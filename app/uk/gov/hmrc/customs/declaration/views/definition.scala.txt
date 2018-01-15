@@ -1,0 +1,57 @@
+@import play.api.libs.json.Json
+@(apiScopeKey: String, whitelistedApplicationIds: Seq[String])
+{
+  "scopes": [
+    {
+      "key": "@apiScopeKey",
+      "name": "Submit a Customs Declaration",
+      "description": "Submit a Customs Declaration"
+    }
+  ],
+  "api": {
+    "name": "Customs Declarations",
+    "description": "Single WCO-compliant Customs Declarations API",
+    "context": "customs/declarations",
+    "versions": [
+      {
+        "version": "1.0",
+        "status": "PUBLISHED",
+        "access": {
+          "type": "PUBLIC"
+        },
+        "fieldDefinitions": [
+          {
+            "name": "callbackUrl",
+            "description": "The URL of your HTTPS webservice that HMRC calls to notify you regarding the declaration submission.",
+            "type": "URL"
+          },
+          {
+            "name": "securityToken",
+            "description": "The full value of Authorization HTTP header that will be used when notifying you.",
+            "type": "SecureToken"
+          }
+        ]
+      },
+      {
+        "version": "2.0",
+        "status": "PUBLISHED",
+        "access": {
+          "type": "PRIVATE",
+          "whitelistedApplicationIds": @Json.toJson(whitelistedApplicationIds)
+        },
+        "fieldDefinitions": [
+          {
+            "name": "callbackUrl",
+            "description": "The URL of your HTTPS webservice that HMRC calls to notify you regarding the declaration submission.",
+            "type": "URL"
+          },
+          {
+            "name": "securityToken",
+            "description": "The full value of Authorization HTTP header that will be used when notifying you.",
+            "type": "SecureToken"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -167,8 +167,6 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
           awaitRequest
         }
         caught shouldBe TestData.emulatedServiceFailure
-
-        eventuallyVerifyError(caught)
       }
 
       "wrap an underlying error when MDG call fails with an http exception" in {
@@ -178,20 +176,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
           awaitRequest
         }
         caught.getCause shouldBe httpException
-
-        eventuallyVerifyError(caught)
       }
-    }
-  }
-
-  private def eventuallyVerifyError(caught: Throwable) {
-    eventually {
-      PassByNameVerifier(mockDeclarationsLogger, "error")
-        .withByNameParam[String](s"Call to wco declaration submission failed. url=${v1Config.url}")
-        .withByNameParam[Throwable](caught)
-        .withAnyHeaderCarrierParam
-        .verify()
-
     }
   }
 

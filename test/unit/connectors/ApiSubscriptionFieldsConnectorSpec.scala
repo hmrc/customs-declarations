@@ -97,7 +97,6 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
         }
 
         caught shouldBe TestData.emulatedServiceFailure
-        eventuallyVerifyError(caught)
       }
 
       "wrap an underlying error when api subscription fields call fails with an http exception" in {
@@ -108,7 +107,6 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
         }
 
         caught.getCause shouldBe httpException
-        eventuallyVerifyError(caught)
       }
     }
   }
@@ -120,16 +118,6 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
   private def returnResponseForRequest(eventualResponse: Future[ApiSubscriptionFieldsResponse]) = {
     when(mockWSGetImpl.GET[ApiSubscriptionFieldsResponse](anyString())
       (any[HttpReads[ApiSubscriptionFieldsResponse]](), any[HeaderCarrier](), any[ExecutionContext])).thenReturn(eventualResponse)
-  }
-
-  private def eventuallyVerifyError(caught: Throwable) {
-    eventually {
-      PassByNameVerifier(mockDeclarationsLogger, "error")
-        .withByNameParam[String](s"Call to subscription information service failed. url=$expectedUrl")
-        .withByNameParam[Throwable](caught)
-        .withAnyHeaderCarrierParam()
-        .verify()
-    }
   }
 
   private def testServicesConfig(configuration: Config) = new ServicesConfig {

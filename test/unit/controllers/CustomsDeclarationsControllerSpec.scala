@@ -29,8 +29,8 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.MicroserviceAuthConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomsDeclarationsController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiDefinitionConfig, CustomsEnrolmentConfig, Eori, RequestedVersion}
-import uk.gov.hmrc.customs.declaration.services.{CustomsConfigService, CustomsDeclarationsBusinessService, RequestedVersionService}
+import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.services.{CustomsConfigService, CustomsDeclarationsBusinessService, RequestedVersionService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
@@ -47,12 +47,15 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
   private val mockAuthConnector = mock[MicroserviceAuthConnector]
   private val mockRequestedVersionService = mock[RequestedVersionService]
   private val mockCustomsDeclarationsBusinessService = mock[CustomsDeclarationsBusinessService]
+  private val mockUuidService = mock[UuidService]
 
   private val controller = new CustomsDeclarationsController(mockDeclarationsLogger,
-                                                        mockCustomsConfigService,
-                                                        mockAuthConnector,
-                                                        mockRequestedVersionService,
-                                                        mockCustomsDeclarationsBusinessService)
+    mockCustomsConfigService,
+    mockAuthConnector,
+    mockRequestedVersionService,
+    mockCustomsDeclarationsBusinessService,
+    mockUuidService
+  )
 
   private val apiScope = "scope-in-api-definition"
   private val customsEnrolmentName = "HMRC-CUS-ORG"
@@ -78,21 +81,24 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
 
   private val cspAuthPredicate = Enrolment(apiScope) and AuthProviders(PrivilegedApplication)
   private val nonCspAuthPredicate = Enrolment(customsEnrolmentName) and AuthProviders(GovernmentGateway)
+  private val fullIds = ids.copy(maybeRequestedVersion = Some(version2), maybeFieldsId = None)
 
   override protected def beforeEach() {
     reset(mockDeclarationsLogger, mockCustomsConfigService, mockAuthConnector, mockRequestedVersionService,
-      mockCustomsDeclarationsBusinessService)
+      mockCustomsDeclarationsBusinessService, mockUuidService)
 
     when(mockRequestedVersionService.validAcceptHeaders)
       .thenReturn(Set(RequestHeaders.ACCEPT_HMRC_XML_V1_VALUE, RequestHeaders.ACCEPT_HMRC_XML_V2_VALUE))
     when(mockRequestedVersionService.getVersionByAcceptHeader(Some(RequestHeaders.ACCEPT_HMRC_XML_V2_VALUE)))
       .thenReturn(Some(version2))
 
+    when(mockUuidService.uuid()).thenReturn(conversationIdUuid)
+
     when(mockCustomsConfigService.apiDefinitionConfig).thenReturn(apiDefinitionConfig)
     when(mockCustomsConfigService.customsEnrolmentConfig).thenReturn(customsEnrolmentConfig)
 
-    when(mockCustomsDeclarationsBusinessService.authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[RequestedVersion])).thenReturn(Right(ids))
-    when(mockCustomsDeclarationsBusinessService.authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[RequestedVersion])).thenReturn(Right(ids))
+    when(mockCustomsDeclarationsBusinessService.authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids])).thenReturn(Right(fullIds))
+    when(mockCustomsDeclarationsBusinessService.authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids])).thenReturn(Right(fullIds))
   }
 
   "CustomsDeclarationsController" should {
@@ -103,8 +109,8 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
         await(result)
         verifyCspAuthorisationCalled(numberOfTimes = 1)
         verifyNonCspAuthorisationCalled(numberOfTimes = 0)
-        verify(mockCustomsDeclarationsBusinessService).authorisedCspSubmission(ameq(ValidXML))(any[HeaderCarrier], ameq(version2))
-        verify(mockCustomsDeclarationsBusinessService, never).authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[RequestedVersion])
+        verify(mockCustomsDeclarationsBusinessService).authorisedCspSubmission(ameq(ValidXML))(any[HeaderCarrier], ameq(fullIds))
+        verify(mockCustomsDeclarationsBusinessService, never).authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids])
       }
     }
 
@@ -114,8 +120,8 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
         await(result)
         verifyCspAuthorisationCalled(numberOfTimes = 1)
         verifyNonCspAuthorisationCalled(numberOfTimes = 1)
-        verify(mockCustomsDeclarationsBusinessService, never).authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[RequestedVersion])
-        verify(mockCustomsDeclarationsBusinessService).authorisedNonCspSubmission(ameq(ValidXML))(any[HeaderCarrier], ameq(version2))
+        verify(mockCustomsDeclarationsBusinessService, never).authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids])
+        verify(mockCustomsDeclarationsBusinessService).authorisedNonCspSubmission(ameq(ValidXML))(any[HeaderCarrier], ameq(fullIds))
       }
     }
 
@@ -174,7 +180,8 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       testSubmitResult(ValidRequest) { result =>
         await(result) shouldBe errorResultInvalidVersionRequested
         PassByNameVerifier(mockDeclarationsLogger, "error")
-          .withByNameParam[String](s"Requested version of Declarations API could not be resolved from Accept header: Some(application/vnd.hmrc.2.0+xml)")
+          .withByNameParam[String](s"Requested version is not valid. Processing failed.")
+          .withByNameParam[Ids](Ids(conversationId))
           .withAnyHeaderCarrierParam
           .verify()
       }
@@ -188,7 +195,8 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       testSubmitResult(ValidRequest) { result =>
         await(result) shouldBe errorResultInvalidVersionRequested
         PassByNameVerifier(mockDeclarationsLogger, "error")
-          .withByNameParam[String](s"Requested version of Declarations API could not be resolved from Accept header: Some(application/vnd.hmrc.2.0+xml)")
+          .withByNameParam[String](s"Requested version is not valid. Processing failed.")
+          .withByNameParam[Ids](Ids(conversationId))
           .withAnyHeaderCarrierParam
           .verify()
 
@@ -196,7 +204,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
     }
 
     "respond with status 500 when a CSP request processing fails with a system error" in {
-      when(mockCustomsDeclarationsBusinessService.authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[RequestedVersion]))
+      when(mockCustomsDeclarationsBusinessService.authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids]))
         .thenReturn(Future.failed(emulatedServiceFailure))
 
       authoriseCsp()
@@ -206,7 +214,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
     }
 
     "respond with status 500 when a non-CSP request processing fails with a system error" in {
-      when(mockCustomsDeclarationsBusinessService.authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[RequestedVersion]))
+      when(mockCustomsDeclarationsBusinessService.authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids]))
         .thenReturn(Future.failed(emulatedServiceFailure))
 
       authoriseNonCsp(Some(declarantEori))
@@ -216,7 +224,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
     }
 
     "return xml-result of the error response returned from CSP request processing" in {
-      when(mockCustomsDeclarationsBusinessService.authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[RequestedVersion]))
+      when(mockCustomsDeclarationsBusinessService.authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids]))
         .thenReturn(Left(mockErrorResponse))
       when(mockErrorResponse.XmlResult).thenReturn(mockResult)
 
@@ -227,7 +235,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
     }
 
     "return xml-result of the error response returned from non-CSP request processing" in {
-      when(mockCustomsDeclarationsBusinessService.authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[RequestedVersion]))
+      when(mockCustomsDeclarationsBusinessService.authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids]))
         .thenReturn(Left(mockErrorResponse))
       when(mockErrorResponse.XmlResult).thenReturn(mockResult)
 

@@ -45,7 +45,6 @@ class ApiSubscriptionFieldsConnector @Inject()(http: WSHttp,
   }
 
   private def get(url: String)(implicit hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
-    logger.debug(s"Getting fields id from api subscription fields service. url=$url")
 
     http.GET[ApiSubscriptionFieldsResponse](url)
       .recoverWith {
@@ -53,7 +52,6 @@ class ApiSubscriptionFieldsConnector @Inject()(http: WSHttp,
       }
       .recoverWith {
         case e: Throwable =>
-          logger.error(s"Call to subscription information service failed. url=$url", e)
           Future.failed(e)
       }
   }

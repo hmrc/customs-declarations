@@ -47,18 +47,17 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
     Future.successful(configuration.getString("override.clientID"))
   }
 
-  def prepareAndSend(inboundXml: NodeSeq, requestedApiVersion: RequestedVersion)(implicit hc: HeaderCarrier): Future[Ids] = {
-    val conversationId = uuidService.uuid()
+  def prepareAndSend(inboundXml: NodeSeq, ids: Ids)(implicit hc: HeaderCarrier): Future[Ids] = {
     val correlationId = uuidService.uuid()
     val dateTime = dateTimeProvider.nowUtc()
 
-    logger.info(s"[conversationId=$conversationId] correlationId=$correlationId, dateTime=$dateTime, requestedApiVersion=$requestedApiVersion")
+    val version = ids.maybeRequestedVersion.getOrElse(throw new IllegalStateException("api version should have been defined by now"))
 
     for {
-      fieldsId <- futureClientId(requestedApiVersion.versionNumber)
-      xmlToSend = preparePayload(inboundXml, conversationId, fieldsId, dateTime)
-      conversationId <- connector.send(xmlToSend, dateTime, correlationId, requestedApiVersion.configPrefix).map(_ => ConversationId(conversationId.toString))
-    } yield Ids(conversationId, fieldsId)
+      fieldsId <- futureClientId(version.versionNumber)
+      xmlToSend = preparePayload(inboundXml, ids.conversationId, fieldsId, dateTime)
+      _ <- connector.send(xmlToSend, dateTime, correlationId, version.configPrefix)
+    } yield ids
   }
 
   private def futureClientId(requestedApiVersionNumber: => String)(implicit hc: HeaderCarrier): Future[FieldsId] = {
@@ -69,7 +68,6 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
       case Some(fieldsId) => Future.successful(FieldsId(fieldsId))
       case _ =>
         val msg = "No value found for clientId."
-        logger.error(msg)
         Future.failed(new IllegalStateException(msg))
     }
   }
@@ -81,9 +79,8 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  private def preparePayload(xml: NodeSeq, conversationId: UUID, fieldsId: FieldsId, dateTime: DateTime)(implicit hc: HeaderCarrier): NodeSeq = {
-    logger.debug(s"preparePayload Using fieldsId=$fieldsId")
-    wrapper.wrap(xml, conversationId.toString, fieldsId.value, dateTime)
+  private def preparePayload(xml: NodeSeq, conversationId: ConversationId, fieldsId: FieldsId, dateTime: DateTime)(implicit hc: HeaderCarrier): NodeSeq = {
+    wrapper.wrap(xml, conversationId.value, fieldsId.value, dateTime)
   }
 
   private def futureApiSubFieldsId(requestedApiVersionNumber: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
@@ -92,7 +89,6 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
     maybeXClientId.fold[Future[Option[String]]](Future.successful(None)) { xClientId =>
       val apiSubscriptionKey = ApiSubscriptionKey(xClientId, apiContextEncoded, requestedApiVersionNumber)
       apiSubFieldsConnector.getSubscriptionFields(apiSubscriptionKey) map (response => {
-        logger.debug("got api-subscription-fields response", payload = response.toString)
         Some(response.fieldsId.toString)
       })
     }

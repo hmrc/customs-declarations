@@ -53,7 +53,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val clientIdOverride = s"OVERRIDE_$fieldsIdString"
   private val configKeyPrefix = Some("config-key-prefix")
   private val versionNumber = "version.number"
-
+  private val fullIds = ids.copy(maybeRequestedVersion = Some(RequestedVersion(versionNumber, configKeyPrefix)))
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
     .withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_HEADER, RequestHeaders.ACCEPT_HMRC_XML_V1_HEADER)
 
@@ -66,7 +66,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
   override protected def beforeEach(): Unit = {
     reset(mockLogger, mockMdgWcoDeclarationConnector, mockApiSubscriptionFieldsConnector, mockPayloadDecorator, mockUuidService, mockDateTimeProvider, mockConfiguration)
-    when(mockUuidService.uuid()).thenReturn(conversationIdUuid).thenReturn(correlationId)
+    when(mockUuidService.uuid()).thenReturn(correlationId)
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockConfiguration.getString("override.clientID")).thenReturn(None)
     when(mockMdgWcoDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[Option[String]])).thenReturn(mockHttpResponse)
@@ -105,7 +105,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
       service =>
         setupMockXmlWrapper
         val generatedConversationId = await(prepareAndSendValidXml(service))
-        generatedConversationId shouldBe ids
+        generatedConversationId shouldBe fullIds
     }
 
     "call payload decorator passing incoming xml" in testService {
@@ -186,6 +186,6 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
   }
 
   private def prepareAndSendValidXml(service: CommunicationService, hc: HeaderCarrier = headerCarrier): Ids = {
-    await(service.prepareAndSend(ValidXML, RequestedVersion(versionNumber, configKeyPrefix))(hc))
+    await(service.prepareAndSend(ValidXML, fullIds)(hc))
   }
 }

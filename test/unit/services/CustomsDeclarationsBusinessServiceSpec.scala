@@ -25,7 +25,7 @@ import org.xml.sax.SAXException
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.RequestedVersion
+import uk.gov.hmrc.customs.declaration.model.Ids
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
@@ -45,7 +45,7 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
     mockXmlValidationService)
 
   private implicit val mockHeaderCarrier: HeaderCarrier = mock[HeaderCarrier]
-  private implicit val mockVersion: RequestedVersion = mock[RequestedVersion]
+  private implicit val mockIds = mock[Ids]
 
   private val xmlValidationErrorText = "cvc-complex-type.3.2.2: Attribute 'foo' is not allowed to appear in element 'Declaration'."
   private val xmlValidationException = new SAXException(xmlValidationErrorText)
@@ -57,7 +57,7 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
   override protected def beforeEach() {
     reset(mockDeclarationsLogger, mockCommunicationService, mockXmlValidationService)
     when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(())
-    when(mockCommunicationService.prepareAndSend(any[NodeSeq], any[RequestedVersion])(any[HeaderCarrier]())).thenReturn(ids)
+    when(mockCommunicationService.prepareAndSend(any[NodeSeq], any[Ids])(any[HeaderCarrier]())).thenReturn(ids)
   }
 
   private val allSubmissionModes = Table(("description", "xml submission thunk with service"),
@@ -79,14 +79,14 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
       "send valid xml to communication service" in {
         testSubmitResult(xmlSubmission(ValidXML)) { result =>
           await(result)
-          verify(mockCommunicationService).prepareAndSend(ameq(ValidXML), any[RequestedVersion])(ameq(mockHeaderCarrier))
+          verify(mockCommunicationService).prepareAndSend(ameq(ValidXML), any[Ids])(ameq(mockHeaderCarrier))
         }
       }
 
       "implicitly pass requested api version to communicationService" in {
         testSubmitResult(xmlSubmission(ValidXML)) { result =>
           await(result)
-          verify(mockCommunicationService).prepareAndSend(any[NodeSeq], ameq(mockVersion))(ameq(mockHeaderCarrier))
+          verify(mockCommunicationService).prepareAndSend(any[NodeSeq], ameq(mockIds))(ameq(mockHeaderCarrier))
         }
       }
 
@@ -117,7 +117,7 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
       }
 
       "propagate the error for a valid request when downstream communication fails" in {
-        when(mockCommunicationService.prepareAndSend(any[NodeSeq](), any[RequestedVersion])(any[HeaderCarrier]()))
+        when(mockCommunicationService.prepareAndSend(any[NodeSeq](), any[Ids])(any[HeaderCarrier]()))
           .thenReturn(Future.failed(emulatedServiceFailure))
 
         testSubmitResult(xmlSubmission(ValidXML)) { result =>

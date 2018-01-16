@@ -45,11 +45,8 @@ trait HeaderValidator extends Results {
     validateHeader(rules, HeaderNames.CONTENT_TYPE, ErrorContentTypeHeaderInvalid.XmlResult)
 
   private def validateHeader(rules: Validation, headerName: String, error: => Result): ActionBuilder[Request] = new ActionBuilder[Request] {
-    private val logMessage = s"$headerName header validation."
     def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]): Future[Result] = {
-      declarationsLogger.info(logMessage, request.headers.headers)
       val headerIsValid = rules(request.headers.get(headerName))
-      declarationsLogger.debug(s = s"$logMessage isValid=$headerIsValid", request.headers.headers)
       getResponse(request, block, headerIsValid, error)
     }
   }

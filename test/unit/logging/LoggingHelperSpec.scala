@@ -28,7 +28,7 @@ class LoggingHelperSpec extends UnitSpec {
   private val fromHeader = ApiSubscriptionFieldsTestData.fieldsIdString
   private val notFromHeader = "FIELDS_ID_NOT_FROM_HEADER"
   private val fieldsIdNotFromHeader = FieldsId(notFromHeader)
-  private val theIds = Ids(TestData.conversationId, fieldsIdNotFromHeader)
+  private val theIds = Ids(TestData.conversationId, Some(fieldsIdNotFromHeader))
   private val allHeaders = Seq(AUTH_HEADER, X_CLIENT_ID_HEADER, API_SUBSCRIPTION_FIELDS_ID_HEADER, X_CONVERSATION_ID_HEADER)
   private val justXClientIdHeader = Seq(X_CLIENT_ID_HEADER)
   private val errorMsg = "ERROR"
@@ -42,7 +42,7 @@ class LoggingHelperSpec extends UnitSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     "format ERROR" in {
-      LoggingHelper.formatError(errorMsg) shouldBe errorMsg
+      LoggingHelper.formatError(errorMsg, theIds) shouldBe s"[fieldsId=FIELDS_ID_NOT_FROM_HEADER][conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] $errorMsg"
     }
 
     "format WARN"  in {
@@ -62,7 +62,7 @@ class LoggingHelperSpec extends UnitSpec {
     implicit val hc: HeaderCarrier = hcWithAllHeaders
 
     "format ERROR" in {
-      LoggingHelper.formatError(errorMsg) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] " + errorMsg
+      LoggingHelper.formatError(errorMsg, theIds) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader][conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] " + errorMsg
     }
 
     "format WARN"  in {
@@ -91,14 +91,6 @@ class LoggingHelperSpec extends UnitSpec {
 
     "format INFO" in {
       LoggingHelper.formatInfo(infoMsg, Some(theIds)) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader][conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] " + infoMsg
-    }
-  }
-
-  "LoggingHelper DEBUG" should {
-    implicit val hc: HeaderCarrier = hcWithAllHeaders
-
-    "format with payload" in {
-      LoggingHelper.formatDebug(debugMsg, maybePayload = Some("PAYLOAD")) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=${hcWithAllHeaders.headers}\npayload=PAYLOAD"
     }
   }
 

@@ -42,7 +42,7 @@ class LoggingHelperSpec extends UnitSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     "format ERROR" in {
-      LoggingHelper.formatError(errorMsg, theIds) shouldBe s"[fieldsId=FIELDS_ID_NOT_FROM_HEADER][conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] $errorMsg"
+      LoggingHelper.formatError(errorMsg, Some(theIds)) shouldBe s"[fieldsId=FIELDS_ID_NOT_FROM_HEADER][conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] $errorMsg"
     }
 
     "format WARN"  in {
@@ -54,7 +54,7 @@ class LoggingHelperSpec extends UnitSpec {
     }
 
     "format DEBUG" in {
-      LoggingHelper.formatDebug(debugMsg) shouldBe s"$debugMsg\nrequest headers=${hc.headers}"
+      LoggingHelper.formatDebug(debugMsg, theIds) shouldBe s"$debugMsg\nrequest headers=${hc.headers}"
     }
   }
 
@@ -62,7 +62,7 @@ class LoggingHelperSpec extends UnitSpec {
     implicit val hc: HeaderCarrier = hcWithAllHeaders
 
     "format ERROR" in {
-      LoggingHelper.formatError(errorMsg, theIds) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader][conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] " + errorMsg
+      LoggingHelper.formatError(errorMsg, Some(theIds)) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader][conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] " + errorMsg
     }
 
     "format WARN"  in {
@@ -74,7 +74,7 @@ class LoggingHelperSpec extends UnitSpec {
     }
 
     "format DEBUG" in {
-      LoggingHelper.formatDebug(debugMsg) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=${hcWithAllHeaders.headers}"
+      LoggingHelper.formatDebug(debugMsg, theIds) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=${hcWithAllHeaders.headers}"
     }
   }
 
@@ -100,7 +100,7 @@ class LoggingHelperSpec extends UnitSpec {
     }
 
     "format DEBUG with headers" in {
-      LoggingHelper.formatDebug(debugMsg, allHeaders) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=$allHeaders"
+      LoggingHelper.formatDebug(debugMsg, allHeaders, theIds) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=$allHeaders"
     }
 
   }

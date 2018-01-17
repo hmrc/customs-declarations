@@ -35,6 +35,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders
+import util.RequestHeaders._
 import util.TestData._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -65,23 +66,23 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
   private val version2 = RequestedVersion("2.0", Some("v2"))
 
   private val errorResultInternalServer = ErrorResponse(INTERNAL_SERVER_ERROR, errorCode = "INTERNAL_SERVER_ERROR",
-    message = "Internal server error").XmlResult
+    message = "Internal server error").XmlResult.withHeaders("X-Conversation-ID" -> conversationIdValue)
 
   private val errorResultEoriNotFoundInCustomsEnrolment = ErrorResponse(UNAUTHORIZED, errorCode = "UNAUTHORIZED",
-    message = "EORI number not found in Customs Enrolment").XmlResult
+    message = "EORI number not found in Customs Enrolment").XmlResult.withHeaders("X-Conversation-ID" -> conversationIdValue)
 
   private val errorResultUnauthorised = ErrorResponse(UNAUTHORIZED, errorCode = "UNAUTHORIZED",
-    message = "Unauthorised request").XmlResult
+    message = "Unauthorised request").XmlResult.withHeaders("X-Conversation-ID" -> conversationIdValue)
 
   private val errorResultInvalidVersionRequested = ErrorResponse(NOT_ACCEPTABLE, errorCode = "INVALID_VERSION_REQUESTED",
-    message = "Invalid API version requested").XmlResult
+    message = "Invalid API version requested").XmlResult.withHeaders("X-Conversation-ID" -> conversationIdValue)
 
   private val mockErrorResponse = mock[ErrorResponse]
   private val mockResult = mock[Result]
 
   private val cspAuthPredicate = Enrolment(apiScope) and AuthProviders(PrivilegedApplication)
   private val nonCspAuthPredicate = Enrolment(customsEnrolmentName) and AuthProviders(GovernmentGateway)
-  private val fullIds = ids.copy(maybeRequestedVersion = Some(version2), maybeFieldsId = None)
+  private val fullIds = ids.copy(maybeRequestedVersion = Some(version2), maybeClientSubscriptionId = None)
 
   override protected def beforeEach() {
     reset(mockDeclarationsLogger, mockCustomsConfigService, mockAuthConnector, mockRequestedVersionService,
@@ -227,6 +228,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       when(mockCustomsDeclarationsBusinessService.authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids]))
         .thenReturn(Left(mockErrorResponse))
       when(mockErrorResponse.XmlResult).thenReturn(mockResult)
+      when(mockResult.withHeaders(X_CONVERSATION_ID_HEADER)).thenReturn(mockResult)
 
       authoriseCsp()
       testSubmitResult(ValidRequest) { result =>
@@ -238,6 +240,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       when(mockCustomsDeclarationsBusinessService.authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids]))
         .thenReturn(Left(mockErrorResponse))
       when(mockErrorResponse.XmlResult).thenReturn(mockResult)
+      when(mockResult.withHeaders(X_CONVERSATION_ID_HEADER)).thenReturn(mockResult)
 
       authoriseNonCsp(Some(declarantEori))
       testSubmitResult(ValidRequest) { result =>

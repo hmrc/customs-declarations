@@ -55,6 +55,7 @@ trait HeaderValidator extends Results {
     if (headerIsValid) {
       block(request)
     } else {
+      declarationsLogger.errorWithoutHeaderCarrier(s"Invalid headers: ${request.headers.headers}")
       Future.successful(error)
     }
   }

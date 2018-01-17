@@ -79,14 +79,14 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
 
       val conversationId = uuidService.uuid().toString
       val basicIds = Ids(ConversationId(conversationId))
-      logger.debug(s"Request received. Generated conversationId=$conversationId Payload = ${request.body.toString}")
+      logger.debug(s"Request received. Payload = ${request.body.toString}", basicIds)
 
       lazy val maybeAcceptHeader = request.headers.get(ACCEPT)
       request.body.asXml match {
         case Some(xml) =>
           requestedVersionService.getVersionByAcceptHeader(maybeAcceptHeader).fold {
             logger.error("Requested version is not valid. Processing failed.", basicIds)
-            Future.successful(ErrorResponseInvalidVersionRequested.XmlResult)
+            Future.successful(ErrorResponseInvalidVersionRequested.XmlResult.withHeaders(conversationIdHeader(basicIds)))
           } {
             version =>
               implicit val extendedIds = basicIds.copy(maybeRequestedVersion = Some(version))
@@ -95,8 +95,12 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
 
         case _ =>
           logger.error(badlyFormedXmlMsg, basicIds)
-          Future.successful(ErrorResponse.errorBadRequest(badlyFormedXmlMsg).XmlResult)
+          Future.successful(ErrorResponse.errorBadRequest(badlyFormedXmlMsg).XmlResult.withHeaders(conversationIdHeader(basicIds)))
       }
+  }
+
+  private def conversationIdHeader(wrapper: Ids) = {
+    "X-Conversation-ID" -> wrapper.conversationId.value
   }
 
   private def processXmlPayload(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[Result] = {
@@ -104,15 +108,14 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
       .map {
         case Right(identifiers) =>
           logger.info("Request processed successfully", identifiers)
-          NoContent.as(MimeTypes.XML).withHeaders("X-Conversation-ID" -> identifiers.conversationId.value)
+          NoContent.as(MimeTypes.XML).withHeaders(conversationIdHeader(identifiers))
         case Left(errorResponse) =>
-          logger.error("Authorisation failed.", ids)
-          errorResponse.XmlResult
+          logger.error("the user is neither a CSP nor authorized by a user with customs enrolment.", ids)
+          errorResponse.XmlResult.withHeaders(conversationIdHeader(ids))
       }
       .recoverWith {
         case NonFatal(_) =>
-          logger.error("Customs declaration submission failed.", ids)
-          Future.successful(ErrorResponse.ErrorInternalServerError.XmlResult)
+          Future.successful(ErrorResponse.ErrorInternalServerError.XmlResult.withHeaders(conversationIdHeader(ids)))
       }
   }
 

@@ -48,29 +48,37 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
   }
 
   def prepareAndSend(inboundXml: NodeSeq, ids: Ids)(implicit hc: HeaderCarrier): Future[Ids] = {
+
+    def futureClientSubscriptionId(requestedApiVersionNumber: => String)(implicit hc: HeaderCarrier): Future[FieldsId] = {
+      lazy val futureMaybeFromHeaders = Future.successful(findHeaderValue("api-subscription-fields-id"))
+      val foConfigOrHeader = orElse(futureMaybeClientIdFromConfiguration, futureMaybeFromHeaders)
+
+      orElse(foConfigOrHeader, futureApiSubFieldsId(requestedApiVersionNumber)) flatMap {
+        case Some(fieldsId) => Future.successful(FieldsId(fieldsId))
+        case _ =>
+          val msg = "No value found for client subscription id"
+          logger.error(msg, ids)
+          Future.failed(new IllegalStateException(msg))
+      }
+    }
+
     val correlationId = uuidService.uuid()
     val dateTime = dateTimeProvider.nowUtc()
-
     val version = ids.maybeRequestedVersion.getOrElse(throw new IllegalStateException("api version should have been defined by now"))
 
     for {
-      fieldsId <- futureClientId(version.versionNumber)
-      xmlToSend = preparePayload(inboundXml, ids.conversationId, fieldsId, dateTime)
-      _ <- connector.send(xmlToSend, dateTime, correlationId, version.configPrefix)
+      clientSubscriptionId <- futureClientSubscriptionId(version.versionNumber)
+      xmlToSend = preparePayload(inboundXml, ids.conversationId, clientSubscriptionId, dateTime)
+      _ <- {
+        logger.debug(s"Sending request to MDG. Payload: $xmlToSend",ids)
+        connector.send(xmlToSend, dateTime, correlationId, version.configPrefix)
+      }
     } yield ids
+
+
   }
 
-  private def futureClientId(requestedApiVersionNumber: => String)(implicit hc: HeaderCarrier): Future[FieldsId] = {
-    lazy val futureMaybeFromHeaders = Future.successful(findHeaderValue("api-subscription-fields-id"))
-    val foConfigOrHeader = orElse(futureMaybeClientIdFromConfiguration, futureMaybeFromHeaders)
 
-    orElse(foConfigOrHeader, futureApiSubFieldsId(requestedApiVersionNumber)) flatMap {
-      case Some(fieldsId) => Future.successful(FieldsId(fieldsId))
-      case _ =>
-        val msg = "No value found for clientId."
-        Future.failed(new IllegalStateException(msg))
-    }
-  }
 
   private def orElse(fo1: Future[Option[String]], fo2: => Future[Option[String]]): Future[Option[String]] = {
     fo1.flatMap[Option[String]]{

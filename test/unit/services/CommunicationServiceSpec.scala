@@ -156,7 +156,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
         when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
 
         val caught = intercept[IllegalStateException](prepareAndSendValidXml(service, emptyHeaderCarrier))
-        caught.getMessage shouldBe "No value found for clientId."
+        caught.getMessage shouldBe "No value found for client subscription id"
     }
 
     "when hardcoded value as clientID NOT hardcoded in configuration AND api-subscription-fields-id header not present and api subscription service returns failed future" in testService {

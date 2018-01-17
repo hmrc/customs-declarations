@@ -63,13 +63,14 @@ class MdgWcoDeclarationConnector @Inject()(http: WSHttp,
   }
 
   private def post(xml: NodeSeq, url: String)(implicit hc: HeaderCarrier) = {
-
+  //making this call
     http.POSTString[HttpResponse](url, xml.toString())
       .recoverWith {
         case httpError: HttpException => Future.failed(new RuntimeException(httpError))
       }
       .recoverWith {
         case e: Throwable =>
+          //log the error here.
           Future.failed(e)
       }
   }

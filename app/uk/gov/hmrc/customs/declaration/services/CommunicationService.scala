@@ -70,7 +70,7 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
       clientSubscriptionId <- futureClientSubscriptionId(version.versionNumber)
       xmlToSend = preparePayload(inboundXml, ids.conversationId, clientSubscriptionId, dateTime)
       _ <- {
-        logger.debug(s"Sending request to MDG. Payload: $xmlToSend",ids)
+        logger.debug(s"Sending request to MDG. Payload: $xmlToSend",ids) // we need to log the auth tokens
         connector.send(xmlToSend, dateTime, correlationId, version.configPrefix)
       }
     } yield ids

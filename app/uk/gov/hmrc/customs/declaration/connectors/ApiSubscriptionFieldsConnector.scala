@@ -41,6 +41,7 @@ class ApiSubscriptionFieldsConnector @Inject()(http: WSHttp,
 
   def getSubscriptionFields(apiSubsKey: ApiSubscriptionKey)(implicit hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
     val url = ApiSubscriptionFieldsPath.url(s"$baseUrl$context", apiSubsKey)
+    //debug the url
     get(url)
   }
 
@@ -51,6 +52,7 @@ class ApiSubscriptionFieldsConnector @Inject()(http: WSHttp,
         case httpError: HttpException => Future.failed(new RuntimeException(httpError))
       }
       .recoverWith {
+        //log the error here
         case e: Throwable =>
           Future.failed(e)
       }

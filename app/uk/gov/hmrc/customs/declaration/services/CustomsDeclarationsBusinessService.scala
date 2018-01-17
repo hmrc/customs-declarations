@@ -51,6 +51,7 @@ class CustomsDeclarationsBusinessService @Inject()(logger: DeclarationsLogger,
     xmlValidationService.validate(xml).map(Right(_))
       .recover {
         case saxe: SAXException =>
+          //log the error
           Left(ErrorResponse
             .errorBadRequest("Payload is not valid according to schema")
             .withErrors(xmlValidationErrors(saxe): _*))

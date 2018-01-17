@@ -85,6 +85,7 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
       request.body.asXml match {
         case Some(xml) =>
           requestedVersionService.getVersionByAcceptHeader(maybeAcceptHeader).fold {
+            //please log the received header. To be honest, this should never happen as we are validating the accept header already.
             logger.error("Requested version is not valid. Processing failed.", basicIds)
             Future.successful(ErrorResponseInvalidVersionRequested.XmlResult.withHeaders(conversationIdHeader(basicIds)))
           } {
@@ -110,11 +111,13 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
           logger.info("Request processed successfully", identifiers)
           NoContent.as(MimeTypes.XML).withHeaders(conversationIdHeader(identifiers))
         case Left(errorResponse) =>
+          //looks like this should be removed as well. It is not always Auth failure, Schema validation failure also ends up here.
           logger.error("the user is neither a CSP nor authorized by a user with customs enrolment.", ids)
           errorResponse.XmlResult.withHeaders(conversationIdHeader(ids))
       }
       .recoverWith {
         case NonFatal(_) =>
+          //log error here
           Future.successful(ErrorResponse.ErrorInternalServerError.XmlResult.withHeaders(conversationIdHeader(ids)))
       }
   }
@@ -141,6 +144,7 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
   private def findEoriInCustomsEnrolment(enrolments: Enrolments, authHeader: Option[Authorization])(implicit hc: HeaderCarrier): Option[Eori] = {
     val maybeCustomsEnrolment = enrolments.getEnrolment(customsEnrolmentName)
     if (maybeCustomsEnrolment.isEmpty) {
+      // this warning should be removed as we are logging an error???? could be changed to debug. OR change this to error and dont log it in controller.
       logger.warn(s"Customs enrolment $customsEnrolmentName not retrieved for authorised non-CSP call with Authorization header=${authHeader.map(_.value).getOrElse("")}")
     }
     for {

@@ -47,13 +47,13 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
     Future.successful(configuration.getString("override.clientID"))
   }
 
-  def prepareAndSend(inboundXml: NodeSeq, ids: Ids)(implicit hc: HeaderCarrier): Future[Ids] = {
+  def prepareAndSend(inboundXml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[Ids] = {
 
     def futureClientSubscriptionId(requestedApiVersionNumber: => String)(implicit hc: HeaderCarrier): Future[FieldsId] = {
       lazy val futureMaybeFromHeaders = Future.successful(findHeaderValue("api-subscription-fields-id"))
       val foConfigOrHeader = orElse(futureMaybeClientIdFromConfiguration, futureMaybeFromHeaders)
 
-      orElse(foConfigOrHeader, futureApiSubFieldsId(requestedApiVersionNumber)) flatMap {
+      orElse(foConfigOrHeader, futureApiSubFieldsId(requestedApiVersionNumber)(hc, ids)) flatMap {
         case Some(fieldsId) => Future.successful(FieldsId(fieldsId))
         case _ =>
           val msg = "No value found for client subscription id"
@@ -70,14 +70,12 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
       clientSubscriptionId <- futureClientSubscriptionId(version.versionNumber)
       xmlToSend = preparePayload(inboundXml, ids.conversationId, clientSubscriptionId, dateTime)
       _ <- {
-        logger.debug(s"Sending request to MDG. Payload: $xmlToSend",ids) // we need to log the auth tokens
         connector.send(xmlToSend, dateTime, correlationId, version.configPrefix)
       }
     } yield ids
 
 
   }
-
 
 
   private def orElse(fo1: Future[Option[String]], fo2: => Future[Option[String]]): Future[Option[String]] = {
@@ -91,7 +89,7 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
     wrapper.wrap(xml, conversationId.value, fieldsId.value, dateTime)
   }
 
-  private def futureApiSubFieldsId(requestedApiVersionNumber: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+  private def futureApiSubFieldsId(requestedApiVersionNumber: String)(implicit hc: HeaderCarrier, ids: Ids): Future[Option[String]] = {
     val maybeXClientId: Option[String] = findHeaderValue("X-Client-ID")
 
     maybeXClientId.fold[Future[Option[String]]](Future.successful(None)) { xClientId =>

@@ -57,7 +57,7 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
   override protected def beforeEach() {
     reset(mockDeclarationsLogger, mockCommunicationService, mockXmlValidationService)
     when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(())
-    when(mockCommunicationService.prepareAndSend(any[NodeSeq], any[Ids])(any[HeaderCarrier]())).thenReturn(ids)
+    when(mockCommunicationService.prepareAndSend(any[NodeSeq])(any[HeaderCarrier](), any[Ids])).thenReturn(ids)
   }
 
   private val allSubmissionModes = Table(("description", "xml submission thunk with service"),
@@ -79,14 +79,14 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
       "send valid xml to communication service" in {
         testSubmitResult(xmlSubmission(ValidXML)) { result =>
           await(result)
-          verify(mockCommunicationService).prepareAndSend(ameq(ValidXML), any[Ids])(ameq(mockHeaderCarrier))
+          verify(mockCommunicationService).prepareAndSend(ameq(ValidXML))(ameq(mockHeaderCarrier), any[Ids])
         }
       }
 
       "implicitly pass requested api version to communicationService" in {
         testSubmitResult(xmlSubmission(ValidXML)) { result =>
           await(result)
-          verify(mockCommunicationService).prepareAndSend(any[NodeSeq], ameq(mockIds))(ameq(mockHeaderCarrier))
+          verify(mockCommunicationService).prepareAndSend(any[NodeSeq])(ameq(mockHeaderCarrier), ameq(mockIds))
         }
       }
 
@@ -117,7 +117,7 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
       }
 
       "propagate the error for a valid request when downstream communication fails" in {
-        when(mockCommunicationService.prepareAndSend(any[NodeSeq](), any[Ids])(any[HeaderCarrier]()))
+        when(mockCommunicationService.prepareAndSend(any[NodeSeq]())(any[HeaderCarrier](), any[Ids]))
           .thenReturn(Future.failed(emulatedServiceFailure))
 
         testSubmitResult(xmlSubmission(ValidXML)) { result =>

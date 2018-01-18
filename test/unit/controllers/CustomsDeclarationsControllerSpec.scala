@@ -157,8 +157,9 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       testSubmitResult(ValidRequest.fromNonCsp) { result =>
         await(result) shouldBe errorResultEoriNotFoundInCustomsEnrolment
         verifyZeroInteractions(mockCustomsDeclarationsBusinessService)
-        PassByNameVerifier(mockDeclarationsLogger, "warn")
+        PassByNameVerifier(mockDeclarationsLogger, "debug")
           .withByNameParam[String](s"Customs enrolment $customsEnrolmentName not retrieved for authorised non-CSP call with Authorization header=Bearer $nonCspBearerToken")
+            .withByNameParam[Ids](fullIds)
           .withAnyHeaderCarrierParam
           .verify()
       }

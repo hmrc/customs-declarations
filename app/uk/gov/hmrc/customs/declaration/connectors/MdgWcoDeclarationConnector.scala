@@ -24,6 +24,7 @@ import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE, DATE, X_FORWARDED_HOST}
 import play.api.http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.Ids
 import uk.gov.hmrc.customs.declaration.services.WSHttp
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
@@ -39,7 +40,7 @@ class MdgWcoDeclarationConnector @Inject()(http: WSHttp,
 
   private val configKey = "wco-declaration"
 
-  def send(xml: NodeSeq, date: DateTime, correlationId: UUID, configKeyPrefix: Option[String] = None): Future[HttpResponse] = {
+  def send(xml: NodeSeq, date: DateTime, correlationId: UUID, configKeyPrefix: Option[String] = None)(implicit ids: Ids): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(getConfigKey(configKeyPrefix))).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, correlationId), authorization = Some(Authorization(bearerToken)))
@@ -62,15 +63,15 @@ class MdgWcoDeclarationConnector @Inject()(http: WSHttp,
       ("X-Correlation-ID", correlationId.toString))
   }
 
-  private def post(xml: NodeSeq, url: String)(implicit hc: HeaderCarrier) = {
-  //making this call
+  private def post(xml: NodeSeq, url: String)(implicit hc: HeaderCarrier, ids: Ids) = {
+    logger.debug(s"Sending request to MDG. Payload: ${xml.toString()}",ids)
     http.POSTString[HttpResponse](url, xml.toString())
       .recoverWith {
         case httpError: HttpException => Future.failed(new RuntimeException(httpError))
       }
       .recoverWith {
         case e: Throwable =>
-          //log the error here.
+          logger.error(s"Call to wco declaration submission failed. url=$url", ids)
           Future.failed(e)
       }
   }

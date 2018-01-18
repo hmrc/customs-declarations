@@ -47,13 +47,14 @@ class CustomsDeclarationsBusinessService @Inject()(logger: DeclarationsLogger,
     validateXml(xml) thenProcessWith prepareAndSend(xml)
   }
 
-  private def validateXml(xml: NodeSeq): Future[ValidationResult] = {
+  private def validateXml(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ValidationResult] = {
     xmlValidationService.validate(xml).map(Right(_))
       .recover {
         case saxe: SAXException =>
-          //log the error
+          val msg = "Payload is not valid according to schema"
+          logger.error(msg, ids)
           Left(ErrorResponse
-            .errorBadRequest("Payload is not valid according to schema")
+            .errorBadRequest(msg)
             .withErrors(xmlValidationErrors(saxe): _*))
       }
   }
@@ -72,7 +73,7 @@ class CustomsDeclarationsBusinessService @Inject()(logger: DeclarationsLogger,
   }
 
   private def prepareAndSend(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ProcessingResult] = {
-    communication.prepareAndSend(xml, ids).map(Right(_))
+    communication.prepareAndSend(xml).map(Right(_))
   }
 
   private implicit class ValidationFutureOps(validationFuture: Future[ValidationResult]) {

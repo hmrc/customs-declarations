@@ -23,7 +23,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
-import uk.gov.hmrc.customs.declaration.model.ApiSubscriptionFieldsResponse
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ConversationId, Ids}
 import uk.gov.hmrc.http._
 import util.ExternalServicesConfig.{Host, Port}
 import util.TestData._
@@ -38,6 +38,7 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
   private lazy val connector = app.injector.instanceOf[ApiSubscriptionFieldsConnector]
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
+  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"))
 
   override protected def beforeAll() {
     startMockServer()
@@ -98,7 +99,7 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
 
   }
 
-  private def getApiSubscriptionFields: Future[ApiSubscriptionFieldsResponse] = {
+  private def getApiSubscriptionFields(implicit ids: Ids): Future[ApiSubscriptionFieldsResponse] = {
     connector.getSubscriptionFields(apiSubscriptionKey)
   }
 }

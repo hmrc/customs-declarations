@@ -71,6 +71,7 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
   })
 
   private def validateHeaders(): ActionBuilder[Request] = {
+    //TODO MC conversationId
     validateAccept(acceptHeaderValidation) andThen validateContentType(contentTypeValidation)
   }
 
@@ -79,13 +80,12 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
 
       val conversationId = uuidService.uuid().toString
       val basicIds = Ids(ConversationId(conversationId))
-      logger.debug(s"Request received. Payload = ${request.body.toString}", basicIds)
+      logger.debug(s"Request received. Payload = ${request.body.toString} headers = ${request.headers.headers}", basicIds)
 
       lazy val maybeAcceptHeader = request.headers.get(ACCEPT)
       request.body.asXml match {
         case Some(xml) =>
           requestedVersionService.getVersionByAcceptHeader(maybeAcceptHeader).fold {
-            //please log the received header. To be honest, this should never happen as we are validating the accept header already.
             logger.error("Requested version is not valid. Processing failed.", basicIds)
             Future.successful(ErrorResponseInvalidVersionRequested.XmlResult.withHeaders(conversationIdHeader(basicIds)))
           } {
@@ -111,13 +111,11 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
           logger.info("Request processed successfully", identifiers)
           NoContent.as(MimeTypes.XML).withHeaders(conversationIdHeader(identifiers))
         case Left(errorResponse) =>
-          //looks like this should be removed as well. It is not always Auth failure, Schema validation failure also ends up here.
-          logger.error("the user is neither a CSP nor authorized by a user with customs enrolment.", ids)
           errorResponse.XmlResult.withHeaders(conversationIdHeader(ids))
       }
       .recoverWith {
         case NonFatal(_) =>
-          //log error here
+          logger.error("Processing error.", ids)
           Future.successful(ErrorResponse.ErrorInternalServerError.XmlResult.withHeaders(conversationIdHeader(ids)))
       }
   }
@@ -141,11 +139,10 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  private def findEoriInCustomsEnrolment(enrolments: Enrolments, authHeader: Option[Authorization])(implicit hc: HeaderCarrier): Option[Eori] = {
+  private def findEoriInCustomsEnrolment(enrolments: Enrolments, authHeader: Option[Authorization])(implicit hc: HeaderCarrier, ids: Ids): Option[Eori] = {
     val maybeCustomsEnrolment = enrolments.getEnrolment(customsEnrolmentName)
     if (maybeCustomsEnrolment.isEmpty) {
-      // this warning should be removed as we are logging an error???? could be changed to debug. OR change this to error and dont log it in controller.
-      logger.warn(s"Customs enrolment $customsEnrolmentName not retrieved for authorised non-CSP call with Authorization header=${authHeader.map(_.value).getOrElse("")}")
+      logger.debug(s"Customs enrolment $customsEnrolmentName not retrieved for authorised non-CSP call with Authorization header=${authHeader.map(_.value).getOrElse("")}", ids)
     }
     for {
       customsEnrolment <- maybeCustomsEnrolment
@@ -153,7 +150,8 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     } yield Eori(eoriIdentifier.value)
   }
 
-  private def unauthorised(authException: AuthorisationException)(implicit hc: HeaderCarrier): Future[Left[ErrorResponse, Ids]] = {
+  private def unauthorised(authException: AuthorisationException)(implicit hc: HeaderCarrier, ids: Ids): Future[Left[ErrorResponse, Ids]] = {
+    logger.error("User is not authorised", ids)
     Future.successful(Left(ErrorResponseUnauthorisedGeneral))
   }
 

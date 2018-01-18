@@ -55,7 +55,7 @@ trait HeaderValidator extends Results {
     if (headerIsValid) {
       block(request)
     } else {
-      // should be specific which header actually was not as expected. Plus log with Conversation and client ID, and return conversation id.
+      //TODO MC should be specific which header actually was not as expected. Plus log with Conversation and client ID, and return conversation id.
       declarationsLogger.errorWithoutHeaderCarrier(s"Invalid headers: ${request.headers.headers}")
       Future.successful(error)
     }

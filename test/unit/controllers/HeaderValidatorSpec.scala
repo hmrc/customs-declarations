@@ -32,21 +32,11 @@ import util.RequestHeaders._
 
 class HeaderValidatorSpec extends UnitSpec with BeforeAndAfterAll with MockitoSugar {
 
-  private val expectedResult: Result = Ok("as expected")
-
   private val mockRequestedVersionService = mock[RequestedVersionService]
 
   private val validator = new HeaderValidator {
     override val declarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
     override val requestedVersionService: RequestedVersionService = mockRequestedVersionService
-  }
-
-  private val acceptAction: Action[AnyContent] = validator.validateAccept(validator.acceptHeaderValidation) {
-    expectedResult
-  }
-
-  private val contentTypeAction: Action[AnyContent] = validator.validateContentType(validator.contentTypeValidation) {
-    expectedResult
   }
 
   private def requestWithHeaders(headers: Map[String, String]) =
@@ -58,35 +48,35 @@ class HeaderValidatorSpec extends UnitSpec with BeforeAndAfterAll with MockitoSu
 
   "HeaderValidatorAction" should {
     "return processing result when accept header is v1" in{
-      await(acceptAction.apply(requestWithHeaders(ValidHeaders - ACCEPT + ACCEPT_HMRC_XML_V1_HEADER))) shouldBe expectedResult
+      await(validator.validateAccept()(requestWithHeaders(ValidHeaders - ACCEPT + ACCEPT_HMRC_XML_V1_HEADER))) shouldBe None
     }
 
     "return processing result when accept header is v2" in{
-      await(acceptAction.apply(requestWithHeaders(ValidHeaders - ACCEPT + ACCEPT_HMRC_XML_V2_HEADER))) shouldBe expectedResult
+      await(validator.validateAccept()(requestWithHeaders(ValidHeaders - ACCEPT + ACCEPT_HMRC_XML_V2_HEADER))) shouldBe None
     }
 
     "return processing result when request headers contain valid values" in {
-      await(acceptAction.apply(requestWithHeaders(ValidHeaders))) shouldBe expectedResult
+      await(validator.validateAccept()(requestWithHeaders(ValidHeaders))) shouldBe None
     }
 
     "return processing result when Content-Type header contains charset" in {
-      await(contentTypeAction.apply(requestWithHeaders(ValidHeaders + CONTENT_TYPE_HEADER_CHARSET))) shouldBe expectedResult
+      await(validator.validateContentType()(requestWithHeaders(ValidHeaders - CONTENT_TYPE + CONTENT_TYPE_HEADER_CHARSET))) shouldBe None
     }
 
     "return Error result when the Accept header does not exist" in {
-      await(acceptAction.apply(requestWithHeaders(ValidHeaders - ACCEPT))) shouldBe ErrorAcceptHeaderInvalid.XmlResult
+      await(validator.validateAccept()(requestWithHeaders(ValidHeaders - ACCEPT))) shouldBe Some(ErrorAcceptHeaderInvalid)
     }
 
     "return Error result when Accept header does not contain expected value" in {
-      await(acceptAction.apply(requestWithHeaders(ValidHeaders + ACCEPT_HEADER_INVALID))) shouldBe ErrorAcceptHeaderInvalid.XmlResult
+      await(validator.validateAccept()(requestWithHeaders(ValidHeaders + ACCEPT_HEADER_INVALID))) shouldBe Some(ErrorAcceptHeaderInvalid)
     }
 
     "return Error result when the Content-Type header does not exist" in {
-      await(contentTypeAction.apply(requestWithHeaders(ValidHeaders - CONTENT_TYPE))) shouldBe ErrorContentTypeHeaderInvalid.XmlResult
+      await(validator.validateContentType()(requestWithHeaders(ValidHeaders - CONTENT_TYPE))) shouldBe Some(ErrorContentTypeHeaderInvalid)
     }
 
     "return Error result when Content-Type header does not contain expected value" in {
-      await(contentTypeAction.apply(requestWithHeaders(ValidHeaders + CONTENT_TYPE_HEADER_INVALID))) shouldBe ErrorContentTypeHeaderInvalid.XmlResult
+      await(validator.validateContentType()(requestWithHeaders(ValidHeaders + CONTENT_TYPE_HEADER_INVALID))) shouldBe Some(ErrorContentTypeHeaderInvalid)
     }
 
   }

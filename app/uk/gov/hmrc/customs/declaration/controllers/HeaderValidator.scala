@@ -17,48 +17,43 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import play.api.http.{HeaderNames, MimeTypes}
-import play.api.mvc.{ActionBuilder, Request, Result, Results}
+import play.api.mvc.{Request, Results}
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorAcceptHeaderInvalid, ErrorContentTypeHeaderInvalid}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.RequestedVersionService
 
-import scala.concurrent.Future
-
 trait HeaderValidator extends Results {
 
   def declarationsLogger: DeclarationsLogger
+
   def requestedVersionService: RequestedVersionService
 
-  type Validation = Option[String] => Boolean
-
-  private lazy val validAcceptHeaders = requestedVersionService.validAcceptHeaders
+  private lazy val validAcceptHeaders = requestedVersionService.validAcceptHeaders.toSeq
 
   private lazy val validContentTypeHeaders = Seq(MimeTypes.XML, MimeTypes.XML + "; charset=utf-8")
 
-  val acceptHeaderValidation: Validation = _ exists validAcceptHeaders.contains
-  val contentTypeValidation: Validation = _ exists (header => validContentTypeHeaders.contains(header.toLowerCase))
+  private type Validation = Option[String] => Boolean
 
-  def validateAccept(rules: Validation): ActionBuilder[Request] =
-    validateHeader(rules, HeaderNames.ACCEPT, ErrorAcceptHeaderInvalid.XmlResult)
+  private val acceptHeaderValidation: Validation = _ exists validAcceptHeaders.contains
+  private val contentTypeValidation: Validation = _ exists (header => validContentTypeHeaders.contains(header.toLowerCase))
 
-  def validateContentType(rules: Validation): ActionBuilder[Request] =
-    validateHeader(rules, HeaderNames.CONTENT_TYPE, ErrorContentTypeHeaderInvalid.XmlResult)
-
-  private def validateHeader(rules: Validation, headerName: String, error: => Result): ActionBuilder[Request] = new ActionBuilder[Request] {
-    def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]): Future[Result] = {
-      val headerIsValid = rules(request.headers.get(headerName))
-      getResponse(request, block, headerIsValid, error)
-    }
+  def validateAccept[A]()(implicit request: Request[A]): Option[ErrorResponse] = {
+    validateHeader(acceptHeaderValidation, HeaderNames.ACCEPT, ErrorAcceptHeaderInvalid)
   }
 
-  private def getResponse[A](request: Request[A], block: (Request[A]) => Future[Result], headerIsValid: Boolean, error: => Result) = {
-    if (headerIsValid) {
-      block(request)
-    } else {
-      //TODO MC should be specific which header actually was not as expected. Plus log with Conversation and client ID, and return conversation id.
-      declarationsLogger.errorWithoutHeaderCarrier(s"Invalid headers: ${request.headers.headers}")
-      Future.successful(error)
+  def validateContentType[A]()(implicit request: Request[A]): Option[ErrorResponse] =
+    validateHeader(contentTypeValidation, HeaderNames.CONTENT_TYPE, ErrorContentTypeHeaderInvalid)
+
+  private def validateHeader[A](rules: Validation, headerName: String, error: => ErrorResponse)(implicit request: Request[A]) = {
+    if (rules(request.headers.get(headerName))) {
+      None
     }
+    else {
+      Some(error)
+    }
+
   }
+
 
 }

@@ -27,7 +27,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.UnauthorizedCode
 import uk.gov.hmrc.customs.declaration.connectors.MicroserviceAuthConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ConversationId, Eori, Ids, RequestedVersion}
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, Eori, Ids}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
@@ -70,34 +70,44 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     case _ => Right(AnyContentAsEmpty)
   })
 
-  private def validateHeaders(): ActionBuilder[Request] = {
-    //TODO MC conversationId
-    validateAccept(acceptHeaderValidation) andThen validateContentType(contentTypeValidation)
+  private def validateHeaders[A](implicit request: Request[A]): Seq[ErrorResponse] = {
+    Seq(validateAccept, validateContentType).filter(_.nonEmpty).map(_.get)
   }
 
-  def submit(): Action[AnyContent] = validateHeaders().async(bodyParser = xmlOrEmptyBody) {
+  private def processRequest(ids: Ids)(implicit request: Request[AnyContent]): Future[Result] = {
+    lazy val maybeAcceptHeader = request.headers.get(ACCEPT)
+    request.body.asXml match {
+      case Some(xml) =>
+        requestedVersionService.getVersionByAcceptHeader(maybeAcceptHeader).fold {
+          logger.error("Requested version is not valid. Processing failed.", ids)
+          Future.successful(ErrorResponseInvalidVersionRequested.XmlResult.withHeaders(conversationIdHeader(ids)))
+        } {
+          version =>
+            implicit val extendedIds = ids.copy(maybeRequestedVersion = Some(version))
+            processXmlPayload(xml)
+        }
+
+      case _ =>
+        logger.error(badlyFormedXmlMsg, ids)
+        Future.successful(ErrorResponse.errorBadRequest(badlyFormedXmlMsg).XmlResult.withHeaders(conversationIdHeader(ids)))
+    }
+  }
+
+  def submit(): Action[AnyContent] = Action.async(bodyParser = xmlOrEmptyBody) {
     implicit request =>
 
       val conversationId = uuidService.uuid().toString
       val basicIds = Ids(ConversationId(conversationId))
       logger.debug(s"Request received. Payload = ${request.body.toString} headers = ${request.headers.headers}", basicIds)
 
-      lazy val maybeAcceptHeader = request.headers.get(ACCEPT)
-      request.body.asXml match {
-        case Some(xml) =>
-          requestedVersionService.getVersionByAcceptHeader(maybeAcceptHeader).fold {
-            logger.error("Requested version is not valid. Processing failed.", basicIds)
-            Future.successful(ErrorResponseInvalidVersionRequested.XmlResult.withHeaders(conversationIdHeader(basicIds)))
-          } {
-            version =>
-              implicit val extendedIds = basicIds.copy(maybeRequestedVersion = Some(version))
-              processXmlPayload(xml)
-          }
-
-        case _ =>
-          logger.error(badlyFormedXmlMsg, basicIds)
-          Future.successful(ErrorResponse.errorBadRequest(badlyFormedXmlMsg).XmlResult.withHeaders(conversationIdHeader(basicIds)))
+      validateHeaders(request) match {
+        case s: Seq[ErrorResponse] if s.nonEmpty =>
+          val errors = s.map(er => er.message).mkString(" ")
+          logger.error(s"Header validation failed due to $errors", basicIds)
+          Future.successful(s.head.XmlResult)
+        case _ => processRequest(basicIds)
       }
+
   }
 
   private def conversationIdHeader(wrapper: Ids) = {

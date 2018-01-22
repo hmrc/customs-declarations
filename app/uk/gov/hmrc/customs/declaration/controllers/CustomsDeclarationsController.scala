@@ -98,15 +98,15 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     implicit request =>
 
       val conversationId = uuidService.uuid().toString
-      val basicIds = Ids(ConversationId(conversationId))
-      logger.debug(s"Request received. Payload = ${request.body.toString} headers = ${request.headers.headers}", basicIds)
+      val onlyConversationId = Ids(ConversationId(conversationId))
+      logger.debug(s"Request received. Payload = ${request.body.toString} headers = ${request.headers.headers}", onlyConversationId)
 
       validateHeaders(request) match {
         case Some(seq) =>
           val errors = seq.mkString(" ")
-          logger.error(s"Header validation failed due to $errors", basicIds)
+          logger.error(s"Header validation failed due to $errors", onlyConversationId)
           Future.successful(seq.head.XmlResult)
-        case _ => processRequest(basicIds)
+        case _ => processRequest(onlyConversationId)
       }
 
   }

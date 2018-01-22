@@ -27,13 +27,14 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, Ids}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
 import util.ApiSubscriptionFieldsTestData.fieldsIdString
 import util.ExternalServicesConfig.{AuthToken, Host, Port}
 import util.TestData._
 import util.externalservices.MdgWcoDecService
-import util.{RequestHeaders, CustomsDeclarationsExternalServicesConfig}
+import util.{CustomsDeclarationsExternalServicesConfig, RequestHeaders}
 
 class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with MdgWcoDecService {
@@ -43,6 +44,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
   private val correlationId = UUID.randomUUID()
+  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"))
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
     .withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_NAME -> fieldsIdString)
@@ -105,7 +107,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
 
   }
 
-  private def sendValidXml() = {
+  private def sendValidXml()(implicit ids: Ids) = {
     connector.send(ValidXML, new DateTime(), correlationId, None)
   }
 }

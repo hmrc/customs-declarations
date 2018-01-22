@@ -47,32 +47,36 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
     Future.successful(configuration.getString("override.clientID"))
   }
 
-  def prepareAndSend(inboundXml: NodeSeq, requestedApiVersion: RequestedVersion)(implicit hc: HeaderCarrier): Future[Ids] = {
-    val conversationId = uuidService.uuid()
+  def prepareAndSend(inboundXml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[Ids] = {
+
+    def futureClientSubscriptionId(requestedApiVersionNumber: => String)(implicit hc: HeaderCarrier): Future[FieldsId] = {
+      lazy val futureMaybeFromHeaders = Future.successful(findHeaderValue("api-subscription-fields-id"))
+      val foConfigOrHeader = orElse(futureMaybeClientIdFromConfiguration, futureMaybeFromHeaders)
+
+      orElse(foConfigOrHeader, futureApiSubFieldsId(requestedApiVersionNumber)(hc, ids)) flatMap {
+        case Some(fieldsId) => Future.successful(FieldsId(fieldsId))
+        case _ =>
+          val msg = "No value found for client subscription id"
+          logger.error(msg, ids)
+          Future.failed(new IllegalStateException(msg))
+      }
+    }
+
     val correlationId = uuidService.uuid()
     val dateTime = dateTimeProvider.nowUtc()
-
-    logger.info(s"[conversationId=$conversationId] correlationId=$correlationId, dateTime=$dateTime, requestedApiVersion=$requestedApiVersion")
+    val version = ids.maybeRequestedVersion.getOrElse(throw new IllegalStateException("api version should have been defined by now"))
 
     for {
-      fieldsId <- futureClientId(requestedApiVersion.versionNumber)
-      xmlToSend = preparePayload(inboundXml, conversationId, fieldsId, dateTime)
-      conversationId <- connector.send(xmlToSend, dateTime, correlationId, requestedApiVersion.configPrefix).map(_ => ConversationId(conversationId.toString))
-    } yield Ids(conversationId, fieldsId)
+      clientSubscriptionId <- futureClientSubscriptionId(version.versionNumber)
+      xmlToSend = preparePayload(inboundXml, ids.conversationId, clientSubscriptionId, dateTime)
+      _ <- {
+        connector.send(xmlToSend, dateTime, correlationId, version.configPrefix)
+      }
+    } yield ids
+
+
   }
 
-  private def futureClientId(requestedApiVersionNumber: => String)(implicit hc: HeaderCarrier): Future[FieldsId] = {
-    lazy val futureMaybeFromHeaders = Future.successful(findHeaderValue("api-subscription-fields-id"))
-    val foConfigOrHeader = orElse(futureMaybeClientIdFromConfiguration, futureMaybeFromHeaders)
-
-    orElse(foConfigOrHeader, futureApiSubFieldsId(requestedApiVersionNumber)) flatMap {
-      case Some(fieldsId) => Future.successful(FieldsId(fieldsId))
-      case _ =>
-        val msg = "No value found for clientId."
-        logger.error(msg)
-        Future.failed(new IllegalStateException(msg))
-    }
-  }
 
   private def orElse(fo1: Future[Option[String]], fo2: => Future[Option[String]]): Future[Option[String]] = {
     fo1.flatMap[Option[String]]{
@@ -81,18 +85,16 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  private def preparePayload(xml: NodeSeq, conversationId: UUID, fieldsId: FieldsId, dateTime: DateTime)(implicit hc: HeaderCarrier): NodeSeq = {
-    logger.debug(s"preparePayload Using fieldsId=$fieldsId")
-    wrapper.wrap(xml, conversationId.toString, fieldsId.value, dateTime)
+  private def preparePayload(xml: NodeSeq, conversationId: ConversationId, fieldsId: FieldsId, dateTime: DateTime)(implicit hc: HeaderCarrier): NodeSeq = {
+    wrapper.wrap(xml, conversationId.value, fieldsId.value, dateTime)
   }
 
-  private def futureApiSubFieldsId(requestedApiVersionNumber: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+  private def futureApiSubFieldsId(requestedApiVersionNumber: String)(implicit hc: HeaderCarrier, ids: Ids): Future[Option[String]] = {
     val maybeXClientId: Option[String] = findHeaderValue("X-Client-ID")
 
     maybeXClientId.fold[Future[Option[String]]](Future.successful(None)) { xClientId =>
       val apiSubscriptionKey = ApiSubscriptionKey(xClientId, apiContextEncoded, requestedApiVersionNumber)
       apiSubFieldsConnector.getSubscriptionFields(apiSubscriptionKey) map (response => {
-        logger.debug("got api-subscription-fields response", payload = response.toString)
         Some(response.fieldsId.toString)
       })
     }

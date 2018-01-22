@@ -27,7 +27,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.UnauthorizedCode
 import uk.gov.hmrc.customs.declaration.connectors.MicroserviceAuthConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{Eori, Ids, RequestedVersion}
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, Eori, Ids}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
@@ -43,7 +43,9 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
                                               customsConfigService: CustomsConfigService,
                                               override val authConnector: MicroserviceAuthConnector,
                                               override val requestedVersionService: RequestedVersionService,
-                                              customsDeclarationsBusinessService: CustomsDeclarationsBusinessService)
+                                              customsDeclarationsBusinessService: CustomsDeclarationsBusinessService,
+                                              uuidService: UuidService
+                                             )
   extends BaseController with HeaderValidator with AuthorisedFunctions {
 
   override val declarationsLogger: DeclarationsLogger = logger
@@ -68,67 +70,79 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     case _ => Right(AnyContentAsEmpty)
   })
 
-  private def validateHeaders(): ActionBuilder[Request] = {
-    validateAccept(acceptHeaderValidation) andThen validateContentType(contentTypeValidation)
+  private def validateHeaders[A](implicit request: Request[A]): Option[Seq[ErrorResponse]] = {
+    val seq = Seq(validateAccept, validateContentType).filter(_.nonEmpty).map(_.get)
+    if(seq.isEmpty) None else Some(seq)
   }
 
-  def submit(): Action[AnyContent] = validateHeaders().async(bodyParser = xmlOrEmptyBody) {
+  private def processRequest(ids: Ids)(implicit request: Request[AnyContent]): Future[Result] = {
+    lazy val maybeAcceptHeader = request.headers.get(ACCEPT)
+    request.body.asXml match {
+      case Some(xml) =>
+        requestedVersionService.getVersionByAcceptHeader(maybeAcceptHeader).fold {
+          logger.error("Requested version is not valid. Processing failed.", ids)
+          Future.successful(ErrorResponseInvalidVersionRequested.XmlResult.withHeaders(conversationIdHeader(ids)))
+        } {
+          version =>
+            implicit val extendedIds = ids.copy(maybeRequestedVersion = Some(version))
+            processXmlPayload(xml)
+        }
+
+      case _ =>
+        logger.error(badlyFormedXmlMsg, ids)
+        Future.successful(ErrorResponse.errorBadRequest(badlyFormedXmlMsg).XmlResult.withHeaders(conversationIdHeader(ids)))
+    }
+  }
+
+  def submit(): Action[AnyContent] = Action.async(bodyParser = xmlOrEmptyBody) {
     implicit request =>
 
-      logger.debug("submit", request.headers.headers)
-      logger.debug("entered submit controller")
-      lazy val maybeAcceptHeader = request.headers.get(ACCEPT)
-      request.body.asXml match {
-        case Some(xml) =>
-          requestedVersionService.getVersionByAcceptHeader(maybeAcceptHeader).fold {
-            logger.error(s"Requested version of Declarations API could not be resolved from Accept header: $maybeAcceptHeader")
-            Future.successful(ErrorResponseInvalidVersionRequested.XmlResult)
-          } {
-            implicit version =>
-              processXmlPayload(xml)
-          }
+      val conversationId = uuidService.uuid().toString
+      val onlyConversationId = Ids(ConversationId(conversationId))
+      logger.debug(s"Request received. Payload = ${request.body.toString} headers = ${request.headers.headers}", onlyConversationId)
 
-        case _ =>
-          logger.error(badlyFormedXmlMsg)
-          Future.successful(ErrorResponse.errorBadRequest(badlyFormedXmlMsg).XmlResult)
+      validateHeaders(request) match {
+        case Some(seq) =>
+          val errors = seq.mkString(" ")
+          logger.error(s"Header validation failed due to $errors", onlyConversationId)
+          Future.successful(seq.head.XmlResult)
+        case _ => processRequest(onlyConversationId)
       }
+
   }
 
-  private def processXmlPayload(xml: NodeSeq)(implicit hc: HeaderCarrier, ver: RequestedVersion): Future[Result] = {
+  private def conversationIdHeader(wrapper: Ids) = {
+    "X-Conversation-ID" -> wrapper.conversationId.value
+  }
+
+  private def processXmlPayload(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[Result] = {
     (authoriseCspSubmission(xml) orElseIfInsufficientEnrolments authoriseNonCspSubmission(xml) orElse unauthorised)
       .map {
-        case Right(ids) =>
-          logger.info("exiting processXmlPayload", ids)
-          NoContent.as(MimeTypes.XML).withHeaders("X-Conversation-ID" -> ids.conversationId.value)
+        case Right(identifiers) =>
+          logger.info("Request processed successfully", identifiers)
+          NoContent.as(MimeTypes.XML).withHeaders(conversationIdHeader(identifiers))
         case Left(errorResponse) =>
-          val msg = "Customs declaration submission failed."
-          logger.debug(s"$msg error processing payload. HttpStatusCode=${errorResponse.httpStatusCode} Error=${errorResponse.message}")
-          logger.error(msg)
-          errorResponse.XmlResult
+          errorResponse.XmlResult.withHeaders(conversationIdHeader(ids))
       }
       .recoverWith {
-        case NonFatal(e) =>
-          logger.error(s"Customs declaration submission failed. error=${e.getMessage}", e)
-          Future.successful(ErrorResponse.ErrorInternalServerError.XmlResult)
+        case NonFatal(_) =>
+          logger.error("Processing error.", ids)
+          Future.successful(ErrorResponse.ErrorInternalServerError.XmlResult.withHeaders(conversationIdHeader(ids)))
       }
   }
 
-  private def authoriseCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ver: RequestedVersion): Future[ProcessingResult] = {
+  private def authoriseCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ProcessingResult] = {
     authorised(Enrolment(apiScopeKey) and AuthProviders(PrivilegedApplication)) {
-      logger.info("Processing an authorised CSP submission.")
       customsDeclarationsBusinessService.authorisedCspSubmission(xml)
     }
   }
 
-  private def authoriseNonCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ver: RequestedVersion): Future[ProcessingResult] = {
-    logger.info("Authorising a non-CSP request.")
+  private def authoriseNonCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ProcessingResult] = {
     authorised(Enrolment(customsEnrolmentName) and AuthProviders(GovernmentGateway)).retrieve(Retrievals.authorisedEnrolments) {
       enrolments =>
         val maybeEori = findEoriInCustomsEnrolment(enrolments, hc.authorization)
-        logger.debug(s"EORI from Customs enrolment for non-CSP request=$maybeEori")
         maybeEori match {
           case Some(_) =>
-            logger.info("Processing an authorised non-CSP submission.")
             customsDeclarationsBusinessService.authorisedNonCspSubmission(xml)
 
           case _ => Future.successful(Left(ErrorResponseEoriNotFoundInCustomsEnrolment))
@@ -136,10 +150,10 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  private def findEoriInCustomsEnrolment(enrolments: Enrolments, authHeader: Option[Authorization])(implicit hc: HeaderCarrier): Option[Eori] = {
+  private def findEoriInCustomsEnrolment(enrolments: Enrolments, authHeader: Option[Authorization])(implicit hc: HeaderCarrier, ids: Ids): Option[Eori] = {
     val maybeCustomsEnrolment = enrolments.getEnrolment(customsEnrolmentName)
     if (maybeCustomsEnrolment.isEmpty) {
-      logger.warn(s"Customs enrolment $customsEnrolmentName not retrieved for authorised non-CSP call with Authorization header=${authHeader.map(_.value).getOrElse("")}")
+      logger.debug(s"Customs enrolment $customsEnrolmentName not retrieved for authorised non-CSP call with Authorization header=${authHeader.map(_.value).getOrElse("")}", ids)
     }
     for {
       customsEnrolment <- maybeCustomsEnrolment
@@ -147,9 +161,8 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     } yield Eori(eoriIdentifier.value)
   }
 
-  private def unauthorised(authException: AuthorisationException)(implicit hc: HeaderCarrier): Future[Left[ErrorResponse, Ids]] = {
-    val authorisationValue = hc.authorization.map(_.value).getOrElse("")
-    logger.error(s"Unauthorized call with Authorization='$authorisationValue' . error=${authException.getMessage}", authException)
+  private def unauthorised(authException: AuthorisationException)(implicit hc: HeaderCarrier, ids: Ids): Future[Left[ErrorResponse, Ids]] = {
+    logger.error("User is not authorised", ids)
     Future.successful(Left(ErrorResponseUnauthorisedGeneral))
   }
 

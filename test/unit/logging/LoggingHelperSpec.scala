@@ -28,7 +28,7 @@ class LoggingHelperSpec extends UnitSpec {
   private val fromHeader = ApiSubscriptionFieldsTestData.fieldsIdString
   private val notFromHeader = "FIELDS_ID_NOT_FROM_HEADER"
   private val fieldsIdNotFromHeader = FieldsId(notFromHeader)
-  private val theIds = Ids(TestData.conversationId, fieldsIdNotFromHeader)
+  private val theIds = Ids(TestData.conversationId, Some(fieldsIdNotFromHeader))
   private val allHeaders = Seq(AUTH_HEADER, X_CLIENT_ID_HEADER, API_SUBSCRIPTION_FIELDS_ID_HEADER, X_CONVERSATION_ID_HEADER)
   private val justXClientIdHeader = Seq(X_CLIENT_ID_HEADER)
   private val errorMsg = "ERROR"
@@ -42,7 +42,7 @@ class LoggingHelperSpec extends UnitSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     "format ERROR" in {
-      LoggingHelper.formatError(errorMsg) shouldBe errorMsg
+      LoggingHelper.formatError(errorMsg, Some(theIds)) shouldBe s"[fieldsId=FIELDS_ID_NOT_FROM_HEADER][conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] $errorMsg"
     }
 
     "format WARN"  in {
@@ -54,7 +54,7 @@ class LoggingHelperSpec extends UnitSpec {
     }
 
     "format DEBUG" in {
-      LoggingHelper.formatDebug(debugMsg) shouldBe s"$debugMsg\nrequest headers=${hc.headers}"
+      LoggingHelper.formatDebug(debugMsg, theIds) shouldBe s"$debugMsg\nrequest headers=${hc.headers}"
     }
   }
 
@@ -62,7 +62,7 @@ class LoggingHelperSpec extends UnitSpec {
     implicit val hc: HeaderCarrier = hcWithAllHeaders
 
     "format ERROR" in {
-      LoggingHelper.formatError(errorMsg) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] " + errorMsg
+      LoggingHelper.formatError(errorMsg, Some(theIds)) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader][conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] " + errorMsg
     }
 
     "format WARN"  in {
@@ -74,7 +74,7 @@ class LoggingHelperSpec extends UnitSpec {
     }
 
     "format DEBUG" in {
-      LoggingHelper.formatDebug(debugMsg) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=${hcWithAllHeaders.headers}"
+      LoggingHelper.formatDebug(debugMsg, theIds) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=${hcWithAllHeaders.headers}"
     }
   }
 
@@ -94,21 +94,13 @@ class LoggingHelperSpec extends UnitSpec {
     }
   }
 
-  "LoggingHelper DEBUG" should {
-    implicit val hc: HeaderCarrier = hcWithAllHeaders
-
-    "format with payload" in {
-      LoggingHelper.formatDebug(debugMsg, maybePayload = Some("PAYLOAD")) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=${hcWithAllHeaders.headers}\npayload=PAYLOAD"
-    }
-  }
-
   "LoggingHelper" should {
     "format INFO with headers" in {
       LoggingHelper.formatInfo(infoMsg, allHeaders) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $infoMsg"
     }
 
     "format DEBUG with headers" in {
-      LoggingHelper.formatDebug(debugMsg, allHeaders) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=$allHeaders"
+      LoggingHelper.formatDebug(debugMsg, allHeaders, theIds) shouldBe s"[clientId=SOME_X_CLIENT_ID][fieldsId=$fromHeader] $debugMsg\nrequest headers=$allHeaders"
     }
 
   }

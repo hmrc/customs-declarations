@@ -26,7 +26,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgWcoDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, Ids, RequestedVersion}
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, ConversationId, Ids, RequestedVersion}
 import uk.gov.hmrc.customs.declaration.services.{CommunicationService, DateTimeService, UuidService}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -53,7 +53,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val clientIdOverride = s"OVERRIDE_$fieldsIdString"
   private val configKeyPrefix = Some("config-key-prefix")
   private val versionNumber = "version.number"
-
+  private implicit val fullIds = ids.copy(maybeRequestedVersion = Some(RequestedVersion(versionNumber, configKeyPrefix)))
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
     .withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_HEADER, RequestHeaders.ACCEPT_HMRC_XML_V1_HEADER)
 
@@ -66,10 +66,10 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
   override protected def beforeEach(): Unit = {
     reset(mockLogger, mockMdgWcoDeclarationConnector, mockApiSubscriptionFieldsConnector, mockPayloadDecorator, mockUuidService, mockDateTimeProvider, mockConfiguration)
-    when(mockUuidService.uuid()).thenReturn(conversationIdUuid).thenReturn(correlationId)
+    when(mockUuidService.uuid()).thenReturn(correlationId)
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockConfiguration.getString("override.clientID")).thenReturn(None)
-    when(mockMdgWcoDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[Option[String]])).thenReturn(mockHttpResponse)
+    when(mockMdgWcoDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[Option[String]])(meq(fullIds))).thenReturn(mockHttpResponse)
   }
 
   "CommunicationService" should {
@@ -77,35 +77,35 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
       service =>
         setupMockXmlWrapper
         prepareAndSendValidXml(service)
-        verify(mockMdgWcoDeclarationConnector).send(meq(WrappedValidXML), any[DateTime], any[UUID], any[Option[String]])
+        verify(mockMdgWcoDeclarationConnector).send(meq(WrappedValidXML), any[DateTime], any[UUID], any[Option[String]])(meq(fullIds))
     }
 
     "generate correlationId and pass to connector" in testService {
       service =>
         setupMockXmlWrapper
         prepareAndSendValidXml(service)
-        verify(mockMdgWcoDeclarationConnector).send(any[NodeSeq], any[DateTime], meq(correlationId), any[Option[String]])
+        verify(mockMdgWcoDeclarationConnector).send(any[NodeSeq], any[DateTime], meq(correlationId), any[Option[String]])(meq(fullIds))
     }
 
     "get utc date time and pass to connector" in testService {
       service =>
         setupMockXmlWrapper
         prepareAndSendValidXml(service)
-        verify(mockMdgWcoDeclarationConnector).send(any[NodeSeq], meq(dateTime), any[UUID], any[Option[String]])
+        verify(mockMdgWcoDeclarationConnector).send(any[NodeSeq], meq(dateTime), any[UUID], any[Option[String]])(meq(fullIds))
     }
 
     "pass config key prefix to connector" in testService {
       service =>
         setupMockXmlWrapper
         prepareAndSendValidXml(service)
-        verify(mockMdgWcoDeclarationConnector).send(any[NodeSeq], any[DateTime], any[UUID], meq(configKeyPrefix))
+        verify(mockMdgWcoDeclarationConnector).send(any[NodeSeq], any[DateTime], any[UUID], meq(configKeyPrefix))(meq(fullIds))
     }
 
     "return a generated conversationId and fetched fieldsId" in testService {
       service =>
         setupMockXmlWrapper
         val generatedConversationId = await(prepareAndSendValidXml(service))
-        generatedConversationId shouldBe ids
+        generatedConversationId shouldBe fullIds
     }
 
     "call payload decorator passing incoming xml" in testService {
@@ -133,17 +133,17 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     "use fieldsId returned from api subscription service when only X-Client-ID header present." in testService {
       service =>
         val hc = HeaderCarrier().withExtraHeaders(RequestHeaders.X_CLIENT_ID_HEADER)
-        when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+        when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier], any[Ids])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
 
         prepareAndSendValidXml(service, hc)
         verify(mockPayloadDecorator).wrap(any[NodeSeq], anyString, meq(fieldsIdString), any[DateTime])
-        verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[HeaderCarrier])
+        verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[HeaderCarrier], any[Ids])
     }
 
     "when hardcoded value as clientID NOT hardcoded in configuration AND both api-subscription-fields-id and X-Client-ID headers present, use api-subscription-fields-id header" in testService {
       service =>
         val hc = HeaderCarrier().withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_HEADER, RequestHeaders.X_CLIENT_ID_HEADER)
-        when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+        when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier], any[Ids])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
 
         prepareAndSendValidXml(service, hc)
         verify(mockPayloadDecorator).wrap(any[NodeSeq], anyString, meq(fieldsIdString), any[DateTime])
@@ -153,16 +153,16 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     "when clientId not specified in configuration or headers then IllegalStateException should be thrown" in testService {
       service =>
         val emptyHeaderCarrier = HeaderCarrier()
-        when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
+        when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier], any[Ids])).thenReturn(Future.failed(emulatedServiceFailure))
 
         val caught = intercept[IllegalStateException](prepareAndSendValidXml(service, emptyHeaderCarrier))
-        caught.getMessage shouldBe "No value found for clientId."
+        caught.getMessage shouldBe "No value found for client subscription id"
     }
 
     "when hardcoded value as clientID NOT hardcoded in configuration AND api-subscription-fields-id header not present and api subscription service returns failed future" in testService {
       service =>
         val hc = HeaderCarrier().withExtraHeaders(RequestHeaders.X_CLIENT_ID_HEADER)
-        when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
+        when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier], any[Ids])).thenReturn(Future.failed(emulatedServiceFailure))
 
         val caught = intercept[EmulatedServiceFailure](prepareAndSendValidXml(service, hc))
         caught shouldBe emulatedServiceFailure
@@ -186,6 +186,6 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
   }
 
   private def prepareAndSendValidXml(service: CommunicationService, hc: HeaderCarrier = headerCarrier): Ids = {
-    await(service.prepareAndSend(ValidXML, RequestedVersion(versionNumber, configKeyPrefix))(hc))
+    await(service.prepareAndSend(ValidXML)(hc, fullIds))
   }
 }

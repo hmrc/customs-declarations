@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customs.declaration.logging
 
 import play.api.http.HeaderNames.AUTHORIZATION
-import uk.gov.hmrc.customs.declaration.model.{MaybeIds, SeqOfHeader}
+import uk.gov.hmrc.customs.declaration.model.{Ids, MaybeIds, SeqOfHeader}
 import uk.gov.hmrc.http.HeaderCarrier
 
 object LoggingHelper {
@@ -25,8 +25,8 @@ object LoggingHelper {
   private val headerOverwriteValue = "value-not-logged"
   private val headersToOverwrite = Set(AUTHORIZATION)
 
-  def formatError(msg: String)(implicit hc: HeaderCarrier): String = {
-    formatInfo(msg, None)
+  def formatError(msg: String, maybeIds: Option[Ids])(implicit hc: HeaderCarrier): String = {
+    formatInfo(msg, maybeIds)
   }
 
   def formatWarn(msg: String)(implicit hc: HeaderCarrier): String = {
@@ -42,25 +42,26 @@ object LoggingHelper {
     s"${format(headers, maybeIds = None)} $msg".trim
   }
 
-  def formatDebug(msg: String, maybePayload: Option[String] = None)(implicit hc: HeaderCarrier): String = {
-    val headers = hc.headers
-    s"${format(headers, maybeIds = None)} $msg\nrequest headers=${overwriteHeaderValues(headers, headersToOverwrite - AUTHORIZATION)} ".trim + maybePayload.fold("")(payload => s"\npayload=$payload")
+  def formatDebug(msg: String, ids: Ids)(implicit hc: HeaderCarrier): String = {
+    formatDebug(msg, hc.headers, ids)
   }
 
-  def formatDebug(msg: String, headers: SeqOfHeader): String = {
+  def formatDebug(msg: String, headers: SeqOfHeader, ids: Ids): String = {
     s"${format(headers, maybeIds = None)} $msg\nrequest headers=${overwriteHeaderValues(headers, headersToOverwrite - AUTHORIZATION)} ".trim
   }
 
   private def format(headers: SeqOfHeader, maybeIds: MaybeIds = None): String = {
-
     lazy val maybeClientId: Option[String] = findHeaderValue("X-Client-ID", headers)
-    // Note this will be present when strategic API platform solution is in place
-    lazy val maybeFieldsIdFromHeader: Option[String] = findHeaderValue("api-subscription-fields-id", headers)
+    lazy val maybeSubscriptionIdFromHeader: Option[String] = findHeaderValue("api-subscription-fields-id", headers)
+    lazy val maybeSubscriptionIdFromHeaderOrIds = maybeSubscriptionIdFromHeader.orElse(maybeIds.flatMap(ids => ids.maybeClientSubscriptionId.map(_.value)))
 
-    lazy val maybeFieldsIdFromHeaderOrIds = maybeFieldsIdFromHeader.orElse(maybeIds.map(ids => ids.fieldsId.value))
     maybeClientId.fold("")(appId => s"[clientId=$appId]") +
-      maybeFieldsIdFromHeaderOrIds.fold("")(fieldsId => s"[fieldsId=$fieldsId]") +
-      maybeIds.fold("")(ids => s"[conversationId=${ids.conversationId.value }]")
+      maybeSubscriptionIdFromHeaderOrIds.fold("")(fieldsId => s"[fieldsId=$fieldsId]") +
+      maybeIds.fold("") { ids =>
+        lazy val maybeRequestedVersion = ids.maybeRequestedVersion
+        s"[conversationId=${ids.conversationId.value}]" +
+          maybeRequestedVersion.fold("")(ver => s"[requestedApiVersion=${ver.versionNumber}]")
+      }
   }
 
   private def findHeaderValue(headerName: String, headers: SeqOfHeader): Option[String] = {

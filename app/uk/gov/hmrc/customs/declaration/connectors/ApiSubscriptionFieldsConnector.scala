@@ -19,7 +19,7 @@ package uk.gov.hmrc.customs.declaration.connectors
 import javax.inject.{Inject, Singleton}
 
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey}
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey, Ids}
 import uk.gov.hmrc.customs.declaration.services.WSHttp
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 import uk.gov.hmrc.play.config.inject.ServicesConfig
@@ -39,13 +39,13 @@ class ApiSubscriptionFieldsConnector @Inject()(http: WSHttp,
   private lazy val baseUrl = servicesConfig.baseUrl(service)
   private lazy val context = servicesConfig.getConfString(serviceContext, throw new IllegalStateException(s"Configuration error - $serviceContext not found."))
 
-  def getSubscriptionFields(apiSubsKey: ApiSubscriptionKey)(implicit hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
+  def getSubscriptionFields(apiSubsKey: ApiSubscriptionKey)(implicit hc: HeaderCarrier, ids: Ids): Future[ApiSubscriptionFieldsResponse] = {
     val url = ApiSubscriptionFieldsPath.url(s"$baseUrl$context", apiSubsKey)
     get(url)
   }
 
-  private def get(url: String)(implicit hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
-    logger.debug(s"Getting fields id from api subscription fields service. url=$url")
+  private def get(url: String)(implicit hc: HeaderCarrier, ids: Ids): Future[ApiSubscriptionFieldsResponse] = {
+    logger.debug(s"Getting fields id from api subscription fields service. url=$url", ids)
 
     http.GET[ApiSubscriptionFieldsResponse](url)
       .recoverWith {
@@ -53,7 +53,7 @@ class ApiSubscriptionFieldsConnector @Inject()(http: WSHttp,
       }
       .recoverWith {
         case e: Throwable =>
-          logger.error(s"Call to subscription information service failed. url=$url", e)
+          logger.error(s"Call to subscription information service failed. url=$url", ids)
           Future.failed(e)
       }
   }

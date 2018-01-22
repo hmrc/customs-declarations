@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.RequestedVersion
+import uk.gov.hmrc.customs.declaration.model.{Ids, RequestedVersion}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.collection.Seq
@@ -35,26 +35,26 @@ class CustomsDeclarationsBusinessService @Inject()(logger: DeclarationsLogger,
 
   type ValidationResult = Either[ErrorResponse, Unit]
 
-  def authorisedCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ver: RequestedVersion): Future[ProcessingResult] = {
-    logger.debug(s"authorisedCspSubmission xml=\n$xml")
+  def authorisedCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ProcessingResult] = {
     sendIfValid(xml)
   }
 
-  def authorisedNonCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ver: RequestedVersion): Future[ProcessingResult] = {
-    logger.debug(s"authorisedNonCspSubmission xml=\n$xml")
+  def authorisedNonCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ProcessingResult] = {
     sendIfValid(xml)
   }
 
-  private def sendIfValid(xml: NodeSeq)(implicit hc: HeaderCarrier, ver: RequestedVersion) = {
+  private def sendIfValid(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ProcessingResult] = {
     validateXml(xml) thenProcessWith prepareAndSend(xml)
   }
 
-  private def validateXml(xml: NodeSeq): Future[ValidationResult] = {
+  private def validateXml(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ValidationResult] = {
     xmlValidationService.validate(xml).map(Right(_))
       .recover {
         case saxe: SAXException =>
+          val msg = "Payload is not valid according to schema"
+          logger.error(msg, ids)
           Left(ErrorResponse
-            .errorBadRequest("Payload is not valid according to schema")
+            .errorBadRequest(msg)
             .withErrors(xmlValidationErrors(saxe): _*))
       }
   }
@@ -72,8 +72,8 @@ class CustomsDeclarationsBusinessService @Inject()(logger: DeclarationsLogger,
     loop(saxe, Nil)
   }
 
-  private def prepareAndSend(xml: NodeSeq)(implicit hc: HeaderCarrier, ver: RequestedVersion): Future[ProcessingResult] = {
-    communication.prepareAndSend(xml, ver).map(Right(_))
+  private def prepareAndSend(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ProcessingResult] = {
+    communication.prepareAndSend(xml).map(Right(_))
   }
 
   private implicit class ValidationFutureOps(validationFuture: Future[ValidationResult]) {

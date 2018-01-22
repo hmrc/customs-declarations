@@ -30,7 +30,7 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.SeqOfHeader
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, Ids, SeqOfHeader}
 import uk.gov.hmrc.customs.declaration.services.WSHttp
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -55,6 +55,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
     .withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_HEADER)
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
+  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"))
 
   override protected def beforeEach() {
     reset(mockWsPost, mockDeclarationsLogger, mockServiceConfigProvider)
@@ -167,8 +168,6 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
           awaitRequest
         }
         caught shouldBe TestData.emulatedServiceFailure
-
-        eventuallyVerifyError(caught)
       }
 
       "wrap an underlying error when MDG call fails with an http exception" in {
@@ -178,20 +177,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
           awaitRequest
         }
         caught.getCause shouldBe httpException
-
-        eventuallyVerifyError(caught)
       }
-    }
-  }
-
-  private def eventuallyVerifyError(caught: Throwable) {
-    eventually {
-      PassByNameVerifier(mockDeclarationsLogger, "error")
-        .withByNameParam[String](s"Call to wco declaration submission failed. url=${v1Config.url}")
-        .withByNameParam[Throwable](caught)
-        .withAnyHeaderCarrierParam
-        .verify()
-
     }
   }
 

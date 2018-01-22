@@ -37,7 +37,7 @@ object TestData {
   val conversationIdValue = "38400000-8cf0-11bd-b23e-10b96e4ef00d"
   val conversationIdUuid: UUID = UUID.fromString(conversationIdValue)
   val conversationId: ConversationId = ConversationId(conversationIdValue)
-  val ids = Ids(conversationId, ApiSubscriptionFieldsTestData.fieldsId)
+  val ids = Ids(conversationId, Some(ApiSubscriptionFieldsTestData.fieldsId))
 
   val cspBearerToken = "CSP-Bearer-Token"
   val nonCspBearerToken = "Software-House-Bearer-Token"

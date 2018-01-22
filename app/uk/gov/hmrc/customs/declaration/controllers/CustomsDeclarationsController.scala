@@ -70,8 +70,9 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     case _ => Right(AnyContentAsEmpty)
   })
 
-  private def validateHeaders[A](implicit request: Request[A]): Seq[ErrorResponse] = {
-    Seq(validateAccept, validateContentType).filter(_.nonEmpty).map(_.get)
+  private def validateHeaders[A](implicit request: Request[A]): Option[Seq[ErrorResponse]] = {
+    val seq = Seq(validateAccept, validateContentType).filter(_.nonEmpty).map(_.get)
+    if(seq.isEmpty) None else Some(seq)
   }
 
   private def processRequest(ids: Ids)(implicit request: Request[AnyContent]): Future[Result] = {
@@ -101,10 +102,10 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
       logger.debug(s"Request received. Payload = ${request.body.toString} headers = ${request.headers.headers}", basicIds)
 
       validateHeaders(request) match {
-        case s: Seq[ErrorResponse] if s.nonEmpty =>
-          val errors = s.map(er => er.message).mkString(" ")
+        case Some(seq) =>
+          val errors = seq.mkString(" ")
           logger.error(s"Header validation failed due to $errors", basicIds)
-          Future.successful(s.head.XmlResult)
+          Future.successful(seq.head.XmlResult)
         case _ => processRequest(basicIds)
       }
 

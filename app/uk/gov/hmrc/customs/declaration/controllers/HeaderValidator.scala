@@ -45,7 +45,7 @@ trait HeaderValidator extends Results {
   def validateContentType[A]()(implicit request: Request[A]): Option[ErrorResponse] =
     validateHeader(contentTypeValidation, HeaderNames.CONTENT_TYPE, ErrorContentTypeHeaderInvalid)
 
-  private def validateHeader[A](rules: Validation, headerName: String, error: => ErrorResponse)(implicit request: Request[A]) = {
+  private def validateHeader[A](rules: Validation, headerName: String, error: => ErrorResponse)(implicit request: Request[A]): Option[ErrorResponse] = {
     if (rules(request.headers.get(headerName))) {
       None
     }

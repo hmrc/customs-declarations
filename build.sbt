@@ -18,7 +18,8 @@ name := "customs-declarations"
 targetJvm := "jvm-1.8"
 
 lazy val allResolvers = resolvers ++= Seq(
-  Resolver.bintrayRepo("hmrc", "releases")
+  Resolver.bintrayRepo("hmrc", "releases"),
+  Resolver.jcenterRepo
 )
 
 lazy val AcceptanceTest = config("acceptance") extend Test

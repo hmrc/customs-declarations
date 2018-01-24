@@ -105,7 +105,7 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
         case Some(seq) =>
           val errors = seq.mkString(" ")
           logger.error(s"Header validation failed due to $errors", onlyConversationId)
-          Future.successful(seq.head.XmlResult)
+          Future.successful(seq.head.XmlResult.withHeaders(conversationIdHeader(onlyConversationId)))
         case _ => processRequest(onlyConversationId)
       }
 

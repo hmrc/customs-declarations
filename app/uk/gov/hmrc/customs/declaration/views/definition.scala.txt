@@ -15,7 +15,8 @@
     "versions": [
       {
         "version": "1.0",
-        "status": "PUBLISHED",
+        "status": "STABLE",
+        "endpointsEnabled": true,
         "access": {
           "type": "PUBLIC"
         },
@@ -34,7 +35,8 @@
       },
       {
         "version": "2.0",
-        "status": "PUBLISHED",
+        "status": "STABLE",
+        "endpointsEnabled": true,
         "access": {
           "type": "PRIVATE",
           "whitelistedApplicationIds": @Json.toJson(whitelistedApplicationIds)

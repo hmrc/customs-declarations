@@ -100,13 +100,13 @@ class DefinitionSpec extends AcceptanceTestSpec with Matchers {
           |          {
           |            "name": "callbackUrl",
           |            "description": "What's your callback URL for declaration submissions?",
-          |            "type": "URL"
+          |            "type": "URL",
           |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
           |          },
           |          {
           |            "name": "securityToken",
           |            "description": "The full value of Authorization HTTP header that will be used when notifying you.",
-          |            "type": "SecureToken"
+          |            "type": "SecureToken",
           |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
           |          }
           |        ]

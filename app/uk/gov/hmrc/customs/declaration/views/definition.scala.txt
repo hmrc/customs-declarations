@@ -30,7 +30,7 @@
           {
             "name": "securityToken",
             "description": "What's the value of the HTTP Authorization header we should use to notify you?",
-            "type": "SecureToken"
+            "type": "SecureToken",
             "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
           }
         ]

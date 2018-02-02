@@ -73,13 +73,15 @@ class DefinitionSpec extends AcceptanceTestSpec with Matchers {
           |        "fieldDefinitions": [
           |          {
           |            "name": "callbackUrl",
-          |            "description": "The URL of your HTTPS webservice that HMRC calls to notify you regarding the declaration submission.",
-          |            "type": "URL"
+          |            "description": "What's your callback URL for declaration submissions?",
+          |            "type": "URL",
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
           |          },
           |          {
           |            "name": "securityToken",
-          |            "description": "The full value of Authorization HTTP header that will be used when notifying you.",
-          |            "type": "SecureToken"
+          |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
+          |            "type": "SecureToken",
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
           |          }
           |        ]
           |      },
@@ -89,7 +91,10 @@ class DefinitionSpec extends AcceptanceTestSpec with Matchers {
           |        "endpointsEnabled": true,
           |        "access": {
           |          "type": "PRIVATE",
-          |          "whitelistedApplicationIds":["someId-1", "someId-2"]
+          |          "whitelistedApplicationIds": [
+          |            "someId-1",
+          |            "someId-2"
+          |          ]
           |        },
           |        "fieldDefinitions": [
           |          {
@@ -107,7 +112,6 @@ class DefinitionSpec extends AcceptanceTestSpec with Matchers {
           |    ]
           |  }
           |}
-          |
         """.stripMargin)
     }
   }

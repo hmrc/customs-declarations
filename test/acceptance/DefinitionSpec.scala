@@ -105,7 +105,7 @@ class DefinitionSpec extends AcceptanceTestSpec with Matchers {
           |          },
           |          {
           |            "name": "securityToken",
-          |            "description": "The full value of Authorization HTTP header that will be used when notifying you.",
+          |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
           |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
           |          }

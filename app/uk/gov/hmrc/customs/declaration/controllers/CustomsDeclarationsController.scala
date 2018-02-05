@@ -120,7 +120,7 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
       .map {
         case Right(identifiers) =>
           logger.info("Request processed successfully", identifiers)
-          NoContent.as(MimeTypes.XML).withHeaders(conversationIdHeader(identifiers))
+          Accepted.as(MimeTypes.XML).withHeaders(conversationIdHeader(identifiers))
         case Left(errorResponse) =>
           errorResponse.XmlResult.withHeaders(conversationIdHeader(ids))
       }

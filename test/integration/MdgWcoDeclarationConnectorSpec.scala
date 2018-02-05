@@ -79,7 +79,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
   "MdgWcoDeclarationConnector" should {
 
     "make a correct request" in {
-      setupMdgWcoDecServiceToReturn(NO_CONTENT)
+      setupMdgWcoDecServiceToReturn(ACCEPTED)
       await(sendValidXml())
       verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
     }

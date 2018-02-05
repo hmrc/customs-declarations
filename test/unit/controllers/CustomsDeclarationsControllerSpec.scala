@@ -126,18 +126,18 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       }
     }
 
-    "respond with status 204 and conversationId in header for a processed valid CSP request" in {
+    "respond with status 202 and conversationId in header for a processed valid CSP request" in {
       authoriseCsp()
       testSubmitResult(ValidRequest) { result =>
-        status(result) shouldBe NO_CONTENT
+        status(result) shouldBe ACCEPTED
         header(RequestHeaders.X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
       }
     }
 
-    "respond with status 204 and conversationId in header for a processed valid non-CSP request" in {
+    "respond with status 202 and conversationId in header for a processed valid non-CSP request" in {
       authoriseNonCsp(Some(declarantEori))
       testSubmitResult(ValidRequest) { result =>
-        status(result) shouldBe NO_CONTENT
+        status(result) shouldBe ACCEPTED
         header(RequestHeaders.X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
       }
     }

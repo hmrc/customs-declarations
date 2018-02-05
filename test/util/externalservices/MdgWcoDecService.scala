@@ -25,12 +25,12 @@ trait MdgWcoDecService extends WireMockRunner {
   private val urlV2MatchingRequestPath = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)
 
   def startMdgWcoDecService(): Unit = {
-    setupMdgWcoDecServiceToReturn(NO_CONTENT)
+    setupMdgWcoDecServiceToReturn(ACCEPTED)
 
     stubFor(post(urlV1MatchingRequestPath).
       willReturn(
         aResponse()
-          .withStatus(NO_CONTENT)))
+          .withStatus(ACCEPTED)))
   }
 
   def setupMdgWcoDecServiceToReturn(status: Int): Unit =

@@ -106,7 +106,7 @@ that `default` configuration is declared directly inside the `customs-declaratio
 
             stub {
               host = localhost
-              port = 9477
+              port = 9479
               bearer-token = "some_stub_token"
               context = "/registrations/registerwithid/1.0.0"
             }
@@ -121,7 +121,7 @@ that `default` configuration is declared directly inside the `customs-declaratio
       
               stub {
                 host = localhost
-                port = 9477
+                port = 9479
                 bearer-token = "some_stub_token"
                 context = "/registrations/registerwithid/1.0.0"
               }

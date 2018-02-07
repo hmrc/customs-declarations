@@ -1,0 +1,45 @@
+<_2:MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+	<_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode>
+	<_2:WCOTypeName>RES</_2:WCOTypeName>
+	<_2:ResponsibleCountryCode/>
+	<_2:ResponsibleAgencyName/>
+	<_2:AgencyAssignedCustomizationCode/>
+	<_2:AgencyAssignedCustomizationVersionCode/>
+	<_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+		<_2_1:FunctionCode>03</_2_1:FunctionCode>
+		<_2_1:FunctionalReferenceID>c41cb7554783489c94e24939cb1ccf51</_2_1:FunctionalReferenceID>
+		<_2_1:IssueDateTime>
+			<_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20180125104618Z</_2_2:DateTimeString>
+		</_2_1:IssueDateTime>
+		<_2_1:Error>
+			<_2_1:ValidationCode>DMS10001</_2_1:ValidationCode>
+			<_2_1:Pointer>
+				<_2_1:DocumentSectionCode>42A</_2_1:DocumentSectionCode>
+			</_2_1:Pointer>
+			<_2_1:Pointer>
+				<_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>
+				<_2_1:DocumentSectionCode>67A</_2_1:DocumentSectionCode>
+			</_2_1:Pointer>
+			<_2_1:Pointer>
+				<_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>
+				<_2_1:DocumentSectionCode>68A</_2_1:DocumentSectionCode>
+			</_2_1:Pointer>
+			<_2_1:Pointer>
+				<_2_1:DocumentSectionCode>23A</_2_1:DocumentSectionCode>
+			</_2_1:Pointer>
+			<_2_1:Pointer>
+				<_2_1:DocumentSectionCode>65A</_2_1:DocumentSectionCode>
+				<_2_1:TagID>128</_2_1:TagID>
+			</_2_1:Pointer>
+		</_2_1:Error>
+		<_2_1:Declaration>
+			<_2_1:FunctionalReferenceID>Import_Obligation_REJ</_2_1:FunctionalReferenceID>
+			<_2_1:ID>18GBJCUDI9ADRHWD54</_2_1:ID>
+			<_2_1:RejectionDateTime>
+				<_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20180125104618Z</_2_2:DateTimeString>
+			</_2_1:RejectionDateTime>
+			<_2_1:VersionID>1</_2_1:VersionID>
+		</_2_1:Declaration>
+	</_2_1:Response>
+</_2:MetaData>
+headers=List((Content-Type,application/xml), (Authorization,BASIC value-not-logged), (User-Agent,Customs Declaration Service), (X-Conversation-ID,xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx))

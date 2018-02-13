@@ -57,7 +57,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
     .withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_HEADER, RequestHeaders.ACCEPT_HMRC_XML_V1_HEADER)
 
-  private val expectedApiSubscriptionKey = ApiSubscriptionKey(xClientId, "customs%2Fdeclarations", versionNumber)
+  private val expectedApiSubscriptionKey = ApiSubscriptionKey(xClientId, "customs%2Fdeclarations%2F", versionNumber)
 
   private def testService(test: CommunicationService => Unit) {
     test(new CommunicationService(mockLogger, mockMdgWcoDeclarationConnector, mockApiSubscriptionFieldsConnector,

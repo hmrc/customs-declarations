@@ -53,7 +53,7 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
   private val expectedUrl = s"http://$Host:$Port$ApiSubscriptionFieldsContext/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0"
 
-  private val expectedApiSubscriptionKey = ApiSubscriptionKey(xClientId, "customs%2Fdeclarations%2F", "2.0")
+  private val expectedApiSubscriptionKey = ApiSubscriptionKey(xClientId, "customs%2Fdeclarations", "2.0")
 
   override protected def beforeEach() {
     reset(mockDeclarationsLogger, mockWSGetImpl)

@@ -41,7 +41,7 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
                                      dateTimeProvider: DateTimeService,
                                      configuration: Configuration) {
 
-  private val apiContextEncoded = URLEncoder.encode("customs/declarations/", "UTF-8")
+  private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
   lazy val futureMaybeClientIdFromConfiguration: Future[Option[String]] = {
     Future.successful(configuration.getString("override.clientID"))

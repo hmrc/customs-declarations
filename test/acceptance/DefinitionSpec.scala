@@ -61,7 +61,7 @@ class DefinitionSpec extends AcceptanceTestSpec with Matchers {
           |  "api": {
           |    "name": "Customs Declarations",
           |    "description": "Single WCO-compliant Customs Declarations API",
-          |    "context": "customs/declarations/",
+          |    "context": "customs/declarations",
           |    "versions": [
           |      {
           |        "version": "1.0",

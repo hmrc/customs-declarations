@@ -58,7 +58,7 @@ window paste the following, one after the other.
     use api-subscription-fields
 
     db.subscriptionFields.update(
-        { "clientId" : "d65f2252-9fcf-4f04-9445-5971021226bb", "apiContext" : "customs/declarations", "apiVersion" : "2.0" },
+        { "clientId" : "d65f2252-9fcf-4f04-9445-5971021226bb", "apiContext" : "customs/declarations/", "apiVersion" : "2.0" },
         { $set:
             {"fieldsId" : "d65f2252-9fcf-4f04-9445-5971021226bb"}
         }

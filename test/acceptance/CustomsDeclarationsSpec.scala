@@ -40,7 +40,7 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
   private val endpoint = "/"
 
   private val apiSubscriptionKeyForXClientIdV1 =
-    ApiSubscriptionKey(clientId = xClientId, context = "customs%2Fdeclarations", version = "1.0")
+    ApiSubscriptionKey(clientId = xClientId, context = "customs%2Fdeclarations%2F", version = "1.0")
 
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = "2.0")
 

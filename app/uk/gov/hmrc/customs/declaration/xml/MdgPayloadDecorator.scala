@@ -18,12 +18,13 @@ package uk.gov.hmrc.customs.declaration.xml
 
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
+import uk.gov.hmrc.customs.declaration.model.Ids
 
 import scala.xml.NodeSeq
 
 class MdgPayloadDecorator () {
 
-  def wrap(xml: NodeSeq, conversationId: String, clientId: String, dateTime: DateTime): NodeSeq =
+  def wrap(xml: NodeSeq, ids:Ids, clientId: String, dateTime: DateTime): NodeSeq =
     <v1:submitDeclarationRequest
     xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1"
     xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2"
@@ -34,7 +35,8 @@ class MdgPayloadDecorator () {
         <v1:regime>CDS</v1:regime>
         <v1:receiptDate>{ dateTime.toString(ISODateTimeFormat.dateTimeNoMillis) }</v1:receiptDate>
         <v1:clientID>{clientId}</v1:clientID>
-        <v1:conversationID>{conversationId}</v1:conversationID>
+        <v1:conversationID>{ids.conversationId.value}</v1:conversationID>
+        { if(ids.maybeBadgeIdentifier.isDefined) <v1:badgeIdentifier>{ids.maybeBadgeIdentifier.get.value}</v1:badgeIdentifier> }
       </v1:requestCommon>
       <v1:requestDetail>
         { xml }

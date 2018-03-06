@@ -27,7 +27,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.UnauthorizedCode
 import uk.gov.hmrc.customs.declaration.connectors.MicroserviceAuthConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ConversationId, Eori, Ids}
+import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, ConversationId, Eori, Ids}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
@@ -77,6 +77,8 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
 
   private def processRequest(ids: Ids)(implicit request: Request[AnyContent]): Future[Result] = {
     lazy val maybeAcceptHeader = request.headers.get(ACCEPT)
+    val maybeBadgeIdentifier: Option[BadgeIdentifier] = extractBadgeIdentifier(request)
+
     request.body.asXml match {
       case Some(xml) =>
         requestedVersionService.getVersionByAcceptHeader(maybeAcceptHeader).fold {
@@ -84,13 +86,20 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
           Future.successful(ErrorResponseInvalidVersionRequested.XmlResult.withHeaders(conversationIdHeader(ids)))
         } {
           version =>
-            implicit val extendedIds = ids.copy(maybeRequestedVersion = Some(version))
+            implicit val extendedIds = ids.copy(maybeRequestedVersion = Some(version), maybeBadgeIdentifier = maybeBadgeIdentifier)
             processXmlPayload(xml)
         }
 
       case _ =>
         logger.error(badlyFormedXmlMsg, ids)
         Future.successful(ErrorResponse.errorBadRequest(badlyFormedXmlMsg).XmlResult.withHeaders(conversationIdHeader(ids)))
+    }
+  }
+
+  private def extractBadgeIdentifier(request: Request[AnyContent]): Option[BadgeIdentifier] = {
+    request.headers.get("X-Badge-Identifier") match {
+      case Some(id) => Some(BadgeIdentifier(id))
+      case _ => None
     }
   }
 

@@ -22,6 +22,11 @@ case class Eori(value: String) extends AnyVal
 
 case class ConversationId(value: String) extends AnyVal
 
+case class BadgeIdentifier(value: String) extends AnyVal
+
 case class FieldsId(value: String) extends AnyVal
 
-case class Ids(conversationId: ConversationId, maybeClientSubscriptionId: Option[FieldsId] = None, maybeRequestedVersion: Option[RequestedVersion] = None)
+case class Ids(conversationId: ConversationId,
+               maybeClientSubscriptionId: Option[FieldsId] = None,
+               maybeRequestedVersion: Option[RequestedVersion] = None,
+               maybeBadgeIdentifier: Option[BadgeIdentifier] = None)

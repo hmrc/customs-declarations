@@ -26,7 +26,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgWcoDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, ConversationId, Ids, RequestedVersion}
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.{CommunicationService, DateTimeService, UuidService}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -111,13 +111,13 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     "call payload decorator passing incoming xml" in testService {
       service =>
         prepareAndSendValidXml(service)
-        verify(mockPayloadDecorator).wrap(meq(ValidXML), anyString, anyString, any[DateTime])
+        verify(mockPayloadDecorator).wrap(meq(ValidXML), any[Ids], anyString, any[DateTime])
     }
 
     "call payload decorator passing api-subscription-fields-id header as clientId" in testService{
       service =>
         prepareAndSendValidXml(service)
-        verify(mockPayloadDecorator).wrap(any[NodeSeq], anyString, meq(fieldsIdString), any[DateTime])
+        verify(mockPayloadDecorator).wrap(any[NodeSeq], any[Ids], meq(fieldsIdString), any[DateTime])
         verifyZeroInteractions(mockApiSubscriptionFieldsConnector)
     }
 
@@ -126,7 +126,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
         when(mockConfiguration.getString("override.clientID")).thenReturn(Some(clientIdOverride))
 
         prepareAndSendValidXml(service)
-        verify(mockPayloadDecorator).wrap(any[NodeSeq], anyString, meq(clientIdOverride), any[DateTime])
+        verify(mockPayloadDecorator).wrap(any[NodeSeq], any[Ids], meq(clientIdOverride), any[DateTime])
         verifyZeroInteractions(mockApiSubscriptionFieldsConnector)
     }
 
@@ -136,7 +136,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
         when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier], any[Ids])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
 
         prepareAndSendValidXml(service, hc)
-        verify(mockPayloadDecorator).wrap(any[NodeSeq], anyString, meq(fieldsIdString), any[DateTime])
+        verify(mockPayloadDecorator).wrap(any[NodeSeq], any[Ids], meq(fieldsIdString), any[DateTime])
         verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[HeaderCarrier], any[Ids])
     }
 
@@ -146,7 +146,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
         when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[HeaderCarrier], any[Ids])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
 
         prepareAndSendValidXml(service, hc)
-        verify(mockPayloadDecorator).wrap(any[NodeSeq], anyString, meq(fieldsIdString), any[DateTime])
+        verify(mockPayloadDecorator).wrap(any[NodeSeq], any[Ids], meq(fieldsIdString), any[DateTime])
         verifyZeroInteractions(mockApiSubscriptionFieldsConnector)
     }
 
@@ -171,18 +171,18 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     "call payload decorator passing conversationId" in testService {
       service =>
         prepareAndSendValidXml(service)
-        verify(mockPayloadDecorator).wrap(any[NodeSeq], meq(conversationIdValue), anyString, any[DateTime])
+        verify(mockPayloadDecorator).wrap(any[NodeSeq], meq(fullIds.copy(conversationId = ConversationId(conversationIdValue))), anyString, any[DateTime])
     }
 
     "call payload decorator passing dateTime" in testService {
       service =>
         prepareAndSendValidXml(service)
-        verify(mockPayloadDecorator).wrap(any[NodeSeq], anyString, anyString, meq(dateTime))
+        verify(mockPayloadDecorator).wrap(any[NodeSeq], any[Ids], anyString, meq(dateTime))
     }
   }
 
   private def setupMockXmlWrapper = {
-    when(mockPayloadDecorator.wrap(meq(ValidXML), anyString, anyString, any[DateTime])).thenReturn(WrappedValidXML)
+    when(mockPayloadDecorator.wrap(meq(ValidXML), any[Ids], anyString, any[DateTime])).thenReturn(WrappedValidXML)
   }
 
   private def prepareAndSendValidXml(service: CommunicationService, hc: HeaderCarrier = headerCarrier): Ids = {

@@ -24,7 +24,7 @@ import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplicat
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.UnauthorizedCode
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{UnauthorizedCode, BadRequestCode}
 import uk.gov.hmrc.customs.declaration.connectors.MicroserviceAuthConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, ConversationId, Eori, Ids}
@@ -62,6 +62,9 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
   private lazy val ErrorResponseEoriNotFoundInCustomsEnrolment =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
 
+  private lazy val ErrorResponseBadgeIdentifierHeaderMissing =
+    ErrorResponse(BAD_REQUEST, BadRequestCode, "The X-Badge-Identifier header is missing or invalid")
+
   private lazy val ErrorResponseUnauthorisedGeneral =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
 
@@ -71,7 +74,7 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
   })
 
   private def validateHeaders[A](implicit request: Request[A]): Option[Seq[ErrorResponse]] = {
-    val seq = Seq(validateAccept, validateContentType).filter(_.nonEmpty).map(_.get)
+    val seq = Seq(validateAccept, validateContentType, validateBadgeIdentifier).filter(_.nonEmpty).map(_.get)
     if(seq.isEmpty) None else Some(seq)
   }
 
@@ -112,12 +115,12 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
 
       validateHeaders(request) match {
         case Some(seq) =>
-          val errors = seq.mkString(" ")
-          logger.error(s"Header validation failed due to $errors", onlyConversationId)
+          var errors = ""
+          seq.foreach(error => errors += error.message + " ")
+          logger.error(s"Header validation failed because $errors", onlyConversationId)
           Future.successful(seq.head.XmlResult.withHeaders(conversationIdHeader(onlyConversationId)))
         case _ => processRequest(onlyConversationId)
       }
-
   }
 
   private def conversationIdHeader(wrapper: Ids) = {
@@ -142,7 +145,13 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
 
   private def authoriseCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ProcessingResult] = {
     authorised(Enrolment(apiScopeKey) and AuthProviders(PrivilegedApplication)) {
-      customsDeclarationsBusinessService.authorisedCspSubmission(xml)
+      //TODO Change to functional
+      if(ids.maybeBadgeIdentifier.isEmpty) {
+        logger.error("Header validation failed because The X-Badge-Identifier header is missing or invalid", ids)
+        Future.successful(Left(ErrorResponseBadgeIdentifierHeaderMissing))
+      } else {
+        customsDeclarationsBusinessService.authorisedCspSubmission(xml)
+      }
     }
   }
 

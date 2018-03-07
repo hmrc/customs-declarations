@@ -26,7 +26,7 @@ import play.api.inject.guice.GuiceableModule
 import play.api.mvc.{AnyContentAsText, AnyContentAsXml}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.POST
-import uk.gov.hmrc.customs.declaration.model.{ConversationId, Eori, Ids}
+import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, ConversationId, Eori, Ids}
 import uk.gov.hmrc.customs.declaration.services.UuidService
 import util.RequestHeaders._
 
@@ -37,7 +37,11 @@ object TestData {
   val conversationIdValue = "38400000-8cf0-11bd-b23e-10b96e4ef00d"
   val conversationIdUuid: UUID = UUID.fromString(conversationIdValue)
   val conversationId: ConversationId = ConversationId(conversationIdValue)
-  val ids = Ids(conversationId, Some(ApiSubscriptionFieldsTestData.fieldsId))
+  val validBadgeIdentifierValue = "BadgeId"
+  val invalidBadgeIdentifierValue = "InvalidBadgeId"
+  val invalidBadgeIdentifier: BadgeIdentifier = BadgeIdentifier(invalidBadgeIdentifierValue)
+  val badgeIdentifier: BadgeIdentifier = BadgeIdentifier(validBadgeIdentifierValue)
+  val ids = Ids(conversationId, Some(ApiSubscriptionFieldsTestData.fieldsId), maybeBadgeIdentifier = Some(badgeIdentifier))
 
   val cspBearerToken = "CSP-Bearer-Token"
   val nonCspBearerToken = "Software-House-Bearer-Token"
@@ -347,7 +351,8 @@ object TestData {
   lazy val ValidRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ACCEPT_HMRC_XML_V2_HEADER,
                  CONTENT_TYPE_HEADER,
-                 API_SUBSCRIPTION_FIELDS_ID_HEADER)
+                 API_SUBSCRIPTION_FIELDS_ID_HEADER,
+                 X_BADGE_IDENTIFIER_HEADER)
     .withXmlBody(ValidXML)
 
   lazy val ValidRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidRequest
@@ -382,6 +387,8 @@ object TestData {
     def postTo(endpoint: String): FakeRequest[R] = fakeRequest.copyFakeRequest(method = POST, uri = endpoint)
   }
 
+
+
 }
 
 object RequestHeaders {
@@ -392,6 +399,10 @@ object RequestHeaders {
   val API_SUBSCRIPTION_FIELDS_ID_NAME = "api-subscription-fields-id"
   val API_SUBSCRIPTION_FIELDS_ID_HEADER: (String, String) = API_SUBSCRIPTION_FIELDS_ID_NAME -> ApiSubscriptionFieldsTestData.fieldsIdString
 
+  val X_BADGE_IDENTIFIER_NAME ="X-Badge-Identifier"
+  val X_BADGE_IDENTIFIER_HEADER: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.badgeIdentifier.value
+  val X_BADGE_IDENTIFIER_HEADER_INVALID: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.invalidBadgeIdentifierValue
+
   val X_CLIENT_ID_ID_NAME = "X-Client-ID"
   val X_CLIENT_ID_HEADER: (String, String) = X_CLIENT_ID_ID_NAME -> ApiSubscriptionFieldsTestData.xClientId
 
@@ -400,6 +411,7 @@ object RequestHeaders {
   val CONTENT_TYPE_HEADER_CHARSET: (String, String) = CONTENT_TYPE -> CONTENT_TYPE_CHARSET_VALUE
 
   val CONTENT_TYPE_HEADER_INVALID: (String, String) = CONTENT_TYPE -> "somethinginvalid"
+
 
   val ACCEPT_HMRC_XML_V1_VALUE = "application/vnd.hmrc.1.0+xml"
   val ACCEPT_HMRC_XML_V2_VALUE = "application/vnd.hmrc.2.0+xml"
@@ -414,5 +426,6 @@ object RequestHeaders {
   val ValidHeaders = Map(
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V2_HEADER,
-    API_SUBSCRIPTION_FIELDS_ID_HEADER)
+    API_SUBSCRIPTION_FIELDS_ID_HEADER,
+    X_BADGE_IDENTIFIER_HEADER)
 }

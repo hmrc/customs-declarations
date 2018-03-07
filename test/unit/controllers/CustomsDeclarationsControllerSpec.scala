@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplicat
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, Retrievals}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.BadRequestCode
 import uk.gov.hmrc.customs.declaration.connectors.MicroserviceAuthConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomsDeclarationsController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -77,12 +78,15 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
   private val errorResultInvalidVersionRequested = ErrorResponse(NOT_ACCEPTABLE, errorCode = "INVALID_VERSION_REQUESTED",
     message = "Invalid API version requested").XmlResult.withHeaders("X-Conversation-ID" -> conversationIdValue)
 
+  private val errorResultBadgeIdentifier = ErrorResponse(BAD_REQUEST, errorCode = BadRequestCode,
+    message = "The X-Badge-Identifier header is missing or invalid").XmlResult.withHeaders("X-Conversation-ID" -> conversationIdValue)
+
   private val mockErrorResponse = mock[ErrorResponse]
   private val mockResult = mock[Result]
 
   private val cspAuthPredicate = Enrolment(apiScope) and AuthProviders(PrivilegedApplication)
   private val nonCspAuthPredicate = Enrolment(customsEnrolmentName) and AuthProviders(GovernmentGateway)
-  private val fullIds = ids.copy(maybeRequestedVersion = Some(version2), maybeClientSubscriptionId = None)
+  private val fullIds = ids.copy(maybeRequestedVersion = Some(version2), maybeClientSubscriptionId = None, maybeBadgeIdentifier = Some(badgeIdentifier))
 
   override protected def beforeEach() {
     reset(mockDeclarationsLogger, mockCustomsConfigService, mockAuthConnector, mockRequestedVersionService,
@@ -159,7 +163,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
         verifyZeroInteractions(mockCustomsDeclarationsBusinessService)
         PassByNameVerifier(mockDeclarationsLogger, "debug")
           .withByNameParam[String](s"Customs enrolment $customsEnrolmentName not retrieved for authorised non-CSP call with Authorization header=Bearer $nonCspBearerToken")
-            .withByNameParam[Ids](fullIds)
+          .withByNameParam[Ids](fullIds)
           .withAnyHeaderCarrierParam
           .verify()
       }
@@ -182,10 +186,37 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       testSubmitResult(ValidRequest) { result =>
         await(result) shouldBe errorResultInvalidVersionRequested
         PassByNameVerifier(mockDeclarationsLogger, "error")
-          .withByNameParam[String](s"Requested version is not valid. Processing failed.")
+          .withByNameParam[String]("Requested version is not valid. Processing failed.")
           .withByNameParam[Ids](Ids(conversationId))
           .withAnyHeaderCarrierParam
           .verify()
+      }
+    }
+
+    "return result 400 BAD_REQUEST when X-BADGE-IDENTIFIER header is missing for a CSP request" in {
+      authoriseCsp()
+      testSubmitResult(ValidRequest.copyFakeRequest(headers = ValidRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))) { result =>
+        await(result) shouldBe errorResultBadgeIdentifier
+        PassByNameVerifier(mockDeclarationsLogger, "error")
+         .withByNameParam[String]("Header validation failed because The X-Badge-Identifier header is missing or invalid")
+         .withByNameParam[Ids](Ids(conversationId, maybeRequestedVersion = Some(version2)))
+         .withAnyHeaderCarrierParam
+         .verify()
+      }
+    }
+
+    "return result 400 BAD_REQUEST when X-BADGE-IDENTIFIER header is invalid for a CSP request" in {
+      authoriseCsp()
+
+      val badMap = ValidRequest.headers.toSimpleMap + (X_BADGE_IDENTIFIER_NAME -> invalidBadgeIdentifierValue)
+
+      testSubmitResult(ValidRequest.withHeaders(badMap.toSeq: _*)) { result =>
+        await(result) shouldBe errorResultBadgeIdentifier
+        PassByNameVerifier(mockDeclarationsLogger, "error")
+         .withByNameParam[String]("Header validation failed because The X-Badge-Identifier header is missing or invalid ")
+         .withByNameParam[Ids](Ids(conversationId))
+         .withAnyHeaderCarrierParam
+         .verify()
       }
     }
 
@@ -197,7 +228,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       testSubmitResult(ValidRequest) { result =>
         await(result) shouldBe errorResultInvalidVersionRequested
         PassByNameVerifier(mockDeclarationsLogger, "error")
-          .withByNameParam[String](s"Requested version is not valid. Processing failed.")
+          .withByNameParam[String]("Requested version is not valid. Processing failed.")
           .withByNameParam[Ids](Ids(conversationId))
           .withAnyHeaderCarrierParam
           .verify()

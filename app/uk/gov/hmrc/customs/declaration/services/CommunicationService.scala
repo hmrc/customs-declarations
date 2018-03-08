@@ -68,7 +68,7 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
 
     for {
       clientSubscriptionId <- futureClientSubscriptionId(version.versionNumber)
-      xmlToSend = preparePayload(inboundXml, ids.conversationId, clientSubscriptionId, dateTime)
+      xmlToSend = preparePayload(inboundXml, ids, clientSubscriptionId, dateTime)
       _ <- {
         connector.send(xmlToSend, dateTime, correlationId, version.configPrefix)
       }
@@ -85,8 +85,8 @@ class CommunicationService @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  private def preparePayload(xml: NodeSeq, conversationId: ConversationId, fieldsId: FieldsId, dateTime: DateTime)(implicit hc: HeaderCarrier): NodeSeq = {
-    wrapper.wrap(xml, conversationId.value, fieldsId.value, dateTime)
+  private def preparePayload(xml: NodeSeq, ids: Ids, fieldsId: FieldsId, dateTime: DateTime)(implicit hc: HeaderCarrier): NodeSeq = {
+    wrapper.wrap(xml, ids, fieldsId.value, dateTime)
   }
 
   private def futureApiSubFieldsId(requestedApiVersionNumber: String)(implicit hc: HeaderCarrier, ids: Ids): Future[Option[String]] = {

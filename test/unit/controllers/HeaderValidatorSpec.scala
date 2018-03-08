@@ -79,5 +79,13 @@ class HeaderValidatorSpec extends UnitSpec with BeforeAndAfterAll with MockitoSu
       await(validator.validateContentType()(requestWithHeaders(ValidHeaders + CONTENT_TYPE_HEADER_INVALID))) shouldBe Some(ErrorContentTypeHeaderInvalid)
     }
 
+    "return Error result when BadgeIdentifier header is invalid" in {
+      await(validator.validateBadgeIdentifier()(requestWithHeaders(ValidHeaders + X_BADGE_IDENTIFIER_HEADER_INVALID))) shouldBe Some(errorBadRequest("X-Badge-Identifier header is missing or invalid"))
+    }
+
+    "return processing result when BadgeIdentifier header is not present" in {
+      await(validator.validateBadgeIdentifier()(requestWithHeaders(ValidHeaders - X_BADGE_IDENTIFIER_NAME))) shouldBe None
+    }
+
   }
 }

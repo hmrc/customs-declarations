@@ -18,6 +18,7 @@ package unit.xml
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.mockito.MockitoSugar
+import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, ConversationId, Ids}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -27,7 +28,8 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
   private val xml: NodeSeq = <node1></node1>
 
-  private val conversationId = "conversationId"
+  private val conversationId = ConversationId("conversationId")
+  private val badgeIdentifier = Some(BadgeIdentifier("badgeIdentifier"))
   private val clientId = "clientId"
 
   private val year = 2017
@@ -40,18 +42,19 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
   private val dateTime = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, DateTimeZone.UTC)
   private val payloadWrapper = new MdgPayloadDecorator()
 
-  private def wrapPayload() = payloadWrapper.wrap(xml, conversationId, clientId, dateTime)
+  private def wrapPayloadWithBadgeIdentifier() = payloadWrapper.wrap(xml, Ids(conversationId,maybeBadgeIdentifier=badgeIdentifier), clientId, dateTime)
+  private def wrapPayloadWithOutBadgeIdentifier() = payloadWrapper.wrap(xml, Ids(conversationId), clientId, dateTime)
 
-  "WcoDmsPayloadWrapper" should {
+  "WcoDmsPayloadWrapper " should {
     "wrap passed XML in DMS wrapper" in {
-      val result = wrapPayload()
+      val result = wrapPayloadWithBadgeIdentifier()
 
       val reqDet = result \\ "requestDetail"
       reqDet.head.child.contains(<node1 />) shouldBe true
     }
 
     "set the receipt date in the wrapper" in {
-      val result = wrapPayload()
+      val result = wrapPayloadWithBadgeIdentifier()
 
       val rd = result \\ "receiptDate"
 
@@ -59,20 +62,37 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
     }
 
     "set the conversationId" in {
-      val result = wrapPayload()
+      val result = wrapPayloadWithBadgeIdentifier()
 
       val rd = result \\ "conversationID"
 
-      rd.head.text shouldBe conversationId
+      rd.head.text shouldBe conversationId.value
     }
 
     "set the clientId" in {
-      val result = wrapPayload()
+      val result = wrapPayloadWithBadgeIdentifier()
 
       val rd = result \\ "clientID"
 
       rd.head.text shouldBe clientId
     }
+
+    "set the badgeIdentifier when present" in {
+      val result = wrapPayloadWithBadgeIdentifier()
+
+      val rd = result \\ "badgeIdentifier"
+
+      rd.head.text shouldBe badgeIdentifier.get.value
+    }
+
+    "should not set the badgeIdentifier when absent" in {
+      val result = wrapPayloadWithOutBadgeIdentifier()
+
+      val rd = result \\ "badgeIdentifier"
+
+      rd.isEmpty
+    }
+
   }
 
 }

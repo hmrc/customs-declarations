@@ -341,7 +341,9 @@ object TestData {
           <v1:paramName>COMMUNICATIONADDRESS</v1:paramName>
           <v1:paramValue></v1:paramValue>
         </v1:requestParameters>
-        <v1:messageType>xml</v1:messageType>
+        <v1:clientID>2bbb7b51-4632-4ebd-b989-7505e46996d1</v1:clientID>
+        <v1:conversationID>c5192352-f849-4a13-9790-1e99253a2797</v1:conversationID>
+        <v1:badgeIdentifier>validBadgeId</v1:badgeIdentifier>
       </v1:requestCommon>
       <v1:requestDetail>
         { ValidXML }
@@ -349,10 +351,7 @@ object TestData {
     </v1:submitDeclarationRequest>
 
   lazy val ValidRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ACCEPT_HMRC_XML_V2_HEADER,
-                 CONTENT_TYPE_HEADER,
-                 API_SUBSCRIPTION_FIELDS_ID_HEADER,
-                 X_BADGE_IDENTIFIER_HEADER)
+    .withHeaders(ValidHeaders.toSeq: _*)
     .withXmlBody(ValidXML)
 
   lazy val ValidRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidRequest
@@ -383,12 +382,8 @@ object TestData {
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")
     def fromNonCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $nonCspBearerToken")
-
     def postTo(endpoint: String): FakeRequest[R] = fakeRequest.copyFakeRequest(method = POST, uri = endpoint)
   }
-
-
-
 }
 
 object RequestHeaders {
@@ -409,15 +404,12 @@ object RequestHeaders {
   val CONTENT_TYPE_HEADER: (String, String) = CONTENT_TYPE -> MimeTypes.XML
   val CONTENT_TYPE_CHARSET_VALUE = MimeTypes.XML + "; charset=UTF-8"
   val CONTENT_TYPE_HEADER_CHARSET: (String, String) = CONTENT_TYPE -> CONTENT_TYPE_CHARSET_VALUE
-
   val CONTENT_TYPE_HEADER_INVALID: (String, String) = CONTENT_TYPE -> "somethinginvalid"
-
 
   val ACCEPT_HMRC_XML_V1_VALUE = "application/vnd.hmrc.1.0+xml"
   val ACCEPT_HMRC_XML_V2_VALUE = "application/vnd.hmrc.2.0+xml"
   val ACCEPT_HMRC_XML_V1_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V1_VALUE
   val ACCEPT_HMRC_XML_V2_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V2_VALUE
-
   val ACCEPT_HEADER_INVALID: (String, String) = ACCEPT -> "invalid"
 
   val AUTH_HEADER_VALUE: String = "AUTH_HEADER_VALUE"

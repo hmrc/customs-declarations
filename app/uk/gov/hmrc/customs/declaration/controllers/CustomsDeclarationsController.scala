@@ -63,7 +63,7 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
 
   private lazy val ErrorResponseBadgeIdentifierHeaderMissing =
-    ErrorResponse(BAD_REQUEST, BadRequestCode, "The X-Badge-Identifier header is missing or invalid")
+    ErrorResponse(BAD_REQUEST, BadRequestCode, "X-Badge-Identifier header is missing or invalid")
 
   private lazy val ErrorResponseUnauthorisedGeneral =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
@@ -115,8 +115,7 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
 
       validateHeaders(request) match {
         case Some(seq) =>
-          var errors = ""
-          seq.foreach(error => errors += error.message + " ")
+          val errors = seq.map(error => error.message + " ").mkString
           logger.error(s"Header validation failed because $errors", onlyConversationId)
           Future.successful(seq.head.XmlResult.withHeaders(conversationIdHeader(onlyConversationId)))
         case _ => processRequest(onlyConversationId)
@@ -145,12 +144,10 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
 
   private def authoriseCspSubmission(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ProcessingResult] = {
     authorised(Enrolment(apiScopeKey) and AuthProviders(PrivilegedApplication)) {
-      //TODO Change to functional
-      if(ids.maybeBadgeIdentifier.isEmpty) {
-        logger.error("Header validation failed because The X-Badge-Identifier header is missing or invalid", ids)
-        Future.successful(Left(ErrorResponseBadgeIdentifierHeaderMissing))
-      } else {
-        customsDeclarationsBusinessService.authorisedCspSubmission(xml)
+      ids.maybeBadgeIdentifier match {
+        case None => logger.error ("Header validation failed because X-Badge-Identifier header is missing or invalid", ids)
+                      Future.successful (Left (ErrorResponseBadgeIdentifierHeaderMissing) )
+        case Some(_) => customsDeclarationsBusinessService.authorisedCspSubmission (xml)
       }
     }
   }

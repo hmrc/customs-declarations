@@ -79,7 +79,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
     message = "Invalid API version requested").XmlResult.withHeaders("X-Conversation-ID" -> conversationIdValue)
 
   private val errorResultBadgeIdentifier = ErrorResponse(BAD_REQUEST, errorCode = BadRequestCode,
-    message = "The X-Badge-Identifier header is missing or invalid").XmlResult.withHeaders("X-Conversation-ID" -> conversationIdValue)
+    message = "X-Badge-Identifier header is missing or invalid").XmlResult.withHeaders("X-Conversation-ID" -> conversationIdValue)
 
   private val mockErrorResponse = mock[ErrorResponse]
   private val mockResult = mock[Result]
@@ -146,6 +146,14 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       }
     }
 
+    "respond with status 202 and conversationId in header for a processed valid non-CSP request without X-BADGE-IDENTIFIER header" in {
+      authoriseNonCsp(Some(declarantEori))
+      testSubmitResult(ValidRequest.withHeaders((ValidHeaders - X_BADGE_IDENTIFIER_NAME).toSeq: _*)) { result =>
+      status(result) shouldBe ACCEPTED
+        header(RequestHeaders.X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
+      }
+    }
+
     "return result 401 UNAUTHORISED when call is unauthorised for both CSP and non-CSP submissions" in {
       unauthoriseCsp()
       unauthoriseNonCspOnly()
@@ -198,7 +206,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       testSubmitResult(ValidRequest.copyFakeRequest(headers = ValidRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))) { result =>
         await(result) shouldBe errorResultBadgeIdentifier
         PassByNameVerifier(mockDeclarationsLogger, "error")
-         .withByNameParam[String]("Header validation failed because The X-Badge-Identifier header is missing or invalid")
+         .withByNameParam[String]("Header validation failed because X-Badge-Identifier header is missing or invalid")
          .withByNameParam[Ids](Ids(conversationId, maybeRequestedVersion = Some(version2)))
          .withAnyHeaderCarrierParam
          .verify()
@@ -207,13 +215,10 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
 
     "return result 400 BAD_REQUEST when X-BADGE-IDENTIFIER header is invalid for a CSP request" in {
       authoriseCsp()
-
-      val badMap = ValidRequest.headers.toSimpleMap + (X_BADGE_IDENTIFIER_NAME -> invalidBadgeIdentifierValue)
-
-      testSubmitResult(ValidRequest.withHeaders(badMap.toSeq: _*)) { result =>
+      testSubmitResult(ValidRequest.withHeaders((ValidHeaders + (X_BADGE_IDENTIFIER_NAME -> invalidBadgeIdentifierValue)).toSeq: _*)) { result =>
         await(result) shouldBe errorResultBadgeIdentifier
         PassByNameVerifier(mockDeclarationsLogger, "error")
-         .withByNameParam[String]("Header validation failed because The X-Badge-Identifier header is missing or invalid ")
+         .withByNameParam[String]("Header validation failed because X-Badge-Identifier header is missing or invalid ")
          .withByNameParam[Ids](Ids(conversationId))
          .withAnyHeaderCarrierParam
          .verify()

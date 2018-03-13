@@ -43,7 +43,7 @@ documentation:
         securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
         body:
           application/xml:
-            #type: !include schemas/customs/wrapper.xsd
+            type: !include schemas/customs/wrapper.xsd
             example: !include examples/example_declaration_202.xml
         responses:
           202:

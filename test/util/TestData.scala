@@ -37,8 +37,8 @@ object TestData {
   val conversationIdValue = "38400000-8cf0-11bd-b23e-10b96e4ef00d"
   val conversationIdUuid: UUID = UUID.fromString(conversationIdValue)
   val conversationId: ConversationId = ConversationId(conversationIdValue)
-  val validBadgeIdentifierValue = "BadgeId"
-  val invalidBadgeIdentifierValue = "InvalidBadgeId"
+  val validBadgeIdentifierValue = "BADGEID123"
+  val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
   val invalidBadgeIdentifier: BadgeIdentifier = BadgeIdentifier(invalidBadgeIdentifierValue)
   val badgeIdentifier: BadgeIdentifier = BadgeIdentifier(validBadgeIdentifierValue)
   val ids = Ids(conversationId, Some(ApiSubscriptionFieldsTestData.fieldsId), maybeBadgeIdentifier = Some(badgeIdentifier))
@@ -396,7 +396,10 @@ object RequestHeaders {
 
   val X_BADGE_IDENTIFIER_NAME ="X-Badge-Identifier"
   val X_BADGE_IDENTIFIER_HEADER: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.badgeIdentifier.value
-  val X_BADGE_IDENTIFIER_HEADER_INVALID: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.invalidBadgeIdentifierValue
+  val X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.invalidBadgeIdentifierValue
+  val X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS: (String, String) = X_BADGE_IDENTIFIER_NAME -> "Invalid^&&("
+  val X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_SHORT: (String, String) = X_BADGE_IDENTIFIER_NAME -> "12345"
+  val X_BADGE_IDENTIFIER_HEADER_INVALID_LOWERCASE: (String, String) = X_BADGE_IDENTIFIER_NAME -> "BadgeId123"
 
   val X_CLIENT_ID_ID_NAME = "X-Client-ID"
   val X_CLIENT_ID_HEADER: (String, String) = X_CLIENT_ID_ID_NAME -> ApiSubscriptionFieldsTestData.xClientId

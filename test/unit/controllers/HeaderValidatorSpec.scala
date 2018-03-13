@@ -79,8 +79,20 @@ class HeaderValidatorSpec extends UnitSpec with BeforeAndAfterAll with MockitoSu
       await(validator.validateContentType()(requestWithHeaders(ValidHeaders + CONTENT_TYPE_HEADER_INVALID))) shouldBe Some(ErrorContentTypeHeaderInvalid)
     }
 
-    "return Error result when BadgeIdentifier header is invalid" in {
-      await(validator.validateBadgeIdentifier()(requestWithHeaders(ValidHeaders + X_BADGE_IDENTIFIER_HEADER_INVALID))) shouldBe Some(errorBadRequest("X-Badge-Identifier header is missing or invalid"))
+    "return Error result when BadgeIdentifier header value length is too long" in {
+      await(validator.validateBadgeIdentifier()(requestWithHeaders(ValidHeaders + X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG))) shouldBe Some(errorBadRequest("X-Badge-Identifier header is missing or invalid"))
+    }
+
+    "return Error result when BadgeIdentifier header value length is too short" in {
+      await(validator.validateBadgeIdentifier()(requestWithHeaders(ValidHeaders + X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_SHORT))) shouldBe Some(errorBadRequest("X-Badge-Identifier header is missing or invalid"))
+    }
+
+    "return Error result when BadgeIdentifier header contains invalid characters" in {
+      await(validator.validateBadgeIdentifier()(requestWithHeaders(ValidHeaders + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS))) shouldBe Some(errorBadRequest("X-Badge-Identifier header is missing or invalid"))
+    }
+
+    "return Error result when BadgeIdentifier header contains lowercase characters" in {
+      await(validator.validateBadgeIdentifier()(requestWithHeaders(ValidHeaders + X_BADGE_IDENTIFIER_HEADER_INVALID_LOWERCASE))) shouldBe Some(errorBadRequest("X-Badge-Identifier header is missing or invalid"))
     }
 
     "return processing result when BadgeIdentifier header is not present" in {

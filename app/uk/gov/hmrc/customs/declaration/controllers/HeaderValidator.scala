@@ -39,7 +39,7 @@ trait HeaderValidator extends Results {
 
   private val acceptHeaderValidation: Validation = _ exists validAcceptHeaders.contains
   private val contentTypeValidation: Validation = _ exists (header => validContentTypeHeaders.contains(header.toLowerCase))
-  private val badgeIdentifierValidation: Validation = _.fold(true)(header => "^[a-zA-Z0-9]{1,12}$".r.findFirstIn(header).isDefined)
+  private val badgeIdentifierValidation: Validation = _.fold(true)(header => "^[0-9A-Z]{6,12}$".r.findFirstIn(header).isDefined)
 
   def validateAccept[A]()(implicit request: Request[A]): Option[ErrorResponse] = {
     validateHeader(acceptHeaderValidation, HeaderNames.ACCEPT, ErrorAcceptHeaderInvalid)

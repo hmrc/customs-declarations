@@ -354,6 +354,10 @@ object TestData {
     .withHeaders(ValidHeaders.toSeq: _*)
     .withXmlBody(ValidXML)
 
+  lazy val ValidRequestWithOutXBatchIdentifier: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(InvalidHeadersWithoutXBatchIdentifier.toSeq: _*)
+    .withXmlBody(ValidXML)
+
   lazy val ValidRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidRequest
     .copyFakeRequest(headers = ValidRequest.headers.remove(ACCEPT).add(ACCEPT_HMRC_XML_V1_HEADER))
 
@@ -423,4 +427,10 @@ object RequestHeaders {
     ACCEPT_HMRC_XML_V2_HEADER,
     API_SUBSCRIPTION_FIELDS_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER)
+
+  val InvalidHeadersWithoutXBatchIdentifier = Map(
+    CONTENT_TYPE_HEADER,
+    ACCEPT_HMRC_XML_V2_HEADER,
+    API_SUBSCRIPTION_FIELDS_ID_HEADER)
+
 }

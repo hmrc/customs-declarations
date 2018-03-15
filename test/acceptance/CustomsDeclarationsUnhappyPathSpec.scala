@@ -72,6 +72,17 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
       |</errorResponse>
     """.stripMargin
 
+  private val BadRequestErrorXBatchIdentifierMissing =
+    """<?xml version="1.0" encoding="UTF-8"?>
+      |<errorResponse>
+      |  <code>BAD_REQUEST</code>
+      |  <message>X-Badge-Identifier header is missing or invalid</message>
+      |</errorResponse>
+    """.stripMargin
+
+
+
+
   private val InvalidAcceptHeaderError =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>
@@ -271,6 +282,29 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
       And("the response body is an \"Internal server error\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(InternalServerError)
     }
+
+    scenario("Response status 400 when CSP user submits a request without X Batch Identifier") {
+      Given("the API is available")
+      val request = ValidRequestWithOutXBatchIdentifier.fromCsp.postTo(endpoint)
+
+      When("a POST request with data is sent to the API")
+      val result: Option[Future[Result]] = route(app = app, request)
+
+      Then("a response with a 400 status is received")
+      result shouldBe 'defined
+      val resultFuture = result.value
+
+      status(resultFuture) shouldBe BAD_REQUEST
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+      And("the response body is an \"Bad Request\" XML")
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBatchIdentifierMissing)
+
+    }
+
+
+
+
   }
 
 }

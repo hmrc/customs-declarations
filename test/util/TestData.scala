@@ -346,16 +346,12 @@ object TestData {
         <v1:badgeIdentifier>validBadgeId</v1:badgeIdentifier>
       </v1:requestCommon>
       <v1:requestDetail>
-        { ValidXML }
+        {ValidXML}
       </v1:requestDetail>
     </v1:submitDeclarationRequest>
 
   lazy val ValidRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeaders.toSeq: _*)
-    .withXmlBody(ValidXML)
-
-  lazy val ValidRequestWithOutXBatchIdentifier: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(InvalidHeadersWithoutXBatchIdentifier.toSeq: _*)
     .withXmlBody(ValidXML)
 
   lazy val ValidRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidRequest
@@ -364,6 +360,14 @@ object TestData {
   lazy val ValidRequestWithXClientIdHeader: FakeRequest[AnyContentAsXml] = ValidRequest
     .copyFakeRequest(headers =
       ValidRequest.headers.remove(API_SUBSCRIPTION_FIELDS_ID_NAME).add(X_CLIENT_ID_HEADER))
+
+  lazy val InvalidRequestWithoutXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidRequest
+    .copyFakeRequest(headers =
+      ValidRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))
+
+  lazy val InvalidRequestWithInvalidXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidRequest
+    .copyFakeRequest(headers =
+      ValidRequest.headers.remove(X_BADGE_IDENTIFIER_NAME).add(X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG))
 
   lazy val InvalidRequest: FakeRequest[AnyContentAsXml] = ValidRequest.withXmlBody(InvalidXML)
 
@@ -381,13 +385,16 @@ object TestData {
     .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
 
   lazy val NoClientIdIdHeaderRequest: FakeRequest[AnyContentAsXml] = ValidRequest
-      .copyFakeRequest(headers = InvalidRequest.headers.remove(API_SUBSCRIPTION_FIELDS_ID_NAME))
+    .copyFakeRequest(headers = InvalidRequest.headers.remove(API_SUBSCRIPTION_FIELDS_ID_NAME))
 
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")
+
     def fromNonCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $nonCspBearerToken")
+
     def postTo(endpoint: String): FakeRequest[R] = fakeRequest.copyFakeRequest(method = POST, uri = endpoint)
   }
+
 }
 
 object RequestHeaders {
@@ -398,7 +405,7 @@ object RequestHeaders {
   val API_SUBSCRIPTION_FIELDS_ID_NAME = "api-subscription-fields-id"
   val API_SUBSCRIPTION_FIELDS_ID_HEADER: (String, String) = API_SUBSCRIPTION_FIELDS_ID_NAME -> ApiSubscriptionFieldsTestData.fieldsIdString
 
-  val X_BADGE_IDENTIFIER_NAME ="X-Badge-Identifier"
+  val X_BADGE_IDENTIFIER_NAME = "X-Badge-Identifier"
   val X_BADGE_IDENTIFIER_HEADER: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.badgeIdentifier.value
   val X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.invalidBadgeIdentifierValue
   val X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS: (String, String) = X_BADGE_IDENTIFIER_NAME -> "Invalid^&&("
@@ -427,10 +434,5 @@ object RequestHeaders {
     ACCEPT_HMRC_XML_V2_HEADER,
     API_SUBSCRIPTION_FIELDS_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER)
-
-  val InvalidHeadersWithoutXBatchIdentifier = Map(
-    CONTENT_TYPE_HEADER,
-    ACCEPT_HMRC_XML_V2_HEADER,
-    API_SUBSCRIPTION_FIELDS_ID_HEADER)
 
 }

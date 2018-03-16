@@ -196,14 +196,17 @@
 						<TypeCode>517</TypeCode>
 						<!-- DE 2/3: Item level Document Type code Box 44 -->
 					</AdditionalDocument>								
-					<AdditionalDocument>
-						<CategoryCode>N</CategoryCode>
-						<!-- DE 2/3: Item level Document Category code Box 44 -->
-						<ID>12345/30/11/2017-JP</ID>
-						<!-- DE 2/3: Document Reference - Invoice exists as a supporting document indicating the transaction value (Code: invoice no/invoice date) Box 44. -->
-						<TypeCode>935</TypeCode>
-						<!-- DE 2/3: Item level Document Type code Box 44 -->
-					</AdditionalDocument>
+                     <AdditionalDocument>
+                        <CategoryCode>N</CategoryCode>
+                        <!--DE 2/3: Item level Document Category code Box 44-->
+                        <ID>12345/30.11.2017</ID>
+                        <!--DE 2/3: Document Reference - Invoice exists as a supporting document indicating the transaction value (Code: invoice no/invoice date) Box 44.-->
+                        <Name>Commercial Policy</Name>
+                        <TypeCode>935</TypeCode>
+                        <!--DE 2/3: Item level Document Type code Box 44-->
+                        <LPCOExemptionCode>AE</LPCOExemptionCode>
+                        <!--New item to take the old Document Status (ITEM-DOC-STATUS). In this case AE = Anti-Dumping Duty Box 44.-->
+                     </AdditionalDocument>
 					<AdditionalDocument>
 						<CategoryCode>Y</CategoryCode>
 						<!-- DE 2/3: Item level Document Category code Box 44 -->
@@ -236,9 +239,15 @@
 						<Description>Vanity case with outer surface made of plastic sheet</Description>
 						<!-- DE 6/8: Description of goods Box 31 -->
 						<Classification>
-							<ID>4202121900</ID>
+							<ID>42021219</ID>
 							<!-- DE 6/14 & DE 6/15: TARIC commodity code Box 33 -->
-							<IdentificationTypeCode>SRZ</IdentificationTypeCode>
+							<IdentificationTypeCode>TSP</IdentificationTypeCode>
+							<!-- Used by DMS to identify the type of Classification Id - standard Comm Code will be TSP However SRZ until Drop 2 -->
+						</Classification>
+						<Classification>
+							<ID>00</ID>
+							<!-- DE 6/14 & DE 6/15: TARIC commodity code Box 33 -->
+							<IdentificationTypeCode>TRC</IdentificationTypeCode>
 							<!-- Used by DMS to identify the type of Classification Id - standard Comm Code will be TSP However SRZ until Drop 2 -->
 						</Classification>
 						<DutyTaxFee>
@@ -290,7 +299,7 @@
 						<!-- This is a mandatory element -->
 						<MarksNumbersID>CDSTRADETEST1I</MarksNumbersID>
 						<!-- DE 6/11: Shipping Marks Box 31 -->
-						<QuantityQuantity>55</QuantityQuantity>
+						<!-- <QuantityQuantity>55</QuantityQuantity> -->
 						<!-- DE 6/10: Package count Box 31 -->
 						<TypeCode>PK</TypeCode>
 						<!-- DE 6/9: Kind of package PK = Package Box 31 -->

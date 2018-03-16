@@ -72,6 +72,14 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
       |</errorResponse>
     """.stripMargin
 
+  private val BadRequestErrorXBatchIdentifierMissingorInvalid =
+    """<?xml version="1.0" encoding="UTF-8"?>
+      |<errorResponse>
+      |  <code>BAD_REQUEST</code>
+      |  <message>X-Badge-Identifier header is missing or invalid</message>
+      |</errorResponse>
+    """.stripMargin
+
   private val InvalidAcceptHeaderError =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>
@@ -230,7 +238,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
       status(resultFuture) shouldBe NOT_ACCEPTABLE
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
-      And("the response body is a \"invalid Accept header\" XML")
+      And("the response body is an \"invalid Accept header\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(InvalidAcceptHeaderError)
     }
 
@@ -248,8 +256,44 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
       status(resultFuture) shouldBe UNSUPPORTED_MEDIA_TYPE
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
-      And("the response body is a \"invalid Content-Type header\" XML")
+      And("the response body is an \"invalid Content-Type header\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(InvalidContentTypeHeaderError)
+    }
+
+    scenario("Response status 400 when a CSP user submits a request without a X-Badge-Identifier header") {
+      Given("the API is available")
+      val request = InvalidRequestWithoutXBadgeIdentifier.fromCsp.postTo(endpoint)
+
+      When("a POST request with data is sent to the API")
+      val result: Option[Future[Result]] = route(app = app, request)
+
+      Then("a response with a 400 status is received")
+      result shouldBe 'defined
+      val resultFuture = result.value
+
+      status(resultFuture) shouldBe BAD_REQUEST
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+      And("the response body is a \"Bad Request\" XML")
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBatchIdentifierMissingorInvalid)
+    }
+
+    scenario("Response status 400 when a CSP user submits a request with an invalid X-Badge-Identifier header") {
+      Given("the API is available")
+      val request = InvalidRequestWithInvalidXBadgeIdentifier.fromCsp.postTo(endpoint)
+
+      When("a POST request with data is sent to the API")
+      val result: Option[Future[Result]] = route(app = app, request)
+
+      Then("a response with a 400 status is received")
+      result shouldBe 'defined
+      val resultFuture = result.value
+
+      status(resultFuture) shouldBe BAD_REQUEST
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+      And("the response body is a \"Bad Request\" XML")
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBatchIdentifierMissingorInvalid)
     }
 
     scenario("Response status 500 when user submits a valid request but downstream call to DMS fails with an HTTP error") {

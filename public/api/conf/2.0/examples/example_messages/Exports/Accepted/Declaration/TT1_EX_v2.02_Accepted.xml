@@ -94,7 +94,7 @@
 					<ContainerCode>1</ContainerCode>
 					<!-- DE 7/2: Container code. Values 0 or 1 (if transported in a container) Box 19/31 -->
 					<DepartureTransportMeans>
-						<IdentificationTypeCode>1</IdentificationTypeCode>
+						<IdentificationTypeCode>10</IdentificationTypeCode>
                         <!-- DE 7/7: Identification Type  Box 18(1) -->
 						<ModeCode>3</ModeCode>
 					</DepartureTransportMeans>
@@ -190,7 +190,7 @@
 						<Classification>
 							<ID>42021219</ID>
 							<!-- DE 6/14: TARIC commodity code Box 33 -->
-							<IdentificationTypeCode>SRZ</IdentificationTypeCode>
+							<IdentificationTypeCode>TSP</IdentificationTypeCode>
 							<!-- Used by DMS to identify the type of Classification Id - standard Comm Code will be TSP but SRZ until Drop 2-->
 						</Classification>
 						<GoodsMeasure>
@@ -219,7 +219,7 @@
 						<!-- This is a mandatory element -->
 						<MarksNumbersID>CDSTRADETEST1E</MarksNumbersID>
 						<!-- DE 6/11: Shipping marks Box 31 -->
-						<QuantityQuantity>55</QuantityQuantity>
+						<!-- <QuantityQuantity>55</QuantityQuantity> -->
 						<!-- DE 6/10: Package count Box 31 -->
 						<TypeCode>PK</TypeCode>
 						<!-- DE 6/9: Kind of package PK = Package Box 31 -->

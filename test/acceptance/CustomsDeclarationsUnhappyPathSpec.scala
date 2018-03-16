@@ -276,7 +276,6 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
       And("the response body is a \"Bad Request\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBatchIdentifierMissingorInvalid)
-
     }
 
     scenario("Response status 400 when a CSP user submits a request with an invalid X-Badge-Identifier header") {
@@ -295,7 +294,6 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
       And("the response body is a \"Bad Request\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBatchIdentifierMissingorInvalid)
-
     }
 
     scenario("Response status 500 when user submits a valid request but downstream call to DMS fails with an HTTP error") {

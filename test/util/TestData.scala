@@ -389,12 +389,9 @@ object TestData {
 
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")
-
     def fromNonCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $nonCspBearerToken")
-
     def postTo(endpoint: String): FakeRequest[R] = fakeRequest.copyFakeRequest(method = POST, uri = endpoint)
   }
-
 }
 
 object RequestHeaders {
@@ -434,5 +431,4 @@ object RequestHeaders {
     ACCEPT_HMRC_XML_V2_HEADER,
     API_SUBSCRIPTION_FIELDS_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER)
-
 }

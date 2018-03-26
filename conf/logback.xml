@@ -51,7 +51,7 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="customs-declarations" level="${logger.customs-declarations:-WARN}"/>
+    <logger name="customs-declarations" level="${logger.customs-declarations:-DEBUG}"/>
 
     <root level="ERROR">
         <appender-ref ref="FILE"/>

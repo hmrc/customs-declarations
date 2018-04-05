@@ -31,7 +31,7 @@ trait HeaderValidator extends Results {
 
   private lazy val validAcceptHeaders = requestedVersionService.validAcceptHeaders.toSeq
 
-  private lazy val validContentTypeHeaders = Seq(MimeTypes.XML, MimeTypes.XML + "; charset=utf-8")
+  private lazy val validContentTypeHeaders = Seq(MimeTypes.XML, MimeTypes.XML + "; charset=utf-8", MimeTypes.XML + ";charset=utf-8")
 
   private lazy val ErrorResponseBadgeIdentifierHeaderMissing = errorBadRequest("X-Badge-Identifier header is missing or invalid")
 

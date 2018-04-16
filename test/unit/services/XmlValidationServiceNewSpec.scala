@@ -23,11 +23,11 @@ import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
-import uk.gov.hmrc.customs.declaration.services.XmlValidationService
+import uk.gov.hmrc.customs.declaration.services.{SubmissionXmlValidationService, XmlValidationService}
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.xml.{Elem, Node, SAXException, SAXParseException}
+import scala.xml.{Elem, Node, SAXException}
 
 class XmlValidationServiceNewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
@@ -84,7 +84,7 @@ class XmlValidationServiceNewSpec extends UnitSpec with MockitoSugar with Before
   </md:MetaData>
 
   private def testService(test: XmlValidationService => Unit) {
-    test(new XmlValidationService(MockConfiguration))
+    test(new SubmissionXmlValidationService(MockConfiguration)) //TODO MC revisit
   }
 
   override protected def beforeEach() {

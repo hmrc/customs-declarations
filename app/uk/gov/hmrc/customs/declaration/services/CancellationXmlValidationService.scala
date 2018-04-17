@@ -20,6 +20,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
-class SubmissionXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
-  override protected val schemaPath: String = "xsd.locations.submit"
+class CancellationXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
+  override protected val schemaPath: String = "xsd.locations.cancel"
 }

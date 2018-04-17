@@ -43,7 +43,7 @@ abstract class XmlValidationService @Inject()(configuration: Configuration) {
 
     val sources = configuration.getStringSeq(schemaPath)
       .filter(_.nonEmpty)
-      .getOrElse(throw new IllegalStateException("application.conf is missing mandatory property 'xsd.locations'"))
+      .getOrElse(throw new IllegalStateException(s"application.conf is missing mandatory property '$schemaPath'"))
       .map(resourceUrl(_).toString)
       .map(systemId => new StreamSource(systemId)).toArray[Source]
 

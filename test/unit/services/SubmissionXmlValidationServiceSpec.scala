@@ -39,40 +39,42 @@ class SubmissionXmlValidationServiceSpec extends UnitSpec with MockitoSugar with
     test(new SubmissionXmlValidationService(MockConfiguration))
   }
 
+  private val schemaPropertyName = "xsd.locations.submit"
+
   override protected def beforeEach() {
     reset(MockConfiguration)
-    when(MockConfiguration.getStringSeq("xsd.locations")).thenReturn(Some(xsdLocations))
+    when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(Some(xsdLocations))
     when(MockConfiguration.getInt("xml.max-errors")).thenReturn(None)
   }
 
   "XmlValidationService" should {
     "get location of xsd resource files from configuration" in testService { xmlValidationService =>
       await(xmlValidationService.validate(ValidXML))
-      verify(MockConfiguration).getStringSeq(ameq("xsd.locations"))
+      verify(MockConfiguration).getStringSeq(ameq(schemaPropertyName))
     }
 
     "fail the future when in configuration there are no locations of xsd resource files" in testService {
       xmlValidationService =>
-        when(MockConfiguration.getStringSeq("xsd.locations")).thenReturn(None)
+        when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(None)
 
         val caught = intercept[IllegalStateException] {
           await(xmlValidationService.validate(MockXml))
         }
-        caught.getMessage shouldBe "application.conf is missing mandatory property 'xsd.locations'"
+        caught.getMessage shouldBe s"application.conf is missing mandatory property '$schemaPropertyName'"
     }
 
     "fail the future when in configuration there is an empty list for locations of xsd resource files" in testService {
       xmlValidationService =>
-        when(MockConfiguration.getStringSeq("xsd.locations")).thenReturn(Some(Nil))
+        when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(Some(Nil))
 
         val caught = intercept[IllegalStateException] {
           await(xmlValidationService.validate(MockXml))
         }
-        caught.getMessage shouldBe "application.conf is missing mandatory property 'xsd.locations'"
+        caught.getMessage shouldBe s"application.conf is missing mandatory property '$schemaPropertyName'"
     }
 
     "fail the future when a configured xsd resource file cannot be found" in testService { xmlValidationService =>
-      when(MockConfiguration.getStringSeq("xsd.locations")).thenReturn(Some(List("there/is/no/such/file")))
+      when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(Some(List("there/is/no/such/file")))
 
       val caught = intercept[FileNotFoundException] {
         await(xmlValidationService.validate(MockXml))

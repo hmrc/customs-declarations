@@ -23,13 +23,13 @@ import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
-import uk.gov.hmrc.customs.declaration.services.{SubmissionXmlValidationService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.services.{CancellationXmlValidationService, XmlValidationService}
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.xml.{Elem, Node, SAXException}
 
-class XmlValidationServiceNewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+class CancellationXmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
   private val MockConfiguration = mock[Configuration]
   private val MockXml = mock[Node]
@@ -37,7 +37,11 @@ class XmlValidationServiceNewSpec extends UnitSpec with MockitoSugar with Before
     "/api/conf/2.0/schemas/wco/declaration/DocumentMetaData_2_DMS.xsd",
     "/api/conf/2.0/schemas/wco/declaration/CANCEL.xsd")
 
-  def validXML(functionCode: Int = 13, typeCode: String = "INV"): Elem = <md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+  private val cancellationFunctionCode = 13
+  private val cancellationTypeCode = "INV"
+
+  def validXML(functionCode: Int = cancellationFunctionCode, typeCode: String = cancellationTypeCode): Elem =
+    <md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>NL</md:ResponsibleCountryCode>
@@ -84,43 +88,45 @@ class XmlValidationServiceNewSpec extends UnitSpec with MockitoSugar with Before
   </md:MetaData>
 
   private def testService(test: XmlValidationService => Unit) {
-    test(new SubmissionXmlValidationService(MockConfiguration)) //TODO MC revisit
+    test(new CancellationXmlValidationService(MockConfiguration))
   }
+
+  private val schemaPropertyName = "xsd.locations.cancel"
 
   override protected def beforeEach() {
     reset(MockConfiguration)
-    when(MockConfiguration.getStringSeq("xsd.locations")).thenReturn(Some(xsdLocations))
+    when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(Some(xsdLocations))
     when(MockConfiguration.getInt("xml.max-errors")).thenReturn(None)
   }
 
   "XmlValidationService" should {
     "get location of xsd resource files from configuration" in testService { xmlValidationService =>
       await(xmlValidationService.validate(validXML()))
-      verify(MockConfiguration).getStringSeq(ameq("xsd.locations"))
+      verify(MockConfiguration).getStringSeq(ameq(schemaPropertyName))
     }
 
     "fail the future when in configuration there are no locations of xsd resource files" in testService {
       xmlValidationService =>
-        when(MockConfiguration.getStringSeq("xsd.locations")).thenReturn(None)
+        when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(None)
 
         val caught = intercept[IllegalStateException] {
           await(xmlValidationService.validate(MockXml))
         }
-        caught.getMessage shouldBe "application.conf is missing mandatory property 'xsd.locations'"
+        caught.getMessage shouldBe s"application.conf is missing mandatory property '$schemaPropertyName'"
     }
 
     "fail the future when in configuration there is an empty list for locations of xsd resource files" in testService {
       xmlValidationService =>
-        when(MockConfiguration.getStringSeq("xsd.locations")).thenReturn(Some(Nil))
+        when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(Some(Nil))
 
         val caught = intercept[IllegalStateException] {
           await(xmlValidationService.validate(MockXml))
         }
-        caught.getMessage shouldBe "application.conf is missing mandatory property 'xsd.locations'"
+        caught.getMessage shouldBe s"application.conf is missing mandatory property '$schemaPropertyName'"
     }
 
     "fail the future when a configured xsd resource file cannot be found" in testService { xmlValidationService =>
-      when(MockConfiguration.getStringSeq("xsd.locations")).thenReturn(Some(List("there/is/no/such/file")))
+      when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(Some(List("there/is/no/such/file")))
 
       val caught = intercept[FileNotFoundException] {
         await(xmlValidationService.validate(MockXml))

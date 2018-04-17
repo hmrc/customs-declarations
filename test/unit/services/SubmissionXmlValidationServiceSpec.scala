@@ -30,6 +30,7 @@ import util.TestData._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.xml.{Node, SAXException}
 
+//TODO MC extract superclass ?
 class SubmissionXmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
   private val MockConfiguration = mock[Configuration]

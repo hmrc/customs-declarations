@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema targetNamespace="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+    <xs:include schemaLocation="../wco/declaration/DocumentMetaData_2_DMS.xsd"/>
+    <xs:import namespace="urn:wco:datamodel:WCO:DEC-DMS:2" schemaLocation="../wco/declaration/WCO_DEC_2_DMS.xsd"/>
+</xs:schema>

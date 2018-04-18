@@ -101,7 +101,6 @@
   <xs:group name="Declaration">
     <xs:choice>
       <xs:any namespace="urn:wco:datamodel:WCO:DEC-DMS:2" processContents="strict"/>
-      <xs:any namespace="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" processContents="strict"/>
     </xs:choice>
   </xs:group>
   <xs:group name="Response">

@@ -23,13 +23,13 @@ object TestXMLData {
   val cancellationTypeCode = "INV"
 
   def validCancellationXML(functionCode: Int = cancellationFunctionCode, typeCode: String = cancellationTypeCode): Elem =
-    <md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+    <md:MetaData xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" xmlns:md="urn:wco:datamodel:WCO:Cancel_DocumentMetaData-DMS:2">
       <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
       <md:WCOTypeName>DEC</md:WCOTypeName>
       <md:ResponsibleCountryCode>NL</md:ResponsibleCountryCode>
       <md:ResponsibleAgencyName>Duane</md:ResponsibleAgencyName>
       <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-      <Declaration xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2 ../CANCEL.xsd ">
+      <Declaration>
         <FunctionCode>{functionCode}</FunctionCode>
         <FunctionalReferenceID>Danielle_20180404_1154</FunctionalReferenceID>
         <ID>18GBJFKYDPAB34VGO7</ID>
@@ -46,13 +46,13 @@ object TestXMLData {
       </Declaration>
     </md:MetaData>
 
-  val InvalidCancellationXML = <md:MetaData xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+  val InvalidCancellationXML = <md:MetaData xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" xmlns:md="urn:wco:datamodel:WCO:Cancel_DocumentMetaData-DMS:2">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>NL</md:ResponsibleCountryCode>
     <md:ResponsibleAgencyName>Duane</md:ResponsibleAgencyName>
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-    <Declaration foo="bar" xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2 ../CANCEL.xsd ">
+    <Declaration foo="bar">
       <FunctionCode>13</FunctionCode>
       <FunctionalReferenceID>Danielle_20180404_1154</FunctionalReferenceID>
       <ID>18GBJFKYDPAB34VGO7</ID>

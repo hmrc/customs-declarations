@@ -19,36 +19,22 @@ package unit.services
 import java.io.FileNotFoundException
 
 import org.mockito.ArgumentMatchers.{eq => ameq}
-import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
-import play.api.Configuration
-import uk.gov.hmrc.customs.declaration.services.{CancellationXmlValidationService, XmlValidationService}
-import uk.gov.hmrc.play.test.UnitSpec
+import org.mockito.Mockito.{verify, when}
+import uk.gov.hmrc.customs.declaration.services.CancellationXmlValidationService
 import util.TestXMLData._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.xml.{Node, SAXException}
+import scala.xml.SAXException
 
-class CancellationXmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+class CancellationXmlValidationServiceSpec extends XmlValidationServiceSpec {
 
-  private val MockConfiguration = mock[Configuration]
-  private val MockXml = mock[Node]
-  private val xsdLocations = List(
+  override protected val xsdLocations = Seq(
     "/api/conf/2.0/schemas/wco/declaration/CANCEL_METADATA.xsd",
     "/api/conf/2.0/schemas/wco/declaration/CANCEL.xsd")
 
-  private def testService(test: XmlValidationService => Unit) {
-    test(new CancellationXmlValidationService(MockConfiguration))
-  }
+  override protected val schemaPropertyName = "xsd.locations.cancel"
 
-  private val schemaPropertyName = "xsd.locations.cancel"
-
-  override protected def beforeEach() {
-    reset(MockConfiguration)
-    when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(Some(xsdLocations))
-    when(MockConfiguration.getInt("xml.max-errors")).thenReturn(None)
-  }
+  override protected def xmlValidationService() = new CancellationXmlValidationService(MockConfiguration)
 
   "XmlValidationService" should {
     "get location of xsd resource files from configuration" in testService { xmlValidationService =>
@@ -127,5 +113,4 @@ class CancellationXmlValidationServiceSpec extends UnitSpec with MockitoSugar wi
     }
 
   }
-
 }

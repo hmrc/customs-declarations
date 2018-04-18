@@ -47,10 +47,6 @@ object TestData {
 
   val mockUuidService: UuidService = MockitoSugar.mock[UuidService]
 
-  val xsdLocations = List(
-    "/api/conf/2.0/schemas/wco/declaration/DocumentMetaData_2_DMS.xsd",
-    "/api/conf/2.0/schemas/wco/declaration/WCO_DEC_2_DMS.xsd")
-
   object TestModule extends AbstractModule {
     def configure(): Unit = {
       bind(classOf[UuidService]) toInstance mockUuidService

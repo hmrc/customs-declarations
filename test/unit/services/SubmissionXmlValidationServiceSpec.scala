@@ -19,35 +19,22 @@ package unit.services
 import java.io.FileNotFoundException
 
 import org.mockito.ArgumentMatchers.{eq => ameq}
-import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
-import play.api.Configuration
-import uk.gov.hmrc.customs.declaration.services.{SubmissionXmlValidationService, XmlValidationService}
-import uk.gov.hmrc.play.test.UnitSpec
-import util.TestData._
+import org.mockito.Mockito.{verify, when}
+import uk.gov.hmrc.customs.declaration.services.SubmissionXmlValidationService
 import util.TestXMLData._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.xml.{Node, SAXException}
+import scala.xml.SAXException
 
-//TODO MC extract superclass ?
-class SubmissionXmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+class SubmissionXmlValidationServiceSpec extends XmlValidationServiceSpec {
 
-  private val MockConfiguration = mock[Configuration]
-  private val MockXml = mock[Node]
+  override protected val schemaPropertyName = "xsd.locations.submit"
 
-  private def testService(test: XmlValidationService => Unit) {
-    test(new SubmissionXmlValidationService(MockConfiguration))
-  }
+  override protected val xsdLocations: Seq[String] = Seq(
+    "/api/conf/2.0/schemas/wco/declaration/DocumentMetaData_2_DMS.xsd",
+    "/api/conf/2.0/schemas/wco/declaration/WCO_DEC_2_DMS.xsd")
 
-  private val schemaPropertyName = "xsd.locations.submit"
-
-  override protected def beforeEach() {
-    reset(MockConfiguration)
-    when(MockConfiguration.getStringSeq(schemaPropertyName)).thenReturn(Some(xsdLocations))
-    when(MockConfiguration.getInt("xml.max-errors")).thenReturn(None)
-  }
+  override protected def xmlValidationService() = new SubmissionXmlValidationService(MockConfiguration)
 
   "XmlValidationService" should {
     "get location of xsd resource files from configuration" in testService { xmlValidationService =>
@@ -146,5 +133,4 @@ class SubmissionXmlValidationServiceSpec extends UnitSpec with MockitoSugar with
     }
 
   }
-
 }

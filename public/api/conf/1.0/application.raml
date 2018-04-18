@@ -49,7 +49,7 @@ documentation:
       securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
       body:
         application/xml:
-          type: !include schemas/customs/wrapper.xsd
+          type: !include schemas/customs/wrapper_submit.xsd
           example: !include examples/example_declaration_202.xml
       responses:
         202:
@@ -82,7 +82,7 @@ documentation:
                       <message>Internal server error</message>
                   </errorResponse>
 
-  /cancellation-requests:
+  /cancellation-requests/:
       post:
         displayName: Submit a cancellation request
         description: Allows submission of a cancellation request.
@@ -108,8 +108,8 @@ documentation:
         securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
         body:
           application/xml:
-            type: !include schemas/customs/wrapper.xsd
-            example: !include examples/example_declaration_202.xml
+            type: !include schemas/customs/wrapper_cancel.xsd
+            example: !include examples/example_cancel_declaration_202.xml
         responses:
           202:
           400:

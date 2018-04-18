@@ -67,7 +67,7 @@
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="FunctionCode" type="FunctionCode"
-				minOccurs="0">
+				minOccurs="1">
 				<xs:annotation>
 					<xs:documentation xml:lang="EN">
 						<WCOCodeRemarks>EDIFACT codes (1225)</WCOCodeRemarks>
@@ -100,7 +100,7 @@
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="FunctionalReferenceID" type="ds:DeclarationFunctionalReferenceIDType"
-				minOccurs="0">
+				minOccurs="1">
 				<xs:annotation>
 					<xs:documentation xml:lang="EN">
 						<WCOFormat>an..35</WCOFormat>
@@ -132,7 +132,7 @@
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="ID" type="ds:DeclarationIdentificationIDType"
-				minOccurs="0">
+				minOccurs="1">
 				<xs:annotation>
 					<xs:documentation xml:lang="EN">
 						<WCOFormat>an..70</WCOFormat>
@@ -598,7 +598,7 @@
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="ID" type="ds:SubmitterIdentificationIDType"
-							minOccurs="0">
+							minOccurs="1">
 							<xs:annotation>
 								<xs:documentation xml:lang="EN">
 									<WCOFormat>an..17</WCOFormat>
@@ -954,7 +954,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="AdditionalInformation" minOccurs="0"
+			<xs:element name="AdditionalInformation" minOccurs="1"
 				maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation xml:lang="EN">
@@ -1005,7 +1005,7 @@
 						</xs:element>
 						<xs:element name="StatementDescription"
 							type="ds:AdditionalInformationStatementDescriptionTextType"
-							minOccurs="0">
+							minOccurs="1">
 							<xs:annotation>
 								<xs:documentation xml:lang="EN">
 									<WCOID>225</WCOID>
@@ -1479,7 +1479,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="Amendment" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="Amendment" minOccurs="1" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation xml:lang="EN">
 						<WCOID>06A</WCOID>
@@ -1499,7 +1499,7 @@
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="ChangeReasonCode" type="ds:AmendmentChangeReasonCodeType"
-							minOccurs="0">
+							minOccurs="1">
 							<xs:annotation>
 								<xs:documentation xml:lang="EN">
 									<WCOCodeRemarks>User codes</WCOCodeRemarks>

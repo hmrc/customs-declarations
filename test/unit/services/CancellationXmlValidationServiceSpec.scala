@@ -35,7 +35,7 @@ class CancellationXmlValidationServiceSpec extends UnitSpec with MockitoSugar wi
   private val MockConfiguration = mock[Configuration]
   private val MockXml = mock[Node]
   private val xsdLocations = List(
-    "/api/conf/2.0/schemas/wco/declaration/DocumentMetaData_2_DMS.xsd",
+    "/api/conf/2.0/schemas/wco/declaration/CANCEL_METADATA.xsd",
     "/api/conf/2.0/schemas/wco/declaration/CANCEL.xsd")
 
   private def testService(test: XmlValidationService => Unit) {

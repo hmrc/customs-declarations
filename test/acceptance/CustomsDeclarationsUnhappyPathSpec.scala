@@ -21,7 +21,7 @@ import play.api.libs.json.{JsObject, JsString}
 import play.api.mvc._
 import play.api.test.Helpers._
 import util.AuditService
-import util.TestData._
+import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.externalservices.{AuthService, MdgWcoDecService}
 
@@ -119,7 +119,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema") {
       Given("the API is available")
-      val request = InvalidRequest.fromCsp.postTo(endpoint)
+      val request = InvalidSubmissionRequest.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -173,7 +173,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when user submits a non-xml payload") {
       Given("the API is available")
-      val request = ValidRequest
+      val request = ValidSubmissionRequest
         .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
         .copyFakeRequest(method = POST, uri = endpoint)
 
@@ -262,7 +262,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when a CSP user submits a request without a X-Badge-Identifier header") {
       Given("the API is available")
-      val request = InvalidRequestWithoutXBadgeIdentifier.fromCsp.postTo(endpoint)
+      val request = InvalidSubmissionRequestWithoutXBadgeIdentifier.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -280,7 +280,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when a CSP user submits a request with an invalid X-Badge-Identifier header") {
       Given("the API is available")
-      val request = InvalidRequestWithInvalidXBadgeIdentifier.fromCsp.postTo(endpoint)
+      val request = InvalidSubmissionRequestWithInvalidXBadgeIdentifier.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -299,7 +299,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
     scenario("Response status 500 when user submits a valid request but downstream call to DMS fails with an HTTP error") {
 
       Given("the API is available")
-      val request = ValidRequest.fromCsp.postTo(endpoint)
+      val request = ValidSubmissionRequest.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       setupMdgWcoDecServiceToReturn(status = NOT_FOUND)

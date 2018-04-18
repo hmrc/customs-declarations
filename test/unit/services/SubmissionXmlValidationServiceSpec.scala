@@ -26,6 +26,7 @@ import play.api.Configuration
 import uk.gov.hmrc.customs.declaration.services.{SubmissionXmlValidationService, XmlValidationService}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
+import util.TestXMLData._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.xml.{Node, SAXException}
@@ -50,7 +51,7 @@ class SubmissionXmlValidationServiceSpec extends UnitSpec with MockitoSugar with
 
   "XmlValidationService" should {
     "get location of xsd resource files from configuration" in testService { xmlValidationService =>
-      await(xmlValidationService.validate(ValidXML))
+      await(xmlValidationService.validate(ValidSubmissionXML))
       verify(MockConfiguration).getStringSeq(ameq(schemaPropertyName))
     }
 
@@ -84,13 +85,13 @@ class SubmissionXmlValidationServiceSpec extends UnitSpec with MockitoSugar with
     }
 
     "successfully validate a correct xml" in testService { xmlValidationService =>
-      val result: Unit = await(xmlValidationService.validate(ValidXML))
+      val result: Unit = await(xmlValidationService.validate(ValidSubmissionXML))
       result should be(())
     }
 
     "fail the future with SAXException when there is an error in XML" in testService { xmlValidationService =>
       val caught = intercept[SAXException] {
-        await(xmlValidationService.validate(InvalidXML))
+        await(xmlValidationService.validate(InvalidSubmissionXML))
       }
       caught.getMessage shouldBe "cvc-complex-type.3.2.2: Attribute 'foo' is not allowed to appear in element 'Declaration'."
       Option(caught.getException) shouldBe None
@@ -98,7 +99,7 @@ class SubmissionXmlValidationServiceSpec extends UnitSpec with MockitoSugar with
 
     "fail the future with wrapped SAXExceptions when there are multiple errors in XML" in testService { xmlValidationService =>
       val caught = intercept[SAXException] {
-        await(xmlValidationService.validate(InvalidXMLWith3Errors))
+        await(xmlValidationService.validate(InvalidSubmissionXMLWith3Errors))
       }
       caught.getMessage shouldBe "cvc-complex-type.2.2: Element 'TotalPackageQuantity' must have no element [children], and the value must be valid."
 
@@ -120,7 +121,7 @@ class SubmissionXmlValidationServiceSpec extends UnitSpec with MockitoSugar with
         when(MockConfiguration.getInt("xml.max-errors")).thenReturn(Some(2))
 
         val caught = intercept[SAXException] {
-          await(xmlValidationService.validate(InvalidXMLWith3Errors))
+          await(xmlValidationService.validate(InvalidSubmissionXMLWith3Errors))
         }
         verify(MockConfiguration).getInt("xml.max-errors")
 

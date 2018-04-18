@@ -30,6 +30,7 @@ import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
+import util.TestXMLData._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -70,28 +71,28 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
     s"CustomsDeclarationsBusinessService when $submissionMode ia submitting" should {
 
       "validate incoming xml" in {
-        testSubmitResult(xmlSubmission(ValidXML)) { result =>
+        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
           await(result)
-          verify(mockXmlValidationService).validate(ameq(ValidXML))(any[ExecutionContext])
+          verify(mockXmlValidationService).validate(ameq(ValidSubmissionXML))(any[ExecutionContext])
         }
       }
 
       "send valid xml to communication service" in {
-        testSubmitResult(xmlSubmission(ValidXML)) { result =>
+        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
           await(result)
-          verify(mockCommunicationService).prepareAndSend(ameq(ValidXML))(ameq(mockHeaderCarrier), any[Ids])
+          verify(mockCommunicationService).prepareAndSend(ameq(ValidSubmissionXML))(ameq(mockHeaderCarrier), any[Ids])
         }
       }
 
       "implicitly pass requested api version to communicationService" in {
-        testSubmitResult(xmlSubmission(ValidXML)) { result =>
+        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
           await(result)
           verify(mockCommunicationService).prepareAndSend(any[NodeSeq])(ameq(mockHeaderCarrier), ameq(mockIds))
         }
       }
 
       "return conversationId and fieldsId for a processed valid request" in {
-        testSubmitResult(xmlSubmission(ValidXML)) { result =>
+        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
           await(result) shouldBe Right(ids)
         }
       }
@@ -100,7 +101,7 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
         when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext]))
           .thenReturn(Future.failed(xmlValidationException))
 
-        testSubmitResult(xmlSubmission(ValidXML)) { result =>
+        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
           await(result) shouldBe Left(xmlValidationErrorResponse)
           verifyZeroInteractions(mockCommunicationService)
         }
@@ -110,7 +111,7 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
         when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext]))
           .thenReturn(Future.failed(emulatedServiceFailure))
 
-        testSubmitResult(xmlSubmission(InvalidXML)) { result =>
+        testSubmitResult(xmlSubmission(InvalidSubmissionXML)) { result =>
           intercept[EmulatedServiceFailure](await(result)) shouldBe emulatedServiceFailure
           verifyZeroInteractions(mockCommunicationService)
         }
@@ -120,7 +121,7 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
         when(mockCommunicationService.prepareAndSend(any[NodeSeq]())(any[HeaderCarrier](), any[Ids]))
           .thenReturn(Future.failed(emulatedServiceFailure))
 
-        testSubmitResult(xmlSubmission(ValidXML)) { result =>
+        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
           intercept[EmulatedServiceFailure](await(result)) shouldBe emulatedServiceFailure
         }
       }

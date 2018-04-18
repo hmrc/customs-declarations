@@ -20,8 +20,8 @@ import java.util.UUID
 
 import com.typesafe.config.{Config, ConfigFactory}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey, FieldsId}
-import util.ExternalServicesConfig.{Host, Port}
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
+import util.ExternalServicesConfig.{Host, Port}
 
 trait ApiSubscriptionFieldsTestData {
   val fieldsIdString = "327d9145-4965-4d28-a2c5-39dedee50334"

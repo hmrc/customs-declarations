@@ -32,6 +32,7 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
+import util.TestXMLData._
 import util.{ApiSubscriptionFieldsTestData, RequestHeaders}
 
 import scala.concurrent.Future
@@ -77,7 +78,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
       service =>
         setupMockXmlWrapper
         prepareAndSendValidXml(service)
-        verify(mockMdgWcoDeclarationConnector).send(meq(WrappedValidXML), any[DateTime], any[UUID], any[Option[String]])(meq(fullIds))
+        verify(mockMdgWcoDeclarationConnector).send(meq(WrappedValidSubmissionXML), any[DateTime], any[UUID], any[Option[String]])(meq(fullIds))
     }
 
     "generate correlationId and pass to connector" in testService {
@@ -111,7 +112,7 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     "call payload decorator passing incoming xml" in testService {
       service =>
         prepareAndSendValidXml(service)
-        verify(mockPayloadDecorator).wrap(meq(ValidXML), any[Ids], anyString, any[DateTime])
+        verify(mockPayloadDecorator).wrap(meq(ValidSubmissionXML), any[Ids], anyString, any[DateTime])
     }
 
     "call payload decorator passing api-subscription-fields-id header as clientId" in testService{
@@ -182,10 +183,10 @@ class CommunicationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
   }
 
   private def setupMockXmlWrapper = {
-    when(mockPayloadDecorator.wrap(meq(ValidXML), any[Ids], anyString, any[DateTime])).thenReturn(WrappedValidXML)
+    when(mockPayloadDecorator.wrap(meq(ValidSubmissionXML), any[Ids], anyString, any[DateTime])).thenReturn(WrappedValidSubmissionXML)
   }
 
   private def prepareAndSendValidXml(service: CommunicationService, hc: HeaderCarrier = headerCarrier): Ids = {
-    await(service.prepareAndSend(ValidXML)(hc, fullIds))
+    await(service.prepareAndSend(ValidSubmissionXML)(hc, fullIds))
   }
 }

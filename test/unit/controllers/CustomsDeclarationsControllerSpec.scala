@@ -34,10 +34,12 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.{CustomsConfigService, CustomsDeclarationsBusinessService, RequestedVersionService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
+import util.FakeRequests._
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders
 import util.RequestHeaders._
 import util.TestData._
+import util.TestXMLData.ValidSubmissionXML
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -110,29 +112,29 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
 
     "process CSP request when call is authorised for CSP" in {
       authoriseCsp()
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result)
         verifyCspAuthorisationCalled(numberOfTimes = 1)
         verifyNonCspAuthorisationCalled(numberOfTimes = 0)
-        verify(mockCustomsDeclarationsBusinessService).authorisedCspSubmission(ameq(ValidXML))(any[HeaderCarrier], ameq(fullIds))
+        verify(mockCustomsDeclarationsBusinessService).authorisedCspSubmission(ameq(ValidSubmissionXML))(any[HeaderCarrier], ameq(fullIds))
         verify(mockCustomsDeclarationsBusinessService, never).authorisedNonCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids])
       }
     }
 
     "process a non-CSP request when call is unauthorised for CSP but authorised for non-CSP" in {
       authoriseNonCsp(Some(declarantEori))
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result)
         verifyCspAuthorisationCalled(numberOfTimes = 1)
         verifyNonCspAuthorisationCalled(numberOfTimes = 1)
         verify(mockCustomsDeclarationsBusinessService, never).authorisedCspSubmission(any[NodeSeq])(any[HeaderCarrier], any[Ids])
-        verify(mockCustomsDeclarationsBusinessService).authorisedNonCspSubmission(ameq(ValidXML))(any[HeaderCarrier], ameq(fullIds))
+        verify(mockCustomsDeclarationsBusinessService).authorisedNonCspSubmission(ameq(ValidSubmissionXML))(any[HeaderCarrier], ameq(fullIds))
       }
     }
 
     "respond with status 202 and conversationId in header for a processed valid CSP request" in {
       authoriseCsp()
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         status(result) shouldBe ACCEPTED
         header(RequestHeaders.X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
       }
@@ -140,7 +142,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
 
     "respond with status 202 and conversationId in header for a processed valid non-CSP request" in {
       authoriseNonCsp(Some(declarantEori))
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         status(result) shouldBe ACCEPTED
         header(RequestHeaders.X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
       }
@@ -148,7 +150,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
 
     "respond with status 202 and conversationId in header for a processed valid non-CSP request without X-BADGE-IDENTIFIER header" in {
       authoriseNonCsp(Some(declarantEori))
-      testSubmitResult(ValidRequest.withHeaders((ValidHeaders - X_BADGE_IDENTIFIER_NAME).toSeq: _*)) { result =>
+      testSubmitResult(ValidSubmissionRequest.withHeaders((ValidHeaders - X_BADGE_IDENTIFIER_NAME).toSeq: _*)) { result =>
       status(result) shouldBe ACCEPTED
         header(RequestHeaders.X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
       }
@@ -157,7 +159,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
     "return result 401 UNAUTHORISED when call is unauthorised for both CSP and non-CSP submissions" in {
       unauthoriseCsp()
       unauthoriseNonCspOnly()
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result) shouldBe errorResultUnauthorised
         verifyZeroInteractions(mockCustomsDeclarationsBusinessService)
       }
@@ -166,7 +168,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
     "return result 401 UNAUTHORISED when there's no Customs enrolment retrieved for an enrolled non-CSP call" in {
       unauthoriseCsp()
       authoriseNonCspButDontRetrieveCustomsEnrolment()
-      testSubmitResult(ValidRequest.fromNonCsp) { result =>
+      testSubmitResult(ValidSubmissionRequest.fromNonCsp) { result =>
         await(result) shouldBe errorResultEoriNotFoundInCustomsEnrolment
         verifyZeroInteractions(mockCustomsDeclarationsBusinessService)
         PassByNameVerifier(mockDeclarationsLogger, "debug")
@@ -180,7 +182,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
     "return result 401 UNAUTHORISED when there's no EORI number in Customs enrolment for a non-CSP call" in {
       unauthoriseCsp()
       authoriseNonCsp(maybeEori = None)
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result) shouldBe errorResultEoriNotFoundInCustomsEnrolment
         verifyZeroInteractions(mockCustomsDeclarationsBusinessService)
       }
@@ -191,7 +193,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
         .thenReturn(None)
 
       authoriseCsp()
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result) shouldBe errorResultInvalidVersionRequested
         PassByNameVerifier(mockDeclarationsLogger, "error")
           .withByNameParam[String]("Requested version is not valid. Processing failed.")
@@ -203,7 +205,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
 
     "return result 400 BAD_REQUEST when X-BADGE-IDENTIFIER header is missing for a CSP request" in {
       authoriseCsp()
-      testSubmitResult(ValidRequest.copyFakeRequest(headers = ValidRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))) { result =>
+      testSubmitResult(ValidSubmissionRequest.copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))) { result =>
         await(result) shouldBe errorResultBadgeIdentifier
         PassByNameVerifier(mockDeclarationsLogger, "error")
          .withByNameParam[String]("Header validation failed because X-Badge-Identifier header is missing or invalid")
@@ -215,7 +217,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
 
     "return result 400 BAD_REQUEST when X-BADGE-IDENTIFIER header is invalid for a CSP request" in {
       authoriseCsp()
-      testSubmitResult(ValidRequest.withHeaders((ValidHeaders + (X_BADGE_IDENTIFIER_NAME -> invalidBadgeIdentifierValue)).toSeq: _*)) { result =>
+      testSubmitResult(ValidSubmissionRequest.withHeaders((ValidHeaders + (X_BADGE_IDENTIFIER_NAME -> invalidBadgeIdentifierValue)).toSeq: _*)) { result =>
         await(result) shouldBe errorResultBadgeIdentifier
         PassByNameVerifier(mockDeclarationsLogger, "error")
          .withByNameParam[String]("Header validation failed because X-Badge-Identifier header is missing or invalid ")
@@ -230,7 +232,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
         .thenReturn(None)
 
       authoriseNonCsp(Some(declarantEori))
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result) shouldBe errorResultInvalidVersionRequested
         PassByNameVerifier(mockDeclarationsLogger, "error")
           .withByNameParam[String]("Requested version is not valid. Processing failed.")
@@ -246,7 +248,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
         .thenReturn(Future.failed(emulatedServiceFailure))
 
       authoriseCsp()
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result) shouldBe errorResultInternalServer
       }
     }
@@ -256,7 +258,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
         .thenReturn(Future.failed(emulatedServiceFailure))
 
       authoriseNonCsp(Some(declarantEori))
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result) shouldBe errorResultInternalServer
       }
     }
@@ -268,7 +270,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       when(mockResult.withHeaders(X_CONVERSATION_ID_HEADER)).thenReturn(mockResult)
 
       authoriseCsp()
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result) shouldBe mockResult
       }
     }
@@ -280,7 +282,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
       when(mockResult.withHeaders(X_CONVERSATION_ID_HEADER)).thenReturn(mockResult)
 
       authoriseNonCsp(Some(declarantEori))
-      testSubmitResult(ValidRequest) { result =>
+      testSubmitResult(ValidSubmissionRequest) { result =>
         await(result) shouldBe mockResult
       }
     }

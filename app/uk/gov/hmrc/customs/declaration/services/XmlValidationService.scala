@@ -18,13 +18,13 @@ package uk.gov.hmrc.customs.declaration.services
 
 import java.io.{FileNotFoundException, StringReader}
 import java.net.URL
+
+import com.google.inject.ImplementedBy
 import javax.inject.Inject
 import javax.xml.XMLConstants
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.{Schema, SchemaFactory}
-
-import com.google.inject.Singleton
 import org.xml.sax.{ErrorHandler, SAXParseException}
 import play.api.Configuration
 
@@ -32,16 +32,18 @@ import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.{NodeSeq, SAXException}
 
-@Singleton
-class XmlValidationService @Inject()(configuration: Configuration) {
+@ImplementedBy(classOf[SubmissionXmlValidationService])
+abstract class XmlValidationService @Inject()(configuration: Configuration) {
+
+  protected val schemaPath: String
 
   private lazy val schema: Schema = {
     def resourceUrl(resourcePath: String): URL = Option(getClass.getResource(resourcePath))
       .getOrElse(throw new FileNotFoundException(s"XML Schema resource file: $resourcePath"))
 
-    val sources = configuration.getStringSeq("xsd.locations")
+    val sources = configuration.getStringSeq(schemaPath)
       .filter(_.nonEmpty)
-      .getOrElse(throw new IllegalStateException("application.conf is missing mandatory property 'xsd.locations'"))
+      .getOrElse(throw new IllegalStateException(s"application.conf is missing mandatory property '$schemaPath'"))
       .map(resourceUrl(_).toString)
       .map(systemId => new StreamSource(systemId)).toArray[Source]
 

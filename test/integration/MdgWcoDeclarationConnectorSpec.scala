@@ -33,6 +33,7 @@ import uk.gov.hmrc.http.logging.Authorization
 import util.ApiSubscriptionFieldsTestData.fieldsIdString
 import util.ExternalServicesConfig.{AuthToken, Host, Port}
 import util.TestData._
+import util.TestXMLData.ValidSubmissionXML
 import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, RequestHeaders}
 
@@ -81,7 +82,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
     "make a correct request" in {
       setupMdgWcoDecServiceToReturn(ACCEPTED)
       await(sendValidXml())
-      verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+      verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
     }
 
     "return a failed future when external service returns 404" in {
@@ -108,6 +109,6 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
   }
 
   private def sendValidXml()(implicit ids: Ids) = {
-    connector.send(ValidXML, new DateTime(), correlationId, None)
+    connector.send(ValidSubmissionXML, new DateTime(), correlationId, None)
   }
 }

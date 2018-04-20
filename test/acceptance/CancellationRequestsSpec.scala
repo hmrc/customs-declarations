@@ -138,7 +138,7 @@ class CancellationRequestsSpec extends AcceptanceTestSpec
     }
 
     scenario("A non-CSP successfully submits a cancellation request on behalf of somebody with Customs enrolment") {
-      Given("A Software House wants to submit a valid cancellation requestn")
+      Given("A Software House wants to submit a valid cancellation request")
       startMdgWcoDecService()
       val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.fromNonCsp.postTo(endpoint)
 

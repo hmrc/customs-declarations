@@ -26,6 +26,11 @@ import util.TestXMLData._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.xml.SAXException
 
+//TODO MC
+/*
+Cancellation and Submission are subclasses of XmlValidationService - they have only one minor difference which is location .
+So I would expect only one big Spec - with possibly two subclass Spec .
+ */
 class CancellationXmlValidationServiceSpec extends XmlValidationServiceSpec {
 
   override protected val xsdLocations = Seq(

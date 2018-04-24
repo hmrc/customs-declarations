@@ -34,7 +34,7 @@ object TestData {
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
   val invalidBadgeIdentifier: BadgeIdentifier = BadgeIdentifier(invalidBadgeIdentifierValue)
   val badgeIdentifier: BadgeIdentifier = BadgeIdentifier(validBadgeIdentifierValue)
-  val ids = Ids(conversationId, RequestType.SUBMIT, Some(ApiSubscriptionFieldsTestData.fieldsId), maybeBadgeIdentifier = Some(badgeIdentifier))
+  val ids = Ids(conversationId, RequestType.Submit, Some(ApiSubscriptionFieldsTestData.fieldsId), maybeBadgeIdentifier = Some(badgeIdentifier))
 
   val cspBearerToken = "CSP-Bearer-Token"
   val nonCspBearerToken = "Software-House-Bearer-Token"

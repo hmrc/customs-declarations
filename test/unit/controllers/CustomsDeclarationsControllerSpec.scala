@@ -111,8 +111,8 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
   }
 
   private val requestTypes = Table(("description", "request type", "validRequest", "validXML"),
-    ("submission", RequestType.SUBMIT, ValidSubmissionRequest, ValidSubmissionXML),
-    ("cancellation", RequestType.CANCEL, ValidCancellationRequest, validCancellationXML())
+    ("submission", RequestType.Submit, ValidSubmissionRequest, ValidSubmissionXML),
+    ("cancellation", RequestType.Cancel, ValidCancellationRequest, validCancellationXML())
   )
 
   private def fullIds(requestType: RequestType): Ids = fullIds.copy(requestType = requestType)

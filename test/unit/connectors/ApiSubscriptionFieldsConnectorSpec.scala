@@ -46,7 +46,7 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
   private val mockWSGetImpl = mock[WSHttp]
   private val mockDeclarationsLogger = mock[DeclarationsLogger]
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.SUBMIT)
+  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.Submit)
 
   private val connector = connectorWithConfig(validConfig)
 

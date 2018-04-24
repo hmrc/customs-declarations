@@ -45,7 +45,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
   private val correlationId = UUID.randomUUID()
-  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.SUBMIT)
+  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.Submit)
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
     .withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_NAME -> fieldsIdString)

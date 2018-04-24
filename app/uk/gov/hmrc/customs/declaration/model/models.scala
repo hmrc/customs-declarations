@@ -39,5 +39,5 @@ case class Ids(conversationId: ConversationId,
 
 object RequestType extends Enumeration {
   type RequestType = Value
-  val SUBMIT, CANCEL = Value
+  val Submit, Cancel = Value
 }

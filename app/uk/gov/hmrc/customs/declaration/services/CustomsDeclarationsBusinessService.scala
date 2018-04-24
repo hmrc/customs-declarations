@@ -47,10 +47,9 @@ class CustomsDeclarationsBusinessService @Inject()(logger: DeclarationsLogger,
   }
 
   private def validateXml(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids) = {
-    //TODO MC planning to revisit, open for review suggestions
     val service: XmlValidationService = ids.requestType match {
-      case RequestType.SUBMIT => xmlValidationServiceProvider.submission
-      case RequestType.CANCEL => xmlValidationServiceProvider.cancellation
+      case RequestType.Submit => xmlValidationServiceProvider.submission
+      case RequestType.Cancel => xmlValidationServiceProvider.cancellation
     }
     service.validate(xml).map(Right(_))
       .recover {

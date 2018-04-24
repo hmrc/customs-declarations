@@ -21,5 +21,5 @@ import play.api.Configuration
 
 @Singleton
 class SubmissionXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
-  override protected val schemaPath: String = "xsd.locations.submit"
+  override protected val schemaPropertyName: String = "xsd.locations.submit"
 }

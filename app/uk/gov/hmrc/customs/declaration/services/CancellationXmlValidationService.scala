@@ -21,5 +21,5 @@ import play.api.Configuration
 
 @Singleton
 class CancellationXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
-  override protected val schemaPath: String = "xsd.locations.cancel"
+  override protected val schemaPropertyName: String = "xsd.locations.cancel"
 }

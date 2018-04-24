@@ -106,9 +106,9 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  def submit(): Action[AnyContent] = process(RequestType.SUBMIT)
+  def submit(): Action[AnyContent] = process(RequestType.Submit)
 
-  def cancel(): Action[AnyContent] = process(RequestType.CANCEL)
+  def cancel(): Action[AnyContent] = process(RequestType.Cancel)
 
 
   def process(requestType: RequestType): Action[AnyContent] = Action.async(bodyParser = xmlOrEmptyBody) {

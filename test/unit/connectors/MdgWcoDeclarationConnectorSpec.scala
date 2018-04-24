@@ -55,7 +55,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
     .withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_HEADER)
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
-  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.SUBMIT)
+  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.Submit)
 
   override protected def beforeEach() {
     reset(mockWsPost, mockDeclarationsLogger, mockServiceConfigProvider)

@@ -76,8 +76,8 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
   )
 
   private val requestTypes = Table(("description", "type", "validation service", "expected valid xml", "expected invalid xml"),
-    ("submission", RequestType.SUBMIT, mockSubmissionXmlValidationService, ValidSubmissionXML, InvalidSubmissionXML),
-    ("cancellation", RequestType.CANCEL, mockCancellationXmlValidationService, validCancellationXML(), InvalidCancellationXML)
+    ("submission", RequestType.Submit, mockSubmissionXmlValidationService, ValidSubmissionXML, InvalidSubmissionXML),
+    ("cancellation", RequestType.Cancel, mockCancellationXmlValidationService, validCancellationXML(), InvalidCancellationXML)
   )
 
 

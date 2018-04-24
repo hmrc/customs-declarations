@@ -38,7 +38,7 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
   private lazy val connector = app.injector.instanceOf[ApiSubscriptionFieldsConnector]
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.SUBMIT)
+  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.Submit)
 
   override protected def beforeAll() {
     startMockServer()

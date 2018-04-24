@@ -17,17 +17,17 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.MimeTypes
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{UnauthorizedCode, BadRequestCode}
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{BadRequestCode, UnauthorizedCode}
 import uk.gov.hmrc.customs.declaration.connectors.MicroserviceAuthConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, ConversationId, Eori, Ids}
+import uk.gov.hmrc.customs.declaration.model.RequestType.RequestType
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
@@ -106,11 +106,16 @@ class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  def submit(): Action[AnyContent] = Action.async(bodyParser = xmlOrEmptyBody) {
+  def submit(): Action[AnyContent] = process(RequestType.Submit)
+
+  def cancel(): Action[AnyContent] = process(RequestType.Cancel)
+
+
+  def process(requestType: RequestType): Action[AnyContent] = Action.async(bodyParser = xmlOrEmptyBody) {
     implicit request =>
 
       val conversationId = uuidService.uuid().toString
-      val onlyConversationId = Ids(ConversationId(conversationId))
+      val onlyConversationId = Ids(ConversationId(conversationId), requestType)
       logger.debug(s"Request received. Payload = ${request.body.toString} headers = ${request.headers.headers}", onlyConversationId)
 
       validateHeaders(request) match {

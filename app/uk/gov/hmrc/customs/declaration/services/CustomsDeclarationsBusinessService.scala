@@ -17,10 +17,9 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{Ids, RequestedVersion}
+import uk.gov.hmrc.customs.declaration.model.{Ids, RequestType}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.collection.Seq
@@ -31,7 +30,7 @@ import scala.xml.{NodeSeq, SAXException}
 @Singleton
 class CustomsDeclarationsBusinessService @Inject()(logger: DeclarationsLogger,
                                                    communication: CommunicationService,
-                                                   xmlValidationService: XmlValidationService) {
+                                                   xmlValidationServiceProvider: XmlValidationServiceProvider) {
 
   type ValidationResult = Either[ErrorResponse, Unit]
 
@@ -47,8 +46,12 @@ class CustomsDeclarationsBusinessService @Inject()(logger: DeclarationsLogger,
     validateXml(xml) thenProcessWith prepareAndSend(xml)
   }
 
-  private def validateXml(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids): Future[ValidationResult] = {
-    xmlValidationService.validate(xml).map(Right(_))
+  private def validateXml(xml: NodeSeq)(implicit hc: HeaderCarrier, ids: Ids) = {
+    val service: XmlValidationService = ids.requestType match {
+      case RequestType.Submit => xmlValidationServiceProvider.submission
+      case RequestType.Cancel => xmlValidationServiceProvider.cancellation
+    }
+    service.validate(xml).map(Right(_))
       .recover {
         case saxe: SAXException =>
           val msg = "Payload is not valid according to schema"

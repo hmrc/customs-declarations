@@ -18,7 +18,7 @@ package unit.xml
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, ConversationId, Ids}
+import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, ConversationId, Ids, RequestType}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -42,8 +42,8 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
   private val dateTime = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, DateTimeZone.UTC)
   private val payloadWrapper = new MdgPayloadDecorator()
 
-  private def wrapPayloadWithBadgeIdentifier() = payloadWrapper.wrap(xml, Ids(conversationId,maybeBadgeIdentifier=badgeIdentifier), clientId, dateTime)
-  private def wrapPayloadWithOutBadgeIdentifier() = payloadWrapper.wrap(xml, Ids(conversationId), clientId, dateTime)
+  private def wrapPayloadWithBadgeIdentifier() = payloadWrapper.wrap(xml, Ids(conversationId, RequestType.Submit, maybeBadgeIdentifier=badgeIdentifier), clientId, dateTime)
+  private def wrapPayloadWithOutBadgeIdentifier() = payloadWrapper.wrap(xml, Ids(conversationId, RequestType.Submit), clientId, dateTime)
 
   "WcoDmsPayloadWrapper " should {
     "wrap passed XML in DMS wrapper" in {

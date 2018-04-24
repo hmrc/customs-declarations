@@ -27,10 +27,10 @@ import util.externalservices.{AuthService, MdgWcoDecService}
 
 import scala.concurrent.Future
 
-class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
+class CustomsDeclarationCancellationUnhappyPathSpec extends AcceptanceTestSpec
   with Matchers with OptionValues with AuthService with MdgWcoDecService with AuditService {
 
-  private val endpoint = "/"
+  private val endpoint = "/cancellation-requests"
 
   private val BadRequestError =
     """<?xml version="1.0" encoding="UTF-8"?>
@@ -41,6 +41,20 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
       |     <error>
       |       <code>xml_validation_error</code>
       |       <message>cvc-complex-type.3.2.2: Attribute 'foo' is not allowed to appear in element 'Declaration'.</message>
+      |     </error>
+      |  </errors>
+      |</errorResponse>
+    """.stripMargin
+
+  private val BadRequestErrorIncorrectEndpoint =
+    """<?xml version="1.0" encoding="UTF-8"?>
+      |<errorResponse>
+      |  <code>BAD_REQUEST</code>
+      |  <message>Payload is not valid according to schema</message>
+      |  <errors>
+      |     <error>
+      |       <code>xml_validation_error</code>
+      |       <message>cvc-elt.1.a: Cannot find the declaration of element 'md:MetaData'.</message>
       |     </error>
       |  </errors>
       |</errorResponse>
@@ -58,7 +72,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
       |     </error>
       |     <error>
       |       <code>xml_validation_error</code>
-      |       <message>cvc-datatype-valid.1.2.1: 'ABC' is not a valid value for 'decimal'.</message>
+      |       <message>cvc-pattern-valid: Value 'ABC' is not facet-valid with respect to pattern '13' for type 'FunctionCode'.</message>
       |     </error>
       |  </errors>
       |</errorResponse>
@@ -117,9 +131,27 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
   feature("The API handles errors as expected") {
 
+    scenario("Response status 400 when user submits an xml payload that does not adhere to schema (and would be valid for submission)") {
+      Given("the API is available")
+      val request = ValidSubmissionRequest.fromCsp.postTo(endpoint)
+
+      When("a POST request with data is sent to the API")
+      val result: Option[Future[Result]] = route(app = app, request)
+
+      Then(s"a response with a 400 status is received")
+      result shouldBe 'defined
+      val resultFuture = result.value
+
+      status(resultFuture) shouldBe BAD_REQUEST
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+      And("the response body is a \"invalid xml\" XML")
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorIncorrectEndpoint)
+    }
+
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema") {
       Given("the API is available")
-      val request = InvalidSubmissionRequest.fromCsp.postTo(endpoint)
+      val request = InvalidCancellationRequest.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -137,7 +169,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")
-      val request = InvalidRequestWith3Errors.fromCsp.postTo(endpoint)
+      val request = InvalidCancellationRequestWith3Errors.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -173,7 +205,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when user submits a non-xml payload") {
       Given("the API is available")
-      val request = ValidSubmissionRequest
+      val request = ValidCancellationRequest
         .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
         .copyFakeRequest(method = POST, uri = endpoint)
 
@@ -193,7 +225,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 500 when user submits a request without any client id headers") {
       Given("the API is available")
-      val request = NoClientIdIdHeaderRequest.fromCsp.postTo(endpoint)
+      val request = NoClientIdIdHeaderCancellationRequest.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -208,7 +240,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 406 when user submits a request without Accept header") {
       Given("the API is available")
-      val request = NoAcceptHeaderRequest.copyFakeRequest(method = POST, uri = endpoint)
+      val request = NoAcceptHeaderCancellationRequest.copyFakeRequest(method = POST, uri = endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -226,7 +258,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 406 when user submits a request with an invalid Accept header") {
       Given("the API is available")
-      val request = InvalidAcceptHeaderRequest.copyFakeRequest(method = POST, uri = endpoint)
+      val request = InvalidAcceptHeaderCancellationRequest.copyFakeRequest(method = POST, uri = endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -244,7 +276,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 415 when user submits a request with an invalid Content-Type header") {
       Given("the API is available")
-      val request = InvalidContentTypeHeaderRequest.copyFakeRequest(method = POST, uri = endpoint)
+      val request = InvalidContentTypeHeaderCancellationRequest.copyFakeRequest(method = POST, uri = endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -262,7 +294,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when a CSP user submits a request without a X-Badge-Identifier header") {
       Given("the API is available")
-      val request = InvalidSubmissionRequestWithoutXBadgeIdentifier.fromCsp.postTo(endpoint)
+      val request = InvalidCancellationRequestWithoutXBadgeIdentifier.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -280,7 +312,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when a CSP user submits a request with an invalid X-Badge-Identifier header") {
       Given("the API is available")
-      val request = InvalidSubmissionRequestWithInvalidXBadgeIdentifier.fromCsp.postTo(endpoint)
+      val request = InvalidCancellationRequestWithInvalidXBadgeIdentifier.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -299,7 +331,7 @@ class CustomsDeclarationsUnhappyPathSpec extends AcceptanceTestSpec
     scenario("Response status 500 when user submits a valid request but downstream call to DMS fails with an HTTP error") {
 
       Given("the API is available")
-      val request = ValidSubmissionRequest.fromCsp.postTo(endpoint)
+      val request = ValidCancellationRequest.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       setupMdgWcoDecServiceToReturn(status = NOT_FOUND)

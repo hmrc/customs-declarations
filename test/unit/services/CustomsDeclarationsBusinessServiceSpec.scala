@@ -25,7 +25,8 @@ import org.xml.sax.SAXException
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.Ids
+import uk.gov.hmrc.customs.declaration.model.RequestType.RequestType
+import uk.gov.hmrc.customs.declaration.model.{Ids, RequestType}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
@@ -39,11 +40,13 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
 
   private val mockDeclarationsLogger = mock[DeclarationsLogger]
   private val mockCommunicationService = mock[CommunicationService]
-  private val mockXmlValidationService = mock[XmlValidationService]
+  private val mockSubmissionXmlValidationService = mock[SubmissionXmlValidationService]
+  private val mockCancellationXmlValidationService = mock[CancellationXmlValidationService]
 
+  private val xmlValidationServiceProvider = new XmlValidationServiceProvider(mockSubmissionXmlValidationService, mockCancellationXmlValidationService)
   private val service = new CustomsDeclarationsBusinessService(mockDeclarationsLogger,
     mockCommunicationService,
-    mockXmlValidationService)
+    xmlValidationServiceProvider)
 
   private implicit val mockHeaderCarrier: HeaderCarrier = mock[HeaderCarrier]
   private implicit val mockIds = mock[Ids]
@@ -56,79 +59,94 @@ class CustomsDeclarationsBusinessServiceSpec extends UnitSpec with Matchers with
     ResponseContents(code = "xml_validation_error", message = xmlValidationErrorText))
 
   override protected def beforeEach() {
-    reset(mockDeclarationsLogger, mockCommunicationService, mockXmlValidationService)
-    when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(())
+    reset(mockDeclarationsLogger, mockCommunicationService, mockSubmissionXmlValidationService, mockCancellationXmlValidationService)
+    when(mockSubmissionXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(())
+    when(mockCancellationXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(())
     when(mockCommunicationService.prepareAndSend(any[NodeSeq])(any[HeaderCarrier](), any[Ids])).thenReturn(ids)
   }
 
+  val serviceCall = (nodes: NodeSeq, requestType: RequestType, fun: (NodeSeq => Future[ProcessingResult])) => {
+    when(mockIds.requestType).thenReturn(requestType)
+    fun(nodes)
+  }
+
   private val allSubmissionModes = Table(("description", "xml submission thunk with service"),
-    ("CSP",     service.authorisedCspSubmission(_: NodeSeq)),
+    ("CSP", service.authorisedCspSubmission(_: NodeSeq)),
     ("non-CSP", service.authorisedNonCspSubmission(_: NodeSeq))
   )
 
-  forAll(allSubmissionModes) { case (submissionMode, xmlSubmission) =>
+  private val requestTypes = Table(("description", "type", "validation service", "expected valid xml", "expected invalid xml"),
+    ("submission", RequestType.Submit, mockSubmissionXmlValidationService, ValidSubmissionXML, InvalidSubmissionXML),
+    ("cancellation", RequestType.Cancel, mockCancellationXmlValidationService, validCancellationXML(), InvalidCancellationXML)
+  )
 
-    s"CustomsDeclarationsBusinessService when $submissionMode ia submitting" should {
 
-      "validate incoming xml" in {
-        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
-          await(result)
-          verify(mockXmlValidationService).validate(ameq(ValidSubmissionXML))(any[ExecutionContext])
+  forAll(requestTypes) { case (typeDescription, requestType, validationService, validXml, invalidXml) => {
+
+    forAll(allSubmissionModes) { case (submissionMode, xmlSubmission) =>
+
+      s"CustomsDeclarationsBusinessService when $submissionMode is submitting via $typeDescription endpoint" should {
+
+        "validate incoming xml" in {
+          testSubmitResult(serviceCall(validXml, requestType, xmlSubmission)) { result =>
+            await(result)
+            verify(validationService).validate(ameq(validXml))(any[ExecutionContext])
+          }
         }
-      }
 
-      "send valid xml to communication service" in {
-        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
-          await(result)
-          verify(mockCommunicationService).prepareAndSend(ameq(ValidSubmissionXML))(ameq(mockHeaderCarrier), any[Ids])
+        "send valid xml to communication service" in {
+          testSubmitResult(serviceCall(validXml, requestType, xmlSubmission)) { result =>
+            await(result)
+            verify(mockCommunicationService).prepareAndSend(ameq(validXml))(ameq(mockHeaderCarrier), any[Ids])
+          }
         }
-      }
 
-      "implicitly pass requested api version to communicationService" in {
-        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
-          await(result)
-          verify(mockCommunicationService).prepareAndSend(any[NodeSeq])(ameq(mockHeaderCarrier), ameq(mockIds))
+        "implicitly pass requested api version to communicationService" in {
+          testSubmitResult(serviceCall(validXml, requestType, xmlSubmission)) { result =>
+            await(result)
+            verify(mockCommunicationService).prepareAndSend(any[NodeSeq])(ameq(mockHeaderCarrier), ameq(mockIds))
+          }
         }
-      }
 
-      "return conversationId and fieldsId for a processed valid request" in {
-        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
-          await(result) shouldBe Right(ids)
+        "return conversationId and fieldsId for a processed valid request" in {
+          testSubmitResult(serviceCall(validXml, requestType, xmlSubmission)) { result =>
+            await(result) shouldBe Right(ids)
+          }
         }
-      }
 
-      "prevent from sending an invalid xml returning xml errors" in {
-        when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext]))
-          .thenReturn(Future.failed(xmlValidationException))
+        "prevent from sending an invalid xml returning xml errors" in {
+          when(validationService.validate(any[NodeSeq])(any[ExecutionContext]))
+            .thenReturn(Future.failed(xmlValidationException))
 
-        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
-          await(result) shouldBe Left(xmlValidationErrorResponse)
-          verifyZeroInteractions(mockCommunicationService)
+          testSubmitResult(serviceCall(validXml, requestType, xmlSubmission)) { result =>
+            await(result) shouldBe Left(xmlValidationErrorResponse)
+            verifyZeroInteractions(mockCommunicationService)
+          }
         }
-      }
 
-      "propagate the error when xml validation fails with a system error" in {
-        when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext]))
-          .thenReturn(Future.failed(emulatedServiceFailure))
+        "propagate the error when xml validation fails with a system error" in {
+          when(validationService.validate(any[NodeSeq])(any[ExecutionContext]))
+            .thenReturn(Future.failed(emulatedServiceFailure))
 
-        testSubmitResult(xmlSubmission(InvalidSubmissionXML)) { result =>
-          intercept[EmulatedServiceFailure](await(result)) shouldBe emulatedServiceFailure
-          verifyZeroInteractions(mockCommunicationService)
+          testSubmitResult(serviceCall(invalidXml, requestType, xmlSubmission)) { result =>
+            intercept[EmulatedServiceFailure](await(result)) shouldBe emulatedServiceFailure
+            verifyZeroInteractions(mockCommunicationService)
+          }
         }
-      }
 
-      "propagate the error for a valid request when downstream communication fails" in {
-        when(mockCommunicationService.prepareAndSend(any[NodeSeq]())(any[HeaderCarrier](), any[Ids]))
-          .thenReturn(Future.failed(emulatedServiceFailure))
+        "propagate the error for a valid request when downstream communication fails" in {
+          when(mockCommunicationService.prepareAndSend(any[NodeSeq]())(any[HeaderCarrier](), any[Ids]))
+            .thenReturn(Future.failed(emulatedServiceFailure))
 
-        testSubmitResult(xmlSubmission(ValidSubmissionXML)) { result =>
-          intercept[EmulatedServiceFailure](await(result)) shouldBe emulatedServiceFailure
+          testSubmitResult(serviceCall(validXml, requestType, xmlSubmission)) { result =>
+            intercept[EmulatedServiceFailure](await(result)) shouldBe emulatedServiceFailure
+          }
         }
-      }
 
+      }
     }
   }
-
+  }
 
   private def testSubmitResult(xmlSubmission: Future[ProcessingResult])
                               (test: Future[ProcessingResult] => Unit) {

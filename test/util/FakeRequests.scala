@@ -46,43 +46,57 @@ object FakeRequests {
 
   lazy val InvalidSubmissionRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.withXmlBody(InvalidSubmissionXML)
 
-  lazy val InvalidRequestWith3Errors: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest.withXmlBody(InvalidSubmissionXMLWith3Errors)
+  lazy val InvalidSubmissionRequestWith3Errors: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest.withXmlBody(InvalidSubmissionXMLWith3Errors)
+
+  lazy val InvalidCancellationRequestWith3Errors: FakeRequest[AnyContentAsXml] = InvalidCancellationRequest.withXmlBody(InvalidCancellationXMLWith3Errors)
 
   lazy val MalformedXmlRequest: FakeRequest[AnyContentAsText] = InvalidSubmissionRequest.withTextBody("<xml><non_well_formed></xml>")
 
-  lazy val NoAcceptHeaderRequest: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest
+  lazy val NoAcceptHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest
     .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(ACCEPT))
 
-  lazy val InvalidAcceptHeaderRequest: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest
+  lazy val NoAcceptHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
+    .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(ACCEPT))
+
+  lazy val InvalidAcceptHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest
     .withHeaders(RequestHeaders.ACCEPT_HEADER_INVALID)
 
-  lazy val InvalidContentTypeHeaderRequest: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest
+  lazy val InvalidAcceptHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
+    .withHeaders(RequestHeaders.ACCEPT_HEADER_INVALID)
+
+  lazy val InvalidContentTypeHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest
     .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
 
-  lazy val NoClientIdIdHeaderRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
+  lazy val InvalidContentTypeHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
+    .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
+
+  lazy val NoClientIdIdHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
     .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(API_SUBSCRIPTION_FIELDS_ID_NAME))
+
+  lazy val NoClientIdIdHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
+    .copyFakeRequest(headers = ValidCancellationRequest.headers.remove(API_SUBSCRIPTION_FIELDS_ID_NAME))
 
 
   lazy val ValidCancellationRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeaders.toSeq: _*)
-    .withXmlBody(ValidSubmissionXML)
+    .withXmlBody(validCancellationXML())
 
-  lazy val ValidCancellationRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
-    .copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(ACCEPT).add(ACCEPT_HMRC_XML_V1_HEADER))
+  lazy val ValidCancellationRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
+    .copyFakeRequest(headers = ValidCancellationRequest.headers.remove(ACCEPT).add(ACCEPT_HMRC_XML_V1_HEADER))
 
-  lazy val ValidCancellationRequestWithXClientIdHeader: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
+  lazy val ValidCancellationRequestWithXClientIdHeader: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
     .copyFakeRequest(headers =
-      ValidSubmissionRequest.headers.remove(API_SUBSCRIPTION_FIELDS_ID_NAME).add(X_CLIENT_ID_HEADER))
+      ValidCancellationRequest.headers.remove(API_SUBSCRIPTION_FIELDS_ID_NAME).add(X_CLIENT_ID_HEADER))
 
   lazy val InvalidCancellationRequestWithoutXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
     .copyFakeRequest(headers =
-      ValidSubmissionRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))
+      ValidCancellationRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))
 
   lazy val InvalidCancellationRequestWithInvalidXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
     .copyFakeRequest(headers =
-      ValidSubmissionRequest.headers.remove(X_BADGE_IDENTIFIER_NAME).add(X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG))
+      ValidCancellationRequest.headers.remove(X_BADGE_IDENTIFIER_NAME).add(X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG))
 
-  lazy val InvalidCancellationRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.withXmlBody(InvalidSubmissionXML)
+  lazy val InvalidCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.withXmlBody(InvalidCancellationXML)
 
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")

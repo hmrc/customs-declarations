@@ -19,7 +19,6 @@ package uk.gov.hmrc.customs.declaration.services
 import java.io.{FileNotFoundException, StringReader}
 import java.net.URL
 
-import com.google.inject.ImplementedBy
 import javax.inject.Inject
 import javax.xml.XMLConstants
 import javax.xml.transform.Source
@@ -32,18 +31,17 @@ import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.{NodeSeq, SAXException}
 
-@ImplementedBy(classOf[SubmissionXmlValidationService])
 abstract class XmlValidationService @Inject()(configuration: Configuration) {
 
-  protected val schemaPath: String
+  protected val schemaPropertyName: String
 
   private lazy val schema: Schema = {
     def resourceUrl(resourcePath: String): URL = Option(getClass.getResource(resourcePath))
       .getOrElse(throw new FileNotFoundException(s"XML Schema resource file: $resourcePath"))
 
-    val sources = configuration.getStringSeq(schemaPath)
+    val sources = configuration.getStringSeq(schemaPropertyName)
       .filter(_.nonEmpty)
-      .getOrElse(throw new IllegalStateException(s"application.conf is missing mandatory property '$schemaPath'"))
+      .getOrElse(throw new IllegalStateException(s"application.conf is missing mandatory property '$schemaPropertyName'"))
       .map(resourceUrl(_).toString)
       .map(systemId => new StreamSource(systemId)).toArray[Source]
 

@@ -27,7 +27,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
-import uk.gov.hmrc.customs.declaration.model.{ConversationId, Ids}
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, Ids, RequestType}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
 import util.ApiSubscriptionFieldsTestData.fieldsIdString
@@ -45,7 +45,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
   private val correlationId = UUID.randomUUID()
-  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"))
+  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.Submit)
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
     .withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_NAME -> fieldsIdString)

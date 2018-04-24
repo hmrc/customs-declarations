@@ -17,9 +17,9 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
 
 @Singleton
-class SubmissionXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
-  override protected val schemaPropertyName: String = "xsd.locations.submit"
+class XmlValidationServiceProvider @Inject() (val submission: SubmissionXmlValidationService,
+                                              val cancellation: CancellationXmlValidationService){
+
 }

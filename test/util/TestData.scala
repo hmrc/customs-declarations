@@ -23,7 +23,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames._
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.inject.guice.GuiceableModule
-import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, ConversationId, Eori, Ids}
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.UuidService
 
 object TestData {
@@ -34,7 +34,7 @@ object TestData {
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
   val invalidBadgeIdentifier: BadgeIdentifier = BadgeIdentifier(invalidBadgeIdentifierValue)
   val badgeIdentifier: BadgeIdentifier = BadgeIdentifier(validBadgeIdentifierValue)
-  val ids = Ids(conversationId, Some(ApiSubscriptionFieldsTestData.fieldsId), maybeBadgeIdentifier = Some(badgeIdentifier))
+  val ids = Ids(conversationId, RequestType.SUBMIT, Some(ApiSubscriptionFieldsTestData.fieldsId), maybeBadgeIdentifier = Some(badgeIdentifier))
 
   val cspBearerToken = "CSP-Bearer-Token"
   val nonCspBearerToken = "Software-House-Bearer-Token"

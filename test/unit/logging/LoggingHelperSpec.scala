@@ -17,7 +17,7 @@
 package unit.logging
 
 import uk.gov.hmrc.customs.declaration.logging.LoggingHelper
-import uk.gov.hmrc.customs.declaration.model.{FieldsId, Ids}
+import uk.gov.hmrc.customs.declaration.model.{FieldsId, Ids, RequestType}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.RequestHeaders._
@@ -28,7 +28,7 @@ class LoggingHelperSpec extends UnitSpec {
   private val fromHeader = ApiSubscriptionFieldsTestData.fieldsIdString
   private val notFromHeader = "FIELDS_ID_NOT_FROM_HEADER"
   private val fieldsIdNotFromHeader = FieldsId(notFromHeader)
-  private val theIds = Ids(TestData.conversationId, Some(fieldsIdNotFromHeader))
+  private val theIds = Ids(TestData.conversationId, RequestType.SUBMIT, Some(fieldsIdNotFromHeader))
   private val allHeaders = Seq(AUTH_HEADER, X_CLIENT_ID_HEADER, API_SUBSCRIPTION_FIELDS_ID_HEADER, X_CONVERSATION_ID_HEADER)
   private val justXClientIdHeader = Seq(X_CLIENT_ID_HEADER)
   private val errorMsg = "ERROR"

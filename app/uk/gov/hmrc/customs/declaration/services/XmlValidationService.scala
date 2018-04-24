@@ -19,8 +19,7 @@ package uk.gov.hmrc.customs.declaration.services
 import java.io.{FileNotFoundException, StringReader}
 import java.net.URL
 
-import com.google.inject.ImplementedBy
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import javax.xml.XMLConstants
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
@@ -32,7 +31,7 @@ import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.{NodeSeq, SAXException}
 
-@ImplementedBy(classOf[SubmissionXmlValidationService])
+@Singleton
 abstract class XmlValidationService @Inject()(configuration: Configuration) {
 
   protected val schemaPath: String

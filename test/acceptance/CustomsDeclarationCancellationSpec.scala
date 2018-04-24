@@ -29,7 +29,7 @@ import util.{CustomsDeclarationsExternalServicesConfig, RequestHeaders}
 
 import scala.concurrent.Future
 
-class CustomsDeclarationsSpec extends AcceptanceTestSpec
+class CustomsDeclarationCancellationSpec extends AcceptanceTestSpec
   with Matchers
   with OptionValues
   with BeforeAndAfterAll
@@ -38,13 +38,12 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
   with ApiSubscriptionFieldsService
   with AuthService {
 
-  private val endpoint = "/"
+  private val endpoint = "/cancellation-requests"
 
   private val apiSubscriptionKeyForXClientIdV1 =
     ApiSubscriptionKey(clientId = xClientId, context = "customs%2Fdeclarations", version = "1.0")
 
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = "2.0")
-
   private val UnauthorisedError =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>
@@ -66,10 +65,10 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
   }
 
   feature("Submissions with v1.0 accept header") {
-    scenario("An authorised CSP successfully submits a customs declaration") {
-      Given("A CSP wants to submit a valid customs declaration")
+    scenario("An authorised CSP successfully submits a cancellation request") {
+      Given("A CSP wants to submit a valid cancellation request")
       startMdgWcoDecService()
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequestWithV1AcceptHeader.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequestWithV1AcceptHeader.fromCsp.postTo(endpoint)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -93,10 +92,10 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
   }
 
   feature("Declaration API authorises submissions from CSPs and Software Houses with v2.0 accept header") {
-    scenario("An authorised CSP successfully submits a customs declaration") {
-      Given("A CSP wants to submit a valid customs declaration")
+    scenario("An authorised CSP successfully submits a cancellation request") {
+      Given("A CSP wants to submit a valid cancellation request")
       startMdgWcoDecService()
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.fromCsp.postTo(endpoint)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -117,9 +116,9 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
     }
 
-    scenario("An unauthorised CSP is not allowed to submit a customs declaration") {
-      Given("A CSP wants to submit a valid customs declaration")
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.fromCsp.postTo(endpoint)
+    scenario("An unauthorised CSP is not allowed to submit a cancellation request") {
+      Given("A CSP wants to submit a valid cancellation request")
+      val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.fromCsp.postTo(endpoint)
 
       And("the CSP is unauthorised with its privileged application")
       authServiceUnauthorisesScopeForCSP()
@@ -138,10 +137,10 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
       verifyAuthServiceCalledForCsp()
     }
 
-    scenario("A non-CSP successfully submits a declaration on behalf of somebody with Customs enrolment") {
-      Given("A Software House wants to submit a valid customs declaration")
+    scenario("A non-CSP successfully submits a cancellation request on behalf of somebody with Customs enrolment") {
+      Given("A Software House wants to submit a valid cancellation request")
       startMdgWcoDecService()
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.fromNonCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.fromNonCsp.postTo(endpoint)
 
       And("declarant is enrolled with Customs having an EORI number")
       authServiceUnauthorisesScopeForCSP(nonCspBearerToken)
@@ -160,10 +159,10 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
       verifyAuthServiceCalledForNonCsp()
     }
 
-    scenario("A non-CSP is not authorised to submit a declaration on behalf of somebody without Customs enrolment") {
-      Given("A Software House wants to submit a valid customs declaration")
+    scenario("A non-CSP is not authorised to submit a cancellation request on behalf of somebody without Customs enrolment") {
+      Given("A Software House wants to submit a valid cancellation request")
       startMdgWcoDecService()
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.fromNonCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.fromNonCsp.postTo(endpoint)
 
       And("declarant is not enrolled with Customs")
       authServiceUnauthorisesScopeForCSP(nonCspBearerToken)
@@ -185,12 +184,12 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
 
   feature("When fields id header is absent, declaration API uses X-Client-ID header to retrieve fields id from api-subscription-fields service") {
 
-    scenario("An authorised CSP successfully submits a customs declaration having X-Client-ID request header to v1 api") {
-      Given("A CSP wants to submit a valid customs declaration and API Gateway provides X-Client-ID header only")
+    scenario("An authorised CSP successfully submits a cancellation request having X-Client-ID request header to v1 api") {
+      Given("A CSP wants to submit a valid cancellation request and API Gateway provides X-Client-ID header only")
       startMdgWcoDecService()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV1)
       val request: FakeRequest[AnyContentAsXml] =
-        ValidSubmissionRequestWithXClientIdHeader.withHeaders(RequestHeaders.ACCEPT_HMRC_XML_V1_HEADER).fromCsp.postTo(endpoint)
+        ValidCancellationRequestWithXClientIdHeader.withHeaders(RequestHeaders.ACCEPT_HMRC_XML_V1_HEADER).fromCsp.postTo(endpoint)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -212,11 +211,11 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
       verifyGetSubscriptionFieldsNotCalled(apiSubscriptionKeyForXClientIdV2)
     }
 
-    scenario("An authorised CSP successfully submits a customs declaration having X-Client-ID request header to v2 api") {
-      Given("A CSP wants to submit a valid customs declaration and API Gateway provides X-Client-ID header only")
+    scenario("An authorised CSP successfully submits a cancellation request having X-Client-ID request header to v2 api") {
+      Given("A CSP wants to submit a valid cancellation request and API Gateway provides X-Client-ID header only")
       startMdgWcoDecService()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequestWithXClientIdHeader.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequestWithXClientIdHeader.fromCsp.postTo(endpoint)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -238,12 +237,12 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
       verifyGetSubscriptionFieldsCalled(apiSubsKey = apiSubscriptionKeyForXClientIdV2)
     }
 
-    scenario("A non-CSP successfully submits a declaration on behalf of somebody with Customs enrolment having X-Client-ID request header to v1 api") {
-      Given("A Software House wants to submit a valid customs declaration and API Gateway provides X-Client-ID header only")
+    scenario("A non-CSP successfully submits a cancellation request on behalf of somebody with Customs enrolment having X-Client-ID request header to v1 api") {
+      Given("A Software House wants to submit a valid cancellation request and API Gateway provides X-Client-ID header only")
       startMdgWcoDecService()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV1)
       val request: FakeRequest[AnyContentAsXml] =
-        ValidSubmissionRequestWithXClientIdHeader.withHeaders(RequestHeaders.ACCEPT_HMRC_XML_V1_HEADER).fromNonCsp.postTo(endpoint)
+        ValidCancellationRequestWithXClientIdHeader.withHeaders(RequestHeaders.ACCEPT_HMRC_XML_V1_HEADER).fromNonCsp.postTo(endpoint)
 
       And("declarant is enrolled with Customs having an EORI number")
       authServiceUnauthorisesScopeForCSP(nonCspBearerToken)
@@ -266,11 +265,11 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
       verifyGetSubscriptionFieldsNotCalled(apiSubsKey = apiSubscriptionKeyForXClientIdV2)
     }
 
-    scenario("A non-CSP successfully submits a declaration on behalf of somebody with Customs enrolment having X-Client-ID request header to v2 api") {
-      Given("A Software House wants to submit a valid customs declaration and API Gateway provides X-Client-ID header only")
+    scenario("A non-CSP successfully submits a cancellation request on behalf of somebody with Customs enrolment having X-Client-ID request header to v2 api") {
+      Given("A Software House wants to submit a valid cancellation request and API Gateway provides X-Client-ID header only")
       startMdgWcoDecService()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequestWithXClientIdHeader.fromNonCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequestWithXClientIdHeader.fromNonCsp.postTo(endpoint)
 
       And("declarant is enrolled with Customs having an EORI number")
       authServiceUnauthorisesScopeForCSP(nonCspBearerToken)
@@ -293,5 +292,4 @@ class CustomsDeclarationsSpec extends AcceptanceTestSpec
       verifyGetSubscriptionFieldsCalled(apiSubsKey = apiSubscriptionKeyForXClientIdV2)
     }
   }
-
 }

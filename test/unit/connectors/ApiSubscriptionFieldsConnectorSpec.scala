@@ -25,7 +25,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey, ConversationId, Ids}
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.WSHttp
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, NotFoundException}
 import uk.gov.hmrc.play.config.inject.ServicesConfig
@@ -46,7 +46,7 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
   private val mockWSGetImpl = mock[WSHttp]
   private val mockDeclarationsLogger = mock[DeclarationsLogger]
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"))
+  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.SUBMIT)
 
   private val connector = connectorWithConfig(validConfig)
 

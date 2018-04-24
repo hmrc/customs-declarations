@@ -69,6 +69,29 @@ object TestXMLData {
     </Declaration>
   </md:MetaData>
 
+  val InvalidCancellationXMLWith3Errors = <md:MetaData xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" xmlns:md="urn:wco:datamodel:WCO:Cancel_DocumentMetaData-DMS:2">
+    <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+    <md:WCOTypeName>DEC</md:WCOTypeName>
+    <md:ResponsibleCountryCode>NL</md:ResponsibleCountryCode>
+    <md:ResponsibleAgencyName>Duane</md:ResponsibleAgencyName>
+    <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+    <Declaration foo="bar">
+      <FunctionCode>ABC</FunctionCode>
+      <FunctionalReferenceID>Danielle_20180404_1154</FunctionalReferenceID>
+      <ID>18GBJFKYDPAB34VGO7</ID>
+      <TypeCode>13</TypeCode>
+      <Submitter>
+        <ID>NL025115165432</ID>
+      </Submitter>
+      <AdditionalInformation>
+        <StatementDescription>This is a duplicate, please cancel</StatementDescription>
+      </AdditionalInformation>
+      <Amendment>
+        <ChangeReasonCode>1</ChangeReasonCode>
+      </Amendment>
+    </Declaration>
+  </md:MetaData>
+
   val InvalidSubmissionXML: Elem =
     <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
                  xmlns:udt="urn:wco:datamodel:WCO:Declaration_DS:DMS:2">

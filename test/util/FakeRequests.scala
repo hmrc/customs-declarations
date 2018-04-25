@@ -29,6 +29,18 @@ object FakeRequests {
     .withHeaders(ValidHeaders.toSeq: _*)
     .withXmlBody(ValidSubmissionXML)
 
+  lazy val ValidSubmission_13_INV_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeaders.toSeq: _*)
+    .withXmlBody(validSubmissionXML(13,"INV"))
+
+  lazy val ValidSubmission_13_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeaders.toSeq: _*)
+    .withXmlBody(validSubmissionXML(13, "IMZ"))
+
+  lazy val ValidSubmission_INV_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeaders.toSeq: _*)
+    .withXmlBody(validSubmissionXML(9, "INV"))
+
   lazy val ValidSubmissionRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
     .copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(ACCEPT).add(ACCEPT_HMRC_XML_V1_HEADER))
 

@@ -70,11 +70,12 @@ class TmpSpec extends AcceptanceTestSpec
       result shouldBe 'defined
       val resultFuture = result.value
 
+      println(contentAsString(resultFuture))
       status(resultFuture) shouldBe BAD_REQUEST
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
-      And("the response body is a \"invalid xml\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestError)
+//      And("the response body is a \"invalid xml\" XML")
+//      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestError)
     }
 
 
@@ -88,23 +89,29 @@ class TmpSpec extends AcceptanceTestSpec
       When("a POST request with data is sent to the API")
       val result: Future[Result] = route(app = app, request).value
 
+      println(contentAsString(result))
       Then("a response with a 202 (ACCEPTED) status is received")
       status(result) shouldBe ACCEPTED
     }
 
 
-    scenario("Response status 202 when user submits INV request") {
+    scenario("Response status 400 when user submits INV request") {
       Given("the API is available")
       val request = ValidSubmission_INV_Request.fromCsp.postTo(endpoint)
 
-      And("the CSP is authorised with its privileged application")
-      authServiceAuthorizesCSP()
-
       When("a POST request with data is sent to the API")
-      val result: Future[Result] = route(app = app, request).value
+      val result: Option[Future[Result]] = route(app = app, request)
 
-      Then("a response with a 202 (ACCEPTED) status is received")
-      status(result) shouldBe ACCEPTED
+      Then(s"a response with a 400 status is received")
+      result shouldBe 'defined
+      val resultFuture = result.value
+
+      println(contentAsString(resultFuture))
+      status(resultFuture) shouldBe BAD_REQUEST
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+//      And("the response body is a \"invalid xml\" XML")
+//      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestError)
     }
   }
 

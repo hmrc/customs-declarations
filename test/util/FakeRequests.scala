@@ -35,7 +35,7 @@ object FakeRequests {
 
   lazy val ValidSubmission_13_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeaders.toSeq: _*)
-    .withXmlBody(validSubmissionXML(13, "IMZ"))
+    .withXmlBody(validSubmissionXML(13, "XXA"))
 
   lazy val ValidSubmission_INV_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeaders.toSeq: _*)

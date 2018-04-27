@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:Cancel_DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2">
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>NL</md:ResponsibleCountryCode>

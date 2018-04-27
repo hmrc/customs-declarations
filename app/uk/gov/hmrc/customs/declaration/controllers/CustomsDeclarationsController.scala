@@ -24,14 +24,13 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{BadRequestCode, UnauthorizedCode}
-import uk.gov.hmrc.customs.declaration.connectors.MicroserviceAuthConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.RequestType.RequestType
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +40,7 @@ import scala.xml.NodeSeq
 @Singleton
 class CustomsDeclarationsController @Inject()(logger: DeclarationsLogger,
                                               customsConfigService: CustomsConfigService,
-                                              override val authConnector: MicroserviceAuthConnector,
+                                              override val authConnector: AuthConnector,
                                               override val requestedVersionService: RequestedVersionService,
                                               customsDeclarationsBusinessService: CustomsDeclarationsBusinessService,
                                               uuidService: UuidService

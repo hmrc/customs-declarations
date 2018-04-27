@@ -31,17 +31,16 @@ import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvid
 import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.{ConversationId, Ids, RequestType, SeqOfHeader}
-import uk.gov.hmrc.customs.declaration.services.WSHttp
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
-import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.{RequestHeaders, TestData}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
 
-  private val mockWsPost = mock[WSHttp]
+  private val mockWsPost = mock[HttpClient]
   private val mockDeclarationsLogger = mock[DeclarationsLogger]
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]
 

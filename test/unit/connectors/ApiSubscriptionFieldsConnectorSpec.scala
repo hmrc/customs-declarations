@@ -23,16 +23,15 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
 import play.api.{Configuration, Environment}
+import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.services.WSHttp
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, NotFoundException}
-import uk.gov.hmrc.play.config.inject.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
-import util.ExternalServicesConfig._
-import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
+import util.ExternalServicesConfig._
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +42,7 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
   with Eventually
   with ApiSubscriptionFieldsTestData {
 
-  private val mockWSGetImpl = mock[WSHttp]
+  private val mockWSGetImpl = mock[HttpClient]
   private val mockDeclarationsLogger = mock[DeclarationsLogger]
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.Submit)
@@ -121,10 +120,8 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
       (any[HttpReads[ApiSubscriptionFieldsResponse]](), any[HeaderCarrier](), any[ExecutionContext])).thenReturn(eventualResponse)
   }
 
-  private def testServicesConfig(configuration: Config) = new ServicesConfig {
-    override val runModeConfiguration = new Configuration(configuration)
+  private def testServicesConfig(configuration: Config) = new ServicesConfig(new Configuration(configuration), mock[Environment]) {
     override val mode = play.api.Mode.Test
-    override def environment: Environment = mock[Environment]
   }
 
   private def connectorWithConfig(config: Config) = new ApiSubscriptionFieldsConnector(mockWSGetImpl, mockDeclarationsLogger, testServicesConfig(config))

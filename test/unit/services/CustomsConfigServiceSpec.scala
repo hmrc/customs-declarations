@@ -19,11 +19,10 @@ package unit.services
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.mockito.MockitoSugar
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.customs.api.common.config.ConfigValidationNelAdaptor
+import uk.gov.hmrc.customs.api.common.config.{ConfigValidationNelAdaptor, ServicesConfig}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.{ApiDefinitionConfig, CustomsEnrolmentConfig}
 import uk.gov.hmrc.customs.declaration.services.CustomsConfigService
-import uk.gov.hmrc.play.config.inject.ServicesConfig
 import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
 
@@ -76,11 +75,8 @@ class CustomsConfigServiceSpec extends UnitSpec with MockitoSugar {
     }
   }
 
-  private def testServicesConfig(configuration: Configuration) = new ServicesConfig {
-    override val runModeConfiguration = configuration
+  private def testServicesConfig(configuration: Configuration) = new ServicesConfig(configuration, mock[Environment]) {
     override val mode = play.api.Mode.Test
-
-    override def environment: Environment = mock[Environment]
   }
 
 }

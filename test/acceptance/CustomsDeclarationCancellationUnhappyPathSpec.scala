@@ -54,7 +54,7 @@ class CustomsDeclarationCancellationUnhappyPathSpec extends AcceptanceTestSpec
       |  <errors>
       |     <error>
       |       <code>xml_validation_error</code>
-      |       <message>cvc-elt.1.a: Cannot find the declaration of element 'md:MetaData'.</message>
+      |       <message>cvc-complex-type.2.4.a: Invalid content was found starting with element 'Declaration'. One of '{WC[&quot;urn:wco:datamodel:WCO:RES-DMS:2&quot;]}' is expected.</message>
       |     </error>
       |  </errors>
       |</errorResponse>

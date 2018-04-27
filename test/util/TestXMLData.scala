@@ -23,7 +23,7 @@ object TestXMLData {
   val cancellationTypeCode = "INV"
 
   def validCancellationXML(functionCode: Int = cancellationFunctionCode, typeCode: String = cancellationTypeCode): Elem =
-    <md:MetaData xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" xmlns:md="urn:wco:datamodel:WCO:Cancel_DocumentMetaData-DMS:2">
+    <md:MetaData xmlns="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
       <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
       <md:WCOTypeName>DEC</md:WCOTypeName>
       <md:ResponsibleCountryCode>NL</md:ResponsibleCountryCode>
@@ -46,7 +46,7 @@ object TestXMLData {
       </Declaration>
     </md:MetaData>
 
-  val InvalidCancellationXML = <md:MetaData xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" xmlns:md="urn:wco:datamodel:WCO:Cancel_DocumentMetaData-DMS:2">
+  val InvalidCancellationXML = <md:MetaData xmlns="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>NL</md:ResponsibleCountryCode>
@@ -69,7 +69,7 @@ object TestXMLData {
     </Declaration>
   </md:MetaData>
 
-  val InvalidCancellationXMLWith3Errors = <md:MetaData xmlns="urn:wco:datamodel:WCO:CANCEL-DEC-DMS:2" xmlns:md="urn:wco:datamodel:WCO:Cancel_DocumentMetaData-DMS:2">
+  val InvalidCancellationXMLWith3Errors = <md:MetaData xmlns="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>NL</md:ResponsibleCountryCode>

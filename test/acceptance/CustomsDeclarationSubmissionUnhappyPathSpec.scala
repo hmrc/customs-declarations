@@ -115,11 +115,6 @@ class CustomsDeclarationSubmissionUnhappyPathSpec extends AcceptanceTestSpec
     stopMockServer()
   }
 
-
-  override protected def beforeEach() {
-    resetMockServer()
-  }
-
   feature("The API handles errors as expected") {
 
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema") {

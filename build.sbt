@@ -61,7 +61,7 @@ lazy val microservice = (project in file("."))
     allResolvers
   )
 
-def onPackageName(rootPackage: String): (String => Boolean) = {
+def onPackageName(rootPackage: String): String => Boolean = {
   testName => testName startsWith rootPackage
 }
 
@@ -124,8 +124,7 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
-val compileDependencies = Seq(microserviceBootStrap, authClient, xmlResolver, customsApiCommon)
-
+val compileDependencies = Seq(bootstrapPlay25, xmlResolver, customsApiCommon)
 
 val testDependencies = Seq(hmrcTest, scalaTest, pegDown,
   scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests)
@@ -135,7 +134,7 @@ unmanagedResourceDirectories in Compile += baseDirectory.value / "public"
 libraryDependencies ++= compileDependencies ++ testDependencies
 
 // Task to create a ZIP file containing all WCO XSDs for each version, under the version directory
-lazy val zipWcoXsds = taskKey[Unit]("Zips up all WCO declaration XSD's and example messages")
+lazy val zipWcoXsds = taskKey[Unit]("Zips up all WCO declaration XSDs and example messages")
 zipWcoXsds := {
   (baseDirectory.value / "public" / "api" / "conf")
     .listFiles()
@@ -155,4 +154,4 @@ packageBin in Compile := {
   (packageBin in Compile).value
 }
 
-evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
+evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false)

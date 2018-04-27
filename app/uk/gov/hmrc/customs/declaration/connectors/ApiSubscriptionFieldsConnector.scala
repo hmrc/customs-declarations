@@ -17,12 +17,11 @@
 package uk.gov.hmrc.customs.declaration.connectors
 
 import javax.inject.{Inject, Singleton}
-
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey, Ids}
-import uk.gov.hmrc.customs.declaration.services.WSHttp
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
-import uk.gov.hmrc.play.config.inject.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -30,7 +29,7 @@ import scala.concurrent.Future
 
 //TODO: determine if we need switching to a stub api-subscription-fields service
 @Singleton
-class ApiSubscriptionFieldsConnector @Inject()(http: WSHttp,
+class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
                                                logger: DeclarationsLogger,
                                                servicesConfig: ServicesConfig) {
 

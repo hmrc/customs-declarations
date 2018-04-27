@@ -21,10 +21,11 @@ import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.Writes
 import play.api.test.Helpers._
+import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 import uk.gov.hmrc.customs.api.common.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.customs.api.common.domain.Registration
-import uk.gov.hmrc.customs.declaration.services.WSHttp
-import uk.gov.hmrc.http.{HeaderCarrier, HttpPost, HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -39,15 +40,16 @@ class ServiceLocatorConnectorSpec extends UnitSpec with MockitoSugar {
   trait Setup {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val serviceLocatorException = new RuntimeException
+    val mockServicesConfig = mock[ServicesConfig]
+    val mockHttpClient = mock[HttpClient]
 
-    lazy val connector: ServiceLocatorConnector = new ServiceLocatorConnector {
-      override val http: HttpPost = mock[WSHttp]
+    lazy val connector = new ServiceLocatorConnector(mockServicesConfig, mockHttpClient) {
       override val appUrl: String = APP_URL
       override val appName: String = APP_NAME
       override val serviceUrl: String = "https://SERVICE-LOCATOR-HOST"
       override val handlerOK: () => Unit = mock[() => Unit]
-      override val handlerError: Throwable => Unit = mock[(Throwable) => Unit]
-      override val metadata: Option[Map[String, String]] = Some(Map(THIRD_PARTY_API -> true.toString))
+      override val handlerError: Throwable => Unit = mock[Throwable => Unit]
+      override val metadata = Some(Map(THIRD_PARTY_API -> true.toString))
     }
   }
 
@@ -57,12 +59,12 @@ class ServiceLocatorConnectorSpec extends UnitSpec with MockitoSugar {
       val registration = Registration(serviceName = APP_NAME, serviceUrl = APP_URL,
         metadata = Some(Map(THIRD_PARTY_API -> "true")))
 
-      when(connector.http.POST(ameq(s"${connector.serviceUrl}/registration"), ameq(registration), ameq(Seq(CONTENT_TYPE -> JSON)))
+      when(mockHttpClient.POST(ameq(s"${connector.serviceUrl}/registration"), ameq(registration), ameq(Seq(CONTENT_TYPE -> JSON)))
       (any[Writes[Registration]], any[HttpReads[HttpResponse]], any[HeaderCarrier], any[MdcLoggingExecutionContext]))
         .thenReturn(Future.successful(HttpResponse(OK)))
 
       await(connector.register) shouldBe true
-      verify(connector.http).POST(ameq("https://SERVICE-LOCATOR-HOST/registration"), ameq(registration),
+      verify(mockHttpClient).POST(ameq("https://SERVICE-LOCATOR-HOST/registration"), ameq(registration),
         ameq(Seq(CONTENT_TYPE -> JSON)))(any[Writes[Registration]], any[HttpReads[HttpResponse]], any[HeaderCarrier], any[MdcLoggingExecutionContext])
       verify(connector.handlerOK).apply()
       verify(connector.handlerError, never).apply(serviceLocatorException)
@@ -72,12 +74,12 @@ class ServiceLocatorConnectorSpec extends UnitSpec with MockitoSugar {
 
       val registration = Registration(serviceName = APP_NAME, serviceUrl = APP_URL,
         metadata = Some(Map(THIRD_PARTY_API -> "true")))
-      when(connector.http.POST(ameq(s"${connector.serviceUrl}/registration"), ameq(registration), ameq(Seq(CONTENT_TYPE -> JSON)))
+      when(mockHttpClient.POST(ameq(s"${connector.serviceUrl}/registration"), ameq(registration), ameq(Seq(CONTENT_TYPE -> JSON)))
       (any[Writes[Registration]], any[HttpReads[HttpResponse]], any[HeaderCarrier], any[MdcLoggingExecutionContext])
       ).thenReturn(Future.failed(serviceLocatorException))
 
       await(connector.register) shouldBe false
-      verify(connector.http).POST(ameq("https://SERVICE-LOCATOR-HOST/registration"), ameq(registration),
+      verify(mockHttpClient).POST(ameq("https://SERVICE-LOCATOR-HOST/registration"), ameq(registration),
         ameq(Seq(CONTENT_TYPE -> JSON)))(any[Writes[Registration]], any[HttpReads[HttpResponse]], any[HeaderCarrier], any[MdcLoggingExecutionContext])
       verify(connector.handlerOK, never).apply()
       verify(connector.handlerError).apply(serviceLocatorException)

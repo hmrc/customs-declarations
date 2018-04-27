@@ -28,7 +28,6 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, Retrievals}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.BadRequestCode
-import uk.gov.hmrc.customs.declaration.connectors.MicroserviceAuthConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomsDeclarationsController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.RequestType.RequestType
@@ -41,7 +40,7 @@ import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders
 import util.RequestHeaders._
 import util.TestData._
-import util.TestXMLData.{ ValidSubmissionXML, validCancellationXML }
+import util.TestXMLData.{ValidSubmissionXML, validCancellationXML}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -50,7 +49,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
 
   private val mockDeclarationsLogger = mock[DeclarationsLogger]
   private val mockCustomsConfigService = mock[CustomsConfigService]
-  private val mockAuthConnector = mock[MicroserviceAuthConnector]
+  private val mockAuthConnector = mock[AuthConnector]
   private val mockRequestedVersionService = mock[RequestedVersionService]
   private val mockCustomsDeclarationsBusinessService = mock[CustomsDeclarationsBusinessService]
   private val mockUuidService = mock[UuidService]
@@ -117,7 +116,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
 
   private def fullIds(requestType: RequestType): Ids = fullIds.copy(requestType = requestType)
 
-  forAll(requestTypes) { case (modeDescription, requestType, validRequest, validXML) => {
+  forAll(requestTypes) { case (modeDescription, requestType, validRequest, validXML) =>
 
     val fullIdsWithReqType = fullIds(requestType)
 
@@ -187,7 +186,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
           PassByNameVerifier(mockDeclarationsLogger, "debug")
             .withByNameParam[String](s"Customs enrolment $customsEnrolmentName not retrieved for authorised non-CSP call with Authorization header=Bearer $nonCspBearerToken")
             .withByNameParam[Ids](fullIdsWithReqType)
-            .withAnyHeaderCarrierParam
+            .withParamMatcher(any[HeaderCarrier])
             .verify()
         }
       }
@@ -211,7 +210,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
           PassByNameVerifier(mockDeclarationsLogger, "error")
             .withByNameParam[String]("Requested version is not valid. Processing failed.")
             .withByNameParam[Ids](Ids(conversationId, requestType))
-            .withAnyHeaderCarrierParam
+            .withParamMatcher(any[HeaderCarrier])
             .verify()
         }
       }
@@ -223,7 +222,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
           PassByNameVerifier(mockDeclarationsLogger, "error")
             .withByNameParam[String]("Header validation failed because X-Badge-Identifier header is missing or invalid")
             .withByNameParam[Ids](Ids(conversationId, requestType, maybeRequestedVersion = Some(version2)))
-            .withAnyHeaderCarrierParam
+            .withParamMatcher(any[HeaderCarrier])
             .verify()
         }
       }
@@ -235,7 +234,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
           PassByNameVerifier(mockDeclarationsLogger, "error")
             .withByNameParam[String]("Header validation failed because X-Badge-Identifier header is missing or invalid ")
             .withByNameParam[Ids](Ids(conversationId, requestType))
-            .withAnyHeaderCarrierParam
+            .withParamMatcher(any[HeaderCarrier])
             .verify()
         }
       }
@@ -250,7 +249,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
           PassByNameVerifier(mockDeclarationsLogger, "error")
             .withByNameParam[String]("Requested version is not valid. Processing failed.")
             .withByNameParam[Ids](Ids(conversationId, requestType))
-            .withAnyHeaderCarrierParam
+            .withParamMatcher(any[HeaderCarrier])
             .verify()
 
         }
@@ -299,9 +298,7 @@ class CustomsDeclarationsControllerSpec extends UnitSpec with Matchers with Mock
           await(result) shouldBe mockResult
         }
       }
-
     }
-  }
   }
 
   private def authoriseCsp(): Unit = {

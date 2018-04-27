@@ -25,16 +25,16 @@ import play.api.http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.Ids
-import uk.gov.hmrc.customs.declaration.services.WSHttp
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
 @Singleton
-class MdgWcoDeclarationConnector @Inject()(http: WSHttp,
+class MdgWcoDeclarationConnector @Inject()(http: HttpClient,
                                            logger: DeclarationsLogger,
                                            serviceConfigProvider: ServiceConfigProvider) {
 

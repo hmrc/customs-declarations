@@ -1,8 +1,8 @@
 ->          /                             health.Routes
 ->          /                             dynamicDefinition.Routes
 
-POST        /                             @uk.gov.hmrc.customs.declaration.controllers.CustomsDeclarationsController.submit()
+POST        /                             @uk.gov.hmrc.customs.declaration.controllers.SubmitDeclarationController.post()
 
-POST        /cancellation-requests        @uk.gov.hmrc.customs.declaration.controllers.CustomsDeclarationsController.cancel()
+POST        /cancellation-requests        @uk.gov.hmrc.customs.declaration.controllers.CancelDeclarationController.post()
 
 GET         /admin/metrics                @com.kenshoo.play.metrics.MetricsController.metrics

@@ -46,10 +46,10 @@ class CustomsConfigServiceSpec extends UnitSpec with MockitoSugar {
   private val validServicesConfiguration = Configuration(validAppConfig)
   private val emptyServicesConfiguration = Configuration(emptyAppConfig)
 
-  private val mockDeclarationsLogger = mock[DeclarationsLogger]
+  private val mockLogger = mock[DeclarationsLogger]
 
   private def customsConfigService(conf: Configuration) =
-    new CustomsConfigService(new ConfigValidationNelAdaptor(testServicesConfig(conf), conf), mockDeclarationsLogger)
+    new CustomsConfigService(new ConfigValidationNelAdaptor(testServicesConfig(conf), conf), mockLogger)
 
   "CustomsConfigService" should {
     "return config as object model when configuration is valid" in {
@@ -69,7 +69,7 @@ class CustomsConfigServiceSpec extends UnitSpec with MockitoSugar {
       val caught = intercept[IllegalStateException](customsConfigService(emptyServicesConfiguration))
       caught.getMessage shouldBe expectedErrorMessage
 
-      PassByNameVerifier(mockDeclarationsLogger, "errorWithoutHeaderCarrier")
+      PassByNameVerifier(mockLogger, "errorWithoutRequestContext")
         .withByNameParam[String](expectedErrorMessage)
         .verify()
     }

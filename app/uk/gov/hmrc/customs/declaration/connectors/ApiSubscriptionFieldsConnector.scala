@@ -17,17 +17,18 @@
 package uk.gov.hmrc.customs.declaration.connectors
 
 import javax.inject.{Inject, Singleton}
+
+import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey, Ids}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-//TODO: determine if we need switching to a stub api-subscription-fields service
 @Singleton
 class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
                                                logger: DeclarationsLogger,
@@ -38,13 +39,13 @@ class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
   private lazy val baseUrl = servicesConfig.baseUrl(service)
   private lazy val context = servicesConfig.getConfString(serviceContext, throw new IllegalStateException(s"Configuration error - $serviceContext not found."))
 
-  def getSubscriptionFields(apiSubsKey: ApiSubscriptionKey)(implicit hc: HeaderCarrier, ids: Ids): Future[ApiSubscriptionFieldsResponse] = {
+  def getSubscriptionFields[A](apiSubsKey: ApiSubscriptionKey)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
     val url = ApiSubscriptionFieldsPath.url(s"$baseUrl$context", apiSubsKey)
     get(url)
   }
 
-  private def get(url: String)(implicit hc: HeaderCarrier, ids: Ids): Future[ApiSubscriptionFieldsResponse] = {
-    logger.debug(s"Getting fields id from api subscription fields service. url=$url", ids)
+  private def get[A](url: String)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
+    logger.debug(s"Getting fields id from api subscription fields service. url=$url")
 
     http.GET[ApiSubscriptionFieldsResponse](url)
       .recoverWith {
@@ -52,7 +53,7 @@ class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
       }
       .recoverWith {
         case e: Throwable =>
-          logger.error(s"Call to subscription information service failed. url=$url", ids)
+          logger.error(s"Call to subscription information service failed. url=$url")
           Future.failed(e)
       }
   }

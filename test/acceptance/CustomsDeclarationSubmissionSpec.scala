@@ -70,6 +70,7 @@ class CustomsDeclarationSubmissionSpec extends AcceptanceTestSpec
       Given("A CSP wants to submit a valid customs declaration")
       startMdgWcoDecService()
       val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequestWithV1AcceptHeader.fromCsp.postTo(endpoint)
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV1)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -96,6 +97,8 @@ class CustomsDeclarationSubmissionSpec extends AcceptanceTestSpec
     scenario("An authorised CSP successfully submits a customs declaration") {
       Given("A CSP wants to submit a valid customs declaration")
       startMdgWcoDecService()
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
+
       val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.fromCsp.postTo(endpoint)
 
       And("the CSP is authorised with its privileged application")
@@ -142,6 +145,7 @@ class CustomsDeclarationSubmissionSpec extends AcceptanceTestSpec
       Given("A Software House wants to submit a valid customs declaration")
       startMdgWcoDecService()
       val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.fromNonCsp.postTo(endpoint)
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
 
       And("declarant is enrolled with Customs having an EORI number")
       authServiceUnauthorisesScopeForCSP(nonCspBearerToken)

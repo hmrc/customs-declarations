@@ -187,7 +187,7 @@ class CustomsDeclarationCancellationUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when user submits a malformed xml payload") {
       Given("the API is available")
-      val request = MalformedXmlRequest.copyFakeRequest(method = POST, uri = endpoint)
+      val request = MalformedXmlRequest.fromCsp.copyFakeRequest(method = POST, uri = endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -205,7 +205,7 @@ class CustomsDeclarationCancellationUnhappyPathSpec extends AcceptanceTestSpec
 
     scenario("Response status 400 when user submits a non-xml payload") {
       Given("the API is available")
-      val request = ValidCancellationRequest
+      val request = ValidCancellationRequest.fromCsp
         .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
         .copyFakeRequest(method = POST, uri = endpoint)
 

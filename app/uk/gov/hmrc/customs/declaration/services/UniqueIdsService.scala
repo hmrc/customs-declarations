@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration
+package uk.gov.hmrc.customs.declaration.services
 
-package object model {
+import java.util.UUID
 
-  type SeqOfHeader = Seq[(String, String)]
+import com.google.inject.Singleton
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, CorrelationId}
+
+
+@Singleton
+class UniqueIdsService {
+
+  def conversation: ConversationId = ConversationId(UUID.randomUUID().toString)
+
+  def correlation: CorrelationId = CorrelationId(UUID.randomUUID().toString)
 
 }

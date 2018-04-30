@@ -25,23 +25,11 @@ To generate the zip file locally run the following command in command line from 
 
     sbt package
 
-# Overriding Client Id value
-As per design the service accepts incoming HTTP header `api-subscription-fields-id` and sends its value downstream as `<v1:clientID>` XML tag value in payload.
-If a hardcoded value is provided in deployment configuration, the service uses this value calling downstream system ignoring HTTP header value if any.
-To have the header overridden, a hardcoded `String` value should be put into deployment configuration for target environment (respective repository `app-config-XXX`) with key `override.clientID`:
+# Lookup of `fieldsId` UUID from `api-subscription-fields` service
+The `X-Client-ID` header, together with the application context and version are used
+ to call the `api-subscription-fields` service to get the unique `fieldsId` UUID to pass on to the backend request.
 
-    override.clientID: 'predefined-client-id'
-
-# Tactical fix - lookup of `fieldsId` UUID from `api-subscription-fields` service
-The strategic design is for the developer hub gateway to lookup the `fieldsId` UUID from [`api-subscription-fields`](https://github.com/hmrc/api-subscription-fields) service, and to put this value
- in the `api-subscription-fields-id`. However this could not be done in time for initial Customs declaration roll out,
- so a tactical solution was chosen. 
- 
-The tactical solution implemented is to use the incoming `X-Client-ID` header, together with the application context and version,
- to call the `api-subscription-fields` service to get the unique `fieldsId` UUID and to put this value in the `api-subscription-fields-id`
- header.    
-
-So there is now a direct dependency on the [`api-subscription-fields`](https://github.com/hmrc/api-subscription-fields) service. Note the service to get the `fieldsId` is not currently stubbed.
+So there is now a direct dependency on the `api-subscription-fields` service. Note the service to get the `fieldsId` is not currently stubbed. 
 
 ## Seeding Data in `api-subscription-fields` for local end to end testing
 

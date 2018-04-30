@@ -177,6 +177,17 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
         caught.getCause shouldBe httpException
       }
     }
+
+    "when configuration is absent" should {
+      "throw an exception when no config is found for given api and version combination" in {
+        when(mockServiceConfigProvider.getConfig("v2.wco-declaration")).thenReturn(null)
+
+        val caught = intercept[IllegalArgumentException] {
+          awaitRequest
+        }
+        caught.getMessage shouldBe "config not found"
+      }
+    }
   }
 
   private def awaitRequest = {

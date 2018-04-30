@@ -29,8 +29,9 @@ class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorH
   private val apiScopeConfigKey = "customs.definition.api-scope"
   private lazy val apiScopeKey = configuration.getString(apiScopeConfigKey).getOrElse(throw new IllegalStateException(s"$apiScopeConfigKey is not configured"))
   private lazy val whitelistedApplicationIds = configuration.getStringSeq("api.access.version-2.0.whitelistedApplicationIds").getOrElse(Seq.empty)
+  private lazy val isVersion2Enabled = configuration.getBoolean("api.access.version-2.0.enabled").getOrElse(true)
 
   def definition(): Action[AnyContent] = Action {
-    Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(apiScopeKey, whitelistedApplicationIds)).withHeaders(CONTENT_TYPE -> JSON)
+    Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(apiScopeKey, whitelistedApplicationIds, isVersion2Enabled)).withHeaders(CONTENT_TYPE -> JSON)
   }
 }

@@ -1,5 +1,5 @@
 @import play.api.libs.json.Json
-@(apiScopeKey: String, whitelistedApplicationIds: Seq[String])
+@(apiScopeKey: String, whitelistedApplicationIds: Seq[String], isVersion2Enabled: Boolean)
 {
   "scopes": [
     {
@@ -34,7 +34,10 @@
             "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
           }
         ]
-      },
+      }
+
+      @if(isVersion2Enabled) {
+      ,
       {
         "version": "2.0",
         "status": "BETA",
@@ -58,6 +61,7 @@
           }
         ]
       }
+      } @****** end if(isVersion2Enabled)  ***************@
     ]
   }
 }

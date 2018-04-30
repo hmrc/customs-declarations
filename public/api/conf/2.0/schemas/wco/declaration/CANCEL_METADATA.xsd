@@ -65,19 +65,6 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element name="AgencyAssignedCustomizationCode" type="ds:MetaDataAgencyAssignedCustomizationCodeType" minOccurs="0">
-          <xs:annotation>
-            <xs:documentation>
-              <WCOFormat>an..6</WCOFormat>
-              <WCOCodeRemarks>User codes</WCOCodeRemarks>
-              <DictionaryEntryName>Document Meta Data. Agency Assigned Customization. Code</DictionaryEntryName>
-              <NamedComplexType>DocumentMetaDataAgencyAssignedCustomizationCodeType</NamedComplexType>
-              <XMLTag>AgencyAssignedCustomizationCode</XMLTag>
-              <WCOName>Agency Assigned Customization</WCOName>
-              <UniquePositionID>9000</UniquePositionID>
-            </xs:documentation>
-          </xs:annotation>
-        </xs:element>
         <xs:element name="AgencyAssignedCustomizationVersionCode" type="ds:MetaDataAgencyAssignedCustomizationVersionCodeType" minOccurs="1">
           <xs:annotation>
             <xs:documentation>

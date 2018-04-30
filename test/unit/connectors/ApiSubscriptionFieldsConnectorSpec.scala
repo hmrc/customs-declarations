@@ -43,9 +43,9 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
   with ApiSubscriptionFieldsTestData {
 
   private val mockWSGetImpl = mock[HttpClient]
-  private val mockDeclarationsLogger = mock[DeclarationsLogger]
+  private val mockLogger = mock[DeclarationsLogger]
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.Submit)
+  private implicit val vpr = TestData.TestCspValidatedPayloadRequest
 
   private val connector = connectorWithConfig(validConfig)
 
@@ -55,7 +55,7 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
   private val expectedApiSubscriptionKey = ApiSubscriptionKey(xClientId, "customs%2Fdeclarations", "2.0")
 
   override protected def beforeEach() {
-    reset(mockDeclarationsLogger, mockWSGetImpl)
+    reset(mockLogger, mockWSGetImpl)
   }
 
   "ApiSubscriptionFieldsConnector" can {
@@ -124,6 +124,6 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
     override val mode = play.api.Mode.Test
   }
 
-  private def connectorWithConfig(config: Config) = new ApiSubscriptionFieldsConnector(mockWSGetImpl, mockDeclarationsLogger, testServicesConfig(config))
+  private def connectorWithConfig(config: Config) = new ApiSubscriptionFieldsConnector(mockWSGetImpl, mockLogger, testServicesConfig(config))
 
 }

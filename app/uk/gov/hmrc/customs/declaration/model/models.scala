@@ -16,28 +16,34 @@
 
 package uk.gov.hmrc.customs.declaration.model
 
-import uk.gov.hmrc.customs.declaration.model.RequestType.RequestType
-
 case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 
 case class Eori(value: String) extends AnyVal
 
+case class ClientId(value: String) extends AnyVal
+
 case class ConversationId(value: String) extends AnyVal
+
+case class CorrelationId(value: String) extends AnyVal
 
 case class BadgeIdentifier(value: String) extends AnyVal
 
 case class FieldsId(value: String) extends AnyVal
 
-//TODO MC it will be revisited anyway while introducing ActionBuilder solution
-//renaming would introduce a lot of noise, so will be done in separate PR
-case class Ids(conversationId: ConversationId,
-               requestType: RequestType,
-               maybeClientSubscriptionId: Option[FieldsId] = None,
-               maybeRequestedVersion: Option[RequestedVersion] = None,
-               maybeBadgeIdentifier: Option[BadgeIdentifier] = None
-              )
+sealed trait ApiVersion {
+  val value: String
+  val configPrefix: String
+}
+object VersionOne extends ApiVersion{
+  override val value: String = "1.0"
+  override val configPrefix: String = ""
+}
+object VersionTwo extends ApiVersion{
+  override val value: String = "2.0"
+  override val configPrefix: String = "v2."
+}
 
-object RequestType extends Enumeration {
-  type RequestType = Value
-  val Submit, Cancel = Value
+object AuthorisedAs extends Enumeration {
+  type AuthorisedAs = Value
+  val Csp, NonCsp = Value
 }

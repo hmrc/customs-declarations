@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration
+package uk.gov.hmrc.customs.declaration.controllers
 
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.declaration.model.Ids
-
-package object services {
-  type ProcessingResult = Either[ErrorResponse, Ids]
+object CustomHeaderNames {
+  val XConversationIdHeaderName: String = "X-Conversation-ID"
+  val XClientIdHeaderName = "X-Client-ID"
+  val XBadgeIdentifierHeaderName: String = "X-Badge-Identifier"
 }

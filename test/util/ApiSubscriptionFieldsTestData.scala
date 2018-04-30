@@ -19,7 +19,7 @@ package util
 import java.util.UUID
 
 import com.typesafe.config.{Config, ConfigFactory}
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey, FieldsId}
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey, ClientId, FieldsId}
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
 import util.ExternalServicesConfig.{Host, Port}
 
@@ -27,6 +27,7 @@ trait ApiSubscriptionFieldsTestData {
   val fieldsIdString = "327d9145-4965-4d28-a2c5-39dedee50334"
   val fieldsId = FieldsId(fieldsIdString)
   val xClientId = "SOME_X_CLIENT_ID"
+  val clientId = ClientId(xClientId)
   val apiContext = "some/api/context"
   val apiContextEncoded = "some%2Fapi%2Fcontext"
   val apiVersion = "1.0"

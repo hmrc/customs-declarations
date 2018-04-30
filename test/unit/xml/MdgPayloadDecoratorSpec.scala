@@ -18,9 +18,10 @@ package unit.xml
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, ConversationId, Ids, RequestType}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
+import util.TestData
+import util.TestData.TestCspValidatedPayloadRequest
 
 import scala.xml.NodeSeq
 
@@ -28,8 +29,6 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
   private val xml: NodeSeq = <node1></node1>
 
-  private val conversationId = ConversationId("conversationId")
-  private val badgeIdentifier = Some(BadgeIdentifier("badgeIdentifier"))
   private val clientId = "clientId"
 
   private val year = 2017
@@ -42,8 +41,10 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
   private val dateTime = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, DateTimeZone.UTC)
   private val payloadWrapper = new MdgPayloadDecorator()
 
-  private def wrapPayloadWithBadgeIdentifier() = payloadWrapper.wrap(xml, Ids(conversationId, RequestType.Submit, maybeBadgeIdentifier=badgeIdentifier), clientId, dateTime)
-  private def wrapPayloadWithOutBadgeIdentifier() = payloadWrapper.wrap(xml, Ids(conversationId, RequestType.Submit), clientId, dateTime)
+  private def wrapPayloadWithBadgeIdentifier() = payloadWrapper.wrap(xml, clientId, dateTime)
+  private def wrapPayloadWithOutBadgeIdentifier() = payloadWrapper.wrap(xml, clientId, dateTime)
+
+  private implicit val vpr = TestCspValidatedPayloadRequest
 
   "WcoDmsPayloadWrapper " should {
     "wrap passed XML in DMS wrapper" in {
@@ -66,7 +67,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
       val rd = result \\ "conversationID"
 
-      rd.head.text shouldBe conversationId.value
+      rd.head.text shouldBe TestData.conversationId.value
     }
 
     "set the clientId" in {
@@ -82,7 +83,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
       val rd = result \\ "badgeIdentifier"
 
-      rd.head.text shouldBe badgeIdentifier.get.value
+      rd.head.text shouldBe TestData.badgeIdentifier.value
     }
 
     "should not set the badgeIdentifier when absent" in {

@@ -30,34 +30,33 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ConversationId, Ids, RequestType, SeqOfHeader}
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
-import util.{RequestHeaders, TestData}
+import util.TestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
 
   private val mockWsPost = mock[HttpClient]
-  private val mockDeclarationsLogger = mock[DeclarationsLogger]
+  private val mockLogger = mock[DeclarationsLogger]
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]
 
-  private val connector = new MdgWcoDeclarationConnector(mockWsPost, mockDeclarationsLogger, mockServiceConfigProvider)
+  private val connector = new MdgWcoDeclarationConnector(mockWsPost, mockLogger, mockServiceConfigProvider)
 
   private val v1Config = ServiceConfig("v1-url", Some("v1-bearer-token"), "v1-default")
   private val v2Config = ServiceConfig("v2-url", Some("v2-bearer-token"), "v2-default")
 
   private val xml = <xml></xml>
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-    .withExtraHeaders(RequestHeaders.API_SUBSCRIPTION_FIELDS_ID_HEADER)
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
-  private implicit val ids: Ids = Ids(ConversationId("dummy-conversation-id"), RequestType.Submit)
+  private implicit val vpr = TestData.TestCspValidatedPayloadRequest
 
   override protected def beforeEach() {
-    reset(mockWsPost, mockDeclarationsLogger, mockServiceConfigProvider)
+    reset(mockWsPost, mockLogger, mockServiceConfigProvider)
     when(mockServiceConfigProvider.getConfig("wco-declaration")).thenReturn(v1Config)
     when(mockServiceConfigProvider.getConfig("v2.wco-declaration")).thenReturn(v2Config)
   }
@@ -82,7 +81,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
 
         awaitRequest
 
-        verify(mockWsPost).POSTString(ameq(v1Config.url), anyString, any[SeqOfHeader])(
+        verify(mockWsPost).POSTString(ameq(v2Config.url), anyString, any[SeqOfHeader])(
           any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
@@ -153,7 +152,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
       "prefix the config key with the prefix if passed" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
-        await(connector.send(xml, date, correlationId, Some("v2")))
+        await(connector.send(xml, date, correlationId, VersionTwo))
 
         verify(mockServiceConfigProvider).getConfig("v2.wco-declaration")
       }
@@ -181,7 +180,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   private def awaitRequest = {
-    await(connector.send(xml, date, correlationId))
+    await(connector.send(xml, date, correlationId, VersionTwo))
   }
 
   private def returnResponseForRequest(eventualResponse: Future[HttpResponse]) = {

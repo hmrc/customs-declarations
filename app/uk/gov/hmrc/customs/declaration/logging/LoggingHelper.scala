@@ -16,64 +16,47 @@
 
 package uk.gov.hmrc.customs.declaration.logging
 
-import play.api.http.HeaderNames.AUTHORIZATION
-import uk.gov.hmrc.customs.declaration.model.{Ids, MaybeIds, SeqOfHeader}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE}
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeaders, HasConversationId}
 
 object LoggingHelper {
+  private val headerSet = Set(CONTENT_TYPE, ACCEPT, XConversationIdHeaderName, XClientIdHeaderName)
 
-  private val headerOverwriteValue = "value-not-logged"
-  private val headersToOverwrite = Set(AUTHORIZATION)
-
-  def formatError(msg: String, maybeIds: Option[Ids])(implicit hc: HeaderCarrier): String = {
-    formatInfo(msg, maybeIds)
+  def formatError(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+    formatMessage(msg, r)
   }
 
-  def formatWarn(msg: String)(implicit hc: HeaderCarrier): String = {
-    formatInfo(msg, None)
+  def formatWarn(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+    formatMessage(msg, r)
   }
 
-  def formatInfo(msg: String, maybeIds: MaybeIds = None)(implicit hc: HeaderCarrier): String = {
-    val headers = hc.headers
-    s"${format(headers, maybeIds)} $msg".trim
+  def formatInfo(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+    formatMessage(msg, r)
   }
 
-  def formatInfo(msg: String, headers: SeqOfHeader): String = {
-    s"${format(headers, maybeIds = None)} $msg".trim
+  def formatDebug(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+    formatMessage(msg, r)
   }
 
-  def formatDebug(msg: String, ids: Ids)(implicit hc: HeaderCarrier): String = {
-    formatDebug(msg, hc.headers, ids)
+  def formatDebugFull(msg: String, r: ConversationIdRequest[_]): String = {
+    formatMessageFull(msg, r)
   }
 
-  def formatDebug(msg: String, headers: SeqOfHeader, ids: Ids): String = {
-    s"${format(headers, maybeIds = None)} $msg\nrequest headers=${overwriteHeaderValues(headers, headersToOverwrite - AUTHORIZATION)} ".trim
+  private def formatMessage(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+    s"${format(r)} $msg".trim
   }
 
-  private def format(headers: SeqOfHeader, maybeIds: MaybeIds = None): String = {
-    lazy val maybeClientId: Option[String] = findHeaderValue("X-Client-ID", headers)
-    lazy val maybeSubscriptionIdFromHeader: Option[String] = findHeaderValue("api-subscription-fields-id", headers)
-    lazy val maybeSubscriptionIdFromHeaderOrIds = maybeSubscriptionIdFromHeader.orElse(maybeIds.flatMap(ids => ids.maybeClientSubscriptionId.map(_.value)))
-
-    maybeClientId.fold("")(appId => s"[clientId=$appId]") +
-      maybeSubscriptionIdFromHeaderOrIds.fold("")(fieldsId => s"[fieldsId=$fieldsId]") +
-      maybeIds.fold("") { ids =>
-        lazy val maybeRequestedVersion = ids.maybeRequestedVersion
-        s"[conversationId=${ids.conversationId.value}]" +
-          maybeRequestedVersion.fold("")(ver => s"[requestedApiVersion=${ver.versionNumber}]")
-      }
+  private def format(r: HasConversationId with ExtractedHeaders): String = {
+    s"[conversationId=${r.conversationId.value}][clientId=${r.clientId.value}][requestedApiVersion=${r.requestedApiVersion.value}]"
   }
 
-  private def findHeaderValue(headerName: String, headers: SeqOfHeader): Option[String] = {
-    headers.collectFirst{
-      case (`headerName`, headerValue) => headerValue
-    }
+  def formatMessageFull(msg: String, r: ConversationIdRequest[_]): String = {
+
+    val filteredHeaders = r.request.headers.toSimpleMap.filter(keyValTuple => headerSet.contains(keyValTuple._1))
+
+    s"[conversationId=${r.conversationId.value}] $msg headers=$filteredHeaders"
   }
 
-  private def overwriteHeaderValues(headers: SeqOfHeader, overwrittenHeaderNames: Set[String]): SeqOfHeader = {
-    headers map {
-      case (rewriteHeader, _) if overwrittenHeaderNames.contains(rewriteHeader) => rewriteHeader -> headerOverwriteValue
-      case header => header
-    }
-  }
+
 }

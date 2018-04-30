@@ -69,6 +69,7 @@ class CustomsDeclarationCancellationSpec extends AcceptanceTestSpec
       Given("A CSP wants to submit a valid cancellation request")
       startMdgWcoDecService()
       val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequestWithV1AcceptHeader.fromCsp.postTo(endpoint)
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV1)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -96,6 +97,7 @@ class CustomsDeclarationCancellationSpec extends AcceptanceTestSpec
       Given("A CSP wants to submit a valid cancellation request")
       startMdgWcoDecService()
       val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.fromCsp.postTo(endpoint)
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -141,6 +143,7 @@ class CustomsDeclarationCancellationSpec extends AcceptanceTestSpec
       Given("A Software House wants to submit a valid cancellation request")
       startMdgWcoDecService()
       val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.fromNonCsp.postTo(endpoint)
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
 
       And("declarant is enrolled with Customs having an EORI number")
       authServiceUnauthorisesScopeForCSP(nonCspBearerToken)

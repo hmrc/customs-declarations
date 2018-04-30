@@ -44,7 +44,7 @@ class CustomsConfigService @Inject()(configValidationNel: ConfigValidationNelAda
       fail = { nel =>
         // error case exposes nel (a NotEmptyList)
         val errorMsg = nel.toList.mkString("\n", "\n", "")
-        logger.errorWithoutHeaderCarrier(errorMsg)
+        logger.errorWithoutRequestContext(errorMsg)
         throw new IllegalStateException(errorMsg)
       },
       succ = identity

@@ -23,18 +23,25 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames._
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.inject.guice.GuiceableModule
+import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.services.UuidService
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeadersImpl}
+import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 
 object TestData {
   val conversationIdValue = "38400000-8cf0-11bd-b23e-10b96e4ef00d"
   val conversationIdUuid: UUID = UUID.fromString(conversationIdValue)
   val conversationId: ConversationId = ConversationId(conversationIdValue)
+
+  val correlationIdValue = "e61f8eee-812c-4b8f-b193-06aedc60dca2"
+  val correlationIdUuid: UUID = UUID.fromString(correlationIdValue)
+  val correlationId = CorrelationId(correlationIdValue)
+
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
   val invalidBadgeIdentifier: BadgeIdentifier = BadgeIdentifier(invalidBadgeIdentifierValue)
   val badgeIdentifier: BadgeIdentifier = BadgeIdentifier(validBadgeIdentifierValue)
-  val ids = Ids(conversationId, RequestType.Submit, Some(ApiSubscriptionFieldsTestData.fieldsId), maybeBadgeIdentifier = Some(badgeIdentifier))
 
   val cspBearerToken = "CSP-Bearer-Token"
   val nonCspBearerToken = "Software-House-Bearer-Token"
@@ -55,15 +62,31 @@ object TestData {
     def asGuiceableModule: GuiceableModule = GuiceableModule.guiceable(this)
   }
 
+  // note we can not mock service methods that return value classes - however using a simple stub IMHO it results in cleaner code (less mocking noise)
+  val stubUniqueIdsService = new UniqueIdsService() {
+    override def conversation: ConversationId = conversationId
+    override def correlation: CorrelationId = correlationId
+  }
+
+  val TestXmlPayload = <foo>bar</foo>
+  val TestFakeRequest = FakeRequest().withXmlBody(TestXmlPayload)
+  val TestConversationIdRequest = ConversationIdRequest(conversationId, TestFakeRequest)
+  val TestExtractedHeaders = ExtractedHeadersImpl(Some(badgeIdentifier), VersionOne, ApiSubscriptionFieldsTestData.clientId)
+  val TestExtractedHeadersNoBadge = TestExtractedHeaders.copy(maybeBadgeIdentifier = None)
+  val TestValidatedHeadersRequest = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
+  val TestValidatedHeadersRequestNoBadge = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeadersNoBadge)
+  val TestUnAuthorisedRequest = TestValidatedHeadersRequest.toAuthorisedRequest(maybeAuthorised = None)
+  val TestUnAuthorisedRequestNoBadge = TestValidatedHeadersRequestNoBadge.toAuthorisedRequest(maybeAuthorised = None)
+  val TestCspAuthorisedRequest = TestValidatedHeadersRequest.toAuthorisedRequest(maybeAuthorised = Some(AuthorisedAs.Csp))
+  val TestNonCspAuthorisedRequest = TestValidatedHeadersRequestNoBadge.toAuthorisedRequest(maybeAuthorised = Some(AuthorisedAs.NonCsp))
+  val TestCspValidatedPayloadRequest = TestCspAuthorisedRequest.toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+
 }
 
 object RequestHeaders {
 
   val X_CONVERSATION_ID_NAME = "X-Conversation-ID"
   val X_CONVERSATION_ID_HEADER: (String, String) = X_CONVERSATION_ID_NAME -> TestData.conversationId.value
-
-  val API_SUBSCRIPTION_FIELDS_ID_NAME = "api-subscription-fields-id"
-  val API_SUBSCRIPTION_FIELDS_ID_HEADER: (String, String) = API_SUBSCRIPTION_FIELDS_ID_NAME -> ApiSubscriptionFieldsTestData.fieldsIdString
 
   val X_BADGE_IDENTIFIER_NAME = "X-Badge-Identifier"
   val X_BADGE_IDENTIFIER_HEADER: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.badgeIdentifier.value
@@ -74,6 +97,7 @@ object RequestHeaders {
 
   val X_CLIENT_ID_ID_NAME = "X-Client-ID"
   val X_CLIENT_ID_HEADER: (String, String) = X_CLIENT_ID_ID_NAME -> ApiSubscriptionFieldsTestData.xClientId
+  val X_CLIENT_ID_HEADER_INVALID: (String, String) = X_CLIENT_ID_ID_NAME -> "This is not a UUID"
 
   val CONTENT_TYPE_HEADER: (String, String) = CONTENT_TYPE -> MimeTypes.XML
   val CONTENT_TYPE_CHARSET_VALUE: String = s"${MimeTypes.XML}; charset=UTF-8"
@@ -89,9 +113,17 @@ object RequestHeaders {
   val AUTH_HEADER_VALUE: String = "AUTH_HEADER_VALUE"
   val AUTH_HEADER: (String, String) = HeaderNames.AUTHORIZATION -> AUTH_HEADER_VALUE
 
-  val ValidHeaders = Map(
+  val ValidHeadersV2 = Map(
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V2_HEADER,
-    API_SUBSCRIPTION_FIELDS_ID_HEADER,
-    X_BADGE_IDENTIFIER_HEADER)
+    X_CLIENT_ID_HEADER,
+    X_BADGE_IDENTIFIER_HEADER
+  )
+
+  val ValidHeadersV1 = Map(
+    CONTENT_TYPE_HEADER,
+    ACCEPT_HMRC_XML_V1_HEADER,
+    X_CLIENT_ID_HEADER,
+    X_BADGE_IDENTIFIER_HEADER
+  )
 }

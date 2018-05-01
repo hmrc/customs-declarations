@@ -49,15 +49,15 @@ class CustomsDeclarationCancellationUnhappyPathSpec extends AcceptanceTestSpec
   private val BadRequestErrorIncorrectEndpoint =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>
-      |  <code>BAD_REQUEST</code>
-      |  <message>Payload is not valid according to schema</message>
-      |  <errors>
-      |     <error>
-      |       <code>xml_validation_error</code>
-      |       <message>cvc-complex-type.2.4.a: Invalid content was found starting with element 'Declaration'. One of '{WC[&quot;urn:wco:datamodel:WCO:RES-DMS:2&quot;]}' is expected.</message>
-      |     </error>
-      |  </errors>
-      |</errorResponse>
+      |    <code>BAD_REQUEST</code> <message>Payload is not valid according to schema</message> <errors>
+      |      <error>
+      |        <code>xml_validation_error</code> <message>cvc-complex-type.2.4.a: Invalid content was found starting with element 'AcceptanceDateTime'. One of '{&quot;urn:wco:datamodel:WCO:DEC-DMS:2&quot;:FunctionCode}' is expected.</message>
+      |      </error>
+      |      <error>
+      |        <code>xml_validation_error</code> <message>cvc-pattern-valid: Value '9' is not facet-valid with respect to pattern '13' for type 'FunctionCode'.</message>
+      |      </error>
+      |    </errors>
+      |  </errorResponse>
     """.stripMargin
 
   private val BadRequestErrorWith2Errors =

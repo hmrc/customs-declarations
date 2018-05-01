@@ -75,11 +75,7 @@ object TestData {
   val TestExtractedHeadersNoBadge = TestExtractedHeaders.copy(maybeBadgeIdentifier = None)
   val TestValidatedHeadersRequest = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestValidatedHeadersRequestNoBadge = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeadersNoBadge)
-  val TestUnAuthorisedRequest = TestValidatedHeadersRequest.toAuthorisedRequest(maybeAuthorised = None)
-  val TestUnAuthorisedRequestNoBadge = TestValidatedHeadersRequestNoBadge.toAuthorisedRequest(maybeAuthorised = None)
-  val TestCspAuthorisedRequest = TestValidatedHeadersRequest.toAuthorisedRequest(maybeAuthorised = Some(AuthorisedAs.Csp))
-  val TestNonCspAuthorisedRequest = TestValidatedHeadersRequestNoBadge.toAuthorisedRequest(maybeAuthorised = Some(AuthorisedAs.NonCsp))
-  val TestCspValidatedPayloadRequest = TestCspAuthorisedRequest.toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestCspValidatedPayloadRequest = TestValidatedHeadersRequest.toCspAuthorisedRequest.toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 
 }
 

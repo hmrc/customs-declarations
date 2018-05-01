@@ -87,4 +87,6 @@ trait AuthConnectorStubbing extends UnitSpec with MockitoSugar {
       .authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext])
   }
 
+  def verifyNonCspAuthorisationNotCalled: Future[Enrolments] = verifyNonCspAuthorisationCalled(0)
+
 }

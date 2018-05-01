@@ -42,46 +42,31 @@ object ActionBuilderModelHelper {
   }
 
   implicit class ValidatedHeadersRequestOps[A](vhr: ValidatedHeadersRequest[A]) {
-    def toAuthorisedRequest(maybeAuthorised: Option[AuthorisedAs] = None): AuthorisedRequest[A] = AuthorisedRequest(
-        vhr.conversationId,
-        vhr.maybeBadgeIdentifier,
-        vhr.requestedApiVersion,
-        vhr.clientId,
-        maybeAuthorised,
-        vhr.request
-      )
+
+    def toCspAuthorisedRequest: AuthorisedRequest[A] = toAuthorisedRequest(AuthorisedAs.Csp)
+
+    def toNonCspAuthorisedRequest: AuthorisedRequest[A] = toAuthorisedRequest(AuthorisedAs.NonCsp)
+
+    def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
+      vhr.conversationId,
+      vhr.maybeBadgeIdentifier,
+      vhr.requestedApiVersion,
+      vhr.clientId,
+      authorisedAs,
+      vhr.request
+    )
   }
 
   implicit class AuthorisedRequestOps[A](ar: AuthorisedRequest[A]) {
     def toValidatedPayloadRequest(xmlBody: NodeSeq): ValidatedPayloadRequest[A] = ValidatedPayloadRequest(
-        ar.conversationId,
-        ar.maybeBadgeIdentifier,
-        ar.requestedApiVersion,
-        ar.clientId,
-        ar.maybeAuthorised,
-        xmlBody,
-        ar.request
-      )
-  }
-
-  implicit class AuthorisedRequestTransformationOp[A](ar: AuthorisedRequest[A]) {
-
-    // we can not use normal case class copy on a wrapped request as it is overridden by RequestHeader
-    def asNonCsp: AuthorisedRequest[A] = authorisedRequest(Some(AuthorisedAs.NonCsp))
-
-    // we can not use normal case class copy on a wrapped request as it is overridden by RequestHeader
-    def asCsp: AuthorisedRequest[A] = authorisedRequest(Some(AuthorisedAs.Csp))
-
-    def authorisedRequest(maybeAuthorised: Option[AuthorisedAs]): AuthorisedRequest[A] = {
-      AuthorisedRequest(
-        ar.conversationId,
-        ar.maybeBadgeIdentifier,
-        ar.requestedApiVersion,
-        ar.clientId,
-        maybeAuthorised,
-        ar.request
-      )
-    }
+      ar.conversationId,
+      ar.maybeBadgeIdentifier,
+      ar.requestedApiVersion,
+      ar.clientId,
+      ar.authorisedAs,
+      xmlBody,
+      ar.request
+    )
   }
 
 }
@@ -97,7 +82,7 @@ trait ExtractedHeaders {
 }
 
 trait HasAuthorisedAs {
-  val maybeAuthorised: Option[AuthorisedAs]
+  val authorisedAs: AuthorisedAs
 }
 
 trait HasXmlBody {
@@ -133,14 +118,14 @@ case class ValidatedHeadersRequest[A](
   request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders
 
-// Available after ValidatedHeadersAction builder
+// Available after Authorise action builder
 case class AuthorisedRequest[A](
-                                 conversationId: ConversationId,
-                                 maybeBadgeIdentifier: Option[BadgeIdentifier],
-                                 requestedApiVersion: ApiVersion,
-                                 clientId: ClientId,
-                                 maybeAuthorised: Option[AuthorisedAs] = None,
-                                 request: Request[A]
+  conversationId: ConversationId,
+  maybeBadgeIdentifier: Option[BadgeIdentifier],
+  requestedApiVersion: ApiVersion,
+  clientId: ClientId,
+  authorisedAs: AuthorisedAs,
+  request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs
 
 // Available after ValidatedPayloadAction builder
@@ -149,7 +134,7 @@ case class ValidatedPayloadRequest[A](
   maybeBadgeIdentifier: Option[BadgeIdentifier],
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
-  maybeAuthorised: Option[AuthorisedAs] = None,
+  authorisedAs: AuthorisedAs,
   xmlBody: NodeSeq,
   request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs with HasXmlBody

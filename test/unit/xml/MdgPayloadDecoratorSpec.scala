@@ -68,7 +68,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
       val rd = result \\ "conversationID"
 
-      rd.head.text shouldBe TestData.conversationId.value
+      rd.head.text shouldBe TestData.conversationId.toString
     }
 
     "set the clientId" in {

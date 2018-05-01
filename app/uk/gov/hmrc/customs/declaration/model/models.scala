@@ -16,15 +16,23 @@
 
 package uk.gov.hmrc.customs.declaration.model
 
+import java.util.UUID
+
 case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 
 case class Eori(value: String) extends AnyVal
 
-case class ClientId(value: String) extends AnyVal
+case class ClientId(value: String) extends AnyVal {
+  override def toString: String = value.toString
+}
 
-case class ConversationId(value: String) extends AnyVal
+case class ConversationId(uuid: UUID) extends AnyVal {
+  override def toString: String = uuid.toString
+}
 
-case class CorrelationId(value: String) extends AnyVal
+case class CorrelationId(uuid: UUID) extends AnyVal {
+  override def toString: String = uuid.toString
+}
 
 case class BadgeIdentifier(value: String) extends AnyVal
 
@@ -33,6 +41,7 @@ case class FieldsId(value: String) extends AnyVal
 sealed trait ApiVersion {
   val value: String
   val configPrefix: String
+  override def toString: String = value
 }
 object VersionOne extends ApiVersion{
   override val value: String = "1.0"

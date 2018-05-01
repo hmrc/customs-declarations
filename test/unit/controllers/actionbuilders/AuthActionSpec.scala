@@ -58,7 +58,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
       private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.value))
+      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
       verifyNonCspAuthorisationNotCalled
     }
 
@@ -88,7 +88,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
       private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      actual shouldBe Left(errorResponseEoriNotFoundInCustomsEnrolment.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.value))
+      actual shouldBe Left(errorResponseEoriNotFoundInCustomsEnrolment.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
       verifyCspAuthorisationCalled(1)
     }
 
@@ -98,7 +98,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
       private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      actual shouldBe Left(errorResponseUnauthorisedGeneral.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.value))
+      actual shouldBe Left(errorResponseUnauthorisedGeneral.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
       verifyCspAuthorisationCalled(1)
     }
 

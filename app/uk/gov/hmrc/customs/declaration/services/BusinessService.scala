@@ -60,7 +60,7 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
 
   private def futureApiSubFieldsId[A](c: ClientId)
                                      (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, FieldsId]] = {
-    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c.value, apiContextEncoded, vpr.requestedApiVersion.value)) map {
+    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
         Right(FieldsId(response.fieldsId.toString))
     }).recover {
@@ -76,7 +76,7 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
     val correlationId = uniqueIdsService.correlation
     val xmlToSend = preparePayload(vpr.xmlBody, subscriptionFieldsId, dateTime)
 
-    connector.send(xmlToSend, dateTime, UUID.fromString(correlationId.value), vpr.requestedApiVersion).map(_ => Right(())).recover{
+    connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(())).recover{
       case NonFatal(e) =>
         logger.error(s"Inventory linking call failed: ${e.getMessage}", e)
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)

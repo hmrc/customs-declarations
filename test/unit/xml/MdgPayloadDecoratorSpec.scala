@@ -41,10 +41,11 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
   private val dateTime = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, DateTimeZone.UTC)
   private val payloadWrapper = new MdgPayloadDecorator()
 
+  private implicit val vpr = TestCspValidatedPayloadRequest
+
   private def wrapPayloadWithBadgeIdentifier() = payloadWrapper.wrap(xml, clientId, dateTime)
   private def wrapPayloadWithOutBadgeIdentifier() = payloadWrapper.wrap(xml, clientId, dateTime)
 
-  private implicit val vpr = TestCspValidatedPayloadRequest
 
   "WcoDmsPayloadWrapper " should {
     "wrap passed XML in DMS wrapper" in {

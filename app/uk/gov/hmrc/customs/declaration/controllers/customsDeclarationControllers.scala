@@ -32,7 +32,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 @Singleton
 class Common @Inject() (
   val conversationIdAction: ConversationIdAction,
-  val authAction: CspAndThenNonCspAuthAction,
+  val authAction: AuthAction,
   val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
   val businessService: BusinessService,
   val logger: DeclarationsLogger
@@ -67,7 +67,7 @@ extends BaseController {
     Action andThen
       common.conversationIdAction andThen
       common.validateAndExtractHeadersAction andThen
-      common.authAction.authAction andThen
+      common.authAction andThen
       payloadValidationAction
     )
     .async(bodyParser = xmlOrEmptyBody) {

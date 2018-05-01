@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
-import play.api.mvc.{ActionFunction, ActionRefiner, RequestHeader, Result}
+import play.api.mvc.{ActionRefiner, RequestHeader, Result}
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
@@ -37,59 +37,60 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.Left
 import scala.util.control.NonFatal
 
-trait AuthAction {
-  protected type EitherResultOrAuthRequest[A] = Either[Result, AuthorisedRequest[A]]
-
-  protected val errorResponseUnauthorisedGeneral =
-    ErrorResponse(Status.UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
-
-}
-
-/** Composed action builder that attempts to authorise request as a CSP else a NON CSP
-  * <li/>INPUT - `ValidatedHeadersRequest` - maybeAuthorised is `None`
-  * <li/>OUTPUT - `AuthorisedRequest` - if authorised maybeAuthorised will be `Some(AuthorisedAs.Csp)` or `Some(AuthorisedAs.Csp)`
-  * <li/>ERROR - 401 if not authorised as CSP or NON CSP. On any downstream errors it returns 500
+/** Action builder that attempts to authorise request as a CSP or else NON CSP
+  * <ul>
+  * <li/>INPUT - `ValidatedHeadersRequest`
+  * <li/>OUTPUT - `AuthorisedRequest` - authorised will be `AuthorisedAs.Csp` or `AuthorisedAs.NonCsp`
+  * <li/>ERROR -
+  * <ul>
+  * <li/>401 if authorised as CSP but badge identifier not present for CSP
+  * <li/>401 if authorised as NON CSP but enrolments does not contain an EORI.
+  * <li/>401 if not authorised as CSP or NON CSP
+  * <li/>500 on any downstream errors it returns 500
+  * </ul>
+  * </ul>
   */
 @Singleton
-class CspAndThenNonCspAuthAction @Inject()(cspAuthAction: CspAuthAction, nonCspAuthAction: NonCspAuthAction) {
-
-  lazy val authAction: ActionFunction[ValidatedHeadersRequest, AuthorisedRequest] = cspAuthAction andThen nonCspAuthAction
-}
-
-
-/** Action builder that attempts to authorise request as a CSP
-  * <li/>INPUT - `ValidatedHeadersRequest` - maybeAuthorised is `None`
-  * <li/>OUTPUT - `AuthorisedRequest` - if CSP, maybeAuthorised will be `Some(AuthorisedAs.Csp)`, otherwise maybeAuthorised will be `None`
-  * <li/>ERROR - 401 if authorised as CSP but badge identifier is missing. On any downstream errors it returns 500
-  */
-@Singleton
-class CspAuthAction @Inject()(
+class AuthAction @Inject()(
   override val authConnector: AuthConnector,
   logger: DeclarationsLogger
-  ) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] with AuthorisedFunctions with AuthAction {
+) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] with AuthorisedFunctions {
 
+  private val errorResponseUnauthorisedGeneral =
+    ErrorResponse(Status.UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
   private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"${CustomHeaderNames.XBadgeIdentifierHeaderName} header is missing or invalid")
+  private lazy val errorResponseEoriNotFoundInCustomsEnrolment =
+    ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
 
-  override def refine[A](vr: ValidatedHeadersRequest[A]): Future[EitherResultOrAuthRequest[A]] = {
-    implicit val implicitVr = vr
+  override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
+    implicit val implicitVhr = vhr
 
-    logger.debug("in CSP authorisation")
-    authoriseAsCsp[A]
+    authoriseAsCsp.flatMap{
+      case Right(isCsp) =>
+        if (isCsp) {
+          Future.successful(Right(vhr.toCspAuthorisedRequest))
+        } else {
+          authoriseAsNonCsp
+        }
+      case Left(result) =>
+        Future.successful(Left(result))
+    }
   }
 
   // pure function that tames exceptions throw by HMRC auth api into an Either
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(AuthorisedRequest) on success
-  private def authoriseAsCsp[A](implicit vhr: ValidatedHeadersRequest[A]): Future[EitherResultOrAuthRequest[A]] = {
+  private def authoriseAsCsp[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Boolean]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
       Future.successful{
         if (vhr.maybeBadgeIdentifier.isDefined) {
           logger.info("Authorising as CSP")
-          Right(vhr.toAuthorisedRequest().asCsp)
+          Right(true)
         } else {
           logger.error("badge identifier not present for CSP")
           Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withConversationId)
@@ -98,56 +99,20 @@ class CspAuthAction @Inject()(
     }.recover{
       case NonFatal(_: AuthorisationException) =>
         logger.error("Not authorised as CSP")
-        Right(vhr.toAuthorisedRequest(maybeAuthorised = None))
+        Right(false)
       case NonFatal(e) =>
         logger.error("Error authorising CSP", e)
         throw e
     }
   }
 
-}
-
-/** Action builder that attempts to authorise request as a NON CSP
-  * <ul>
-  * <li/>INPUT - `ValidatedHeadersRequest` - maybeAuthorised may be  be `None` or `Some(AuthorisedAs.Csp)` (processing is skipped)
-  * <li/>OUTPUT - `AuthorisedRequest` - if CSP, maybeAuthorised will be `Some(AuthorisedAs.Csp)` or `Some(AuthorisedAs.NonCsp)`
-  * <li/>ERROR -
-  * <ul>
-  * <li/>401 if not authorised as NON CSP
-  * <li/>401 if authorised as NON CSP but enrolments does not contain an EORI.
-  * <li/>500 on any downstream errors it returns 500
-  * </ul>
-  * </ul>
-  */
-@Singleton
-class NonCspAuthAction @Inject()(
-                                  override val authConnector: AuthConnector,
-                                  logger: DeclarationsLogger
-                             ) extends ActionRefiner[AuthorisedRequest, AuthorisedRequest] with AuthorisedFunctions with AuthAction {
-
-  private lazy val errorResponseEoriNotFoundInCustomsEnrolment =
-    ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
-
-
-  override def refine[A](ar: AuthorisedRequest[A]): Future[EitherResultOrAuthRequest[A]] = {
-    implicit val implicitAr = ar
-
-    logger.debug("in Non CSP authorisation.")
-
-    if (ar.maybeAuthorised.isEmpty) {
-      logger.debug("about to authorise as Non CSP")
-      authoriseAsNonCsp[A]
-    } else {
-      logger.debug("already authorised as CSP")
-      Future.successful(Right(ar))
-    }
-  }
-
   // pure function that tames exceptions throw by HMRC auth api into an Either
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(AuthorisedRequest) on success
-  private def authoriseAsNonCsp[A](implicit ar: AuthorisedRequest[A]): Future[EitherResultOrAuthRequest[A]] = {
+  private def authoriseAsNonCsp[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
+
+    Future.successful(Right(vhr.toNonCspAuthorisedRequest))
 
     authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(Retrievals.authorisedEnrolments) {
       enrolments =>
@@ -156,7 +121,7 @@ class NonCspAuthAction @Inject()(
         maybeEori match {
           case Some(_) =>
             logger.info("Authorising as non-CSP")
-            Future.successful(Right(ar.asNonCsp))
+            Future.successful(Right(vhr.toNonCspAuthorisedRequest))
           case _ =>
             Future.successful(Left(errorResponseEoriNotFoundInCustomsEnrolment.XmlResult.withConversationId))
         }
@@ -167,9 +132,10 @@ class NonCspAuthAction @Inject()(
         logger.error("Error authorising Non CSP", e)
         throw e
     }
+
   }
 
-  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier): Option[Eori] = {
+  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: ValidatedHeadersRequest[A], hc: HeaderCarrier): Option[Eori] = {
     val maybeCustomsEnrolment = enrolments.getEnrolment("HMRC-CUS-ORG")
     if (maybeCustomsEnrolment.isEmpty) {
       logger.warn(s"Customs enrolment HMRC-CUS-ORG not retrieved for authorised non-CSP call")
@@ -181,5 +147,3 @@ class NonCspAuthAction @Inject()(
   }
 
 }
-
-

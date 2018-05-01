@@ -23,18 +23,19 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.logging.LoggingHelper
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
-import uk.gov.hmrc.customs.declaration.model.{ClientId, ConversationId, VersionOne}
+import uk.gov.hmrc.customs.declaration.model.{ClientId, VersionOne}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.TestData._
 
 class ExportsLoggingHelperSpec extends UnitSpec with MockitoSugar {
 
-  private def expectedMessage(message: String) = "[conversationId=conversation-id]" +
+  private def expectedMessage(message: String) = s"[conversationId=${conversationId.toString}]" +
     "[clientId=some-client-id]" +
     s"[requestedApiVersion=1.0] $message"
   private val requestMock = mock[Request[_]]
   private val conversationIdRequest =
     ConversationIdRequest(
-      ConversationId("conversation-id"),
+      conversationId,
       FakeRequest().withHeaders(
         CONTENT_TYPE -> "A",
         ACCEPT -> "B",
@@ -43,7 +44,7 @@ class ExportsLoggingHelperSpec extends UnitSpec with MockitoSugar {
         "IGNORE" -> "IGNORE"
       )
     )
-  private val validatedHeadersRequest = ValidatedHeadersRequest(ConversationId("conversation-id"), None, VersionOne, ClientId("some-client-id"), requestMock)
+  private val validatedHeadersRequest = ValidatedHeadersRequest(conversationId, None, VersionOne, ClientId("some-client-id"), requestMock)
 
   "LoggingHelper" should {
 
@@ -65,7 +66,7 @@ class ExportsLoggingHelperSpec extends UnitSpec with MockitoSugar {
     }
 
     "testFormatDebugFull" in {
-      LoggingHelper.formatDebugFull("Debug message.", conversationIdRequest) shouldBe s"[conversationId=conversation-id] Debug message. headers=Map(Accept -> B, X-Client-ID -> D, Content-Type -> A, X-Conversation-ID -> C)"
+      LoggingHelper.formatDebugFull("Debug message.", conversationIdRequest) shouldBe s"[conversationId=$conversationIdValue] Debug message. headers=Map(Accept -> B, X-Client-ID -> D, Content-Type -> A, X-Conversation-ID -> C)"
     }
   }
 }

@@ -23,20 +23,23 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames._
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.inject.guice.GuiceableModule
+import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeadersImpl}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeadersImpl, ValidatedHeadersRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
+
+import scala.xml.Elem
 
 object TestData {
   val conversationIdValue = "38400000-8cf0-11bd-b23e-10b96e4ef00d"
   val conversationIdUuid: UUID = UUID.fromString(conversationIdValue)
-  val conversationId: ConversationId = ConversationId(conversationIdValue)
+  val conversationId: ConversationId = ConversationId(conversationIdUuid)
 
   val correlationIdValue = "e61f8eee-812c-4b8f-b193-06aedc60dca2"
   val correlationIdUuid: UUID = UUID.fromString(correlationIdValue)
-  val correlationId = CorrelationId(correlationIdValue)
+  val correlationId = CorrelationId(correlationIdUuid)
 
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
@@ -63,26 +66,26 @@ object TestData {
   }
 
   // note we can not mock service methods that return value classes - however using a simple stub IMHO it results in cleaner code (less mocking noise)
-  val stubUniqueIdsService = new UniqueIdsService() {
+  val stubUniqueIdsService = new UniqueIdsService(mockUuidService) {
     override def conversation: ConversationId = conversationId
     override def correlation: CorrelationId = correlationId
   }
 
-  val TestXmlPayload = <foo>bar</foo>
-  val TestFakeRequest = FakeRequest().withXmlBody(TestXmlPayload)
+  val TestXmlPayload: Elem = <foo>bar</foo>
+  val TestFakeRequest: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload)
   val TestConversationIdRequest = ConversationIdRequest(conversationId, TestFakeRequest)
   val TestExtractedHeaders = ExtractedHeadersImpl(Some(badgeIdentifier), VersionOne, ApiSubscriptionFieldsTestData.clientId)
-  val TestExtractedHeadersNoBadge = TestExtractedHeaders.copy(maybeBadgeIdentifier = None)
-  val TestValidatedHeadersRequest = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestValidatedHeadersRequestNoBadge = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeadersNoBadge)
-  val TestCspValidatedPayloadRequest = TestValidatedHeadersRequest.toCspAuthorisedRequest.toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestExtractedHeadersNoBadge: ExtractedHeadersImpl = TestExtractedHeaders.copy(maybeBadgeIdentifier = None)
+  val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
+  val TestValidatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeadersNoBadge)
+  val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest.toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 
 }
 
 object RequestHeaders {
 
   val X_CONVERSATION_ID_NAME = "X-Conversation-ID"
-  val X_CONVERSATION_ID_HEADER: (String, String) = X_CONVERSATION_ID_NAME -> TestData.conversationId.value
+  val X_CONVERSATION_ID_HEADER: (String, String) = X_CONVERSATION_ID_NAME -> TestData.conversationId.toString
 
   val X_BADGE_IDENTIFIER_NAME = "X-Badge-Identifier"
   val X_BADGE_IDENTIFIER_HEADER: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.badgeIdentifier.value

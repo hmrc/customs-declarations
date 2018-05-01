@@ -19,7 +19,7 @@ package acceptance
 import org.scalatest.{Matchers, OptionValues}
 import play.api.mvc._
 import play.api.test.Helpers._
-import uk.gov.hmrc.customs.declaration.model.ApiSubscriptionKey
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.AuditService
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
@@ -47,8 +47,8 @@ class DeclarationSchemaSpec extends AcceptanceTestSpec
     """.stripMargin
 
   private val apiSubscriptionKeyForXClientIdV1 =
-    ApiSubscriptionKey(clientId = xClientId, context = "customs%2Fdeclarations", version = "1.0")
-  private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = "2.0")
+    ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
+  private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
 
   override protected def beforeAll() {

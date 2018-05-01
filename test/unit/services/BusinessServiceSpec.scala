@@ -42,7 +42,7 @@ import scala.xml.NodeSeq
 class BusinessServiceSpec extends UnitSpec with MockitoSugar {
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
-  private val expectedApiSubscriptionKey = ApiSubscriptionKey(xClientId, "customs%2Fdeclarations", "1.0")
+  private val expectedApiSubscriptionKey = ApiSubscriptionKey(clientId, "customs%2Fdeclarations", VersionOne)
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
   private val wrappedValidXML = <wrapped></wrapped>
 

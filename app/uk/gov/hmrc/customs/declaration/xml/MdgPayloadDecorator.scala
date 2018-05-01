@@ -35,7 +35,7 @@ class MdgPayloadDecorator() {
         <v1:regime>CDS</v1:regime>
         <v1:receiptDate>{ dateTime.toString(ISODateTimeFormat.dateTimeNoMillis) }</v1:receiptDate>
         <v1:clientID>{clientId}</v1:clientID>
-        <v1:conversationID>{vpr.conversationId.value}</v1:conversationID>
+        <v1:conversationID>{vpr.conversationId.uuid}</v1:conversationID>
         { if(vpr.maybeBadgeIdentifier.isDefined) <v1:badgeIdentifier>{vpr.maybeBadgeIdentifier.get.value}</v1:badgeIdentifier> }
       </v1:requestCommon>
       <v1:requestDetail>

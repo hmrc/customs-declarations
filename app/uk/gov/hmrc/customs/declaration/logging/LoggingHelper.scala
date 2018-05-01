@@ -48,14 +48,14 @@ object LoggingHelper {
   }
 
   private def format(r: HasConversationId with ExtractedHeaders): String = {
-    s"[conversationId=${r.conversationId.value}][clientId=${r.clientId.value}][requestedApiVersion=${r.requestedApiVersion.value}]"
+    s"[conversationId=${r.conversationId.uuid}][clientId=${r.clientId.value}][requestedApiVersion=${r.requestedApiVersion.value}]"
   }
 
   def formatMessageFull(msg: String, r: ConversationIdRequest[_]): String = {
 
     val filteredHeaders = r.request.headers.toSimpleMap.filter(keyValTuple => headerSet.contains(keyValTuple._1))
 
-    s"[conversationId=${r.conversationId.value}] $msg headers=$filteredHeaders"
+    s"[conversationId=${r.conversationId.uuid}] $msg headers=$filteredHeaders"
   }
 
 

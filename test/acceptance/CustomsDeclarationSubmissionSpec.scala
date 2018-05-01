@@ -21,7 +21,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionVal
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.customs.declaration.model.ApiSubscriptionKey
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.FakeRequests._
 import util.TestData._
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoDecService}
@@ -41,9 +41,9 @@ class CustomsDeclarationSubmissionSpec extends AcceptanceTestSpec
   private val endpoint = "/"
 
   private val apiSubscriptionKeyForXClientIdV1 =
-    ApiSubscriptionKey(clientId = xClientId, context = "customs%2Fdeclarations", version = "1.0")
+    ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
 
-  private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = "2.0")
+  private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
   private val UnauthorisedError =
     """<?xml version="1.0" encoding="UTF-8"?>

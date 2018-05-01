@@ -27,7 +27,7 @@ object ActionBuilderModelHelper {
 
   implicit class AddConversationId(result: Result) {
     def withConversationId(implicit c: HasConversationId): Result = {
-      result.withHeaders(XConversationIdHeaderName -> c.conversationId.value)
+      result.withHeaders(XConversationIdHeaderName -> c.conversationId.toString)
     }
   }
 

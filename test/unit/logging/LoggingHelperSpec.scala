@@ -56,7 +56,6 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
     }
 
     "testFormatInfo with authorisation" in {
-      val x = LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest)
       LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest) shouldBe expectedMessage("Info message", Some(AuthorisedAs.Csp))
     }
 

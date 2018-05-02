@@ -1,5 +1,5 @@
 @import play.api.libs.json.Json
-@(apiScopeKey: String, whitelistedApplicationIds: Seq[String], isVersion2Enabled: Boolean)
+@(apiScopeKey: String, whitelistedApplicationIds: Seq[String], version2EndpointsEnabled: Boolean)
 {
   "scopes": [
     {
@@ -34,14 +34,11 @@
             "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
           }
         ]
-      }
-
-      @if(isVersion2Enabled) {
-      ,
+      },
       {
         "version": "2.0",
         "status": "BETA",
-        "endpointsEnabled": true,
+        "endpointsEnabled": @version2EndpointsEnabled,
         "access": {
           "type": "PRIVATE",
           "whitelistedApplicationIds": @Json.toJson(whitelistedApplicationIds)
@@ -61,7 +58,6 @@
           }
         ]
       }
-      } @****** end if(isVersion2Enabled)  ***************@
     ]
   }
 }

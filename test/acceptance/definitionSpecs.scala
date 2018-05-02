@@ -122,6 +122,8 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends AcceptanceTestSpec w
 class DefinitionSpecWithVersion2Disabled extends AcceptanceTestSpec with Matchers {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
+    "api.access.version-2.0.whitelistedApplicationIds.0" -> "someId-1",
+    "api.access.version-2.0.whitelistedApplicationIds.1" -> "someId-2",
     "api.access.version-2.0.enabled" -> false
   )).build()
 
@@ -161,6 +163,32 @@ class DefinitionSpecWithVersion2Disabled extends AcceptanceTestSpec with Matcher
           |        "endpointsEnabled": true,
           |        "access": {
           |          "type": "PUBLIC"
+          |        },
+          |        "fieldDefinitions": [
+          |          {
+          |            "name": "callbackUrl",
+          |            "description": "What's your callback URL for declaration submissions?",
+          |            "type": "URL",
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          |          },
+          |          {
+          |            "name": "securityToken",
+          |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
+          |            "type": "SecureToken",
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |          }
+          |        ]
+          |      },
+          |      {
+          |        "version": "2.0",
+          |        "status": "BETA",
+          |        "endpointsEnabled": false,
+          |        "access": {
+          |          "type": "PRIVATE",
+          |          "whitelistedApplicationIds": [
+          |            "someId-1",
+          |            "someId-2"
+          |          ]
           |        },
           |        "fieldDefinitions": [
           |          {

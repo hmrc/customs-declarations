@@ -40,7 +40,7 @@ class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator, logg
       case Left(result) =>
         Left(result.XmlResult.withConversationId)
       case Right(extracted) =>
-        val vhr = ValidatedHeadersRequest(cr.conversationId, extracted.maybeBadgeIdentifier, extracted.requestedApiVersion, extracted.clientId, cr.request)
+        val vhr = ValidatedHeadersRequest(cr.conversationId, extracted.requestedApiVersion, extracted.clientId, cr.request)
         Right(vhr)
     }
   }

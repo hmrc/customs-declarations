@@ -18,6 +18,7 @@ package uk.gov.hmrc.customs.declaration.xml
 
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
+import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 
 import scala.xml.NodeSeq
@@ -36,7 +37,7 @@ class MdgPayloadDecorator() {
         <v1:receiptDate>{ dateTime.toString(ISODateTimeFormat.dateTimeNoMillis) }</v1:receiptDate>
         <v1:clientID>{clientId}</v1:clientID>
         <v1:conversationID>{vpr.conversationId.uuid}</v1:conversationID>
-        { if(vpr.maybeBadgeIdentifier.isDefined) <v1:badgeIdentifier>{vpr.maybeBadgeIdentifier.get.value}</v1:badgeIdentifier> }
+        { vpr.authorisedAs match { case Csp(badgeId) => <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>; case _ => NodeSeq.Empty } }
       </v1:requestCommon>
       <v1:requestDetail>
         { xml }

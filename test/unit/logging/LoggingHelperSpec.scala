@@ -22,18 +22,17 @@ import play.api.mvc.Request
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.logging.LoggingHelper
-import uk.gov.hmrc.customs.declaration.model.AuthorisedAs.AuthorisedAs
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
-import uk.gov.hmrc.customs.declaration.model.{AuthorisedAs, ClientId, VersionOne}
+import uk.gov.hmrc.customs.declaration.model.{ClientId, VersionOne}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 
 class LoggingHelperSpec extends UnitSpec with MockitoSugar {
 
-  private def expectedMessage(message: String, maybeAuthorised: Option[AuthorisedAs] = None) = s"[conversationId=${conversationId.toString}]" +
+  private def expectedMessage(message: String, maybeAuthorised: String = "") = s"[conversationId=${conversationId.toString}]" +
     "[clientId=some-client-id]" +
-    s"[requestedApiVersion=1.0]${maybeAuthorised.fold("")(authAs => s"[authorisedAs=$authAs]")} $message"
+    s"[requestedApiVersion=1.0]$maybeAuthorised $message"
   private val requestMock = mock[Request[_]]
   private val conversationIdRequest =
     ConversationIdRequest(
@@ -46,7 +45,7 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
         "IGNORE" -> "IGNORE"
       )
     )
-  private val validatedHeadersRequest = ValidatedHeadersRequest(conversationId, None, VersionOne, ClientId("some-client-id"), requestMock)
+  private val validatedHeadersRequest = ValidatedHeadersRequest(conversationId, VersionOne, ClientId("some-client-id"), requestMock)
 
   "LoggingHelper" should {
 
@@ -56,7 +55,7 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
     }
 
     "testFormatInfo with authorisation" in {
-      LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest) shouldBe expectedMessage("Info message", Some(AuthorisedAs.Csp))
+      LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier)) shouldBe expectedMessage("Info message", "[authorisedAs=Csp(BadgeIdentifier(BADGEID123))]")
     }
 
     "testFormatError" in {
@@ -75,4 +74,5 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
       LoggingHelper.formatDebugFull("Debug message.", conversationIdRequest) shouldBe s"[conversationId=$conversationIdValue] Debug message. headers=Map(Accept -> B, X-Client-ID -> D, Content-Type -> A, X-Conversation-ID -> C)"
     }
   }
+
 }

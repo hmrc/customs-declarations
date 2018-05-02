@@ -25,6 +25,7 @@ import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 import util.{AuthConnectorStubbing, RequestHeaders}
@@ -38,6 +39,18 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
   private lazy val errorResponseEoriNotFoundInCustomsEnrolment =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
 
+  private lazy val validatedHeadersRequestWithValidBadgeId =
+    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId()).toValidatedHeadersRequest(TestExtractedHeaders)
+  private lazy val validatedHeadersRequestWithInValidBadgeIdTooLong =
+    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId(badgeIdString = "INVALID_BADGE_IDENTIFIER_TO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
+  private lazy val validatedHeadersRequestWithInValidBadgeIdLowerCase =
+    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
+  private lazy val validatedHeadersRequestWithInValidBadgeIdTooShort =
+    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
+  private lazy val validatedHeadersRequestWithInValidBadgeIdInvalidChars =
+    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
+
+
   trait SetUp extends AuthConnectorStubbing {
     val mockExportsLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val authAction: AuthAction = new AuthAction(mockAuthConnector, mockExportsLogger)
@@ -47,9 +60,8 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
     "Return Right of AuthorisedRequest with authorisedAs CSP when authorised by auth API and badge identifier exists" in new SetUp {
       authoriseCsp()
 
-      private val actual = await(authAction.refine(TestValidatedHeadersRequest))
-
-      actual shouldBe Right(TestValidatedHeadersRequest.toCspAuthorisedRequest)
+      private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
+      actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(badgeIdentifier))
       verifyNonCspAuthorisationNotCalled
     }
 
@@ -57,6 +69,43 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       authoriseCsp()
 
       private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
+
+      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+      verifyNonCspAuthorisationNotCalled
+    }
+
+
+    "Return Left of 401 Result when authorised by auth API but badge identifier exists but is too long" in new SetUp {
+      authoriseCsp()
+
+      private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdTooLong))
+
+      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+      verifyNonCspAuthorisationNotCalled
+    }
+
+    "Return Left of 401 Result when authorised by auth API but badge identifier exists but is too short" in new SetUp {
+      authoriseCsp()
+
+      private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdTooShort))
+
+      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+      verifyNonCspAuthorisationNotCalled
+    }
+
+    "Return Left of 401 Result when authorised by auth API but badge identifier exists but contains invalid chars" in new SetUp {
+      authoriseCsp()
+
+      private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdInvalidChars))
+
+      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+      verifyNonCspAuthorisationNotCalled
+    }
+
+    "Return Left of 401 Result when authorised by auth API but badge identifier exists but contains all lowercase chars" in new SetUp {
+      authoriseCsp()
+
+      private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdLowerCase))
 
       actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
       verifyNonCspAuthorisationNotCalled
@@ -79,7 +128,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
       private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      actual shouldBe Right(TestValidatedHeadersRequestNoBadge.toNonCspAuthorisedRequest)
+      actual shouldBe Right(TestValidatedHeadersRequestNoBadge.toNonCspAuthorisedRequest(declarantEori))
       verifyCspAuthorisationCalled(1)
     }
 

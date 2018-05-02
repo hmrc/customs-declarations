@@ -19,28 +19,37 @@ package uk.gov.hmrc.customs.declaration.logging
 import javax.inject.Singleton
 
 import com.google.inject.Inject
+import play.api.mvc.Request
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.logging.LoggingHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeaders, HasConversationId}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 
 @Singleton
 class DeclarationsLogger @Inject()(logger: CdsLogger) {
 
-  def debug(s: => String)(implicit r: HasConversationId with ExtractedHeaders): Unit = logger.debug(formatDebug(s, r))
+  def debug(s: => String)(implicit r: HasConversationId): Unit =
+    logger.debug(formatDebug(s, r))
 
-  def debug(s: => String, e: => Throwable)(implicit r: HasConversationId with ExtractedHeaders): Unit = logger.debug(formatDebug(s, r), e)
+  def debug(s: => String, e: => Throwable)(implicit r: HasConversationId): Unit =
+    logger.debug(formatDebug(s, r), e)
 
   //called once at the start of the request processing pipeline
-  def debugFull(s: => String)(implicit r: ConversationIdRequest[_]): Unit = logger.debug(formatDebugFull(s, r))
+  def debugFull(s: => String)(implicit r: HasConversationId with Request[_]): Unit =
+    logger.debug(formatDebugFull(s, r))
 
-  def info(s: => String)(implicit r: HasConversationId with ExtractedHeaders): Unit = logger.info(formatInfo(s, r))
+  def info(s: => String)(implicit r: HasConversationId): Unit =
+    logger.info(formatInfo(s, r))
 
-  def warn(s: => String)(implicit r: HasConversationId with ExtractedHeaders): Unit = logger.warn(formatWarn(s, r))
+  def warn(s: => String)(implicit r: HasConversationId): Unit =
+    logger.warn(formatWarn(s, r))
 
-  def error(s: => String, e: => Throwable)(implicit r: HasConversationId with ExtractedHeaders): Unit = logger.error(formatError(s, r), e)
+  def error(s: => String, e: => Throwable)(implicit r: HasConversationId): Unit =
+    logger.error(formatError(s, r), e)
 
-  def error(s: => String)(implicit r: HasConversationId with ExtractedHeaders): Unit = logger.error(formatError(s, r))
+  def error(s: => String)(implicit r: HasConversationId): Unit =
+    logger.error(formatError(s, r))
 
-  def errorWithoutRequestContext(s: => String): Unit = logger.error(s)
+  def errorWithoutRequestContext(s: => String): Unit =
+    logger.error(s)
 
 }

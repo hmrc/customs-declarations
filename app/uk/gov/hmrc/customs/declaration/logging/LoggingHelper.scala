@@ -17,43 +17,61 @@
 package uk.gov.hmrc.customs.declaration.logging
 
 import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE}
+import play.api.mvc.Request
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeaders, HasConversationId}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeaders, HasAuthorisedAs, HasConversationId}
 
 object LoggingHelper {
-  private val headerSet = Set(CONTENT_TYPE, ACCEPT, XConversationIdHeaderName, XClientIdHeaderName)
+  private val headerSet = Set(CONTENT_TYPE.toLowerCase, ACCEPT.toLowerCase, XConversationIdHeaderName.toLowerCase, XClientIdHeaderName.toLowerCase)
 
-  def formatError(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+  def formatError(msg: String, r: HasConversationId): String = {
     formatMessage(msg, r)
   }
 
-  def formatWarn(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+  def formatWarn(msg: String, r: HasConversationId): String = {
     formatMessage(msg, r)
   }
 
-  def formatInfo(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+  def formatInfo(msg: String, r: HasConversationId): String = {
     formatMessage(msg, r)
   }
 
-  def formatDebug(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+  def formatDebug(msg: String, r: HasConversationId): String = {
     formatMessage(msg, r)
   }
 
-  def formatDebugFull(msg: String, r: ConversationIdRequest[_]): String = {
+  def formatDebugFull(msg: String, r: HasConversationId with Request[_]): String = {
     formatMessageFull(msg, r)
   }
 
-  private def formatMessage(msg: String, r: HasConversationId with ExtractedHeaders): String = {
+  private def formatMessage(msg: String, r: HasConversationId): String = {
     s"${format(r)} $msg".trim
   }
 
-  private def format(r: HasConversationId with ExtractedHeaders): String = {
-    s"[conversationId=${r.conversationId.uuid}][clientId=${r.clientId.value}][requestedApiVersion=${r.requestedApiVersion.value}]"
+  private def format(r: HasConversationId): String = {
+    def conversationId = r match {
+      case c: HasConversationId => s"[conversationId=${c.conversationId}]"
+      case _ => ""
+    }
+    def extractedHeaders = r match {
+      case h: ExtractedHeaders => s"[clientId=${h.clientId}][requestedApiVersion=${h.requestedApiVersion}]"
+      case _ => ""
+    }
+    def authorised = r match {
+      case a: HasAuthorisedAs => s"[authorisedAs=${a.authorisedAs}]"
+      case _ => ""
+    }
+    s"$conversationId$extractedHeaders$authorised"
   }
 
-  def formatMessageFull(msg: String, r: ConversationIdRequest[_]): String = {
-
-    val filteredHeaders = r.request.headers.toSimpleMap.filter(keyValTuple => headerSet.contains(keyValTuple._1))
+  def formatMessageFull(msg: String, r: HasConversationId with Request[_]): String = {
+    def filteredHeaders = r match {
+      case request: Request[_] =>
+        request.headers.toSimpleMap.filter(keyValTuple =>
+          headerSet.contains(keyValTuple._1.toLowerCase)
+        )
+      case _ => ""
+    }
 
     s"[conversationId=${r.conversationId.uuid}] $msg headers=$filteredHeaders"
   }

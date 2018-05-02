@@ -23,13 +23,13 @@ import play.api.http.MimeTypes
 import play.api.mvc.Headers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeadersImpl}
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeadersImpl}
 
 @Singleton
-class HeaderValidator @Inject()(logger: CdsLogger) {
+class HeaderValidator @Inject()(logger: DeclarationsLogger) {
 
   private val versionsByAcceptHeader: Map[String, ApiVersion] = Map(
     "application/vnd.hmrc.1.0+xml" -> VersionOne,
@@ -68,7 +68,8 @@ class HeaderValidator @Inject()(logger: CdsLogger) {
     theResult
   }
 
-  private def validateHeader(headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)(implicit h: Headers): Either[ErrorResponse, String] = {
+  private def validateHeader[A](headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)
+                               (implicit conversationIdRequest: ConversationIdRequest[A], h: Headers): Either[ErrorResponse, String] = {
     val left = Left(errorResponse)
     def leftWithLog(headerName: String) = {
       logger.error(s"Error - header '$headerName' not present")
@@ -87,7 +88,8 @@ class HeaderValidator @Inject()(logger: CdsLogger) {
     }
   }
 
-  private def validateOptionalHeader(headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)(implicit h: Headers): Either[ErrorResponse, Option[String]] = {
+  private def validateOptionalHeader[A](headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)
+                                       (implicit conversationIdRequest: ConversationIdRequest[A], h: Headers): Either[ErrorResponse, Option[String]] = {
     val left = Left(errorResponse)
     def leftForInvalidHeaderValue(headerName: String, value: String) = {
       logger.error(s"Error - header '$headerName' value '$value' is not valid")

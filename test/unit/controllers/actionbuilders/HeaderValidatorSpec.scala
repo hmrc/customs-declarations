@@ -21,11 +21,11 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.http.HeaderNames._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderValidator
-import uk.gov.hmrc.customs.declaration.model.{VersionOne, VersionTwo}
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeadersImpl}
+import uk.gov.hmrc.customs.declaration.model.{VersionOne, VersionTwo}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.RequestHeaders._
 import util.TestData.badgeIdentifier
@@ -39,7 +39,7 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
   private val errorResponseBadgeIdentifierHeader = errorBadRequest(s"${RequestHeaders.X_BADGE_IDENTIFIER_NAME} header is missing or invalid")
 
   trait SetUp {
-    val loggerMock: CdsLogger = mock[CdsLogger]
+    val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
     val validator = new HeaderValidator(loggerMock)
   }
 

@@ -22,16 +22,18 @@ import play.api.mvc.Request
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.logging.LoggingHelper
+import uk.gov.hmrc.customs.declaration.model.AuthorisedAs.AuthorisedAs
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
-import uk.gov.hmrc.customs.declaration.model.{ClientId, VersionOne}
+import uk.gov.hmrc.customs.declaration.model.{AuthorisedAs, ClientId, VersionOne}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 
-class ExportsLoggingHelperSpec extends UnitSpec with MockitoSugar {
+class LoggingHelperSpec extends UnitSpec with MockitoSugar {
 
-  private def expectedMessage(message: String) = s"[conversationId=${conversationId.toString}]" +
+  private def expectedMessage(message: String, maybeAuthorised: Option[AuthorisedAs] = None) = s"[conversationId=${conversationId.toString}]" +
     "[clientId=some-client-id]" +
-    s"[requestedApiVersion=1.0] $message"
+    s"[requestedApiVersion=1.0]${maybeAuthorised.fold("")(authAs => s"[authorisedAs=$authAs]")} $message"
   private val requestMock = mock[Request[_]]
   private val conversationIdRequest =
     ConversationIdRequest(
@@ -51,6 +53,11 @@ class ExportsLoggingHelperSpec extends UnitSpec with MockitoSugar {
 
     "testFormatInfo" in {
       LoggingHelper.formatInfo("Info message", validatedHeadersRequest) shouldBe expectedMessage("Info message")
+    }
+
+    "testFormatInfo with authorisation" in {
+      val x = LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest)
+      LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest) shouldBe expectedMessage("Info message", Some(AuthorisedAs.Csp))
     }
 
     "testFormatError" in {

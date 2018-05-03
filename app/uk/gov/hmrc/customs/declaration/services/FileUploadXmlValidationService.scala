@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package util
+package uk.gov.hmrc.customs.declaration.services
 
-object CustomsDeclarationsExternalServicesConfig {
-  val MdgWcoDecV1ServiceContext = "/mdgWcoDecServiceV1/submitdeclaration"
-  val MdgWcoDecV2ServiceContext = "/mdgWcoDecServiceV2/submitdeclaration"
-  val ApiSubscriptionFieldsContext = "/api-subscription-fields/field"
-  val UpscanInitiateContext = "/upscan/initiate"
-  val CustomsNotificationAuthHeaderValue = "some-basic-auth"
+import javax.inject.{Inject, Singleton}
+import play.api.Configuration
+
+@Singleton
+class FileUploadXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
+  override protected val schemaPropertyName: String = "xsd.locations.fileupload"
 }

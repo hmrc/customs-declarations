@@ -114,6 +114,24 @@ object FakeRequests {
 
   lazy val InvalidCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.withXmlBody(InvalidCancellationXML)
 
+  lazy val ValidFileUploadRequest = FakeRequest()
+    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withXmlBody(ValidFileUploadXml)
+
+
+  lazy val InvalidFileUploadRequest = FakeRequest()
+    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withXmlBody(InvalidFileUploadXml)
+
+  lazy val NoAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
+    .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(ACCEPT))
+
+  lazy val InvalidAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
+    .withHeaders(RequestHeaders.ACCEPT_HEADER_INVALID)
+
+  lazy val InvalidContentTypeHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
+    .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
+
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")
 

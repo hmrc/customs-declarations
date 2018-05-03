@@ -570,5 +570,13 @@ object TestXMLData {
       </v1:requestDetail>
     </v1:submitDeclarationRequest>
 
+  val ValidFileUploadXml = <upscanInitiate xmlns="hmrc:fileupload">
+    <declarationID>dec123</declarationID>
+    <documentationType>docType123</documentationType>
+  </upscanInitiate>
 
+  val InvalidFileUploadXml = <upscanInitiate xmlns="hmrc:fileupload">
+    <declarationID foo="bar">dec123</declarationID>
+    <documentationType>docType123</documentationType>
+  </upscanInitiate>
 }

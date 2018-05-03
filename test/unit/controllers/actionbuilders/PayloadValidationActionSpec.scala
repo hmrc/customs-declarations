@@ -67,7 +67,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
     "return Right of ValidatedPayloadRequest when XML validation is OK" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.successful(()))
 
-      private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestValidatedHeadersRequest.toCspAuthorisedRequest))
+      private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))
 
       actual shouldBe Right(TestCspValidatedPayloadRequest)
     }
@@ -75,7 +75,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
     "return Left of error Result when XML is not well formed" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.failed(saxException))
 
-      private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestValidatedHeadersRequest.toCspAuthorisedRequest))
+      private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))
 
       actual shouldBe Left(expectedXmlSchemaErrorResult)
     }
@@ -84,7 +84,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       private val errorMessage = "Request body does not contain a well-formed XML document."
       private val errorNotWellFormed = ErrorResponse.errorBadRequest(errorMessage).XmlResult.withConversationId
       private val authorisedRequestWithNonWellFormedXml = ConversationIdRequest(conversationId, FakeRequest().withTextBody("<foo><foo>"))
-        .toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest
+        .toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest(badgeIdentifier)
 
       private val actual = await(payloadValidationAction.refine(authorisedRequestWithNonWellFormedXml))
 
@@ -94,7 +94,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
     "propagates downstream errors by returning Left of error Result" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.failed(emulatedServiceFailure))
 
-      private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestValidatedHeadersRequest.toCspAuthorisedRequest))
+      private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))
 
       actual shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
     }

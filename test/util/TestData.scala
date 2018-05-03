@@ -27,7 +27,7 @@ import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeadersImpl, ValidatedHeadersRequest, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 
 import scala.xml.Elem
@@ -73,12 +73,17 @@ object TestData {
 
   val TestXmlPayload: Elem = <foo>bar</foo>
   val TestFakeRequest: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload)
+
+  def testFakeRequestWithBadgeId(badgeIdString: String = badgeIdentifier.value): FakeRequest[AnyContentAsXml] =
+    FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString)
+
   val TestConversationIdRequest = ConversationIdRequest(conversationId, TestFakeRequest)
-  val TestExtractedHeaders = ExtractedHeadersImpl(Some(badgeIdentifier), VersionOne, ApiSubscriptionFieldsTestData.clientId)
-  val TestExtractedHeadersNoBadge: ExtractedHeadersImpl = TestExtractedHeaders.copy(maybeBadgeIdentifier = None)
+  val TestExtractedHeaders = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
+
   val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestValidatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeadersNoBadge)
-  val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest.toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestCspAuthorisedRequest = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier)
+  val TestValidatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
+  val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 
 }
 

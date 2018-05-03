@@ -18,7 +18,7 @@ package uk.gov.hmrc.customs.declaration.model.actionbuilders
 
 import play.api.mvc.{Request, Result, WrappedRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
-import uk.gov.hmrc.customs.declaration.model.AuthorisedAs.AuthorisedAs
+import uk.gov.hmrc.customs.declaration.model.AuthorisedAs
 import uk.gov.hmrc.customs.declaration.model._
 
 import scala.xml.NodeSeq
@@ -34,7 +34,6 @@ object ActionBuilderModelHelper {
   implicit class CorrelationIdsRequestOps[A](cir: ConversationIdRequest[A]) {
     def toValidatedHeadersRequest(eh: ExtractedHeaders): ValidatedHeadersRequest[A] = ValidatedHeadersRequest(
       cir.conversationId,
-      eh.maybeBadgeIdentifier,
       eh.requestedApiVersion,
       eh.clientId,
       cir.request
@@ -43,13 +42,12 @@ object ActionBuilderModelHelper {
 
   implicit class ValidatedHeadersRequestOps[A](vhr: ValidatedHeadersRequest[A]) {
 
-    def toCspAuthorisedRequest: AuthorisedRequest[A] = toAuthorisedRequest(AuthorisedAs.Csp)
+    def toCspAuthorisedRequest(badgeId: BadgeIdentifier): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId))
 
-    def toNonCspAuthorisedRequest: AuthorisedRequest[A] = toAuthorisedRequest(AuthorisedAs.NonCsp)
+    def toNonCspAuthorisedRequest(eori: Eori): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori))
 
     def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
       vhr.conversationId,
-      vhr.maybeBadgeIdentifier,
       vhr.requestedApiVersion,
       vhr.clientId,
       authorisedAs,
@@ -60,7 +58,6 @@ object ActionBuilderModelHelper {
   implicit class AuthorisedRequestOps[A](ar: AuthorisedRequest[A]) {
     def toValidatedPayloadRequest(xmlBody: NodeSeq): ValidatedPayloadRequest[A] = ValidatedPayloadRequest(
       ar.conversationId,
-      ar.maybeBadgeIdentifier,
       ar.requestedApiVersion,
       ar.clientId,
       ar.authorisedAs,
@@ -76,7 +73,6 @@ trait HasConversationId {
 }
 
 trait ExtractedHeaders {
-  val maybeBadgeIdentifier: Option[BadgeIdentifier]
   val requestedApiVersion: ApiVersion
   val clientId: ClientId
 }
@@ -90,7 +86,6 @@ trait HasXmlBody {
 }
 
 case class ExtractedHeadersImpl(
-  maybeBadgeIdentifier: Option[BadgeIdentifier],
   requestedApiVersion: ApiVersion,
   clientId: ClientId
 ) extends ExtractedHeaders
@@ -112,7 +107,6 @@ case class ConversationIdRequest[A](
 // Available after ValidatedHeadersAction builder
 case class ValidatedHeadersRequest[A](
   conversationId: ConversationId,
-  maybeBadgeIdentifier: Option[BadgeIdentifier],
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   request: Request[A]
@@ -121,7 +115,6 @@ case class ValidatedHeadersRequest[A](
 // Available after Authorise action builder
 case class AuthorisedRequest[A](
   conversationId: ConversationId,
-  maybeBadgeIdentifier: Option[BadgeIdentifier],
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
@@ -131,7 +124,6 @@ case class AuthorisedRequest[A](
 // Available after ValidatedPayloadAction builder
 case class ValidatedPayloadRequest[A](
   conversationId: ConversationId,
-  maybeBadgeIdentifier: Option[BadgeIdentifier],
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,

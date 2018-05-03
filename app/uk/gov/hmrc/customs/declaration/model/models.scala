@@ -52,7 +52,6 @@ object VersionTwo extends ApiVersion{
   override val configPrefix: String = "v2."
 }
 
-object AuthorisedAs extends Enumeration {
-  type AuthorisedAs = Value
-  val Csp, NonCsp = Value
-}
+sealed trait AuthorisedAs
+case class Csp(badgeIdentifier: BadgeIdentifier) extends AuthorisedAs
+case class NonCsp(eori: Eori) extends AuthorisedAs

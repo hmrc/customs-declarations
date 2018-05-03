@@ -37,8 +37,6 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   )
   private lazy val validContentTypeHeaders = Seq(MimeTypes.XML, MimeTypes.XML + ";charset=utf-8", MimeTypes.XML + "; charset=utf-8")
   private lazy val xClientIdRegex = "^\\S+$".r
-  private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
-  private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"$XBadgeIdentifierHeaderName header is missing or invalid")
 
 
   def validateHeaders[A](implicit conversationIdRequest: ConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeadersImpl] = {
@@ -50,20 +48,16 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
 
     def hasXClientId = validateHeader(XClientIdHeaderName, xClientIdRegex.findFirstIn(_).nonEmpty, ErrorInternalServerError)
 
-    def maybeHasXBadgeIdentifier = validateOptionalHeader(XBadgeIdentifierHeaderName, xBadgeIdentifierRegex.findFirstIn(_).nonEmpty, errorResponseBadgeIdentifierHeaderMissing)
-
     val theResult: Either[ErrorResponse, ExtractedHeadersImpl] = for {
       acceptValue <- hasAccept.right
       contentTypeValue <- hasContentType.right
       xClientIdValue <- hasXClientId.right
-      maybeXBadgeIdentifierValue <- maybeHasXBadgeIdentifier.right
     } yield {
       logger.debug(
         s"\n$ACCEPT header passed validation: $acceptValue"
       + s"\n$CONTENT_TYPE header passed validation: $contentTypeValue"
-      + s"\n$XClientIdHeaderName header passed validation: $xClientIdValue"
-      + s"\n$XBadgeIdentifierHeaderName header passed validation: $maybeXBadgeIdentifierValue")
-      ExtractedHeadersImpl(maybeXBadgeIdentifierValue.map(s => BadgeIdentifier(s)), versionsByAcceptHeader(acceptValue), ClientId(xClientIdValue))
+      + s"\n$XClientIdHeaderName header passed validation: $xClientIdValue")
+      ExtractedHeadersImpl(versionsByAcceptHeader(acceptValue), ClientId(xClientIdValue))
     }
     theResult
   }
@@ -88,20 +82,5 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 
-  private def validateOptionalHeader[A](headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)
-                                       (implicit conversationIdRequest: ConversationIdRequest[A], h: Headers): Either[ErrorResponse, Option[String]] = {
-    val left = Left(errorResponse)
-    def leftForInvalidHeaderValue(headerName: String, value: String) = {
-      logger.error(s"Error - header '$headerName' value '$value' is not valid")
-      left
-    }
-
-    h.get(headerName).fold[Either[ErrorResponse, Option[String]]]{
-      Right(None)
-    }{
-      v =>
-        if (rule(v)) Right(Some(v)) else leftForInvalidHeaderValue(headerName, v)
-    }
-  }
 }
 

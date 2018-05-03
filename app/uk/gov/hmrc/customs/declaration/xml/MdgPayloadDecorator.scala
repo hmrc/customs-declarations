@@ -37,7 +37,11 @@ class MdgPayloadDecorator() {
         <v1:receiptDate>{ dateTime.toString(ISODateTimeFormat.dateTimeNoMillis) }</v1:receiptDate>
         <v1:clientID>{clientId}</v1:clientID>
         <v1:conversationID>{vpr.conversationId.uuid}</v1:conversationID>
-        { vpr.authorisedAs match { case Csp(badgeId) => <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>; case _ => NodeSeq.Empty } }
+        { vpr.authorisedAs match {
+            case Csp(badgeId) => <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>
+            case _ => NodeSeq.Empty
+          }
+        }
       </v1:requestCommon>
       <v1:requestDetail>
         { xml }

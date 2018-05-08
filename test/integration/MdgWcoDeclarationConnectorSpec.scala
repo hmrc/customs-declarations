@@ -26,6 +26,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
+import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -36,6 +37,8 @@ import util.TestData._
 import util.TestXMLData.ValidSubmissionXML
 import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
+
+import scala.util.{Failure, Success, Try}
 
 class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with MdgWcoDecService {
@@ -78,10 +81,42 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
 
   "MdgWcoDeclarationConnector" should {
 
-    "make a correct request" in {
+    "make sure CB is working" in {
       setupMdgWcoDecServiceToReturn(ACCEPTED)
       await(sendValidXml())
       verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+
+
+      resetMockServer()
+      stopMockServer()
+
+
+      //numberOfCallsToTriggerStateChange is currently configured as 5, so circuit breaker will be tripped after 5 failed attempts
+      for(a <- 1 to 5){
+        val k = intercept[RuntimeException](await(sendValidXml()))
+        k.getCause shouldBe (an[BadGatewayException])
+      }
+
+      // now we should get circuit breaker exception.
+      for(a <- 1 to 3){
+        val k = intercept[UnhealthyServiceException](await(sendValidXml()))
+        k.getMessage shouldBe "MDG-WCO-DEC"
+      }
+
+      startMockServer()
+      setupMdgWcoDecServiceToReturn(ACCEPTED)
+
+      //wait until 'unavailablePeriodDuration' is over which is configured as 1000
+      Thread.sleep(1000)
+
+      // CB is in Trial mode now, it needs `numberOfCallsToTriggerStateChange` times successful calls to be HEALTHY
+      for(a <- 1 to 5) {
+        resetMockServer()
+        setupMdgWcoDecServiceToReturn(ACCEPTED)
+        await(sendValidXml())
+        verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+
+      }
     }
 
     "return a failed future when external service returns 404" in {

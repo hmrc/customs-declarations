@@ -31,4 +31,6 @@ object AppDependencies {
   val customsApiCommon = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion withSources()
 
   val customsApiCommonTests = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion % testScope classifier "tests"
+
+  val cb = "uk.gov.hmrc" %% "reactive-circuit-breaker" % "3.2.0"
 }

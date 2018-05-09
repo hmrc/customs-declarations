@@ -45,26 +45,34 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
 
 
   override protected def beforeAll() {
-        startMockServer()
+    startMockServer()
   }
 
   override protected def beforeEach() {
-        resetMockServer()
-        registrationServiceIsRunning()
+    resetMockServer()
+    registrationServiceIsRunning()
   }
 
   override protected def afterAll() {
-        stopMockServer()
+    stopMockServer()
   }
 
   private val fileReference = UUID.randomUUID().toString
   val request = FakeRequest("POST", endpoint).withJsonBody(Json.parse(
     s"""
-      |{
-      |    "reference" : "$fileReference",
-      |    "fileStatus" : "READY",
-      |    "url" : "https://some-url"
-      |}
+       |{
+       |    "reference" : "$fileReference",
+       |    "fileStatus" : "READY",
+       |    "url" : "https://some-url"
+       |}
+    """.stripMargin))
+
+  val incorrectRequest = FakeRequest("POST", endpoint).withJsonBody(Json.parse(
+    s"""
+       |{
+       |    "reference" : "$fileReference",
+       |    "url" : "https://some-url"
+       |}
     """.stripMargin))
 
   feature("Upscan notifications") {
@@ -94,13 +102,13 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
       val result: Future[Result] = route(app = app, request).value
 
       Then("a request is made to Custom Notification Service")
-      val (requestHeaders, requestPayload) = aRequestWasMadeToRegistrationService()
+      val (requestHeaders, requestPayload) = aRequestWasMadeToNotificationService()
 
       And("The clientSubscriptionId is passed as X-CDS-Client-ID")
       requestHeaders.get("X-CDS-Client-ID") shouldBe Some(clientSubscriptionId)
 
       And("The reference is passed as X-Conversation-ID")
-      requestHeaders.get("X-CDS-Client-ID") shouldBe Some(clientSubscriptionId)
+      requestHeaders.get("X-Conversation-ID") shouldBe Some(fileReference)
 
       And("The Authorization header contains the value which is configured in the configs")
       requestHeaders.get(AUTHORIZATION) shouldBe Some(CustomsNotificationAuthHeaderValue)
@@ -123,5 +131,21 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
         """.stripMargin
 
     }
+
+    scenario("Response status 400 when file upload payload is Invalid") {
+
+      Given("A file upload by a CDS user has failed")
+      And("the uploaded file has been successfully scanned by upscan")
+
+      When("upscan service notifies Declaration API using previously provided callback URL")
+      val result: Future[Result] = route(app = app, incorrectRequest).value
+
+      Then("a response with a 400 status is returned")
+      status(result) shouldBe 400
+
+      Then("no request is made to Custom Notification Service")
+      noRequestWasMadeToNotificationService()
+    }
+
   }
 }

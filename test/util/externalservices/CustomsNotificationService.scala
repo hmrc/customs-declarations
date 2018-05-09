@@ -36,10 +36,15 @@ trait CustomsNotificationService extends WireMockRunner {
           .withStatus(ACCEPTED)))
   }
 
-  def aRequestWasMadeToRegistrationService(): Tuple2[Map[String, String],String] =  {
+  def aRequestWasMadeToNotificationService(): Tuple2[Map[String, String],String] =  {
     verify(1, postRequestedFor(notifyPath))
     val req = findAll(postRequestedFor(notifyPath)).get(0)
     val keys: List[String] = List.concat(req.getHeaders().keys().asScala)
     (Map(keys map {s => (s, req.getHeader(s))} : _*),req.getBodyAsString)
   }
+
+  def noRequestWasMadeToNotificationService()=  {
+    verify(0, postRequestedFor(notifyPath))
+  }
+
 }

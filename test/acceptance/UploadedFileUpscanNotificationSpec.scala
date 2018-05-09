@@ -23,6 +23,8 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import util.CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
+import util.externalservices.CustomsNotificationService
 
 import scala.concurrent.Future
 
@@ -30,33 +32,36 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
   with Matchers
   with OptionValues
   with BeforeAndAfterAll
-  with BeforeAndAfterEach {
+  with BeforeAndAfterEach
+  with CustomsNotificationService {
 
-  private val decId: String = UUID.randomUUID().toString
-  private val eori: String = UUID.randomUUID().toString
-  private val docType: String = "license"
-  private val clientSubscriptionId: String = UUID.randomUUID().toString
+  private val decId = UUID.randomUUID().toString
+  private val eori = UUID.randomUUID().toString
+  private val docType = "license"
+  private val clientSubscriptionId = UUID.randomUUID().toString
 
   private val endpoint =
     s"/uploaded-file-upscan-notifications/decId/$decId/eori/$eori/documentationType/$docType/clientSubscriptionId/$clientSubscriptionId"
 
 
   override protected def beforeAll() {
-    //    startMockServer()
+        startMockServer()
   }
 
   override protected def beforeEach() {
-    //    resetMockServer()
+        resetMockServer()
+        registrationServiceIsRunning()
   }
 
   override protected def afterAll() {
-    //    stopMockServer()
+        stopMockServer()
   }
 
+  private val fileReference = UUID.randomUUID().toString
   val request = FakeRequest("POST", endpoint).withJsonBody(Json.parse(
-    """
+    s"""
       |{
-      |    "reference" : "8ffb9b06-a655-47bf-b127-dc5984e433a2",
+      |    "reference" : "$fileReference",
       |    "fileStatus" : "READY",
       |    "url" : "https://some-url"
       |}
@@ -64,7 +69,7 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
 
   feature("Upscan notifications") {
 
-    scenario("Notification is received successfully") {
+    scenario("Notification is received successfully from upscan") {
 
       Given("A file has been uploaded by a CDS user")
       And("the uploaded file has been successfully scanned by upscan")
@@ -78,6 +83,44 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
 
       And("the response body is empty")
       contentAsString(result) shouldBe 'empty
+
+    }
+
+    scenario("Correct request has been made to Customs Notification service") {
+
+      Given("A file has been uploaded by a CDS user")
+      And("the uploaded file has been successfully scanned by upscan")
+      And("upscan service notifies Declaration API using previously provided callback URL")
+      val result: Future[Result] = route(app = app, request).value
+
+      Then("a request is made to Custom Notification Service")
+      val (requestHeaders, requestPayload) = aRequestWasMadeToRegistrationService()
+
+      And("The clientSubscriptionId is passed as X-CDS-Client-ID")
+      requestHeaders.get("X-CDS-Client-ID") shouldBe Some(clientSubscriptionId)
+
+      And("The reference is passed as X-Conversation-ID")
+      requestHeaders.get("X-CDS-Client-ID") shouldBe Some(clientSubscriptionId)
+
+      And("The Authorization header contains the value which is configured in the configs")
+      requestHeaders.get(AUTHORIZATION) shouldBe Some(CustomsNotificationAuthHeaderValue)
+
+      And("The Content-Type header is application/xml; charset=UTF-8")
+      requestHeaders.get(CONTENT_TYPE) shouldBe Some("application/xml; charset=UTF-8")
+
+      And("The Accept header is application/xml")
+      requestHeaders.get(ACCEPT) shouldBe Some("application/xml")
+
+
+      And("The request XML payload contains details of the scan outcome")
+      requestPayload shouldBe
+        """
+          |<?xml version="1.0" encoding="UTF-8"?>
+          |<root>
+          |   <FileStatus>SUCCESS</FileStatus>
+          |   <details>"File successfully received"</details>
+          |</root>
+        """.stripMargin
 
     }
   }

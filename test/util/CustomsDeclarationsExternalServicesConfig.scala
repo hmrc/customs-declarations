@@ -20,4 +20,5 @@ object CustomsDeclarationsExternalServicesConfig {
   val MdgWcoDecV1ServiceContext = "/mdgWcoDecServiceV1/submitdeclaration"
   val MdgWcoDecV2ServiceContext = "/mdgWcoDecServiceV2/submitdeclaration"
   val ApiSubscriptionFieldsContext = "/api-subscription-fields/field"
+  val CustomsNotificationAuthHeaderValue = "some-basic-auth"
 }

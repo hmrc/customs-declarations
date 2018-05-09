@@ -62,6 +62,26 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
       |}
     """.stripMargin))
 
+  val failedUploadRequest = FakeRequest("POST", endpoint).withJsonBody(Json.parse(
+    """
+      |{
+      |    "reference" : "8ffb9b06-a655-47bf-b127-dc5984e433a2",
+      |    "fileStatus" : "FAILED",
+      |    "url" : "https://some-url"
+      |}
+    """.stripMargin))
+
+  val incorrectRequest = FakeRequest("POST", endpoint).withJsonBody(Json.parse(
+    """
+      |{
+      |    "reference"
+      |    "fileStatus" : "FAILED",
+      |    "url" : "https://some-url",
+      |    "detail" : NULL
+      |}
+    """.stripMargin))
+
+
   feature("Upscan notifications") {
 
     scenario("Notification is received successfully") {
@@ -80,5 +100,36 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
       contentAsString(result) shouldBe 'empty
 
     }
+
+    scenario("Notification send for a failed file upload") {
+
+      Given("A file upload by a CDS user has failed")
+
+      When("upscan service notifies Declaration API using previously provided callback URL")
+      val result: Future[Result] = route(app = app, failedUploadRequest).value
+
+      Then("a response with a 204 status is returned")
+      status(result) shouldBe 204
+
+      And("the response body is empty")
+      contentAsString(result) shouldBe 'empty
+
+    }
+
+    ignore("Response status 400 when file upload payload is Invalid") {
+
+      Given("A file upload by a CDS user has failed")
+      And("the uploaded file has been successfully scanned by upscan")
+
+      When("upscan service notifies Declaration API using previously provided callback URL")
+      val result: Future[Result] = route(app = app, incorrectRequest).value
+
+      Then("a response with a 400 status is returned")
+      status(result) shouldBe 400
+
+    }
+
+
+
   }
 }

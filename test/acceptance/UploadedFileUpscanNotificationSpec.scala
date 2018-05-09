@@ -132,12 +132,12 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
 
     }
 
-    scenario("Response status 400 when file upload payload is Invalid") {
+    scenario("Response status 400 when receive file upload status message payload is invalid") {
 
-      Given("A file upload by a CDS user has failed")
+      Given("A file has been uploaded by a CDS user")
       And("the uploaded file has been successfully scanned by upscan")
 
-      When("upscan service notifies Declaration API using previously provided callback URL")
+      When("upscan service notifies Declaration API using previously provided callback URL with incorrect json payload")
       val result: Future[Result] = route(app = app, incorrectRequest).value
 
       Then("a response with a 400 status is returned")

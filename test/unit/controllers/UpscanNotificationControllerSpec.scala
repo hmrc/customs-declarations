@@ -20,7 +20,7 @@ import java.util.UUID
 
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play._
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
 import play.api.test.Helpers._
 import play.api.test._
@@ -29,114 +29,100 @@ import uk.gov.hmrc.customs.declaration.controllers.UpscanNotificationController
 
 class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Results {
 
-  private val decId = UUID.randomUUID().toString
-  private val eori = UUID.randomUUID().toString
-  private val docType = "license"
-  private val clientSubscriptionId = UUID.randomUUID().toString
   private val fileReference = UUID.randomUUID().toString
 
+  private val post: Action[AnyContent] = new UpscanNotificationController()
+    .post("decId", "eori", "docType", "clientSubscriptionId")
 
-  val controller = new UpscanNotificationController()
+
+  "upscan notification controller" should {
+
+    "return 204 when a valid READY request is received" in {
+      val result = post (fakeRequestWith(readyPayload))
+      status(result) mustBe 204
+      contentAsString(result) mustBe ""
+    }
+
+    "return 204 when a valid FAILED request is received" in {
+      val result = post (fakeRequestWith(failedFileStatusPayload))
+      status(result) mustBe 204
+      contentAsString(result) mustBe ""
+    }
+
+    "return 400 when the request does not contain valid json" in {
+      val result = post (FakeRequest().withTextBody("some").withHeaders((CONTENT_TYPE, "application/json")))
+      status(result) mustBe 400
+      await(result) mustBe ErrorResponse.errorBadRequest("Invalid JSON payload").JsonResult
+    }
+
+    "return 400 when request does not contain the reference" in {
+      val result = post (fakeRequestWith(readyPayload - "reference"))
+      status(result) mustBe 400
+      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
+      badRequestJsValue.code mustBe expectedJsonValidationMessage
+      badRequestJsValue.message must include("/reference,List(ValidationError(List(error.path.missing")
+    }
+
+    "return 400 when reference  is not valid UUID" in {
+      val result = post (fakeRequestWith(readyPayload + ("reference" -> JsString("123"))))
+
+      status(result) mustBe 400
+      val badRequestJsValue = contentAsJson(result).as[ResponseContents]
+      badRequestJsValue.code mustBe expectedJsonValidationMessage
+      badRequestJsValue.message must include("/reference,List(ValidationError(List(error.expected.uuid")
+    }
+
+    "return 400 when fileStatus is missing" in {
+      val result = post (fakeRequestWith(readyPayload - "fileStatus"))
+
+      status(result) mustBe 400
+      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
+      badRequestJsValue.code mustBe expectedJsonValidationMessage
+      badRequestJsValue.message must include("/fileStatus,List(ValidationError(List(error.path.missing")
+    }
+
+    "return 400 when fileStatus is not READY or FAILED" in {
+      val result = post (fakeRequestWith(readyPayload +("fileStatus" -> JsString("123"))))
+
+      status(result) mustBe 400
+      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
+      badRequestJsValue.code mustBe expectedJsonValidationMessage
+      badRequestJsValue.message must include("/fileStatus,List(ValidationError(List(error.expected.validenumvalue")
+    }
+
+    "return 400 when fileStatus is FAILED and details is not available" in {
+      val result = post (fakeRequestWith(failedFileStatusPayload - "details"))
+
+      status(result) mustBe 400
+      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
+      badRequestJsValue.code mustBe expectedJsonValidationMessage
+      badRequestJsValue.message must include("File status is FAILED so details are required")
+    }
+  }
+
   implicit val ResponseContentsReads = Json.reads[ResponseContents]
 
-  private val validJson = Json.parse(
+  private val readyPayload = Json.parse(
     s"""
        |{
        |    "reference" : "$fileReference",
        |    "fileStatus" : "READY",
        |    "url" : "https://some-url"
        |}
-    """.stripMargin)
+    """.stripMargin).as[JsObject]
 
-  "upscan notification controller" should {
+  private val failedFileStatusPayload = Json.parse(
+    s"""
+       |{
+       |    "reference" : "$fileReference",
+       |    "fileStatus" : "FAILED",
+       |    "details": "some failure details"
+       |}
+    """.stripMargin).as[JsObject]
 
-    "return 204 when a valid request is received" in {
-      val result = controller.post(decId, eori, docType, clientSubscriptionId).apply(FakeRequest().withJsonBody(validJson))
-      status(result) mustBe 204
-      contentAsString(result) mustBe ""
-    }
+  private val expectedJsonValidationMessage = "Unexpected JSON"
 
-    "return 400 when the request does not contain valid json" in {
-      val result = controller.post(decId, eori, docType, clientSubscriptionId).apply(FakeRequest().withTextBody("some").withHeaders((CONTENT_TYPE, "application/json")))
-      status(result) mustBe 400
-      await(result) mustBe ErrorResponse.errorBadRequest("Invalid JSON payload").JsonResult
-    }
+  private def fakeRequestWith(json: JsValue) =
+    FakeRequest().withJsonBody(json)
 
-    "return 400 when the JSON is not according to the expected schema" in {
-      val result = controller.post(decId, eori, docType, clientSubscriptionId).apply(FakeRequest().withJsonBody(Json.parse(
-        """
-          |{}
-        """.stripMargin)))
-      status(result) mustBe 400
-      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
-      badRequestJsValue.code mustBe "Json is not as expected"
-    }
-
-
-    "return 400 when reference is not present" in {
-      val result = controller.post(decId, eori, docType, clientSubscriptionId).apply(FakeRequest().withJsonBody(Json.parse(
-        """{
-          | "fileStatus" : "READY",
-          | "url" : "https://some-url"}
-        """.stripMargin)))
-      status(result) mustBe 400
-      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
-      badRequestJsValue.code mustBe "Json is not as expected"
-    }
-
-    "return 400 when reference  is not valid UUID" in {
-      val result = controller.post(decId, eori, docType, clientSubscriptionId).apply(FakeRequest().withJsonBody(Json.parse(
-        s"""{
-            | "reference" : "123",
-            | "fileStatus" : "READY",
-            | "url" : "https://some-url"}
-        """.stripMargin)))
-
-      status(result) mustBe 400
-      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
-      badRequestJsValue.code mustBe "Json is not as expected"
-    }
-
-    "return 400 when fileStatus is missing" in {
-      val result = controller.post(decId, eori, docType, clientSubscriptionId).apply(FakeRequest().withJsonBody(Json.parse(
-        s"""{
-            | "reference" : "$fileReference",
-            | "url" : "https://some-url"
-            }""".stripMargin)))
-
-      status(result) mustBe 400
-      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
-      badRequestJsValue.code mustBe "Json is not as expected"
-    }
-
-    "return 400 when fileStatus is not READY or FAILED" in {
-      val result = controller.post(decId, eori, docType, clientSubscriptionId).apply(FakeRequest().withJsonBody(Json.parse(
-        s"""{
-            | "reference" : "$fileReference",
-            | "fileStatus" : "fdf",
-            | "url" : "https://some-url"}
-        """.stripMargin)))
-
-      status(result) mustBe 400
-      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
-      badRequestJsValue.code mustBe "Json is not as expected"
-    }
-
-    "return 400 when fileStatus is FAILED and Details is not available" in {
-      val result = controller.post(decId, eori, docType, clientSubscriptionId).apply(FakeRequest().withJsonBody(Json.parse(
-        s"""{
-            | "reference" : "$fileReference",
-            | "fileStatus" : "FAILED",
-            | "url" : "https://some-url"
-            | }
-        """.stripMargin)))
-
-      status(result) mustBe 400
-      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
-      badRequestJsValue.code mustBe "Json is not as expected"
-      //      badRequestJsValue.message mustBe "Json is not as expected"
-    }
-
-
-  }
 }

@@ -36,7 +36,7 @@ object FileStatus extends Enumeration {
   implicit val fileStatusReads = Reads.enumNameReads(FileStatus)
 }
 
-case class UpscanNotification(reference: UUID, fileStatus: FileStatus, details: Option[String], url: String)
+case class UpscanNotification(reference: UUID, fileStatus: FileStatus, details: Option[String], url: Option[String])
 
 
 object UpscanNotification {
@@ -54,7 +54,7 @@ object UpscanNotification {
       (JsPath \ "reference").read[UUID] and
       (JsPath \ "fileStatus").read[FileStatus] and
       detailsReads and
-      (JsPath \ "url").read[String]
+      (JsPath \ "url").readNullable[String]
     ).apply {
     UpscanNotification.apply _
   }
@@ -67,7 +67,7 @@ class UpscanNotificationController extends BaseController {
       .fold(Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)) { js =>
         js.validate[UpscanNotification] match {
           case x: JsSuccess[UpscanNotification] => Future.successful(Results.NoContent)
-          case f: JsError => Future.successful(errorBadRequest(errorCode = "Json is not as expected", errorMessage = f.errors.toString()).JsonResult)
+          case f: JsError => Future.successful(errorBadRequest(errorCode = "Unexpected JSON", errorMessage = f.errors.toString()).JsonResult)
         }
       }
   }

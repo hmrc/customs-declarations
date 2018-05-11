@@ -6,3 +6,5 @@ POST        /                             @uk.gov.hmrc.customs.declaration.contr
 POST        /cancellation-requests        @uk.gov.hmrc.customs.declaration.controllers.CancelDeclarationController.post()
 
 GET         /admin/metrics                @com.kenshoo.play.metrics.MetricsController.metrics
+
+POST        /uploaded-file-upscan-notifications/decId/:decId/eori/:eori/documentationType/:docType/clientSubscriptionId/:clientSubscriptionId @uk.gov.hmrc.customs.declaration.controllers.UpscanNotificationController.post(decId,eori,docType,clientSubscriptionId)

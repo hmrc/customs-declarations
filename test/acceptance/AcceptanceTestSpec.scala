@@ -45,7 +45,8 @@ trait AcceptanceTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneApp
     "microservice.services.api-subscription-fields.context" -> CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext,
     "auditing.enabled" -> false,
     "auditing.consumer.baseUri.host" -> ExternalServicesConfig.Host,
-    "auditing.consumer.baseUri.port" -> ExternalServicesConfig.Port
+    "auditing.consumer.baseUri.port" -> ExternalServicesConfig.Port,
+    "microservice.services.customs-notification.auth" -> CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
     )).build()
 
   protected def string2xml(s: String): Node = {

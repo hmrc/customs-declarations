@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package util
+package uk.gov.hmrc.customs.declaration.services
 
-object CustomsDeclarationsExternalServicesConfig {
-  val MdgWcoDecV1ServiceContext = "/mdgWcoDecServiceV1/submitdeclaration"
-  val MdgWcoDecV2ServiceContext = "/mdgWcoDecServiceV2/submitdeclaration"
-  val ApiSubscriptionFieldsContext = "/api-subscription-fields/field"
-  val CustomsNotificationAuthHeaderValue = "some-basic-auth"
+import com.google.inject.Singleton
+import uk.gov.hmrc.customs.declaration.controllers.UpscanNotification
+
+
+case class UploadedFileCompletedScanDetails(decId: String, eori: String, docType: String, clientSubscriptionId: String, upscanNotification: UpscanNotification)
+
+@Singleton
+class CustomsNotificationService {
+
+  def sendMessage(x: UploadedFileCompletedScanDetails): Unit = {
+
+  }
 }

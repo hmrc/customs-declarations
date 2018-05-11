@@ -18,6 +18,7 @@ package unit.controllers
 
 import java.util.UUID
 
+import org.mockito.Mockito.verify
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play._
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
@@ -25,13 +26,16 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import play.api.test._
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
-import uk.gov.hmrc.customs.declaration.controllers.UpscanNotificationController
+import uk.gov.hmrc.customs.declaration.controllers.{FileStatus, UpscanNotification, UpscanNotificationController}
+import uk.gov.hmrc.customs.declaration.services.{CustomsNotificationService, UploadedFileCompletedScanDetails}
 
 class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Results {
 
-  private val fileReference = UUID.randomUUID().toString
+  private val fileReference = UUID.randomUUID()
+  private val mockService = mock[CustomsNotificationService]
 
-  private val post: Action[AnyContent] = new UpscanNotificationController()
+
+  private val post: Action[AnyContent] = new UpscanNotificationController(mockService)
     .post("decId", "eori", "docType", "clientSubscriptionId")
 
 
@@ -41,6 +45,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
       val result = post (fakeRequestWith(readyPayload))
       status(result) mustBe 204
       contentAsString(result) mustBe ""
+      verify(mockService).sendMessage(UploadedFileCompletedScanDetails("decId", "eori", "docType", "clientSubscriptionId", UpscanNotification(fileReference, FileStatus.READY, None, Some("https://some-url"))))
     }
 
     "return 204 when a valid FAILED request is received" in {

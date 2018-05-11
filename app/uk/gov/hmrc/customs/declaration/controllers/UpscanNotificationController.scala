@@ -18,6 +18,7 @@ package uk.gov.hmrc.customs.declaration.controllers
 
 import java.util.UUID
 
+import com.google.inject.Inject
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
@@ -25,6 +26,7 @@ import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, Results}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.declaration.controllers.FileStatus.FileStatus
+import uk.gov.hmrc.customs.declaration.services.{CustomsNotificationService, UploadedFileCompletedScanDetails}
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.Future
@@ -51,7 +53,7 @@ object UpscanNotification {
   }
 
   implicit val UpscanNotificationReads: Reads[UpscanNotification] = (
-      (JsPath \ "reference").read[UUID] and
+    (JsPath \ "reference").read[UUID] and
       (JsPath \ "fileStatus").read[FileStatus] and
       detailsReads and
       (JsPath \ "url").readNullable[String]
@@ -61,13 +63,16 @@ object UpscanNotification {
 }
 
 
-class UpscanNotificationController extends BaseController {
+class UpscanNotificationController @Inject()(downstreamService: CustomsNotificationService) extends BaseController {
   def post(decId: String, eori: String, docType: String, clientSubscriptionId: String): Action[AnyContent] = Action.async { request =>
     request.body.asJson
       .fold(Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)) { js =>
         js.validate[UpscanNotification] match {
-          case x: JsSuccess[UpscanNotification] => Future.successful(Results.NoContent)
-          case f: JsError => Future.successful(errorBadRequest(errorCode = "Unexpected JSON", errorMessage = f.errors.toString()).JsonResult)
+          case n: JsSuccess[UpscanNotification] => {
+            downstreamService.sendMessage(UploadedFileCompletedScanDetails(decId, eori, docType, clientSubscriptionId, n.value))
+            Future.successful(Results.NoContent)
+          }
+          case e: JsError => Future.successful(errorBadRequest(errorCode = "Unexpected JSON", errorMessage = e.errors.toString()).JsonResult)
         }
       }
   }

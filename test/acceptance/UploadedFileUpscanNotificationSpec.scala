@@ -58,7 +58,7 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
   }
 
   private val fileReference = UUID.randomUUID().toString
-  val request = FakeRequest("POST", endpoint).withJsonBody(Json.parse(
+  val validRequest = FakeRequest("POST", endpoint).withJsonBody(Json.parse(
     s"""
        |{
        |    "reference" : "$fileReference",
@@ -84,7 +84,8 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
 
 
       When("upscan service notifies Declaration API using previously provided callback URL")
-      val result: Future[Result] = route(app = app, request).value
+
+      val result: Future[Result] = route(app = app, validRequest).value
 
       Then("a response with a 204 status is returned")
       status(result) shouldBe 204
@@ -94,12 +95,12 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
 
     }
 
-    scenario("Correct request has been made to Customs Notification service") {
+    ignore("Correct request has been made to Customs Notification service") {
 
       Given("A file has been uploaded by a CDS user")
       And("the uploaded file has been successfully scanned by upscan")
       And("upscan service notifies Declaration API using previously provided callback URL")
-      val result: Future[Result] = route(app = app, request).value
+      val result: Future[Result] = route(app = app, validRequest).value
 
       Then("a request is made to Custom Notification Service")
       val (requestHeaders, requestPayload) = aRequestWasMadeToNotificationService()

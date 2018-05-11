@@ -16,8 +16,12 @@
 
 package util
 
+import java.util.UUID
+
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.UUIDGenerator
 import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION}
-import play.api.mvc.{AnyContentAsText, AnyContentAsXml}
+import play.api.libs.json.Json
+import play.api.mvc.{AnyContentAsJson, AnyContentAsText, AnyContentAsXml}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.POST
 import util.RequestHeaders._
@@ -29,9 +33,9 @@ object FakeRequests {
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(ValidSubmissionXML)
 
-  lazy val ValidSubmission_13_INV_Request: FakeRequest[AnyContentAsXml] =  FakeRequest()
+  lazy val ValidSubmission_13_INV_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
-    .withXmlBody(validSubmissionXML(13,"INV"))
+    .withXmlBody(validSubmissionXML(13, "INV"))
 
   lazy val ValidSubmission_13_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
@@ -112,7 +116,10 @@ object FakeRequests {
 
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")
+
     def fromNonCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $nonCspBearerToken")
+
     def postTo(endpoint: String): FakeRequest[R] = fakeRequest.copyFakeRequest(method = POST, uri = endpoint)
   }
+
 }

@@ -16,14 +16,60 @@
 
 package uk.gov.hmrc.customs.declaration.controllers
 
-import play.api.mvc.{Action, Results}
+import java.util.UUID
+
+import play.api.data.validation.ValidationError
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Reads._
+import play.api.libs.json._
+import play.api.mvc.{Action, AnyContent, Results}
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
+import uk.gov.hmrc.customs.declaration.controllers.FileStatus.FileStatus
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.Future
 
+object FileStatus extends Enumeration {
+  type FileStatus = Value
+  val READY, FAILED = Value
+
+  implicit val fileStatusReads = Reads.enumNameReads(FileStatus)
+}
+
+case class UpscanNotification(reference: UUID, fileStatus: FileStatus, details: Option[String], url: String)
+
+
+object UpscanNotification {
+
+  private def detailsMustBeProvidedWhenStatusIsFailed(fs: FileStatus, details: Option[String]) =
+    fs == FileStatus.READY || (fs == FileStatus.FAILED && details.isDefined)
+
+
+  private val detailsReads: Reads[Option[String]] = (JsPath \ "fileStatus").read[FileStatus].flatMap { fs =>
+    (__ \ "details").readNullable[String]
+      .filter(ValidationError("File status is FAILED so details are required"))(detailsMustBeProvidedWhenStatusIsFailed(fs, _))
+  }
+
+  implicit val UpscanNotificationReads: Reads[UpscanNotification] = (
+      (JsPath \ "reference").read[UUID] and
+      (JsPath \ "fileStatus").read[FileStatus] and
+      detailsReads and
+      (JsPath \ "url").read[String]
+    ).apply {
+    UpscanNotification.apply _
+  }
+}
+
 
 class UpscanNotificationController extends BaseController {
-
-  def post(decId: String, eori: String, docType: String, clientSubscriptionId: String) = Action.async(Future.successful(Results.NoContent))
+  def post(decId: String, eori: String, docType: String, clientSubscriptionId: String): Action[AnyContent] = Action.async { request =>
+    request.body.asJson
+      .fold(Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)) { js =>
+        js.validate[UpscanNotification] match {
+          case x: JsSuccess[UpscanNotification] => Future.successful(Results.NoContent)
+          case f: JsError => Future.successful(errorBadRequest(errorCode = "Json is not as expected", errorMessage = f.errors.toString()).JsonResult)
+        }
+      }
+  }
 
 }

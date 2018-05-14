@@ -72,7 +72,7 @@ class CustomsDeclarationSubmissionUnhappyPathSpec extends AcceptanceTestSpec
       |</errorResponse>
     """.stripMargin
 
-  private val BadRequestErrorXBatchIdentifierMissingOrInvalid =
+  private val BadRequestErrorXBadgeIdentifierMissingOrInvalid =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>
       |  <code>BAD_REQUEST</code>
@@ -275,7 +275,7 @@ class CustomsDeclarationSubmissionUnhappyPathSpec extends AcceptanceTestSpec
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is a \"Bad Request\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBatchIdentifierMissingOrInvalid)
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBadgeIdentifierMissingOrInvalid)
     }
 
     scenario("Response status 400 when a CSP user submits a request with an invalid X-Badge-Identifier header") {
@@ -293,7 +293,7 @@ class CustomsDeclarationSubmissionUnhappyPathSpec extends AcceptanceTestSpec
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is a \"Bad Request\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBatchIdentifierMissingOrInvalid)
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBadgeIdentifierMissingOrInvalid)
     }
 
     scenario("Response status 500 when user submits a valid request but downstream call to DMS fails with an HTTP error") {

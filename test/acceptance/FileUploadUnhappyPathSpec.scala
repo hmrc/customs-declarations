@@ -48,7 +48,7 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       |</errorResponse>
     """.stripMargin
 
-  private val BadRequestErrorXBatchIdentifierMissingOrInvalid =
+  private val BadRequestErrorXBadgeIdentifierMissingOrInvalid =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>
       |  <code>BAD_REQUEST</code>
@@ -231,7 +231,7 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(ForbiddenError)
     }
 
-    ignore("Response status 400 when CSP sends the request (without badge identifier)") {
+    scenario("Response status 400 when CSP sends the request (without badge identifier)") {
       Given("request is sent by CSP")
       authServiceAuthorizesCSP()
       authServiceUnauthorisesCustomsEnrolmentForNonCSP(bearerToken = cspBearerToken)
@@ -248,7 +248,7 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is \"Forbidden\"")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBatchIdentifierMissingOrInvalid)
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBadgeIdentifierMissingOrInvalid)
     }
 
     scenario("Response status 406 when user submits a request with an invalid Accept header") {

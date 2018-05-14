@@ -105,6 +105,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       when(mockAuthConnector.authorise(any, ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Enrolments(Set(customsEnrolment)))
       when(mockFileUploadBusinessService.send(any[ValidatedUploadPayloadRequest[AnyContentAsXml]],any[HeaderCarrier])).thenReturn(Future.successful(Right(())))
+
       val actual: Result = await(fileUploadController.post().apply(ValidRequest))(Duration.Inf)
 
       status(actual) shouldBe Status.ACCEPTED

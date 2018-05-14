@@ -20,10 +20,12 @@ import org.scalatest.{Matchers, OptionValues}
 import play.api.libs.json.{JsObject, JsString}
 import play.api.mvc._
 import play.api.test.Helpers._
-import util.{AuditService, TestData}
+import play.mvc.Http.Status.FORBIDDEN
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
+import util.TestData.{cspBearerToken, invalidBearerToken}
 import util.externalservices.{AuthService, UpscanInitiateService}
+import util.{AuditService, TestData}
 
 import scala.concurrent.Future
 
@@ -83,6 +85,12 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       |<errorResponse>
       |  <code>INTERNAL_SERVER_ERROR</code>
       |  <message>Internal server error</message>
+      |</errorResponse>
+    """.stripMargin
+
+  private val ForbiddenError =
+    """<errorResponse>
+      |  <code>FORBIDDEN</code> <message>Not an authorized service</message>
       |</errorResponse>
     """.stripMargin
 
@@ -176,11 +184,11 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(InvalidAcceptHeaderError)
     }
 
-    scenario("Response status 401 when user submits as CSP") {
-      Given("the request is sent by CSP")
-      authServiceUnauthorisesScopeForCSP()
-      authServiceUnauthorisesCustomsEnrolmentForNonCSP(bearerToken = TestData.cspBearerToken)
-      val request = ValidFileUploadRequest.fromCsp.postTo(endpoint)
+    scenario("Response status 401 when user provides invalid token") {
+      Given("the API is available")
+      authServiceUnauthorisesScopeForCSP(bearerToken = invalidBearerToken)
+      authServiceUnauthorisesCustomsEnrolmentForNonCSP(bearerToken = invalidBearerToken)
+      val request = ValidFileUploadRequest.withCustomToken(invalidBearerToken).postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -192,8 +200,49 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       status(resultFuture) shouldBe UNAUTHORIZED
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
-      And("the response body is a \"invalid Accept header\" XML")
+      And("the response body is \"Unauthorised request\"")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(UnauthorisedRequestError)
+    }
+
+    scenario("Response status 403 when CSP sends the request (with badge identifier)") {
+      Given("request is sent by CSP")
+      authServiceAuthorizesCSP()
+      authServiceUnauthorisesCustomsEnrolmentForNonCSP(bearerToken = cspBearerToken)
+      val request = ValidFileUploadRequest.fromCsp.postTo(endpoint)
+
+      When("a POST request with data is sent to the API")
+      val result: Option[Future[Result]] = route(app = app, request)
+
+      Then(s"a response with a 403 status is received")
+      result shouldBe 'defined
+      val resultFuture = result.value
+
+      status(resultFuture) shouldBe FORBIDDEN
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+      And("the response body is \"Forbidden\"")
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(ForbiddenError)
+    }
+
+    //TODO MC revisit
+    ignore("Response status 403 when CSP sends the request (without badge identifier)") {
+      Given("request is sent by CSP")
+      authServiceAuthorizesCSP()
+      authServiceUnauthorisesCustomsEnrolmentForNonCSP(bearerToken = cspBearerToken)
+      val request = ValidFileUploadRequestWithoutBadgeId.fromCsp.postTo(endpoint)
+
+      When("a POST request with data is sent to the API")
+      val result: Option[Future[Result]] = route(app = app, request)
+
+      Then(s"a response with a 403 status is received")
+      result shouldBe 'defined
+      val resultFuture = result.value
+
+      status(resultFuture) shouldBe FORBIDDEN
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+      And("the response body is \"Forbidden\"")
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(ForbiddenError)
     }
 
     scenario("Response status 406 when user submits a request with an invalid Accept header") {

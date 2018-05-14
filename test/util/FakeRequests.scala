@@ -118,6 +118,8 @@ object FakeRequests {
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(ValidFileUploadXml)
 
+  lazy val ValidFileUploadRequestWithoutBadgeId = ValidFileUploadRequest
+    .copyFakeRequest(headers = ValidFileUploadRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))
 
   lazy val InvalidFileUploadRequest = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
@@ -136,6 +138,8 @@ object FakeRequests {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")
 
     def fromNonCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $nonCspBearerToken")
+
+    def withCustomToken(token: String): FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $token")
 
     def postTo(endpoint: String): FakeRequest[R] = fakeRequest.copyFakeRequest(method = POST, uri = endpoint)
   }

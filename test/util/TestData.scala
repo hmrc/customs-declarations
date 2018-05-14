@@ -48,6 +48,7 @@ object TestData {
 
   val cspBearerToken = "CSP-Bearer-Token"
   val nonCspBearerToken = "Software-House-Bearer-Token"
+  val invalidBearerToken = "InvalidBearerToken"
 
   val declarantEoriValue = "ZZ123456789000"
   val declarantEori = Eori(declarantEoriValue)

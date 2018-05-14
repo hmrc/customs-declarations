@@ -114,10 +114,32 @@ object FakeRequests {
 
   lazy val InvalidCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.withXmlBody(InvalidCancellationXML)
 
+  lazy val ValidFileUploadRequest = FakeRequest()
+    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withXmlBody(ValidFileUploadXml)
+
+  lazy val ValidFileUploadRequestWithoutBadgeId = ValidFileUploadRequest
+    .copyFakeRequest(headers = ValidFileUploadRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))
+
+  lazy val InvalidFileUploadRequest = FakeRequest()
+    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withXmlBody(InvalidFileUploadXml)
+
+  lazy val NoAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
+    .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(ACCEPT))
+
+  lazy val InvalidAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
+    .withHeaders(RequestHeaders.ACCEPT_HEADER_INVALID)
+
+  lazy val InvalidContentTypeHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
+    .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
+
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")
 
     def fromNonCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $nonCspBearerToken")
+
+    def withCustomToken(token: String): FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $token")
 
     def postTo(endpoint: String): FakeRequest[R] = fakeRequest.copyFakeRequest(method = POST, uri = endpoint)
   }

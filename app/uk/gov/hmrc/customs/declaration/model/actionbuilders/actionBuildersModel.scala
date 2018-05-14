@@ -66,6 +66,20 @@ object ActionBuilderModelHelper {
     )
   }
 
+  implicit class ValidatedPayloadRequestOps[A](vpr: ValidatedPayloadRequest[A]) {
+
+    def toValidatedUploadPayloadRequest(declarationId: DeclarationId,
+                                        documentationType: DocumentationType): ValidatedUploadPayloadRequest[A] = ValidatedUploadPayloadRequest(
+      vpr.conversationId,
+      vpr.requestedApiVersion,
+      vpr.clientId,
+      vpr.authorisedAs,
+      vpr.xmlBody,
+      vpr.request,
+      declarationId,
+      documentationType
+    )
+  }
 }
 
 trait HasConversationId {
@@ -83,6 +97,11 @@ trait HasAuthorisedAs {
 
 trait HasXmlBody {
   val xmlBody: NodeSeq
+}
+
+trait HasFileUploadProperties {
+  val declarationId: DeclarationId
+  val documentationType: DocumentationType
 }
 
 case class ExtractedHeadersImpl(
@@ -122,6 +141,15 @@ case class AuthorisedRequest[A](
 ) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs
 
 // Available after ValidatedPayloadAction builder
+abstract class GenericValidatedPayloadRequest[A](
+                                       conversationId: ConversationId,
+                                       requestedApiVersion: ApiVersion,
+                                       clientId: ClientId,
+                                       authorisedAs: AuthorisedAs,
+                                       xmlBody: NodeSeq,
+                                       request: Request[A]
+                                     ) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
+
 case class ValidatedPayloadRequest[A](
   conversationId: ConversationId,
   requestedApiVersion: ApiVersion,
@@ -129,4 +157,15 @@ case class ValidatedPayloadRequest[A](
   authorisedAs: AuthorisedAs,
   xmlBody: NodeSeq,
   request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
+) extends GenericValidatedPayloadRequest(conversationId, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
+
+case class ValidatedUploadPayloadRequest[A](
+  conversationId: ConversationId,
+  requestedApiVersion: ApiVersion,
+  clientId: ClientId,
+  authorisedAs: AuthorisedAs,
+  xmlBody: NodeSeq,
+  request: Request[A],
+  declarationId: DeclarationId,
+  documentationType: DocumentationType
+) extends GenericValidatedPayloadRequest(conversationId, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties

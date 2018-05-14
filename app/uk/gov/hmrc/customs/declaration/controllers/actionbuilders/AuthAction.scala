@@ -39,6 +39,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Left
 import scala.util.control.NonFatal
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorInternalServerError
 
 /** Action builder that attempts to authorise request as a CSP or else NON CSP
   * <ul>
@@ -103,7 +104,7 @@ class AuthAction @Inject()(
         Right(None)
       case NonFatal(e) =>
         logger.error("Error authorising CSP", e)
-        throw e
+        Left(ErrorInternalServerError.XmlResult.withConversationId)
     }
   }
 
@@ -133,7 +134,7 @@ class AuthAction @Inject()(
         Left(errorResponseUnauthorisedGeneral.XmlResult.withConversationId)
       case NonFatal(e) =>
         logger.error("Error authorising Non CSP", e)
-        throw e
+        Left(ErrorInternalServerError.XmlResult.withConversationId)
     }
 
   }

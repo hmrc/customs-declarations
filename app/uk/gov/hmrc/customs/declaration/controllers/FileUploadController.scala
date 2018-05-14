@@ -17,44 +17,21 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.MimeTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.services.BusinessService
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
+import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class Common @Inject() (
-  val conversationIdAction: ConversationIdAction,
-  val authAction: AuthAction,
-  val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
-  val logger: DeclarationsLogger
-)
-
-@Singleton
-class SubmitDeclarationController @Inject()(
-  common: Common,
-  businessService: BusinessService,
-  payloadValidationAction: SubmitPayloadValidationAction
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
-
-@Singleton
-class CancelDeclarationController @Inject()(
-  common: Common,
-  businessService: BusinessService,
-  payloadValidationAction: CancelPayloadValidationAction
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
-
-abstract class CustomsDeclarationController(
-  common: Common,
-  businessService: BusinessService,
-  payloadValidationAction: PayloadValidationAction
+class FileUploadController @Inject()(
+                                      common: Common,
+                                      fileUploadBusinessService: FileUploadBusinessService,
+                                      fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction
 )
 extends BaseController {
 
@@ -70,22 +47,21 @@ extends BaseController {
       common.conversationIdAction andThen
       common.validateAndExtractHeadersAction andThen
       common.authAction andThen
-      payloadValidationAction
+      fileUploadPayloadValidationComposedAction
     )
     .async(bodyParser = xmlOrEmptyBody) {
 
-      implicit vpr: ValidatedPayloadRequest[AnyContent] =>
-        val logger = common.logger
+      implicit vupr: ValidatedUploadPayloadRequest[AnyContent] =>
+      val logger = common.logger
 
-        logger.debug(s"Request received. Payload = ${vpr.body.toString} headers = ${vpr.headers.headers}")
-        logger.info(s"Declaration request received")
+      logger.debug(s"Request received. Payload = ${vupr.body.toString} headers = ${vupr.headers.headers}")
 
-        businessService.send map {
+        fileUploadBusinessService.send map {
           case Right(_) =>
+            logger.info(s"Upload initiate request processed successfully")
             Accepted.as(MimeTypes.XML).withConversationId
-          case Left(errorResult) =>
-            errorResult
-        }
-
+        case Left(errorResult) =>
+          errorResult
+      }
     }
 }

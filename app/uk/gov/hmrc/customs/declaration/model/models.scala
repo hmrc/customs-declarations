@@ -38,6 +38,10 @@ case class BadgeIdentifier(value: String) extends AnyVal
 
 case class FieldsId(value: String) extends AnyVal
 
+case class DeclarationId(value: String) extends AnyVal
+
+case class DocumentationType(value: String) extends AnyVal
+
 sealed trait ApiVersion {
   val value: String
   val configPrefix: String
@@ -55,3 +59,7 @@ object VersionTwo extends ApiVersion{
 sealed trait AuthorisedAs
 case class Csp(badgeIdentifier: BadgeIdentifier) extends AuthorisedAs
 case class NonCsp(eori: Eori) extends AuthorisedAs
+
+case class UpscanInitiatePayload(callbackUrl: String)
+
+case class FileUploadPayload(declarationID: String, documentationType: String)

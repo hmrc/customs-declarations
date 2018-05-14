@@ -20,7 +20,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{UnauthorizedCode, errorBadRequest}
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -111,12 +111,12 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       verifyNonCspAuthorisationNotCalled
     }
 
-    "propagate exceptional errors in CSP auth API call" in new SetUp {
+    "Return Left of 500 Result if errors occur in CSP auth API call" in new SetUp {
       authoriseCspError()
 
-      private val caught = intercept[Throwable](await(authAction.refine(TestValidatedHeadersRequestNoBadge)))
+      private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      caught shouldBe emulatedServiceFailure
+      actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
       verifyNonCspAuthorisationNotCalled
     }
 
@@ -151,13 +151,13 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       verifyCspAuthorisationCalled(1)
     }
 
-    "propagate exceptional errors in Non CSP auth API call" in new SetUp {
+    "Return Left of 500 Result if errors occur in CSP auth API call" in new SetUp {
       unauthoriseCsp()
       authoriseNonCspOnlyError()
 
-      private val caught = intercept[Throwable](await(authAction.refine(TestValidatedHeadersRequestNoBadge)))
+      private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      caught shouldBe emulatedServiceFailure
+      actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
       verifyCspAuthorisationCalled(1)
     }
   }

@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.services
+package uk.gov.hmrc.customs.declaration.connectors
 
 import com.google.inject.Singleton
-import uk.gov.hmrc.customs.declaration.controllers.UpscanNotification
+import uk.gov.hmrc.customs.declaration.services.CustomsNotification
 
-
-case class UploadedFileCompletedScanDetails(decId: String, eori: String, docType: String, clientSubscriptionId: String, upscanNotification: UpscanNotification)
+import scala.concurrent.Future
 
 @Singleton
-class CustomsNotificationService {
-
-  def sendMessage(x: UploadedFileCompletedScanDetails): Unit = {
-
+class CustomsNotificationServiceConnector {
+  def send(notification: CustomsNotification): Future[Unit] = {
+    Future.successful(())
   }
+
 }

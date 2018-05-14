@@ -18,7 +18,10 @@ package unit.controllers
 
 import java.util.UUID
 
-import org.mockito.Mockito.verify
+import org.mockito.ArgumentMatchers.any
+import org.mockito.{ArgumentMatcher, Mockito}
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play._
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
@@ -27,16 +30,22 @@ import play.api.test.Helpers._
 import play.api.test._
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.controllers.{FileStatus, UpscanNotification, UpscanNotificationController}
-import uk.gov.hmrc.customs.declaration.services.{CustomsNotificationService, UploadedFileCompletedScanDetails}
+import uk.gov.hmrc.customs.declaration.services.{UploadedFileProcessingService, UploadedFileDetails}
 
-class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Results {
+import scala.concurrent.Future
+
+class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Results with BeforeAndAfterEach {
 
   private val fileReference = UUID.randomUUID()
-  private val mockService = mock[CustomsNotificationService]
+  private val mockService = mock[UploadedFileProcessingService]
 
 
   private val post: Action[AnyContent] = new UpscanNotificationController(mockService)
     .post("decId", "eori", "docType", "clientSubscriptionId")
+
+  override def beforeEach()  {
+    reset(mockService)
+  }
 
 
   "upscan notification controller" should {
@@ -45,7 +54,17 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
       val result = post (fakeRequestWith(readyPayload))
       status(result) mustBe 204
       contentAsString(result) mustBe ""
-      verify(mockService).sendMessage(UploadedFileCompletedScanDetails("decId", "eori", "docType", "clientSubscriptionId", UpscanNotification(fileReference, FileStatus.READY, None, Some("https://some-url"))))
+      verify(mockService).sendMessage(UploadedFileDetails("decId", "eori", "docType", "clientSubscriptionId", UpscanNotification(fileReference, FileStatus.READY, None, Some("https://some-url"))))
+    }
+
+    "return 204 even when call to Custom Notifications services fails" in {
+      when(mockService.sendMessage(any[UploadedFileDetails]))
+        .thenReturn(Future.failed(new RuntimeException("something")))
+      
+      val result = post (fakeRequestWith(readyPayload))
+      status(result) mustBe 204
+      contentAsString(result) mustBe ""
+      verify(mockService).sendMessage(UploadedFileDetails("decId", "eori", "docType", "clientSubscriptionId", UpscanNotification(fileReference, FileStatus.READY, None, Some("https://some-url"))))
     }
 
     "return 204 when a valid FAILED request is received" in {

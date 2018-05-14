@@ -34,7 +34,7 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
 
   private val endpoint = "/file-upload"
 
-  private val BadRequestError =
+  private val BadRequestSchemaValidationError =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>
       |  <code>BAD_REQUEST</code>
@@ -48,6 +48,13 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       |</errorResponse>
     """.stripMargin
 
+  private val BadRequestErrorXBatchIdentifierMissingOrInvalid =
+    """<?xml version="1.0" encoding="UTF-8"?>
+      |<errorResponse>
+      |  <code>BAD_REQUEST</code>
+      |  <message>X-Badge-Identifier header is missing or invalid</message>
+      |</errorResponse>
+    """.stripMargin
 
   private val MalformedXmlBodyError =
     """<?xml version="1.0" encoding="UTF-8"?>
@@ -123,7 +130,7 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is a \"invalid xml\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestError)
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestSchemaValidationError)
     }
 
 
@@ -224,8 +231,7 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(ForbiddenError)
     }
 
-    //TODO MC revisit
-    ignore("Response status 403 when CSP sends the request (without badge identifier)") {
+    ignore("Response status 400 when CSP sends the request (without badge identifier)") {
       Given("request is sent by CSP")
       authServiceAuthorizesCSP()
       authServiceUnauthorisesCustomsEnrolmentForNonCSP(bearerToken = cspBearerToken)
@@ -234,15 +240,15 @@ class FileUploadUnhappyPathSpec extends AcceptanceTestSpec
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
 
-      Then(s"a response with a 403 status is received")
+      Then(s"a response with a 400 status is received")
       result shouldBe 'defined
       val resultFuture = result.value
 
-      status(resultFuture) shouldBe FORBIDDEN
+      status(resultFuture) shouldBe BAD_REQUEST
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is \"Forbidden\"")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(ForbiddenError)
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorXBatchIdentifierMissingOrInvalid)
     }
 
     scenario("Response status 406 when user submits a request with an invalid Accept header") {

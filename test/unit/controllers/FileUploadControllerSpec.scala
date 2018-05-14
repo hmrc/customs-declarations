@@ -62,7 +62,6 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.SAXException
 
-//TODO MC revisit
 class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
 
   private implicit val forConversions = TestConversationIdRequest
@@ -94,22 +93,17 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
   "FileUploadController" should {
 
     "return Right of ValidatedPayloadRequest when XML validation is OK" in new SetUp {
-      when(mockXmlValidationService.validate(ValidFileUploadXml)).thenReturn(Future.successful(()))
-
       val apiScope = "write:customs-declaration"
       val predicate: Predicate = Enrolment(apiScope) and AuthProviders(PrivilegedApplication)
-
       val customsEnrolmentName = "HMRC-CUS-ORG"
       val eoriIdentifier = "EORINumber"
-
       val customsEnrolment = Enrolment(customsEnrolmentName).withIdentifier(eoriIdentifier, "EORI123")
 
+      when(mockXmlValidationService.validate(ValidFileUploadXml)).thenReturn(Future.successful(()))
       when(mockAuthConnector.authorise(ameq(Enrolment(apiScope) and AuthProviders(PrivilegedApplication)), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Future.failed(new InsufficientEnrolments))
-
       when(mockAuthConnector.authorise(any, ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Enrolments(Set(customsEnrolment)))
-
       when(mockFileUploadBusinessService.send(any[ValidatedUploadPayloadRequest[AnyContentAsXml]],any[HeaderCarrier])).thenReturn(Future.successful(Right(())))
       val actual: Result = await(fileUploadController.post().apply(ValidRequest))(Duration.Inf)
 

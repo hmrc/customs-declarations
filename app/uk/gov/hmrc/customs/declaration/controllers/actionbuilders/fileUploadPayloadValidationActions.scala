@@ -45,13 +45,7 @@ class FileUploadPayloadValidationComposedAction @Inject()(fileUploadPayloadValid
       case NonCsp(_) => {
         fileUploadPayloadValidationAction.refine(ar).map {
           case Right(validatedPayloadRequest) =>
-            Right(ValidatedUploadPayloadRequest[A](
-              validatedPayloadRequest.conversationId,
-              validatedPayloadRequest.requestedApiVersion,
-              validatedPayloadRequest.clientId,
-              validatedPayloadRequest.authorisedAs,
-              validatedPayloadRequest.xmlBody,
-              validatedPayloadRequest.request,
+            Right(validatedPayloadRequest.toValidatedUploadPayloadRequest(
               DeclarationId((validatedPayloadRequest.xmlBody \ declarationIdPropertyName).text),
               DocumentationType((validatedPayloadRequest.xmlBody \ documentationTypePropertyName).text)))
           case Left(b) => Left(b)

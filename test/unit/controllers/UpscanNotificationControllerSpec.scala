@@ -19,7 +19,6 @@ package unit.controllers
 import java.util.UUID
 
 import org.mockito.ArgumentMatchers.any
-import org.mockito.{ArgumentMatcher, Mockito}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
@@ -30,7 +29,7 @@ import play.api.test.Helpers._
 import play.api.test._
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.controllers.{FileStatus, UpscanNotification, UpscanNotificationController}
-import uk.gov.hmrc.customs.declaration.services.{UploadedFileProcessingService, UploadedFileDetails}
+import uk.gov.hmrc.customs.declaration.services.{UploadedFileDetails, UploadedFileProcessingService}
 
 import scala.concurrent.Future
 
@@ -52,6 +51,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
 
     "return 204 when a valid READY request is received" in {
       val result = post (fakeRequestWith(readyPayload))
+
       status(result) mustBe 204
       contentAsString(result) mustBe ""
       verify(mockService).sendMessage(UploadedFileDetails("decId", "eori", "docType", "clientSubscriptionId", UpscanNotification(fileReference, FileStatus.READY, None, Some("https://some-url"))))
@@ -60,8 +60,9 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
     "return 204 even when call to Custom Notifications services fails" in {
       when(mockService.sendMessage(any[UploadedFileDetails]))
         .thenReturn(Future.failed(new RuntimeException("something")))
-      
+
       val result = post (fakeRequestWith(readyPayload))
+
       status(result) mustBe 204
       contentAsString(result) mustBe ""
       verify(mockService).sendMessage(UploadedFileDetails("decId", "eori", "docType", "clientSubscriptionId", UpscanNotification(fileReference, FileStatus.READY, None, Some("https://some-url"))))
@@ -69,18 +70,21 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
 
     "return 204 when a valid FAILED request is received" in {
       val result = post (fakeRequestWith(failedFileStatusPayload))
+
       status(result) mustBe 204
       contentAsString(result) mustBe ""
     }
 
     "return 400 when the request does not contain valid json" in {
       val result = post (FakeRequest().withTextBody("some").withHeaders((CONTENT_TYPE, "application/json")))
+
       status(result) mustBe 400
       await(result) mustBe ErrorResponse.errorBadRequest("Invalid JSON payload").JsonResult
     }
 
     "return 400 when request does not contain the reference" in {
       val result = post (fakeRequestWith(readyPayload - "reference"))
+
       status(result) mustBe 400
       val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
       badRequestJsValue.code mustBe expectedJsonValidationMessage

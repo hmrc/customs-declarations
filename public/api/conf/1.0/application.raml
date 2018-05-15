@@ -169,7 +169,20 @@ documentation:
             type: !include schemas/wco/declaration/FileUpload.xsd
             example: !include examples/example_file_upload_202.xml
         responses:
-          202:
+          200:
+            body:
+              example: |
+                 <?xml version="1.0" encoding="UTF-8"?>
+                 <fileUpload>
+                   <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
+                   <X-Amz-Algorithm>AWS4-HMAC-SHA256</X-Amz-Algorithm>
+                   <X-Amz-Expiration>2018-02-09T12:35:45.297Z</X-Amz-Expiration>
+                   <X-Amz-Signature>xxxx</X-Amz-Signature>
+                   <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+                   <acl>private</acl>
+                   <X-Amz-Credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-Credential>
+                   <policy>xxxxxxxx==</policy>
+                 </fileUpload>
           400:
             body:
               application/xml:

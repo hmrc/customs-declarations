@@ -86,7 +86,7 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
   private def preparePayload[A](xml: NodeSeq, clientId: FieldsId, dateTime: DateTime)
                                (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): NodeSeq = {
     logger.debug(s"preparePayload called")
-    wrapper.wrap(xml, clientId.value, dateTime)
+    wrapper.wrap(xml, clientId, dateTime)
   }
 
 }

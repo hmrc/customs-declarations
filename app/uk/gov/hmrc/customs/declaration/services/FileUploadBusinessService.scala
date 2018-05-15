@@ -41,7 +41,7 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
   private val callbackUrl = "https://traders-callback-url"
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
-  def send[A](implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Unit]] = {
+  def send[A](implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, InitiateUpscanResponsePayload]] = {
 
     futureApiSubFieldsId(vupr.clientId) flatMap {
       case Right(sfId) =>
@@ -64,8 +64,8 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
   }
 
   private def callBackend[A](subscriptionFieldsId: FieldsId)
-                            (implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Unit]] = {
-    upscanInitiateconnector.send(preparePayload(subscriptionFieldsId), vupr.requestedApiVersion).map(_ => Right(())).recover{
+                            (implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, InitiateUpscanResponsePayload]] = {
+    upscanInitiateconnector.send(preparePayload(subscriptionFieldsId), vupr.requestedApiVersion).map(f => Right(f)).recover{
       case NonFatal(e) =>
         logger.error(s"Upscan initiate call failed: ${e.getMessage}", e)
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)

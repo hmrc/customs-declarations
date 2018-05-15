@@ -18,9 +18,13 @@ package uk.gov.hmrc.customs.declaration.model
 
 import java.util.UUID
 
+import scala.xml.Elem
+
 case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 
-case class Eori(value: String) extends AnyVal
+case class Eori(value: String) extends AnyVal {
+  override def toString: String = value.toString
+}
 
 case class ClientId(value: String) extends AnyVal {
   override def toString: String = value.toString
@@ -34,13 +38,25 @@ case class CorrelationId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
 }
 
-case class BadgeIdentifier(value: String) extends AnyVal
+case class SubscriptionFieldsId(value: String) extends AnyVal {
+  override def toString: String = value.toString
+}
 
-case class FieldsId(value: String) extends AnyVal
+case class BadgeIdentifier(value: String) extends AnyVal {
+  override def toString: String = value.toString
+}
 
-case class DeclarationId(value: String) extends AnyVal
+case class FieldsId(value: String) extends AnyVal{
+  override def toString: String = value.toString
+}
 
-case class DocumentationType(value: String) extends AnyVal
+case class DeclarationId(value: String) extends AnyVal{
+  override def toString: String = value.toString
+}
+
+case class DocumentationType(value: String) extends AnyVal{
+  override def toString: String = value.toString
+}
 
 sealed trait ApiVersion {
   val value: String
@@ -63,3 +79,24 @@ case class NonCsp(eori: Eori) extends AuthorisedAs
 case class UpscanInitiatePayload(callbackUrl: String)
 
 case class FileUploadPayload(declarationID: String, documentationType: String)
+
+case class InitiateUpscanResponsePayload
+(
+  reference: String,
+  uploadRequest: InitiateUpscanUploadRequest
+)
+
+case class InitiateUpscanUploadRequest
+(
+  href: String,
+  fields: Map[String, String]
+)
+{
+  def toXml: String = s"<fileUpload><href>$href</href>" + fields.map{ f =>
+    val tag = f._1
+    val content = f._2
+    s"<$tag>$content</$tag>"
+  }.mkString(" ") + "</fileUpload>"
+
+}
+

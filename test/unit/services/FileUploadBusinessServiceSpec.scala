@@ -22,7 +22,7 @@ import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import play.api.mvc._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, UpscanInitiateConnector}
@@ -46,7 +46,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockUpscanInitiateConnector: UpscanInitiateConnector = mock[UpscanInitiateConnector]
-    protected val mockHttpResponse: HttpResponse = mock[HttpResponse]
+    protected val mockInitiateUpscanResponsePayload: InitiateUpscanResponsePayload = mock[InitiateUpscanResponsePayload]
 
     protected lazy val service: FileUploadBusinessService = new FileUploadBusinessService(mockLogger, mockApiSubscriptionFieldsConnector, mockUpscanInitiateConnector)
 
@@ -63,10 +63,10 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
     val upscanInitiatePayload = UpscanInitiatePayload("https://traders-callback-url/declarationId/decId123/eori/123/documentationType/docType456/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
 
-    protected def send(vupr: ValidatedUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Unit] = {
+    protected def send(vupr: ValidatedUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, InitiateUpscanResponsePayload] = {
       await(service.send(vupr, hc))
     }
-    when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockHttpResponse)
+    when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockInitiateUpscanResponsePayload)
   }
 
   "BusinessService" should {
@@ -74,10 +74,10 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     "send payload to connector" in new SetUp() {
 
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockHttpResponse)
-      val result: Either[Result, Unit] = send()
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockInitiateUpscanResponsePayload)
+      val result: Either[Result, InitiateUpscanResponsePayload] = send()
 
-      result shouldBe Right(())
+      result shouldBe Right(mockInitiateUpscanResponsePayload)
       verify(mockUpscanInitiateConnector).send(meq(upscanInitiatePayload), any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])
     }
   }
@@ -85,18 +85,18 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
   "pass in version to connector" in new SetUp() {
 
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockHttpResponse)
+    when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockInitiateUpscanResponsePayload)
 
-    val result: Either[Result, Unit] = send()
+    val result: Either[Result, InitiateUpscanResponsePayload] = send()
 
-    result shouldBe Right(())
+    result shouldBe Right(mockInitiateUpscanResponsePayload)
     verify(mockUpscanInitiateConnector).send(meq(upscanInitiatePayload), any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])
   }
 
   "return left when subscription field lookup fails" in new SetUp() {
 
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(new Exception))
-    when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockHttpResponse)
+    when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockInitiateUpscanResponsePayload)
 
     val result: Result = send().left.get
 

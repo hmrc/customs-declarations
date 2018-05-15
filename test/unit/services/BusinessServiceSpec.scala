@@ -28,7 +28,7 @@ import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnecto
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, ApiVersion, VersionOne}
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, ApiVersion, FieldsId, VersionOne}
 import uk.gov.hmrc.customs.declaration.services.{BusinessService, DateTimeService}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -61,7 +61,7 @@ class BusinessServiceSpec extends UnitSpec with MockitoSugar {
       await(service.send(vpr, hc))
     }
 
-    when(mockPayloadDecorator.wrap(meq(TestXmlPayload), meq(fieldsId.value), any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
+    when(mockPayloadDecorator.wrap(meq(TestXmlPayload), meq[String](fieldsId.value).asInstanceOf[FieldsId], any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockMdgWcoDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(mockHttpResponse)
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
@@ -100,7 +100,7 @@ class BusinessServiceSpec extends UnitSpec with MockitoSugar {
     val result: Either[Result, Unit] = send()
 
     result shouldBe Right(())
-    verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), meq(fieldsId.value), any[DateTime])(any[ValidatedPayloadRequest[_]])
+    verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), meq[String](fieldsId.value).asInstanceOf[FieldsId], any[DateTime])(any[ValidatedPayloadRequest[_]])
     verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
   }
 

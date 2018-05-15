@@ -20,10 +20,10 @@ import org.scalatest.{Matchers, OptionValues}
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
-import util.{AuditService, TestData}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, UpscanInitiateService}
+import util.{AuditService, TestData}
 
 import scala.concurrent.Future
 
@@ -64,7 +64,7 @@ class FileUploadSchemaSpec extends AcceptanceTestSpec
     }
 
 
-    scenario("Response status 202 when user submits correct request") {
+    scenario("Response status 200 when user submits correct request") {
       Given("the API is available")
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
       val request = ValidFileUploadRequest.fromNonCsp.postTo(endpoint)
@@ -72,8 +72,8 @@ class FileUploadSchemaSpec extends AcceptanceTestSpec
       When("a POST request with data is sent to the API")
       val result: Future[Result] = route(app = app, request).value
 
-      Then("a response with a 202 (ACCEPTED) status is received")
-      status(result) shouldBe ACCEPTED
+      Then("a response with a 200 (OK) status is received")
+      status(result) shouldBe OK
 
       headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }

@@ -149,5 +149,4 @@ class AuthAction @Inject()(
       eoriIdentifier <- customsEnrolment.getIdentifier("EORINumber")
     } yield Eori(eoriIdentifier.value)
   }
-
 }

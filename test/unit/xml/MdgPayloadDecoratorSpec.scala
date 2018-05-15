@@ -18,6 +18,7 @@ package unit.xml
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.mockito.MockitoSugar
+import uk.gov.hmrc.customs.declaration.model.FieldsId
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData
@@ -29,7 +30,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
   private val xml: NodeSeq = <node1></node1>
 
-  private val clientId = "clientId"
+  private val clientId = FieldsId("clientId")
 
   private val year = 2017
   private val monthOfYear = 6
@@ -76,7 +77,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
       val rd = result \\ "clientID"
 
-      rd.head.text shouldBe clientId
+      rd.head.text shouldBe clientId.value
     }
 
     "set the badgeIdentifier when present" in {

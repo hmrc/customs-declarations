@@ -51,6 +51,18 @@ class FileUploadSpec extends AcceptanceTestSpec
       |</errorResponse>
     """.stripMargin
 
+  private val validUpscanInitiateResponse =
+    """<fileUpload>
+      |<href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
+      |<X-Amz-Algorithm>AWS4-HMAC-SHA256</X-Amz-Algorithm>
+      |<X-Amz-Expiration>2018-02-09T12:35:45.297Z</X-Amz-Expiration>
+      |<X-Amz-Signature>xxxx</X-Amz-Signature>
+      |<key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+      |<acl>private</acl>
+      |<X-Amz-Credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-Credential>
+      |<policy>xxxxxxxx==</policy>
+      |</fileUpload>""".stripMargin
+
   override protected def beforeAll() {
     startMockServer()
   }
@@ -87,6 +99,7 @@ class FileUploadSpec extends AcceptanceTestSpec
       verifyAuthServiceCalledForCsp()
     }
 
+
     scenario("A non-CSP successfully submits a declaration on behalf of somebody with Customs enrolment") {
       Given("A Software House wants to submit a valid file upload request")
       startUpscanInitiateService()
@@ -100,11 +113,11 @@ class FileUploadSpec extends AcceptanceTestSpec
       When("a POST request with data is sent to the API")
       val result: Future[Result] = route(app = app, request).value
 
-      Then("a response with a 202 (ACCEPTED) status is received")
-      status(result) shouldBe ACCEPTED
+      Then("a response with a 200 (OK) status is received")
+      status(result) shouldBe OK
 
-      And("the response body is empty")
-      contentAsString(result) shouldBe 'empty
+      And("the response body should be correct")
+      string2xml(contentAsString(result)) shouldBe string2xml(validUpscanInitiateResponse)
 
       And("the request was authorised with AuthService")
       verifyAuthServiceCalledForNonCsp()

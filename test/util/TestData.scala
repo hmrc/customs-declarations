@@ -52,6 +52,7 @@ object TestData {
 
   val declarantEoriValue = "ZZ123456789000"
   val declarantEori = Eori(declarantEoriValue)
+  val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
 
   type EmulatedServiceFailure = UnsupportedOperationException
   val emulatedServiceFailure = new EmulatedServiceFailure("Emulated service failure.")

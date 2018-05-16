@@ -20,12 +20,14 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers._
 import util.CustomsDeclarationsExternalServicesConfig.UpscanInitiateContext
-import util.WireMockRunner
+import util.TestData.upscanInitiateReference
+import util.{TestData, WireMockRunner}
 
 trait UpscanInitiateService extends WireMockRunner {
   private val urlMatchingRequestPath = urlMatching(UpscanInitiateContext)
-  private val validUpscanInitiateResponse = """{
-    "reference": "11370e18-6e24-453e-b45a-76d3e32ea33d",
+
+  private val validUpscanInitiateResponse = s"""{
+    "reference": "${upscanInitiateReference}",
     "uploadRequest": {
       "href": "https://bucketName.s3.eu-west-2.amazonaws.com",
       "fields": {

@@ -22,6 +22,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.FakeRequests._
+import util.TestData
 import util.TestData._
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, UpscanInitiateService}
 
@@ -118,6 +119,9 @@ class FileUploadSpec extends AcceptanceTestSpec
 
       And("the response body should be correct")
       string2xml(contentAsString(result)) shouldBe string2xml(validUpscanInitiateResponse)
+
+      And("conversationId is correct")
+      headers(result).get("X-Conversation-ID") shouldBe Some(upscanInitiateReference)
 
       And("the request was authorised with AuthService")
       verifyAuthServiceCalledForNonCsp()

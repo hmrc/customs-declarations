@@ -18,6 +18,7 @@ package acceptance
 
 import java.util.UUID
 
+import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -30,7 +31,9 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
   with OptionValues
   with BeforeAndAfterAll
   with BeforeAndAfterEach
-  with CustomsNotificationService {
+  with CustomsNotificationService
+  with Eventually
+  with IntegrationPatience {
 
   private val decId = UUID.randomUUID().toString
   private val eori = UUID.randomUUID().toString
@@ -73,6 +76,7 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
 
   feature("Upscan notifications") {
     scenario("Correct request has been made to Customs Notification service") {
+      notificationServiceIsRunning()
       Given("A file has been uploaded by a CDS user")
       And("the uploaded file has been successfully scanned by upscan")
 
@@ -86,7 +90,7 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
       contentAsString(result) shouldBe empty
 
       And("a request is made to Custom Notification Service")
-      val (requestHeaders, requestPayload) = aRequestWasMadeToNotificationService()
+      val (requestHeaders, requestPayload) = eventually(aRequestWasMadeToNotificationService())
 
       And("The clientSubscriptionId is passed as X-CDS-Client-ID")
       requestHeaders.get("X-CDS-Client-ID") shouldBe Some(clientSubscriptionId)

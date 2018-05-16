@@ -75,7 +75,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
     "when making a successful request" should {
 
       "pass URL from config" in {
-        returnResponseForRequest(Future.successful(mock[InitiateUpscanResponsePayload]))
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
 
         awaitRequest
 
@@ -84,7 +84,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
       }
 
       "pass in the body" in {
-        returnResponseForRequest(Future.successful(mock[InitiateUpscanResponsePayload]))
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
 
         awaitRequest
 
@@ -93,7 +93,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
       }
 
       "prefix the config key with the prefix if passed" in {
-        returnResponseForRequest(Future.successful(mock[InitiateUpscanResponsePayload]))
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
 
         await(connector.send(upscanInitiatePayload, VersionTwo))
 
@@ -137,9 +137,9 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
     await(connector.send(upscanInitiatePayload, VersionTwo))
   }
 
-  private def returnResponseForRequest(eventualResponse: Future[InitiateUpscanResponsePayload]) = {
+  private def returnResponseForRequest(eventualResponse: Future[UpscanInitiateResponsePayload]) = {
     when(mockWsPost.POST(anyString, any[UpscanInitiatePayload], any[SeqOfHeader])(
-      any[Writes[UpscanInitiatePayload]], any[HttpReads[InitiateUpscanResponsePayload]](), any[HeaderCarrier](), any[ExecutionContext]))
+      any[Writes[UpscanInitiatePayload]], any[HttpReads[UpscanInitiateResponsePayload]](), any[HeaderCarrier](), any[ExecutionContext]))
       .thenReturn(eventualResponse)
   }
 }

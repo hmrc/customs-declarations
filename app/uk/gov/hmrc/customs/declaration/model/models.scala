@@ -18,7 +18,7 @@ package uk.gov.hmrc.customs.declaration.model
 
 import java.util.UUID
 
-import scala.xml.Elem
+import play.api.libs.json.{Json, OFormat}
 
 case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 
@@ -38,15 +38,11 @@ case class CorrelationId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
 }
 
-case class SubscriptionFieldsId(value: String) extends AnyVal {
-  override def toString: String = value.toString
-}
-
 case class BadgeIdentifier(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
 
-case class FieldsId(value: String) extends AnyVal{
+case class SubscriptionFieldsId(value: String) extends AnyVal{
   override def toString: String = value.toString
 }
 
@@ -78,15 +74,19 @@ case class NonCsp(eori: Eori) extends AuthorisedAs
 
 case class UpscanInitiatePayload(callbackUrl: String)
 
+object UpscanInitiatePayload {
+  implicit val format: OFormat[UpscanInitiatePayload] = Json.format[UpscanInitiatePayload]
+}
+
 case class FileUploadPayload(declarationID: String, documentationType: String)
 
-case class InitiateUpscanResponsePayload
-(
-  reference: String,
-  uploadRequest: InitiateUpscanUploadRequest
-)
+case class UpscanInitiateResponsePayload(reference: String, uploadRequest: UpscanInitiateUploadRequest)
 
-case class InitiateUpscanUploadRequest
+object UpscanInitiateUploadRequest {
+  implicit val format: OFormat[UpscanInitiateUploadRequest] = Json.format[UpscanInitiateUploadRequest]
+}
+
+case class UpscanInitiateUploadRequest
 (
   href: String,
   fields: Map[String, String]
@@ -97,6 +97,8 @@ case class InitiateUpscanUploadRequest
     val content = f._2
     s"<$tag>$content</$tag>"
   }.mkString(" ") + "</fileUpload>"
-
 }
 
+object UpscanInitiateResponsePayload {
+  implicit val format: OFormat[UpscanInitiateResponsePayload] = Json.format[UpscanInitiateResponsePayload]
+}

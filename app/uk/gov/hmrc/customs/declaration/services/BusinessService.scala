@@ -17,9 +17,8 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import java.net.URLEncoder
-import java.util.UUID
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
@@ -59,10 +58,10 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
   }
 
   private def futureApiSubFieldsId[A](c: ClientId)
-                                     (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, FieldsId]] = {
+                                     (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
-        Right(FieldsId(response.fieldsId.toString))
+        Right(SubscriptionFieldsId(response.fieldsId.toString))
     }).recover {
       case NonFatal(e) =>
         logger.error(s"Subscriptions fields lookup call failed: ${e.getMessage}", e)
@@ -70,7 +69,7 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  private def callBackend[A](subscriptionFieldsId: FieldsId)
+  private def callBackend[A](subscriptionFieldsId: SubscriptionFieldsId)
                             (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Unit]] = {
     val dateTime = dateTimeProvider.nowUtc()
     val correlationId = uniqueIdsService.correlation
@@ -83,7 +82,7 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  private def preparePayload[A](xml: NodeSeq, clientId: FieldsId, dateTime: DateTime)
+  private def preparePayload[A](xml: NodeSeq, clientId: SubscriptionFieldsId, dateTime: DateTime)
                                (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): NodeSeq = {
     logger.debug(s"preparePayload called")
     wrapper.wrap(xml, clientId, dateTime)

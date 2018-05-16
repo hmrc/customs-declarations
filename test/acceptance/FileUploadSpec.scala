@@ -22,7 +22,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.FakeRequests._
-import util.TestData
 import util.TestData._
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, UpscanInitiateService}
 
@@ -76,7 +75,6 @@ class FileUploadSpec extends AcceptanceTestSpec
     stopMockServer()
   }
 
-
   feature("File upload API authorises submissions from Software Houses with v2.0 accept header") {
 
     scenario("An unauthorised CSP is not allowed to submit a file upload request") {
@@ -99,7 +97,6 @@ class FileUploadSpec extends AcceptanceTestSpec
       And("the request was authorised with AuthService")
       verifyAuthServiceCalledForCsp()
     }
-
 
     scenario("A non-CSP successfully submits a declaration on behalf of somebody with Customs enrolment") {
       Given("A Software House wants to submit a valid file upload request")

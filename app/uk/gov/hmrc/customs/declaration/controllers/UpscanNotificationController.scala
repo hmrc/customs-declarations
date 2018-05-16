@@ -47,7 +47,7 @@ object UpscanNotification {
     fs == FileStatus.READY || (fs == FileStatus.FAILED && details.isDefined)
 
 
-  private val detailsReads: Reads[Option[String]] = (JsPath \ "fileStatus"). read[FileStatus].flatMap { fs =>
+  private val detailsReads: Reads[Option[String]] = (JsPath \ "fileStatus").read[FileStatus].flatMap { fs =>
     (__ \ "details").readNullable[String]
       .filter(ValidationError("File status is FAILED so details are required"))(detailsMustBeProvidedWhenStatusIsFailed(fs, _))
   }

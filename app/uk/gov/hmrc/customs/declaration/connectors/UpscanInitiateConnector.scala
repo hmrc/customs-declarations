@@ -16,16 +16,12 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import ch.qos.logback.classic.joran.action.InsertFromJNDIAction
 import com.google.inject._
-import play.api.http.MimeTypes
-import play.api.libs.json.{JsPath, Json, OFormat, Reads}
-import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
-import uk.gov.hmrc.customs.declaration.model.{ApiVersion, InitiateUpscanResponsePayload, InitiateUpscanUploadRequest, UpscanInitiatePayload}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
+import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiateResponsePayload, UpscanInitiatePayload}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,32 +34,24 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
 
   private val configKey = "upscan-initiate"
 
-  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vupr: ValidatedUploadPayloadRequest[A]): Future[InitiateUpscanResponsePayload] = {
+  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vupr: ValidatedUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     post(payload, config.url)
   }
 
-
   private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vupr: ValidatedUploadPayloadRequest[A]) = {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    implicit val payloadFormat: OFormat[UpscanInitiatePayload] = Json.format[UpscanInitiatePayload]
-
-    implicit val initiateUpscanUploadRequestFormat: OFormat[InitiateUpscanUploadRequest] = Json.format[InitiateUpscanUploadRequest]
-    implicit val initiateUpscanResponsePayloadFormat: OFormat[InitiateUpscanResponsePayload] = Json.format[InitiateUpscanResponsePayload]
-
 
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload: ${payload.toString}")
-    val eventualResponse = http.POST[UpscanInitiatePayload, InitiateUpscanResponsePayload](url, payload)
+    val eventualResponse = http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
     eventualResponse.map(res =>
       res
     ).recoverWith {
-        case httpError: HttpException => Future.failed(new RuntimeException(httpError))
-      }
-      .recoverWith {
-        case e: Throwable =>
-          logger.error(s"Call to upscan initiate failed. url=$url")
-          Future.failed(e)
-      }
+      case httpError: HttpException => Future.failed(new RuntimeException(httpError))
+      case e: Throwable =>
+        logger.error(s"Call to upscan initiate failed. url=$url")
+        Future.failed(e)
+    }
   }
 }

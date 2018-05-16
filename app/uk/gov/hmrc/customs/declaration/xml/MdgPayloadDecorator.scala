@@ -18,14 +18,14 @@ package uk.gov.hmrc.customs.declaration.xml
 
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
-import uk.gov.hmrc.customs.declaration.model.{Csp, FieldsId, SubscriptionFieldsId}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.{Csp, SubscriptionFieldsId}
 
 import scala.xml.NodeSeq
 
 class MdgPayloadDecorator() {
 
-  def wrap[A](xml: NodeSeq, clientId: FieldsId, dateTime: DateTime)(implicit vpr: ValidatedPayloadRequest[A]): NodeSeq =
+  def wrap[A](xml: NodeSeq, clientId: SubscriptionFieldsId, dateTime: DateTime)(implicit vpr: ValidatedPayloadRequest[A]): NodeSeq =
     <v1:submitDeclarationRequest
     xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1"
     xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2"

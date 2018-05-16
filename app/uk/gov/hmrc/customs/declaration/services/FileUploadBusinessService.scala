@@ -41,7 +41,7 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
   private val callbackUrl = "https://traders-callback-url"
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
-  def send[A](implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, InitiateUpscanResponsePayload]] = {
+  def send[A](implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, UpscanInitiateResponsePayload]] = {
 
     futureApiSubFieldsId(vupr.clientId) flatMap {
       case Right(sfId) =>
@@ -52,10 +52,10 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
   }
 
   private def futureApiSubFieldsId[A](c: ClientId)
-                                     (implicit vupr: GenericValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, FieldsId]] = {
+                                     (implicit vupr: GenericValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vupr.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
-        Right(FieldsId(response.fieldsId.toString))
+        Right(SubscriptionFieldsId(response.fieldsId.toString))
     }).recover {
       case NonFatal(e) =>
         logger.error(s"Subscriptions fields lookup call failed: ${e.getMessage}", e)
@@ -63,8 +63,8 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  private def callBackend[A](subscriptionFieldsId: FieldsId)
-                            (implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, InitiateUpscanResponsePayload]] = {
+  private def callBackend[A](subscriptionFieldsId: SubscriptionFieldsId)
+                            (implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, UpscanInitiateResponsePayload]] = {
     upscanInitiateconnector.send(preparePayload(subscriptionFieldsId), vupr.requestedApiVersion).map(f => Right(f)).recover{
       case NonFatal(e) =>
         logger.error(s"Upscan initiate call failed: ${e.getMessage}", e)
@@ -72,7 +72,7 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
     }
   }
 
-  private def preparePayload[A](subscriptionFieldsId: FieldsId)(implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
+  private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId)(implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
     logger.debug(s"preparePayload called")
     UpscanInitiatePayload(s"$callbackUrl/declarationId/${vupr.declarationId.value}/eori/${vupr.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${vupr.documentationType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
   }

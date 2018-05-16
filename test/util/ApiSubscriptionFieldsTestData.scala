@@ -24,8 +24,8 @@ import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsConte
 import util.ExternalServicesConfig.{Host, Port}
 
 trait ApiSubscriptionFieldsTestData {
-  val fieldsIdString = "327d9145-4965-4d28-a2c5-39dedee50334"
-  val fieldsId = FieldsId(fieldsIdString)
+  val subscriptionFieldsIdString = "327d9145-4965-4d28-a2c5-39dedee50334"
+  val subscriptionFieldsId = SubscriptionFieldsId(subscriptionFieldsIdString)
   val xClientId = "SOME_X_CLIENT_ID"
   val clientId = ClientId(xClientId)
   val apiContext = "some/api/context"
@@ -33,13 +33,13 @@ trait ApiSubscriptionFieldsTestData {
   val apiVersion = "1.0"
   val apiSubscriptionKey = ApiSubscriptionKey(clientId, apiContext, VersionOne)
   val apiSubscriptionKeyWithEncodedContext: ApiSubscriptionKey = apiSubscriptionKey.copy(context = apiContextEncoded)
-  val apiSubscriptionFieldsResponse = ApiSubscriptionFieldsResponse(UUID.fromString(fieldsIdString))
+  val apiSubscriptionFieldsResponse = ApiSubscriptionFieldsResponse(UUID.fromString(subscriptionFieldsIdString))
   val responseJsonString: String =
     s"""{
        |  "clientId": "afsdknbw34ty4hebdv",
        |  "apiContext": "ciao-api",
        |  "apiVersion": "1.0",
-       |  "fieldsId":"$fieldsIdString",
+       |  "fieldsId":"$subscriptionFieldsIdString",
        |  "fields":{
        |    "callback-id":"http://localhost",
        |    "token":"abc123"

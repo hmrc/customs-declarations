@@ -18,7 +18,7 @@ package unit.xml
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.customs.declaration.model.FieldsId
+import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData
@@ -30,7 +30,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
   private val xml: NodeSeq = <node1></node1>
 
-  private val clientId = FieldsId("clientId")
+  private val clientId = SubscriptionFieldsId("clientId")
 
   private val year = 2017
   private val monthOfYear = 6

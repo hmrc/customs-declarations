@@ -51,6 +51,18 @@ class FileUploadSpec extends AcceptanceTestSpec
       |</errorResponse>
     """.stripMargin
 
+  private val validUpscanInitiateResponse =
+    """<fileUpload>
+      |<href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
+      |<X-Amz-Algorithm>AWS4-HMAC-SHA256</X-Amz-Algorithm>
+      |<X-Amz-Expiration>2018-02-09T12:35:45.297Z</X-Amz-Expiration>
+      |<X-Amz-Signature>xxxx</X-Amz-Signature>
+      |<key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+      |<acl>private</acl>
+      |<X-Amz-Credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-Credential>
+      |<policy>xxxxxxxx==</policy>
+      |</fileUpload>""".stripMargin
+
   override protected def beforeAll() {
     startMockServer()
   }
@@ -62,7 +74,6 @@ class FileUploadSpec extends AcceptanceTestSpec
   override protected def afterAll() {
     stopMockServer()
   }
-
 
   feature("File upload API authorises submissions from Software Houses with v2.0 accept header") {
 
@@ -100,11 +111,14 @@ class FileUploadSpec extends AcceptanceTestSpec
       When("a POST request with data is sent to the API")
       val result: Future[Result] = route(app = app, request).value
 
-      Then("a response with a 202 (ACCEPTED) status is received")
-      status(result) shouldBe ACCEPTED
+      Then("a response with a 200 (OK) status is received")
+      status(result) shouldBe OK
 
-      And("the response body is empty")
-      contentAsString(result) shouldBe 'empty
+      And("the response body should be correct")
+      string2xml(contentAsString(result)) shouldBe string2xml(validUpscanInitiateResponse)
+
+      And("conversationId is correct")
+      headers(result).get("X-Conversation-ID") shouldBe Some(upscanInitiateReference)
 
       And("the request was authorised with AuthService")
       verifyAuthServiceCalledForNonCsp()

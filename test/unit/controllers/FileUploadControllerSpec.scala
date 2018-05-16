@@ -32,6 +32,8 @@
 
 package unit.controllers
 
+import java.util.UUID
+
 import akka.stream.Materializer
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
@@ -44,12 +46,11 @@ import uk.gov.hmrc.auth.core.AuthProvider.PrivilegedApplication
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, Retrievals}
-import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, FileUploadController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.{UpscanInitiateResponsePayload, UpscanInitiateUploadRequest}
 import uk.gov.hmrc.customs.declaration.services.{FileUploadBusinessService, FileUploadXmlValidationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
@@ -58,9 +59,7 @@ import util.TestData._
 import util.TestXMLData.ValidFileUploadXml
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.SAXException
 
 class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
 
@@ -82,6 +81,10 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
     val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, mockLogger)
     val fileUploadController = new FileUploadController(common, mockFileUploadBusinessService, fileUploadPayloadValidationComposedAction)
 
+    val upscanInitiateUploadRequest: UpscanInitiateUploadRequest = UpscanInitiateUploadRequest("http://some.url.com", Map("a" -> "b"))
+
+    val upscanInitiateResponsePayload = UpscanInitiateResponsePayload(UUID.randomUUID().toString, upscanInitiateUploadRequest)
+
   }
   lazy val ValidRequest: FakeRequest[AnyContentAsXml] = FakeRequest("POST", "/file-upload")
     .withHeaders(
@@ -92,7 +95,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
 
   "FileUploadController" should {
 
-    "return Right of ValidatedPayloadRequest when XML validation is OK" in new SetUp {
+    "return HTTP response code 200 (OK) when a valid payload is sent" in new SetUp {
       val apiScope = "write:customs-declaration"
       val predicate: Predicate = Enrolment(apiScope) and AuthProviders(PrivilegedApplication)
       val customsEnrolmentName = "HMRC-CUS-ORG"
@@ -104,11 +107,11 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
         .thenReturn(Future.failed(new InsufficientEnrolments))
       when(mockAuthConnector.authorise(any, ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Enrolments(Set(customsEnrolment)))
-      when(mockFileUploadBusinessService.send(any[ValidatedUploadPayloadRequest[AnyContentAsXml]],any[HeaderCarrier])).thenReturn(Future.successful(Right(())))
+      when(mockFileUploadBusinessService.send(any[ValidatedUploadPayloadRequest[AnyContentAsXml]],any[HeaderCarrier])).thenReturn(Future.successful(Right(upscanInitiateResponsePayload)))
 
-      val actual: Result = await(fileUploadController.post().apply(ValidRequest))(Duration.Inf)
+      val actual: Result = await(fileUploadController.post().apply(ValidRequest))
 
-      status(actual) shouldBe Status.ACCEPTED
+      status(actual) shouldBe Status.OK
     }
   }
 }

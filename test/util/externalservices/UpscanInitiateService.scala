@@ -20,18 +20,35 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers._
 import util.CustomsDeclarationsExternalServicesConfig.UpscanInitiateContext
-import util.WireMockRunner
+import util.TestData.upscanInitiateReference
+import util.{TestData, WireMockRunner}
 
 trait UpscanInitiateService extends WireMockRunner {
   private val urlMatchingRequestPath = urlMatching(UpscanInitiateContext)
 
+  private val validUpscanInitiateResponse = s"""{
+    "reference": "${upscanInitiateReference}",
+    "uploadRequest": {
+      "href": "https://bucketName.s3.eu-west-2.amazonaws.com",
+      "fields": {
+      "X-Amz-Algorithm": "AWS4-HMAC-SHA256",
+      "X-Amz-Expiration": "2018-02-09T12:35:45.297Z",
+      "X-Amz-Signature": "xxxx",
+      "key": "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "acl": "private",
+      "X-Amz-Credential": "ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request",
+      "policy": "xxxxxxxx=="
+    }
+    }
+  }""".stripMargin
+
   def startUpscanInitiateService(): Unit = {
-    setupUpscanInitiateToReturn(ACCEPTED)
+    setupUpscanInitiateToReturn(OK)
   }
 
   def setupUpscanInitiateToReturn(status: Int): StubMapping = stubFor(post(urlMatchingRequestPath).
     willReturn(
-      aResponse()
+      aResponse().withBody(validUpscanInitiateResponse)
         .withStatus(status)))
 
   def verifyUpscanInitiateServiceWasCalled() {

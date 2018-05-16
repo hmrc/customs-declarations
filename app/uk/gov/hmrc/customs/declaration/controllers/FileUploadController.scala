@@ -16,12 +16,14 @@
 
 package uk.gov.hmrc.customs.declaration.controllers
 
+import java.util.UUID
+
 import javax.inject.{Inject, Singleton}
-import play.api.http.MimeTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, UpscanInitiateUploadRequest}
 import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
@@ -57,9 +59,11 @@ extends BaseController {
       logger.debug(s"Request received. Payload = ${vupr.body.toString} headers = ${vupr.headers.headers}")
 
         fileUploadBusinessService.send map {
-          case Right(_) =>
+          case Right(res) =>
             logger.info(s"Upload initiate request processed successfully")
-            Accepted.as(MimeTypes.XML).withConversationId
+            val request: UpscanInitiateUploadRequest = res.uploadRequest
+            val elem = scala.xml.XML.loadString(request.toXml) // to make sure xml is valid
+            Ok(elem).withConversationId(ConversationId(UUID.fromString(res.reference)))
         case Left(errorResult) =>
           errorResult
       }

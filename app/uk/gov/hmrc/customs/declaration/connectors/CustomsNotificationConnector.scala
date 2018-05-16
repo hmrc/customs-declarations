@@ -58,7 +58,10 @@ class CustomsNotificationConnector @Inject()(http: HttpClient,
       serviceUrl,
       XMLHeader + notification.payload.toString(),
       headers.toSeq
-    ) map (_ => ()) recover {
+    ) map { _ =>
+      logger.info(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: Upscan notification processed successfully ")
+      ()
+    } recover {
       case e: Throwable =>
         logger.error(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}] FileUploadScanNotificationHandler -> Request to Customs Notification failed.", e)
     }

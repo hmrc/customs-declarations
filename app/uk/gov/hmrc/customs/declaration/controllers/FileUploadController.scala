@@ -63,10 +63,9 @@ extends BaseController {
         fileUploadBusinessService.send map {
           case Right(res) =>
             logger.info(s"Upload initiate request processed successfully")
-            implicit val conversationId: ConversationId = ConversationId(UUID.fromString(res.reference))
             val request: InitiateUpscanUploadRequest = res.uploadRequest
             val elem = scala.xml.XML.loadString(request.toXml) // to make sure xml is valid
-            Ok(elem).withConversationId
+            Ok(elem).withConversationId(ConversationId(UUID.fromString(res.reference)))
         case Left(errorResult) =>
           errorResult
       }

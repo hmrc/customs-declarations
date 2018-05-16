@@ -44,10 +44,8 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload: ${payload.toString}")
-    val eventualResponse = http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
-    eventualResponse.map(res =>
-      res
-    ).recoverWith {
+    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
+      .recoverWith {
       case httpError: HttpException => Future.failed(new RuntimeException(httpError))
       case e: Throwable =>
         logger.error(s"Call to upscan initiate failed. url=$url")

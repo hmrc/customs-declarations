@@ -33,6 +33,7 @@ import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
+import util.TestData
 
 import scala.concurrent.Future
 
@@ -118,7 +119,7 @@ class CustomsNotificationConnectorSpec extends UnitSpec
     }
 
     "log the error in case request to notification service fails" in {
-      val exception: RuntimeException = new RuntimeException("An error happened....")
+      val exception = new RuntimeException("An error happened....")
       when(mockHttpClient.POSTString[HttpResponse](any(), any(), any())(any(), any(), any()))
         .thenReturn(Future.failed(exception))
 

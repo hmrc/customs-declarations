@@ -18,7 +18,6 @@ package acceptance
 
 import java.util.UUID
 
-import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest

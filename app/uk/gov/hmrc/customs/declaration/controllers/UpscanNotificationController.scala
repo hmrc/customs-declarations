@@ -40,7 +40,6 @@ object FileStatus extends Enumeration {
 
 case class UpscanNotification(reference: UUID, fileStatus: FileStatus, details: Option[String], url: Option[String])
 
-
 object UpscanNotification {
 
   private def detailsMustBeProvidedWhenStatusIsFailed(fs: FileStatus, details: Option[String]) =

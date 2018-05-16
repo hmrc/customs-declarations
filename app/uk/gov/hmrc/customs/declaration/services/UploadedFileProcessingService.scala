@@ -19,7 +19,7 @@ package uk.gov.hmrc.customs.declaration.services
 import java.util.UUID
 
 import com.google.inject.{Inject, Singleton}
-import uk.gov.hmrc.customs.declaration.connectors.CustomsNotificationServiceConnector
+import uk.gov.hmrc.customs.declaration.connectors.CustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.controllers.{FileStatus, UpscanNotification}
 
 import scala.concurrent.Future
@@ -46,7 +46,7 @@ object CustomsNotification {
 
 
 @Singleton
-class UploadedFileProcessingService @Inject()(notificationConnector: CustomsNotificationServiceConnector) {
+class UploadedFileProcessingService @Inject()(notificationConnector: CustomsNotificationConnector) {
 
   def sendMessage(details: UploadedFileDetails): Future[Unit] =
     notificationConnector.send(CustomsNotification(details))

@@ -20,13 +20,13 @@ import org.scalatest._
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import util.{ExternalServicesConfig, CustomsDeclarationsExternalServicesConfig}
+import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig}
 
 import scala.util.control.NonFatal
 import scala.xml.{Node, Utility, XML}
 
 trait AcceptanceTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
-   with BeforeAndAfterAll with BeforeAndAfterEach {
+  with BeforeAndAfterAll with BeforeAndAfterEach {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
     "xml.max-errors" -> 2,
@@ -54,8 +54,11 @@ trait AcceptanceTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneApp
     "auditing.enabled" -> false,
     "auditing.consumer.baseUri.host" -> ExternalServicesConfig.Host,
     "auditing.consumer.baseUri.port" -> ExternalServicesConfig.Port,
-    "microservice.services.customs-notification.auth" -> CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
-    )).build()
+    "microservice.services.customs-notification.host" -> ExternalServicesConfig.Host,
+    "microservice.services.customs-notification.port" -> ExternalServicesConfig.Port,
+    "microservice.services.customs-notification.context" -> "/customs-notification/notify",
+    "microservice.services.customs-notification.bearer-token" -> CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
+  )).build()
 
   protected def string2xml(s: String): Node = {
     val xml = try {

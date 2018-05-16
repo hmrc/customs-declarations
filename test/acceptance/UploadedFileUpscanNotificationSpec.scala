@@ -20,13 +20,10 @@ import java.util.UUID
 
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.libs.json.Json
-import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import util.CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
 import util.externalservices.CustomsNotificationService
-
-import scala.concurrent.Future
 
 class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
   with Matchers
@@ -50,7 +47,6 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
 
   override protected def beforeEach() {
     resetMockServer()
-    registrationServiceIsRunning()
   }
 
   override protected def afterAll() {
@@ -76,33 +72,20 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
     """.stripMargin))
 
   feature("Upscan notifications") {
-
-    scenario("Notification is received successfully from upscan") {
-
+    scenario("Correct request has been made to Customs Notification service") {
       Given("A file has been uploaded by a CDS user")
       And("the uploaded file has been successfully scanned by upscan")
 
-
       When("upscan service notifies Declaration API using previously provided callback URL")
+      val result = route(app = app, validRequest).value
 
-      val result: Future[Result] = route(app = app, validRequest).value
-
-      Then("a response with a 204 status is returned")
+      Then("Declaration Service returns 204")
       status(result) shouldBe 204
 
       And("the response body is empty")
-      contentAsString(result) shouldBe 'empty
+      contentAsString(result) shouldBe empty
 
-    }
-
-    ignore("Correct request has been made to Customs Notification service") {
-
-      Given("A file has been uploaded by a CDS user")
-      And("the uploaded file has been successfully scanned by upscan")
-      And("upscan service notifies Declaration API using previously provided callback URL")
-      val result: Future[Result] = route(app = app, validRequest).value
-
-      Then("a request is made to Custom Notification Service")
+      And("a request is made to Custom Notification Service")
       val (requestHeaders, requestPayload) = aRequestWasMadeToNotificationService()
 
       And("The clientSubscriptionId is passed as X-CDS-Client-ID")
@@ -112,7 +95,7 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
       requestHeaders.get("X-Conversation-ID") shouldBe Some(fileReference)
 
       And("The Authorization header contains the value which is configured in the configs")
-      requestHeaders.get(AUTHORIZATION) shouldBe Some(CustomsNotificationAuthHeaderValue)
+      requestHeaders.get(AUTHORIZATION) shouldBe Some(s"Basic $CustomsNotificationAuthHeaderValue")
 
       And("The Content-Type header is application/xml; charset=UTF-8")
       requestHeaders.get(CONTENT_TYPE) shouldBe Some("application/xml; charset=UTF-8")
@@ -122,31 +105,24 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
 
 
       And("The request XML payload contains details of the scan outcome")
-      requestPayload shouldBe
-        """
-          |<?xml version="1.0" encoding="UTF-8"?>
+      string2xml(requestPayload) shouldBe string2xml(
+        """<?xml version="1.0" encoding="UTF-8" ?>
           |<root>
-          |   <FileStatus>SUCCESS</FileStatus>
-          |   <details>"File successfully received"</details>
+          |   <fileStatus>SUCCESS</fileStatus>
+          |   <details>File successfully received</details>
           |</root>
-        """.stripMargin
-
+        """.stripMargin)
     }
 
-    scenario("Response status 400 when receive file upload status message payload is invalid") {
-
+    scenario("Response status 400 when received file upload status message payload is invalid") {
       Given("A file has been uploaded by a CDS user")
       And("the uploaded file has been successfully scanned by upscan")
 
       When("upscan service notifies Declaration API using previously provided callback URL with incorrect json payload")
-      val result: Future[Result] = route(app = app, incorrectRequest).value
+      val result = route(app = app, incorrectRequest).value
 
       Then("a response with a 400 status is returned")
-      status(result) shouldBe 400
-
-      Then("no request is made to Custom Notification Service")
-      noRequestWasMadeToNotificationService()
+      status(result) should be (400)
     }
-
   }
 }

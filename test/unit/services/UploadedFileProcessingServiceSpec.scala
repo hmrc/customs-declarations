@@ -18,27 +18,24 @@ package unit.services
 
 import java.util.UUID
 
-import org.custommonkey.xmlunit.XMLUnit
-import org.mockito.{ArgumentCaptor, ArgumentMatchers, Mockito}
 import org.mockito.Mockito.{reset, verify, when}
-import org.mockito.internal.matchers.Equality
+import org.mockito.{ArgumentCaptor, ArgumentMatchers}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.test.Helpers._
-import uk.gov.hmrc.customs.declaration.connectors.CustomsNotificationServiceConnector
+import uk.gov.hmrc.customs.declaration.connectors.CustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.controllers.FileStatus._
-import uk.gov.hmrc.customs.declaration.controllers.{FileStatus, UpscanNotification}
+import uk.gov.hmrc.customs.declaration.controllers.UpscanNotification
 import uk.gov.hmrc.customs.declaration.services.{CustomsNotification, UploadedFileDetails, UploadedFileProcessingService}
 
 import scala.concurrent.Future
-import scala.xml.Elem
 import scala.xml.Utility.trim
 
 
 class UploadedFileProcessingServiceSpec extends PlaySpec with MockitoSugar with BeforeAndAfterEach {
 
-  private val customsNotificationConnector = mock[CustomsNotificationServiceConnector]
+  private val customsNotificationConnector = mock[CustomsNotificationConnector]
 
   private val service = new UploadedFileProcessingService(customsNotificationConnector)
 

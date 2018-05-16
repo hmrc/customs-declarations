@@ -26,7 +26,7 @@ import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, Results}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.declaration.controllers.FileStatus.FileStatus
-import uk.gov.hmrc.customs.declaration.services.{UploadedFileProcessingService, UploadedFileDetails}
+import uk.gov.hmrc.customs.declaration.services.{UploadedFileDetails, UploadedFileProcessingService}
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.Future
@@ -71,7 +71,7 @@ class UpscanNotificationController @Inject()(downstreamService: UploadedFileProc
             downstreamService.sendMessage(UploadedFileDetails(decId, eori, docType, clientSubscriptionId, n.value))
             Future.successful(Results.NoContent)
           }
-          case e: JsError => Future.successful(errorBadRequest(errorCode = "Unexpected JSON", errorMessage = e.errors.toString()).JsonResult)
+          case e: JsError => Future.successful(errorBadRequest(errorCode = "BAD_REQUEST", errorMessage = e.errors.toString()).JsonResult)
         }
       }
   }

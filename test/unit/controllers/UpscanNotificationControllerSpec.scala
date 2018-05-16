@@ -157,7 +157,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
        |}
     """.stripMargin).as[JsObject]
 
-  private val expectedJsonValidationMessage = "Unexpected JSON"
+  private val expectedJsonValidationMessage = "BAD_REQUEST"
 
   private def fakeRequestWith(json: JsValue) =
     FakeRequest().withJsonBody(json)

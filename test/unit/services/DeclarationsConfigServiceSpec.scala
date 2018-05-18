@@ -21,24 +21,20 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.customs.api.common.config.{ConfigValidationNelAdaptor, ServicesConfig}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiDefinitionConfig, CustomsEnrolmentConfig}
-import uk.gov.hmrc.customs.declaration.services.CustomsConfigService
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
 
-class CustomsConfigServiceSpec extends UnitSpec with MockitoSugar {
+class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
   private val validAppConfig: Config = ConfigFactory.parseString(
     """
-      |customs = {
-      |   definition = {
-      |     api-scope = "write:customs-declaration"
-      |   }
-      |
-      |   enrolment = {
-      |     name = "HMRC-CUS-ORG"
-      |     eori-identifier = "EORINumber"
-      |   }
-      |}
+      |microservice.services.api-subscription-fields.host=some-host
+      |microservice.services.api-subscription-fields.port=1111
+      |microservice.services.api-subscription-fields.context=/some-context
+      |microservice.services.customs-notification.host=some-host2
+      |microservice.services.customs-notification.port=1112
+      |microservice.services.customs-notification.bearer-token=some-token
+      |microservice.services.customs-notification.context=/some-context2
     """.stripMargin)
 
   private val emptyAppConfig: Config = ConfigFactory.parseString("")
@@ -49,22 +45,25 @@ class CustomsConfigServiceSpec extends UnitSpec with MockitoSugar {
   private val mockLogger = mock[DeclarationsLogger]
 
   private def customsConfigService(conf: Configuration) =
-    new CustomsConfigService(new ConfigValidationNelAdaptor(testServicesConfig(conf), conf), mockLogger)
+    new DeclarationsConfigService(new ConfigValidationNelAdaptor(testServicesConfig(conf), conf), mockLogger)
 
   "CustomsConfigService" should {
     "return config as object model when configuration is valid" in {
       val configService = customsConfigService(validServicesConfiguration)
 
-      configService.apiDefinitionConfig shouldBe ApiDefinitionConfig("write:customs-declaration")
-      configService.customsEnrolmentConfig shouldBe CustomsEnrolmentConfig("HMRC-CUS-ORG", "EORINumber")
+      configService.apiSubscriptionFieldsBaseUrl shouldBe "http://some-host:1111/some-context"
+      configService.customsNotificationBaseBaseUrl shouldBe "http://some-host2:1112/some-context2"
+      configService.customsNotificationBearerToken shouldBe "some-token"
     }
 
     "throw an exception when configuration is invalid, that contains AGGREGATED error messages" in {
       val expectedErrorMessage =
         """
-          |Could not find config key 'customs.definition.api-scope'
-          |Could not find config key 'customs.enrolment.name'
-          |Could not find config key 'customs.enrolment.eori-identifier'""".stripMargin
+          |Could not find config api-subscription-fields.host
+          |Service configuration not found for key: api-subscription-fields.context
+          |Could not find config customs-notification.host
+          |Service configuration not found for key: customs-notification.context
+          |Service configuration not found for key: customs-notification.bearer-token""".stripMargin
 
       val caught = intercept[IllegalStateException](customsConfigService(emptyServicesConfiguration))
       caught.getMessage shouldBe expectedErrorMessage

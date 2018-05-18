@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.model
 
-case class ApiDefinitionConfig(apiScope: String)
-
-case class CustomsEnrolmentConfig(customsEnrolmentName: String, eoriIdentifierName: String)
+trait DeclarationsConfig {
+  val apiSubscriptionFieldsBaseUrl: String
+  val customsNotificationBaseBaseUrl: String
+  val customsNotificationBearerToken: String
+}

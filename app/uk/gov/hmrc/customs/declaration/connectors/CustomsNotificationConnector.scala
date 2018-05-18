@@ -19,9 +19,8 @@ package uk.gov.hmrc.customs.declaration.connectors
 import com.google.inject.{Inject, Singleton}
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes
-import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.services.CustomsNotification
+import uk.gov.hmrc.customs.declaration.services.{CustomsNotification, DeclarationsConfigService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -31,15 +30,7 @@ import scala.concurrent.Future
 @Singleton
 class CustomsNotificationConnector @Inject()(http: HttpClient,
                                              logger: CdsLogger,
-                                             configs: ServicesConfig) {
-
-
-  private val service = "customs-notification"
-  private val serviceContext = service + ".context"
-  private val baseUrl = configs.baseUrl(service)
-  private val context = configs.getConfString(serviceContext, throw new IllegalStateException(s"Configuration error - $serviceContext not found."))
-  private val serviceUrl = s"$baseUrl$context"
-  private val basicAuthToken = configs.getConfString(s"$service.bearer-token", throw new IllegalStateException(s"Configuration error - $service.basicAuthToken not found."))
+                                             config: DeclarationsConfigService) {
 
   private implicit val hc = HeaderCarrier()
   private val XMLHeader = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>"""
@@ -47,15 +38,15 @@ class CustomsNotificationConnector @Inject()(http: HttpClient,
   def send(notification: CustomsNotification): Future[Unit] = {
 
     val headers: Map[String, String] = Map(
-      ("X-CDS-Client-ID" -> notification.clientSubscriptionId),
-      ("X-Conversation-ID" -> notification.conversationId.toString),
-      (CONTENT_TYPE -> s"${MimeTypes.XML}; charset=UTF-8"),
-      (ACCEPT -> MimeTypes.XML),
-      (AUTHORIZATION -> s"Basic $basicAuthToken"))
+      "X-CDS-Client-ID" -> notification.clientSubscriptionId,
+      "X-Conversation-ID" -> notification.conversationId.toString,
+      CONTENT_TYPE -> s"${MimeTypes.XML}; charset=UTF-8",
+      ACCEPT -> MimeTypes.XML,
+      AUTHORIZATION -> s"Basic ${config.customsNotificationBearerToken}")
 
 
     http.POSTString(
-      serviceUrl,
+      config.customsNotificationBaseBaseUrl,
       XMLHeader + notification.payload.toString(),
       headers.toSeq
     ) map { _ =>

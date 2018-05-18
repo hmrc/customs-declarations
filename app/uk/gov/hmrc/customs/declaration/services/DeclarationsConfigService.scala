@@ -20,27 +20,19 @@ import javax.inject.{Inject, Singleton}
 
 import uk.gov.hmrc.customs.api.common.config.ConfigValidationNelAdaptor
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiDefinitionConfig, CustomsEnrolmentConfig}
+import uk.gov.hmrc.customs.declaration.model.DeclarationsConfig
 
-import scalaz.ValidationNel
 import scalaz.syntax.apply._
 import scalaz.syntax.traverse._
 
 @Singleton
-class CustomsConfigService @Inject()(configValidationNel: ConfigValidationNelAdaptor, logger: DeclarationsLogger) {
+class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationNelAdaptor, logger: DeclarationsLogger) extends DeclarationsConfig {
 
-  private val root = configValidationNel.root
-
-  private val validatedDefinitionConfig: ValidationNel[String, ApiDefinitionConfig] =
-    root.string("customs.definition.api-scope").map(ApiDefinitionConfig.apply)
-
-  private val validatedCustomsEnrolmentConfig: ValidationNel[String, CustomsEnrolmentConfig] = (
-    root.string("customs.enrolment.name") |@|
-      root.string("customs.enrolment.eori-identifier")
-    ) (CustomsEnrolmentConfig.apply)
-
-  private val customsConfigHolder =
-    (validatedDefinitionConfig |@| validatedCustomsEnrolmentConfig) (CustomsConfigHolder.apply) fold(
+  private val customsNotificationsServiceNel = configValidationNel.service("customs-notification")
+  private lazy val customsConfigHolder =
+    (configValidationNel.service("api-subscription-fields").serviceUrl |@|
+     customsNotificationsServiceNel.serviceUrl |@|
+     customsNotificationsServiceNel.string("bearer-token"))(DeclarationsConfigImpl.apply) fold(
       fail = { nel =>
         // error case exposes nel (a NotEmptyList)
         val errorMsg = nel.toList.mkString("\n", "\n", "")
@@ -50,12 +42,16 @@ class CustomsConfigService @Inject()(configValidationNel: ConfigValidationNelAda
       succ = identity
     )
 
-  val apiDefinitionConfig: ApiDefinitionConfig = customsConfigHolder.apiDefinitionConfig
+  val apiSubscriptionFieldsBaseUrl: String = customsConfigHolder.apiSubscriptionFieldsBaseUrl
 
-  val customsEnrolmentConfig: CustomsEnrolmentConfig = customsConfigHolder.customsEnrolmentConfig
+  val customsNotificationBaseBaseUrl: String = customsConfigHolder.customsNotificationBaseBaseUrl
 
+  val customsNotificationBearerToken: String = customsConfigHolder.customsNotificationBearerToken
 
-  private case class CustomsConfigHolder(apiDefinitionConfig: ApiDefinitionConfig,
-                                         customsEnrolmentConfig: CustomsEnrolmentConfig)
+  private case class DeclarationsConfigImpl(
+    apiSubscriptionFieldsBaseUrl: String,
+    customsNotificationBaseBaseUrl: String,
+    customsNotificationBearerToken: String
+  ) extends DeclarationsConfig
 
 }

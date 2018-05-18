@@ -62,8 +62,7 @@ extends BaseController {
           case Right(res) =>
             logger.info(s"Upload initiate request processed successfully")
             val request: UpscanInitiateUploadRequest = res.uploadRequest
-            val elem = scala.xml.XML.loadString(request.toXml) // to make sure xml is valid
-            Ok(elem).withConversationId(ConversationId(UUID.fromString(res.reference)))
+            Ok(request.toXml).withConversationId(ConversationId(UUID.fromString(res.reference)))
         case Left(errorResult) =>
           errorResult
       }

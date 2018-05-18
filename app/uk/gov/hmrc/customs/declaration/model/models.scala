@@ -20,6 +20,8 @@ import java.util.UUID
 
 import play.api.libs.json.{Json, OFormat}
 
+import scala.xml.{Elem, Node, NodeSeq}
+
 case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 
 case class Eori(value: String) extends AnyVal {
@@ -92,11 +94,25 @@ case class UpscanInitiateUploadRequest
   fields: Map[String, String]
 )
 {
-  def toXml: String = s"<fileUpload><href>$href</href>" + fields.map{ f =>
-    val tag = f._1
-    val content = f._2
-    s"<$tag>$content</$tag>"
-  }.mkString(" ") + "</fileUpload>"
+  def addChild(n: NodeSeq, newChild: Node): NodeSeq = n match {
+    case Elem(prefix, label, attribs, scope, child @ _*) =>
+      Elem(prefix, label, attribs, scope, true, child ++ newChild : _*)
+    case _ => sys.error("Can only add children to elements!")
+  }
+
+  def toXml: NodeSeq = {
+    var payload: NodeSeq = <fileUpload>
+      <href>
+        {href}
+      </href>
+    </fileUpload>
+    fields.map { f =>
+      val tag = f._1
+      val content = f._2
+      payload = addChild(payload, <a/>.copy(label = tag, child = scala.xml.Text(content)))
+    }
+    payload
+  }
 }
 
 object UpscanInitiateResponsePayload {

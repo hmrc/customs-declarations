@@ -17,11 +17,11 @@
 package uk.gov.hmrc.customs.declaration.config
 
 import com.google.inject.AbstractModule
-import uk.gov.hmrc.customs.declaration.services.CustomsConfigService
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 
 class CustomsDeclarationsModule extends AbstractModule {
   def configure() {
     // asEagerSingleton forces evaluation at application startup time
-    bind(classOf[CustomsConfigService]).asEagerSingleton()
+    bind(classOf[DeclarationsConfigService]).asEagerSingleton()
   }
 }

@@ -26,8 +26,7 @@ import uk.gov.hmrc.customs.api.common.controllers.DocumentationController
 @Singleton
 class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorHandler, configuration: Configuration) extends DocumentationController(httpErrorHandler) {
 
-  private val apiScopeConfigKey = "customs.definition.api-scope"
-  private lazy val apiScopeKey = configuration.getString(apiScopeConfigKey).getOrElse(throw new IllegalStateException(s"$apiScopeConfigKey is not configured"))
+  private lazy val apiScopeKey = "write:customs-declaration"
   private lazy val whitelistedApplicationIds = configuration.getStringSeq("api.access.version-2.0.whitelistedApplicationIds").getOrElse(Seq.empty)
   private lazy val version2EndpointsEnabled = configuration.getBoolean("api.access.version-2.0.enabled").getOrElse(true)
 

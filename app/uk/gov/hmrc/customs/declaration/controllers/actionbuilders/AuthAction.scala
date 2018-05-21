@@ -100,7 +100,7 @@ class AuthAction @Inject()(
       }
     }.recover{
       case NonFatal(_: AuthorisationException) =>
-        logger.error("Not authorised as CSP")
+        logger.debug("Not authorised as CSP")
         Right(None)
       case NonFatal(e) =>
         logger.error("Error authorising CSP", e)

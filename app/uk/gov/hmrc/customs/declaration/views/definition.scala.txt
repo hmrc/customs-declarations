@@ -1,7 +1,6 @@
 @import play.api.libs.json.Json
 
-@(  apiScopeKey: String,
-    v1PrivateAccessEnabled: Boolean,
+@(  v1PrivateAccessEnabled: Boolean,
     v1WhitelistedApplicationIds:  Seq[String],
     v2PrivateAccessEnabled: Boolean,
     v2WhitelistedApplicationIds: Seq[String],
@@ -11,7 +10,7 @@
 {
   "scopes": [
     {
-      "key": "@apiScopeKey",
+      "key": "write:customs-declaration",
       "name": "Submit a Customs Declaration",
       "description": "Submit a Customs Declaration"
     }

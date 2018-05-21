@@ -26,8 +26,6 @@ import uk.gov.hmrc.customs.api.common.controllers.DocumentationController
 @Singleton
 class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorHandler, configuration: Configuration) extends DocumentationController(httpErrorHandler) {
 
-  private lazy val apiScopeKey = "write:customs-declaration"
-
   private lazy val v1PrivateAccessEnabled = configuration.getBoolean("api.access.version-1.0.private").getOrElse(false)
   private lazy val v2PrivateAccessEnabled = configuration.getBoolean("api.access.version-2.0.private").getOrElse(false)
 
@@ -37,7 +35,7 @@ class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorH
   private lazy val v2Enabled = configuration.getBoolean("api.access.version-2.0.enabled").getOrElse(true)
 
   def definition(): Action[AnyContent] = Action {
-    Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(apiScopeKey,
+    Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(
       v1PrivateAccessEnabled,
       v1WhitelistedApplicationIds,
       v2PrivateAccessEnabled,

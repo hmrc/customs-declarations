@@ -29,14 +29,13 @@ import scala.concurrent.Future
 class DefinitionSpecWithAllVersionsEnabledByDefault extends AcceptanceTestSpec with Matchers {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
-    "api.access.version-2.0.private" -> true,
     "api.access.version-2.0.whitelistedApplicationIds.0" -> "someId-1",
     "api.access.version-2.0.whitelistedApplicationIds.1" -> "someId-2"
   )).build()
 
   feature("Ensure definition file") {
 
-    scenario("is correct and all versions are enabled by default") {
+    scenario("is correct when V1 is public and V2 is private") {
 
       Given("the API is available")
       val request = FakeRequest("GET", "/api/definition")
@@ -49,6 +48,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends AcceptanceTestSpec w
       status(resultFuture) shouldBe OK
 
       And("the response body is correct")
+
       contentAsJson(resultFuture) shouldBe Json.parse(
         """
           |{

@@ -51,6 +51,14 @@ class CancelDeclarationController @Inject()(
   payloadValidationAction: CancelPayloadValidationAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
 
+@Singleton
+class ClearanceDeclarationController @Inject()(
+ common: Common,
+ businessService: BusinessService,
+ payloadValidationAction: ClearancePayloadValidationAction
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
+
+
 abstract class CustomsDeclarationController(
   common: Common,
   businessService: BusinessService,

@@ -92,6 +92,10 @@ object FakeRequests {
   lazy val NoClientIdIdHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
     .copyFakeRequest(headers = ValidCancellationRequest.headers.remove(X_CLIENT_ID_ID_NAME))
 
+  lazy val ValidClearanceRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV2.toSeq: _*)
+    //TODO: MJC change this to clearance XML when we have schema
+    .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidCancellationRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)

@@ -33,13 +33,12 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc.{ActionRefiner, AnyContent, Result}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.{CancellationXmlValidationService, SubmissionXmlValidationService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.services.{CancellationXmlValidationService, ClearanceXmlValidationService, SubmissionXmlValidationService, XmlValidationService}
 
 import scala.collection.Seq
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -49,6 +48,9 @@ import scala.xml.{NodeSeq, SAXException}
 
 @Singleton
 class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+
+@Singleton
+class ClearancePayloadValidationAction @Inject() (xmlValidationService: ClearanceXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
 class CancelPayloadValidationAction @Inject() (xmlValidationService: CancellationXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)

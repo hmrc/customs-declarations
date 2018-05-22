@@ -23,3 +23,19 @@ import play.api.Configuration
 class SubmissionXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
   override protected val schemaPropertyName: String = "xsd.locations.submit"
 }
+
+@Singleton
+class FileUploadXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
+  override protected val schemaPropertyName: String = "xsd.locations.fileupload"
+}
+
+@Singleton
+class CancellationXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
+  override protected val schemaPropertyName: String = "xsd.locations.cancel"
+}
+
+@Singleton
+class ClearanceXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
+  //TODO MJC: Change schema location to clearance when we have correct schema files
+  override protected val schemaPropertyName: String = "xsd.locations.submit"
+}

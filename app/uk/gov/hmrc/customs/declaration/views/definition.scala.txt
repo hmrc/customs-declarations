@@ -1,9 +1,14 @@
 @import play.api.libs.json.Json
-@(apiScopeKey: String, whitelistedApplicationIds: Seq[String], version2EndpointsEnabled: Boolean)
+
+@(  mayBeV1WhitelistedApplicationIds:  Option[Seq[String]],
+    mayBeV2WhitelistedApplicationIds: Option[Seq[String]],
+    v2Enabled: Boolean
+ )
+
 {
   "scopes": [
     {
-      "key": "@apiScopeKey",
+      "key": "write:customs-declaration",
       "name": "Submit a Customs Declaration",
       "description": "Submit a Customs Declaration"
     }
@@ -18,7 +23,12 @@
         "status": "BETA",
         "endpointsEnabled": true,
         "access": {
-          "type": "PUBLIC"
+            @mayBeV1WhitelistedApplicationIds.fold(""" "type": "PUBLIC" """)( ids =>
+                s"""
+                    "type": "PRIVATE",
+                    "whitelistedApplicationIds": ${Json.toJson(ids)}
+                """
+            )
         },
         "fieldDefinitions": [
           {
@@ -38,10 +48,14 @@
       {
         "version": "2.0",
         "status": "BETA",
-        "endpointsEnabled": @version2EndpointsEnabled,
+        "endpointsEnabled": @v2Enabled,
         "access": {
-          "type": "PRIVATE",
-          "whitelistedApplicationIds": @Json.toJson(whitelistedApplicationIds)
+            @mayBeV2WhitelistedApplicationIds.fold(""" "type": "PUBLIC" """)( ids =>
+                s"""
+                    "type": "PRIVATE",
+                    "whitelistedApplicationIds": ${Json.toJson(ids)}
+                """
+            )
         },
         "fieldDefinitions": [
           {

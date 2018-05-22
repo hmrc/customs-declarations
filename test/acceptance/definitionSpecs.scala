@@ -35,7 +35,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends AcceptanceTestSpec w
 
   feature("Ensure definition file") {
 
-    scenario("is correct and all versions are enabled by default") {
+    scenario("is correct when V1 is public and V2 is private") {
 
       Given("the API is available")
       val request = FakeRequest("GET", "/api/definition")
@@ -48,6 +48,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends AcceptanceTestSpec w
       status(resultFuture) shouldBe OK
 
       And("the response body is correct")
+
       contentAsJson(resultFuture) shouldBe Json.parse(
         """
           |{
@@ -122,8 +123,6 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends AcceptanceTestSpec w
 class DefinitionSpecWithVersion2Disabled extends AcceptanceTestSpec with Matchers {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
-    "api.access.version-2.0.whitelistedApplicationIds.0" -> "someId-1",
-    "api.access.version-2.0.whitelistedApplicationIds.1" -> "someId-2",
     "api.access.version-2.0.enabled" -> false
   )).build()
 
@@ -184,11 +183,7 @@ class DefinitionSpecWithVersion2Disabled extends AcceptanceTestSpec with Matcher
           |        "status": "BETA",
           |        "endpointsEnabled": false,
           |        "access": {
-          |          "type": "PRIVATE",
-          |          "whitelistedApplicationIds": [
-          |            "someId-1",
-          |            "someId-2"
-          |          ]
+          |          "type": "PUBLIC"
           |        },
           |        "fieldDefinitions": [
           |          {

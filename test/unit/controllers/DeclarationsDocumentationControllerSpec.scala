@@ -75,7 +75,7 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
 
       status(result) mustBe 200
       contentAsJson(result) mustBe expectedJson(
-        expectedV1WhitelistedAppIds =Some(v1WhitelistedAppIdsConfigs.values),
+        expectedV1WhitelistedAppIds = Some(v1WhitelistedAppIdsConfigs.values),
         expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values))
     }
   }

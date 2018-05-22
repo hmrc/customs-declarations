@@ -26,15 +26,15 @@ import uk.gov.hmrc.customs.api.common.controllers.DocumentationController
 @Singleton
 class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorHandler, configuration: Configuration) extends DocumentationController(httpErrorHandler) {
 
-  private lazy val v1WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-1.0.whitelistedApplicationIds")
-  private lazy val v2WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-2.0.whitelistedApplicationIds")
+  private lazy val mayBeV1WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-1.0.whitelistedApplicationIds")
+  private lazy val mayBeV2WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-2.0.whitelistedApplicationIds")
 
   private lazy val v2Enabled = configuration.getBoolean("api.access.version-2.0.enabled").getOrElse(true)
 
   def definition(): Action[AnyContent] = Action {
     Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(
-      v1WhitelistedApplicationIds,
-      v2WhitelistedApplicationIds,
+      mayBeV1WhitelistedApplicationIds,
+      mayBeV2WhitelistedApplicationIds,
       v2Enabled)).withHeaders(CONTENT_TYPE -> JSON)
   }
 }

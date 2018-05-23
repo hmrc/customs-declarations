@@ -106,7 +106,7 @@ case class UpscanInitiateUploadRequest
         {href}
       </href>
     </fileUpload>
-    fields.map { f =>
+    fields.foreach { f =>
       val tag = f._1
       val content = f._2
       payload = addChild(payload, <a/>.copy(label = tag, child = scala.xml.Text(content)))

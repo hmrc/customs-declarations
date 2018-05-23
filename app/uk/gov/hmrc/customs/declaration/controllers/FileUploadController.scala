@@ -60,9 +60,9 @@ extends BaseController {
 
         fileUploadBusinessService.send map {
           case Right(res) =>
-            logger.info(s"Upload initiate request processed successfully")
-            val request: UpscanInitiateUploadRequest = res.uploadRequest
-            Ok(request.toXml).withConversationId(ConversationId(UUID.fromString(res.reference)))
+            val reference = res.reference
+            logger.info(s"Upload initiate request processed successfully. Replacing conversationId with $reference")
+            Ok(res.uploadRequest.toXml).withConversationId(ConversationId(UUID.fromString(reference)))
         case Left(errorResult) =>
           errorResult
       }

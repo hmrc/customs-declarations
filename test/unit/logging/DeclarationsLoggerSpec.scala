@@ -16,7 +16,6 @@
 
 package unit.logging
 
-import org.mockito.ArgumentMatchers.{eq => ameq}
 import org.scalatest.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger

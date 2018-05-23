@@ -46,14 +46,16 @@ import uk.gov.hmrc.auth.core.AuthProvider.PrivilegedApplication
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, Retrievals}
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, FileUploadController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
-import uk.gov.hmrc.customs.declaration.model.{UpscanInitiateResponsePayload, UpscanInitiateUploadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedUploadPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, UpscanInitiateResponsePayload, UpscanInitiateUploadRequest}
 import uk.gov.hmrc.customs.declaration.services.{FileUploadBusinessService, FileUploadXmlValidationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
+import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders
 import util.TestData._
 import util.TestXMLData.ValidFileUploadXml
@@ -68,17 +70,18 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
 
   trait SetUp {
     val mockXmlValidationService: FileUploadXmlValidationService = mock[FileUploadXmlValidationService]
-    val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
+    val mockCdsLogger = mock[CdsLogger]
+    val logger = new DeclarationsLogger(mockCdsLogger)
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-    val stubConversationIdAction: ConversationIdAction = new ConversationIdAction(stubUniqueIdsService, mockLogger)
-    val stubAuthAction = new AuthAction(mockAuthConnector, mockLogger)
-    val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger)
+    val stubConversationIdAction: ConversationIdAction = new ConversationIdAction(stubUniqueIdsService, logger)
+    val stubAuthAction = new AuthAction(mockAuthConnector, logger)
+    val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(logger), logger)
 
-    val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
+    val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, logger)
     val mockFileUploadBusinessService = mock[FileUploadBusinessService]
-    val fileUploadPayloadValidationAction = new FileUploadPayloadValidationAction(mockXmlValidationService, mockLogger)
-    val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, mockLogger)
+    val fileUploadPayloadValidationAction = new FileUploadPayloadValidationAction(mockXmlValidationService, logger)
+    val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, logger)
     val fileUploadController = new FileUploadController(common, mockFileUploadBusinessService, fileUploadPayloadValidationComposedAction)
 
     val upscanInitiateUploadRequest: UpscanInitiateUploadRequest = UpscanInitiateUploadRequest("http://some.url.com", Map("a" -> "b"))
@@ -101,6 +104,9 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       val customsEnrolmentName = "HMRC-CUS-ORG"
       val eoriIdentifier = "EORINumber"
       val customsEnrolment = Enrolment(customsEnrolmentName).withIdentifier(eoriIdentifier, "EORI123")
+      val conversationId = new HasConversationId {
+        override val conversationId: ConversationId = ConversationId(UUID.fromString(upscanInitiateResponsePayload.reference))
+      }
 
       when(mockXmlValidationService.validate(ValidFileUploadXml)).thenReturn(Future.successful(()))
       when(mockAuthConnector.authorise(ameq(Enrolment(apiScope) and AuthProviders(PrivilegedApplication)), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext]))
@@ -112,6 +118,9 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       val actual: Result = await(fileUploadController.post().apply(ValidRequest))
 
       status(actual) shouldBe Status.OK
+      PassByNameVerifier(mockCdsLogger, "info")
+        .withByNameParam(s"[conversationId=${upscanInitiateResponsePayload.reference}] Upload initiate request processed successfully.")
+        .verify()
     }
   }
 }

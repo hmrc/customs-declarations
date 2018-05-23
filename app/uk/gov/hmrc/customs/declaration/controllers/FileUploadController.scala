@@ -21,9 +21,9 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
-import uk.gov.hmrc.customs.declaration.model.{ConversationId, UpscanInitiateUploadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
@@ -34,8 +34,8 @@ class FileUploadController @Inject()(
                                       common: Common,
                                       fileUploadBusinessService: FileUploadBusinessService,
                                       fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction
-)
-extends BaseController {
+                                    )
+  extends BaseController {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {
     case Right(xml) =>
@@ -54,17 +54,20 @@ extends BaseController {
     .async(bodyParser = xmlOrEmptyBody) {
 
       implicit vupr: ValidatedUploadPayloadRequest[AnyContent] =>
-      val logger = common.logger
+        val logger = common.logger
 
-      logger.debug(s"Request received. Payload = ${vupr.body.toString} headers = ${vupr.headers.headers}")
+        logger.debug(s"Request received. Payload = ${vupr.body.toString} headers = ${vupr.headers.headers}")
 
         fileUploadBusinessService.send map {
           case Right(res) =>
-            val reference = res.reference
-            logger.info(s"Upload initiate request processed successfully. Replacing conversationId with $reference")
-            Ok(res.uploadRequest.toXml).withConversationId(ConversationId(UUID.fromString(reference)))
-        case Left(errorResult) =>
-          errorResult
-      }
+            val referenceConversationId = ConversationId(UUID.fromString(res.reference))
+            logger.debug(s"Replacing conversationId with $referenceConversationId")
+            logger.info(s"Upload initiate request processed successfully.")(new HasConversationId {
+              override val conversationId: ConversationId = referenceConversationId
+            })
+            Ok(res.uploadRequest.toXml).withConversationId(referenceConversationId)
+          case Left(errorResult) =>
+            errorResult
+        }
     }
 }

@@ -20,7 +20,7 @@ import com.google.inject._
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
-import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiateResponsePayload, UpscanInitiatePayload}
+import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -45,11 +45,15 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
 
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload: ${payload.toString}")
     http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
+      .map { res: UpscanInitiateResponsePayload =>
+        logger.debug(s"Response received from upscan initiate service $res")
+        res
+      }
       .recoverWith {
-      case httpError: HttpException => Future.failed(new RuntimeException(httpError))
-      case e: Throwable =>
-        logger.error(s"Call to upscan initiate failed. url=$url")
-        Future.failed(e)
-    }
+        case httpError: HttpException => Future.failed(new RuntimeException(httpError))
+        case e: Throwable =>
+          logger.error(s"Call to upscan initiate failed. url=$url")
+          Future.failed(e)
+      }
   }
 }

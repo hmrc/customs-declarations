@@ -49,10 +49,8 @@ object LoggingHelper {
   }
 
   private def format(r: HasConversationId): String = {
-    def conversationId = r match {
-      case c: HasConversationId => s"[conversationId=${c.conversationId}]"
-      case _ => ""
-    }
+    def conversationId = s"[conversationId=${r.conversationId}]"
+
     def extractedHeaders = r match {
       case h: ExtractedHeaders => s"[clientId=${h.clientId}][requestedApiVersion=${h.requestedApiVersion}]"
       case _ => ""
@@ -65,13 +63,8 @@ object LoggingHelper {
   }
 
   def formatMessageFull(msg: String, r: HasConversationId with Request[_]): String = {
-    def filteredHeaders = r match {
-      case request: Request[_] =>
-        request.headers.toSimpleMap.filter(keyValTuple =>
-          headerSet.contains(keyValTuple._1.toLowerCase)
-        )
-      case _ => ""
-    }
+    def filteredHeaders = r.headers.toSimpleMap.filter(keyValTuple =>
+      headerSet.contains(keyValTuple._1.toLowerCase))
 
     s"[conversationId=${r.conversationId.uuid}] $msg headers=$filteredHeaders"
   }

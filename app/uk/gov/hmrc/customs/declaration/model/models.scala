@@ -94,24 +94,26 @@ case class UpscanInitiateUploadRequest
   fields: Map[String, String]
 )
 {
-  def addChild(n: NodeSeq, newChild: Node): NodeSeq = n match {
+  def addChild(n: NodeSeq, newChild: NodeSeq): NodeSeq = n match {
     case Elem(prefix, label, attribs, scope, child @ _*) =>
       Elem(prefix, label, attribs, scope, true, child ++ newChild : _*)
     case _ => sys.error("Can only add children to elements!")
   }
 
   def toXml: NodeSeq = {
-    var payload: NodeSeq = <fileUpload>
-      <href>
-        {href}
-      </href>
-    </fileUpload>
+    var xmlFields: NodeSeq = <fields></fields>
+
     fields.foreach { f =>
       val tag = f._1
       val content = f._2
-      payload = addChild(payload, <a/>.copy(label = tag, child = scala.xml.Text(content)))
+      xmlFields = addChild(xmlFields, <a/>.copy(label = tag, child = scala.xml.Text(content)))
     }
-    payload
+    <fileUpload>
+      <href>
+        {href}
+      </href>
+      {xmlFields}
+    </fileUpload>
   }
 }
 

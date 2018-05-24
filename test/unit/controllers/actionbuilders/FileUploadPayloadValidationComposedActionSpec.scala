@@ -68,7 +68,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
 
     "Should return right when no errors" in new SetUp() {
 
-      val testUpscanInitiatePayload: NodeSeq = <upscanInitiate><declarationId>dec123</declarationId><documentationType>docType123</documentationType></upscanInitiate>
+      val testUpscanInitiatePayload: NodeSeq = <upscanInitiate><declarationID>dec123</declarationID><documentationType>docType123</documentationType></upscanInitiate>
 
       val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, VersionTwo, clientId, NonCsp(Eori("EORI123")), FakeRequest("GET", "/").withXmlBody(testUpscanInitiatePayload))
 

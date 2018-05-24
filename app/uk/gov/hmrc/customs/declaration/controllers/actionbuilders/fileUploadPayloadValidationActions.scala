@@ -36,7 +36,7 @@ class FileUploadPayloadValidationAction @Inject() (fileUploadXmlValidationServic
 @Singleton
 class FileUploadPayloadValidationComposedAction @Inject()(fileUploadPayloadValidationAction: FileUploadPayloadValidationAction, logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedUploadPayloadRequest] {
 
-  private val declarationIdPropertyName = "declarationId"
+  private val declarationIdPropertyName = "declarationID"
   private val documentationTypePropertyName = "documentationType"
 
   override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedUploadPayloadRequest[A]]] = {

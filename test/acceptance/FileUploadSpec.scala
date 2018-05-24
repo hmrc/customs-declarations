@@ -54,6 +54,7 @@ class FileUploadSpec extends AcceptanceTestSpec
   private val validUpscanInitiateResponse =
     """<fileUpload>
       |<href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
+      |<fields>
       |<X-Amz-Algorithm>AWS4-HMAC-SHA256</X-Amz-Algorithm>
       |<X-Amz-Expiration>2018-02-09T12:35:45.297Z</X-Amz-Expiration>
       |<X-Amz-Signature>xxxx</X-Amz-Signature>
@@ -61,6 +62,7 @@ class FileUploadSpec extends AcceptanceTestSpec
       |<acl>private</acl>
       |<X-Amz-Credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-Credential>
       |<policy>xxxxxxxx==</policy>
+      |</fields>
       |</fileUpload>""".stripMargin
 
   override protected def beforeAll() {

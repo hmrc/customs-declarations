@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package acceptance
+package component
 
 import org.scalatest._
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -25,7 +25,7 @@ import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig}
 import scala.util.control.NonFatal
 import scala.xml.{Node, Utility, XML}
 
-trait AcceptanceTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
+trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
   with BeforeAndAfterAll with BeforeAndAfterEach {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(

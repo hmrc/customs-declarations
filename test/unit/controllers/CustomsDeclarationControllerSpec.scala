@@ -184,5 +184,15 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
       result shouldBe mockResult
     }
+
+    "return the Internal Server error when business service returns a 500 " in new SetUp() {
+      when(mockBusinessService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+        .thenReturn(Future.successful(Left(ErrorResponse.ErrorInternalServerError.XmlResult)))
+      authoriseCsp()
+
+      val result: Result = awaitSubmit(ValidSubmissionRequest)
+
+      result.header.status shouldBe INTERNAL_SERVER_ERROR
+    }
   }
 }

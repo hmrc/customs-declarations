@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package acceptance
+package component
 
 import org.scalatest.{Matchers, OptionValues}
 import play.api.mvc._
@@ -27,7 +27,7 @@ import util.{AuditService, TestData}
 
 import scala.concurrent.Future
 
-class FileUploadSchemaSpec extends AcceptanceTestSpec
+class FileUploadSchemaSpec extends ComponentTestSpec
   with Matchers with OptionValues with AuthService with UpscanInitiateService with ApiSubscriptionFieldsService with AuditService {
 
   private val endpoint = "/file-upload"

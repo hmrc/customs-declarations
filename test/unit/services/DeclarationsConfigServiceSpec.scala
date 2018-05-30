@@ -54,12 +54,12 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
     "return config as object model when configuration is valid" in {
       val configService = customsConfigService(validServicesConfiguration)
 
-      configService.apiSubscriptionFieldsBaseUrl shouldBe "http://some-host:1111/some-context"
-      configService.customsNotificationBaseBaseUrl shouldBe "http://some-host2:1112/some-context2"
-      configService.customsNotificationBearerToken shouldBe "some-token"
-      configService.numberOfCallsToTriggerStateChange shouldBe 5
-      configService.unavailablePeriodDurationInMillis shouldBe 1000
-      configService.unstablePeriodDurationInMillis shouldBe 1000
+      configService.declarationsConfig.apiSubscriptionFieldsBaseUrl shouldBe "http://some-host:1111/some-context"
+      configService.declarationsConfig.customsNotificationBaseBaseUrl shouldBe "http://some-host2:1112/some-context2"
+      configService.declarationsConfig.customsNotificationBearerToken shouldBe "some-token"
+      configService.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange shouldBe 5
+      configService.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis shouldBe 1000
+      configService.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis shouldBe 1000
     }
 
     "throw an exception when configuration is invalid, that contains AGGREGATED error messages" in {

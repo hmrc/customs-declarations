@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.connectors
 
 import javax.inject.{Inject, Singleton}
-
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.GenericValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey}
@@ -35,7 +34,7 @@ class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
                                                config: DeclarationsConfigService) {
 
   def getSubscriptionFields[A](apiSubsKey: ApiSubscriptionKey)(implicit vpr: GenericValidatedPayloadRequest[A], hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
-    val url = ApiSubscriptionFieldsPath.url(config.apiSubscriptionFieldsBaseUrl, apiSubsKey)
+    val url = ApiSubscriptionFieldsPath.url(config.declarationsConfig.apiSubscriptionFieldsBaseUrl, apiSubsKey)
     get(url)
   }
 

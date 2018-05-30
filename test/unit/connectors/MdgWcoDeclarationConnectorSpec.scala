@@ -45,6 +45,10 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private val mockLogger = mock[DeclarationsLogger]
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
+  private val mockDeclarationsCircuitBreakerConfig = mock[DeclarationsCircuitBreakerConfig]
+  private val numberOfCallsToTriggerStateChange = 5
+  private val unavailablePeriodDurationInMillis = 1000
+  private val unstablePeriodDurationInMillis = 10000
 
   private val connector = new MdgWcoDeclarationConnector(mockWsPost, mockLogger, mockServiceConfigProvider, mockDeclarationsConfigService)
 
@@ -61,6 +65,10 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
     reset(mockWsPost, mockLogger, mockServiceConfigProvider)
     when(mockServiceConfigProvider.getConfig("wco-declaration")).thenReturn(v1Config)
     when(mockServiceConfigProvider.getConfig("v2.wco-declaration")).thenReturn(v2Config)
+    when(mockDeclarationsConfigService.declarationsCircuitBreakerConfig).thenReturn(mockDeclarationsCircuitBreakerConfig)
+    when(mockDeclarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange).thenReturn(numberOfCallsToTriggerStateChange)
+    when(mockDeclarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis).thenReturn(unavailablePeriodDurationInMillis)
+    when(mockDeclarationsCircuitBreakerConfig.unstablePeriodDurationInMillis).thenReturn(unstablePeriodDurationInMillis)
   }
 
   private val year = 2017

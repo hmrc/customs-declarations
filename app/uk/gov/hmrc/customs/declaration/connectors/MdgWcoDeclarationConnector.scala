@@ -28,8 +28,8 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.ApiVersion
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +40,7 @@ import scala.xml.NodeSeq
 class MdgWcoDeclarationConnector @Inject()(http: HttpClient,
                                            logger: DeclarationsLogger,
                                            serviceConfigProvider: ServiceConfigProvider,
-                                           declarationsConfigService: DeclarationsConfigService) extends UsingCircuitBreaker {
+                                           config: DeclarationsConfigService) extends UsingCircuitBreaker {
 
   private val configKey = "wco-declaration"
 
@@ -74,9 +74,9 @@ class MdgWcoDeclarationConnector @Inject()(http: HttpClient,
   override protected def circuitBreakerConfig: CircuitBreakerConfig =
     CircuitBreakerConfig(
       serviceName = configKey,
-      numberOfCallsToTriggerStateChange = declarationsConfigService.numberOfCallsToTriggerStateChange,
-      unavailablePeriodDuration = declarationsConfigService.unavailablePeriodDurationInMillis,
-      unstablePeriodDuration = declarationsConfigService.unstablePeriodDurationInMillis
+      numberOfCallsToTriggerStateChange = config.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange,
+      unavailablePeriodDuration = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis,
+      unstablePeriodDuration = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
     )
 
   override protected def breakOnException(t: Throwable): Boolean = t match {

@@ -46,7 +46,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
   private val numberOfCallsToTriggerStateChange = 5
-  private val unavailablePeriodDurationInMillis = 1500
+  private val unavailablePeriodDurationInMillis = 1000
   private val correlationId = UUID.randomUUID()
   private implicit val vpr = TestData.TestCspValidatedPayloadRequest
 
@@ -100,7 +100,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
         k.getMessage shouldBe "wco-declaration"
       }
 
-      startMockServer()
+      resetMockServer()
       setupMdgWcoDecServiceToReturn(ACCEPTED)
 
       Thread.sleep(unavailablePeriodDurationInMillis)

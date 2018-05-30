@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package acceptance
+package component
 
 import java.util.UUID
 
@@ -26,7 +26,7 @@ import play.api.test.Helpers._
 import util.CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
 import util.externalservices.CustomsNotificationService
 
-class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
+class UploadedFileUpscanNotificationSpec extends ComponentTestSpec
   with Matchers
   with OptionValues
   with BeforeAndAfterAll
@@ -126,7 +126,7 @@ class UploadedFileUpscanNotificationSpec extends AcceptanceTestSpec
       val result = route(app = app, incorrectRequest).value
 
       Then("a response with a 400 status is returned")
-      status(result) should be (400)
+      status(result) should be (BAD_REQUEST)
     }
   }
 }

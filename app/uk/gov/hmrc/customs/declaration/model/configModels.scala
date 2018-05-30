@@ -16,8 +16,11 @@
 
 package uk.gov.hmrc.customs.declaration.model
 
-trait DeclarationsConfig {
-  val apiSubscriptionFieldsBaseUrl: String
-  val customsNotificationBaseBaseUrl: String
-  val customsNotificationBearerToken: String
-}
+case class DeclarationsConfig (apiSubscriptionFieldsBaseUrl: String,
+                               customsNotificationBaseBaseUrl: String,
+                               customsNotificationBearerToken: String)
+
+case class DeclarationsCircuitBreakerConfig(numberOfCallsToTriggerStateChange: Int,
+                                            unavailablePeriodDurationInMillis: Int,
+                                            unstablePeriodDurationInMillis: Int)
+

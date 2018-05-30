@@ -27,6 +27,7 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.CustomsNotificationConnector
+import uk.gov.hmrc.customs.declaration.model.DeclarationsConfig
 import uk.gov.hmrc.customs.declaration.services.{CustomsNotification, DeclarationsConfigService}
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -45,6 +46,7 @@ class CustomsNotificationConnectorSpec extends UnitSpec
   private val mockLogger = mock[CdsLogger]
   private val mockConfigs = mock[ServicesConfig]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
+  private val mockDeclarationsConfig = mock[DeclarationsConfig]
 
   private lazy val connector = new CustomsNotificationConnector(mockHttpClient, mockLogger, mockDeclarationsConfigService)
 
@@ -64,8 +66,9 @@ class CustomsNotificationConnectorSpec extends UnitSpec
   override protected def beforeEach() {
     reset(mockLogger, mockHttpClient, mockConfigs, mockDeclarationsConfigService)
 
-    when(mockDeclarationsConfigService.customsNotificationBaseBaseUrl).thenReturn(expectedUrl)
-    when(mockDeclarationsConfigService.customsNotificationBearerToken).thenReturn(basicAuthToken)
+    when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)
+    when(mockDeclarationsConfig.customsNotificationBaseBaseUrl).thenReturn(expectedUrl)
+    when(mockDeclarationsConfig.customsNotificationBearerToken).thenReturn(basicAuthToken)
   }
 
   "CustomsNotificationConnector" should {

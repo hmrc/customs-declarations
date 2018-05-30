@@ -42,11 +42,11 @@ class CustomsNotificationConnector @Inject()(http: HttpClient,
       "X-Conversation-ID" -> notification.conversationId.toString,
       CONTENT_TYPE -> s"${MimeTypes.XML}; charset=UTF-8",
       ACCEPT -> MimeTypes.XML,
-      AUTHORIZATION -> s"Basic ${config.customsNotificationBearerToken}")
+      AUTHORIZATION -> s"Basic ${config.declarationsConfig.customsNotificationBearerToken}")
 
 
     http.POSTString(
-      config.customsNotificationBaseBaseUrl,
+      config.declarationsConfig.customsNotificationBaseBaseUrl,
       XMLHeader + notification.payload.toString(),
       headers.toSeq
     ) map { _ =>

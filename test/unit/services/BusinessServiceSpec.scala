@@ -23,7 +23,9 @@ import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
+import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgWcoDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -45,6 +47,7 @@ class BusinessServiceSpec extends UnitSpec with MockitoSugar {
   private val expectedApiSubscriptionKey = ApiSubscriptionKey(clientId, "customs%2Fdeclarations", VersionOne)
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
   private val wrappedValidXML = <wrapped></wrapped>
+  private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
   trait SetUp {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
@@ -120,6 +123,14 @@ class BusinessServiceSpec extends UnitSpec with MockitoSugar {
     val result: Either[Result, Unit] = send()
 
     result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+  }
+
+  "return Left of internal error Result when MDG circuit breaker trips" in new SetUp() {
+    when(mockMdgWcoDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new UnhealthyServiceException("wco-declaration")))
+
+    val result: Either[Result, Unit] = send()
+
+    result shouldBe Left(errorResponseServiceUnavailable.XmlResult)
   }
 }
 

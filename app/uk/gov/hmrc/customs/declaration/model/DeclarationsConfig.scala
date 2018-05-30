@@ -20,4 +20,7 @@ trait DeclarationsConfig {
   val apiSubscriptionFieldsBaseUrl: String
   val customsNotificationBaseBaseUrl: String
   val customsNotificationBearerToken: String
+  val numberOfCallsToTriggerStateChange: Int
+  val unavailablePeriodDurationInMillis: Int
+  val unstablePeriodDurationInMillis: Int
 }

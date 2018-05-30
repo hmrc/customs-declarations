@@ -26,6 +26,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
+import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -44,6 +45,8 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
 
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
+  private val numberOfCallsToTriggerStateChange = 5
+  private val unavailablePeriodDurationInMillis = 1500
   private val correlationId = UUID.randomUUID()
   private implicit val vpr = TestData.TestCspValidatedPayloadRequest
 
@@ -84,6 +87,32 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
       verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
     }
 
+    "circuit breaker trips after specified number of failures" in {
+      setupMdgWcoDecServiceToReturn(INTERNAL_SERVER_ERROR)
+
+      1 to numberOfCallsToTriggerStateChange foreach { _ =>
+        val k = intercept[Upstream5xxResponse](await(sendValidXml()))
+        k.reportAs shouldBe BAD_GATEWAY
+      }
+
+      1 to 3 foreach { _ =>
+        val k = intercept[UnhealthyServiceException](await(sendValidXml()))
+        k.getMessage shouldBe "wco-declaration"
+      }
+
+      startMockServer()
+      setupMdgWcoDecServiceToReturn(ACCEPTED)
+
+      Thread.sleep(unavailablePeriodDurationInMillis)
+
+      1 to 5 foreach { _ =>
+        resetMockServer()
+        setupMdgWcoDecServiceToReturn(ACCEPTED)
+        await(sendValidXml())
+        verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+      }
+    }
+
     "return a failed future when external service returns 404" in {
       setupMdgWcoDecServiceToReturn(NOT_FOUND)
       intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[NotFoundException]
@@ -104,7 +133,6 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
       intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[BadGatewayException]
       startMockServer()
     }
-
   }
 
   private def sendValidXml()(implicit vpr: ValidatedPayloadRequest[_]) = {

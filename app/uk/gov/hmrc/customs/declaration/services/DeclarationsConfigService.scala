@@ -17,22 +17,37 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-
+import scalaz.syntax.apply._
+import scalaz.syntax.traverse._
 import uk.gov.hmrc.customs.api.common.config.ConfigValidationNelAdaptor
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.DeclarationsConfig
 
-import scalaz.syntax.apply._
-import scalaz.syntax.traverse._
-
 @Singleton
 class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationNelAdaptor, logger: DeclarationsLogger) extends DeclarationsConfig {
 
-  private val customsNotificationsServiceNel = configValidationNel.service("customs-notification")
-  private lazy val customsConfigHolder =
-    (configValidationNel.service("api-subscription-fields").serviceUrl |@|
-     customsNotificationsServiceNel.serviceUrl |@|
-     customsNotificationsServiceNel.string("bearer-token"))(DeclarationsConfigImpl.apply) fold(
+  private val root = configValidationNel.root
+  private val customsNotificationsService = configValidationNel.service("customs-notification")
+  private val apiSubscriptionFieldsService = configValidationNel.service("api-subscription-fields")
+
+  private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
+  private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
+  private val unstablePeriodDurationInMillisNel = root.int("circuitBreaker.unstablePeriodDurationInMillis")
+  private val bearerTokenNel = customsNotificationsService.string("bearer-token")
+  private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
+  private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
+
+  private val declarationsConfigCurried = (DeclarationsConfigImpl.apply _).curried
+
+  private val validatedConfig  =
+    unstablePeriodDurationInMillisNel <*>
+      (unavailablePeriodDurationInMillisNel <*>
+        (numberOfCallsToTriggerStateChangeNel <*>
+          (bearerTokenNel <*>
+            (customsNotificationsServiceUrlNel <*>
+              (apiSubscriptionFieldsServiceUrlNel map declarationsConfigCurried)))))
+
+  private val customsConfigHolder = validatedConfig.fold(
       fail = { nel =>
         // error case exposes nel (a NotEmptyList)
         val errorMsg = nel.toList.mkString("\n", "\n", "")
@@ -48,10 +63,19 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
 
   val customsNotificationBearerToken: String = customsConfigHolder.customsNotificationBearerToken
 
-  private case class DeclarationsConfigImpl(
-    apiSubscriptionFieldsBaseUrl: String,
-    customsNotificationBaseBaseUrl: String,
-    customsNotificationBearerToken: String
+  val numberOfCallsToTriggerStateChange: Int = customsConfigHolder.numberOfCallsToTriggerStateChange
+
+  val unavailablePeriodDurationInMillis: Int = customsConfigHolder.unavailablePeriodDurationInMillis
+
+  val unstablePeriodDurationInMillis: Int = customsConfigHolder.unstablePeriodDurationInMillis
+
+  case class DeclarationsConfigImpl(
+                                     apiSubscriptionFieldsBaseUrl: String,
+                                     customsNotificationBaseBaseUrl: String,
+                                     customsNotificationBearerToken: String,
+                                     numberOfCallsToTriggerStateChange: Int,
+                                     unavailablePeriodDurationInMillis: Int,
+                                     unstablePeriodDurationInMillis: Int
   ) extends DeclarationsConfig
 
 }

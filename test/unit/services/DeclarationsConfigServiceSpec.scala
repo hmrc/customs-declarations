@@ -35,6 +35,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.customs-notification.port=1112
       |microservice.services.customs-notification.bearer-token=some-token
       |microservice.services.customs-notification.context=/some-context2
+      |circuitBreaker.numberOfCallsToTriggerStateChange=5
+      |circuitBreaker.unavailablePeriodDurationInMillis=1000
+      |circuitBreaker.unstablePeriodDurationInMillis=1000
     """.stripMargin)
 
   private val emptyAppConfig: Config = ConfigFactory.parseString("")
@@ -54,6 +57,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.apiSubscriptionFieldsBaseUrl shouldBe "http://some-host:1111/some-context"
       configService.customsNotificationBaseBaseUrl shouldBe "http://some-host2:1112/some-context2"
       configService.customsNotificationBearerToken shouldBe "some-token"
+      configService.numberOfCallsToTriggerStateChange shouldBe 5
+      configService.unavailablePeriodDurationInMillis shouldBe 1000
+      configService.unstablePeriodDurationInMillis shouldBe 1000
     }
 
     "throw an exception when configuration is invalid, that contains AGGREGATED error messages" in {
@@ -63,7 +69,10 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: api-subscription-fields.context
           |Could not find config customs-notification.host
           |Service configuration not found for key: customs-notification.context
-          |Service configuration not found for key: customs-notification.bearer-token""".stripMargin
+          |Service configuration not found for key: customs-notification.bearer-token
+          |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
+          |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
+          |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'""".stripMargin
 
       val caught = intercept[IllegalStateException](customsConfigService(emptyServicesConfiguration))
       caught.getMessage shouldBe expectedErrorMessage

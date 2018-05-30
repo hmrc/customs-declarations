@@ -22,12 +22,14 @@ import com.google.inject._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE, DATE, X_FORWARDED_HOST}
 import play.api.http.MimeTypes
+import uk.gov.hmrc.circuitbreaker.{CircuitBreakerConfig, UsingCircuitBreaker}
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.ApiVersion
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.logging.Authorization
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
+import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -37,7 +39,8 @@ import scala.xml.NodeSeq
 @Singleton
 class MdgWcoDeclarationConnector @Inject()(http: HttpClient,
                                            logger: DeclarationsLogger,
-                                           serviceConfigProvider: ServiceConfigProvider) {
+                                           serviceConfigProvider: ServiceConfigProvider,
+                                           declarationsConfigService: DeclarationsConfigService) extends UsingCircuitBreaker {
 
   private val configKey = "wco-declaration"
 
@@ -45,7 +48,7 @@ class MdgWcoDeclarationConnector @Inject()(http: HttpClient,
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, correlationId), authorization = Some(Authorization(bearerToken)))
-    post(xml, config.url)
+    withCircuitBreaker(post(xml, config.url))
   }
 
   private def getHeaders(date: DateTime, correlationId: UUID) = {
@@ -62,11 +65,22 @@ class MdgWcoDeclarationConnector @Inject()(http: HttpClient,
     http.POSTString[HttpResponse](url, xml.toString())
       .recoverWith {
         case httpError: HttpException => Future.failed(new RuntimeException(httpError))
-      }
-      .recoverWith {
         case e: Throwable =>
           logger.error(s"Call to wco declaration submission failed. url=$url")
           Future.failed(e)
       }
+  }
+
+  override protected def circuitBreakerConfig: CircuitBreakerConfig =
+    CircuitBreakerConfig(
+      serviceName = configKey,
+      numberOfCallsToTriggerStateChange = declarationsConfigService.numberOfCallsToTriggerStateChange,
+      unavailablePeriodDuration = declarationsConfigService.unavailablePeriodDurationInMillis,
+      unstablePeriodDuration = declarationsConfigService.unstablePeriodDurationInMillis
+    )
+
+  override protected def breakOnException(t: Throwable): Boolean = t match {
+    case _: BadRequestException | _: NotFoundException | _: Upstream4xxResponse => false
+    case _ => true
   }
 }

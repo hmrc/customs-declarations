@@ -21,7 +21,9 @@ import java.net.URLEncoder
 import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
 import play.api.mvc.Result
+import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgWcoDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -46,6 +48,7 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
                                 ) {
 
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
+  private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
   def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Unit]] = {
 
@@ -76,8 +79,11 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
     val xmlToSend = preparePayload(vpr.xmlBody, subscriptionFieldsId, dateTime)
 
     connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(())).recover{
+      case _: UnhealthyServiceException =>
+        logger.error("unhealthy state entered")
+        Left(errorResponseServiceUnavailable.XmlResult)
       case NonFatal(e) =>
-        logger.error(s"Inventory linking call failed: ${e.getMessage}", e)
+        logger.error(s"submission declaration call failed: ${e.getMessage}", e)
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
     }
   }

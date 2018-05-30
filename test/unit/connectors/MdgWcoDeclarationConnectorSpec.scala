@@ -31,6 +31,7 @@ import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvid
 import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
@@ -43,8 +44,9 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]
+  private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
 
-  private val connector = new MdgWcoDeclarationConnector(mockWsPost, mockLogger, mockServiceConfigProvider)
+  private val connector = new MdgWcoDeclarationConnector(mockWsPost, mockLogger, mockServiceConfigProvider, mockDeclarationsConfigService)
 
   private val v1Config = ServiceConfig("v1-url", Some("v1-bearer-token"), "v1-default")
   private val v2Config = ServiceConfig("v2-url", Some("v2-bearer-token"), "v2-default")

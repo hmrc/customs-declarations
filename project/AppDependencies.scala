@@ -10,6 +10,7 @@ object AppDependencies {
   val pegdownVersion = "1.6.0"
   val wireMockVersion = "2.10.1"
   val customsApiCommonVersion = "1.25.0"
+  val circuitBreakerVersion = "3.2.0"
   val testScope = "test,it"
 
   val xmlResolver = "xml-resolver" % "xml-resolver" % "1.2"
@@ -31,4 +32,6 @@ object AppDependencies {
   val customsApiCommon = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion withSources()
 
   val customsApiCommonTests = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion % testScope classifier "tests"
+
+  val circuitBreaker = "uk.gov.hmrc" %% "reactive-circuit-breaker" % circuitBreakerVersion
 }

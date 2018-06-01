@@ -15,6 +15,7 @@
         </Submitter>
         <AdditionalInformation>
             <StatementDescription>This is a duplicate, please cancel</StatementDescription>
+            <StatementTypeCode>CUS</StatementTypeCode>
         </AdditionalInformation>
         <Amendment>
             <ChangeReasonCode>1</ChangeReasonCode>

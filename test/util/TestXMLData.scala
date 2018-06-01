@@ -23,7 +23,7 @@ object TestXMLData {
   val cancellationTypeCode = "INV"
 
   def validCancellationXML(functionCode: Int = cancellationFunctionCode, typeCode: String = cancellationTypeCode): Elem =
-    <md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+    <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
       <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
       <md:WCOTypeName>DEC</md:WCOTypeName>
       <md:ResponsibleCountryCode>NL</md:ResponsibleCountryCode>
@@ -39,6 +39,7 @@ object TestXMLData {
         </Submitter>
         <AdditionalInformation>
           <StatementDescription>This is a duplicate, please cancel</StatementDescription>
+          <StatementTypeCode>CUS</StatementTypeCode>
         </AdditionalInformation>
         <Amendment>
           <ChangeReasonCode>1</ChangeReasonCode>

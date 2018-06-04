@@ -20,22 +20,14 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
-class SubmissionXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
-  override protected val schemaPropertyName: String = "xsd.locations.submit"
-}
+class SubmissionXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.submit")
 
 @Singleton
-class FileUploadXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
-  override protected val schemaPropertyName: String = "xsd.locations.fileupload"
-}
+class FileUploadXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.fileupload")
 
 @Singleton
-class CancellationXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
-  override protected val schemaPropertyName: String = "xsd.locations.cancel"
-}
+class CancellationXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.cancel")
 
+//TODO MJC: Change schema location to clearance when we have correct schema files
 @Singleton
-class ClearanceXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration) {
-  //TODO MJC: Change schema location to clearance when we have correct schema files
-  override protected val schemaPropertyName: String = "xsd.locations.submit"
-}
+class ClearanceXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.submit")

@@ -25,7 +25,7 @@ import scala.xml.NodeSeq
 
 object ActionBuilderModelHelper {
 
-  implicit class AddConversationId(result: Result) {
+  implicit class AddConversationId(val result: Result) extends AnyVal {
     def withConversationId(implicit c: HasConversationId): Result = {
       result.withHeaders(XConversationIdHeaderName -> c.conversationId.toString)
     }
@@ -35,7 +35,7 @@ object ActionBuilderModelHelper {
     }
   }
 
-  implicit class CorrelationIdsRequestOps[A](cir: ConversationIdRequest[A]) {
+  implicit class CorrelationIdsRequestOps[A](val cir: ConversationIdRequest[A]) extends AnyVal {
     def toValidatedHeadersRequest(eh: ExtractedHeaders): ValidatedHeadersRequest[A] = ValidatedHeadersRequest(
       cir.conversationId,
       eh.requestedApiVersion,
@@ -44,7 +44,7 @@ object ActionBuilderModelHelper {
     )
   }
 
-  implicit class ValidatedHeadersRequestOps[A](vhr: ValidatedHeadersRequest[A]) {
+  implicit class ValidatedHeadersRequestOps[A](val vhr: ValidatedHeadersRequest[A]) extends AnyVal {
 
     def toCspAuthorisedRequest(badgeId: BadgeIdentifier): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId))
 
@@ -59,7 +59,7 @@ object ActionBuilderModelHelper {
     )
   }
 
-  implicit class AuthorisedRequestOps[A](ar: AuthorisedRequest[A]) {
+  implicit class AuthorisedRequestOps[A](val ar: AuthorisedRequest[A]) extends AnyVal {
     def toValidatedPayloadRequest(xmlBody: NodeSeq): ValidatedPayloadRequest[A] = ValidatedPayloadRequest(
       ar.conversationId,
       ar.requestedApiVersion,
@@ -70,7 +70,7 @@ object ActionBuilderModelHelper {
     )
   }
 
-  implicit class ValidatedPayloadRequestOps[A](vpr: ValidatedPayloadRequest[A]) {
+  implicit class ValidatedPayloadRequestOps[A](val vpr: ValidatedPayloadRequest[A]) extends AnyVal {
 
     def toValidatedUploadPayloadRequest(declarationId: DeclarationId,
                                         documentationType: DocumentationType): ValidatedUploadPayloadRequest[A] = ValidatedUploadPayloadRequest(

@@ -60,9 +60,9 @@ class ClearanceDeclarationController @Inject()(
 
 
 abstract class CustomsDeclarationController(
-  common: Common,
-  businessService: BusinessService,
-  payloadValidationAction: PayloadValidationAction
+  val common: Common,
+  val businessService: BusinessService,
+  val payloadValidationAction: PayloadValidationAction
 )
 extends BaseController {
 

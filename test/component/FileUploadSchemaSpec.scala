@@ -28,7 +28,8 @@ import util.{AuditService, TestData}
 import scala.concurrent.Future
 
 class FileUploadSchemaSpec extends ComponentTestSpec
-  with Matchers with OptionValues with AuthService with UpscanInitiateService with ApiSubscriptionFieldsService with AuditService {
+  with Matchers with OptionValues with AuthService with UpscanInitiateService with ApiSubscriptionFieldsService
+  with AuditService with ExpectedTestResponses {
 
   private val endpoint = "/file-upload"
 
@@ -50,7 +51,7 @@ class FileUploadSchemaSpec extends ComponentTestSpec
 
   feature("The API handles errors as expected") {
 
-    scenario("Response status 400 when user submits malformed request") {
+    scenario("Response status 400 when user submits invalid request") {
       Given("the API is available")
       val request = ValidSubmission_13_INV_Request.fromNonCsp.postTo(endpoint)
 
@@ -63,6 +64,23 @@ class FileUploadSchemaSpec extends ComponentTestSpec
       headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }
 
+    scenario("Response status 400 when user submits a malformed xml payload") {
+      Given("the API is available")
+      val request = MalformedXmlRequest.fromNonCsp.copyFakeRequest(method = POST, uri = endpoint)
+
+      When("a POST request with data is sent to the API")
+      val result: Option[Future[Result]] = route(app = app, request)
+
+      Then(s"a response with a 400 status is received")
+      result shouldBe 'defined
+      val resultFuture = result.value
+
+      status(resultFuture) shouldBe BAD_REQUEST
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+      And("the response body is a \"malformed xml body\" XML")
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
+    }
 
     scenario("Response status 200 when user submits correct request") {
       Given("the API is available")

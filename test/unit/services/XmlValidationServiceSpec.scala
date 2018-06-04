@@ -25,7 +25,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestXMLData.{InvalidSubmissionXML, InvalidSubmissionXMLWith3Errors, ValidSubmissionXML}
+import util.TestXMLData.{InvalidSubmissionXML, InvalidSubmissionXMLWith2Errors, ValidSubmissionXML}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.xml.{Node, SAXException}
@@ -41,9 +41,7 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     "/api/conf/2.0/schemas/wco/declaration/DocumentMetaData_2_DMS.xsd",
     "/api/conf/2.0/schemas/wco/declaration/WCO_DEC_2_DMS.xsd")
 
-  def xmlValidationService: XmlValidationService = new XmlValidationService(MockConfiguration) {
-    override protected val schemaPropertyName: String = propertyName
-  }
+  def xmlValidationService: XmlValidationService = new XmlValidationService(MockConfiguration, schemaPropertyName = propertyName){}
 
   override protected def beforeEach() {
     reset(MockConfiguration)
@@ -105,7 +103,7 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
     "fail the future with wrapped SAXExceptions when there are multiple errors in XML" in {
       val caught = intercept[SAXException] {
-        await(xmlValidationService.validate(InvalidSubmissionXMLWith3Errors))
+        await(xmlValidationService.validate(InvalidSubmissionXMLWith2Errors))
       }
       caught.getMessage shouldBe "cvc-complex-type.2.2: Element 'TotalPackageQuantity' must have no element [children], and the value must be valid."
 
@@ -126,7 +124,7 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
       when(MockConfiguration.getInt("xml.max-errors")).thenReturn(Some(2))
 
       val caught = intercept[SAXException] {
-        await(xmlValidationService.validate(InvalidSubmissionXMLWith3Errors))
+        await(xmlValidationService.validate(InvalidSubmissionXMLWith2Errors))
       }
       verify(MockConfiguration).getInt("xml.max-errors")
 

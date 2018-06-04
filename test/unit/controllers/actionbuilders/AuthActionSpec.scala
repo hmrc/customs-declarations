@@ -123,7 +123,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
   }
 
   "NonCspAuthAction" should {
-    "Authorise Non CSP when authorised by auth API " in new SetUp {
+    "Return Right of AuthorisedRequest with AuthorisedAs Non CSP when authorised by auth API " in new SetUp {
       authoriseNonCsp(Some(declarantEori))
 
       private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
@@ -132,7 +132,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       verifyCspAuthorisationCalled(1)
     }
 
-    "Return 401 when authorised by auth API but Eori not exists" in new SetUp {
+    "Return Left of 401 when authorised by auth API but Eori not exists" in new SetUp {
       authoriseNonCsp(maybeEori = None)
 
       private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
@@ -141,7 +141,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       verifyCspAuthorisationCalled(1)
     }
 
-    "Return 401 when not authorised as NonCsp" in new SetUp {
+    "Return Left of 401 when not authorised as NonCsp" in new SetUp {
       unauthoriseCsp()
       unauthoriseNonCspOnly()
 

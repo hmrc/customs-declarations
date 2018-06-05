@@ -113,8 +113,6 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
   }
 
-  //***  UNHAPPY PATH SPECS ***
-
   feature("The API handles errors as expected") {
 
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {

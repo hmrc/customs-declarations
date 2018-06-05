@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.declaration.controllers.{CancelDeclarationController,
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{CancellationXmlValidationService, ClearanceXmlValidationService, FileUploadXmlValidationService, SubmissionXmlValidationService}
 
-class ControllersWiringTestSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar {
+class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   private lazy val mockSubmissionXmlValidationService = mock[SubmissionXmlValidationService]
   private lazy val mockCancellationXmlValidationService = mock[CancellationXmlValidationService]

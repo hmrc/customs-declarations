@@ -47,20 +47,6 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
 
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
-  private val validUpscanInitiateResponse =
-    """<fileUpload>
-      |<href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
-      |<fields>
-      |<X-Amz-Algorithm>AWS4-HMAC-SHA256</X-Amz-Algorithm>
-      |<X-Amz-Expiration>2018-02-09T12:35:45.297Z</X-Amz-Expiration>
-      |<X-Amz-Signature>xxxx</X-Amz-Signature>
-      |<key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-      |<acl>private</acl>
-      |<X-Amz-Credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-Credential>
-      |<policy>xxxxxxxx==</policy>
-      |</fields>
-      |</fileUpload>""".stripMargin
-
   override protected def beforeAll() {
     startMockServer()
   }
@@ -98,18 +84,14 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
 
   }
 
-  //*** UNHAPPY PATH SPECS ***
-
   feature("The API handles errors as expected") {
     scenario("Response status 400 when user submits a non-xml payload") {
       Given("the API is available")
       val request = InvalidFileUploadRequest.fromNonCsp
         .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
         .copyFakeRequest(method = POST, uri = endpoint)
-      stubAuditService()
-      authServiceUnauthorisesScopeForCSP(TestData.nonCspBearerToken)
-      authServiceAuthorizesNonCspWithEori()
-      startUpscanInitiateService()
+      setupWiremockExpectations()
+
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -124,5 +106,62 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       And("the response body is a \"malformed xml body\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
     }
+
+    scenario("Response status 400 when user submits invalid request") {
+      Given("the API is available")
+      val request = ValidSubmission_13_INV_Request.fromNonCsp.postTo(endpoint)
+      setupWiremockExpectations()
+
+      When("a POST request with data is sent to the API")
+      val result: Future[Result] = route(app = app, request).value
+
+      Then(s"a response with a 400 status is received")
+
+      status(result) shouldBe BAD_REQUEST
+      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+    }
+
+    scenario("Response status 400 when user submits a malformed xml payload") {
+      Given("the API is available")
+      val request = MalformedXmlRequest.fromNonCsp.copyFakeRequest(method = POST, uri = endpoint)
+      setupWiremockExpectations()
+
+      When("a POST request with data is sent to the API")
+      val result: Option[Future[Result]] = route(app = app, request)
+
+      Then(s"a response with a 400 status is received")
+      result shouldBe 'defined
+      val resultFuture = result.value
+
+      status(resultFuture) shouldBe BAD_REQUEST
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+      And("the response body is a \"malformed xml body\" XML")
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
+    }
+
+    scenario("Response status 200 when user submits correct request") {
+      Given("the API is available")
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
+      val request = ValidFileUploadRequest.fromNonCsp.postTo(endpoint)
+      setupWiremockExpectations()
+
+      When("a POST request with data is sent to the API")
+      val result: Future[Result] = route(app = app, request).value
+
+      Then("a response with a 200 (OK) status is received")
+      status(result) shouldBe OK
+
+      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+    }
+
+
+  }
+
+  private def setupWiremockExpectations(): Unit = {
+    stubAuditService()
+    authServiceUnauthorisesScopeForCSP(TestData.nonCspBearerToken)
+    authServiceAuthorizesNonCspWithEori()
+    startUpscanInitiateService()
   }
 }

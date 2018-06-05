@@ -30,6 +30,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val root = configValidationNel.root
   private val customsNotificationsService = configValidationNel.service("customs-notification")
   private val apiSubscriptionFieldsService = configValidationNel.service("api-subscription-fields")
+  private val googleAnalyticsService = configValidationNel.service("google-analytics")
 
   private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
@@ -37,9 +38,10 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val bearerTokenNel = customsNotificationsService.string("bearer-token")
   private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
+  private val gaServiceUrlNel: ValidationNel[String, String] = googleAnalyticsService.serviceUrl
 
   private val validatedDeclarationsConfig: ValidationNel[String, DeclarationsConfig] = (
-    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel
+    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| gaServiceUrlNel |@| bearerTokenNel
     ) (DeclarationsConfig.apply)
 
   private val validatedDeclarationsCircuitBreakerConfig: ValidationNel[String, DeclarationsCircuitBreakerConfig] = (
@@ -47,7 +49,8 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
     ) (DeclarationsCircuitBreakerConfig.apply)
 
   private val customsConfigHolder =
-    (validatedDeclarationsConfig |@| validatedDeclarationsCircuitBreakerConfig) (CustomsConfigHolder.apply) fold(
+    (validatedDeclarationsConfig |@|
+      validatedDeclarationsCircuitBreakerConfig) (CustomsConfigHolder.apply) fold(
       fail = { nel =>
         // error case exposes nel (a NotEmptyList)
         val errorMsg = nel.toList.mkString("\n", "\n", "")

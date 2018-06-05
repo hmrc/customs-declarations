@@ -120,3 +120,9 @@ case class UpscanInitiateUploadRequest
 object UpscanInitiateResponsePayload {
   implicit val format: OFormat[UpscanInitiateResponsePayload] = Json.format[UpscanInitiateResponsePayload]
 }
+
+case class GoogleAnalyticsRequest(payload: String)
+
+object GoogleAnalyticsRequest {
+  implicit val format = Json.format[GoogleAnalyticsRequest]
+}

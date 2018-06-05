@@ -22,6 +22,7 @@ object CustomsDeclarationsExternalServicesConfig {
   val MdgCancellationDeclarationServiceContext = "/mdgCancelDecService/submit"
   val MdgCancellationDeclarationServiceContextV2 = "/mdgCancelDecService2/submit2"
   val ApiSubscriptionFieldsContext = "/api-subscription-fields/field"
+  val GoogleAnalyticsContext = "/send-google-analytics"
   val UpscanInitiateContext = "/upscan/initiate"
   val CustomsNotificationAuthHeaderValue = "some-basic-auth"
 }

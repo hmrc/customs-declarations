@@ -18,9 +18,9 @@ package uk.gov.hmrc.customs.declaration.model
 
 case class DeclarationsConfig (apiSubscriptionFieldsBaseUrl: String,
                                customsNotificationBaseBaseUrl: String,
+                               googleAnalyticsUrl: String,
                                customsNotificationBearerToken: String)
 
 case class DeclarationsCircuitBreakerConfig(numberOfCallsToTriggerStateChange: Int,
                                             unavailablePeriodDurationInMillis: Int,
                                             unstablePeriodDurationInMillis: Int)
-

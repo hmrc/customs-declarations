@@ -35,6 +35,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.customs-notification.port=1112
       |microservice.services.customs-notification.bearer-token=some-token
       |microservice.services.customs-notification.context=/some-context2
+      |microservice.services.google-analytics.host=some-host3
+      |microservice.services.google-analytics.port=1113
+      |microservice.services.google-analytics.context=/some-context3
       |circuitBreaker.numberOfCallsToTriggerStateChange=5
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
@@ -69,6 +72,8 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: api-subscription-fields.context
           |Could not find config customs-notification.host
           |Service configuration not found for key: customs-notification.context
+          |Could not find config google-analytics.host
+          |Service configuration not found for key: google-analytics.context
           |Service configuration not found for key: customs-notification.bearer-token
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'

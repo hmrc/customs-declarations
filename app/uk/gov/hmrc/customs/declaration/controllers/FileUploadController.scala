@@ -31,9 +31,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class FileUploadController @Inject()(
-                                      common: Common,
-                                      fileUploadBusinessService: FileUploadBusinessService,
-                                      fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction
+                                      val common: Common,
+                                      val fileUploadBusinessService: FileUploadBusinessService,
+                                      val fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction
                                     )
   extends BaseController {
 

@@ -18,37 +18,49 @@ package integration
 
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{CancelPayloadValidationAction, ClearancePayloadValidationAction, SubmitPayloadValidationAction}
-import uk.gov.hmrc.customs.declaration.controllers.{CancelDeclarationController, ClearanceDeclarationController, SubmitDeclarationController}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{CancelPayloadValidationAction, ClearancePayloadValidationAction, FileUploadPayloadValidationAction, SubmitPayloadValidationAction}
+import uk.gov.hmrc.customs.declaration.controllers.{CancelDeclarationController, ClearanceDeclarationController, FileUploadController, SubmitDeclarationController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.services.{CancellationXmlValidationService, ClearanceXmlValidationService, SubmissionXmlValidationService}
+import uk.gov.hmrc.customs.declaration.services.{CancellationXmlValidationService, ClearanceXmlValidationService, FileUploadXmlValidationService, SubmissionXmlValidationService}
 
 class ControllersWiringTestSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   private lazy val mockSubmissionXmlValidationService = mock[SubmissionXmlValidationService]
   private lazy val mockCancellationXmlValidationService = mock[CancellationXmlValidationService]
   private lazy val mockClearanceXmlValidationService = mock[ClearanceXmlValidationService]
+  private lazy val mockFileUploadXmlValidationService = mock[FileUploadXmlValidationService]
   private lazy val mockDeclarationsLogger = mock[DeclarationsLogger]
 
   private lazy val clearanceController = app.injector.instanceOf[ClearanceDeclarationController]
   private lazy val submitController = app.injector.instanceOf[SubmitDeclarationController]
   private lazy val cancelController = app.injector.instanceOf[CancelDeclarationController]
+  private lazy val fileUploadController = app.injector.instanceOf[FileUploadController]
 
   "The correct XmlValidationAction"  should {
-    "be wired into SubmitDeclarationController " in {
+    "be wired into SubmitDeclarationController" in {
+      val action = submitController.payloadValidationAction
 
-      submitController.payloadValidationAction.getClass.getSimpleName shouldBe new SubmitPayloadValidationAction(mockSubmissionXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
-      submitController.payloadValidationAction.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
+      action.getClass.getSimpleName shouldBe new SubmitPayloadValidationAction(mockSubmissionXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
+      action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
     }
-    "be wired into CancelDeclarationController " in {
+    "be wired into CancelDeclarationController" in {
+      val action = cancelController.payloadValidationAction
 
-      cancelController.payloadValidationAction.getClass.getSimpleName shouldBe new CancelPayloadValidationAction(mockCancellationXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
-      cancelController.payloadValidationAction.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.cancel"
+      action.getClass.getSimpleName shouldBe new CancelPayloadValidationAction(mockCancellationXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
+      action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.cancel"
     }
-    "be wired into ClearanceDeclarationController " in {
+    "be wired into ClearanceDeclarationController" in {
+      val action = clearanceController.payloadValidationAction
 
-      clearanceController.payloadValidationAction.getClass.getSimpleName shouldBe new ClearancePayloadValidationAction(mockClearanceXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
-      clearanceController.payloadValidationAction.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
+      action.getClass.getSimpleName shouldBe new ClearancePayloadValidationAction(mockClearanceXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
+      action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
+    }
+
+    "be wired into FileUploadController" in {
+      val action = fileUploadController.fileUploadPayloadValidationComposedAction.fileUploadPayloadValidationAction
+
+      action.getClass.getSimpleName shouldBe new FileUploadPayloadValidationAction(mockFileUploadXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
+      action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.fileupload"
     }
   }
 

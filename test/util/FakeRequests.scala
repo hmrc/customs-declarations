@@ -93,6 +93,10 @@ object FakeRequests {
     //TODO: MJC change this to clearance XML when we have schema
     .withXmlBody(ValidSubmissionXML)
 
+  lazy val ValidAmendRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withXmlBody(ValidSubmissionXML)
+
   lazy val ValidCancellationRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(validCancellationXML())

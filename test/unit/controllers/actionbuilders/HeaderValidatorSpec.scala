@@ -20,14 +20,15 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.http.HeaderNames._
 import play.api.test.FakeRequest
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeadersImpl}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeaders, ExtractedHeadersImpl}
 import uk.gov.hmrc.customs.declaration.model.{VersionOne, VersionTwo}
 import uk.gov.hmrc.play.test.UnitSpec
-import util.RequestHeaders._
+import util.RequestHeaders.{ValidHeadersV2, _}
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
 class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
@@ -38,29 +39,46 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
   trait SetUp {
     val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
     val validator = new HeaderValidator(loggerMock)
+
+    def validate(c: ConversationIdRequest[_]): Either[ErrorResponse, ExtractedHeaders] = {
+      validator.validateHeaders(c)
+    }
   }
 
-  val headersTable =
-    Table(
-      ("description", "Headers", "Expected response"),
-      ("Valid Headers for V1", ValidHeadersV1, Right(extractedHeadersWithBadgeIdentifierV1)),
-      ("Valid Headers for V2", ValidHeadersV2, Right(extractedHeadersWithBadgeIdentifierV2)),
-      ("Valid content type XML with no space header", ValidHeadersV2 + (CONTENT_TYPE -> "application/xml;charset=utf-8"), Right(extractedHeadersWithBadgeIdentifierV2)),
-      ("Missing accept header", ValidHeadersV2 - ACCEPT, Left(ErrorAcceptHeaderInvalid)),
-      ("Missing content type header", ValidHeadersV2 - CONTENT_TYPE, Left(ErrorContentTypeHeaderInvalid)),
-      ("Missing X-Client-ID header", ValidHeadersV2 - XClientIdHeaderName, Left(ErrorInternalServerError)),
-      ("Invalid accept header", ValidHeadersV2 + ACCEPT_HEADER_INVALID, Left(ErrorAcceptHeaderInvalid)),
-      ("Invalid content type header JSON header", ValidHeadersV2 + CONTENT_TYPE_HEADER_INVALID, Left(ErrorContentTypeHeaderInvalid)),
-      ("Invalid X-Client-ID header", ValidHeadersV2 + X_CLIENT_ID_HEADER_INVALID, Left(ErrorInternalServerError))
-    )
-
-  "HeaderValidatorAction" should {
-    forAll(headersTable) { (description, headers, response) =>
-      s"$description" in new SetUp {
-        private val conversationIdRequest: ConversationIdRequest[_] = ConversationIdRequest(TestData.conversationId, FakeRequest().withHeaders(headers.toSeq: _*))
-
-        validator.validateHeaders(conversationIdRequest) shouldBe response
+  "HeaderValidator" can {
+    "in happy path, validation" should {
+      "be successful for a valid request with accept header for V1" in new SetUp {
+        validate(conversationIdRequest(ValidHeadersV1)) shouldBe Right(extractedHeadersWithBadgeIdentifierV1)
+      }
+      "be successful for a valid request with accept header for V2" in new SetUp {
+        validate(conversationIdRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+      }
+      "be successful for content type XML with no space header" in new SetUp {
+        validate(conversationIdRequest(ValidHeadersV2 + (CONTENT_TYPE -> "application/xml;charset=utf-8"))) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+      }
+    }
+    "in unhappy path, validation" should {
+      "fail when request is missing accept header" in new SetUp {
+        validate(conversationIdRequest(ValidHeadersV2 - ACCEPT)) shouldBe Left(ErrorAcceptHeaderInvalid)
+      }
+      "fail when request is missing content type header" in new SetUp {
+        validate(conversationIdRequest(ValidHeadersV2 - CONTENT_TYPE)) shouldBe Left(ErrorContentTypeHeaderInvalid)
+      }
+      "fail when request is missing X-Client-ID header" in new SetUp {
+        validate(conversationIdRequest(ValidHeadersV2 - XClientIdHeaderName)) shouldBe Left(ErrorInternalServerError)
+      }
+      "fail when request has invalid accept header" in new SetUp {
+        validate(conversationIdRequest(ValidHeadersV2 + ACCEPT_HEADER_INVALID)) shouldBe Left(ErrorAcceptHeaderInvalid)
+      }
+      "fail when request has invalid content type header (for JSON)" in new SetUp {
+        validate(conversationIdRequest(ValidHeadersV2 + CONTENT_TYPE_HEADER_INVALID)) shouldBe Left(ErrorContentTypeHeaderInvalid)
+      }
+      "fail when request has invalid X-Client-ID header" in new SetUp {
+        validate(conversationIdRequest(ValidHeadersV2 + X_CLIENT_ID_HEADER_INVALID)) shouldBe Left(ErrorInternalServerError)
       }
     }
   }
+
+  private def conversationIdRequest(requestMap: Map[String, String]): ConversationIdRequest[_] =
+    ConversationIdRequest(TestData.conversationId, FakeRequest().withHeaders(requestMap.toSeq: _*))
 }

@@ -49,28 +49,28 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
 
   "API Definition" should {
 
-    "is correct when V1 & V2 are PUBLIC by default" in {
+    "be correct when V1 & V2 are PUBLIC by default" in {
       val result = getApiDefinitionWith(Map())(FakeRequest())
 
       status(result) mustBe 200
       contentAsJson(result) mustBe expectedJson(None, None)
     }
 
-    "is correct when V1 is PRIVATE & V2 is public" in {
+    "be correct when V1 is PRIVATE & V2 is public" in {
       val result = getApiDefinitionWith(v1WhitelistedAppIdsConfigs)(FakeRequest())
 
       status(result) mustBe 200
       contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = Some(v1WhitelistedAppIdsConfigs.values), None)
     }
 
-    "is correct when V1 is PUBLIC & V2 is PRIVATE" in {
+    "be correct when V1 is PUBLIC & V2 is PRIVATE" in {
       val result = getApiDefinitionWith(v2WhitelistedAppIdsConfigs)(FakeRequest())
 
       status(result) mustBe 200
       contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = None, expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values))
     }
 
-    "is correct when V1 & V2 are PRIVATE" in {
+    "be correct when V1 & V2 are PRIVATE" in {
       val result = getApiDefinitionWith(v1WhitelistedAppIdsConfigs ++ v2WhitelistedAppIdsConfigs)(FakeRequest())
 
       status(result) mustBe 200

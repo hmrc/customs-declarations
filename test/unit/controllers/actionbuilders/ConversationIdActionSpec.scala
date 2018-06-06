@@ -35,7 +35,7 @@ class ConversationIdActionSpec extends UnitSpec with MockitoSugar {
   }
 
   "ConversationIdAction" should {
-    "transform Request to CorrelationIdsRequest" in new SetUp {
+    "Generate a Request containing a unique correlation id" in new SetUp {
 
       private val actual = await(conversationIdAction.transform(request))
 

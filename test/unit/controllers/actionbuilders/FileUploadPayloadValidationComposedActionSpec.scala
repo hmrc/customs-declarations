@@ -46,41 +46,32 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
   }
 
   "FileUploadPayloadValidationComposedAction" should  {
+    "return 403 response when authorised as CSP" in new SetUp {
+      val authorisedCspRequest: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, VersionTwo, clientId, Csp(BadgeIdentifier("CSP1")), mock[Request[AnyContent]])
 
-      "Should return 403 when CSP" in new SetUp() {
+      val actualResult: Either[Result, ValidatedUploadPayloadRequest[AnyContent]] = await(fileUploadPayloadValidationComposedAction.refine(authorisedCspRequest))
 
-        val authorisedCspRequest: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, VersionTwo, clientId, Csp(BadgeIdentifier("CSP1")), mock[Request[AnyContent]])
-        val actualResult: Either[Result, ValidatedUploadPayloadRequest[AnyContent]] = await(fileUploadPayloadValidationComposedAction.refine(authorisedCspRequest))
+      actualResult shouldBe Left(ErrorResponse(FORBIDDEN, ForbiddenCode, "Not an authorized service").XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationIdValue))
+    }
 
-        actualResult shouldBe Left(ErrorResponse(FORBIDDEN, ForbiddenCode, "Not an authorized service").XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationIdValue))
-      }
-
-    "Should throw an error when validation fails" in new SetUp() {
-
+    "return an error when validation fails" in new SetUp {
       val authorisedNonCspRequest: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, VersionTwo, clientId, NonCsp(Eori("EORI123")), mock[Request[AnyContent]])
       val mockResult: Result = mock[Result]
 
       when(mockFileUploadPayloadValidationAction.refine(authorisedNonCspRequest)).thenReturn(Future.successful(Left(mockResult)))
 
-      val actualResult: Either[Result, ValidatedUploadPayloadRequest[AnyContent]] = await(fileUploadPayloadValidationComposedAction.refine(authorisedNonCspRequest))
-      actualResult shouldBe Left(mockResult)
+      await(fileUploadPayloadValidationComposedAction.refine(authorisedNonCspRequest)) shouldBe Left(mockResult)
     }
 
-    "Should return right when no errors" in new SetUp() {
-
+    "return success when there are no errors" in new SetUp {
       val testUpscanInitiatePayload: NodeSeq = <upscanInitiate><declarationID>dec123</declarationID><documentationType>docType123</documentationType></upscanInitiate>
-
       val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, VersionTwo, clientId, NonCsp(Eori("EORI123")), FakeRequest("GET", "/").withXmlBody(testUpscanInitiatePayload))
-
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(testUpscanInitiatePayload)
 
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
       val expectedVupr: ValidatedUploadPayloadRequest[AnyContentAsXml] = testVpr.toValidatedUploadPayloadRequest(DeclarationId("dec123"), DocumentationType("docType123"))
-
-      val actualResult: Either[Result, ValidatedUploadPayloadRequest[AnyContentAsXml]] = await(fileUploadPayloadValidationComposedAction.refine(testAr))
-
-      actualResult shouldBe Right(expectedVupr)
+      await(fileUploadPayloadValidationComposedAction.refine(testAr)) shouldBe Right(expectedVupr)
     }
   }
 }

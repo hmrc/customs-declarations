@@ -23,7 +23,7 @@ import org.mockito.Mockito.{reset, verify, verifyZeroInteractions, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play._
-import play.api.libs.json.{JsObject, JsString, JsValue, Json}
+import play.api.libs.json._
 import play.api.mvc._
 import play.api.test.Helpers._
 import play.api.test._
@@ -84,7 +84,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
       await(result) mustBe errorBadRequest("Invalid JSON payload").JsonResult
     }
 
-    "return 400 when request does not contain the reference" in {
+    "return 400 response with path missing validation error when request does not contain the reference " in {
       val result = post(fakeRequestWith(readyPayload - "reference"))
 
       status(result) mustBe 400
@@ -93,7 +93,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
       badRequestJsValue.message must include("/reference,List(ValidationError(List(error.path.missing")
     }
 
-    "return 400 when reference  is not valid UUID" in {
+    "return 400 response with expected uuid validation error when reference is not valid UUID" in {
       val result = post(fakeRequestWith(readyPayload + ("reference" -> JsString("123"))))
 
       status(result) mustBe 400
@@ -102,7 +102,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
       badRequestJsValue.message must include("/reference,List(ValidationError(List(error.expected.uuid")
     }
 
-    "return 400 when fileStatus is missing" in {
+    "return 400 response with path missing validation error when fileStatus is missing" in {
       val result = post(fakeRequestWith(readyPayload - "fileStatus"))
 
       status(result) mustBe 400
@@ -111,7 +111,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
       badRequestJsValue.message must include("/fileStatus,List(ValidationError(List(error.path.missing")
     }
 
-    "return 400 when fileStatus is not READY or FAILED" in {
+    "return 400 response with expected valid enum value validation error when fileStatus is not READY or FAILED" in {
       val result = post(fakeRequestWith(readyPayload + ("fileStatus" -> JsString("123"))))
 
       status(result) mustBe 400
@@ -137,7 +137,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
     }
   }
 
-  implicit val ResponseContentsReads = Json.reads[ResponseContents]
+  implicit val ResponseContentsReads: Reads[ResponseContents] = Json.reads[ResponseContents]
 
   private val readyPayload = Json.parse(
     s"""

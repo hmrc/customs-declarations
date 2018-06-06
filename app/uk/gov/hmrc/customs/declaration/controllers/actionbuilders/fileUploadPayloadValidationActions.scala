@@ -34,7 +34,7 @@ import scala.concurrent.Future
 class FileUploadPayloadValidationAction @Inject() (fileUploadXmlValidationService: FileUploadXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(fileUploadXmlValidationService, logger)
 
 @Singleton
-class FileUploadPayloadValidationComposedAction @Inject()(fileUploadPayloadValidationAction: FileUploadPayloadValidationAction, logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedUploadPayloadRequest] {
+class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction, val logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedUploadPayloadRequest] {
 
   private val declarationIdPropertyName = "declarationID"
   private val documentationTypePropertyName = "documentationType"
@@ -42,7 +42,7 @@ class FileUploadPayloadValidationComposedAction @Inject()(fileUploadPayloadValid
   override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedUploadPayloadRequest[A]]] = {
     implicit val implicitAr: AuthorisedRequest[A] = ar
     ar.authorisedAs match {
-      case NonCsp(_) => {
+      case NonCsp(_) =>
         fileUploadPayloadValidationAction.refine(ar).map {
           case Right(validatedPayloadRequest) =>
             Right(validatedPayloadRequest.toValidatedUploadPayloadRequest(
@@ -50,7 +50,6 @@ class FileUploadPayloadValidationComposedAction @Inject()(fileUploadPayloadValid
               DocumentationType((validatedPayloadRequest.xmlBody \ documentationTypePropertyName).text)))
           case Left(b) => Left(b)
         }
-      }
       case _ => Future.successful(Left(ErrorResponse(FORBIDDEN, ForbiddenCode, "Not an authorized service").XmlResult.withConversationId))
     }
   }

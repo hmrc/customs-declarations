@@ -16,12 +16,8 @@
 
 package util
 
-import java.util.UUID
-
-import com.fasterxml.jackson.annotation.ObjectIdGenerators.UUIDGenerator
 import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION}
-import play.api.libs.json.Json
-import play.api.mvc.{AnyContentAsJson, AnyContentAsText, AnyContentAsXml}
+import play.api.mvc.{AnyContentAsText, AnyContentAsXml}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.POST
 import util.RequestHeaders._
@@ -62,9 +58,9 @@ object FakeRequests {
 
   lazy val InvalidSubmissionRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.withXmlBody(InvalidSubmissionXML)
 
-  lazy val InvalidSubmissionRequestWith3Errors: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest.withXmlBody(InvalidSubmissionXMLWith3Errors)
+  lazy val InvalidSubmissionRequestWith2Errors: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest.withXmlBody(InvalidSubmissionXMLWith2Errors)
 
-  lazy val InvalidCancellationRequestWith3Errors: FakeRequest[AnyContentAsXml] = InvalidCancellationRequest.withXmlBody(InvalidCancellationXMLWith3Errors)
+  lazy val InvalidCancellationRequestWith2Errors: FakeRequest[AnyContentAsXml] = InvalidCancellationRequest.withXmlBody(InvalidCancellationXMLWith2Errors)
 
   lazy val MalformedXmlRequest: FakeRequest[AnyContentAsText] = InvalidSubmissionRequest.withTextBody("<xml><non_well_formed></xml>")
 

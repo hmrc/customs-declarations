@@ -107,7 +107,7 @@ class BusinessServiceSpec extends UnitSpec with MockitoSugar {
     verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
   }
 
-  "return Left of error Result when subscription fields call fails" in new SetUp() {
+  "return 500 error response when subscription fields call fails" in new SetUp() {
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
 
     val result: Either[Result, Unit] = send()
@@ -117,7 +117,7 @@ class BusinessServiceSpec extends UnitSpec with MockitoSugar {
     verifyZeroInteractions(mockMdgWcoDeclarationConnector)
   }
 
-  "return Left of error Result when MDG call fails" in new SetUp() {
+  "return 500 error response when MDG call fails" in new SetUp() {
     when(mockMdgWcoDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
 
     val result: Either[Result, Unit] = send()
@@ -125,7 +125,7 @@ class BusinessServiceSpec extends UnitSpec with MockitoSugar {
     result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
   }
 
-  "return Left of internal error Result when MDG circuit breaker trips" in new SetUp() {
+  "return 500 error response when MDG circuit breaker trips" in new SetUp() {
     when(mockMdgWcoDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new UnhealthyServiceException("wco-declaration")))
 
     val result: Either[Result, Unit] = send()

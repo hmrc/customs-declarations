@@ -31,9 +31,7 @@ import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.{NodeSeq, SAXException}
 
-abstract class XmlValidationService @Inject()(configuration: Configuration) {
-
-  protected val schemaPropertyName: String
+abstract class XmlValidationService @Inject()(val configuration: Configuration, val schemaPropertyName: String) {
 
   private lazy val schema: Schema = {
     def resourceUrl(resourcePath: String): URL = Option(getClass.getResource(resourcePath))

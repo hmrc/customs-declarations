@@ -21,8 +21,7 @@ import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestData
-import util.TestData.TestCspValidatedPayloadRequest
+import util.TestData._
 
 import scala.xml.NodeSeq
 
@@ -42,18 +41,16 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
   private val dateTime = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, DateTimeZone.UTC)
   private val payloadWrapper = new MdgPayloadDecorator()
 
-  private implicit val vpr = TestCspValidatedPayloadRequest
+  "WcoDmsPayloadWrapper for Csp" should {
+    implicit val implicitPvr = TestCspValidatedPayloadRequest
+    def wrapPayloadWithBadgeIdentifier(): NodeSeq = payloadWrapper.wrap(xml, clientId, dateTime)
+    def wrapPayloadWithOutBadgeIdentifier(): NodeSeq = payloadWrapper.wrap(xml, clientId, dateTime)
 
-  private def wrapPayloadWithBadgeIdentifier() = payloadWrapper.wrap(xml, clientId, dateTime)
-  private def wrapPayloadWithOutBadgeIdentifier() = payloadWrapper.wrap(xml, clientId, dateTime)
-
-
-  "WcoDmsPayloadWrapper " should {
     "wrap passed XML in DMS wrapper" in {
       val result = wrapPayloadWithBadgeIdentifier()
 
       val reqDet = result \\ "requestDetail"
-      reqDet.head.child.contains(<node1 />) shouldBe true
+      reqDet.head.child.contains(<node1/>) shouldBe true
     }
 
     "set the receipt date in the wrapper" in {
@@ -69,7 +66,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
       val rd = result \\ "conversationID"
 
-      rd.head.text shouldBe TestData.conversationId.toString
+      rd.head.text shouldBe conversationId.toString
     }
 
     "set the clientId" in {
@@ -85,7 +82,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
       val rd = result \\ "badgeIdentifier"
 
-      rd.head.text shouldBe TestData.badgeIdentifier.value
+      rd.head.text shouldBe badgeIdentifier.value
     }
 
     "should not set the badgeIdentifier when absent" in {
@@ -94,6 +91,43 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
       val rd = result \\ "badgeIdentifier"
 
       rd.isEmpty
+    }
+
+  }
+
+  "WcoDmsPayloadWrapper for Non Csp" should {
+    implicit val implicitPvr = TestNonCspValidatedPayloadRequest
+    def wrapPayloadWithBadgeIdentifier(): NodeSeq = payloadWrapper.wrap(xml, clientId, dateTime)
+
+    "wrap passed XML in DMS wrapper" in {
+      val result = wrapPayloadWithBadgeIdentifier()
+
+      val reqDet = result \\ "requestDetail"
+      reqDet.head.child.contains(<node1/>) shouldBe true
+    }
+
+    "set the receipt date in the wrapper" in {
+      val result = wrapPayloadWithBadgeIdentifier()
+
+      val rd = result \\ "receiptDate"
+
+      rd.head.text shouldBe "2017-06-08T13:55:00Z"
+    }
+
+    "set the conversationId" in {
+      val result = wrapPayloadWithBadgeIdentifier()
+
+      val rd = result \\ "conversationID"
+
+      rd.head.text shouldBe conversationId.toString
+    }
+
+    "set the clientId" in {
+      val result = wrapPayloadWithBadgeIdentifier()
+
+      val rd = result \\ "clientID"
+
+      rd.head.text shouldBe clientId.value
     }
 
   }

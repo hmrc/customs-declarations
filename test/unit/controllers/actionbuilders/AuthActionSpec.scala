@@ -56,109 +56,110 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
     val authAction: AuthAction = new AuthAction(mockAuthConnector, mockExportsLogger)
   }
 
-  "CspAuthAction" should {
-    "Return Right of AuthorisedRequest with authorisedAs CSP when authorised by auth API and badge identifier exists" in new SetUp {
-      authoriseCsp()
+  "AuthAction Builder " can {
+    "as CSP " should {
+      "authorise as CSP when authorised by auth API and badge identifier exists" in new SetUp {
+        authoriseCsp()
 
-      private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
-      actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(badgeIdentifier))
-      verifyNonCspAuthorisationNotCalled
+        private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(badgeIdentifier))
+        verifyNonCspAuthorisationNotCalled
+      }
+
+      "Return 401 response when authorised by auth API but badge identifier does not exists" in new SetUp {
+        authoriseCsp()
+
+        private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
+
+        actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyNonCspAuthorisationNotCalled
+      }
+
+
+      "Return 401 response when authorised by auth API but badge identifier exists but is too long" in new SetUp {
+        authoriseCsp()
+
+        private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdTooLong))
+
+        actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyNonCspAuthorisationNotCalled
+      }
+
+      "Return 401 response when authorised by auth API but badge identifier exists but is too short" in new SetUp {
+        authoriseCsp()
+
+        private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdTooShort))
+
+        actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyNonCspAuthorisationNotCalled
+      }
+
+      "Return 401 response when authorised by auth API but badge identifier exists but contains invalid chars" in new SetUp {
+        authoriseCsp()
+
+        private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdInvalidChars))
+
+        actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyNonCspAuthorisationNotCalled
+      }
+
+      "Return 401 response when authorised by auth API but badge identifier exists but contains all lowercase chars" in new SetUp {
+        authoriseCsp()
+
+        private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdLowerCase))
+
+        actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyNonCspAuthorisationNotCalled
+      }
+
+      "Return 500 response if errors occur in CSP auth API call" in new SetUp {
+        authoriseCspError()
+
+        private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
+
+        actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyNonCspAuthorisationNotCalled
+      }
     }
 
-    "Return Left of 401 Result when authorised by auth API but badge identifier does not exists" in new SetUp {
-      authoriseCsp()
+    "As a Non CSP" should {
+      "Authorise as Non CSP when authorised by auth API" in new SetUp {
+        authoriseNonCsp(Some(declarantEori))
 
-      private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
+        private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
-      verifyNonCspAuthorisationNotCalled
-    }
+        actual shouldBe Right(TestValidatedHeadersRequestNoBadge.toNonCspAuthorisedRequest(declarantEori))
+        verifyCspAuthorisationCalled(1)
+      }
 
+      "Return 401 response when authorised by auth API but Eori not exists" in new SetUp {
+        authoriseNonCsp(maybeEori = None)
 
-    "Return Left of 401 Result when authorised by auth API but badge identifier exists but is too long" in new SetUp {
-      authoriseCsp()
+        private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdTooLong))
+        actual shouldBe Left(errorResponseEoriNotFoundInCustomsEnrolment.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyCspAuthorisationCalled(1)
+      }
 
-      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
-      verifyNonCspAuthorisationNotCalled
-    }
+      "Return 401 response when not authorised as NonCsp" in new SetUp {
+        unauthoriseCsp()
+        unauthoriseNonCspOnly()
 
-    "Return Left of 401 Result when authorised by auth API but badge identifier exists but is too short" in new SetUp {
-      authoriseCsp()
+        private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdTooShort))
+        actual shouldBe Left(errorResponseUnauthorisedGeneral.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyCspAuthorisationCalled(1)
+      }
 
-      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
-      verifyNonCspAuthorisationNotCalled
-    }
+      "Return 500 response if errors occur in CSP auth API call" in new SetUp {
+        unauthoriseCsp()
+        authoriseNonCspOnlyError()
 
-    "Return Left of 401 Result when authorised by auth API but badge identifier exists but contains invalid chars" in new SetUp {
-      authoriseCsp()
+        private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-      private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdInvalidChars))
-
-      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
-      verifyNonCspAuthorisationNotCalled
-    }
-
-    "Return Left of 401 Result when authorised by auth API but badge identifier exists but contains all lowercase chars" in new SetUp {
-      authoriseCsp()
-
-      private val actual = await(authAction.refine(validatedHeadersRequestWithInValidBadgeIdLowerCase))
-
-      actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
-      verifyNonCspAuthorisationNotCalled
-    }
-
-    "Return Left of 500 Result if errors occur in CSP auth API call" in new SetUp {
-      authoriseCspError()
-
-      private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
-
-      actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
-      verifyNonCspAuthorisationNotCalled
-    }
-
-  }
-
-  "NonCspAuthAction" should {
-    "Authorise Non CSP when authorised by auth API " in new SetUp {
-      authoriseNonCsp(Some(declarantEori))
-
-      private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
-
-      actual shouldBe Right(TestValidatedHeadersRequestNoBadge.toNonCspAuthorisedRequest(declarantEori))
-      verifyCspAuthorisationCalled(1)
-    }
-
-    "Return 401 when authorised by auth API but Eori not exists" in new SetUp {
-      authoriseNonCsp(maybeEori = None)
-
-      private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
-
-      actual shouldBe Left(errorResponseEoriNotFoundInCustomsEnrolment.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
-      verifyCspAuthorisationCalled(1)
-    }
-
-    "Return 401 when not authorised as NonCsp" in new SetUp {
-      unauthoriseCsp()
-      unauthoriseNonCspOnly()
-
-      private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
-
-      actual shouldBe Left(errorResponseUnauthorisedGeneral.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
-      verifyCspAuthorisationCalled(1)
-    }
-
-    "Return Left of 500 Result if errors occur in CSP auth API call" in new SetUp {
-      unauthoriseCsp()
-      authoriseNonCspOnlyError()
-
-      private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
-
-      actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
-      verifyCspAuthorisationCalled(1)
+        actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyCspAuthorisationCalled(1)
+      }
     }
   }
 

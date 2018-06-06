@@ -26,12 +26,14 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames
+import play.api.mvc.AnyContentAsXml
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
@@ -59,7 +61,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
-  private implicit val vpr = TestData.TestCspValidatedPayloadRequest
+  private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
 
   override protected def beforeEach() {
     reset(mockWsPost, mockLogger, mockServiceConfigProvider)
@@ -86,7 +88,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
 
     "when making a successful request" should {
 
-      "pass URL from config" in {
+      "ensure URL is retrieved from config" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
         awaitRequest
@@ -95,7 +97,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
           any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
-      "pass the xml in the body" in {
+      "ensure xml payload is included in the MDG request body" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
         awaitRequest
@@ -104,7 +106,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
           any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
-      "set the content type header" in {
+      "ensure the content type header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
         awaitRequest
@@ -115,7 +117,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
         headersCaptor.getValue.extraHeaders should contain(HeaderNames.CONTENT_TYPE -> MimeTypes.XML)
       }
 
-      "set the accept header" in {
+      "ensure the accept header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
         awaitRequest
@@ -126,7 +128,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
         headersCaptor.getValue.extraHeaders should contain(HeaderNames.ACCEPT -> MimeTypes.XML)
       }
 
-      "set the date header" in {
+      "ensure the date header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
         awaitRequest
@@ -137,7 +139,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
         headersCaptor.getValue.extraHeaders should contain(HeaderNames.DATE -> httpFormattedDate)
       }
 
-      "set the X-Forwarded-Host header" in {
+      "ensure the X-FORWARDED_HOST header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
         awaitRequest
@@ -148,7 +150,7 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
         headersCaptor.getValue.extraHeaders should contain(HeaderNames.X_FORWARDED_HOST -> "MDTP")
       }
 
-      "set the X-Correlation-Id header" in {
+      "ensure the X-Correlation-Id header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
         awaitRequest
@@ -159,12 +161,16 @@ class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with Bef
         headersCaptor.getValue.extraHeaders should contain("X-Correlation-ID" -> correlationId.toString)
       }
 
-      "prefix the config key with the prefix if passed" in {
+      "Ensure routing is working for the config location which will ensure version specific config values are loaded correctly" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
         await(connector.send(xml, date, correlationId, VersionTwo))
 
         verify(mockServiceConfigProvider).getConfig("v2.wco-declaration")
+
+        await(connector.send(xml, date, correlationId, VersionOne))
+
+        verify(mockServiceConfigProvider).getConfig("wco-declaration")
       }
     }
 

@@ -70,9 +70,9 @@ class AuthAction @Inject()(
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val implicitVhr = vhr
 
-    authoriseAsCsp.flatMap{
-      case Right(maybeBadgeIdentifier) =>
-        maybeBadgeIdentifier.fold{
+    futureAuthoriseAsCsp.flatMap{
+      case Right(maybeAuthorisedAsCspWithBadgeIdentifier) =>
+        maybeAuthorisedAsCspWithBadgeIdentifier.fold{
           authoriseAsNonCsp
         }{ badgeId =>
           Future.successful(Right(vhr.toCspAuthorisedRequest(badgeId)))
@@ -84,8 +84,9 @@ class AuthAction @Inject()(
 
   // pure function that tames exceptions throw by HMRC auth api into an Either
   // this enables calling function to not worry about recover blocks
-  // returns a Future of Left(Result) on error or a Right(AuthorisedRequest) on success
-  private def authoriseAsCsp[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[BadgeIdentifier]]] = {
+  // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
+  // Right(None) if not authorised as CSP
+  private def futureAuthoriseAsCsp[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[BadgeIdentifier]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {

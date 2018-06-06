@@ -64,7 +64,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
   }
 
   "PayloadValidationAction" should {
-    "return Right of ValidatedPayloadRequest when XML validation is OK" in new SetUp {
+    "return a ValidatedPayloadRequest when XML validation is OK" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.successful(()))
 
       private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))
@@ -72,7 +72,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       actual shouldBe Right(TestCspValidatedPayloadRequest)
     }
 
-    "return Left of error Result when XML is not well formed" in new SetUp {
+    "return 400 error response when XML is not well formed" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.failed(saxException))
 
       private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))
@@ -80,7 +80,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       actual shouldBe Left(expectedXmlSchemaErrorResult)
     }
 
-    "return Left of error Result when XML validation fails" in new SetUp {
+    "return 400 error response when XML validation fails" in new SetUp {
       private val errorMessage = "Request body does not contain a well-formed XML document."
       private val errorNotWellFormed = ErrorResponse.errorBadRequest(errorMessage).XmlResult.withConversationId
       private val authorisedRequestWithNonWellFormedXml = ConversationIdRequest(conversationId, FakeRequest().withTextBody("<foo><foo>"))
@@ -91,7 +91,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       actual shouldBe Left(errorNotWellFormed)
     }
 
-    "propagates downstream errors by returning Left of error Result" in new SetUp {
+    "propagates downstream errors by returning a 500 error response" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.failed(emulatedServiceFailure))
 
       private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))

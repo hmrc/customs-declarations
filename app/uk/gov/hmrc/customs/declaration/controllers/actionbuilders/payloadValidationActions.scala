@@ -55,7 +55,7 @@ class ClearancePayloadValidationAction @Inject() (xmlValidationService: Clearanc
 @Singleton
 class CancelPayloadValidationAction @Inject() (xmlValidationService: CancellationXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
 
-abstract class PayloadValidationAction(xmlValidationService: XmlValidationService, logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedPayloadRequest] {
+abstract class PayloadValidationAction(val xmlValidationService: XmlValidationService, logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedPayloadRequest] {
 
   override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedPayloadRequest[A]]] = {
     implicit val implicitAr = ar

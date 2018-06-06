@@ -46,7 +46,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
   }
 
   "FileUploadPayloadValidationComposedAction" should  {
-    "Should return 403 response when authorised as CSP" in new SetUp() {
+    "return 403 response when authorised as CSP" in new SetUp {
       val authorisedCspRequest: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, VersionTwo, clientId, Csp(BadgeIdentifier("CSP1")), mock[Request[AnyContent]])
 
       val actualResult: Either[Result, ValidatedUploadPayloadRequest[AnyContent]] = await(fileUploadPayloadValidationComposedAction.refine(authorisedCspRequest))
@@ -54,7 +54,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
       actualResult shouldBe Left(ErrorResponse(FORBIDDEN, ForbiddenCode, "Not an authorized service").XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationIdValue))
     }
 
-    "Should return an error when validation fails" in new SetUp() {
+    "return an error when validation fails" in new SetUp {
       val authorisedNonCspRequest: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, VersionTwo, clientId, NonCsp(Eori("EORI123")), mock[Request[AnyContent]])
       val mockResult: Result = mock[Result]
 
@@ -63,7 +63,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
       await(fileUploadPayloadValidationComposedAction.refine(authorisedNonCspRequest)) shouldBe Left(mockResult)
     }
 
-    "Should return success when there are no errors" in new SetUp() {
+    "return success when there are no errors" in new SetUp {
       val testUpscanInitiatePayload: NodeSeq = <upscanInitiate><declarationID>dec123</declarationID><documentationType>docType123</documentationType></upscanInitiate>
       val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, VersionTwo, clientId, NonCsp(Eori("EORI123")), FakeRequest("GET", "/").withXmlBody(testUpscanInitiatePayload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(testUpscanInitiatePayload)

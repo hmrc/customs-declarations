@@ -69,16 +69,19 @@ object TestData {
     def asGuiceableModule: GuiceableModule = GuiceableModule.guiceable(this)
   }
 
-  val ValidGoogleAnalyticsJson: JsValue = Json.parse(
+  val GoogleAnalyticsPayloadValue = "some-query-string-for-ga"
+
+  lazy val ValidGoogleAnalyticsJson: JsValue = Json.parse(
     s"""
        |{
-       | "payload": "some-query-string-for-ga"
+       | "payload": $GoogleAnalyticsPayloadValue
        |}
     """.stripMargin)
 
   // note we can not mock service methods that return value classes - however using a simple stub IMHO it results in cleaner code (less mocking noise)
   val stubUniqueIdsService = new UniqueIdsService(mockUuidService) {
     override def conversation: ConversationId = conversationId
+
     override def correlation: CorrelationId = correlationId
   }
 

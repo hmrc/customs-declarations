@@ -40,8 +40,7 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
     (ACCEPT, MimeTypes.JSON),
     (CONTENT_TYPE, MimeTypes.JSON))
 
-  //TODO MC change Future[HttpResponse] to Future[Unit], since it's supposed to be fire and forget
-  //TODO MC add test
+  //TODO MC change (?) Future[HttpResponse] to Future[Unit], since it's supposed to be fire and forget
   def send[A](googleAnalyticsRequest: GoogleAnalyticsRequest)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = outboundHeaders)

@@ -12,3 +12,5 @@ GET         /admin/metrics                @com.kenshoo.play.metrics.MetricsContr
 POST        /uploaded-file-upscan-notifications/decId/:decId/eori/:eori/documentationType/:docType/clientSubscriptionId/:clientSubscriptionId @uk.gov.hmrc.customs.declaration.controllers.UpscanNotificationController.post(decId,eori,docType,clientSubscriptionId)
 
 POST        /clearance                    @uk.gov.hmrc.customs.declaration.controllers.ClearanceDeclarationController.post()
+
+POST        /amend                        @uk.gov.hmrc.customs.declaration.controllers.AmendDeclarationController.post()

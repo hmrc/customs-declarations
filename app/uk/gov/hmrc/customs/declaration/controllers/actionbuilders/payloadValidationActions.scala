@@ -38,7 +38,7 @@ import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseConten
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.{CancellationXmlValidationService, ClearanceXmlValidationService, SubmissionXmlValidationService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.services._
 
 import scala.collection.Seq
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -51,6 +51,9 @@ class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionX
 
 @Singleton
 class ClearancePayloadValidationAction @Inject() (xmlValidationService: ClearanceXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+
+@Singleton
+class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
 class CancelPayloadValidationAction @Inject() (xmlValidationService: CancellationXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)

@@ -17,11 +17,12 @@
 package util
 
 import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION}
-import play.api.mvc.{AnyContentAsText, AnyContentAsXml}
+import play.api.libs.json.JsValue
+import play.api.mvc.{AnyContentAsText, AnyContentAsXml, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.POST
 import util.RequestHeaders._
-import util.TestData.{cspBearerToken, nonCspBearerToken}
+import util.TestData.{ValidGoogleAnalyticsJson, cspBearerToken, nonCspBearerToken}
 import util.TestXMLData._
 
 object FakeRequests {
@@ -137,6 +138,13 @@ object FakeRequests {
 
   lazy val InvalidContentTypeHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
     .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
+
+  lazy val ValidGoogleAnalyticsRequest = FakeRequest()
+    .withHeaders(RequestHeaders.ValidGoogleAnalyticsHeaders.toSeq: _*)
+    .withJsonBody(ValidGoogleAnalyticsJson)
+
+  lazy val ValidGoogleAnalyticsRequestAsJsValue: Request[JsValue] = ValidGoogleAnalyticsRequest.copyFakeRequest[JsValue](body = ValidGoogleAnalyticsRequest.body.json)
+
 
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")

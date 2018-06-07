@@ -42,22 +42,22 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
 
   //TODO MC change Future[HttpResponse] to Future[Unit], since it's supposed to be fire and forget
   //TODO MC add test
-  def send[A](publicNotificationRequest: GoogleAnalyticsRequest)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
+  def send[A](googleAnalyticsRequest: GoogleAnalyticsRequest)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = outboundHeaders)
-    val msg = "Calling public notification service"
+    val msg = "Calling public notification (google analytics) service"
     val url = config.declarationsConfig.googleAnalyticsUrl
-    val payloadAsJsonString = Json.prettyPrint(Json.toJson(publicNotificationRequest))
-    logger.debug(s"$msg at $url with\nheaders=${hc.headers} and\npayload=$payloadAsJsonString publicNotificationRequest")
+    val payloadAsJsonString = Json.prettyPrint(Json.toJson(googleAnalyticsRequest))
+    logger.debug(s"$msg at $url with\nheaders=${hc.headers} and\npayload=$payloadAsJsonString googleAnalyticsRequest")
 
     val postFuture = http
-      .POST[GoogleAnalyticsRequest, HttpResponse](url, publicNotificationRequest)
+      .POST[GoogleAnalyticsRequest, HttpResponse](url, googleAnalyticsRequest)
       .recoverWith {
         case httpError: HttpException => Future.failed(new RuntimeException(httpError))
       }
       .recoverWith {
         case e: Throwable =>
-          logger.error(s"Call to public notification service failed. POST url=$url", e)
+          logger.error(s"Call to public notification service (google analytics) failed. POST url=$url", e)
           Future.failed(e)
       }
     postFuture

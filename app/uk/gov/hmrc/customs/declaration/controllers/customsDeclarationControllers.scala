@@ -58,6 +58,13 @@ class ClearanceDeclarationController @Inject()(
  payloadValidationAction: ClearancePayloadValidationAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
 
+@Singleton
+class AmendDeclarationController @Inject()(
+ common: Common,
+ businessService: BusinessService,
+ payloadValidationAction: AmendPayloadValidationAction
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
+
 
 abstract class CustomsDeclarationController(
   val common: Common,

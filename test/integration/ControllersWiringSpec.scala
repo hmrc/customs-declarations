@@ -18,20 +18,22 @@ package integration
 
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{CancelPayloadValidationAction, ClearancePayloadValidationAction, FileUploadPayloadValidationAction, SubmitPayloadValidationAction}
-import uk.gov.hmrc.customs.declaration.controllers.{CancelDeclarationController, ClearanceDeclarationController, FileUploadController, SubmitDeclarationController}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
+import uk.gov.hmrc.customs.declaration.controllers._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.services.{CancellationXmlValidationService, ClearanceXmlValidationService, FileUploadXmlValidationService, SubmissionXmlValidationService}
+import uk.gov.hmrc.customs.declaration.services._
 
 class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   private lazy val mockSubmissionXmlValidationService = mock[SubmissionXmlValidationService]
   private lazy val mockCancellationXmlValidationService = mock[CancellationXmlValidationService]
   private lazy val mockClearanceXmlValidationService = mock[ClearanceXmlValidationService]
+  private lazy val mockAmendXmlValidationService = mock[AmendXmlValidationService]
   private lazy val mockFileUploadXmlValidationService = mock[FileUploadXmlValidationService]
   private lazy val mockDeclarationsLogger = mock[DeclarationsLogger]
 
   private lazy val clearanceController = app.injector.instanceOf[ClearanceDeclarationController]
+  private lazy val amendController = app.injector.instanceOf[AmendDeclarationController]
   private lazy val submitController = app.injector.instanceOf[SubmitDeclarationController]
   private lazy val cancelController = app.injector.instanceOf[CancelDeclarationController]
   private lazy val fileUploadController = app.injector.instanceOf[FileUploadController]
@@ -55,7 +57,12 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
       action.getClass.getSimpleName shouldBe new ClearancePayloadValidationAction(mockClearanceXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
     }
+    "be wired into AmendDeclarationController" in {
+      val action = amendController.payloadValidationAction
 
+      action.getClass.getSimpleName shouldBe new AmendPayloadValidationAction(mockAmendXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
+      action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
+    }
     "be wired into FileUploadController" in {
       val action = fileUploadController.fileUploadPayloadValidationComposedAction.fileUploadPayloadValidationAction
 

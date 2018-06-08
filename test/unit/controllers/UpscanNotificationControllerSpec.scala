@@ -29,7 +29,7 @@ import play.api.test.Helpers._
 import play.api.test._
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.controllers.ResponseContents
-import uk.gov.hmrc.customs.declaration.controllers.{FileStatus, UpscanNotification, UpscanNotificationController}
+import uk.gov.hmrc.customs.declaration.controllers.{FileStatus, UploadDetails, UpscanNotification, UpscanNotificationController}
 import uk.gov.hmrc.customs.declaration.services.{UploadedFileDetails, UploadedFileProcessingService}
 
 import scala.concurrent.Future
@@ -38,7 +38,6 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
 
   private val fileReference = UUID.randomUUID()
   private val mockService = mock[UploadedFileProcessingService]
-
 
   private val post: Action[AnyContent] = new UpscanNotificationController(mockService)
     .post("decId", "eori", "docType", "clientSubscriptionId")
@@ -54,7 +53,8 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
 
       status(result) mustBe 204
       contentAsString(result) mustBe ""
-      verify(mockService).sendMessage(UploadedFileDetails("decId", "eori", "docType", "clientSubscriptionId", UpscanNotification(fileReference, FileStatus.READY, None, Some("https://some-url"))))
+      verify(mockService).sendMessage(UploadedFileDetails("decId", "eori", "docType", "clientSubscriptionId",
+        UpscanNotification(fileReference, FileStatus.READY, Some(UploadDetails(Some("2018-04-24T09:30:00Z"), Some("CHECKSUM"))), None, Some("https://some-url"))))
     }
 
     "return 204 even when call to Custom Notifications services fails" in {
@@ -67,7 +67,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
       contentAsString(result) mustBe ""
       verify(mockService).sendMessage(
         UploadedFileDetails("decId", "eori", "docType", "clientSubscriptionId",
-          UpscanNotification(fileReference, FileStatus.READY, None, Some("https://some-url"))))
+          UpscanNotification(fileReference, FileStatus.READY, Some(UploadDetails(Some("2018-04-24T09:30:00Z"), Some("CHECKSUM"))), None, Some("https://some-url"))))
     }
 
     "return 204 when a valid FAILED request is received" in {
@@ -120,17 +120,30 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
       badRequestJsValue.message must include("/fileStatus,List(ValidationError(List(error.expected.validenumvalue")
     }
 
-    "return 400 when fileStatus is FAILED and details is not available" in {
-      val result = post(fakeRequestWith(failedFileStatusPayload - "details"))
+    "return 400 when fileStatus is FAILED and failureDetails is not available" in {
+      val jsObject = failedFileStatusPayload - "failureDetails"
+      val result = post(fakeRequestWith(jsObject))
 
       status(result) mustBe 400
       val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
       badRequestJsValue.code mustBe expectedJsonValidationMessage
-      badRequestJsValue.message must include("File status is FAILED so details are required")
+      badRequestJsValue.message must include("File status is FAILED so failureReason is required")
+      badRequestJsValue.message must include("File status is FAILED so message is required")
+    }
+
+    "return 400 when fileStatus is READY and uploadDetails is not available" in {
+      val jsObject = readyPayload - "uploadDetails"
+      val result = post(fakeRequestWith(jsObject))
+
+      status(result) mustBe 400
+      val badRequestJsValue: ResponseContents = contentAsJson(result).as[ResponseContents]
+      badRequestJsValue.code mustBe expectedJsonValidationMessage
+      badRequestJsValue.message must include("File status is READY so uploadTimestamp is required")
+      badRequestJsValue.message must include("File status is READY so checksum is required")
     }
 
     "not call downstream service when 400 is being returned" in {
-      val result = post(fakeRequestWith(failedFileStatusPayload - "details"))
+      val result = post(fakeRequestWith(failedFileStatusPayload - "failureDetails"))
 
       status(result) mustBe 400
       verifyZeroInteractions(mockService)
@@ -144,6 +157,10 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
        |{
        |    "reference" : "$fileReference",
        |    "fileStatus" : "READY",
+       |    "uploadDetails": {
+       |      "uploadTimestamp": "2018-04-24T09:30:00Z",
+       |      "checksum": "CHECKSUM"
+       |    },
        |    "url" : "https://some-url"
        |}
     """.stripMargin).as[JsObject]
@@ -153,7 +170,10 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
        |{
        |    "reference" : "$fileReference",
        |    "fileStatus" : "FAILED",
-       |    "details": "some failure details"
+       |    "failureDetails": {
+       |        "failureReason": "QUARANTINED",
+       |        "message": "This file has a virus"
+       |    }
        |}
     """.stripMargin).as[JsObject]
 

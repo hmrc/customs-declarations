@@ -36,9 +36,9 @@ case class UploadedFileDetails(
 case class CustomsNotification(clientSubscriptionId: String, conversationId: UUID, payload: NodeSeq)
 
 object CustomsNotification {
-  def apply(details: UploadedFileDetails)(implicit successXML: NodeSeq, failedXML: (UploadedFileDetails => NodeSeq)): CustomsNotification = {
+  def apply(details: UploadedFileDetails)(successXML: (UploadedFileDetails => NodeSeq), failedXML: (UploadedFileDetails => NodeSeq)): CustomsNotification = {
     details.upscanNotification.fileStatus match {
-      case FileStatus.READY => CustomsNotification(details.clientSubscriptionId, details.upscanNotification.reference, successXML)
+      case FileStatus.READY => CustomsNotification(details.clientSubscriptionId, details.upscanNotification.reference, successXML(details))
       case FileStatus.FAILED => CustomsNotification(details.clientSubscriptionId, details.upscanNotification.reference, failedXML(details))
     }
   }
@@ -49,20 +49,27 @@ object CustomsNotification {
 class UploadedFileProcessingService @Inject()(notificationConnector: CustomsNotificationConnector) {
 
   def sendMessage(details: UploadedFileDetails): Future[Unit] =
-    notificationConnector.send(CustomsNotification(details))
+    notificationConnector.send(CustomsNotification(details)(uploadedFileScanSuccessXML, uploadedFileScanFailedXML))
 
-
-  private implicit val uploadedFileScanSuccessXML =
+  private def uploadedFileScanSuccessXML: UploadedFileDetails => NodeSeq = details =>
     <root>
       <fileStatus>SUCCESS</fileStatus>
-      <details>File successfully received</details>
+      <uploadDetails>
+        <uploadTimestamp>{details.upscanNotification.uploadDetails.get.uploadTimestamp.get}</uploadTimestamp>
+        <checksum>{details.upscanNotification.uploadDetails.get.checksum.get}</checksum>
+      </uploadDetails>
     </root>
 
-  private implicit def uploadedFileScanFailedXML: UploadedFileDetails => NodeSeq = details =>
+  private def uploadedFileScanFailedXML: UploadedFileDetails => NodeSeq = details =>
     <root>
       <fileStatus>FAILED</fileStatus>
-      <details>
-        {details.upscanNotification.details.get}
-      </details>
+      <failureDetails>
+        <failureReason>
+          {details.upscanNotification.failureDetails.get.failureReason}
+        </failureReason>
+        <message>
+          {details.upscanNotification.failureDetails.get.message}
+        </message>
+      </failureDetails>
     </root>
 }

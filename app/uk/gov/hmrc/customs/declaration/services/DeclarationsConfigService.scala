@@ -22,7 +22,7 @@ import scalaz.syntax.apply._
 import scalaz.syntax.traverse._
 import uk.gov.hmrc.customs.api.common.config.ConfigValidationNelAdaptor
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{DeclarationsCircuitBreakerConfig, DeclarationsConfig}
+import uk.gov.hmrc.customs.declaration.model.{DeclarationsCircuitBreakerConfig, DeclarationsConfig, GoogleAnalyticsConfig}
 
 @Singleton
 class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationNelAdaptor, logger: DeclarationsLogger) {
@@ -30,7 +30,6 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val root = configValidationNel.root
   private val customsNotificationsService = configValidationNel.service("customs-notification")
   private val apiSubscriptionFieldsService = configValidationNel.service("api-subscription-fields")
-  private val googleAnalyticsService = configValidationNel.service("google-analytics")
 
   private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
@@ -38,19 +37,29 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val bearerTokenNel = customsNotificationsService.string("bearer-token")
   private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
-  private val gaServiceUrlNel: ValidationNel[String, String] = googleAnalyticsService.serviceUrl
+
+  private val gaServiceUrl = configValidationNel.service("google-analytics").serviceUrl
+  private val gaTrackingId = root.string("googleAnalytics.trackingId")
+  private val gaClientId = root.string("googleAnalytics.clientId")
+  private val gaEventValue = root.string("googleAnalytics.eventValue")
 
   private val validatedDeclarationsConfig: ValidationNel[String, DeclarationsConfig] = (
-    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| gaServiceUrlNel |@| bearerTokenNel
+    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel
     ) (DeclarationsConfig.apply)
 
   private val validatedDeclarationsCircuitBreakerConfig: ValidationNel[String, DeclarationsCircuitBreakerConfig] = (
     numberOfCallsToTriggerStateChangeNel |@| unavailablePeriodDurationInMillisNel |@| unstablePeriodDurationInMillisNel
     ) (DeclarationsCircuitBreakerConfig.apply)
 
+  val validatedGoogleAnalyticsSenderConfig: ValidationNel[String, GoogleAnalyticsConfig] = (
+    gaServiceUrl |@| gaTrackingId |@| gaClientId |@| gaEventValue
+    ) (GoogleAnalyticsConfig.apply)
+
   private val customsConfigHolder =
     (validatedDeclarationsConfig |@|
-      validatedDeclarationsCircuitBreakerConfig) (CustomsConfigHolder.apply) fold(
+      validatedDeclarationsCircuitBreakerConfig |@|
+      validatedGoogleAnalyticsSenderConfig
+      ) (CustomsConfigHolder.apply) fold(
       fail = { nel =>
         // error case exposes nel (a NotEmptyList)
         val errorMsg = nel.toList.mkString("\n", "\n", "")
@@ -64,6 +73,9 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
 
   val declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig = customsConfigHolder.declarationsCircuitBreakerConfig
 
+  val googleAnalyticsConfig: GoogleAnalyticsConfig = customsConfigHolder.validatedGoogleAnalyticsConfig
+
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
-                                         declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig)
+                                         declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,
+                                         validatedGoogleAnalyticsConfig: GoogleAnalyticsConfig)
 }

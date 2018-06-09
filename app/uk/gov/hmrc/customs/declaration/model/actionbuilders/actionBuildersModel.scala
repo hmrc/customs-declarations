@@ -87,6 +87,8 @@ trait HasConversationId {
   val conversationId: ConversationId
 }
 
+//TODO MC add trait HasControllerNick
+
 trait ExtractedHeaders {
   val requestedApiVersion: ApiVersion
   val clientId: ClientId

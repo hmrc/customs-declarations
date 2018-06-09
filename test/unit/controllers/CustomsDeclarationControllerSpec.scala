@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -53,13 +54,13 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
     protected val mockResult: Result = mock[Result]
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
-
+    protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val stubConversationIdAction: ConversationIdAction = new ConversationIdAction(stubUniqueIdsService, mockDeclarationsLogger)
     protected val stubAuthAction: AuthAction = new AuthAction(mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockDeclarationsLogger), mockDeclarationsLogger)
     protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger){}
 
-    protected val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, mockDeclarationsLogger)
+    protected val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, mockDeclarationsLogger, mockGoogleAnalyticsConnector)
 
     protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction){}
 

@@ -17,9 +17,9 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.MimeTypes
 import play.api.mvc._
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -34,7 +34,8 @@ class Common @Inject() (
   val conversationIdAction: ConversationIdAction,
   val authAction: AuthAction,
   val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
-  val logger: DeclarationsLogger
+  val logger: DeclarationsLogger,
+  val googleAnalyticsConnector: GoogleAnalyticsConnector
 )
 
 @Singleton
@@ -65,7 +66,7 @@ class AmendDeclarationController @Inject()(
                                             payloadValidationAction: AmendPayloadValidationAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
 
-
+//TODO MC find out who called me
 abstract class CustomsDeclarationController(
                                              val common: Common,
                                              val businessService: DeclarationService,

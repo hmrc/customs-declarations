@@ -47,6 +47,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, Retrievals}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, FileUploadController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -77,8 +78,8 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
     val stubConversationIdAction: ConversationIdAction = new ConversationIdAction(stubUniqueIdsService, logger)
     val stubAuthAction = new AuthAction(mockAuthConnector, logger)
     val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(logger), logger)
-
-    val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, logger)
+    val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
+    val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, logger, mockGoogleAnalyticsConnector)
     val mockFileUploadBusinessService = mock[FileUploadBusinessService]
     val fileUploadPayloadValidationAction = new FileUploadPayloadValidationAction(mockXmlValidationService, logger)
     val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, logger)

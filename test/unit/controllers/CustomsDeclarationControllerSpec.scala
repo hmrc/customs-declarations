@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.services.{StandardDeclarationSubmissionService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.services.{GoogleAnalyticsService, StandardDeclarationSubmissionService, XmlValidationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.AuthConnectorStubbing
@@ -53,12 +53,15 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockBusinessService: StandardDeclarationSubmissionService = mock[StandardDeclarationSubmissionService]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
     protected val mockResult: Result = mock[Result]
+    protected lazy val mockGoogleAnalyticsService = mock[GoogleAnalyticsService]
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
     protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val stubConversationIdAction: ConversationIdAction = new ConversationIdAction(stubUniqueIdsService, mockDeclarationsLogger)
     protected val stubAuthAction: AuthAction = new AuthAction(mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockDeclarationsLogger), mockDeclarationsLogger)
-    protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger){}
+    protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger, Some(mockGoogleAnalyticsService)){
+      override val owner: String = "stub-owner"
+    }
 
     protected val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, mockDeclarationsLogger, mockGoogleAnalyticsConnector)
 

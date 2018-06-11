@@ -23,7 +23,7 @@ import play.api.http.MimeTypes
 import play.api.libs.json.Json
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsRequest
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -46,10 +46,11 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
     s"v=1&t=event&tid=${config.trackingId}&cid=${config.clientId}&ec=CDS&ea=$eventName&el=$eventLabel&ev=${config.eventValue}"
   }
 
-  def send[A](eventName: String, eventLabel: String)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Unit] = {
+  def send[A](eventName: String, eventLabel: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
 
     val msg = "Calling public notification (google analytics) service"
     val url = config.url
+    implicit val hc = new HeaderCarrier
     val request = GoogleAnalyticsRequest(payload(eventName, eventLabel))
     val payloadAsJsonString = Json.prettyPrint(Json.toJson(request))
     logger.debug(s"$msg at $url with\nheaders=${hc.headers} and\npayload=$payloadAsJsonString googleAnalyticsRequest")

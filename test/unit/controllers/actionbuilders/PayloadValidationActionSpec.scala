@@ -41,7 +41,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.PayloadValidat
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.XmlValidationService
+import uk.gov.hmrc.customs.declaration.services.{GoogleAnalyticsService, XmlValidationService}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 
@@ -60,9 +60,12 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
   trait SetUp {
     val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
     val mockExportsLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    val payloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockExportsLogger) {}
+    val mockGoogleAnalyticsService = mock[GoogleAnalyticsService]
+    val payloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockExportsLogger, Some(mockGoogleAnalyticsService)) {
+      override val owner: String = "generic-owner"
+    }
   }
-
+//TODO MC revisit
   "PayloadValidationAction" should {
     "return a ValidatedPayloadRequest when XML validation is OK" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.successful(()))

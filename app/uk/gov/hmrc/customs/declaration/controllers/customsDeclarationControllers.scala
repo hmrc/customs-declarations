@@ -66,7 +66,6 @@ class AmendDeclarationController @Inject()(
                                             payloadValidationAction: AmendPayloadValidationAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
 
-//TODO MC find out who called me
 abstract class CustomsDeclarationController(
                                              val common: Common,
                                              val businessService: DeclarationService,
@@ -94,7 +93,7 @@ extends BaseController {
         val logger = common.logger
 
         logger.debug(s"Request received. Payload = ${vpr.body.toString} headers = ${vpr.headers.headers}")
-
+        payloadValidationAction.sendGoogleAnalyticsSuccess
         businessService.send map {
           case Right(_) =>
             logger.info(s"Declaration request processed successfully")

@@ -37,7 +37,7 @@ import play.api.mvc.{ActionRefiner, AnyContent, Result}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
 
 import scala.collection.Seq
@@ -47,18 +47,28 @@ import scala.util.control.NonFatal
 import scala.xml.{NodeSeq, SAXException}
 
 @Singleton
-class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionXmlValidationService, logger: DeclarationsLogger, googleAnalyticsService: GoogleAnalyticsService) extends PayloadValidationAction(xmlValidationService, logger, Some(googleAnalyticsService)) {
+  override val owner: String = "declarationSubmit"
+}
 
 @Singleton
-class ClearancePayloadValidationAction @Inject() (xmlValidationService: ClearanceXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+class ClearancePayloadValidationAction @Inject() (xmlValidationService: ClearanceXmlValidationService, logger: DeclarationsLogger, googleAnalyticsService: GoogleAnalyticsService) extends PayloadValidationAction(xmlValidationService, logger, Some(googleAnalyticsService)) {
+  override val owner: String = "declarationClearance"
+}
 
 @Singleton
-class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger, None) {
+  override val owner: String = "declarationAmend"
+}
 
 @Singleton
-class CancelPayloadValidationAction @Inject() (xmlValidationService: CancellationXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+class CancelPayloadValidationAction @Inject() (xmlValidationService: CancellationXmlValidationService, logger: DeclarationsLogger, googleAnalyticsService: GoogleAnalyticsService) extends PayloadValidationAction(xmlValidationService, logger, Some(googleAnalyticsService)) {
+  override val owner: String = "declarationCancellation"
+}
 
-abstract class PayloadValidationAction(val xmlValidationService: XmlValidationService, logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedPayloadRequest] {
+abstract class PayloadValidationAction(val xmlValidationService: XmlValidationService, logger: DeclarationsLogger, maybeGoogleAnalyticsService: Option[GoogleAnalyticsService]) extends ActionRefiner[AuthorisedRequest, ValidatedPayloadRequest] {
+
+  val owner: String
 
   override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedPayloadRequest[A]]] = {
     implicit val implicitAr = ar
@@ -80,6 +90,7 @@ abstract class PayloadValidationAction(val xmlValidationService: XmlValidationSe
           val msg = "Payload did not pass validation against the schema."
           logger.debug(msg, saxe)
           logger.error(msg)
+          maybeGoogleAnalyticsService.map(service => service.failure(owner, msg))
           Left(ErrorResponse
             .errorBadRequest("Payload is not valid according to schema")
             .withErrors(xmlValidationErrors(saxe): _*).XmlResult.withConversationId)
@@ -97,6 +108,8 @@ abstract class PayloadValidationAction(val xmlValidationService: XmlValidationSe
     }
   }
 
+  //TODO MC this seems ugly, maybe we could discuss and refactor in next PR (could be a tech debt as well)
+  def sendGoogleAnalyticsSuccess(implicit hasConversationId: HasConversationId): Option[Future[Unit]] = maybeGoogleAnalyticsService.map(service => service.success(owner))
 
   private def xmlValidationErrors(saxe: SAXException): Seq[ResponseContents] = {
     @annotation.tailrec

@@ -18,8 +18,7 @@ package uk.gov.hmrc.customs.declaration.model.actionbuilders
 
 import play.api.mvc.{Request, Result, WrappedRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
-import uk.gov.hmrc.customs.declaration.model.AuthorisedAs
-import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.{AuthorisedAs, _}
 
 import scala.xml.NodeSeq
 
@@ -86,8 +85,6 @@ object ActionBuilderModelHelper {
 trait HasConversationId {
   val conversationId: ConversationId
 }
-
-//TODO MC add trait HasControllerNick
 
 trait ExtractedHeaders {
   val requestedApiVersion: ApiVersion

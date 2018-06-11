@@ -25,13 +25,15 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedUploadPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.FileUploadXmlValidationService
+import uk.gov.hmrc.customs.declaration.services.{FileUploadXmlValidationService, GoogleAnalyticsService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class FileUploadPayloadValidationAction @Inject() (fileUploadXmlValidationService: FileUploadXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(fileUploadXmlValidationService, logger)
+class FileUploadPayloadValidationAction @Inject() (fileUploadXmlValidationService: FileUploadXmlValidationService, logger: DeclarationsLogger, googleAnalyticsService: GoogleAnalyticsService) extends PayloadValidationAction(fileUploadXmlValidationService, logger, Some(googleAnalyticsService)) {
+  override val owner: String = "declarationFileUpload"
+}
 
 @Singleton
 class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction, val logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedUploadPayloadRequest] {

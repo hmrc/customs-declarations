@@ -52,8 +52,6 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
   private val eventName: String = "event-name"
   private val eventLabel: String = "event-label"
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
-
   private implicit val vpr = TestData.TestCspValidatedPayloadRequest
 
   private lazy val connector = new GoogleAnalyticsConnector(
@@ -65,7 +63,7 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
   override def beforeEach(): Unit = {
     reset(mockConfigService, mockCdsLogger, mockHttpClient)
     when(mockConfigService.googleAnalyticsConfig).thenReturn(GoogleAnalyticsConfig(url, gaTrackingId, gaClientId, gaEventValue))
-    when(mockHttpClient.POST(any[String](), any[JsValue](), any[Seq[(String, String)]]())(any[Writes[JsValue]](), any[HttpReads[HttpResponse]](), meq(hc), any[ExecutionContext]()))
+    when(mockHttpClient.POST(any[String](), any[JsValue](), any[Seq[(String, String)]]())(any[Writes[JsValue]](), any[HttpReads[HttpResponse]](), any[HeaderCarrier], any[ExecutionContext]()))
       .thenReturn(Future.successful(mock[HttpResponse]))
   }
 
@@ -94,7 +92,7 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
     }
 
     "not propagate exception, log it correctly" in {
-      when(mockHttpClient.POST(any(), any(), any())(any[Writes[JsValue]](), any[HttpReads[HttpResponse]](), meq(hc), any[ExecutionContext]()))
+      when(mockHttpClient.POST(any(), any(), any())(any[Writes[JsValue]](), any[HttpReads[HttpResponse]](), any[HeaderCarrier], any[ExecutionContext]()))
         .thenReturn(Future.failed(emulatedHttpVerbsException))
 
       await(connector.send(eventName, eventLabel))

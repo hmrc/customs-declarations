@@ -16,16 +16,19 @@
 
 package unit.controllers.actionbuilders
 
+import org.mockito.Mockito.verify
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode, errorBadRequest}
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 import util.{AuthConnectorStubbing, RequestHeaders}
@@ -40,20 +43,21 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
 
   private lazy val validatedHeadersRequestWithValidBadgeId =
-    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId()).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeId()).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInValidBadgeIdTooLong =
-    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId(badgeIdString = "INVALID_BADGE_IDENTIFIER_TO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeId(badgeIdString = "INVALID_BADGE_IDENTIFIER_TO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInValidBadgeIdLowerCase =
-    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeId(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInValidBadgeIdTooShort =
-    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeId(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInValidBadgeIdInvalidChars =
-    ConversationIdRequest(conversationId, testFakeRequestWithBadgeId(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeId(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
 
 
   trait SetUp extends AuthConnectorStubbing {
     val mockExportsLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    val authAction: AuthAction = new AuthAction(mockAuthConnector, mockExportsLogger)
+    val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
+    val authAction: AuthAction = new AuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector)
   }
 
   "AuthAction Builder " can {
@@ -73,6 +77,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(TestValidatedHeadersRequestNoBadge)
       }
 
 
@@ -83,6 +88,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(validatedHeadersRequestWithInValidBadgeIdTooLong)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but is too short" in new SetUp {
@@ -92,6 +98,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(validatedHeadersRequestWithInValidBadgeIdTooShort)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but contains invalid chars" in new SetUp {
@@ -101,6 +108,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(validatedHeadersRequestWithInValidBadgeIdInvalidChars)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but contains all lowercase chars" in new SetUp {
@@ -110,6 +118,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(validatedHeadersRequestWithInValidBadgeIdLowerCase)
       }
 
       "Return 500 response if errors occur in CSP auth API call" in new SetUp {
@@ -139,6 +148,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriNotFoundInCustomsEnrolment.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyCspAuthorisationCalled(1)
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriNotFoundInCustomsEnrolment)(TestValidatedHeadersRequestNoBadge)
       }
 
       "Return 401 response when not authorised as NonCsp" in new SetUp {
@@ -149,6 +159,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseUnauthorisedGeneral.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyCspAuthorisationCalled(1)
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseUnauthorisedGeneral)(TestValidatedHeadersRequestNoBadge)
       }
 
       "Return 500 response if errors occur in CSP auth API call" in new SetUp {

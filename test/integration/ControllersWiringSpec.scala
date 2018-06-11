@@ -18,6 +18,7 @@ package integration
 
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -31,7 +32,7 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
   private lazy val mockAmendXmlValidationService = mock[AmendXmlValidationService]
   private lazy val mockFileUploadXmlValidationService = mock[FileUploadXmlValidationService]
   private lazy val mockDeclarationsLogger = mock[DeclarationsLogger]
-  private lazy val mockGoogleAnalyticsService = mock[GoogleAnalyticsService]
+  private lazy val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
   private lazy val clearanceController = app.injector.instanceOf[ClearanceDeclarationController]
   private lazy val amendController = app.injector.instanceOf[AmendDeclarationController]
   private lazy val submitController = app.injector.instanceOf[SubmitDeclarationController]
@@ -42,19 +43,19 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
     "be wired into SubmitDeclarationController" in {
       val action = submitController.payloadValidationAction
 
-      action.getClass.getSimpleName shouldBe new SubmitPayloadValidationAction(mockSubmissionXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsService).getClass.getSimpleName
+      action.getClass.getSimpleName shouldBe new SubmitPayloadValidationAction(mockSubmissionXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsConnector).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
     }
     "be wired into CancelDeclarationController" in {
       val action = cancelController.payloadValidationAction
 
-      action.getClass.getSimpleName shouldBe new CancelPayloadValidationAction(mockCancellationXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsService).getClass.getSimpleName
+      action.getClass.getSimpleName shouldBe new CancelPayloadValidationAction(mockCancellationXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsConnector).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.cancel"
     }
     "be wired into ClearanceDeclarationController" in {
       val action = clearanceController.payloadValidationAction
 
-      action.getClass.getSimpleName shouldBe new ClearancePayloadValidationAction(mockClearanceXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsService).getClass.getSimpleName
+      action.getClass.getSimpleName shouldBe new ClearancePayloadValidationAction(mockClearanceXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsConnector).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
     }
     "be wired into AmendDeclarationController" in {
@@ -66,7 +67,7 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
     "be wired into FileUploadController" in {
       val action = fileUploadController.fileUploadPayloadValidationComposedAction.fileUploadPayloadValidationAction
 
-      action.getClass.getSimpleName shouldBe new FileUploadPayloadValidationAction(mockFileUploadXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsService).getClass.getSimpleName
+      action.getClass.getSimpleName shouldBe new FileUploadPayloadValidationAction(mockFileUploadXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsConnector).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.fileupload"
     }
   }

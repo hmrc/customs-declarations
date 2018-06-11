@@ -20,6 +20,7 @@ import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -33,7 +34,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class FileUploadController @Inject()(
                                       val common: Common,
                                       val fileUploadBusinessService: FileUploadBusinessService,
-                                      val fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction
+                                      val fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction,
+                                      val fileUploadAnalyticsValuesAction: FileUploadAnalyticsValuesAction,
+                                      val googleAnalyticsConnector: GoogleAnalyticsConnector
                                     )
   extends BaseController {
 
@@ -47,6 +50,7 @@ class FileUploadController @Inject()(
   def post(): Action[AnyContent] = (
     Action andThen
       common.conversationIdAction andThen
+      fileUploadAnalyticsValuesAction andThen
       common.validateAndExtractHeadersAction andThen
       common.authAction andThen
       fileUploadPayloadValidationComposedAction
@@ -66,6 +70,7 @@ class FileUploadController @Inject()(
               override val conversationId: ConversationId = referenceConversationId
             }
             logger.info(s"Upload initiate request processed successfully.")(id)
+            googleAnalyticsConnector.success
             Ok(res.uploadRequest.toXml).withConversationId(id)
           case Left(errorResult) =>
             errorResult

@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
 import play.api.mvc.Headers
@@ -26,7 +25,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeadersImpl}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ExtractedHeadersImpl}
 
 @Singleton
 class HeaderValidator @Inject()(logger: DeclarationsLogger) {
@@ -39,8 +38,8 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   private lazy val xClientIdRegex = "^\\S+$".r
 
 
-  def validateHeaders[A](implicit conversationIdRequest: ConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeadersImpl] = {
-    implicit val headers = conversationIdRequest.headers
+  def validateHeaders[A](implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeadersImpl] = {
+    implicit val headers: Headers = conversationIdRequest.headers
 
     def hasAccept = validateHeader(ACCEPT, versionsByAcceptHeader.keySet.contains(_), ErrorAcceptHeaderInvalid)
 
@@ -63,7 +62,7 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   }
 
   private def validateHeader[A](headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)
-                               (implicit conversationIdRequest: ConversationIdRequest[A], h: Headers): Either[ErrorResponse, String] = {
+                               (implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A], h: Headers): Either[ErrorResponse, String] = {
     val left = Left(errorResponse)
     def leftWithLog(headerName: String) = {
       logger.error(s"Error - header '$headerName' not present")

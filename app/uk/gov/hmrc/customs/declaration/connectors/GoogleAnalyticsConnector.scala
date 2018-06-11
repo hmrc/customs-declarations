@@ -21,9 +21,10 @@ import javax.inject.Singleton
 import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE}
 import play.api.http.MimeTypes
 import play.api.libs.json.Json
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsRequest
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -46,7 +47,27 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
     s"v=1&t=event&tid=${config.trackingId}&cid=${config.clientId}&ec=CDS&ea=$eventName&el=$eventLabel&ev=${config.eventValue}"
   }
 
-  def send[A](eventName: String, eventLabel: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
+
+  def success(implicit data: HasConversationId with HasAnalyticsValues): Future[Unit] = {
+    send(data.analyticsValues.success, s"ConversationId: ${data.conversationId}")
+  }
+
+  def failure(response: ErrorResponse)(implicit data: HasConversationId with HasAnalyticsValues): Future[Unit] = {
+    val errorCode = response.httpStatusCode
+
+    if(errorCode > 399 && errorCode < 500) {
+      failure(response.message)
+    } else {
+      Future.successful(())
+    }
+
+  }
+
+  def failure(error: String)(implicit data: HasConversationId with HasAnalyticsValues): Future[Unit] = {
+    send(data.analyticsValues.failure, s"ConversationId: ${data.conversationId} $error")
+  }
+
+  def send[A](eventName: String, eventLabel: String)(implicit hasConversationId: HasConversationId with HasAnalyticsValues): Future[Unit] = {
 
     val msg = "Calling public notification (google analytics) service"
     val url = config.url

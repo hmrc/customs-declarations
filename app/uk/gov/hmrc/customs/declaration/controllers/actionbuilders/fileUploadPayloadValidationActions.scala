@@ -21,19 +21,18 @@ import play.api.mvc.{ActionRefiner, Result}
 import play.mvc.Http.Status.FORBIDDEN
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ForbiddenCode
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedUploadPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.{FileUploadXmlValidationService, GoogleAnalyticsService}
+import uk.gov.hmrc.customs.declaration.services.FileUploadXmlValidationService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class FileUploadPayloadValidationAction @Inject() (fileUploadXmlValidationService: FileUploadXmlValidationService, logger: DeclarationsLogger, googleAnalyticsService: GoogleAnalyticsService) extends PayloadValidationAction(fileUploadXmlValidationService, logger, Some(googleAnalyticsService)) {
-  override val owner: String = "declarationFileUpload"
-}
+class FileUploadPayloadValidationAction @Inject() (fileUploadXmlValidationService: FileUploadXmlValidationService, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends PayloadValidationAction(fileUploadXmlValidationService, logger, Some(googleAnalyticsConnector))
 
 @Singleton
 class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction, val logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedUploadPayloadRequest] {

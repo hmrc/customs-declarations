@@ -72,6 +72,7 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
   "GoogleAnalyticsSenderConnector" should {
 
     "POST valid payload" in {
+
       await(connector.send(eventName, eventLabel))
       val expectedBody = GoogleAnalyticsRequest(s"v=1&t=event&tid=$gaTrackingId&cid=$gaClientId&ec=CDS&ea=$eventName&el=$eventLabel&ev=$gaEventValue")
       val requestCaptor: ArgumentCaptor[JsValue] = ArgumentCaptor.forClass(classOf[JsValue])
@@ -102,5 +103,6 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
         .withParamMatcher(any[HasConversationId])
         .verify()
     }
+
   }
 }

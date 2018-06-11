@@ -37,11 +37,13 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.PayloadValidationAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.{GoogleAnalyticsService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 
@@ -60,12 +62,9 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
   trait SetUp {
     val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
     val mockExportsLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    val mockGoogleAnalyticsService = mock[GoogleAnalyticsService]
-    val payloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockExportsLogger, Some(mockGoogleAnalyticsService)) {
-      override val owner: String = "generic-owner"
-    }
+    val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
+    val payloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockExportsLogger, Some(mockGoogleAnalyticsConnector)){}
   }
-//TODO MC revisit
   "PayloadValidationAction" should {
     "return a ValidatedPayloadRequest when XML validation is OK" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.successful(()))
@@ -75,31 +74,34 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       actual shouldBe Right(TestCspValidatedPayloadRequest)
     }
 
-    "return 400 error response when XML is not well formed" in new SetUp {
+    "return 400 error response when XML is not well formed  (and send GA request)" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.failed(saxException))
 
       private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))
 
       actual shouldBe Left(expectedXmlSchemaErrorResult)
+      verify(mockGoogleAnalyticsConnector).failure("Payload did not pass validation against the schema.")(TestCspAuthorisedRequest)
     }
 
-    "return 400 error response when XML validation fails" in new SetUp {
+    "return 400 error response when XML validation fails (and send GA request)" in new SetUp {
       private val errorMessage = "Request body does not contain a well-formed XML document."
       private val errorNotWellFormed = ErrorResponse.errorBadRequest(errorMessage).XmlResult.withConversationId
-      private val authorisedRequestWithNonWellFormedXml = ConversationIdRequest(conversationId, FakeRequest().withTextBody("<foo><foo>"))
+      private val authorisedRequestWithNonWellFormedXml = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, FakeRequest().withTextBody("<foo><foo>"))
         .toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest(badgeIdentifier)
 
       private val actual = await(payloadValidationAction.refine(authorisedRequestWithNonWellFormedXml))
 
       actual shouldBe Left(errorNotWellFormed)
+      verify(mockGoogleAnalyticsConnector).failure(errorMessage)(authorisedRequestWithNonWellFormedXml)
     }
 
-    "propagates downstream errors by returning a 500 error response" in new SetUp {
+    "propagates downstream errors by returning a 500 error response (and doesn't send GA request)" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.failed(emulatedServiceFailure))
 
       private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))
 
       actual shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+      verifyZeroInteractions(mockGoogleAnalyticsConnector)
     }
   }
 

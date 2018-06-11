@@ -25,8 +25,8 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeaders, ExtractedHeadersImpl}
-import uk.gov.hmrc.customs.declaration.model.{VersionOne, VersionTwo}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ExtractedHeaders, ExtractedHeadersImpl}
+import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsValues, VersionOne, VersionTwo}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.RequestHeaders.{ValidHeadersV2, _}
 import util.{ApiSubscriptionFieldsTestData, TestData}
@@ -40,7 +40,7 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
     val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
     val validator = new HeaderValidator(loggerMock)
 
-    def validate(c: ConversationIdRequest[_]): Either[ErrorResponse, ExtractedHeaders] = {
+    def validate(c: AnalyticsValuesAndConversationIdRequest[_]): Either[ErrorResponse, ExtractedHeaders] = {
       validator.validateHeaders(c)
     }
   }
@@ -48,37 +48,37 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
   "HeaderValidator" can {
     "in happy path, validation" should {
       "be successful for a valid request with accept header for V1" in new SetUp {
-        validate(conversationIdRequest(ValidHeadersV1)) shouldBe Right(extractedHeadersWithBadgeIdentifierV1)
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV1)) shouldBe Right(extractedHeadersWithBadgeIdentifierV1)
       }
       "be successful for a valid request with accept header for V2" in new SetUp {
-        validate(conversationIdRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
       }
       "be successful for content type XML with no space header" in new SetUp {
-        validate(conversationIdRequest(ValidHeadersV2 + (CONTENT_TYPE -> "application/xml;charset=utf-8"))) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (CONTENT_TYPE -> "application/xml;charset=utf-8"))) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
       }
     }
     "in unhappy path, validation" should {
       "fail when request is missing accept header" in new SetUp {
-        validate(conversationIdRequest(ValidHeadersV2 - ACCEPT)) shouldBe Left(ErrorAcceptHeaderInvalid)
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 - ACCEPT)) shouldBe Left(ErrorAcceptHeaderInvalid)
       }
       "fail when request is missing content type header" in new SetUp {
-        validate(conversationIdRequest(ValidHeadersV2 - CONTENT_TYPE)) shouldBe Left(ErrorContentTypeHeaderInvalid)
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 - CONTENT_TYPE)) shouldBe Left(ErrorContentTypeHeaderInvalid)
       }
       "fail when request is missing X-Client-ID header" in new SetUp {
-        validate(conversationIdRequest(ValidHeadersV2 - XClientIdHeaderName)) shouldBe Left(ErrorInternalServerError)
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 - XClientIdHeaderName)) shouldBe Left(ErrorInternalServerError)
       }
       "fail when request has invalid accept header" in new SetUp {
-        validate(conversationIdRequest(ValidHeadersV2 + ACCEPT_HEADER_INVALID)) shouldBe Left(ErrorAcceptHeaderInvalid)
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + ACCEPT_HEADER_INVALID)) shouldBe Left(ErrorAcceptHeaderInvalid)
       }
       "fail when request has invalid content type header (for JSON)" in new SetUp {
-        validate(conversationIdRequest(ValidHeadersV2 + CONTENT_TYPE_HEADER_INVALID)) shouldBe Left(ErrorContentTypeHeaderInvalid)
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + CONTENT_TYPE_HEADER_INVALID)) shouldBe Left(ErrorContentTypeHeaderInvalid)
       }
       "fail when request has invalid X-Client-ID header" in new SetUp {
-        validate(conversationIdRequest(ValidHeadersV2 + X_CLIENT_ID_HEADER_INVALID)) shouldBe Left(ErrorInternalServerError)
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + X_CLIENT_ID_HEADER_INVALID)) shouldBe Left(ErrorInternalServerError)
       }
     }
   }
 
-  private def conversationIdRequest(requestMap: Map[String, String]): ConversationIdRequest[_] =
-    ConversationIdRequest(TestData.conversationId, FakeRequest().withHeaders(requestMap.toSeq: _*))
+  private def analyticsValuesAndConversationIdRequest(requestMap: Map[String, String]): AnalyticsValuesAndConversationIdRequest[_] =
+    AnalyticsValuesAndConversationIdRequest(TestData.conversationId, GoogleAnalyticsValues.Submit, FakeRequest().withHeaders(requestMap.toSeq: _*))
 }

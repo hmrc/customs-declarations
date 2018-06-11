@@ -91,7 +91,7 @@ object TestData {
   def testFakeRequestWithBadgeId(badgeIdString: String = badgeIdentifier.value): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString)
 
-  val TestConversationIdRequest = ConversationIdRequest(conversationId, TestFakeRequest)
+  val TestConversationIdRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, TestFakeRequest)
   val TestExtractedHeaders = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
 
   val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)

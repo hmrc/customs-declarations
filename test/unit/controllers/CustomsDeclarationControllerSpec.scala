@@ -32,6 +32,8 @@ import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationCo
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.{GoogleAnalyticsService, StandardDeclarationSubmissionService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.services.{BusinessService, XmlValidationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.AuthConnectorStubbing
@@ -53,19 +55,16 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockBusinessService: StandardDeclarationSubmissionService = mock[StandardDeclarationSubmissionService]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
     protected val mockResult: Result = mock[Result]
-    protected lazy val mockGoogleAnalyticsService = mock[GoogleAnalyticsService]
+    protected val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
-    protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val stubConversationIdAction: ConversationIdAction = new ConversationIdAction(stubUniqueIdsService, mockDeclarationsLogger)
-    protected val stubAuthAction: AuthAction = new AuthAction(mockAuthConnector, mockDeclarationsLogger)
-    protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockDeclarationsLogger), mockDeclarationsLogger)
-    protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger, Some(mockGoogleAnalyticsService)){
-      override val owner: String = "stub-owner"
-    }
+    protected val stubAuthAction: AuthAction = new AuthAction(mockAuthConnector, mockDeclarationsLogger, mockGoogleAnalyticsConnector)
+    protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
+    protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger, Some(mockGoogleAnalyticsConnector)) {}
 
-    protected val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, mockDeclarationsLogger, mockGoogleAnalyticsConnector)
+    protected val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, mockDeclarationsLogger)
 
-    protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction){}
+    protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, new DeclarationSubmitAnalyticsValuesAction(mockDeclarationsLogger), Some(mockGoogleAnalyticsConnector)) {}
 
     protected def awaitSubmit(request: Request[AnyContent]): Result = {
       await(controller.post().apply(request))
@@ -113,6 +112,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
       status(result) shouldBe ACCEPTED
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
+      verify(mockGoogleAnalyticsConnector).success(any[HasConversationId with HasAnalyticsValues])
     }
 
     "respond with status 400 for a CSP request with a missing X-Badge-Identifier" in new SetUp() {
@@ -120,6 +120,15 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
       val result: Result = awaitSubmit(ValidSubmissionRequest.copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(X_BADGE_IDENTIFIER_NAME)))
       result shouldBe errorResultBadgeIdentifier
+      verifyZeroInteractions(mockBusinessService)
+      verifyZeroInteractions(mockXmlValidationService)
+    }
+
+    "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
+      authoriseCsp()
+
+      val result: Result = awaitSubmit(ValidSubmissionRequest.copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(X_CLIENT_ID_ID_NAME)))
+      status(result) shouldBe INTERNAL_SERVER_ERROR
       verifyZeroInteractions(mockBusinessService)
       verifyZeroInteractions(mockXmlValidationService)
     }
@@ -141,6 +150,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
       status(result) shouldBe ACCEPTED
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
+      verify(mockGoogleAnalyticsConnector).success(any[HasConversationId with HasAnalyticsValues])
     }
 
     "return result 401 UNAUTHORISED and conversationId in header when call is unauthorised for both CSP and non-CSP submissions" in new SetUp() {
@@ -187,6 +197,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       val result: Result = awaitSubmit(ValidSubmissionRequest)
 
       result shouldBe mockResult
+      verifyZeroInteractions(mockGoogleAnalyticsConnector)
     }
 
     "return the Internal Server error when business service returns a 500 " in new SetUp() {
@@ -197,6 +208,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       val result: Result = awaitSubmit(ValidSubmissionRequest)
 
       result.header.status shouldBe INTERNAL_SERVER_ERROR
+      verifyZeroInteractions(mockGoogleAnalyticsConnector)
     }
   }
 }

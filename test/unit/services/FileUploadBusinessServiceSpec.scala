@@ -22,7 +22,7 @@ import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
 import play.api.mvc._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, UpscanInitiateConnector}
@@ -30,7 +30,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedPayloadRequest, ValidatedUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, _}
 import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
@@ -52,6 +52,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
     private implicit val jsonRequest = ValidatedUploadPayloadRequest(
       ConversationId(UUID.randomUUID()),
+      GoogleAnalyticsValues.Fileupload,
       VersionTwo,
       ClientId("ABC"),
       NonCsp(Eori("123")),

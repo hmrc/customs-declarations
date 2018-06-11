@@ -34,42 +34,50 @@ class Common @Inject() (
   val conversationIdAction: ConversationIdAction,
   val authAction: AuthAction,
   val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
-  val logger: DeclarationsLogger,
-  val googleAnalyticsConnector: GoogleAnalyticsConnector
+  val logger: DeclarationsLogger
 )
 
 @Singleton
 class SubmitDeclarationController @Inject()(
-                                             common: Common,
-                                             businessService: StandardDeclarationSubmissionService,
-                                             payloadValidationAction: SubmitPayloadValidationAction
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
+  common: Common,
+  businessService: StandardDeclarationSubmissionService,
+  payloadValidationAction: SubmitPayloadValidationAction,
+  analyticsValuesAction: DeclarationSubmitAnalyticsValuesAction,
+  googleAnalyticsConnector: GoogleAnalyticsConnector
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector))
 
 @Singleton
 class CancelDeclarationController @Inject()(
-                                             common: Common,
-                                             businessService: CancellationDeclarationSubmissionService,
-                                             payloadValidationAction: CancelPayloadValidationAction
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
+  common: Common,
+  businessService: CancellationDeclarationSubmissionService,
+  payloadValidationAction: CancelPayloadValidationAction,
+  analyticsValuesAction: DeclarationCancellationAnalyticsValuesAction,
+  googleAnalyticsConnector: GoogleAnalyticsConnector
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector))
 
 @Singleton
 class ClearanceDeclarationController @Inject()(
-                                                common: Common,
-                                                businessService: StandardDeclarationSubmissionService,
-                                                payloadValidationAction: ClearancePayloadValidationAction
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
+ common: Common,
+ businessService: StandardDeclarationSubmissionService,
+ payloadValidationAction: ClearancePayloadValidationAction,
+ analyticsValuesAction: DeclarationClearanceAnalyticsValuesAction,
+ googleAnalyticsConnector: GoogleAnalyticsConnector
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector))
 
 @Singleton
 class AmendDeclarationController @Inject()(
-                                            common: Common,
-                                            businessService: StandardDeclarationSubmissionService,
-                                            payloadValidationAction: AmendPayloadValidationAction
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
+ common: Common,
+ businessService: StandardDeclarationSubmissionService,
+ payloadValidationAction: AmendPayloadValidationAction,
+ analyticsValuesAction: DeclarationAmendValuesAction
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, None)
 
 abstract class CustomsDeclarationController(
-                                             val common: Common,
-                                             val businessService: DeclarationService,
-                                             val payloadValidationAction: PayloadValidationAction
+  val common: Common,
+  val businessService: DeclarationService,
+  val payloadValidationAction: PayloadValidationAction,
+  val analyticsValuesAction: AnalyticsValuesAction,
+  val maybeGoogleAnalyticsConnector: Option[GoogleAnalyticsConnector]
 )
 extends BaseController {
 
@@ -83,6 +91,7 @@ extends BaseController {
   def post(): Action[AnyContent] = (
     Action andThen
       common.conversationIdAction andThen
+      analyticsValuesAction andThen
       common.validateAndExtractHeadersAction andThen
       common.authAction andThen
       payloadValidationAction
@@ -93,10 +102,10 @@ extends BaseController {
         val logger = common.logger
 
         logger.debug(s"Request received. Payload = ${vpr.body.toString} headers = ${vpr.headers.headers}")
-        payloadValidationAction.sendGoogleAnalyticsSuccess
         businessService.send map {
           case Right(_) =>
             logger.info(s"Declaration request processed successfully")
+            maybeGoogleAnalyticsConnector.map(conn => conn.success)
             Accepted.as(MimeTypes.XML).withConversationId
           case Left(errorResult) =>
             errorResult

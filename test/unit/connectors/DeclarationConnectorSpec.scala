@@ -29,7 +29,7 @@ import play.api.http.HeaderNames
 import play.api.mvc.AnyContentAsXml
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
-import uk.gov.hmrc.customs.declaration.connectors.DeclarationConnector
+import uk.gov.hmrc.customs.declaration.connectors.MdgDeclarationConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
@@ -52,7 +52,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val unavailablePeriodDurationInMillis = 1000
   private val unstablePeriodDurationInMillis = 10000
 
-  private val connector = new DeclarationConnector {
+  private val connector = new MdgDeclarationConnector {
     val http = mockWsPost
     val logger = mockLogger
     val serviceConfigProvider = mockServiceConfigProvider

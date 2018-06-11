@@ -27,7 +27,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
-import uk.gov.hmrc.customs.declaration.connectors.DeclarationCancellationConnector
+import uk.gov.hmrc.customs.declaration.connectors.MdgDeclarationCancellationConnector
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._
@@ -41,7 +41,7 @@ import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with MdgCancellationDeclarationService {
 
-  private lazy val connector = app.injector.instanceOf[DeclarationCancellationConnector]
+  private lazy val connector = app.injector.instanceOf[MdgDeclarationCancellationConnector]
 
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
@@ -79,13 +79,13 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with Guic
   "MdgWcoDeclarationConnector" should {
 
     "make a correct request" in {
-      mdgDecCancellationServiceToReturn(ACCEPTED)
+      startMdgCancellationV1Service(ACCEPTED)
       await(sendValidXml())
       verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
     }
 
     "circuit breaker trips after specified number of failures" in {
-      mdgDecCancellationServiceToReturn(INTERNAL_SERVER_ERROR)
+      startMdgCancellationV1Service(INTERNAL_SERVER_ERROR)
 
       1 to numberOfCallsToTriggerStateChange foreach { _ =>
         val k = intercept[Upstream5xxResponse](await(sendValidXml()))
@@ -98,30 +98,30 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with Guic
       }
 
       resetMockServer()
-      mdgDecCancellationServiceToReturn(ACCEPTED)
+      startMdgCancellationV1Service(ACCEPTED)
 
       Thread.sleep(unavailablePeriodDurationInMillis)
 
       1 to 5 foreach { _ =>
         resetMockServer()
-        mdgDecCancellationServiceToReturn(ACCEPTED)
+        startMdgCancellationV1Service(ACCEPTED)
         await(sendValidXml())
         verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
       }
     }
 
     "return a failed future when external service returns 404" in {
-      mdgDecCancellationServiceToReturn(NOT_FOUND)
+      startMdgCancellationV1Service(NOT_FOUND)
       intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[NotFoundException]
     }
 
     "return a failed future when external service returns 400" in {
-      mdgDecCancellationServiceToReturn(BAD_REQUEST)
+      startMdgCancellationV1Service(BAD_REQUEST)
       intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[BadRequestException]
     }
 
     "return a failed future when external service returns 500" in {
-      mdgDecCancellationServiceToReturn(INTERNAL_SERVER_ERROR)
+      startMdgCancellationV1Service(INTERNAL_SERVER_ERROR)
       intercept[Upstream5xxResponse](await(sendValidXml()))
     }
 

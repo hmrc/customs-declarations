@@ -24,7 +24,7 @@ import play.api.mvc.Result
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector, MdgWcoDeclarationConnector}
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgDeclarationCancellationConnector, MdgDeclarationConnector, MdgWcoDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -40,19 +40,27 @@ import scala.xml.NodeSeq
 
 
 @Singleton
-class BusinessServiceImpl @Inject()(override val logger: DeclarationsLogger,
-                                    override val connector: MdgWcoDeclarationConnector,
-                                    override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                    override val wrapper: MdgPayloadDecorator,
-                                    override val dateTimeProvider: DateTimeService,
-                                    override val uniqueIdsService: UniqueIdsService) extends BusinessService
+class StandardDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
+                                                     override val connector: MdgWcoDeclarationConnector,
+                                                     override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
+                                                     override val wrapper: MdgPayloadDecorator,
+                                                     override val dateTimeProvider: DateTimeService,
+                                                     override val uniqueIdsService: UniqueIdsService) extends DeclarationService
+
+@Singleton
+class CancellationDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
+                                                     override val connector: MdgDeclarationCancellationConnector,
+                                                     override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
+                                                     override val wrapper: MdgPayloadDecorator,
+                                                     override val dateTimeProvider: DateTimeService,
+                                                     override val uniqueIdsService: UniqueIdsService) extends DeclarationService
 
 
-trait BusinessService {
+trait DeclarationService {
 
   def logger: DeclarationsLogger
 
-  def connector: DeclarationConnector
+  def connector: MdgDeclarationConnector
 
   def apiSubFieldsConnector: ApiSubscriptionFieldsConnector
 

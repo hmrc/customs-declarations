@@ -26,12 +26,12 @@ import play.api.mvc.{AnyContentAsXml, Result}
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, ApiVersion, SubscriptionFieldsId, VersionOne}
-import uk.gov.hmrc.customs.declaration.services.{BusinessService, DateTimeService}
+import uk.gov.hmrc.customs.declaration.services.{DeclarationService, DateTimeService}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -51,13 +51,13 @@ class BusinessServiceSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    protected val mockMdgWcoDeclarationConnector: DeclarationConnector = mock[DeclarationConnector]
+    protected val mockMdgWcoDeclarationConnector: MdgDeclarationConnector = mock[MdgDeclarationConnector]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
     protected val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
     protected val mockHttpResponse: HttpResponse = mock[HttpResponse]
 
-    protected lazy val service: BusinessService = new BusinessService {
+    protected lazy val service: DeclarationService = new DeclarationService {
       val logger = mockLogger
       val connector = mockMdgWcoDeclarationConnector
       val apiSubFieldsConnector = mockApiSubscriptionFieldsConnector

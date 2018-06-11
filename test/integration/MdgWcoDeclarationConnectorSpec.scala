@@ -27,7 +27,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
-import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
+import uk.gov.hmrc.customs.declaration.connectors.{DeclarationConnector, MdgWcoDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._

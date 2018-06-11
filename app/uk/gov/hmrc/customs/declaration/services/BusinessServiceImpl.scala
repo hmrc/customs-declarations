@@ -17,14 +17,14 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import java.net.URLEncoder
-
 import javax.inject.{Inject, Singleton}
+
 import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgWcoDeclarationConnector}
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector, MdgWcoDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -38,14 +38,29 @@ import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml.NodeSeq
 
+
 @Singleton
-class BusinessService @Inject()(logger: DeclarationsLogger,
-                                connector: MdgWcoDeclarationConnector,
-                                apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                wrapper: MdgPayloadDecorator,
-                                dateTimeProvider: DateTimeService,
-                                uniqueIdsService: UniqueIdsService
-                                ) {
+class BusinessServiceImpl @Inject()(override val logger: DeclarationsLogger,
+                                    override val connector: MdgWcoDeclarationConnector,
+                                    override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
+                                    override val wrapper: MdgPayloadDecorator,
+                                    override val dateTimeProvider: DateTimeService,
+                                    override val uniqueIdsService: UniqueIdsService) extends BusinessService
+
+
+trait BusinessService {
+
+  def logger: DeclarationsLogger
+
+  def connector: DeclarationConnector
+
+  def apiSubFieldsConnector: ApiSubscriptionFieldsConnector
+
+  def wrapper: MdgPayloadDecorator
+
+  def dateTimeProvider: DateTimeService
+
+  def uniqueIdsService: UniqueIdsService
 
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
@@ -59,7 +74,7 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
         Future.successful(Left(result))
     }
   }
-
+  //TODO: Service should not return a Result, it is controller's job to return the result in whichever format it wants.
   private def futureApiSubFieldsId[A](c: ClientId)
                                      (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
@@ -78,7 +93,7 @@ class BusinessService @Inject()(logger: DeclarationsLogger,
     val correlationId = uniqueIdsService.correlation
     val xmlToSend = preparePayload(vpr.xmlBody, subscriptionFieldsId, dateTime)
 
-    connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(())).recover{
+    connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(())).recover {
       case _: UnhealthyServiceException =>
         logger.error("unhealthy state entered")
         Left(errorResponseServiceUnavailable.XmlResult)

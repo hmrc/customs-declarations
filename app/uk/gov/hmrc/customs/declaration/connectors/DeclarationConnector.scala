@@ -37,12 +37,26 @@ import scala.concurrent.Future
 import scala.xml.NodeSeq
 
 @Singleton
-class MdgWcoDeclarationConnector @Inject()(http: HttpClient,
-                                           logger: DeclarationsLogger,
-                                           serviceConfigProvider: ServiceConfigProvider,
-                                           config: DeclarationsConfigService) extends UsingCircuitBreaker {
+class MdgWcoDeclarationConnector @Inject()(override val http: HttpClient,
+                                         override val logger: DeclarationsLogger,
+                                         override val serviceConfigProvider: ServiceConfigProvider,
+                                         override val config: DeclarationsConfigService)
+  extends DeclarationConnector with UsingCircuitBreaker {
 
-  private val configKey = "wco-declaration"
+  override val configKey = "wco-declaration"
+}
+
+trait DeclarationConnector extends UsingCircuitBreaker {
+
+  def http: HttpClient
+
+  def logger: DeclarationsLogger
+
+  def serviceConfigProvider: ServiceConfigProvider
+
+  def config: DeclarationsConfigService
+
+  def configKey: String
 
   def send[A](xml: NodeSeq, date: DateTime, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))

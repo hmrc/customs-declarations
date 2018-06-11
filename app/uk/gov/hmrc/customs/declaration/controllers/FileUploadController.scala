@@ -62,10 +62,11 @@ class FileUploadController @Inject()(
           case Right(res) =>
             val referenceConversationId = ConversationId(UUID.fromString(res.reference))
             logger.debug(s"Replacing conversationId with $referenceConversationId")
-            logger.info(s"Upload initiate request processed successfully.")(new HasConversationId {
+            val id = new HasConversationId {
               override val conversationId: ConversationId = referenceConversationId
-            })
-            Ok(res.uploadRequest.toXml).withConversationId(referenceConversationId)
+            }
+            logger.info(s"Upload initiate request processed successfully.")(id)
+            Ok(res.uploadRequest.toXml).withConversationId(id)
           case Left(errorResult) =>
             errorResult
         }

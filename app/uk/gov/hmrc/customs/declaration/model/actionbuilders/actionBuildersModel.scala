@@ -30,9 +30,6 @@ object ActionBuilderModelHelper {
       result.withHeaders(XConversationIdHeaderName -> c.conversationId.toString)
     }
 
-    def withConversationId(conversationId: ConversationId): Result = {
-      result.withHeaders(XConversationIdHeaderName -> conversationId.toString)
-    }
   }
 
   implicit class CorrelationIdsRequestOps[A](val cir: ConversationIdRequest[A]) extends AnyVal {

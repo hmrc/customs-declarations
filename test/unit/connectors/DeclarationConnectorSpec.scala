@@ -41,7 +41,7 @@ import util.TestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MdgWcoDeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
+class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
 
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]

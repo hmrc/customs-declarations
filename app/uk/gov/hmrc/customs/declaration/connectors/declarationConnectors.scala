@@ -46,6 +46,16 @@ class MdgWcoDeclarationConnector @Inject()(override val http: HttpClient,
   override val configKey = "wco-declaration"
 }
 
+@Singleton
+class DeclarationCancellationConnector @Inject()(override val http: HttpClient,
+                                           override val logger: DeclarationsLogger,
+                                           override val serviceConfigProvider: ServiceConfigProvider,
+                                           override val config: DeclarationsConfigService)
+  extends DeclarationConnector with UsingCircuitBreaker {
+
+  override val configKey = "declaration-cancellation"
+}
+
 trait DeclarationConnector extends UsingCircuitBreaker {
 
   def http: HttpClient

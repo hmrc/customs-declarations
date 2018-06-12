@@ -113,7 +113,6 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
       And("v2 config was used")
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV2)))
-      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
 
       And("GA call was made")
       verifyGoogleAnalyticsServiceWasCalled

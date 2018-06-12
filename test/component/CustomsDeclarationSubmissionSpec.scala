@@ -24,7 +24,7 @@ import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
-import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoDecService}
+import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgWcoDecService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig}
 
 import scala.concurrent.Future
@@ -36,7 +36,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
   with BeforeAndAfterEach
   with MdgWcoDecService
   with ApiSubscriptionFieldsService
-  with AuthService {
+  with AuthService
+  with GoogleAnalyticsService {
 
   private val endpoint = "/"
 
@@ -101,6 +102,9 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       And("v1 config was used")
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV1ServiceContext)))
 
+      And("GA call was made")
+      verifyGoogleAnalyticsServiceWasCalled
+
     }
 
     scenario("Response status 400 when user submits a malformed xml payload") {
@@ -121,6 +125,9 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("the response body is a \"malformed xml body\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
+
+      And("GA call was made")
+      verifyGoogleAnalyticsServiceWasCalled
     }
 
   }
@@ -150,6 +157,9 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("v2 config was used")
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
+
+      And("GA call was made")
+      verifyGoogleAnalyticsServiceWasCalled
     }
 
   }
@@ -174,6 +184,9 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
+
+      And("GA call was made")
+      verifyGoogleAnalyticsServiceWasCalled
     }
 
   }

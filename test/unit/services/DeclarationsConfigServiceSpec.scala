@@ -35,6 +35,12 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.customs-notification.port=1112
       |microservice.services.customs-notification.bearer-token=some-token
       |microservice.services.customs-notification.context=/some-context2
+      |microservice.services.google-analytics.host=some-host3
+      |microservice.services.google-analytics.port=1113
+      |microservice.services.google-analytics.context=/some-context3
+      |googleAnalytics.trackingId=ga-tr,
+      |googleAnalytics.clientId=gl-cl-id,
+      |googleAnalytics.eventValue=ga-ev-id
       |circuitBreaker.numberOfCallsToTriggerStateChange=5
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
@@ -72,7 +78,12 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: customs-notification.bearer-token
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
-          |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'""".stripMargin
+          |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'
+          |Could not find config google-analytics.host
+          |Service configuration not found for key: google-analytics.context
+          |Could not find config key 'googleAnalytics.trackingId'
+          |Could not find config key 'googleAnalytics.clientId'
+          |Could not find config key 'googleAnalytics.eventValue'""".stripMargin
 
       val caught = intercept[IllegalStateException](customsConfigService(emptyServicesConfiguration))
       caught.getMessage shouldBe expectedErrorMessage

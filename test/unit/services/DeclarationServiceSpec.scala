@@ -41,7 +41,7 @@ import util.TestData._
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class BusinessServiceSpec extends UnitSpec with MockitoSugar {
+class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private val expectedApiSubscriptionKey = ApiSubscriptionKey(clientId, "customs%2Fdeclarations", VersionOne)
@@ -72,7 +72,7 @@ class BusinessServiceSpec extends UnitSpec with MockitoSugar {
 
     when(mockPayloadDecorator.wrap(meq(TestXmlPayload), meq[String](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
-    when(mockMdgWcoDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(mockHttpResponse)
+    when(mockMdgWcoDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
 
     "BusinessService" should {

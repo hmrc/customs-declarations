@@ -46,7 +46,7 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
   private val mockConfigService = mock[DeclarationsConfigService]
 
   private val url = "the-url"
-  private val gaTrackingId: String = "UA-43414424-2"
+  private val gaTrackingId: String = "real-tracking-id"
   private val gaClientId: String = "555"
   private val gaEventValue = "10"
   private val eventName: String = "event-name"

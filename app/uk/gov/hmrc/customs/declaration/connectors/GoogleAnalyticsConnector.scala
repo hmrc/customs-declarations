@@ -55,7 +55,7 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
   def failure(response: ErrorResponse)(implicit data: HasConversationId with HasAnalyticsValues): Future[Unit] = {
     val errorCode = response.httpStatusCode
 
-    if(errorCode > 399 && errorCode < 500) {
+    if (errorCode > 399 && errorCode < 500) {
       failure(response.message)
     } else {
       Future.successful(())
@@ -71,7 +71,7 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
 
     val msg = "Calling public notification (google analytics) service"
     val url = config.url
-    implicit val hc = new HeaderCarrier
+    implicit val hc: HeaderCarrier = new HeaderCarrier
     val request = GoogleAnalyticsRequest(payload(eventName, eventLabel))
     val payloadAsJsonString = Json.prettyPrint(Json.toJson(request))
     logger.debug(s"$msg at $url with\nheaders=${hc.headers} and\npayload=$payloadAsJsonString googleAnalyticsRequest")

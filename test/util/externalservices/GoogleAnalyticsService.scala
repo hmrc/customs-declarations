@@ -18,35 +18,29 @@ package util.externalservices
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.{HeaderNames, MimeTypes}
-import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsRequest
+import play.api.libs.json.JsValue
 import util.{CustomsDeclarationsExternalServicesConfig, WireMockRunner}
 
 trait GoogleAnalyticsService extends WireMockRunner {
   private val urlMatchingRequestPath = urlMatching(CustomsDeclarationsExternalServicesConfig.GoogleAnalyticsContext)
 
-  def setupServiceToReturn(status: Int): Unit =
+  def setupGoogleAnalyticsServiceToReturn(status: Int): Unit =
     stubFor(post(urlMatchingRequestPath)
       .withHeader(HeaderNames.ACCEPT, equalTo(MimeTypes.JSON))
       .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
       willReturn aResponse()
       .withStatus(status))
 
-  def verifyServiceWasCalledWith(googleAnalyticsRequest: GoogleAnalyticsRequest) {
+  def verifyGoogleAnalyticsServiceWasCalled {
     verify(1, postRequestedFor(urlMatchingRequestPath)
       .withHeader(HeaderNames.ACCEPT, equalTo(MimeTypes.JSON))
       .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
-      .withRequestBody(equalToJson(Json.toJson(googleAnalyticsRequest).toString()))
     )
   }
 
-  def verifyPublicNotificationServiceWasCalledWith(expectedPayload: JsValue) {
-    verify(1, postRequestedFor(urlMatchingRequestPath)
-      .withHeader(HeaderNames.ACCEPT, equalTo(MimeTypes.JSON))
-      .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
-      .withRequestBody(equalToJson(expectedPayload.toString()))
+  def verifyGoogleAnalyticsServiceWasNotCalled {
+    verify(0, postRequestedFor(urlMatchingRequestPath)
     )
-
   }
 
 }

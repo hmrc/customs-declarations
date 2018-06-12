@@ -53,7 +53,7 @@ object GoogleAnalyticsValues {
   }
 
   val Fileupload = new GoogleAnalyticsValues {
-    override val success: String = "declaratonFileUploadSucess"
+    override val success: String = "declarationFileUploadSuccess"
     override val failure: String = "declarationFileUploadFailure"
   }
 

@@ -25,6 +25,7 @@ import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, Ve
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgCancellationDeclarationService, MdgWcoDecService}
+import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgWcoDecService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig}
 
 import scala.concurrent.Future
@@ -36,7 +37,8 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
   with BeforeAndAfterEach
   with MdgCancellationDeclarationService
   with ApiSubscriptionFieldsService
-  with AuthService {
+  with AuthService
+  with GoogleAnalyticsService {
 
   private val endpoint = "/cancellation-requests"
 
@@ -82,6 +84,8 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       And("v1 config was used")
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContext)))
 
+      And("GA call was made")
+      verifyGoogleAnalyticsServiceWasCalled
     }
   }
 
@@ -109,6 +113,9 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
       And("v2 config was used")
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV2)))
+
+      And("GA call was made")
+      verifyGoogleAnalyticsServiceWasCalled
     }
 
   }
@@ -133,6 +140,9 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
+
+      And("GA call was made")
+      verifyGoogleAnalyticsServiceWasCalled
     }
 
   }

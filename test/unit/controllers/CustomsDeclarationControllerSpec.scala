@@ -30,7 +30,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.services.{BusinessService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.services.{StandardDeclarationSubmissionService, XmlValidationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.AuthConnectorStubbing
@@ -49,7 +49,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
     protected val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]
-    protected val mockBusinessService: BusinessService = mock[BusinessService]
+    protected val mockBusinessService: StandardDeclarationSubmissionService = mock[StandardDeclarationSubmissionService]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
     protected val mockResult: Result = mock[Result]
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]

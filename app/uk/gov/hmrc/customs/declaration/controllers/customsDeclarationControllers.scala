@@ -24,7 +24,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.services.BusinessService
+import uk.gov.hmrc.customs.declaration.services.{CancellationDeclarationSubmissionService, DeclarationService, StandardDeclarationSubmissionService}
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,37 +39,37 @@ class Common @Inject() (
 
 @Singleton
 class SubmitDeclarationController @Inject()(
-  common: Common,
-  businessService: BusinessService,
-  payloadValidationAction: SubmitPayloadValidationAction
+                                             common: Common,
+                                             businessService: StandardDeclarationSubmissionService,
+                                             payloadValidationAction: SubmitPayloadValidationAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
 
 @Singleton
 class CancelDeclarationController @Inject()(
-  common: Common,
-  businessService: BusinessService,
-  payloadValidationAction: CancelPayloadValidationAction
+                                             common: Common,
+                                             businessService: CancellationDeclarationSubmissionService,
+                                             payloadValidationAction: CancelPayloadValidationAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
 
 @Singleton
 class ClearanceDeclarationController @Inject()(
- common: Common,
- businessService: BusinessService,
- payloadValidationAction: ClearancePayloadValidationAction
+                                                common: Common,
+                                                businessService: StandardDeclarationSubmissionService,
+                                                payloadValidationAction: ClearancePayloadValidationAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
 
 @Singleton
 class AmendDeclarationController @Inject()(
- common: Common,
- businessService: BusinessService,
- payloadValidationAction: AmendPayloadValidationAction
+                                            common: Common,
+                                            businessService: StandardDeclarationSubmissionService,
+                                            payloadValidationAction: AmendPayloadValidationAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction)
 
 
 abstract class CustomsDeclarationController(
-  val common: Common,
-  val businessService: BusinessService,
-  val payloadValidationAction: PayloadValidationAction
+                                             val common: Common,
+                                             val businessService: DeclarationService,
+                                             val payloadValidationAction: PayloadValidationAction
 )
 extends BaseController {
 

@@ -24,7 +24,7 @@ import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
-import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoDecService}
+import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgCancellationDeclarationService, MdgWcoDecService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig}
 
 import scala.concurrent.Future
@@ -34,7 +34,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
   with OptionValues
   with BeforeAndAfterAll
   with BeforeAndAfterEach
-  with MdgWcoDecService
+  with MdgCancellationDeclarationService
   with ApiSubscriptionFieldsService
   with AuthService {
 
@@ -60,7 +60,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
   feature("Submissions with v1.0 accept header") {
     scenario("An authorised CSP successfully submits a cancellation request") {
       Given("A CSP wants to submit a valid cancellation request")
-      startMdgWcoDecService()
+      startMdgCancellationV1Service()
       val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequestWithV1AcceptHeader.fromCsp.postTo(endpoint)
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV1)
 
@@ -80,7 +80,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       verifyAuthServiceCalledForCsp()
 
       And("v1 config was used")
-      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV1ServiceContext)))
+      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContext)))
 
     }
   }
@@ -88,7 +88,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
   feature("Declaration API authorises submissions from CSPs and Software Houses with v2.0 accept header") {
     scenario("An authorised CSP successfully submits a cancellation request") {
       Given("A CSP wants to submit a valid cancellation request")
-      startMdgWcoDecService()
+      startMdgCancellationV2Service()
       val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.fromCsp.postTo(endpoint)
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
 
@@ -108,7 +108,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       verifyAuthServiceCalledForCsp()
 
       And("v2 config was used")
-      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
+      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV2)))
     }
 
   }

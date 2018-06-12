@@ -17,11 +17,11 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc.{ActionRefiner, _}
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest}
 
 import scala.concurrent.Future
 
@@ -31,18 +31,19 @@ import scala.concurrent.Future
   * <li/>ERROR - 4XX Result if is a header validation error. This terminates the action builder pipeline.
   */
 @Singleton
-class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator, logger: DeclarationsLogger) extends ActionRefiner[ConversationIdRequest, ValidatedHeadersRequest] {
+class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends ActionRefiner[AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest] {
+  actionName =>
 
-  override def refine[A](cr: ConversationIdRequest[A]): Future[Either[Result, ValidatedHeadersRequest[A]]] = Future.successful {
-    implicit val id = cr
+  override def refine[A](cr: AnalyticsValuesAndConversationIdRequest[A]): Future[Either[Result, ValidatedHeadersRequest[A]]] = Future.successful {
+    implicit val id: AnalyticsValuesAndConversationIdRequest[A] = cr
 
     validator.validateHeaders(cr) match {
       case Left(result) =>
+        googleAnalyticsConnector.failure(result)
         Left(result.XmlResult.withConversationId)
       case Right(extracted) =>
-        val vhr = ValidatedHeadersRequest(cr.conversationId, extracted.requestedApiVersion, extracted.clientId, cr.request)
+        val vhr = ValidatedHeadersRequest(cr.conversationId, cr.analyticsValues, extracted.requestedApiVersion, extracted.clientId, cr.request)
         Right(vhr)
     }
   }
-
 }

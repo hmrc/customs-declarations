@@ -23,8 +23,10 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames._
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.inject.guice.GuiceableModule
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
+import play.api.test.Helpers.CONTENT_TYPE
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
@@ -67,9 +69,19 @@ object TestData {
     def asGuiceableModule: GuiceableModule = GuiceableModule.guiceable(this)
   }
 
+  val GoogleAnalyticsPayloadValue = "some-query-string-for-ga"
+
+  lazy val ValidGoogleAnalyticsJson: JsValue = Json.parse(
+    s"""
+       |{
+       | "payload": $GoogleAnalyticsPayloadValue
+       |}
+    """.stripMargin)
+
   // note we can not mock service methods that return value classes - however using a simple stub IMHO it results in cleaner code (less mocking noise)
   val stubUniqueIdsService = new UniqueIdsService(mockUuidService) {
     override def conversation: ConversationId = conversationId
+
     override def correlation: CorrelationId = correlationId
   }
 
@@ -79,7 +91,7 @@ object TestData {
   def testFakeRequestWithBadgeId(badgeIdString: String = badgeIdentifier.value): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString)
 
-  val TestConversationIdRequest = ConversationIdRequest(conversationId, TestFakeRequest)
+  val TestConversationIdRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, TestFakeRequest)
   val TestExtractedHeaders = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
 
   val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
@@ -93,11 +105,11 @@ object TestData {
 object RequestHeaders {
 
   val X_CONVERSATION_ID_NAME = "X-Conversation-ID"
-  val X_CONVERSATION_ID_HEADER: (String, String) = X_CONVERSATION_ID_NAME -> TestData.conversationId.toString
+  lazy val X_CONVERSATION_ID_HEADER: (String, String) = X_CONVERSATION_ID_NAME -> TestData.conversationId.toString
 
   val X_BADGE_IDENTIFIER_NAME = "X-Badge-Identifier"
-  val X_BADGE_IDENTIFIER_HEADER: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.badgeIdentifier.value
-  val X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.invalidBadgeIdentifierValue
+  lazy val X_BADGE_IDENTIFIER_HEADER: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.badgeIdentifier.value
+  lazy val X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG: (String, String) = X_BADGE_IDENTIFIER_NAME -> TestData.invalidBadgeIdentifierValue
   val X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS: (String, String) = X_BADGE_IDENTIFIER_NAME -> "Invalid^&&("
   val X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_SHORT: (String, String) = X_BADGE_IDENTIFIER_NAME -> "12345"
   val X_BADGE_IDENTIFIER_HEADER_INVALID_LOWERCASE: (String, String) = X_BADGE_IDENTIFIER_NAME -> "BadgeId123"
@@ -132,5 +144,10 @@ object RequestHeaders {
     ACCEPT_HMRC_XML_V1_HEADER,
     X_CLIENT_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER
+  )
+
+  val ValidGoogleAnalyticsHeaders = Map(
+    CONTENT_TYPE -> MimeTypes.JSON,
+    ACCEPT_HMRC_XML_V1_HEADER
   )
 }

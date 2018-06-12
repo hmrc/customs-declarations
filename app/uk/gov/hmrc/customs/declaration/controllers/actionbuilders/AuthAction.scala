@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
 import play.api.mvc.{ActionRefiner, RequestHeader, Result}
@@ -25,12 +24,13 @@ import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplicat
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{UnauthorizedCode, errorBadRequest}
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode, errorBadRequest}
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, Eori}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedHeadersRequest}
+import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, Eori}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.HeaderCarrierConverter
@@ -39,7 +39,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Left
 import scala.util.control.NonFatal
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorInternalServerError
 
 /** Action builder that attempts to authorise request as a CSP or else NON CSP
   * <ul>
@@ -57,7 +56,8 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorInternalSer
 @Singleton
 class AuthAction @Inject()(
   override val authConnector: AuthConnector,
-  logger: DeclarationsLogger
+  logger: DeclarationsLogger,
+  googleAnalyticsConnector: GoogleAnalyticsConnector
 ) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] with AuthorisedFunctions {
 
   private val errorResponseUnauthorisedGeneral =
@@ -73,12 +73,18 @@ class AuthAction @Inject()(
     futureAuthoriseAsCsp.flatMap{
       case Right(maybeAuthorisedAsCspWithBadgeIdentifier) =>
         maybeAuthorisedAsCspWithBadgeIdentifier.fold{
-          authoriseAsNonCsp
+          authoriseAsNonCsp.map[Either[Result, AuthorisedRequest[A]]] {
+            case Left(errorResponse) =>
+              googleAnalyticsConnector.failure(errorResponse)
+              Left(errorResponse.XmlResult.withConversationId)
+            case Right(a) => Right(a)
+          }
         }{ badgeId =>
           Future.successful(Right(vhr.toCspAuthorisedRequest(badgeId)))
         }
       case Left(result) =>
-        Future.successful(Left(result))
+        googleAnalyticsConnector.failure(result)
+        Future.successful(Left(result.XmlResult.withConversationId))
     }
   }
 
@@ -86,14 +92,14 @@ class AuthAction @Inject()(
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
   // Right(None) if not authorised as CSP
-  private def futureAuthoriseAsCsp[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[BadgeIdentifier]]] = {
+  private def futureAuthoriseAsCsp[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[BadgeIdentifier]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
       Future.successful{
-        maybeBadgeIdentifier.fold[Either[Result, Option[BadgeIdentifier]]]{
+        maybeBadgeIdentifier.fold[Either[ErrorResponse, Option[BadgeIdentifier]]]{
           logger.error("badge identifier invalid or not present for CSP")
-          Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withConversationId)
+          Left(errorResponseBadgeIdentifierHeaderMissing)
         }{ badgeId =>
           logger.debug("Authorising as CSP")
           Right(Some(badgeId))
@@ -105,7 +111,7 @@ class AuthAction @Inject()(
         Right(None)
       case NonFatal(e) =>
         logger.error("Error authorising CSP", e)
-        Left(ErrorInternalServerError.XmlResult.withConversationId)
+        Left(ErrorInternalServerError)
     }
   }
 
@@ -117,25 +123,25 @@ class AuthAction @Inject()(
   // pure function that tames exceptions throw by HMRC auth api into an Either
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(AuthorisedRequest) on success
-  private def authoriseAsNonCsp[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
+  private def authoriseAsNonCsp[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, AuthorisedRequest[A]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(Retrievals.authorisedEnrolments) {
       enrolments =>
         val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(enrolments, hc.authorization)
         logger.debug(s"EORI from Customs enrolment for non-CSP request: $maybeEori")
-        maybeEori.fold[Future[Either[Result, AuthorisedRequest[A]]]]{
-          Future.successful(Left(errorResponseEoriNotFoundInCustomsEnrolment.XmlResult.withConversationId))
+        maybeEori.fold[Future[Either[ErrorResponse, AuthorisedRequest[A]]]]{
+          Future.successful(Left(errorResponseEoriNotFoundInCustomsEnrolment))
         }{ eori =>
           logger.debug("Authorising as non-CSP")
           Future.successful(Right(vhr.toNonCspAuthorisedRequest(eori)))
         }
     }.recover{
       case NonFatal(_: AuthorisationException) =>
-        Left(errorResponseUnauthorisedGeneral.XmlResult.withConversationId)
+        Left(errorResponseUnauthorisedGeneral)
       case NonFatal(e) =>
         logger.error("Error authorising Non CSP", e)
-        Left(ErrorInternalServerError.XmlResult.withConversationId)
+        Left(ErrorInternalServerError)
     }
 
   }

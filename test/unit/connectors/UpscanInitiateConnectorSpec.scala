@@ -23,7 +23,7 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
-import play.api.libs.json.{JsObject, JsValue, Writes}
+import play.api.libs.json.{Json, Writes}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.UpscanInitiateConnector
@@ -34,7 +34,6 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundExcepti
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData
-import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -56,6 +55,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
   private val upscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com")
   private implicit val jsonRequest = ValidatedUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
+    GoogleAnalyticsValues.Fileupload,
     VersionTwo,
     ClientId("ABC"),
     NonCsp(Eori("123")),

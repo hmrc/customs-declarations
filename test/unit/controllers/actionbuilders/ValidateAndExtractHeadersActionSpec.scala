@@ -22,9 +22,10 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.mvc.{AnyContentAsXml, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
+import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{HeaderValidator, ValidateAndExtractHeadersAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.RequestHeaders
 import util.TestData._
@@ -34,13 +35,14 @@ class ValidateAndExtractHeadersActionSpec extends UnitSpec with MockitoSugar wit
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockHeaderValidator: HeaderValidator = mock[HeaderValidator]
-    val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(mockHeaderValidator, mockLogger)
+    val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
+    val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(mockHeaderValidator, mockLogger, mockGoogleAnalyticsConnector)
   }
 
   "HeaderValidationAction when validation succeeds" should {
     "extract headers from incoming request and copy relevant values on to the ValidatedHeaderRequest" in new SetUp {
-      val conversationIdRequest: ConversationIdRequest[AnyContentAsXml] = TestConversationIdRequest
-      when(mockHeaderValidator.validateHeaders(any[ConversationIdRequest[_]])).thenReturn(Right(TestExtractedHeaders))
+      val conversationIdRequest: AnalyticsValuesAndConversationIdRequest[AnyContentAsXml] = TestConversationIdRequest
+      when(mockHeaderValidator.validateHeaders(any[AnalyticsValuesAndConversationIdRequest[_]])).thenReturn(Right(TestExtractedHeaders))
 
       val actualResult: Either[Result, ValidatedHeadersRequest[_]] = await(validateAndExtractHeadersAction.refine(conversationIdRequest))
 
@@ -50,8 +52,8 @@ class ValidateAndExtractHeadersActionSpec extends UnitSpec with MockitoSugar wit
 
   "HeaderValidationAction when validation fails" should {
     "return error with conversation Id in the headers" in new SetUp {
-      val conversationIdRequest: ConversationIdRequest[AnyContentAsXml] = TestConversationIdRequest
-      when(mockHeaderValidator.validateHeaders(any[ConversationIdRequest[_]])).thenReturn(Left(ErrorContentTypeHeaderInvalid))
+      val conversationIdRequest: AnalyticsValuesAndConversationIdRequest[AnyContentAsXml] = TestConversationIdRequest
+      when(mockHeaderValidator.validateHeaders(any[AnalyticsValuesAndConversationIdRequest[_]])).thenReturn(Left(ErrorContentTypeHeaderInvalid))
 
       val actualResult: Either[Result, ValidatedHeadersRequest[_]] = await(validateAndExtractHeadersAction.refine(conversationIdRequest))
 

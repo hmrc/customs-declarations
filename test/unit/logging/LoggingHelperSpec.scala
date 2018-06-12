@@ -24,7 +24,7 @@ import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.logging.LoggingHelper
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
-import uk.gov.hmrc.customs.declaration.model.{ClientId, VersionOne}
+import uk.gov.hmrc.customs.declaration.model.{ClientId, GoogleAnalyticsValues, VersionOne}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 
@@ -45,7 +45,7 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
         "IGNORE" -> "IGNORE"
       )
     )
-  private val validatedHeadersRequest = ValidatedHeadersRequest(conversationId, VersionOne, ClientId("some-client-id"), requestMock)
+  private val validatedHeadersRequest = ValidatedHeadersRequest(conversationId, GoogleAnalyticsValues.Submit, VersionOne, ClientId("some-client-id"), requestMock)
 
   "LoggingHelper" should {
 

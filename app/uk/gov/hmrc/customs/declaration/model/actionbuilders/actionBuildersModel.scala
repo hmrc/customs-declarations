@@ -18,8 +18,7 @@ package uk.gov.hmrc.customs.declaration.model.actionbuilders
 
 import play.api.mvc.{Request, Result, WrappedRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
-import uk.gov.hmrc.customs.declaration.model.AuthorisedAs
-import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.{AuthorisedAs, _}
 
 import scala.xml.NodeSeq
 
@@ -32,9 +31,10 @@ object ActionBuilderModelHelper {
 
   }
 
-  implicit class CorrelationIdsRequestOps[A](val cir: ConversationIdRequest[A]) extends AnyVal {
+  implicit class CorrelationIdsRequestOps[A](val cir: AnalyticsValuesAndConversationIdRequest[A]) extends AnyVal {
     def toValidatedHeadersRequest(eh: ExtractedHeaders): ValidatedHeadersRequest[A] = ValidatedHeadersRequest(
       cir.conversationId,
+      cir.analyticsValues,
       eh.requestedApiVersion,
       eh.clientId,
       cir.request
@@ -49,6 +49,7 @@ object ActionBuilderModelHelper {
 
     def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
       vhr.conversationId,
+      vhr.analyticsValues,
       vhr.requestedApiVersion,
       vhr.clientId,
       authorisedAs,
@@ -59,6 +60,7 @@ object ActionBuilderModelHelper {
   implicit class AuthorisedRequestOps[A](val ar: AuthorisedRequest[A]) extends AnyVal {
     def toValidatedPayloadRequest(xmlBody: NodeSeq): ValidatedPayloadRequest[A] = ValidatedPayloadRequest(
       ar.conversationId,
+      ar.analyticsValues,
       ar.requestedApiVersion,
       ar.clientId,
       ar.authorisedAs,
@@ -72,6 +74,7 @@ object ActionBuilderModelHelper {
     def toValidatedUploadPayloadRequest(declarationId: DeclarationId,
                                         documentationType: DocumentationType): ValidatedUploadPayloadRequest[A] = ValidatedUploadPayloadRequest(
       vpr.conversationId,
+      vpr.analyticsValues,
       vpr.requestedApiVersion,
       vpr.clientId,
       vpr.authorisedAs,
@@ -85,6 +88,10 @@ object ActionBuilderModelHelper {
 
 trait HasConversationId {
   val conversationId: ConversationId
+}
+
+trait HasAnalyticsValues {
+  val analyticsValues: GoogleAnalyticsValues
 }
 
 trait ExtractedHeaders {
@@ -124,44 +131,55 @@ case class ConversationIdRequest[A](
   request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId
 
+case class AnalyticsValuesAndConversationIdRequest[A](
+ conversationId: ConversationId,
+ analyticsValues: GoogleAnalyticsValues,
+ request: Request[A]
+) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues
+
 // Available after ValidatedHeadersAction builder
 case class ValidatedHeadersRequest[A](
   conversationId: ConversationId,
+  analyticsValues: GoogleAnalyticsValues,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders
+) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders
 
 // Available after Authorise action builder
 case class AuthorisedRequest[A](
   conversationId: ConversationId,
+  analyticsValues: GoogleAnalyticsValues,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
   request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs
+) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs
 
 // Available after ValidatedPayloadAction builder
 abstract class GenericValidatedPayloadRequest[A](
                                        conversationId: ConversationId,
+                                       analyticsValues: GoogleAnalyticsValues,
                                        requestedApiVersion: ApiVersion,
                                        clientId: ClientId,
                                        authorisedAs: AuthorisedAs,
                                        xmlBody: NodeSeq,
                                        request: Request[A]
-                                     ) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
+                                     ) extends WrappedRequest[A](request) with HasConversationId  with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
 
 case class ValidatedPayloadRequest[A](
   conversationId: ConversationId,
+  analyticsValues: GoogleAnalyticsValues,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
   xmlBody: NodeSeq,
   request: Request[A]
-) extends GenericValidatedPayloadRequest(conversationId, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
 
 case class ValidatedUploadPayloadRequest[A](
   conversationId: ConversationId,
+  analyticsValues: GoogleAnalyticsValues,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
@@ -169,4 +187,4 @@ case class ValidatedUploadPayloadRequest[A](
   request: Request[A],
   declarationId: DeclarationId,
   documentationType: DocumentationType
-) extends GenericValidatedPayloadRequest(conversationId, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties

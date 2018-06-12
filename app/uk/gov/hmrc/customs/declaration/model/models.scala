@@ -20,7 +20,7 @@ import java.util.UUID
 
 import play.api.libs.json.{Json, OFormat}
 
-import scala.xml.{Elem, Node, NodeSeq}
+import scala.xml.{Elem, NodeSeq}
 
 case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 
@@ -35,6 +35,41 @@ case class ClientId(value: String) extends AnyVal {
 case class ConversationId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
 }
+
+sealed trait GoogleAnalyticsValues {
+  val success: String
+  val failure: String
+}
+
+object GoogleAnalyticsValues {
+  val Submit: GoogleAnalyticsValues = new GoogleAnalyticsValues {
+    override val success: String = "declarationSubmitSuccess"
+    override val failure: String = "declarationSubmitFailure"
+  }
+
+  val Cancel: GoogleAnalyticsValues = new GoogleAnalyticsValues {
+    override val success: String = "declarationCancellationSuccess"
+    override val failure: String = "declarationCancellationFailure"
+  }
+
+  val Fileupload = new GoogleAnalyticsValues {
+    override val success: String = "declarationFileUploadSuccess"
+    override val failure: String = "declarationFileUploadFailure"
+  }
+
+  val Clearance = new GoogleAnalyticsValues {
+    override val success: String = "declarationClearanceSuccess"
+    override val failure: String = "declarationClearanceFailure"
+  }
+
+  //according to the ticket, amend endpoint should not call GA
+  //hence, to be on a safe side exception might be in order
+  val Amend = new GoogleAnalyticsValues {
+    override lazy val success: String = ???
+    override lazy val failure: String = ???
+  }
+}
+
 
 case class CorrelationId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
@@ -119,4 +154,10 @@ case class UpscanInitiateUploadRequest
 
 object UpscanInitiateResponsePayload {
   implicit val format: OFormat[UpscanInitiateResponsePayload] = Json.format[UpscanInitiateResponsePayload]
+}
+
+case class GoogleAnalyticsRequest(payload: String)
+
+object GoogleAnalyticsRequest {
+  implicit val format = Json.format[GoogleAnalyticsRequest]
 }

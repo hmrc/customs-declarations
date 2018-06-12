@@ -38,29 +38,62 @@ object FileStatus extends Enumeration {
   implicit val fileStatusReads = Reads.enumNameReads(FileStatus)
 }
 
-case class UpscanNotification(reference: UUID, fileStatus: FileStatus, details: Option[String], url: Option[String])
+case class UploadDetails(uploadTimestamp: Option[String], checksum: Option[String])
+case class FailureDetails(failureReason: Option[String], message: Option[String])
+case class UpscanNotification(reference: UUID, fileStatus: FileStatus, uploadDetails: Option[UploadDetails], failureDetails: Option[FailureDetails], url: Option[String])
 
 object UpscanNotification {
 
-  private def detailsMustBeProvidedWhenStatusIsFailed(fs: FileStatus, details: Option[String]) =
-    fs == FileStatus.READY || (fs == FileStatus.FAILED && details.isDefined)
+  implicit val uploadDetailsReads = (
 
+    (JsPath \\ "uploadTimestamp").readNullable[String]
+      .filter(ValidationError("File status is READY so uploadTimestamp is required"))(_.isDefined)
+      and
+      (JsPath \\ "checksum").readNullable[String]
+        .filter(ValidationError("File status is READY so checksum is required"))(_.isDefined)
+    ) (UploadDetails.apply _)
 
-  private val detailsReads: Reads[Option[String]] = (JsPath \ "fileStatus").read[FileStatus].flatMap { fs =>
-    (__ \ "details").readNullable[String]
-      .filter(ValidationError("File status is FAILED so details are required"))(detailsMustBeProvidedWhenStatusIsFailed(fs, _))
-  }
+  implicit val failureDetailsReads = (
+    (JsPath \\ "failureReason").readNullable[String].filter(ValidationError("File status is FAILED so failureReason is required"))(_.isDefined)
+      and
+      (JsPath \\ "message").readNullable[String].filter(ValidationError("File status is FAILED so message is required"))(_.isDefined)
+    ) (FailureDetails.apply _)
 
-  implicit val UpscanNotificationReads: Reads[UpscanNotification] = (
+  implicit val upscanNotificationReads: Reads[UpscanNotification] = (
     (JsPath \ "reference").read[UUID] and
       (JsPath \ "fileStatus").read[FileStatus] and
-      detailsReads and
-      (JsPath \ "url").readNullable[String]
-    ).apply {
-    UpscanNotification.apply _
-  }
-}
 
+      (JsPath \ "fileStatus").read[FileStatus].flatMap {
+        case FileStatus.FAILED => {
+          new Reads[Option[UploadDetails]] {
+            def reads(js: JsValue) = JsSuccess(None)
+          }
+        }
+        case FileStatus.READY => {
+          new Reads[Option[UploadDetails]] {
+            def reads(js: JsValue) = {
+              js.validateOpt[UploadDetails](uploadDetailsReads)
+            }
+          }
+        }
+      } and
+      (JsPath \ "fileStatus").read[FileStatus].flatMap {
+        case FileStatus.FAILED => {
+          new Reads[Option[FailureDetails]] {
+            def reads(js: JsValue) = {
+              js.validateOpt[FailureDetails](failureDetailsReads)
+            }
+          }
+        }
+        case FileStatus.READY => {
+          new Reads[Option[FailureDetails]] {
+            def reads(js: JsValue) = JsSuccess(None)
+          }
+        }
+      } and
+      (JsPath \ "url").readNullable[String]
+    ) (UpscanNotification.apply _)
+}
 
 class UpscanNotificationController @Inject()(downstreamService: UploadedFileProcessingService) extends BaseController {
   def post(decId: String, eori: String, docType: String, clientSubscriptionId: String): Action[AnyContent] = Action.async { request =>
@@ -75,5 +108,4 @@ class UpscanNotificationController @Inject()(downstreamService: UploadedFileProc
         }
       }
   }
-
 }

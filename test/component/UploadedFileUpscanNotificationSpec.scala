@@ -62,6 +62,10 @@ class UploadedFileUpscanNotificationSpec extends ComponentTestSpec
        |{
        |    "reference" : "$fileReference",
        |    "fileStatus" : "READY",
+       |    "uploadDetails": {
+       |      "uploadTimestamp": "2018-04-24T09:30:00Z",
+       |      "checksum": "CHECKSUM"
+       |    },
        |    "url" : "https://some-url"
        |}
     """.stripMargin))
@@ -113,7 +117,10 @@ class UploadedFileUpscanNotificationSpec extends ComponentTestSpec
         """<?xml version="1.0" encoding="UTF-8" ?>
           |<root>
           |   <fileStatus>SUCCESS</fileStatus>
-          |   <details>File successfully received</details>
+          |   <uploadDetails>
+          |     <uploadTimestamp>2018-04-24T09:30:00Z</uploadTimestamp>
+          |     <checksum>CHECKSUM</checksum>
+          |   </uploadDetails>
           |</root>
         """.stripMargin)
     }

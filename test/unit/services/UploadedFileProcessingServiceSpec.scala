@@ -26,7 +26,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.connectors.CustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.controllers.FileStatus._
-import uk.gov.hmrc.customs.declaration.controllers.UpscanNotification
+import uk.gov.hmrc.customs.declaration.controllers.{FailureDetails, UploadDetails, UpscanNotification}
 import uk.gov.hmrc.customs.declaration.services.{CustomsNotification, UploadedFileDetails, UploadedFileProcessingService}
 
 import scala.concurrent.Future
@@ -40,10 +40,10 @@ class UploadedFileProcessingServiceSpec extends PlaySpec with MockitoSugar with 
   private val service = new UploadedFileProcessingService(customsNotificationConnector)
 
   private val readyStatusFD = UploadedFileDetails("decId", "eori", "docType", "clientSubscriptionId",
-    UpscanNotification(UUID.randomUUID(), READY, None, Some("https://some-url")))
+    UpscanNotification(UUID.randomUUID(), READY, Some(UploadDetails(Some("2018-04-24T09:30:00Z"), Some("CHECKSUM"))), None, Some("https://some-url")))
 
   private val failedStatusFD = UploadedFileDetails("decId", "eori", "docType", "clientSubscriptionId",
-    UpscanNotification(UUID.randomUUID(), FAILED, Some("The file has a virus"), Some("https://some-url")))
+    UpscanNotification(UUID.randomUUID(), FAILED, None, Some(FailureDetails(Some("Failed"), Some("The file has a virus"))), Some("https://some-url")))
 
   override def beforeEach(): Unit = {
     reset(customsNotificationConnector)
@@ -66,10 +66,13 @@ class UploadedFileProcessingServiceSpec extends PlaySpec with MockitoSugar with 
 
       val expectedXML = <root>
         <fileStatus>SUCCESS</fileStatus>
-        <details>File successfully received</details>
+        <uploadDetails>
+          <uploadTimestamp>2018-04-24T09:30:00Z</uploadTimestamp>
+          <checksum>CHECKSUM</checksum>
+        </uploadDetails>
       </root>
 
-      trim(expectedXML) must be (trim(notification.payload(0)))
+      trim(notification.payload(0)) must be (trim(expectedXML))
     }
 
     "call the Customs Notification connector with correct details when FileStatus is FAILED" in {
@@ -85,12 +88,17 @@ class UploadedFileProcessingServiceSpec extends PlaySpec with MockitoSugar with 
 
       val expectedXML = <root>
         <fileStatus>FAILED</fileStatus>
-        <details>{failedStatusFD.upscanNotification.details.get}</details>
+        <failureDetails>
+          <failureReason>
+            {failedStatusFD.upscanNotification.failureDetails.get.failureReason}
+          </failureReason>
+          <message>
+            {failedStatusFD.upscanNotification.failureDetails.get.message}
+          </message>
+        </failureDetails>
       </root>
 
       trim(expectedXML) must be (trim(notification.payload(0)))
     }
   }
-
-
 }

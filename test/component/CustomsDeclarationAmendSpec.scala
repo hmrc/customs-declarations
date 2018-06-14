@@ -75,7 +75,7 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
     stopMockServer()
   }
 
-  feature("Declaration API authorises submissions from CSPs and Software Houses with v2.0 accept header") {
+  feature("Declaration API authorises amendment of submissions from CSPs with v2.0 accept header") {
     scenario("An authorised CSP successfully submits a customs amend declaration") {
       Given("A CSP wants to submit a valid customs amend declaration")
 
@@ -107,7 +107,7 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
 
   }
 
-  feature("The API handles errors as expected") {
+  feature("Declaration API handles amendment of submission errors from CSPs as expected") {
 
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")

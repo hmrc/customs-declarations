@@ -1,4 +1,5 @@
 import AppDependencies._
+import com.typesafe.sbt.packager.MappingsHelper._
 import org.scalastyle.sbt.ScalastylePlugin._
 import play.sbt.routes.RoutesKeys._
 import sbt.Keys._
@@ -12,7 +13,6 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
 import scala.language.postfixOps
-import com.typesafe.sbt.packager.MappingsHelper._
 
 mappings in Universal ++= directory(baseDirectory.value / "public")
 // my understanding is publishing processed changed when we moved to the open and
@@ -116,7 +116,7 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
       ,"uk\\.gov\\.hmrc\\.customs\\.declaration\\.views\\..*"
       ,".*(AuthService|BuildInfo|Routes).*"
     ).mkString(";"),
-  coverageMinimum := 98,
+  coverageMinimum := 99,
   coverageFailOnMinimum := true,
   coverageHighlighting := true,
   parallelExecution in Test := false

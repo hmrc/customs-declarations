@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-import play.api.http.Status
 import play.api.mvc.{ActionTransformer, Request}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
@@ -26,14 +25,6 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndCo
 import uk.gov.hmrc.customs.declaration.services.UniqueIdsService
 
 import scala.concurrent.Future
-
-trait SmartGA {
-  def sendingRequired(code: Int): Option[Unit] = if (code >= Status.BAD_REQUEST && code < Status.INTERNAL_SERVER_ERROR) {
-    Some(())
-  } else {
-    None
-  }
-}
 
 abstract class EndpointAction() extends ActionTransformer[Request, AnalyticsValuesAndConversationIdRequest] {
 

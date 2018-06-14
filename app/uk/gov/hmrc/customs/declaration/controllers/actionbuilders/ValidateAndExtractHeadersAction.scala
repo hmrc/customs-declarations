@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
+import play.api.http.Status
 import play.api.mvc.{ActionRefiner, _}
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -31,7 +32,7 @@ import scala.concurrent.Future
   * <li/>ERROR - 4XX Result if is a header validation error. This terminates the action builder pipeline.
   */
 @Singleton
-class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends ActionRefiner[AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest] with SmartGA {
+class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends ActionRefiner[AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest] {
   actionName =>
 
   override def refine[A](cr: AnalyticsValuesAndConversationIdRequest[A]): Future[Either[Result, ValidatedHeadersRequest[A]]] = Future.successful {
@@ -39,7 +40,8 @@ class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator, logg
 
     validator.validateHeaders(cr) match {
       case Left(result) =>
-        sendingRequired(result.httpStatusCode).map(_ => googleAnalyticsConnector.failure(result.message))
+        val code = result.httpStatusCode
+        if (code >= Status.BAD_REQUEST && code < Status.INTERNAL_SERVER_ERROR) googleAnalyticsConnector.failure(result.message)
         Left(result.XmlResult.withConversationId)
       case Right(extracted) =>
         val vhr = ValidatedHeadersRequest(cr.conversationId, cr.analyticsValues, extracted.requestedApiVersion, extracted.clientId, cr.request)

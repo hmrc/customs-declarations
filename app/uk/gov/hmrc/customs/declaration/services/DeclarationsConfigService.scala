@@ -38,7 +38,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
 
-  private val gaServiceUrl = configValidationNel.service("google-analytics").serviceUrl
+  private val gaServiceUrl = configValidationNel.service("google-analytics-sender").serviceUrl
   private val gaTrackingId = root.string("googleAnalytics.trackingId")
   private val gaClientId = root.string("googleAnalytics.clientId")
   private val gaEventValue = root.string("googleAnalytics.eventValue")

@@ -25,6 +25,7 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, Results}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers.FileStatus.FileStatus
 import uk.gov.hmrc.customs.declaration.services.{UploadedFileDetails, UploadedFileProcessingService}
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
@@ -95,16 +96,25 @@ object UpscanNotification {
     ) (UpscanNotification.apply _)
 }
 
-class UpscanNotificationController @Inject()(downstreamService: UploadedFileProcessingService) extends BaseController {
+class UpscanNotificationController @Inject()(downstreamService: UploadedFileProcessingService, cdsLogger: CdsLogger) extends BaseController {
   def post(decId: String, eori: String, docType: String, clientSubscriptionId: String): Action[AnyContent] = Action.async { request =>
     request.body.asJson
-      .fold(Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)) { js =>
+      .fold(
+        {
+          cdsLogger.error(s"Malformed JSON received. Body: ${request.body.asText} headers: ${request.headers}")
+          Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)
+        }
+      ) { js =>
         js.validate[UpscanNotification] match {
           case n: JsSuccess[UpscanNotification] => {
+            cdsLogger.debug(s"Valid JSON request received. Body: $js headers: ${request.headers}")
             downstreamService.sendMessage(UploadedFileDetails(decId, eori, docType, clientSubscriptionId, n.value))
             Future.successful(Results.NoContent)
           }
-          case e: JsError => Future.successful(errorBadRequest(errorCode = "BAD_REQUEST", errorMessage = e.errors.toString()).JsonResult)
+          case e: JsError => {
+            cdsLogger.error(s"Invalid JSON received. Body: ${request.body.asText} headers: ${request.headers}")
+            Future.successful(errorBadRequest(errorCode = "BAD_REQUEST", errorMessage = e.errors.toString()).JsonResult)
+          }
         }
       }
   }

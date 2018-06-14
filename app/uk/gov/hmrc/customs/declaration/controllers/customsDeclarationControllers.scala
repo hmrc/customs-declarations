@@ -31,7 +31,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class Common @Inject() (
-  val conversationIdAction: ConversationIdAction,
   val authAction: AuthAction,
   val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
   val logger: DeclarationsLogger
@@ -76,7 +75,7 @@ abstract class CustomsDeclarationController(
   val common: Common,
   val businessService: DeclarationService,
   val payloadValidationAction: PayloadValidationAction,
-  val analyticsValuesAction: AnalyticsValuesAction,
+  val analyticsValuesAction: EndpointAction,
   val maybeGoogleAnalyticsConnector: Option[GoogleAnalyticsConnector]
 )
 extends BaseController {
@@ -90,7 +89,6 @@ extends BaseController {
 
   def post(): Action[AnyContent] = (
     Action andThen
-      common.conversationIdAction andThen
       analyticsValuesAction andThen
       common.validateAndExtractHeadersAction andThen
       common.authAction andThen

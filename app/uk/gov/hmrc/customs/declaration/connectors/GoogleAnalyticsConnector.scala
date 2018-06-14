@@ -21,7 +21,6 @@ import javax.inject.Singleton
 import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE}
 import play.api.http.MimeTypes
 import play.api.libs.json.Json
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsRequest
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId}
@@ -50,17 +49,6 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
 
   def success(implicit data: HasConversationId with HasAnalyticsValues): Future[Unit] = {
     send(data.analyticsValues.success, s"ConversationId: ${data.conversationId}")
-  }
-
-  def failure(response: ErrorResponse)(implicit data: HasConversationId with HasAnalyticsValues): Future[Unit] = {
-    val errorCode = response.httpStatusCode
-
-    if (errorCode > 399 && errorCode < 500) {
-      failure(response.message)
-    } else {
-      Future.successful(())
-    }
-
   }
 
   def failure(error: String)(implicit data: HasConversationId with HasAnalyticsValues): Future[Unit] = {

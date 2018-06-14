@@ -49,7 +49,6 @@ class FileUploadController @Inject()(
 
   def post(): Action[AnyContent] = (
     Action andThen
-      common.conversationIdAction andThen
       fileUploadAnalyticsValuesAction andThen
       common.validateAndExtractHeadersAction andThen
       common.authAction andThen

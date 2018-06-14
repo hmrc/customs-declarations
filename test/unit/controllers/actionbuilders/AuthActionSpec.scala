@@ -77,7 +77,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(TestValidatedHeadersRequestNoBadge)
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(TestValidatedHeadersRequestNoBadge)
       }
 
 
@@ -88,7 +88,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(validatedHeadersRequestWithInValidBadgeIdTooLong)
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInValidBadgeIdTooLong)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but is too short" in new SetUp {
@@ -98,7 +98,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(validatedHeadersRequestWithInValidBadgeIdTooShort)
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInValidBadgeIdTooShort)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but contains invalid chars" in new SetUp {
@@ -108,7 +108,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(validatedHeadersRequestWithInValidBadgeIdInvalidChars)
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInValidBadgeIdInvalidChars)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but contains all lowercase chars" in new SetUp {
@@ -118,7 +118,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing)(validatedHeadersRequestWithInValidBadgeIdLowerCase)
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInValidBadgeIdLowerCase)
       }
 
       "Return 500 response if errors occur in CSP auth API call" in new SetUp {
@@ -148,7 +148,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriNotFoundInCustomsEnrolment.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyCspAuthorisationCalled(1)
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriNotFoundInCustomsEnrolment)(TestValidatedHeadersRequestNoBadge)
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriNotFoundInCustomsEnrolment.message)(TestValidatedHeadersRequestNoBadge)
       }
 
       "Return 401 response when not authorised as NonCsp" in new SetUp {
@@ -159,7 +159,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseUnauthorisedGeneral.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyCspAuthorisationCalled(1)
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseUnauthorisedGeneral)(TestValidatedHeadersRequestNoBadge)
+        verify(mockGoogleAnalyticsConnector).failure(errorResponseUnauthorisedGeneral.message)(TestValidatedHeadersRequestNoBadge)
       }
 
       "Return 500 response if errors occur in CSP auth API call" in new SetUp {

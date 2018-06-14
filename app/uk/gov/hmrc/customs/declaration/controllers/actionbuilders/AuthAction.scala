@@ -58,7 +58,7 @@ class AuthAction @Inject()(
   override val authConnector: AuthConnector,
   logger: DeclarationsLogger,
   googleAnalyticsConnector: GoogleAnalyticsConnector
-) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] with AuthorisedFunctions {
+) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] with AuthorisedFunctions with SmartGA {
 
   private val errorResponseUnauthorisedGeneral =
     ErrorResponse(Status.UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
@@ -75,7 +75,7 @@ class AuthAction @Inject()(
         maybeAuthorisedAsCspWithBadgeIdentifier.fold{
           authoriseAsNonCsp.map[Either[Result, AuthorisedRequest[A]]] {
             case Left(errorResponse) =>
-              googleAnalyticsConnector.failure(errorResponse)
+              sendingRequired(errorResponse.httpStatusCode).map(_ => googleAnalyticsConnector.failure(errorResponse.message))
               Left(errorResponse.XmlResult.withConversationId)
             case Right(a) => Right(a)
           }
@@ -83,7 +83,7 @@ class AuthAction @Inject()(
           Future.successful(Right(vhr.toCspAuthorisedRequest(badgeId)))
         }
       case Left(result) =>
-        googleAnalyticsConnector.failure(result)
+        sendingRequired(result.httpStatusCode).map(_ => googleAnalyticsConnector.failure(result.message))
         Future.successful(Left(result.XmlResult.withConversationId))
     }
   }

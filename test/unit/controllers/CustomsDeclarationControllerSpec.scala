@@ -30,8 +30,9 @@ import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, ValidatedPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.{StandardDeclarationSubmissionService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.services.{StandardDeclarationSubmissionService, UniqueIdsService, XmlValidationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.AuthConnectorStubbing
@@ -55,14 +56,18 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockResult: Result = mock[Result]
     protected val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
-    protected val stubConversationIdAction: ConversationIdAction = new ConversationIdAction(stubUniqueIdsService, mockDeclarationsLogger)
+    protected val endpointAction = new EndpointAction {
+      override val logger: DeclarationsLogger = mockDeclarationsLogger
+      override val googleAnalyticsValues: GoogleAnalyticsValues = GoogleAnalyticsValues.Submit
+      override val correlationIdService: UniqueIdsService = stubUniqueIdsService
+    }
     protected val stubAuthAction: AuthAction = new AuthAction(mockAuthConnector, mockDeclarationsLogger, mockGoogleAnalyticsConnector)
     protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
     protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger, Some(mockGoogleAnalyticsConnector)) {}
 
-    protected val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, mockDeclarationsLogger)
+    protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockDeclarationsLogger)
 
-    protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, new DeclarationSubmitAnalyticsValuesAction(mockDeclarationsLogger), Some(mockGoogleAnalyticsConnector)) {}
+    protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, Some(mockGoogleAnalyticsConnector)) {}
 
     protected def awaitSubmit(request: Request[AnyContent]): Result = {
       await(controller.post().apply(request))

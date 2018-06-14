@@ -29,6 +29,7 @@ import play.api.test.Helpers._
 import play.api.test._
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.controllers.ResponseContents
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers.{FileStatus, UploadDetails, UpscanNotification, UpscanNotificationController}
 import uk.gov.hmrc.customs.declaration.services.{UploadedFileDetails, UploadedFileProcessingService}
 
@@ -38,8 +39,9 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
 
   private val fileReference = UUID.randomUUID()
   private val mockService = mock[UploadedFileProcessingService]
+  private val mockCdsLogger = mock[CdsLogger]
 
-  private val post: Action[AnyContent] = new UpscanNotificationController(mockService)
+  private val post: Action[AnyContent] = new UpscanNotificationController(mockService, mockCdsLogger)
     .post("decId", "eori", "docType", "clientSubscriptionId")
 
   override def beforeEach() {

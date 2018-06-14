@@ -17,18 +17,24 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.ActionTransformer
+import play.api.mvc.{ActionTransformer, Request}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ConversationIdRequest}
+import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
+import uk.gov.hmrc.customs.declaration.services.UniqueIdsService
 
 import scala.concurrent.Future
 
-abstract class AnalyticsValuesAction (logger: DeclarationsLogger, analyticsValues: GoogleAnalyticsValues) extends ActionTransformer[ConversationIdRequest, AnalyticsValuesAndConversationIdRequest] {
+abstract class EndpointAction() extends ActionTransformer[Request, AnalyticsValuesAndConversationIdRequest] {
 
-  override def transform[A](request: ConversationIdRequest[A]): Future[AnalyticsValuesAndConversationIdRequest[A]] = {
+  val logger: DeclarationsLogger
+  val googleAnalyticsValues: GoogleAnalyticsValues
+  val correlationIdService: UniqueIdsService
 
-    val r = AnalyticsValuesAndConversationIdRequest(request.conversationId, analyticsValues , request.request)
+  override def transform[A](request: Request[A]): Future[AnalyticsValuesAndConversationIdRequest[A]] = {
+
+    val r = AnalyticsValuesAndConversationIdRequest(correlationIdService.conversation, googleAnalyticsValues, request)
     logger.debugFull("In AnalyticsValuesAction.")(r)
 
     Future.successful(r)
@@ -36,19 +42,26 @@ abstract class AnalyticsValuesAction (logger: DeclarationsLogger, analyticsValue
 }
 
 @Singleton
-class FileUploadAnalyticsValuesAction @Inject()(logger: DeclarationsLogger) extends AnalyticsValuesAction(logger, GoogleAnalyticsValues.Fileupload)
+class FileUploadAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+  override val googleAnalyticsValues: GoogleAnalyticsValues = Fileupload
+}
 
 @Singleton
-class DeclarationSubmitAnalyticsValuesAction @Inject()(logger: DeclarationsLogger) extends AnalyticsValuesAction(logger, GoogleAnalyticsValues.Submit)
+class DeclarationSubmitAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+  override val googleAnalyticsValues: GoogleAnalyticsValues = Submit
+}
 
 @Singleton
-class DeclarationClearanceAnalyticsValuesAction @Inject()(logger: DeclarationsLogger) extends AnalyticsValuesAction(logger, GoogleAnalyticsValues.Clearance)
+class DeclarationClearanceAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+  override val googleAnalyticsValues: GoogleAnalyticsValues = Clearance
+}
 
 @Singleton
-class DeclarationAmendAnalyticsValuesAction @Inject()(logger: DeclarationsLogger) extends AnalyticsValuesAction(logger, GoogleAnalyticsValues.Amend)
+class DeclarationCancellationAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+  override val googleAnalyticsValues: GoogleAnalyticsValues = Cancel
+}
 
 @Singleton
-class DeclarationCancellationAnalyticsValuesAction @Inject()(logger: DeclarationsLogger) extends AnalyticsValuesAction(logger, GoogleAnalyticsValues.Cancel)
-
-@Singleton
-class DeclarationAmendValuesAction @Inject()(logger: DeclarationsLogger) extends AnalyticsValuesAction(logger, GoogleAnalyticsValues.Amend)
+class DeclarationAmendValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+  override val googleAnalyticsValues: GoogleAnalyticsValues = Amend
+}

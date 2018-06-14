@@ -75,7 +75,6 @@ class AuthAction @Inject()(
         maybeAuthorisedAsCspWithBadgeIdentifier.fold{
           authoriseAsNonCsp.map[Either[Result, AuthorisedRequest[A]]] {
             case Left(errorResponse) =>
-              googleAnalyticsConnector.failure(errorResponse)
               Left(errorResponse.XmlResult.withConversationId)
             case Right(a) => Right(a)
           }
@@ -83,7 +82,6 @@ class AuthAction @Inject()(
           Future.successful(Right(vhr.toCspAuthorisedRequest(badgeId)))
         }
       case Left(result) =>
-        googleAnalyticsConnector.failure(result)
         Future.successful(Left(result.XmlResult.withConversationId))
     }
   }
@@ -99,6 +97,7 @@ class AuthAction @Inject()(
       Future.successful{
         maybeBadgeIdentifier.fold[Either[ErrorResponse, Option[BadgeIdentifier]]]{
           logger.error("badge identifier invalid or not present for CSP")
+          googleAnalyticsConnector.failure(errorResponseBadgeIdentifierHeaderMissing.message)
           Left(errorResponseBadgeIdentifierHeaderMissing)
         }{ badgeId =>
           logger.debug("Authorising as CSP")
@@ -131,6 +130,7 @@ class AuthAction @Inject()(
         val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(enrolments, hc.authorization)
         logger.debug(s"EORI from Customs enrolment for non-CSP request: $maybeEori")
         maybeEori.fold[Future[Either[ErrorResponse, AuthorisedRequest[A]]]]{
+          googleAnalyticsConnector.failure(errorResponseEoriNotFoundInCustomsEnrolment.message)
           Future.successful(Left(errorResponseEoriNotFoundInCustomsEnrolment))
         }{ eori =>
           logger.debug("Authorising as non-CSP")
@@ -138,6 +138,7 @@ class AuthAction @Inject()(
         }
     }.recover{
       case NonFatal(_: AuthorisationException) =>
+        googleAnalyticsConnector.failure(errorResponseUnauthorisedGeneral.message)
         Left(errorResponseUnauthorisedGeneral)
       case NonFatal(e) =>
         logger.error("Error authorising Non CSP", e)

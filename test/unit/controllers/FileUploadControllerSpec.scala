@@ -52,8 +52,8 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, FileUploadController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, ValidatedUploadPayloadRequest}
-import uk.gov.hmrc.customs.declaration.model.{ConversationId, UpscanInitiateResponsePayload, UpscanInitiateUploadRequest}
-import uk.gov.hmrc.customs.declaration.services.{FileUploadBusinessService, FileUploadXmlValidationService}
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, GoogleAnalyticsValues, UpscanInitiateResponsePayload, UpscanInitiateUploadRequest}
+import uk.gov.hmrc.customs.declaration.services.{FileUploadBusinessService, FileUploadXmlValidationService, UniqueIdsService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
@@ -72,20 +72,25 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
   trait SetUp {
     val mockXmlValidationService: FileUploadXmlValidationService = mock[FileUploadXmlValidationService]
     val mockCdsLogger = mock[CdsLogger]
-    val logger = new DeclarationsLogger(mockCdsLogger)
+    val mockLogger = new DeclarationsLogger(mockCdsLogger)
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-    val stubConversationIdAction: ConversationIdAction = new ConversationIdAction(stubUniqueIdsService, logger)
-    val stubAuthAction = new AuthAction(mockAuthConnector, logger, mockGoogleAnalyticsConnector)
-    val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(logger), logger, mockGoogleAnalyticsConnector)
-    val common = new Common(stubConversationIdAction, stubAuthAction, stubValidateAndExtractHeadersAction, logger)
+    protected val endpointAction = new EndpointAction {
+      override val logger: DeclarationsLogger = mockLogger
+      override val googleAnalyticsValues: GoogleAnalyticsValues = GoogleAnalyticsValues.Submit
+      override val correlationIdService: UniqueIdsService = stubUniqueIdsService
+    }
+
+    val stubAuthAction = new AuthAction(mockAuthConnector, mockLogger, mockGoogleAnalyticsConnector)
+    val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger, mockGoogleAnalyticsConnector)
+    val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
     val mockFileUploadBusinessService = mock[FileUploadBusinessService]
     val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
 
-    val fileUploadPayloadValidationAction = new FileUploadPayloadValidationAction(mockXmlValidationService, logger, mockGoogleAnalyticsConnector)
-    val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, logger)
+    val fileUploadPayloadValidationAction = new FileUploadPayloadValidationAction(mockXmlValidationService, mockLogger, mockGoogleAnalyticsConnector)
+    val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, mockLogger)
     val fileUploadController = new FileUploadController(common, mockFileUploadBusinessService, fileUploadPayloadValidationComposedAction,
-      new FileUploadAnalyticsValuesAction(logger), mockGoogleAnalyticsConnector)
+      new FileUploadAnalyticsValuesAction(mockLogger, stubUniqueIdsService), mockGoogleAnalyticsConnector)
 
     val upscanInitiateUploadRequest: UpscanInitiateUploadRequest = UpscanInitiateUploadRequest("http://some.url.com", Map("a" -> "b"))
 

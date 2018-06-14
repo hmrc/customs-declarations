@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
+import play.api.http.Status
 import play.api.mvc.{ActionRefiner, _}
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -39,7 +40,8 @@ class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator, logg
 
     validator.validateHeaders(cr) match {
       case Left(result) =>
-        googleAnalyticsConnector.failure(result)
+        val code = result.httpStatusCode
+        if (code >= Status.BAD_REQUEST && code < Status.INTERNAL_SERVER_ERROR) googleAnalyticsConnector.failure(result.message)
         Left(result.XmlResult.withConversationId)
       case Right(extracted) =>
         val vhr = ValidatedHeadersRequest(cr.conversationId, cr.analyticsValues, extracted.requestedApiVersion, extracted.clientId, cr.request)

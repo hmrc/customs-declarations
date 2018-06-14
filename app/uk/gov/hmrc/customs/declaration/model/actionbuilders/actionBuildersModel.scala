@@ -125,12 +125,6 @@ case class ExtractedHeadersImpl(
  * eg `r.badgeIdentifier` vs `r.requestData.badgeIdentifier`
  */
 
-// Available after ConversationIdAction action builder
-case class ConversationIdRequest[A](
-  conversationId: ConversationId,
-  request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId
-
 case class AnalyticsValuesAndConversationIdRequest[A](
  conversationId: ConversationId,
  analyticsValues: GoogleAnalyticsValues,

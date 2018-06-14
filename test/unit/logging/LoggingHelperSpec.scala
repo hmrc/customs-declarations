@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.logging.LoggingHelper
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.customs.declaration.model.{ClientId, GoogleAnalyticsValues, VersionOne}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
@@ -35,8 +35,9 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
     s"[requestedApiVersion=1.0]$maybeAuthorised $message"
   private val requestMock = mock[Request[_]]
   private val conversationIdRequest =
-    ConversationIdRequest(
+    AnalyticsValuesAndConversationIdRequest(
       conversationId,
+      GoogleAnalyticsValues.Submit,
       FakeRequest().withHeaders(
         CONTENT_TYPE -> "A",
         ACCEPT -> "B",

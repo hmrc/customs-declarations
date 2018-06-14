@@ -18,26 +18,33 @@ package unit.controllers.actionbuilders
 
 import org.scalatest.mockito.MockitoSugar
 import play.api.test.FakeRequest
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.ConversationIdAction
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.EndpointAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
+import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
+import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues.Submit
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
+import uk.gov.hmrc.customs.declaration.services.UniqueIdsService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData
 import util.TestData.conversationId
 
-class ConversationIdActionSpec extends UnitSpec with MockitoSugar {
+class EndpointActionSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
     private val mockExportsLogger = mock[DeclarationsLogger]
     val request = FakeRequest()
-    val conversationIdAction = new ConversationIdAction(TestData.stubUniqueIdsService, mockExportsLogger)
-    val expected = ConversationIdRequest(conversationId, request)
+    val endpointAction = new EndpointAction {
+      override val logger: DeclarationsLogger = mockExportsLogger
+      override val googleAnalyticsValues: GoogleAnalyticsValues = Submit
+      override val correlationIdService: UniqueIdsService = TestData.stubUniqueIdsService
+    }
+    val expected = AnalyticsValuesAndConversationIdRequest(conversationId, Submit, request)
   }
 
-  "ConversationIdAction" should {
+  "EndpointAction" should {
     "Generate a Request containing a unique correlation id" in new SetUp {
 
-      private val actual = await(conversationIdAction.transform(request))
+      private val actual = await(endpointAction.transform(request))
 
       actual shouldBe expected
     }

@@ -50,7 +50,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
     stopMockServer()
   }
 
-  feature("The API handles Cancellation Specific type code (INV) correctly") {
+  feature("The API handles cancellation-specific type code (INV) correctly") {
 
     scenario("Response status 400 when user submits function code 13 + type code INV") {
       Given("the API is available")

@@ -59,7 +59,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
     stopMockServer()
   }
 
-  feature("Submissions with v1.0 accept header") {
+  feature("Declaration API authorises cancellation of submissions from CSPs with v1.0 accept header") {
     scenario("An authorised CSP successfully submits a cancellation request") {
       Given("A CSP wants to submit a valid cancellation request")
       startMdgCancellationV1Service()
@@ -89,7 +89,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
     }
   }
 
-  feature("Declaration API authorises submissions from CSPs and Software Houses with v2.0 accept header") {
+  feature("Declaration API authorises cancellation of submissions from CSPs with v2.0 accept header") {
     scenario("An authorised CSP successfully submits a cancellation request") {
       Given("A CSP wants to submit a valid cancellation request")
       startMdgCancellationV2Service()
@@ -120,7 +120,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
   }
 
-  feature("The API handles errors as expected") {
+  feature("Declaration API handles cancellation of submission errors from CSPs as expected") {
 
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")

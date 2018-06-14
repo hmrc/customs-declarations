@@ -77,7 +77,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
     stopMockServer()
   }
 
-  feature("Submissions with v1.0 accept header") {
+  feature("Declaration API authorises submissions from CSPs with v1.0 accept header") {
     scenario("An authorised CSP successfully submits a customs declaration") {
       Given("A CSP wants to submit a valid customs declaration")
 
@@ -132,7 +132,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
   }
 
-  feature("Declaration API authorises submissions from CSPs and Software Houses with v2.0 accept header") {
+  feature("Declaration API authorises submissions from CSPs with v2.0 accept header") {
     scenario("An authorised CSP successfully submits a customs declaration") {
       Given("A CSP wants to submit a valid customs declaration")
 
@@ -164,7 +164,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
   }
 
-  feature("The API handles errors as expected") {
+  feature("Declaration API handles submission errors from CSPs as expected") {
 
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")

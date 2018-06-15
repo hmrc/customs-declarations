@@ -2,7 +2,9 @@
 
 @(  mayBeV1WhitelistedApplicationIds:  Option[Seq[String]],
     mayBeV2WhitelistedApplicationIds: Option[Seq[String]],
-    v2Enabled: Boolean
+    mayBeV3WhitelistedApplicationIds: Option[Seq[String]],
+    v2Enabled: Boolean,
+    v3Enabled: Boolean
  )
 
 {
@@ -56,6 +58,29 @@
                     "whitelistedApplicationIds": ${Json.toJson(ids)}
                 """
             )
+        },
+        "fieldDefinitions": [
+          {
+            "name": "callbackUrl",
+            "description": "What's your callback URL for declaration submissions?",
+            "type": "URL",
+            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          },
+          {
+            "name": "securityToken",
+            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
+            "type": "SecureToken",
+            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          }
+        ]
+      },
+      {
+        "version": "3.0",
+        "status": "BETA",
+        "endpointsEnabled": @v3Enabled,
+        "access": {
+            "type": "PRIVATE",
+            "whitelistedApplicationIds": @mayBeV3WhitelistedApplicationIds.fold("[]")( ids => s"""${Json.toJson(ids)}""")
         },
         "fieldDefinitions": [
           {

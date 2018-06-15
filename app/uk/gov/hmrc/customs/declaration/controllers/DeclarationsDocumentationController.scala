@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.Configuration
 import play.api.http.HttpErrorHandler
 import play.api.mvc.{Action, AnyContent}
@@ -28,13 +27,17 @@ class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorH
 
   private lazy val mayBeV1WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-1.0.whitelistedApplicationIds")
   private lazy val mayBeV2WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-2.0.whitelistedApplicationIds")
+  private lazy val mayBeV3WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-3.0.whitelistedApplicationIds")
 
   private lazy val v2Enabled = configuration.getBoolean("api.access.version-2.0.enabled").getOrElse(true)
+  private lazy val v3Enabled = configuration.getBoolean("api.access.version-3.0.enabled").getOrElse(true)
 
   def definition(): Action[AnyContent] = Action {
     Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(
       mayBeV1WhitelistedApplicationIds,
       mayBeV2WhitelistedApplicationIds,
-      v2Enabled)).withHeaders(CONTENT_TYPE -> JSON)
+      mayBeV3WhitelistedApplicationIds,
+      v2Enabled,
+      v3Enabled)).withHeaders(CONTENT_TYPE -> JSON)
   }
 }

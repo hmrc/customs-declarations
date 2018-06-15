@@ -1,0 +1,100 @@
+<_2:MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+	<_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode>
+	<_2:WCOTypeName>RES</_2:WCOTypeName>
+	<_2:ResponsibleCountryCode/>
+	<_2:ResponsibleAgencyName/>
+	<_2:AgencyAssignedCustomizationCode/>
+	<_2:AgencyAssignedCustomizationVersionCode/>
+	<_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+		<_2_1:FunctionCode>01</_2_1:FunctionCode>
+		<_2_1:FunctionalReferenceID>a5b4aeb03a384a5faf1b9afeff5dac97</_2_1:FunctionalReferenceID>
+		<_2_1:IssueDateTime>
+			<_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20180119155357Z</_2_2:DateTimeString>
+		</_2_1:IssueDateTime>
+		<_2_1:Declaration>
+			<_2_1:AcceptanceDateTime>
+				<_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20171001000000Z</_2_2:DateTimeString>
+			</_2_1:AcceptanceDateTime>
+			<_2_1:FunctionalReferenceID>Import_Accepted</_2_1:FunctionalReferenceID>
+			<_2_1:ID>18GBJCM3USAFD2WD51</_2_1:ID>
+			<_2_1:VersionID>1</_2_1:VersionID>
+		</_2_1:Declaration>
+	</_2_1:Response>
+	<_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+		<_2_1:FunctionCode>13</_2_1:FunctionCode>
+		<_2_1:FunctionalReferenceID>d5710483848740849ce7415470c2886a</_2_1:FunctionalReferenceID>
+		<_2_1:IssueDateTime>
+			<_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20180119155400Z</_2_2:DateTimeString>
+		</_2_1:IssueDateTime>
+		<_2_1:AppealOffice>
+			<_2_1:ID>GBLBA001</_2_1:ID>
+		</_2_1:AppealOffice>
+		<_2_1:Bank>
+			<_2_1:ReferenceID>CITIGB2LLON</_2_1:ReferenceID>
+			<_2_1:ID>GB25CITI08320011963155</_2_1:ID>
+		</_2_1:Bank>
+		<_2_1:ContactOffice>
+			<_2_1:ID>GBLBA001</_2_1:ID>
+			<_2_1:Communication>
+				<_2_1:ID>See Developer Hub</_2_1:ID>
+				<_2_1:TypeCode>EM</_2_1:TypeCode>
+			</_2_1:Communication>
+			<_2_1:Communication>
+				<_2_1:ID>+441234567891</_2_1:ID>
+				<_2_1:TypeCode>FX</_2_1:TypeCode>
+			</_2_1:Communication>
+		</_2_1:ContactOffice>
+		<_2_1:Status>
+			<_2_1:NameCode>4</_2_1:NameCode>
+		</_2_1:Status>
+		<_2_1:Declaration>
+			<_2_1:FunctionalReferenceID>Import_Accepted</_2_1:FunctionalReferenceID>
+			<_2_1:ID>18GBJCM3USAFD2WD51</_2_1:ID>
+			<_2_1:VersionID>1</_2_1:VersionID>
+			<_2_1:GoodsShipment>
+				<_2_1:GovernmentAgencyGoodsItem>
+					<_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>
+					<_2_1:Commodity>
+						<_2_1:DutyTaxFee>
+							<_2_1:DeductAmount>0.00</_2_1:DeductAmount>
+							<_2_1:DutyRegimeCode>100</_2_1:DutyRegimeCode>
+							<_2_1:TaxRateNumeric>9.70</_2_1:TaxRateNumeric>
+							<_2_1:TypeCode>A00</_2_1:TypeCode>
+							<_2_1:Payment>
+								<_2_1:TaxAssessedAmount>97.00</_2_1:TaxAssessedAmount>
+								<_2_1:PaymentAmount>97.00</_2_1:PaymentAmount>
+							</_2_1:Payment>
+						</_2_1:DutyTaxFee>
+						<_2_1:DutyTaxFee>
+							<_2_1:DeductAmount>0.00</_2_1:DeductAmount>
+							<_2_1:DutyRegimeCode>100</_2_1:DutyRegimeCode>
+							<_2_1:TaxRateNumeric>20.00</_2_1:TaxRateNumeric>
+							<_2_1:TypeCode>B00</_2_1:TypeCode>
+							<_2_1:Payment>
+								<_2_1:TaxAssessedAmount>219.40</_2_1:TaxAssessedAmount>
+								<_2_1:PaymentAmount>219.40</_2_1:PaymentAmount>
+							</_2_1:Payment>
+						</_2_1:DutyTaxFee>
+					</_2_1:Commodity>
+				</_2_1:GovernmentAgencyGoodsItem>
+			</_2_1:GoodsShipment>
+		</_2_1:Declaration>
+	</_2_1:Response>
+	<_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+		<_2_1:FunctionCode>09</_2_1:FunctionCode>
+		<_2_1:FunctionalReferenceID>f634f77719d546a7b0eb83092bb3a015</_2_1:FunctionalReferenceID>
+		<_2_1:IssueDateTime>
+			<_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20180119155400Z</_2_2:DateTimeString>
+		</_2_1:IssueDateTime>
+		<_2_1:AdditionalInformation>
+			<_2_1:StatementCode>A2</_2_1:StatementCode>
+			<_2_1:StatementTypeCode>AFB</_2_1:StatementTypeCode>
+		</_2_1:AdditionalInformation>
+		<_2_1:Declaration>
+			<_2_1:FunctionalReferenceID>Import_Accepted</_2_1:FunctionalReferenceID>
+			<_2_1:ID>18GBJCM3USAFD2WD51</_2_1:ID>
+			<_2_1:VersionID>1</_2_1:VersionID>
+		</_2_1:Declaration>
+	</_2_1:Response>
+</_2:MetaData>
+headers=List((Content-Type,application/xml), (Authorization,BASIC value-not-logged), (User-Agent,Customs Declaration Service), (X-Conversation-ID,xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx))

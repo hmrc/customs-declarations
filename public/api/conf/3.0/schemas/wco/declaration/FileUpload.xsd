@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="hmrc:fileupload"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="hmrc:fileupload"
+           elementFormDefault="qualified" version="1.0">
+
+    <xs:simpleType name="DeclarationID">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="22"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="DocumentationType">
+        <xs:restriction base="xs:string" />
+    </xs:simpleType>
+
+    <xs:element name="upscanInitiate" type="UpscanInitiate" />
+
+    <xs:complexType name="UpscanInitiate">
+        <xs:sequence>
+            <xs:element name="declarationID" type="DeclarationID"/>
+            <xs:element name="documentationType" type="DocumentationType"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

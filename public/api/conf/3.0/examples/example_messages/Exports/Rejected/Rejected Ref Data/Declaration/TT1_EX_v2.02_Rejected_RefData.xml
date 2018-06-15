@@ -1,0 +1,252 @@
+﻿	<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+		<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+		<md:WCOTypeName>DEC</md:WCOTypeName>
+		<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+		<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+		<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+        <Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+                     xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!-- ======================================================	 ==
+		  == Export Scenario 1 - Export pre-lodged - Rej. Ref. Data  ==
+		  ==                                                  		 ==
+          == Sports Bags going to USA                         		 ==
+		  ==                                                   		 ==
+		  ==  v2.02                                                  ==
+		  ==  Only change from v2.01 is rationalisation of comments  ==
+		  ==  and removal of unnecessary empty DutyTaxFee tags.      ==
+		  ==  No change to any 'working' markup.                     ==
+		  ==                                                   		 ==
+          == ======================================================	 -->
+			<AcceptanceDateTime>
+				<p1:DateTimeString formatCode="304">20171001010000+01</p1:DateTimeString>
+			</AcceptanceDateTime>
+				<!-- Trader needs to provide Tax Point date in a Supp Dec due to it being the legal acceptance date into traders records -->
+			<FunctionCode>9</FunctionCode>
+			<!-- Message Function Code: Original to be inserted -->
+			<FunctionalReferenceID>Export_RefData_REJ</FunctionalReferenceID>
+			<!-- DE 2/5 LRN / Traders Own Reference - AN..22 -->
+			<TypeCode>EXZ</TypeCode>
+			<!-- DE1/1, DE1/2: Declaration Type -->
+			<!-- DE4/10 & DE4/11: Total of all invoiced items in the Declaration. Not needed in this scenario. Currency Box 22  -->
+			<!-- DE 6/5: Total of all invoiced items in Kgs : cannot be included as an "empty" tag when not supplied in a scenario  -->
+			<GoodsItemQuantity>1</GoodsItemQuantity>
+			<!-- DE 1/9: Not official in EUCDM but requested anyway due to DMS need -->
+			<TotalPackageQuantity>55</TotalPackageQuantity>
+			<!-- DE 6/18 -->
+			<AuthorisationHolder>
+				<ID>INSERTEORI</ID>
+				<CategoryCode>CWP</CategoryCode>
+			</AuthorisationHolder>
+			<AuthorisationHolder>
+				<ID>INSERTEORI</ID>
+				<CategoryCode>AEOC</CategoryCode>
+			</AuthorisationHolder>
+			<AuthorisationHolder>
+				<ID>INSERTEORI</ID>
+				<CategoryCode>EIR</CategoryCode>
+			</AuthorisationHolder>
+			<!-- DE 3/39: Holder of the authorisation Id - should be the same id as DE 3/2 (Exporter) -->
+			<BorderTransportMeans>
+				<!-- DE 7/14: BorderTransportMeans identifier not completed in this situation Box 21 -->
+				<RegistrationNationalityCode>US</RegistrationNationalityCode>
+				<!-- DE 7/15: Nationality of active means of transport crossing the border Box 21(2) -->
+				<ModeCode>1</ModeCode>
+				<!-- DE 7/4: Transport Mode 1 = Maritime Transport Box 25 -->	
+			</BorderTransportMeans>
+			<!-- DE 3/17: Declarant Name and Address not completed in this situation. Box 14 -->
+			<Declarant>
+				<ID>INSERTEORI</ID>
+				<!-- DE 3/18: Declarant Identifier (EORI) Box 14 --> 
+			</Declarant>
+			<ExitOffice>
+				<ID>GB999999</ID>
+			</ExitOffice>
+			<!-- DE 5/12: Customs office of exit Box 29 -->
+			<Exporter>
+				<ID>INSERTEORI</ID>
+			</Exporter>
+			 <!-- DE 3/2 EORI: Used instead of Consignor SAD Box 2 Cannot have both EORI and Name/Address as it fails schema validation -->
+			<GoodsShipment>
+				<TransactionNatureCode>11</TransactionNatureCode>
+				<!-- DE 8/5: Nature of transaction  Box 24 -->
+				<!-- DE 3/27: Not needed at this level for this situation. -->
+				<Consignee>
+					<Name>Bags Export</Name>
+					<!-- DE 3/9: Consignee Name -->
+					<Address>
+						<CityName>New York</CityName>
+						<CountryCode>US</CountryCode>
+						<Line>1 Bags Avenue</Line>
+						<PostcodeID>NY1 234</PostcodeID>
+					</Address>
+					<!-- DE 3/9: Consignee Address -->
+				</Consignee>
+				<Consignment>
+					<ContainerCode>1</ContainerCode>
+					<!-- DE 7/2: Container code - not needed for this situation. Values 0 or 1 (if transported in a container) Box 19/31 -->
+					<DepartureTransportMeans>
+						<IdentificationTypeCode>10</IdentificationTypeCode>
+                        <!-- DE 7/7: Identification Type  Box 18(1) -->
+						<ModeCode>3</ModeCode>
+					</DepartureTransportMeans>
+					<!-- DE 7/5: Inland mode of transport - 3 = Road Transport Box 26 -->
+					<GoodsLocation>
+						<ID>U1234567GB</ID>
+						<TypeCode>B</TypeCode>
+						<!-- DE 5/23: Type of location B= Authorised place Box 44 -->
+						<Address>
+							<TypeCode>Y</TypeCode>
+							<!-- DE 5/23: Qualifier  Y= Authorisation number Box 44 -->
+							<CountryCode>GB</CountryCode>
+						</Address>	
+					</GoodsLocation>
+					<!-- DE 5/23: Location of Goods Box 30 -->
+					<TransportEquipment>
+						<SequenceNumeric>1</SequenceNumeric>
+						<ID>DM1234</ID>
+					</TransportEquipment>
+					<!-- DE 7/10: Container identification number Box 31 -->
+				</Consignment>
+				<!-- DE 4/8: HMRC do not put this data at header level -->
+				<Destination>
+					<CountryCode>US</CountryCode>
+				</Destination>
+				<!-- DE 5/8: Destination Country Box 17a -->
+				<!-- DE 3/40: Additional Fiscal References - not needed for Requested Procedure 40 -->
+				<ExportCountry>
+					<ID>GB</ID>
+					<!-- DE 5/14: Dispatch Country Box 15a --> 
+				</ExportCountry>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!-- DE 1/6: Each item must have a different sequential number Box 32 -->
+					<!-- DE 8/5: Not needed at item level in this situation Box 24 -->
+					<StatisticalValueAmount currencyID="GBP">1000</StatisticalValueAmount>
+					<!-- DE 8/6: Stat Value Amount Box 46 -->
+					<AdditionalDocument>
+						<CategoryCode>C</CategoryCode>
+						<!-- DE 2/3: Item level Document Category code Box 44 -->
+						<ID>GBAEOCINSERTEORI</ID>
+						<!-- DE 2/3: Document Reference - AEO Decision number; if no codes currently in place suggest EORI Box 44. -->
+						<TypeCode>501</TypeCode>
+						<!-- DE 2/3: Item level Document Type code Box 44 -->
+					</AdditionalDocument>
+					<AdditionalDocument>
+						<CategoryCode>C</CategoryCode>
+						<!-- DE 2/3: Item level Document Category code Box 44 -->
+						<ID>GBEIRINSERTEORI</ID>
+						<!-- DE 2/3: Document Reference - CFSP decision number; if no codes devised, suggest EOR Box 44. -->
+						<TypeCode>514</TypeCode>
+						<!-- DE 2/3: Item level Document Type code Box 44 -->
+					</AdditionalDocument>
+					<AdditionalDocument>
+						<CategoryCode>C</CategoryCode>
+						<!-- DE 2/3: Item level Document Category code Box 44 -->
+						<ID>GBCWPU1234567GB</ID>
+						<!-- DE 2/3: Document Reference - CW authorisation number; if no coding devised, suggest CW ID (ex box.47 codes Box 44. -->
+						<TypeCode>517</TypeCode>
+						<!-- DE 2/3: Item level Document Type code Box 44 -->
+					</AdditionalDocument>
+					<AdditionalDocument>
+						<CategoryCode>Y</CategoryCode>
+						<!-- DE 2/3: Item level Document Category code Box 44 -->
+						<ID>GBAEOC03000/15</ID>
+						<!-- DE 2/3: Document Reference - AEO Declarant Cert No. Box 44. -->
+						<TypeCode>022</TypeCode>
+						<!-- DE 2/3: Item level Document Type code Box 44 -->
+					</AdditionalDocument>
+					<AdditionalDocument>
+						<CategoryCode>Y</CategoryCode>
+						<!-- DE 2/3: Item level Document Category code Box 44 -->
+						<ID>GBAEOC03000/15</ID>
+						<!-- DE 2/3: Document Reference - AEO Declarant Cert No. Box 44. -->
+						<TypeCode>024</TypeCode>
+						<!-- DE 2/3: Item level Document Type code Box 44 -->
+					</AdditionalDocument>
+					<AdditionalDocument>
+						<CategoryCode>Y</CategoryCode>
+						<!-- DE 2/3: Item level Document Category code Box 44 -->
+						<ID>GBAEOC03000/15</ID>
+						<!-- DE 2/3: Document Reference - AEO Declarant Cert No. Box 44. -->
+						<TypeCode>027</TypeCode>
+						<!-- DE 2/3: Item level Document Type code Box 44 -->
+					</AdditionalDocument>
+					<AdditionalInformation>
+						<StatementCode>00400</StatementCode>
+					</AdditionalInformation>
+					<!-- DE 2/2: Additional Information Statement Code 00400 = Relationship between Exporter and Declarant -->
+					<Commodity>
+						<Description>Vanity case with outer surface made of plastic sheet</Description>
+						<!-- DE 6/8: Description of goods Box 31 -->
+						<Classification>
+							<ID>42021219</ID>
+							<!-- DE 6/14: TARIC commodity code Box 33 -->
+							<IdentificationTypeCode>TSP</IdentificationTypeCode>
+							<!-- Used by DMS to identify the type of Classification Id - standard Comm Code will be TSP but SRZ until Drop 2-->
+						</Classification>
+						<GoodsMeasure>
+							<GrossMassMeasure>150</GrossMassMeasure>
+							<!--  DE 6/5: Gross mass of item in Kg Box 35. Cannot be 'blank' or empty. Must be removed from the dec entirely to validate. -->
+							<NetNetWeightMeasure>100</NetNetWeightMeasure>
+							<!-- DE 6/1: Item Net Mass. unitCode specifies the default Kilograms as specified by UCC Box 38 -->
+						</GoodsMeasure>
+							<!-- DE 4/14: Item Price/Amount Box 42 -->
+					</Commodity>							
+					<!-- DE 3/2: Consignor at item level: unnecessary in this instance Box 2 -->
+					<!-- DE 3/40: Additional Fiscal References at item level. Not needed for Requested Procedure 40. -->
+					<!-- Customs valuation not in the scenario currently -->
+					<GovernmentProcedure>
+						<!-- DE 1/10 CPC / Requested Procedure/Previous Procedure Box 37(1) -->
+						<CurrentCode>31</CurrentCode>
+						<PreviousCode>71</PreviousCode>
+					</GovernmentProcedure>
+					<GovernmentProcedure>
+						<!-- DE 1/11 Additional Procedure Box 37(2) -->
+						<CurrentCode>000</CurrentCode>
+					</GovernmentProcedure>
+					<!-- DE 5/15: Items Country of origin N/A in the scenario currently 34a -->
+					<Packaging>
+						<SequenceNumeric>1</SequenceNumeric>
+						<!-- This is a mandatory element -->
+						<MarksNumbersID>CDSTRADETEST1E</MarksNumbersID>
+						<!-- DE 6/11: Shipping marks Box 31 -->
+						<!-- <QuantityQuantity>55</QuantityQuantity> -->
+						<!-- DE 6/10: Package count Box 31 -->
+						<TypeCode>PK</TypeCode>
+						<!-- DE 6/9: Kind of package PK = Package Box 31 -->
+					</Packaging>
+					<PreviousDocument>
+						<CategoryCode>Y</CategoryCode>
+						<!-- Only Temporary -->
+						<ID>201710017INSERTEORI-12345</ID>
+						<!-- DE 2/1: Doc Reference Box 40 -->
+						<TypeCode>CLE</TypeCode>
+						<!-- DE 2/1: Doc Type CLE = Reference/date of entry of the goods in the records Box 40 -->
+						<LineNumeric>1</LineNumeric>
+					</PreviousDocument>
+					<!-- DE 3/24 - 3/25: Only needed where different from Exporter details -->
+					<!-- DE 4/13: Valuation indicators Not in the scenario currently  Box 45 -->
+				</GovernmentAgencyGoodsItem>
+				<!-- DE 3/16: The same Consignee must not be entered at both header and item level Box 8 -->
+				<!-- DE 2/1: Import CHIEF processing doesn't allow PreviousDocument at 'header' level Box 40 -->
+				<!-- DE 3/24 - 3/25: Not needed where the Seller has the same details as the Exporter -->
+				<!-- DE 4/1: Delivery terms Box 20 - Not applicable to this scenario currently -->
+				<UCR>
+					<!-- ~ Unique Consignment Ref Id at header level - Could be used for DUCR? -->
+					<TraderAssignedReferenceID>7INSERTEORI-12345</TraderAssignedReferenceID>
+					<!-- ~ DE 2/4: Equivalent to TDR-OWN-REF-ENT in EDIFACT Box 7  - would allow traders to refer to items using their own code -->
+				</UCR>
+				<Warehouse>
+					<!-- DE 2/7: Premise Id / Id of warehouse Box 49 -->
+					<ID>1234567GB</ID>
+					<!-- Warehouse Type is a separate data item so shouldn't be included in the Id -->
+					<TypeCode>U</TypeCode>
+					<!-- U = Private warehouse -->
+				</Warehouse>
+			</GoodsShipment>
+		</Declaration>
+	</md:MetaData>

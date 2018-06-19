@@ -54,7 +54,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockBusinessService: StandardDeclarationSubmissionService = mock[StandardDeclarationSubmissionService]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
     protected val mockResult: Result = mock[Result]
-    protected val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
+    protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
     protected val endpointAction = new EndpointAction {
       override val logger: DeclarationsLogger = mockDeclarationsLogger
@@ -130,7 +130,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionRequest.copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(X_CLIENT_ID_ID_NAME)))
+      val result: Result = awaitSubmit(ValidSubmissionRequest.copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(X_CLIENT_ID_NAME)))
       status(result) shouldBe INTERNAL_SERVER_ERROR
       verifyZeroInteractions(mockBusinessService)
       verifyZeroInteractions(mockXmlValidationService)

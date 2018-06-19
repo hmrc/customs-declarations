@@ -85,7 +85,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContext)))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      verifyGoogleAnalyticsServiceWasCalled()
     }
   }
 
@@ -115,7 +115,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV2)))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      verifyGoogleAnalyticsServiceWasCalled()
     }
 
   }
@@ -142,7 +142,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      verifyGoogleAnalyticsServiceWasCalled()
     }
 
   }

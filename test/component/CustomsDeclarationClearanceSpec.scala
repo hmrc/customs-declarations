@@ -105,7 +105,7 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      verifyGoogleAnalyticsServiceWasCalled()
     }
 
   }
@@ -132,7 +132,7 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      verifyGoogleAnalyticsServiceWasCalled()
     }
 
   }

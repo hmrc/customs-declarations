@@ -43,7 +43,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
     startMockServer()
     stubAuditService()
     authServiceAuthorizesCSP()
-    startMdgWcoDecService()
+    startMdgWcoDecServiceV2()
   }
 
   override protected def afterAll() {

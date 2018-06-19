@@ -19,8 +19,10 @@ package util
 object CustomsDeclarationsExternalServicesConfig {
   val MdgWcoDecV1ServiceContext = "/mdgWcoDecServiceV1/submitdeclaration"
   val MdgWcoDecV2ServiceContext = "/mdgWcoDecServiceV2/submitdeclaration"
+  val MdgWcoDecV3ServiceContext = "/mdgWcoDecServiceV3/submitdeclaration"
   val MdgCancellationDeclarationServiceContext = "/mdgCancelDecService/submit"
   val MdgCancellationDeclarationServiceContextV2 = "/mdgCancelDecService2/submit2"
+  val MdgCancellationDeclarationServiceContextV3 = "/mdgCancelDecService3/submit3"
   val ApiSubscriptionFieldsContext = "/api-subscription-fields/field"
   val GoogleAnalyticsContext = "/send-google-analytics"
   val GoogleAnalyticsTrackingId = "ga-tracking-id"

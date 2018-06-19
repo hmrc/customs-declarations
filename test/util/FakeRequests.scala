@@ -30,6 +30,10 @@ object FakeRequests {
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(ValidSubmissionXML)
 
+  lazy val ValidSubmissionV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV3.toSeq: _*)
+    .withXmlBody(ValidSubmissionXML)
+
   lazy val ValidSubmission_13_INV_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(validSubmissionXML(13, "INV"))
@@ -89,13 +93,22 @@ object FakeRequests {
   lazy val NoClientIdIdHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
     .copyFakeRequest(headers = ValidCancellationRequest.headers.remove(X_CLIENT_ID_NAME))
 
-  lazy val ValidClearanceRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
+  lazy val ValidClearanceV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
     //TODO: MJC change this to clearance XML when we have schema
     .withXmlBody(ValidSubmissionXML)
 
-  lazy val ValidAmendRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
+  lazy val ValidClearanceV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV3.toSeq: _*)
+    //TODO: MJC change this to clearance XML when we have schema
+    .withXmlBody(ValidSubmissionXML)
+
+  lazy val ValidAmendV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withXmlBody(ValidSubmissionXML)
+
+  lazy val ValidAmendV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV3.toSeq: _*)
     .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidCancellationRequest: FakeRequest[AnyContentAsXml] = FakeRequest()

@@ -21,7 +21,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionVal
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgWcoDecService}
@@ -45,6 +45,8 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
     ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
 
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
+
+  private val apiSubscriptionKeyForXClientIdV3 = apiSubscriptionKeyForXClientIdV2.copy(version = VersionThree)
 
   protected override val BadRequestErrorWith2Errors =
     """<?xml version="1.0" encoding="UTF-8"?>
@@ -70,7 +72,6 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
 
   override protected def beforeEach() {
     resetMockServer()
-    startMdgWcoDecService()
     setupGoogleAnalyticsServiceToReturn(ACCEPTED)
   }
 
@@ -81,10 +82,10 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
   feature("Declaration API authorises clearance submissions from CSPs with v2.0 accept header") {
     scenario("An authorised CSP successfully submits a customs clearance declaration") {
       Given("A CSP wants to submit a valid customs clearance declaration")
-
+      startMdgWcoDecServiceV2()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
 
-      val request: FakeRequest[AnyContentAsXml] = ValidClearanceRequest.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidClearanceV2Request.fromCsp.postTo(endpoint)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -106,6 +107,38 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
 
       And("GA call was made")
       eventually(verifyGoogleAnalyticsServiceWasCalled())
+    }
+
+  }
+
+  feature("Declaration API authorises clearance submissions from CSPs with v3.0 accept header") {
+    scenario("An authorised CSP successfully submits a customs clearance declaration") {
+      Given("A CSP wants to submit a valid customs clearance declaration")
+      startMdgWcoDecServiceV3()
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
+
+      val request: FakeRequest[AnyContentAsXml] = ValidClearanceV3Request.fromCsp.postTo(endpoint)
+
+      And("the CSP is authorised with its privileged application")
+      authServiceAuthorizesCSP()
+
+      When("a POST request with data is sent to the API")
+      val result: Future[Result] = route(app = app, request).value
+
+      Then("a response with a 202 (ACCEPTED) status is received")
+      status(result) shouldBe ACCEPTED
+
+      And("the response body is empty")
+      contentAsString(result) shouldBe 'empty
+
+      And("the request was authorised with AuthService")
+      verifyAuthServiceCalledForCsp()
+
+      And("v2 config was used")
+      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV3ServiceContext)))
+
+      And("GA call was made")
+      verifyGoogleAnalyticsServiceWasCalled
     }
 
   }

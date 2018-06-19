@@ -32,7 +32,8 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
 
   private val versionsByAcceptHeader: Map[String, ApiVersion] = Map(
     "application/vnd.hmrc.1.0+xml" -> VersionOne,
-    "application/vnd.hmrc.2.0+xml" -> VersionTwo
+    "application/vnd.hmrc.2.0+xml" -> VersionTwo,
+    "application/vnd.hmrc.3.0+xml" -> VersionThree
   )
   private lazy val validContentTypeHeaders = Seq(MimeTypes.XML, MimeTypes.XML + ";charset=utf-8", MimeTypes.XML + "; charset=utf-8")
   private lazy val xClientIdRegex = "^\\S+$".r

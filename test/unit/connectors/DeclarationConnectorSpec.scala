@@ -168,6 +168,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
         headersCaptor.getValue.extraHeaders should contain("X-Correlation-ID" -> correlationId.toString)
       }
 
+      //TODO MC v3
       "Ensure routing is working for the config location which will ensure version specific config values are loaded correctly" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 

@@ -96,13 +96,13 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
       contentAsString(result) shouldBe 'empty
 
       And("the request was authorised with AuthService")
-      verifyAuthServiceCalledForCsp()
+      eventually(verifyAuthServiceCalledForCsp())
 
       And("v2 config was used")
-      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
+      eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext))))
 
       And("GA call wasn't made")
-      verifyGoogleAnalyticsServiceWasNotCalled()
+      eventually(verifyGoogleAnalyticsServiceWasNotCalled())
     }
 
   }
@@ -129,7 +129,7 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
       And("GA call wasn't made")
-      verifyGoogleAnalyticsServiceWasNotCalled()
+      eventually(verifyGoogleAnalyticsServiceWasNotCalled())
     }
 
   }

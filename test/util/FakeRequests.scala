@@ -84,10 +84,10 @@ object FakeRequests {
     .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
 
   lazy val NoClientIdIdHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
-    .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(X_CLIENT_ID_ID_NAME))
+    .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(X_CLIENT_ID_NAME))
 
   lazy val NoClientIdIdHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
-    .copyFakeRequest(headers = ValidCancellationRequest.headers.remove(X_CLIENT_ID_ID_NAME))
+    .copyFakeRequest(headers = ValidCancellationRequest.headers.remove(X_CLIENT_ID_NAME))
 
   lazy val ValidClearanceRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)

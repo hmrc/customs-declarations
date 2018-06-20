@@ -31,14 +31,14 @@ trait GoogleAnalyticsService extends WireMockRunner {
       willReturn aResponse()
       .withStatus(status))
 
-  def verifyGoogleAnalyticsServiceWasCalled {
+  def verifyGoogleAnalyticsServiceWasCalled() {
     verify(1, postRequestedFor(urlMatchingRequestPath)
       .withHeader(HeaderNames.ACCEPT, equalTo(MimeTypes.JSON))
       .withHeader(HeaderNames.CONTENT_TYPE, equalTo(MimeTypes.JSON))
     )
   }
 
-  def verifyGoogleAnalyticsServiceWasNotCalled {
+  def verifyGoogleAnalyticsServiceWasNotCalled() {
     verify(0, postRequestedFor(urlMatchingRequestPath)
     )
   }

@@ -102,7 +102,7 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
 
       And("GA call wasn't made")
-      verifyGoogleAnalyticsServiceWasNotCalled
+      verifyGoogleAnalyticsServiceWasNotCalled()
     }
 
   }
@@ -129,7 +129,7 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
       And("GA call wasn't made")
-      verifyGoogleAnalyticsServiceWasNotCalled
+      verifyGoogleAnalyticsServiceWasNotCalled()
     }
 
   }

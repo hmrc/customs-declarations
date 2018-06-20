@@ -99,13 +99,13 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
       contentAsString(result) shouldBe 'empty
 
       And("the request was authorised with AuthService")
-      verifyAuthServiceCalledForCsp()
+      eventually(verifyAuthServiceCalledForCsp())
 
       And("v2 config was used")
-      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
+      eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext))))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
@@ -132,7 +132,7 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }

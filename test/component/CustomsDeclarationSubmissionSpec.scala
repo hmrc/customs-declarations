@@ -97,13 +97,13 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       contentAsString(result) shouldBe 'empty
 
       And("the request was authorised with AuthService")
-      verifyAuthServiceCalledForCsp()
+      eventually(verifyAuthServiceCalledForCsp())
 
       And("v1 config was used")
-      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV1ServiceContext)))
+      eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV1ServiceContext))))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
 
     }
 
@@ -127,7 +127,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
@@ -153,13 +153,13 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       contentAsString(result) shouldBe 'empty
 
       And("the request was authorised with AuthService")
-      verifyAuthServiceCalledForCsp()
+      eventually(verifyAuthServiceCalledForCsp())
 
       And("v2 config was used")
-      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
+      eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext))))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
@@ -186,7 +186,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }

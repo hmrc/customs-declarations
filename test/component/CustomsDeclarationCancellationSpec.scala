@@ -79,13 +79,13 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       contentAsString(result) shouldBe 'empty
 
       And("the request was authorised with AuthService")
-      verifyAuthServiceCalledForCsp()
+      eventually(verifyAuthServiceCalledForCsp())
 
       And("v1 config was used")
-      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContext)))
+      eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContext))))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
   }
 
@@ -109,13 +109,13 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       contentAsString(result) shouldBe 'empty
 
       And("the request was authorised with AuthService")
-      verifyAuthServiceCalledForCsp()
+      eventually(verifyAuthServiceCalledForCsp())
 
       And("v2 config was used")
-      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV2)))
+      eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV2))))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
@@ -142,7 +142,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }

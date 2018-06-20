@@ -17,6 +17,7 @@
 package component
 
 import org.scalatest._
+import org.scalatest.concurrent.Eventually
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -26,7 +27,7 @@ import scala.util.control.NonFatal
 import scala.xml.{Node, Utility, XML}
 
 trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
-  with BeforeAndAfterAll with BeforeAndAfterEach {
+  with BeforeAndAfterAll with BeforeAndAfterEach with Eventually {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
     "xml.max-errors" -> 2,

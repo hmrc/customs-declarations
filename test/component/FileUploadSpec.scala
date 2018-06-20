@@ -79,7 +79,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
 
       And("the request was authorised with AuthService")
-      verifyAuthServiceCalledForCsp()
+      eventually(verifyAuthServiceCalledForCsp())
     }
 
   }

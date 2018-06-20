@@ -26,16 +26,16 @@ import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ExtractedHeaders, ExtractedHeadersImpl}
-import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsValues, VersionOne, VersionTwo}
+import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsValues, VersionOne, VersionThree, VersionTwo}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.RequestHeaders.{ValidHeadersV2, _}
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
-//TODO MC add v3
 class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
 
   private val extractedHeadersWithBadgeIdentifierV1 = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
   private val extractedHeadersWithBadgeIdentifierV2 = extractedHeadersWithBadgeIdentifierV1.copy(requestedApiVersion = VersionTwo)
+  private val extractedHeadersWithBadgeIdentifierV3 = extractedHeadersWithBadgeIdentifierV1.copy(requestedApiVersion = VersionThree)
 
   trait SetUp {
     val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
@@ -53,6 +53,9 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
       }
       "be successful for a valid request with accept header for V2" in new SetUp {
         validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+      }
+      "be successful for a valid request with accept header for V3" in new SetUp {
+        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV3)) shouldBe Right(extractedHeadersWithBadgeIdentifierV3)
       }
       "be successful for content type XML with no space header" in new SetUp {
         validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (CONTENT_TYPE -> "application/xml;charset=utf-8"))) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)

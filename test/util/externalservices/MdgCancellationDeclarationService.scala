@@ -24,10 +24,13 @@ import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig, 
 trait MdgCancellationDeclarationService extends WireMockRunner {
   private val v1URL = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContext)
   private val v2URL = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV2)
+  private val v3URL = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV3)
 
   def startMdgCancellationV1Service(status: Int = ACCEPTED): Unit = startService(status, v1URL)
 
   def startMdgCancellationV2Service(status: Int = ACCEPTED): Unit = startService(status, v2URL)
+
+  def startMdgCancellationV3Service(status: Int = ACCEPTED): Unit = startService(status, v3URL)
 
   private def startService (status: Int, url: UrlPattern) = {
     stubFor(post(url).

@@ -82,7 +82,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
     scenario("An authorised CSP successfully submits a customs declaration") {
       Given("A CSP wants to submit a valid customs declaration")
       startMdgWcoDecServiceV1()
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequestWithV1AcceptHeader.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionV1Request.fromCsp.postTo(endpoint)
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV1)
 
       And("the CSP is authorised with its privileged application")
@@ -140,7 +140,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       startMdgWcoDecServiceV2()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
 
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request.fromCsp.postTo(endpoint)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()

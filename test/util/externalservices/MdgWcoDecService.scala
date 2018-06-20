@@ -17,7 +17,7 @@
 package util.externalservices
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import com.github.tomakehurst.wiremock.matching.UrlPattern
+import com.github.tomakehurst.wiremock.matching.{MatchResult, UrlPattern}
 import play.api.test.Helpers._
 import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig, WireMockRunner}
 
@@ -26,32 +26,16 @@ trait MdgWcoDecService extends WireMockRunner {
   private val urlV2MatchingRequestPath = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)
   private val urlV3MatchingRequestPath = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV3ServiceContext)
 
-
   def startMdgWcoDecServiceV1(): Unit = {
-    setupMdgWcoDecServiceToReturn(ACCEPTED, urlV2MatchingRequestPath)
-
-    stubFor(post(urlV1MatchingRequestPath).
-      willReturn(
-        aResponse()
-          .withStatus(ACCEPTED)))
+    setupMdgWcoDecServiceToReturn(ACCEPTED, urlV1MatchingRequestPath)
   }
 
   def startMdgWcoDecServiceV2(): Unit = {
     setupMdgWcoDecServiceToReturn(ACCEPTED, urlV2MatchingRequestPath)
-
-    stubFor(post(urlV2MatchingRequestPath).
-      willReturn(
-        aResponse()
-          .withStatus(ACCEPTED)))
   }
 
   def startMdgWcoDecServiceV3(): Unit = {
-    setupMdgWcoDecServiceToReturn(ACCEPTED, urlV2MatchingRequestPath)
-
-    stubFor(post(urlV3MatchingRequestPath).
-      willReturn(
-        aResponse()
-          .withStatus(ACCEPTED)))
+    setupMdgWcoDecServiceToReturn(ACCEPTED, urlV3MatchingRequestPath)
   }
 
 

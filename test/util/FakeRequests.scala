@@ -26,7 +26,7 @@ import util.TestData.{ValidGoogleAnalyticsJson, cspBearerToken, nonCspBearerToke
 import util.TestXMLData._
 
 object FakeRequests {
-  lazy val ValidSubmissionRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
+  lazy val ValidSubmissionV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(ValidSubmissionXML)
 
@@ -46,22 +46,22 @@ object FakeRequests {
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(validSubmissionXML(9, "INV"))
 
-  lazy val ValidSubmissionRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
-    .copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(ACCEPT).add(ACCEPT_HMRC_XML_V1_HEADER))
+  lazy val ValidSubmissionV1Request: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request
+    .copyFakeRequest(headers = ValidSubmissionV2Request.headers.remove(ACCEPT).add(ACCEPT_HMRC_XML_V1_HEADER))
 
-  lazy val ValidSubmissionRequestWithXClientIdHeader: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
+  lazy val ValidSubmissionRequestWithXClientIdHeader: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request
     .copyFakeRequest(headers =
-      ValidSubmissionRequest.headers.add(X_CLIENT_ID_HEADER))
+      ValidSubmissionV2Request.headers.add(X_CLIENT_ID_HEADER))
 
-  lazy val InvalidSubmissionRequestWithoutXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
+  lazy val InvalidSubmissionRequestWithoutXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request
     .copyFakeRequest(headers =
-      ValidSubmissionRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))
+      ValidSubmissionV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME))
 
-  lazy val InvalidSubmissionRequestWithInvalidXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
+  lazy val InvalidSubmissionRequestWithInvalidXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request
     .copyFakeRequest(headers =
-      ValidSubmissionRequest.headers.remove(X_BADGE_IDENTIFIER_NAME).add(X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG))
+      ValidSubmissionV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME).add(X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG))
 
-  lazy val InvalidSubmissionRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.withXmlBody(InvalidSubmissionXML)
+  lazy val InvalidSubmissionRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request.withXmlBody(InvalidSubmissionXML)
 
   lazy val InvalidSubmissionRequestWith2Errors: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest.withXmlBody(InvalidSubmissionXMLWith2Errors)
 
@@ -72,26 +72,26 @@ object FakeRequests {
   lazy val NoAcceptHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest
     .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(ACCEPT))
 
-  lazy val NoAcceptHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
+  lazy val NoAcceptHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request
     .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(ACCEPT))
 
   lazy val InvalidAcceptHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest
     .withHeaders(RequestHeaders.ACCEPT_HEADER_INVALID)
 
-  lazy val InvalidAcceptHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
+  lazy val InvalidAcceptHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request
     .withHeaders(RequestHeaders.ACCEPT_HEADER_INVALID)
 
   lazy val InvalidContentTypeHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest
     .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
 
-  lazy val InvalidContentTypeHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
+  lazy val InvalidContentTypeHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request
     .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
 
-  lazy val NoClientIdIdHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
+  lazy val NoClientIdIdHeaderSubmissionRequest: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request
     .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(X_CLIENT_ID_NAME))
 
-  lazy val NoClientIdIdHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
-    .copyFakeRequest(headers = ValidCancellationRequest.headers.remove(X_CLIENT_ID_NAME))
+  lazy val NoClientIdIdHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request
+    .copyFakeRequest(headers = ValidCancellationV2Request.headers.remove(X_CLIENT_ID_NAME))
 
   lazy val ValidClearanceV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
@@ -111,45 +111,53 @@ object FakeRequests {
     .withHeaders(ValidHeadersV3.toSeq: _*)
     .withXmlBody(ValidSubmissionXML)
 
-  lazy val ValidCancellationRequest: FakeRequest[AnyContentAsXml] = FakeRequest()
+  lazy val ValidCancellationV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV3.toSeq: _*)
+    .withXmlBody(validCancellationXML())
+
+  lazy val ValidCancellationV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(validCancellationXML())
 
-  lazy val ValidCancellationRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
-    .copyFakeRequest(headers = ValidCancellationRequest.headers.remove(ACCEPT).add(ACCEPT_HMRC_XML_V1_HEADER))
+  lazy val ValidCancellationRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request
+    .copyFakeRequest(headers = ValidCancellationV2Request.headers.remove(ACCEPT).add(ACCEPT_HMRC_XML_V1_HEADER))
 
-  lazy val ValidCancellationRequestWithXClientIdHeader: FakeRequest[AnyContentAsXml] = ValidCancellationRequest
+  lazy val ValidCancellationRequestWithXClientIdHeader: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request
     .copyFakeRequest(headers =
-      ValidCancellationRequest.headers.add(X_CLIENT_ID_HEADER))
+      ValidCancellationV2Request.headers.add(X_CLIENT_ID_HEADER))
 
-  lazy val InvalidCancellationRequestWithoutXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
+  lazy val InvalidCancellationRequestWithoutXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request
     .copyFakeRequest(headers =
-      ValidCancellationRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))
+      ValidCancellationV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME))
 
-  lazy val InvalidCancellationRequestWithInvalidXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest
+  lazy val InvalidCancellationRequestWithInvalidXBadgeIdentifier: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request
     .copyFakeRequest(headers =
-      ValidCancellationRequest.headers.remove(X_BADGE_IDENTIFIER_NAME).add(X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG))
+      ValidCancellationV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME).add(X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_LONG))
 
-  lazy val InvalidCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationRequest.withXmlBody(InvalidCancellationXML)
+  lazy val InvalidCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request.withXmlBody(InvalidCancellationXML)
 
-  lazy val ValidFileUploadRequest = FakeRequest()
+  lazy val ValidFileUploadV2Request = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(ValidFileUploadXml)
 
-  lazy val ValidFileUploadRequestWithoutBadgeId = ValidFileUploadRequest
-    .copyFakeRequest(headers = ValidFileUploadRequest.headers.remove(X_BADGE_IDENTIFIER_NAME))
+  lazy val ValidFileUploadV3Request = FakeRequest()
+    .withHeaders(ValidHeadersV3.toSeq: _*)
+    .withXmlBody(ValidFileUploadXml)
+
+  lazy val ValidFileUploadRequestWithoutBadgeId = ValidFileUploadV2Request
+    .copyFakeRequest(headers = ValidFileUploadV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME))
 
   lazy val InvalidFileUploadRequest = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(InvalidFileUploadXml)
 
-  lazy val NoAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
+  lazy val NoAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request
     .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(ACCEPT))
 
-  lazy val InvalidAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
+  lazy val InvalidAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request
     .withHeaders(RequestHeaders.ACCEPT_HEADER_INVALID)
 
-  lazy val InvalidContentTypeHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest
+  lazy val InvalidContentTypeHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request
     .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
 
   lazy val ValidGoogleAnalyticsRequest = FakeRequest()

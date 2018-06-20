@@ -114,9 +114,9 @@ object RequestHeaders {
   val X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_SHORT: (String, String) = X_BADGE_IDENTIFIER_NAME -> "12345"
   val X_BADGE_IDENTIFIER_HEADER_INVALID_LOWERCASE: (String, String) = X_BADGE_IDENTIFIER_NAME -> "BadgeId123"
 
-  val X_CLIENT_ID_ID_NAME = "X-Client-ID"
-  val X_CLIENT_ID_HEADER: (String, String) = X_CLIENT_ID_ID_NAME -> ApiSubscriptionFieldsTestData.xClientId
-  val X_CLIENT_ID_HEADER_INVALID: (String, String) = X_CLIENT_ID_ID_NAME -> "This is not a UUID"
+  val X_CLIENT_ID_NAME = "X-Client-ID"
+  val X_CLIENT_ID_HEADER: (String, String) = X_CLIENT_ID_NAME -> ApiSubscriptionFieldsTestData.xClientId
+  val X_CLIENT_ID_HEADER_INVALID: (String, String) = X_CLIENT_ID_NAME -> "This is not a UUID"
 
   val CONTENT_TYPE_HEADER: (String, String) = CONTENT_TYPE -> MimeTypes.XML
   val CONTENT_TYPE_CHARSET_VALUE: String = s"${MimeTypes.XML}; charset=UTF-8"

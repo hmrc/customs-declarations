@@ -103,7 +103,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV1ServiceContext)))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      verifyGoogleAnalyticsServiceWasCalled()
 
     }
 
@@ -127,7 +127,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      verifyGoogleAnalyticsServiceWasCalled()
     }
 
   }
@@ -159,7 +159,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      verifyGoogleAnalyticsServiceWasCalled()
     }
 
   }
@@ -186,7 +186,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      verifyGoogleAnalyticsServiceWasCalled()
     }
 
   }

@@ -93,7 +93,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "process CSP request when call is authorised for CSP" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionRequest)
+      val result: Result = awaitSubmit(ValidSubmissionV2Request)
 
       verifyCspAuthorisationCalled(numberOfTimes = 1)
       verifyNonCspAuthorisationCalled(numberOfTimes = 0)
@@ -102,7 +102,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "process a non-CSP request when call is unauthorised for CSP but authorised for non-CSP" in new SetUp() {
       authoriseNonCsp(Some(declarantEori))
 
-      val result: Result = awaitSubmit(ValidSubmissionRequest)
+      val result: Result = awaitSubmit(ValidSubmissionV2Request)
 
       verifyCspAuthorisationCalled(numberOfTimes = 1)
       verifyNonCspAuthorisationCalled(numberOfTimes = 1)
@@ -111,7 +111,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "respond with status 202 and conversationId in header for a processed valid CSP request" in new SetUp() {
       authoriseCsp()
 
-      val result: Future[Result] = submit(ValidSubmissionRequest)
+      val result: Future[Result] = submit(ValidSubmissionV2Request)
 
       status(result) shouldBe ACCEPTED
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
@@ -121,7 +121,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "respond with status 400 for a CSP request with a missing X-Badge-Identifier" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionRequest.copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(X_BADGE_IDENTIFIER_NAME)))
+      val result: Result = awaitSubmit(ValidSubmissionV2Request.copyFakeRequest(headers = ValidSubmissionV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME)))
       result shouldBe errorResultBadgeIdentifier
       verifyZeroInteractions(mockBusinessService)
       verifyZeroInteractions(mockXmlValidationService)
@@ -130,7 +130,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionRequest.copyFakeRequest(headers = ValidSubmissionRequest.headers.remove(X_CLIENT_ID_NAME)))
+      val result: Result = awaitSubmit(ValidSubmissionV2Request.copyFakeRequest(headers = ValidSubmissionV2Request.headers.remove(X_CLIENT_ID_NAME)))
       status(result) shouldBe INTERNAL_SERVER_ERROR
       verifyZeroInteractions(mockBusinessService)
       verifyZeroInteractions(mockXmlValidationService)
@@ -139,7 +139,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "respond with status 400 for a request with an invalid X-Badge-Identifier" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionRequest.withHeaders((ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS).toSeq: _*))
+      val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders((ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS).toSeq: _*))
 
       result shouldBe errorResultBadgeIdentifier
       verifyZeroInteractions(mockBusinessService)
@@ -149,7 +149,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "respond with status 202 and conversationId in header for a processed valid non-CSP request" in new SetUp() {
       authoriseNonCsp(Some(declarantEori))
 
-      val result: Future[Result] = submit(ValidSubmissionRequest)
+      val result: Future[Result] = submit(ValidSubmissionV2Request)
 
       status(result) shouldBe ACCEPTED
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
@@ -160,7 +160,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       unauthoriseCsp()
       unauthoriseNonCspOnly()
 
-      val result: Future[Result] = submit(ValidSubmissionRequest)
+      val result: Future[Result] = submit(ValidSubmissionV2Request)
 
       await(result) shouldBe errorResultUnauthorised
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
@@ -172,7 +172,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       unauthoriseCsp()
       authoriseNonCspButDontRetrieveCustomsEnrolment()
 
-      val result: Future[Result] = submit(ValidSubmissionRequest.fromNonCsp)
+      val result: Future[Result] = submit(ValidSubmissionV2Request.fromNonCsp)
 
       await(result) shouldBe errorResultEoriNotFoundInCustomsEnrolment
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
@@ -184,7 +184,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       unauthoriseCsp()
       authoriseNonCsp(maybeEori = None)
 
-      val result: Future[Result] = submit(ValidSubmissionRequest)
+      val result: Future[Result] = submit(ValidSubmissionV2Request)
 
       await(result) shouldBe errorResultEoriNotFoundInCustomsEnrolment
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
@@ -197,7 +197,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
         .thenReturn(Future.successful(Left(mockResult)))
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionRequest)
+      val result: Result = awaitSubmit(ValidSubmissionV2Request)
 
       result shouldBe mockResult
       verifyZeroInteractions(mockGoogleAnalyticsConnector)
@@ -208,7 +208,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
         .thenReturn(Future.successful(Left(ErrorResponse.ErrorInternalServerError.XmlResult)))
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionRequest)
+      val result: Result = awaitSubmit(ValidSubmissionV2Request)
 
       result.header.status shouldBe INTERNAL_SERVER_ERROR
       verifyZeroInteractions(mockGoogleAnalyticsConnector)

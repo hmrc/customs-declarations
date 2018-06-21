@@ -21,7 +21,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionVal
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
+import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgWcoDecService}
@@ -45,6 +45,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
     ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
 
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
+
+  private val apiSubscriptionKeyForXClientIdV3 = apiSubscriptionKeyForXClientIdV2.copy(version = VersionThree)
 
   protected override val BadRequestErrorWith2Errors: String =
     """<?xml version="1.0" encoding="UTF-8"?>
@@ -70,7 +72,6 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
   override protected def beforeEach() {
     resetMockServer()
-    startMdgWcoDecService()
   }
 
   override protected def afterAll() {
@@ -80,8 +81,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
   feature("Declaration API authorises submissions from CSPs with v1.0 accept header") {
     scenario("An authorised CSP successfully submits a customs declaration") {
       Given("A CSP wants to submit a valid customs declaration")
-
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequestWithV1AcceptHeader.fromCsp.postTo(endpoint)
+      startMdgWcoDecServiceV1()
+      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionV1Request.fromCsp.postTo(endpoint)
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV1)
 
       And("the CSP is authorised with its privileged application")
@@ -109,6 +110,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
     scenario("Response status 400 when user submits a malformed xml payload") {
       Given("the API is available")
+      startMdgWcoDecServiceV1()
       val request = MalformedXmlRequest.fromCsp.copyFakeRequest(method = POST, uri = endpoint)
       stubAuditService()
       authServiceAuthorizesCSP()
@@ -135,10 +137,10 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
   feature("Declaration API authorises submissions from CSPs with v2.0 accept header") {
     scenario("An authorised CSP successfully submits a customs declaration") {
       Given("A CSP wants to submit a valid customs declaration")
-
+      startMdgWcoDecServiceV2()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
 
-      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionRequest.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request.fromCsp.postTo(endpoint)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -163,6 +165,39 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
     }
 
   }
+
+  feature("Declaration API authorises submissions from CSPs with v3.0 accept header") {
+    scenario("An authorised CSP successfully submits a customs declaration") {
+      Given("A CSP wants to submit a valid customs declaration")
+      startMdgWcoDecServiceV3()
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
+
+      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionV3Request.fromCsp.postTo(endpoint)
+
+      And("the CSP is authorised with its privileged application")
+      authServiceAuthorizesCSP()
+
+      When("a POST request with data is sent to the API")
+      val result: Future[Result] = route(app = app, request).value
+
+      Then("a response with a 202 (ACCEPTED) status is received")
+      status(result) shouldBe ACCEPTED
+
+      And("the response body is empty")
+      contentAsString(result) shouldBe 'empty
+
+      And("the request was authorised with AuthService")
+      verifyAuthServiceCalledForCsp()
+
+      And("v3 config was used")
+      verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV3ServiceContext)))
+
+      And("GA call was made")
+      verifyGoogleAnalyticsServiceWasCalled
+    }
+
+  }
+
 
   feature("Declaration API handles submission errors from CSPs as expected") {
 

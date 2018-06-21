@@ -125,8 +125,10 @@ object RequestHeaders {
 
   val ACCEPT_HMRC_XML_V1_VALUE = "application/vnd.hmrc.1.0+xml"
   val ACCEPT_HMRC_XML_V2_VALUE = "application/vnd.hmrc.2.0+xml"
+  val ACCEPT_HMRC_XML_V3_VALUE = "application/vnd.hmrc.3.0+xml"
   val ACCEPT_HMRC_XML_V1_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V1_VALUE
   val ACCEPT_HMRC_XML_V2_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V2_VALUE
+  val ACCEPT_HMRC_XML_V3_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V3_VALUE
   val ACCEPT_HEADER_INVALID: (String, String) = ACCEPT -> "invalid"
 
   val AUTH_HEADER_VALUE: String = "AUTH_HEADER_VALUE"
@@ -135,6 +137,13 @@ object RequestHeaders {
   val ValidHeadersV2 = Map(
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V2_HEADER,
+    X_CLIENT_ID_HEADER,
+    X_BADGE_IDENTIFIER_HEADER
+  )
+
+  val ValidHeadersV3 = Map(
+    CONTENT_TYPE_HEADER,
+    ACCEPT_HMRC_XML_V3_HEADER,
     X_CLIENT_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER
   )

@@ -30,12 +30,13 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
     "api.access.version-2.0.whitelistedApplicationIds.0" -> "someId-1",
-    "api.access.version-2.0.whitelistedApplicationIds.1" -> "someId-2"
+    "api.access.version-2.0.whitelistedApplicationIds.1" -> "someId-2",
+    "api.access.version-3.0.whitelistedApplicationIds.0" -> "someId-3"
   )).build()
 
   feature("Ensure definition file") {
 
-    scenario("is correct when V1 is public and V2 is private") {
+    scenario("is correct when V1 is public and V2 is private and V3 is private") {
 
       Given("the API is available")
       val request = FakeRequest("GET", "/api/definition")
@@ -111,6 +112,31 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
           |          }
           |        ]
+          |      },
+          |      {
+          |        "version": "3.0",
+          |        "status": "BETA",
+          |        "endpointsEnabled": true,
+          |        "access": {
+          |          "type": "PRIVATE",
+          |          "whitelistedApplicationIds": [
+          |            "someId-3"
+          |          ]
+          |        },
+          |        "fieldDefinitions": [
+          |          {
+          |            "name": "callbackUrl",
+          |            "description": "What's your callback URL for declaration submissions?",
+          |            "type": "URL",
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          |          },
+          |          {
+          |            "name": "securityToken",
+          |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
+          |            "type": "SecureToken",
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |          }
+          |        ]
           |      }
           |    ]
           |  }
@@ -123,7 +149,8 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
 class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
-    "api.access.version-2.0.enabled" -> false
+    "api.access.version-2.0.enabled" -> false,
+    "api.access.version-3.0.whitelistedApplicationIds.0" -> "someId-3"
   )).build()
 
   feature("Ensure definition file") {
@@ -184,6 +211,31 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "endpointsEnabled": false,
           |        "access": {
           |          "type": "PUBLIC"
+          |        },
+          |        "fieldDefinitions": [
+          |          {
+          |            "name": "callbackUrl",
+          |            "description": "What's your callback URL for declaration submissions?",
+          |            "type": "URL",
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          |          },
+          |          {
+          |            "name": "securityToken",
+          |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
+          |            "type": "SecureToken",
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |          }
+          |        ]
+          |      },
+          |      {
+          |        "version": "3.0",
+          |        "status": "BETA",
+          |        "endpointsEnabled": true,
+          |        "access": {
+          |          "type": "PRIVATE",
+          |          "whitelistedApplicationIds": [
+          |            "someId-3"
+          |          ]
           |        },
           |        "fieldDefinitions": [
           |          {

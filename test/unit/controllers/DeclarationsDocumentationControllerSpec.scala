@@ -39,6 +39,11 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
     "api.access.version-2.0.whitelistedApplicationIds.0" -> "v2AppId-1",
     "api.access.version-2.0.whitelistedApplicationIds.1" -> "v2AppId-2")
 
+
+  private val v3WhitelistedAppIdsConfigs = Map(
+    "api.access.version-3.0.whitelistedApplicationIds.0" -> "v3AppId-1",
+    "api.access.version-3.0.whitelistedApplicationIds.1" -> "v3AppId-2")
+
   private def getApiDefinitionWith(configMap: Map[String, Any]) =
     new DeclarationsDocumentationController(mockService, play.api.Configuration.from(configMap))
       .definition()
@@ -49,39 +54,42 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
 
   "API Definition" should {
 
-    "be correct when V1 & V2 are PUBLIC by default" in {
+    "be correct when V1 & V2 are PUBLIC by default and V3 is always private" in {
       val result = getApiDefinitionWith(Map())(FakeRequest())
 
       status(result) mustBe 200
-      contentAsJson(result) mustBe expectedJson(None, None)
+      contentAsJson(result) mustBe expectedJson(None, None, None)
     }
 
-    "be correct when V1 is PRIVATE & V2 is public" in {
+    "be correct when V1 is PRIVATE & V2 is public  and V3 is always private" in {
       val result = getApiDefinitionWith(v1WhitelistedAppIdsConfigs)(FakeRequest())
 
       status(result) mustBe 200
-      contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = Some(v1WhitelistedAppIdsConfigs.values), None)
+      contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = Some(v1WhitelistedAppIdsConfigs.values), None, None)
     }
 
-    "be correct when V1 is PUBLIC & V2 is PRIVATE" in {
+    "be correct when V1 is PUBLIC & V2 is PRIVATE  and V3 is always private" in {
       val result = getApiDefinitionWith(v2WhitelistedAppIdsConfigs)(FakeRequest())
 
       status(result) mustBe 200
-      contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = None, expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values))
+      contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = None, expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values), None)
     }
 
-    "be correct when V1 & V2 are PRIVATE" in {
-      val result = getApiDefinitionWith(v1WhitelistedAppIdsConfigs ++ v2WhitelistedAppIdsConfigs)(FakeRequest())
+    "be correct when V1 & V2 & V3 are PRIVATE" in {
+      val result = getApiDefinitionWith(v1WhitelistedAppIdsConfigs ++ v2WhitelistedAppIdsConfigs ++ v3WhitelistedAppIdsConfigs)(FakeRequest())
 
       status(result) mustBe 200
       contentAsJson(result) mustBe expectedJson(
         expectedV1WhitelistedAppIds = Some(v1WhitelistedAppIdsConfigs.values),
-        expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values))
+        expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values),
+        expectedV3WhitelistedAppIds = Some(v3WhitelistedAppIdsConfigs.values))
     }
   }
 
   private def expectedJson(expectedV1WhitelistedAppIds: Option[Iterable[String]],
-                           expectedV2WhitelistedAppIds: Option[Iterable[String]]) =
+                           expectedV2WhitelistedAppIds: Option[Iterable[String]],
+                           expectedV3WhitelistedAppIds: Option[Iterable[String]]
+                          ) =
     Json.parse(
       s"""
          |{
@@ -139,6 +147,30 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
             + ids.map(x => s""" "$x" """).mkString(",") + "]"
         ) +
         s"""
+           |            },
+           |            "fieldDefinitions":[
+           |               {
+           |                  "name":"callbackUrl",
+           |                  "description":"What's your callback URL for declaration submissions?",
+           |                  "type":"URL",
+           |                  "hint":"This is how we'll notify you when we've processed them. It must include https and port 443"
+           |               },
+           |               {
+           |                  "name":"securityToken",
+           |                  "description":"What's the value of the HTTP Authorization header we should use to notify you?",
+           |                  "type":"SecureToken",
+           |                  "hint":"For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+           |               }
+           |            ]
+           |         },
+           |         {
+           |            "version":"3.0",
+           |            "status":"BETA",
+           |            "endpointsEnabled":true,
+           |            "access":{
+           |                "type":"PRIVATE",
+           |                "whitelistedApplicationIds":""".stripMargin + expectedV3WhitelistedAppIds.fold("[]")(ids =>
+        """ [ """.stripMargin + ids.map(x => s""" "$x" """).mkString(",") + "]") + """
            |            },
            |            "fieldDefinitions":[
            |               {

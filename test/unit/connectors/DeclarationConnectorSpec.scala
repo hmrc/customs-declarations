@@ -32,8 +32,8 @@ import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvid
 import uk.gov.hmrc.customs.declaration.connectors.MdgDeclarationConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
@@ -63,6 +63,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
   private val v1Config = ServiceConfig("v1-url", Some("v1-bearer-token"), "v1-default")
   private val v2Config = ServiceConfig("v2-url", Some("v2-bearer-token"), "v2-default")
+  private val v3Config = ServiceConfig("v3-url", Some("v3-bearer-token"), "v3-default")
 
   private val xml = <xml></xml>
   private implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -74,6 +75,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
     reset(mockWsPost, mockLogger, mockServiceConfigProvider)
     when(mockServiceConfigProvider.getConfig("wco-declaration")).thenReturn(v1Config)
     when(mockServiceConfigProvider.getConfig("v2.wco-declaration")).thenReturn(v2Config)
+    when(mockServiceConfigProvider.getConfig("v3.wco-declaration")).thenReturn(v3Config)
     when(mockDeclarationsConfigService.declarationsCircuitBreakerConfig).thenReturn(mockDeclarationsCircuitBreakerConfig)
     when(mockDeclarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange).thenReturn(numberOfCallsToTriggerStateChange)
     when(mockDeclarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis).thenReturn(unavailablePeriodDurationInMillis)
@@ -170,6 +172,10 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
       "Ensure routing is working for the config location which will ensure version specific config values are loaded correctly" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
+
+        await(connector.send(xml, date, correlationId, VersionThree))
+
+        verify(mockServiceConfigProvider).getConfig("v3.wco-declaration")
 
         await(connector.send(xml, date, correlationId, VersionTwo))
 

@@ -63,7 +63,32 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
 
     scenario("An unauthorised CSP is not allowed to submit a file upload request") {
       Given("A CSP wants to submit a valid file upload")
-      val request: FakeRequest[AnyContentAsXml] = ValidFileUploadRequest.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request.fromCsp.postTo(endpoint)
+
+      And("the CSP is unauthorised with its privileged application")
+      authServiceUnauthorisesScopeForCSP()
+      authServiceUnauthorisesCustomsEnrolmentForNonCSP(cspBearerToken)
+
+      When("a POST request with data is sent to the API")
+      val result: Future[Result] = route(app = app, request).value
+
+      Then("a response with a 401 (UNAUTHORIZED) status is received")
+      status(result) shouldBe UNAUTHORIZED
+
+      And("the response body is empty")
+      string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
+
+      And("the request was authorised with AuthService")
+      eventually(verifyAuthServiceCalledForCsp())
+    }
+
+  }
+
+  feature("File upload API authorises submissions from Software Houses with v3.0 accept header") {
+
+    scenario("An unauthorised CSP is not allowed to submit a file upload request") {
+      Given("A CSP wants to submit a valid file upload")
+      val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV3Request.fromCsp.postTo(endpoint)
 
       And("the CSP is unauthorised with its privileged application")
       authServiceUnauthorisesScopeForCSP()
@@ -143,7 +168,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     scenario("Response status 200 when user submits correct request") {
       Given("the API is available")
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
-      val request = ValidFileUploadRequest.fromNonCsp.postTo(endpoint)
+      val request = ValidFileUploadV2Request.fromNonCsp.postTo(endpoint)
       setupWiremockExpectations()
 
       When("a POST request with data is sent to the API")

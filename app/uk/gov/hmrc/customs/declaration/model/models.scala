@@ -104,6 +104,10 @@ object VersionTwo extends ApiVersion{
   override val value: String = "2.0"
   override val configPrefix: String = "v2."
 }
+object VersionThree extends ApiVersion{
+  override val value: String = "3.0"
+  override val configPrefix: String = "v3."
+}
 
 sealed trait AuthorisedAs
 case class Csp(badgeIdentifier: BadgeIdentifier) extends AuthorisedAs

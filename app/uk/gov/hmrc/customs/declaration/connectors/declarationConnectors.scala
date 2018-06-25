@@ -72,7 +72,10 @@ trait MdgDeclarationConnector extends UsingCircuitBreaker {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, correlationId), authorization = Some(Authorization(bearerToken)))
-    withCircuitBreaker(post(xml, config.url))
+    withCircuitBreaker(post(xml, config.url)).map{
+      response => logger.debug(s"Response: $response")
+      response
+    }
   }
 
   private def getHeaders(date: DateTime, correlationId: UUID) = {
@@ -85,7 +88,7 @@ trait MdgDeclarationConnector extends UsingCircuitBreaker {
   }
 
   private def post[A](xml: NodeSeq, url: String)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
-    logger.debug(s"Sending request to MDG. Payload: ${xml.toString()}")
+    logger.debug(s"Sending request to $url. Payload: ${xml.toString()}")
     http.POSTString[HttpResponse](url, xml.toString())
       .recoverWith {
         case httpError: HttpException => Future.failed(new RuntimeException(httpError))

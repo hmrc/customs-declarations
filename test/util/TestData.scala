@@ -19,6 +19,7 @@ package util
 import java.util.UUID
 
 import com.google.inject.AbstractModule
+import org.joda.time.{LocalDate, LocalTime}
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames._
 import play.api.http.{HeaderNames, MimeTypes}
@@ -27,6 +28,10 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import play.api.test.Helpers.CONTENT_TYPE
+import uk.gov.hmrc.auth.core.AffinityGroup.Individual
+import uk.gov.hmrc.auth.core.{ConfidenceLevel, User}
+import uk.gov.hmrc.auth.core.ConfidenceLevel.L500
+import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
@@ -55,6 +60,84 @@ object TestData {
   val declarantEoriValue = "ZZ123456789000"
   val declarantEori = Eori(declarantEoriValue)
   val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
+
+  val nrsInternalIdValue = "internalId"
+  val nrsExternalIdValue = "externalId"
+  val nrsAgentCodeValue = "agentCode"
+  val nrsCredentials = Credentials(providerId= "providerId", providerType= "providerType")
+  val nrsConfidenceLevel = L500
+  val nrsNinoValue = "ninov"
+  val nrsSaUtrValue = "saUtr"
+  val nrsNameValue = Name(Some("name"), Some("lastname"))
+  val nrsDateOfBirth = Some(LocalDate.now().minusYears(25))
+  val nrsEmailValue = Some("nrsEmailValue")
+  val nrsAgentInformationValue = AgentInformation(Some("agentId"),
+                                                  Some("agentCode"),
+                                                  Some("agentFriendlyName"))
+  val nrsGroupIdentifierValue = Some("groupIdentifierValue")
+  val nrsCredentialRole = Some(User)
+  val nrsMdtpInformation = MdtpInformation("deviceId", "sessionId")
+  val nrsItmpName = ItmpName(Some("givenName"),
+                            Some("middleName"),
+                            Some("familyName"))
+  val nrsItmpAddress = ItmpAddress(Some("line1"),
+                                  Some("line2"),
+                                  Some("line3"),
+                                  Some("line4"),
+                                  Some("line5"),
+                                  Some("postCode"),
+                                  Some("countryName"),
+                                  Some("countryCode"))
+  val nrsAffinityGroup = Some(Individual)
+  val nrsCredentialStrength = Some("STRONG")
+  val nrsLoginTimes = LoginTimes(LocalDate.now().toDateTime(LocalTime.now()), Some(LocalDate.now().minusDays(2).toDateTime(LocalTime.now())))
+
+  val nrsRetrievalStuff = NrsRetrievalData(Some(nrsInternalIdValue),
+                                            Some(nrsExternalIdValue),
+                                            Some(nrsAgentCodeValue),
+                                            nrsCredentials,
+                                            nrsConfidenceLevel,
+                                            Some(nrsNinoValue),
+                                            Some(nrsSaUtrValue),
+                                            nrsNameValue,
+                                            nrsDateOfBirth,
+                                            nrsEmailValue,
+                                            nrsAgentInformationValue,
+                                            nrsGroupIdentifierValue,
+                                            nrsCredentialRole,
+                                            Some(nrsMdtpInformation),
+                                            nrsItmpName,
+                                            nrsDateOfBirth,
+                                            nrsItmpAddress,
+                                            nrsAffinityGroup,
+                                            nrsCredentialStrength,
+                                            nrsLoginTimes)
+
+  val nrsRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
+    Retrievals.nino and Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
+    Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
+    Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
+
+  val nrsReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
+    ,Some(nrsExternalIdValue)),
+    Some(nrsAgentCodeValue)),
+    nrsCredentials),
+    nrsConfidenceLevel),
+    Some(nrsNinoValue)),
+    Some(nrsSaUtrValue)),
+    nrsNameValue),
+    nrsDateOfBirth),
+    nrsEmailValue),
+    nrsAgentInformationValue),
+    nrsGroupIdentifierValue),
+    nrsCredentialRole),
+    Some(nrsMdtpInformation)),
+    nrsItmpName),
+    nrsDateOfBirth),
+    nrsItmpAddress),
+    nrsAffinityGroup),
+    nrsCredentialStrength),
+    nrsLoginTimes)
 
   type EmulatedServiceFailure = UnsupportedOperationException
   val emulatedServiceFailure = new EmulatedServiceFailure("Emulated service failure.")
@@ -98,7 +181,7 @@ object TestData {
   val TestCspAuthorisedRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier)
   val TestValidatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
-  val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori, nrsRetrievalStuff).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 
 }
 

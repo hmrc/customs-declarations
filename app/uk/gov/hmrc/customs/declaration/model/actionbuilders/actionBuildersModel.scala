@@ -45,7 +45,7 @@ object ActionBuilderModelHelper {
 
     def toCspAuthorisedRequest(badgeId: BadgeIdentifier): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId))
 
-    def toNonCspAuthorisedRequest(eori: Eori): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori))
+    def toNonCspAuthorisedRequest(eori: Eori, nrsRetrievalData: NrsRetrievalData): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori))
 
     def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
       vhr.conversationId,

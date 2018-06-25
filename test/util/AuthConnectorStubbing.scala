@@ -16,15 +16,17 @@
 
 package util
 
+import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, Retrievals}
+import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.declaration.model.Eori
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
+import util.TestData._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -51,28 +53,62 @@ trait AuthConnectorStubbing extends UnitSpec with MockitoSugar {
       .thenReturn(Future.failed(authException))
   }
 
+//  def authoriseNonCsp(maybeEori: Option[Eori]): Unit = {
+//    unauthoriseCsp()
+//    val customsEnrolment = maybeEori.fold(ifEmpty = Enrolment(customsEnrolmentName)) { eori =>
+//      Enrolment(customsEnrolmentName).withIdentifier(eoriIdentifier, eori.value)
+//    }
+//    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
+//      .thenReturn(Enrolments(Set(customsEnrolment)))
+//  }
+
+//  Some(nrsInternalIdValue) ~
+//    Some(nrsExternalIdValue) ~
+//    Some(nrsAgentCodeValue) ~
+//    nrsCredentials ~
+//    nrsConfidenceLevel ~
+//    Some(nrsNinoValue) ~
+//    Some(nrsSaUtrValue) ~
+//    nrsNameValue ~
+//    nrsDateOfBirth ~
+//    nrsEmailValue ~
+//    nrsAgentInformationValue ~
+//    nrsGroupIdentifierValue ~
+//    nrsCredentialRole ~
+//    Some(nrsMdtpInformation) ~
+//    nrsItmpName ~
+//    nrsDateOfBirth ~
+//    nrsItmpAddress ~
+//    nrsAffinityGroup ~
+//    nrsCredentialStrength ~
+//    nrsLoginTimes ~
+
+  type nrsRetrievalDataType = Retrieval[Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes]
+  type nrsEnrolmentType = Retrieval[Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes ~ Enrolments]
+
+
   def authoriseNonCsp(maybeEori: Option[Eori]): Unit = {
     unauthoriseCsp()
     val customsEnrolment = maybeEori.fold(ifEmpty = Enrolment(customsEnrolmentName)) { eori =>
       Enrolment(customsEnrolmentName).withIdentifier(eoriIdentifier, eori.value)
     }
-    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
-      .thenReturn(Enrolments(Set(customsEnrolment)))
+    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
+      .thenReturn(new ~( nrsReturnData, Enrolments(Set(customsEnrolment))))
   }
 
   def authoriseNonCspButDontRetrieveCustomsEnrolment(): Unit = {
     unauthoriseCsp()
-    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
-      .thenReturn(Enrolments(Set.empty))
+    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
+      .thenReturn(new ~( nrsReturnData, Enrolments(Set.empty)))
   }
 
   def unauthoriseNonCspOnly(authException: AuthorisationException = new InsufficientEnrolments): Unit = {
-    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
+    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.failed(authException))
   }
 
   def authoriseNonCspOnlyError(): Unit = {
-    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
+    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.failed(TestData.emulatedServiceFailure))
   }
 
@@ -82,11 +118,11 @@ trait AuthConnectorStubbing extends UnitSpec with MockitoSugar {
       .authorise(ameq(cspAuthPredicate), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext])
   }
 
-  def verifyNonCspAuthorisationCalled(numberOfTimes: Int): Future[Enrolments] = {
+  def verifyNonCspAuthorisationCalled(numberOfTimes: Int): Future[Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes ~ Enrolments] = {
     verify(mockAuthConnector, times(numberOfTimes))
-      .authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext])
+      .authorise(ameq(nonCspAuthPredicate), ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext])
   }
 
-  def verifyNonCspAuthorisationNotCalled: Future[Enrolments] = verifyNonCspAuthorisationCalled(0)
+  def verifyNonCspAuthorisationNotCalled: Future[Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes ~ Enrolments] = verifyNonCspAuthorisationCalled(0)
 
 }

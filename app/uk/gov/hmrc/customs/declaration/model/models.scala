@@ -18,7 +18,10 @@ package uk.gov.hmrc.customs.declaration.model
 
 import java.util.UUID
 
+import org.joda.time.LocalDate
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
+import uk.gov.hmrc.auth.core.retrieve._
 
 import scala.xml.{Elem, NodeSeq}
 
@@ -27,6 +30,27 @@ case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 case class Eori(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
+
+case class NrsRetrievalData(internalId: Option[String],
+                            externalId: Option[String],
+                            agentCode: Option[String],
+                            credentials: Credentials,
+                            confidenceLevel: ConfidenceLevel,
+                            nino: Option[String],
+                            saUtr: Option[String],
+                            name: Name,
+                            dateOfBirth: Option[LocalDate],
+                            email: Option[String],
+                            agentInformation: AgentInformation,
+                            groupIdentifier: Option[String],
+                            credentialRole: Option[CredentialRole],
+                            mdtpInformation: Option[MdtpInformation],
+                            itmpName: ItmpName,
+                            itmpDateOfBirth: Option[LocalDate],
+                            itmpAddress: ItmpAddress,
+                            affinityGroup: Option[AffinityGroup],
+                            credentialStrength: Option[String],
+                            loginTimes: LoginTimes)
 
 case class ClientId(value: String) extends AnyVal {
   override def toString: String = value.toString
@@ -118,6 +142,8 @@ case class UpscanInitiatePayload(callbackUrl: String)
 object UpscanInitiatePayload {
   implicit val format: OFormat[UpscanInitiatePayload] = Json.format[UpscanInitiatePayload]
 }
+
+case class AuthorisedRetrievalData(retrievalJSONBody: String)
 
 case class FileUploadPayload(declarationID: String, documentationType: String)
 

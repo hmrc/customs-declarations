@@ -21,6 +21,7 @@ import java.util.UUID
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.mockito.MockitoSugar
+import play.api.Configuration
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -29,7 +30,7 @@ import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnecto
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedPayloadRequest, ValidatedUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, _}
-import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadBusinessService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
@@ -47,8 +48,10 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockUpscanInitiateConnector: UpscanInitiateConnector = mock[UpscanInitiateConnector]
     protected val mockUpscanInitiateResponsePayload: UpscanInitiateResponsePayload = mock[UpscanInitiateResponsePayload]
+    protected val mockDeclarationsConfig = mock[DeclarationsConfig]
+    protected val mockConfiguration = mock[DeclarationsConfigService]
 
-    protected lazy val service: FileUploadBusinessService = new FileUploadBusinessService(mockLogger, mockApiSubscriptionFieldsConnector, mockUpscanInitiateConnector)
+    protected lazy val service: FileUploadBusinessService = new FileUploadBusinessService(mockLogger, mockApiSubscriptionFieldsConnector, mockUpscanInitiateConnector, mockConfiguration)
 
     private implicit val jsonRequest = ValidatedUploadPayloadRequest(
       ConversationId(UUID.randomUUID()),
@@ -62,15 +65,18 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       DocumentationType("docType456")
     )
 
-    val upscanInitiatePayload = UpscanInitiatePayload("http://customs-declaration.protected.mdtp/declarationId/decId123/eori/123/documentationType/docType456/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
+    val upscanInitiatePayload = UpscanInitiatePayload("http://upscan-callback.url/uploaded-file-upscan-notifications/decId/decId123/eori/123/documentationType/docType456/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
 
     protected def send(vupr: ValidatedUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, UpscanInitiateResponsePayload] = {
       await(service.send(vupr, hc))
     }
+    when(mockDeclarationsConfig.upscanCallbackUrl).thenReturn("http://upscan-callback.url")
+    when(mockConfiguration.declarationsConfig).thenReturn(mockDeclarationsConfig)
     when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockUpscanInitiateResponsePayload)
   }
 
   "BusinessService" should {
+
 
     "send payload to connector" in new SetUp() {
 

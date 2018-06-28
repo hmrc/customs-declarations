@@ -38,7 +38,7 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
                                           apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                           upscanInitiateconnector: UpscanInitiateConnector) {
 
-  private val callbackUrl = "https://traders-callback-url"
+  private val callbackUrl = "http://customs-declaration.protected.mdtp"
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
   def send[A](implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, UpscanInitiateResponsePayload]] = {

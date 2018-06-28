@@ -36,9 +36,9 @@ import scala.util.control.NonFatal
 @Singleton
 class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
                                           apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                          upscanInitiateconnector: UpscanInitiateConnector) {
+                                          upscanInitiateconnector: UpscanInitiateConnector,
+                                          config: DeclarationsConfigService) {
 
-  private val callbackUrl = "http://customs-declaration.protected.mdtp"
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
   def send[A](implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, UpscanInitiateResponsePayload]] = {
@@ -73,7 +73,7 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
   }
 
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId)(implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
-    val upscanInitiatePayload = UpscanInitiatePayload(s"$callbackUrl/declarationId/${vupr.declarationId.value}/eori/${vupr.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${vupr.documentationType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
+    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.declarationsConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${vupr.declarationId.value}/eori/${vupr.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${vupr.documentationType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
     logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
     upscanInitiatePayload
   }

@@ -34,6 +34,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
   private val unstablePeriodDurationInMillisNel = root.int("circuitBreaker.unstablePeriodDurationInMillis")
+
   private val bearerTokenNel = customsNotificationsService.string("bearer-token")
   private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
@@ -43,8 +44,10 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val gaClientId = root.string("googleAnalytics.clientId")
   private val gaEventValue = root.string("googleAnalytics.eventValue")
 
+  private val upscanCallbackUrl = root.string("upscan-callback.url")
+
   private val validatedDeclarationsConfig: ValidationNel[String, DeclarationsConfig] = (
-    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel
+    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel |@| upscanCallbackUrl
     ) (DeclarationsConfig.apply)
 
   private val validatedDeclarationsCircuitBreakerConfig: ValidationNel[String, DeclarationsCircuitBreakerConfig] = (

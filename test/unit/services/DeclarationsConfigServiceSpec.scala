@@ -44,6 +44,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |circuitBreaker.numberOfCallsToTriggerStateChange=5
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
+      |upscan-callback.url="http://upscan-callback.url"
     """.stripMargin)
 
   private val emptyAppConfig: Config = ConfigFactory.parseString("")
@@ -76,6 +77,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config customs-notification.host
           |Service configuration not found for key: customs-notification.context
           |Service configuration not found for key: customs-notification.bearer-token
+          |Could not find config key 'upscan-callback.url'
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'

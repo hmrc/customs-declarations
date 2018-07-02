@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.Configuration
 import play.api.http.HttpErrorHandler
 import play.api.mvc.{Action, AnyContent}

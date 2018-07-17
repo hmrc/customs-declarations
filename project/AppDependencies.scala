@@ -8,7 +8,7 @@ object AppDependencies {
   val mockitoVersion = "2.6.2"
   val pegdownVersion = "1.6.0"
   val wireMockVersion = "2.10.1"
-  val customsApiCommonVersion = "1.26.0"
+  val customsApiCommonVersion = "1.27.0"
   val circuitBreakerVersion = "3.2.0"
   val testScope = "test,it"
 

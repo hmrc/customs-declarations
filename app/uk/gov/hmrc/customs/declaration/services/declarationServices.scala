@@ -45,7 +45,12 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
                                                      override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                                      override val wrapper: MdgPayloadDecorator,
                                                      override val dateTimeProvider: DateTimeService,
-                                                     override val uniqueIdsService: UniqueIdsService) extends DeclarationService
+                                                     override val uniqueIdsService: UniqueIdsService) extends DeclarationService {
+  override def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Unit]] = {
+
+    super.send
+  }
+}
 
 @Singleton
 class CancellationDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,

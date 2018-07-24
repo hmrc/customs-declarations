@@ -25,6 +25,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
 import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
+import util.TestData
 import util.TestData._
 
 class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
@@ -35,7 +36,7 @@ class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
     implicit val implicitVpr = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, FakeRequest()
       .withXmlBody(TestXmlPayload).withHeaders("Content-Type" -> "Some-Content-Type"))
       .toValidatedHeadersRequest(TestExtractedHeaders)
-      .toCspAuthorisedRequest(badgeIdentifier)
+      .toCspAuthorisedRequest(badgeIdentifier, nrsRetrievalValues)
   }
 
   "DeclarationsLogger" should {

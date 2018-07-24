@@ -19,9 +19,15 @@ package uk.gov.hmrc.customs.declaration.model
 import java.util.UUID
 
 import org.joda.time.LocalDate
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsValue, Json, OFormat}
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
-import uk.gov.hmrc.auth.core.retrieve._
+import uk.gov.hmrc.auth.core.retrieve.Credentials
+import uk.gov.hmrc.auth.core.retrieve.Name
+import uk.gov.hmrc.auth.core.retrieve.AgentInformation
+import uk.gov.hmrc.auth.core.retrieve.MdtpInformation
+import uk.gov.hmrc.auth.core.retrieve.ItmpName
+import uk.gov.hmrc.auth.core.retrieve.ItmpAddress
+import uk.gov.hmrc.auth.core.retrieve.LoginTimes
 
 import scala.xml.{Elem, NodeSeq}
 
@@ -51,6 +57,24 @@ case class NrsRetrievalData(internalId: Option[String],
                             affinityGroup: Option[AffinityGroup],
                             credentialStrength: Option[String],
                             loginTimes: LoginTimes)
+
+object NrsRetrievalData {
+  implicit val credentialsFormat = Json.format[Credentials]
+
+  implicit val nameFormat = Json.format[Name]
+
+  implicit val agentInformationFormat = Json.format[AgentInformation]
+
+  implicit val mdtpInformationFormat = Json.format[MdtpInformation]
+
+  implicit val itmpNameFormat = Json.format[ItmpName]
+
+  implicit val itmpAddressFormat = Json.format[ItmpAddress]
+
+  implicit val loginTimesFormat = Json.format[LoginTimes]
+
+  implicit val nrsRetrievalDataFormat = Json.format[NrsRetrievalData]
+}
 
 case class ClientId(value: String) extends AnyVal {
   override def toString: String = value.toString
@@ -190,4 +214,17 @@ case class GoogleAnalyticsRequest(payload: String)
 
 object GoogleAnalyticsRequest {
   implicit val format = Json.format[GoogleAnalyticsRequest]
+}
+
+case class NrsMetadata(businessId: String, notableEvent: String, payloadContentType: String, payloadSha256Checksum: String,
+                       userSubmissionTimestamp: String, identityData: NrsRetrievalData, headerData: JsValue, searchKeys: JsValue)
+
+object NrsMetadata {
+  implicit val format = Json.format[NrsMetadata]
+}
+
+case class NrsPayload(payload: String, metadata: NrsMetadata)
+
+object NrsPayload {
+  implicit val format = Json.format[NrsPayload]
 }

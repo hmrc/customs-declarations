@@ -40,6 +40,7 @@ import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._
 
+import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
@@ -70,7 +71,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, Some(mockGoogleAnalyticsConnector)) {}
 
     protected def awaitSubmit(request: Request[AnyContent]): Result = {
-      await(controller.post().apply(request))
+      await(controller.post().apply(request))(Duration.Inf) //TODO remove duration
     }
 
     protected def submit(request: Request[AnyContent]): Future[Result] = {

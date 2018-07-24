@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
-import util.{AuthConnectorStubbing, RequestHeaders}
+import util.{AuthConnectorStubbing, RequestHeaders, TestData}
 
 class AuthActionSpec extends UnitSpec with MockitoSugar {
 
@@ -66,7 +66,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         authoriseCsp()
 
         private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(badgeIdentifier))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(badgeIdentifier, nrsRetrievalValues))
         verifyNonCspAuthorisationNotCalled
       }
 
@@ -137,7 +137,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-        actual shouldBe Right(TestValidatedHeadersRequestNoBadge.toNonCspAuthorisedRequest(declarantEori, nrsRetrievalStuff))
+        actual shouldBe Right(TestValidatedHeadersRequestNoBadge.toNonCspAuthorisedRequest(declarantEori, nrsRetrievalValues))
         verifyCspAuthorisationCalled(1)
       }
 

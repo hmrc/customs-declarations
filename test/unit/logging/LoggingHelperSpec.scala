@@ -26,6 +26,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.customs.declaration.model.{ClientId, GoogleAnalyticsValues, VersionOne}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.TestData
 import util.TestData._
 
 class LoggingHelperSpec extends UnitSpec with MockitoSugar {
@@ -56,7 +57,7 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
     }
 
     "testFormatInfo with authorisation" in {
-      LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier)) shouldBe expectedMessage("Info message", "[authorisedAs=Csp(BADGEID123)]")
+      LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, nrsRetrievalValues)) shouldBe expectedMessage("Info message", "[authorisedAs=Csp(BADGEID123)]")
     }
 
     "testFormatError" in {

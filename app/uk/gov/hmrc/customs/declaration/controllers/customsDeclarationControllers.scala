@@ -100,6 +100,7 @@ extends BaseController {
         val logger = common.logger
 
         logger.debug(s"Request received. Payload = ${vpr.body.toString} headers = ${vpr.headers.headers}")
+
         businessService.send map {
           case Right(_) =>
             logger.info(s"Declaration request processed successfully")

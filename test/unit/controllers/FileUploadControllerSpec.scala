@@ -62,6 +62,7 @@ import util.TestData._
 import util.TestXMLData.ValidFileUploadXml
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
@@ -81,11 +82,11 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService
     }
 
+    val mockFileUploadBusinessService = mock[FileUploadBusinessService]
+    val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     val stubAuthAction = new AuthAction(mockAuthConnector, mockLogger, mockGoogleAnalyticsConnector)
     val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger, mockGoogleAnalyticsConnector)
     val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
-    val mockFileUploadBusinessService = mock[FileUploadBusinessService]
-    val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
 
     val fileUploadPayloadValidationAction = new FileUploadPayloadValidationAction(mockXmlValidationService, mockLogger, mockGoogleAnalyticsConnector)
     val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, mockLogger)
@@ -121,9 +122,10 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
         .thenReturn(Future.failed(new InsufficientEnrolments))
       when(mockAuthConnector.authorise(any, ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(new ~(nrsReturnData, Enrolments(Set(customsEnrolment))))
+
       when(mockFileUploadBusinessService.send(any[ValidatedUploadPayloadRequest[AnyContentAsXml]],any[HeaderCarrier])).thenReturn(Future.successful(Right(upscanInitiateResponsePayload)))
 
-      val actual: Result = await(fileUploadController.post().apply(ValidRequest))
+      val actual: Result = await(fileUploadController.post().apply(ValidRequest))(Duration.Inf)
 
       status(actual) shouldBe Status.OK
       PassByNameVerifier(mockCdsLogger, "info")

@@ -39,17 +39,17 @@ trait AuthConnectorStubbing extends UnitSpec with MockitoSugar {
   private val nonCspAuthPredicate = Enrolment(customsEnrolmentName) and AuthProviders(GovernmentGateway)
 
   def authoriseCsp(): Unit = {
-    when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext]))
-      .thenReturn(())
+    when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(nrsRetrievalData))(any[HeaderCarrier], any[ExecutionContext]))
+      .thenReturn(TestData.nrsReturnData)
   }
 
   def authoriseCspError(): Unit = {
-    when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext]))
+    when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(nrsRetrievalData))(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.failed(TestData.emulatedServiceFailure))
   }
 
   def unauthoriseCsp(authException: AuthorisationException = new InsufficientEnrolments): Unit = {
-    when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext]))
+    when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(nrsRetrievalData))(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.failed(authException))
   }
 

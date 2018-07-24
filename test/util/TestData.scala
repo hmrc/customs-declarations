@@ -24,7 +24,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames._
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.inject.guice.GuiceableModule
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import play.api.test.Helpers.CONTENT_TYPE
@@ -92,7 +92,7 @@ object TestData {
   val nrsCredentialStrength = Some("STRONG")
   val nrsLoginTimes = LoginTimes(LocalDate.now().toDateTime(LocalTime.now()), Some(LocalDate.now().minusDays(2).toDateTime(LocalTime.now())))
 
-  val nrsRetrievalStuff = NrsRetrievalData(Some(nrsInternalIdValue),
+  val nrsRetrievalValues = NrsRetrievalData(Some(nrsInternalIdValue),
                                             Some(nrsExternalIdValue),
                                             Some(nrsAgentCodeValue),
                                             nrsCredentials,
@@ -139,6 +139,12 @@ object TestData {
     nrsCredentialStrength),
     nrsLoginTimes)
 
+  val nrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
+    "sha256Checksum", "timestamp", nrsRetrievalValues, JsObject(Map[String, JsValue]("abc" -> JsString("abc"))),
+    JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
+
+  val nrsPayload = new NrsPayload("Some Base64 encoded payload", nrsMetadata) //TODO
+
   type EmulatedServiceFailure = UnsupportedOperationException
   val emulatedServiceFailure = new EmulatedServiceFailure("Emulated service failure.")
 
@@ -178,10 +184,10 @@ object TestData {
   val TestExtractedHeaders = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
 
   val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestCspAuthorisedRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier)
+  val TestCspAuthorisedRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, nrsRetrievalValues)
   val TestValidatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
-  val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori, nrsRetrievalStuff).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, nrsRetrievalValues).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori, nrsRetrievalValues).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 
 }
 

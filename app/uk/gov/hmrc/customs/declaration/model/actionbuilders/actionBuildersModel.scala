@@ -28,7 +28,6 @@ object ActionBuilderModelHelper {
     def withConversationId(implicit c: HasConversationId): Result = {
       result.withHeaders(XConversationIdHeaderName -> c.conversationId.toString)
     }
-
   }
 
   implicit class CorrelationIdsRequestOps[A](val cir: AnalyticsValuesAndConversationIdRequest[A]) extends AnyVal {
@@ -43,17 +42,18 @@ object ActionBuilderModelHelper {
 
   implicit class ValidatedHeadersRequestOps[A](val vhr: ValidatedHeadersRequest[A]) extends AnyVal {
 
-    def toCspAuthorisedRequest(badgeId: BadgeIdentifier): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId))
+    def toCspAuthorisedRequest(badgeId: BadgeIdentifier, nrsRetrievalData: NrsRetrievalData): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId), nrsRetrievalData)
 
-    def toNonCspAuthorisedRequest(eori: Eori, nrsRetrievalData: NrsRetrievalData): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori))
+    def toNonCspAuthorisedRequest(eori: Eori, nrsRetrievalData: NrsRetrievalData): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori), nrsRetrievalData)
 
-    def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
+    def toAuthorisedRequest(authorisedAs: AuthorisedAs, nrsRetrievalData: NrsRetrievalData): AuthorisedRequest[A] = AuthorisedRequest(
       vhr.conversationId,
       vhr.analyticsValues,
       vhr.requestedApiVersion,
       vhr.clientId,
       authorisedAs,
-      vhr.request
+      vhr.request,
+      nrsRetrievalData
     )
   }
 
@@ -65,7 +65,8 @@ object ActionBuilderModelHelper {
       ar.clientId,
       ar.authorisedAs,
       xmlBody,
-      ar.request
+      ar.request,
+      ar.nrsRetrievalData
     )
   }
 
@@ -112,6 +113,10 @@ trait HasFileUploadProperties {
   val documentationType: DocumentationType
 }
 
+trait HasNrsProperties {
+  val nrsRetrievalData: NrsRetrievalData
+}
+
 case class ExtractedHeadersImpl(
   requestedApiVersion: ApiVersion,
   clientId: ClientId
@@ -147,19 +152,21 @@ case class AuthorisedRequest[A](
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
-  request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs
+  request: Request[A],
+  nrsRetrievalData: NrsRetrievalData
+) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs with HasNrsProperties
+
 
 // Available after ValidatedPayloadAction builder
 abstract class GenericValidatedPayloadRequest[A](
-                                       conversationId: ConversationId,
-                                       analyticsValues: GoogleAnalyticsValues,
-                                       requestedApiVersion: ApiVersion,
-                                       clientId: ClientId,
-                                       authorisedAs: AuthorisedAs,
-                                       xmlBody: NodeSeq,
-                                       request: Request[A]
-                                     ) extends WrappedRequest[A](request) with HasConversationId  with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
+ conversationId: ConversationId,
+ analyticsValues: GoogleAnalyticsValues,
+ requestedApiVersion: ApiVersion,
+ clientId: ClientId,
+ authorisedAs: AuthorisedAs,
+ xmlBody: NodeSeq,
+ request: Request[A]
+) extends WrappedRequest[A](request) with HasConversationId  with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
 
 case class ValidatedPayloadRequest[A](
   conversationId: ConversationId,
@@ -168,8 +175,9 @@ case class ValidatedPayloadRequest[A](
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
   xmlBody: NodeSeq,
-  request: Request[A]
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
+  request: Request[A],
+  nrsRetrievalData: NrsRetrievalData
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasNrsProperties
 
 case class ValidatedUploadPayloadRequest[A](
   conversationId: ConversationId,

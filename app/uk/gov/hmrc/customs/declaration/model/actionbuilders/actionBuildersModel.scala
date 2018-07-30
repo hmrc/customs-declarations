@@ -30,6 +30,12 @@ object ActionBuilderModelHelper {
     }
   }
 
+  implicit class AddNrSubmissionId(val result: Result) extends AnyVal {
+    def withNrSubmissionId(n: NrSubmissionId): Result = {
+      result.withHeaders(NonRepudiationReceiptId -> n.toString)
+    }
+  }
+
   implicit class CorrelationIdsRequestOps[A](val cir: AnalyticsValuesAndConversationIdRequest[A]) extends AnyVal {
     def toValidatedHeadersRequest(eh: ExtractedHeaders): ValidatedHeadersRequest[A] = ValidatedHeadersRequest(
       cir.conversationId,

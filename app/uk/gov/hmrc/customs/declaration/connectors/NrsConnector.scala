@@ -16,19 +16,12 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import java.lang.String.format
-import java.math.BigInteger
-import java.nio.charset.StandardCharsets.UTF_8
-import java.security.MessageDigest.getInstance
-
-import com.google.common.io.BaseEncoding.base64
 import com.google.inject._
-import org.joda.time.DateTime
-import play.api.libs.json.{JsArray, JsObject, JsString, JsValue}
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrsMetadata, NrsPayload}
+import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrsPayload}
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -38,31 +31,14 @@ import scala.concurrent.Future
 @Singleton
 class NrsConnector @Inject()(http: HttpClient,
                              logger: DeclarationsLogger,
-                             serviceConfigProvider: ServiceConfigProvider) {
+                             serviceConfigProvider: ServiceConfigProvider,
+                             config: DeclarationsConfigService) {
 
   private val configKey = "nrs-service"
+  private val XApiKey = "X-API-Key"
 
-  private val conversationIdKey = "conversationId"
-  private val applicationXml = "application/xml"
-  private val businessIdValue = "cds"
-  private val notableEventValue = "cds-declaration"
-
-  def send[A](apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
-
+  def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
-
-    val nrsMetadata = new NrsMetadata(businessId = businessIdValue,
-      notableEvent = notableEventValue,
-      payloadContentType = applicationXml,
-      payloadSha256Checksum = sha256Hash(vpr.request.body.toString),
-      userSubmissionTimestamp = DateTime.now().toString,
-      identityData = vpr.nrsRetrievalData,
-      headerData = new JsObject(vpr.request.headers.toMap.map(x => x._1 -> JsArray(x._2.map(JsString)))),
-      searchKeys = JsObject(Map[String, JsValue](conversationIdKey -> JsString(vpr.conversationId.toString)))
-    )
-
-    val nrsPayload: NrsPayload = NrsPayload(base64().encode(vpr.request.body.toString.getBytes(UTF_8)), nrsMetadata)
-
     post(nrsPayload, config.url)
   }
 
@@ -72,7 +48,7 @@ class NrsConnector @Inject()(http: HttpClient,
 
     logger.debug(s"Sending request to nrs service. Url: $url Payload: ${payload.toString}")
 
-    http.POST[NrsPayload, HttpResponse](url, payload)
+    http.POST[NrsPayload, HttpResponse](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, config.nrsConfig.nrsApiKey)))
       .map { res =>
         logger.debug(s"Response received from nrs service $res")
         res
@@ -83,9 +59,5 @@ class NrsConnector @Inject()(http: HttpClient,
           logger.error(s"Call to nrs service failed. url=$url")
           Future.failed(e)
       }
-  }
-
-  private def sha256Hash(text: String) : String =  {
-    format("%064x", new BigInteger(1, getInstance("SHA-256").digest(text.getBytes("UTF-8"))))
   }
 }

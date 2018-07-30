@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
-import util.{AuthConnectorStubbing, RequestHeaders, TestData}
+import util.{AuthConnectorStubbing, RequestHeaders}
 
 class AuthActionSpec extends UnitSpec with MockitoSugar {
 
@@ -173,5 +173,4 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       }
     }
   }
-
 }

@@ -37,6 +37,10 @@ case class Eori(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
 
+case class NrSubmissionId(value: UUID) extends AnyVal {
+  override def toString: String = value.toString
+}
+
 case class NrsRetrievalData(internalId: Option[String],
                             externalId: Option[String],
                             agentCode: Option[String],

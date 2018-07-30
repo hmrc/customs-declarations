@@ -35,7 +35,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues,
 import uk.gov.hmrc.customs.declaration.services.{StandardDeclarationSubmissionService, UniqueIdsService, XmlValidationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
-import util.AuthConnectorStubbing
+import util.{AuthConnectorStubbing, TestData}
 import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._
@@ -71,7 +71,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, Some(mockGoogleAnalyticsConnector)) {}
 
     protected def awaitSubmit(request: Request[AnyContent]): Result = {
-      await(controller.post().apply(request))(Duration.Inf) //TODO remove duration
+      await(controller.post().apply(request))
     }
 
     protected def submit(request: Request[AnyContent]): Future[Result] = {
@@ -79,7 +79,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     }
 
     when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(Future.successful(()))
-    when(mockBusinessService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(Right(())))
+    when(mockBusinessService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(Right(Some(nrSubmissionId))))
   }
 
   private val errorResultEoriNotFoundInCustomsEnrolment = ErrorResponse(UNAUTHORIZED, errorCode = "UNAUTHORIZED",

@@ -17,10 +17,11 @@
 package util
 
 import java.util.UUID
+import java.util.UUID.fromString
 
 import com.google.inject.AbstractModule
 import org.joda.time.{LocalDate, LocalTime}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.inject.guice.GuiceableModule
@@ -29,8 +30,8 @@ import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import play.api.test.Helpers.CONTENT_TYPE
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
-import uk.gov.hmrc.auth.core.{ConfidenceLevel, User}
 import uk.gov.hmrc.auth.core.ConfidenceLevel.L500
+import uk.gov.hmrc.auth.core.User
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -41,12 +42,16 @@ import scala.xml.Elem
 
 object TestData {
   val conversationIdValue = "38400000-8cf0-11bd-b23e-10b96e4ef00d"
-  val conversationIdUuid: UUID = UUID.fromString(conversationIdValue)
+  val conversationIdUuid: UUID = fromString(conversationIdValue)
   val conversationId: ConversationId = ConversationId(conversationIdUuid)
 
   val correlationIdValue = "e61f8eee-812c-4b8f-b193-06aedc60dca2"
-  val correlationIdUuid: UUID = UUID.fromString(correlationIdValue)
+  val correlationIdUuid: UUID = fromString(correlationIdValue)
   val correlationId = CorrelationId(correlationIdUuid)
+
+  val nrSubmissionIdValue = "902b0150-aa9a-4046-bf27-85889f128c2a"
+  val nrSubmissionIdValueUuid: UUID = fromString(nrSubmissionIdValue)
+  val nrSubmissionId = NrSubmissionId(nrSubmissionIdValueUuid)
 
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
@@ -148,7 +153,7 @@ object TestData {
   type EmulatedServiceFailure = UnsupportedOperationException
   val emulatedServiceFailure = new EmulatedServiceFailure("Emulated service failure.")
 
-  val mockUuidService: UuidService = MockitoSugar.mock[UuidService]
+  lazy val mockUuidService: UuidService = mock[UuidService]
 
   object TestModule extends AbstractModule {
     def configure(): Unit = {
@@ -168,7 +173,7 @@ object TestData {
     """.stripMargin)
 
   // note we can not mock service methods that return value classes - however using a simple stub IMHO it results in cleaner code (less mocking noise)
-  val stubUniqueIdsService = new UniqueIdsService(mockUuidService) {
+  lazy val stubUniqueIdsService = new UniqueIdsService(mockUuidService) {
     override def conversation: ConversationId = conversationId
 
     override def correlation: CorrelationId = correlationId

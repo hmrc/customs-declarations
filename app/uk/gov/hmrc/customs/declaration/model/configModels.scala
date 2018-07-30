@@ -21,6 +21,8 @@ case class DeclarationsConfig(apiSubscriptionFieldsBaseUrl: String,
                               customsNotificationBearerToken: String,
                               upscanCallbackUrl: String)
 
+case class NrsConfig(nrsEnabled: Boolean, nrsApiKey: String)
+
 case class DeclarationsCircuitBreakerConfig(numberOfCallsToTriggerStateChange: Int,
                                             unavailablePeriodDurationInMillis: Int,
                                             unstablePeriodDurationInMillis: Int)

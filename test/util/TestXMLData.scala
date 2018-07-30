@@ -119,6 +119,32 @@ object TestXMLData {
       </Declaration>
     </md:MetaData>
 
+  val InvalidClearanceRequestXmlWith2Errors: Elem =
+    <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+                 xmlns:udt="urn:wco:datamodel:WCO:Declaration_DS:DMS:2">
+      <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+      <md:WCOTypeName>DEC-DMS</md:WCOTypeName>
+      <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+      <md:ResponsibleAgencyName>Agency ABC</md:ResponsibleAgencyName>
+      <md:AgencyAssignedCustomizationVersionCode>v1.2</md:AgencyAssignedCustomizationVersionCode>
+
+      <Declaration foo="bar">
+        <GoodsItemQuantity>ABC</GoodsItemQuantity>
+      </Declaration>
+    </md:MetaData>
+
+  val ValidClearanceXML: Elem =
+    <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:udt="urn:wco:datamodel:WCO:Declaration_DS:DMS:2">
+    <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+    <md:WCOTypeName>DEC-DMS</md:WCOTypeName>
+    <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+    <md:ResponsibleAgencyName>Agency ABC</md:ResponsibleAgencyName>
+    <md:AgencyAssignedCustomizationVersionCode>v1.2</md:AgencyAssignedCustomizationVersionCode>
+    <Declaration>
+      <TypeCode>IMK</TypeCode>
+    </Declaration>
+  </md:MetaData>
+
   val ValidSubmissionXML: Elem =
     <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
                  xmlns:udt="urn:wco:datamodel:WCO:Declaration_DS:DMS:2">

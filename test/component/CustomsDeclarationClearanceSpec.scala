@@ -147,7 +147,7 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
 
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")
-      val request = InvalidSubmissionRequestWith2Errors.fromCsp.postTo(endpoint)
+      val request = InvalidClearanceRequestWith2Errors.fromCsp.postTo(endpoint)
       stubAuditService()
       authServiceAuthorizesCSP()
 

@@ -28,7 +28,6 @@ class FileUploadXmlValidationService @Inject()(configuration: Configuration) ext
 @Singleton
 class CancellationXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.cancel")
 
-//TODO MJC: Change schema location to clearance when we have correct schema files
 @Singleton
 class ClearanceXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.clearance")
 

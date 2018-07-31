@@ -53,36 +53,6 @@ trait AuthConnectorStubbing extends UnitSpec with MockitoSugar {
       .thenReturn(Future.failed(authException))
   }
 
-//  def authoriseNonCsp(maybeEori: Option[Eori]): Unit = {
-//    unauthoriseCsp()
-//    val customsEnrolment = maybeEori.fold(ifEmpty = Enrolment(customsEnrolmentName)) { eori =>
-//      Enrolment(customsEnrolmentName).withIdentifier(eoriIdentifier, eori.value)
-//    }
-//    when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
-//      .thenReturn(Enrolments(Set(customsEnrolment)))
-//  }
-
-//  Some(nrsInternalIdValue) ~
-//    Some(nrsExternalIdValue) ~
-//    Some(nrsAgentCodeValue) ~
-//    nrsCredentials ~
-//    nrsConfidenceLevel ~
-//    Some(nrsNinoValue) ~
-//    Some(nrsSaUtrValue) ~
-//    nrsNameValue ~
-//    nrsDateOfBirth ~
-//    nrsEmailValue ~
-//    nrsAgentInformationValue ~
-//    nrsGroupIdentifierValue ~
-//    nrsCredentialRole ~
-//    Some(nrsMdtpInformation) ~
-//    nrsItmpName ~
-//    nrsDateOfBirth ~
-//    nrsItmpAddress ~
-//    nrsAffinityGroup ~
-//    nrsCredentialStrength ~
-//    nrsLoginTimes ~
-
   type NrsDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes
   type NrsRetrievalDataType = Retrieval[NrsDataType]
   type NrsRetrievalDataTypeWithEnrolments = Retrieval[NrsDataType ~ Enrolments]

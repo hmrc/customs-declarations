@@ -45,7 +45,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.auth.core.AuthProvider.PrivilegedApplication
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, Retrievals, ~}
+import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
@@ -62,7 +62,6 @@ import util.TestData._
 import util.TestXMLData.ValidFileUploadXml
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
@@ -125,7 +124,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
 
       when(mockFileUploadBusinessService.send(any[ValidatedUploadPayloadRequest[AnyContentAsXml]],any[HeaderCarrier])).thenReturn(Future.successful(Right(upscanInitiateResponsePayload)))
 
-      val actual: Result = await(fileUploadController.post().apply(ValidRequest))(Duration.Inf)
+      val actual: Result = await(fileUploadController.post().apply(ValidRequest))
 
       status(actual) shouldBe Status.OK
       PassByNameVerifier(mockCdsLogger, "info")

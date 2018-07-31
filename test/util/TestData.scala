@@ -20,7 +20,7 @@ import java.util.UUID
 import java.util.UUID.fromString
 
 import com.google.inject.AbstractModule
-import org.joda.time.{LocalDate, LocalTime}
+import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
 import play.api.http.{HeaderNames, MimeTypes}
@@ -95,7 +95,12 @@ object TestData {
                                   Some("countryCode"))
   val nrsAffinityGroup = Some(Individual)
   val nrsCredentialStrength = Some("STRONG")
-  val nrsLoginTimes = LoginTimes(LocalDate.now().toDateTime(LocalTime.now()), Some(LocalDate.now().minusDays(2).toDateTime(LocalTime.now())))
+
+  val currentLoginTime: DateTime = new DateTime(1530442800000L)
+  val previousLoginTime: DateTime = new DateTime(1530464400000L)
+  val nrsTimeStamp: DateTime = new DateTime(1530475200000L)
+
+  val nrsLoginTimes = LoginTimes(currentLoginTime, Some(previousLoginTime))
 
   val nrsRetrievalValues = NrsRetrievalData(Some(nrsInternalIdValue),
                                             Some(nrsExternalIdValue),
@@ -145,10 +150,10 @@ object TestData {
     nrsLoginTimes)
 
   val nrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "sha256Checksum", "timestamp", nrsRetrievalValues, JsObject(Map[String, JsValue]("abc" -> JsString("abc"))),
+    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, JsObject(Map[String, JsValue]()),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
 
-  val nrsPayload = new NrsPayload("Some Base64 encoded payload", nrsMetadata) //TODO
+  val nrsPayload = new NrsPayload("QW55Q29udGVudEFzWG1sKDxmb28+YmFyPC9mb28+KQ==", nrsMetadata)
 
   type EmulatedServiceFailure = UnsupportedOperationException
   val emulatedServiceFailure = new EmulatedServiceFailure("Emulated service failure.")

@@ -41,6 +41,10 @@ case class NrSubmissionId(value: UUID) extends AnyVal {
   override def toString: String = value.toString
 }
 
+object NrSubmissionId {
+  implicit val format = Json.format[NrSubmissionId]
+}
+
 case class NrsRetrievalData(internalId: Option[String],
                             externalId: Option[String],
                             agentCode: Option[String],
@@ -231,4 +235,10 @@ case class NrsPayload(payload: String, metadata: NrsMetadata)
 
 object NrsPayload {
   implicit val format = Json.format[NrsPayload]
+}
+
+case class NrsResponsePayload(nrSubmissionId: NrSubmissionId)
+
+object NrsResponsePayload {
+  implicit val format = Json.format[NrsResponsePayload]
 }

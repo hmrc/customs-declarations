@@ -54,7 +54,7 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
   override def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
 
     if (config.nrsConfig.nrsEnabled) {
-      val nrsServiceCallFuture: Future[HttpResponse] = nrsService.send(vpr, hc)
+      val nrsServiceCallFuture: Future[NrsResponsePayload] = nrsService.send(vpr, hc)
       val declarationServiceCallFuture: Future[Either[Result, Option[NrSubmissionId]]] = super.send
 
       declarationServiceCallFuture.map {
@@ -74,9 +74,9 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
     }
   }
 
-  private def getNrSubmissionId[A](f: Future[HttpResponse])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Option[NrSubmissionId]  = {
+  private def getNrSubmissionId[A](f: Future[NrsResponsePayload])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Option[NrSubmissionId]  = {
     f.value match {
-      case Some(scala.util.Success(response)) => (response.json \ "nrSubmissionId").toOption.map(js => NrSubmissionId(fromString(js.toString)))
+      case Some(scala.util.Success(response)) => Some(response.nrSubmissionId)
       case Some(scala.util.Failure(ex)) => {
         logger.debug("NRS Service call failed, nrSubmissionId not returned to client", ex)
         None
@@ -156,5 +156,4 @@ trait DeclarationService {
     logger.debug(s"preparePayload called")
     wrapper.wrap(xml, clientId, dateTime)
   }
-
 }

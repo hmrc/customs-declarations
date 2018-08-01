@@ -22,7 +22,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrsPayload, NrsResponsePayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,7 +32,7 @@ import scala.concurrent.Future
 class NrsConnector @Inject()(http: HttpClient,
                              logger: DeclarationsLogger,
                              serviceConfigProvider: ServiceConfigProvider,
-                             config: DeclarationsConfigService) {
+                             declarationConfigService: DeclarationsConfigService) {
 
   private val configKey = "nrs-service"
   private val XApiKey = "X-API-Key"
@@ -48,7 +48,7 @@ class NrsConnector @Inject()(http: HttpClient,
 
     logger.debug(s"Sending request to nrs service. Url: $url Payload: ${payload.toString}")
 
-    http.POST[NrsPayload, NrsResponsePayload](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, config.nrsConfig.nrsApiKey)))
+    http.POST[NrsPayload, NrsResponsePayload](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
       .map { res =>
         logger.debug(s"Response received from nrs service $res")
         res

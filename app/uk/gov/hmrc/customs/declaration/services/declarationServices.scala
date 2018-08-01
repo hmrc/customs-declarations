@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import java.net.URLEncoder
-import java.util.UUID.fromString
 import javax.inject.{Inject, Singleton}
 
 import org.joda.time.DateTime
@@ -31,14 +30,13 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml.NodeSeq
-
 
 @Singleton
 class StandardDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,

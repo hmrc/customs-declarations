@@ -17,15 +17,6 @@
 package util.externalservices
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import play.api.http.Status
-import play.api.libs.json.{JsArray, Json}
-import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve._
-import uk.gov.hmrc.customs.declaration.model.Eori
-import util.TestData
 
 trait NrsService {
 

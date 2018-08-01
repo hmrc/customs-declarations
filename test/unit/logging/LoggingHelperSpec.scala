@@ -26,7 +26,6 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.customs.declaration.model.{ClientId, GoogleAnalyticsValues, VersionOne}
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestData
 import util.TestData._
 
 class LoggingHelperSpec extends UnitSpec with MockitoSugar {

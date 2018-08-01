@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.MimeTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector

@@ -47,7 +47,7 @@
 
     <logger name="uk.gov.hmrc.circuitbreaker" level="WARN"/>
 
-    <logger name="application" level="WARN"/>
+    <logger name="application" level="INFO"/>
 
     <logger name="connector" level="ERROR">
         <appender-ref ref="STDOUT"/>

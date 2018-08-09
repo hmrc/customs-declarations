@@ -38,14 +38,54 @@ import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml.NodeSeq
 
-
 @Singleton
 class StandardDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
                                                      override val connector: MdgWcoDeclarationConnector,
                                                      override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                                      override val wrapper: MdgPayloadDecorator,
                                                      override val dateTimeProvider: DateTimeService,
-                                                     override val uniqueIdsService: UniqueIdsService) extends DeclarationService
+                                                     override val uniqueIdsService: UniqueIdsService,
+                                                     val nrsService: NrsService,
+                                                     val config: DeclarationsConfigService
+                                                    ) extends DeclarationService {
+
+  override def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
+
+    if (config.nrsConfig.nrsEnabled) {
+      val nrsServiceCallFuture: Future[NrsResponsePayload] = nrsService.send(vpr, hc)
+      val declarationServiceCallFuture: Future[Either[Result, Option[NrSubmissionId]]] = super.send
+
+      declarationServiceCallFuture.map {
+        case Left(result) => Left(
+          {
+            val maybeSubmissionId = getNrSubmissionId(nrsServiceCallFuture)
+            if (getNrSubmissionId(nrsServiceCallFuture).isDefined) {
+              result.withNrSubmissionId(maybeSubmissionId.get)
+            } else {
+              result
+            }
+          })
+        case Right(_) => Right(getNrSubmissionId(nrsServiceCallFuture)) // Unit - i.e. OK response
+      }
+    } else {
+      super.send
+    }
+  }
+
+  private def getNrSubmissionId[A](f: Future[NrsResponsePayload])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Option[NrSubmissionId]  = {
+    f.value match {
+      case Some(scala.util.Success(response)) => Some(response.nrSubmissionId)
+      case Some(scala.util.Failure(ex)) => {
+        logger.debug("NRS Service call failed, nrSubmissionId not returned to client", ex)
+        None
+      }
+      case None =>  {
+        logger.debug("NRS Service did not respond in time, nrSubmissionId not returned to client")
+        None
+      }
+    }
+  }
+}
 
 @Singleton
 class CancellationDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
@@ -54,8 +94,6 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
                                                      override val wrapper: MdgPayloadDecorator,
                                                      override val dateTimeProvider: DateTimeService,
                                                      override val uniqueIdsService: UniqueIdsService) extends DeclarationService
-
-
 trait DeclarationService {
 
   def logger: DeclarationsLogger
@@ -73,7 +111,7 @@ trait DeclarationService {
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
-  def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Unit]] = {
+  def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
 
     futureApiSubFieldsId(vpr.clientId) flatMap {
       case Right(sfId) =>
@@ -96,12 +134,12 @@ trait DeclarationService {
   }
 
   private def callBackend[A](subscriptionFieldsId: SubscriptionFieldsId)
-                            (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Unit]] = {
+                            (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     val dateTime = dateTimeProvider.nowUtc()
     val correlationId = uniqueIdsService.correlation
     val xmlToSend = preparePayload(vpr.xmlBody, subscriptionFieldsId, dateTime)
 
-    connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(())).recover {
+    connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(None)).recover {
       case _: UnhealthyServiceException =>
         logger.error("unhealthy state entered")
         Left(errorResponseServiceUnavailable.XmlResult)
@@ -116,5 +154,4 @@ trait DeclarationService {
     logger.debug(s"preparePayload called")
     wrapper.wrap(xml, clientId, dateTime)
   }
-
 }

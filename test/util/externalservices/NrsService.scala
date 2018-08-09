@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.controllers
+package util.externalservices
 
-object CustomHeaderNames {
-  val XConversationIdHeaderName: String = "X-Conversation-ID"
-  val XClientIdHeaderName = "X-Client-ID"
-  val XBadgeIdentifierHeaderName: String = "X-Badge-Identifier"
-  val NonRepudiationReceiptId: String = "non-repudiation-receipt-id"
+import com.github.tomakehurst.wiremock.client.WireMock._
+
+trait NrsService {
+
+  val nrsUrl = "/submission"
+  private val nrsUrlMatcher = urlEqualTo(nrsUrl)
+
+  def verifyNrsServiceCalled(): Unit = {
+    verify(1, postRequestedFor(nrsUrlMatcher)
+      // Body has been verified as part of unit test
+      .withHeader("Content-Type", equalTo("application/json"))
+      .withHeader("X-API-KEY", equalTo("nrs-api-key"))
+    )
+  }
 }

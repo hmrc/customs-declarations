@@ -45,6 +45,8 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
       |upscan-callback.url="http://upscan-callback.url"
+      |nrs.enabled=true
+      |nrs.apikey="nrs-api-key"
     """.stripMargin)
 
   private val emptyAppConfig: Config = ConfigFactory.parseString("")
@@ -85,7 +87,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: google-analytics-sender.context
           |Could not find config key 'googleAnalytics.trackingId'
           |Could not find config key 'googleAnalytics.clientId'
-          |Could not find config key 'googleAnalytics.eventValue'""".stripMargin
+          |Could not find config key 'googleAnalytics.eventValue'
+          |Could not find config key 'nrs.enabled'
+          |Could not find config key 'nrs.apikey'""".stripMargin
 
       val caught = intercept[IllegalStateException](customsConfigService(emptyServicesConfiguration))
       caught.getMessage shouldBe expectedErrorMessage

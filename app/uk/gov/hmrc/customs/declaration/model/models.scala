@@ -18,7 +18,16 @@ package uk.gov.hmrc.customs.declaration.model
 
 import java.util.UUID
 
-import play.api.libs.json.{Json, OFormat}
+import org.joda.time.LocalDate
+import play.api.libs.json.{JsValue, Json, OFormat}
+import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
+import uk.gov.hmrc.auth.core.retrieve.Credentials
+import uk.gov.hmrc.auth.core.retrieve.Name
+import uk.gov.hmrc.auth.core.retrieve.AgentInformation
+import uk.gov.hmrc.auth.core.retrieve.MdtpInformation
+import uk.gov.hmrc.auth.core.retrieve.ItmpName
+import uk.gov.hmrc.auth.core.retrieve.ItmpAddress
+import uk.gov.hmrc.auth.core.retrieve.LoginTimes
 
 import scala.xml.{Elem, NodeSeq}
 
@@ -26,6 +35,53 @@ case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 
 case class Eori(value: String) extends AnyVal {
   override def toString: String = value.toString
+}
+
+case class NrSubmissionId(value: UUID) extends AnyVal {
+  override def toString: String = value.toString
+}
+
+object NrSubmissionId {
+  implicit val format = Json.format[NrSubmissionId]
+}
+
+case class NrsRetrievalData(internalId: Option[String],
+                            externalId: Option[String],
+                            agentCode: Option[String],
+                            credentials: Credentials,
+                            confidenceLevel: ConfidenceLevel,
+                            nino: Option[String],
+                            saUtr: Option[String],
+                            name: Name,
+                            dateOfBirth: Option[LocalDate],
+                            email: Option[String],
+                            agentInformation: AgentInformation,
+                            groupIdentifier: Option[String],
+                            credentialRole: Option[CredentialRole],
+                            mdtpInformation: Option[MdtpInformation],
+                            itmpName: ItmpName,
+                            itmpDateOfBirth: Option[LocalDate],
+                            itmpAddress: ItmpAddress,
+                            affinityGroup: Option[AffinityGroup],
+                            credentialStrength: Option[String],
+                            loginTimes: LoginTimes)
+
+object NrsRetrievalData {
+  implicit val credentialsFormat = Json.format[Credentials]
+
+  implicit val nameFormat = Json.format[Name]
+
+  implicit val agentInformationFormat = Json.format[AgentInformation]
+
+  implicit val mdtpInformationFormat = Json.format[MdtpInformation]
+
+  implicit val itmpNameFormat = Json.format[ItmpName]
+
+  implicit val itmpAddressFormat = Json.format[ItmpAddress]
+
+  implicit val loginTimesFormat = Json.format[LoginTimes]
+
+  implicit val nrsRetrievalDataFormat = Json.format[NrsRetrievalData]
 }
 
 case class ClientId(value: String) extends AnyVal {
@@ -119,6 +175,8 @@ object UpscanInitiatePayload {
   implicit val format: OFormat[UpscanInitiatePayload] = Json.format[UpscanInitiatePayload]
 }
 
+case class AuthorisedRetrievalData(retrievalJSONBody: String)
+
 case class FileUploadPayload(declarationID: String, documentationType: String)
 
 case class UpscanInitiateResponsePayload(reference: String, uploadRequest: UpscanInitiateUploadRequest)
@@ -164,4 +222,23 @@ case class GoogleAnalyticsRequest(payload: String)
 
 object GoogleAnalyticsRequest {
   implicit val format = Json.format[GoogleAnalyticsRequest]
+}
+
+case class NrsMetadata(businessId: String, notableEvent: String, payloadContentType: String, payloadSha256Checksum: String,
+                       userSubmissionTimestamp: String, identityData: NrsRetrievalData, headerData: JsValue, searchKeys: JsValue)
+
+object NrsMetadata {
+  implicit val format = Json.format[NrsMetadata]
+}
+
+case class NrsPayload(payload: String, metadata: NrsMetadata)
+
+object NrsPayload {
+  implicit val format = Json.format[NrsPayload]
+}
+
+case class NrsResponsePayload(nrSubmissionId: NrSubmissionId)
+
+object NrsResponsePayload {
+  implicit val format = Json.format[NrsResponsePayload]
 }

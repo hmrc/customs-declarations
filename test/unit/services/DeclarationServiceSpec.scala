@@ -30,8 +30,8 @@ import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnecto
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, ApiVersion, SubscriptionFieldsId, VersionOne}
-import uk.gov.hmrc.customs.declaration.services.{DeclarationService, DateTimeService}
+import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationService}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -66,7 +66,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       val uniqueIdsService = stubUniqueIdsService
     }
 
-    protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Unit] = {
+    protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
       await(service.send(vpr, hc))
     }
 
@@ -79,9 +79,9 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       "send transformed xml to connector" in new SetUp() {
 
-        val result: Either[Result, Unit] = send()
+        val result: Either[Result, Option[NrSubmissionId]] = send()
 
-        result shouldBe Right(())
+        result shouldBe Right(None)
         verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
       }
     }
@@ -89,25 +89,25 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
     "get utc date time and pass to connector" in new SetUp() {
 
-      val result: Either[Result, Unit] = send()
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Right(())
+      result shouldBe Right(None)
       verify(mockMdgDeclarationConnector).send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
 
     "pass in version to connector" in new SetUp() {
 
-      val result: Either[Result, Unit] = send()
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Right(())
+      result shouldBe Right(None)
       verify(mockMdgDeclarationConnector).send(any[NodeSeq], any[DateTime], any[UUID], meq(VersionOne))(any[ValidatedPayloadRequest[_]])
     }
 
     "call payload decorator passing incoming xml" in new SetUp() {
 
-      val result: Either[Result, Unit] = send()
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Right(())
+      result shouldBe Right(None)
       verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), meq[String](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], any[DateTime])(any[ValidatedPayloadRequest[_]])
       verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
     }
@@ -115,7 +115,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     "return 500 error response when subscription fields call fails" in new SetUp() {
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
 
-      val result: Either[Result, Unit] = send()
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
       verifyZeroInteractions(mockPayloadDecorator)
@@ -125,7 +125,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     "return 500 error response when MDG call fails" in new SetUp() {
       when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
 
-      val result: Either[Result, Unit] = send()
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
     }
@@ -133,7 +133,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     "return 500 error response when MDG circuit breaker trips" in new SetUp() {
       when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new UnhealthyServiceException("wco-declaration")))
 
-      val result: Either[Result, Unit] = send()
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(errorResponseServiceUnavailable.XmlResult)
     }

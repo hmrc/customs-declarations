@@ -24,7 +24,7 @@ import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
-import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgWcoDecService}
+import util.externalservices._
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig}
 
 import scala.concurrent.Future
@@ -37,7 +37,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
   with MdgWcoDecService
   with ApiSubscriptionFieldsService
   with AuthService
-  with GoogleAnalyticsService {
+  with GoogleAnalyticsService
+  with NrsService {
 
   private val endpoint = "/"
 
@@ -105,6 +106,9 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("GA call was made")
       eventually(verifyGoogleAnalyticsServiceWasCalled())
+
+      And("NRS Service call was made")
+      eventually(verifyNrsServiceCalled())
 
     }
 

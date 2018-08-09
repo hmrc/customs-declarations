@@ -36,7 +36,8 @@ trait AuthService {
 
   private val cspAuthorisationPredicate = Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)
   private val nonCspAuthorisationPredicate = Enrolment(customsEnrolmentName) and AuthProviders(GovernmentGateway)
-  private val nonCspRetrieval = Retrievals.authorisedEnrolments
+  private val cspRetrieval = TestData.nrsRetrievalData
+  private val nonCspRetrieval = TestData.nrsRetrievalData and Retrievals.authorisedEnrolments
 
   private def bearerTokenMatcher(bearerToken: String)= equalTo("Bearer " + bearerToken)
 
@@ -57,19 +58,20 @@ trait AuthService {
 
   def authServiceAuthorizesCSP(bearerToken: String = TestData.cspBearerToken): Unit = {
     stubFor(post(authUrlMatcher)
-      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate)))
+      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate, cspRetrieval)))
       .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
       .willReturn(
         aResponse()
           .withStatus(Status.OK)
-          .withBody("{}")
+          .withBody(
+            """{"internalId":"Int-d67e2592-e560-4766-9e2a-bd2e107ab50a","externalId":"Ext-9cf74a8d-64eb-4ec1-83c1-e432ffa4aa65","agentCode":"123456789","credentials":{"providerId":"a-cred-id","providerType":"PrivilegedApplication"},"confidenceLevel":50,"name":{"name":"TestUser"},"email":"","agentInformation":{},"groupIdentifier":"testGroupId-e2cc8c50-c38f-4014-8265-4e3b35db814d","mdtpInformation":{"deviceId":"device-identifier-1234","sessionId":"session-id-12345"},"itmpName":{"givenName":"test","middleName":"test","familyName":"test"},"itmpDateOfBirth":"1985-01-01" ,"itmpAddress":{},"affinityGroup":"Individual","credentialStrength":"strong","loginTimes":{"currentLogin":"2018-04-23T09:26:45.069Z","previousLogin":"2018-04-05T13:59:54.082Z"}}""".stripMargin)
       )
     )
   }
 
   def authServiceUnauthorisesScopeForCSP(bearerToken: String = TestData.cspBearerToken): Unit = {
     stubFor(post(authUrlMatcher)
-      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate)))
+      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate, cspRetrieval)))
       .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
       .willReturn(
         aResponse()
@@ -88,11 +90,11 @@ trait AuthService {
         aResponse()
           .withStatus(Status.OK)
           .withBody(
-            s"""
-              |{
-              |  "authorisedEnrolments": [ ${enrolmentRetrievalJson(customsEnrolmentName, "EORINumber", eori.value)} ]
-              |}
-            """.stripMargin
+            s"""{"internalId":"Int-d67e2592-e560-4766-9e2a-bd2e107ab50a","externalId":"Ext-9cf74a8d-64eb-4ec1-83c1-e432ffa4aa65","agentCode":"123456789","credentials":{"providerId":"a-cred-id","providerType":"GovernmentGateway"},"confidenceLevel":50,"name":{"name":"TestUser"},"email":"","agentInformation":{},"groupIdentifier":"testGroupId-e2cc8c50-c38f-4014-8265-4e3b35db814d","mdtpInformation":{"deviceId":"device-identifier-1234","sessionId":"session-id-12345"},"affinityGroup":"Individual","credentialStrength":"strong","loginTimes":{"currentLogin":"2018-04-23T09:26:45.069Z","previousLogin":"2018-04-05T13:59:54.082Z"},
+               |"authorisedEnrolments": [ ${enrolmentRetrievalJson(customsEnrolmentName, "EORINumber", eori.value)} ],
+               |"itmpAddress": {},
+               |"itmpName": {}
+               |}""".stripMargin
           )
       )
     )
@@ -112,7 +114,7 @@ trait AuthService {
 
   def verifyAuthServiceCalledForCsp(bearerToken: String = TestData.cspBearerToken): Unit = {
     verify(1, postRequestedFor(authUrlMatcher)
-      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate)))
+      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate, cspRetrieval)))
       .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
     )
   }

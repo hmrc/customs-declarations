@@ -35,7 +35,7 @@ class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
     implicit val implicitVpr = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, FakeRequest()
       .withXmlBody(TestXmlPayload).withHeaders("Content-Type" -> "Some-Content-Type"))
       .toValidatedHeadersRequest(TestExtractedHeaders)
-      .toCspAuthorisedRequest(badgeIdentifier)
+      .toCspAuthorisedRequest(badgeIdentifier, nrsRetrievalValues)
   }
 
   "DeclarationsLogger" should {

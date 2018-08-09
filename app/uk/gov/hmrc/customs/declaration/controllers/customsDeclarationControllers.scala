@@ -100,14 +100,17 @@ extends BaseController {
         val logger = common.logger
 
         logger.debug(s"Request received. Payload = ${vpr.body.toString} headers = ${vpr.headers.headers}")
+
         businessService.send map {
-          case Right(_) =>
+          case Right(maybeNrSubmissionId) =>
             logger.info(s"Declaration request processed successfully")
             maybeGoogleAnalyticsConnector.map(conn => conn.success)
-            Accepted.as(MimeTypes.XML).withConversationId
+            maybeNrSubmissionId match {
+              case Some(nrSubmissionId) => Accepted.as(MimeTypes.XML).withConversationId.withNrSubmissionId(nrSubmissionId)
+              case None => Accepted.as(MimeTypes.XML).withConversationId
+            }
           case Left(errorResult) =>
             errorResult
         }
-
     }
 }

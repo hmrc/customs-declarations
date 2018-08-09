@@ -17,16 +17,22 @@
 package util
 
 import java.util.UUID
+import java.util.UUID.fromString
 
 import com.google.inject.AbstractModule
-import org.scalatest.mockito.MockitoSugar
+import org.joda.time.{DateTime, LocalDate}
+import org.scalatest.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.inject.guice.GuiceableModule
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import play.api.test.Helpers.CONTENT_TYPE
+import uk.gov.hmrc.auth.core.AffinityGroup.Individual
+import uk.gov.hmrc.auth.core.ConfidenceLevel.L500
+import uk.gov.hmrc.auth.core.User
+import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
@@ -36,12 +42,16 @@ import scala.xml.Elem
 
 object TestData {
   val conversationIdValue = "38400000-8cf0-11bd-b23e-10b96e4ef00d"
-  val conversationIdUuid: UUID = UUID.fromString(conversationIdValue)
+  val conversationIdUuid: UUID = fromString(conversationIdValue)
   val conversationId: ConversationId = ConversationId(conversationIdUuid)
 
   val correlationIdValue = "e61f8eee-812c-4b8f-b193-06aedc60dca2"
-  val correlationIdUuid: UUID = UUID.fromString(correlationIdValue)
+  val correlationIdUuid: UUID = fromString(correlationIdValue)
   val correlationId = CorrelationId(correlationIdUuid)
+
+  val nrSubmissionIdValue = "902b0150-aa9a-4046-bf27-85889f128c2a"
+  val nrSubmissionIdValueUuid: UUID = fromString(nrSubmissionIdValue)
+  val nrSubmissionId = NrSubmissionId(nrSubmissionIdValueUuid)
 
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
@@ -56,10 +66,99 @@ object TestData {
   val declarantEori = Eori(declarantEoriValue)
   val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
 
+  val nrsInternalIdValue = "internalId"
+  val nrsExternalIdValue = "externalId"
+  val nrsAgentCodeValue = "agentCode"
+  val nrsCredentials = Credentials(providerId= "providerId", providerType= "providerType")
+  val nrsConfidenceLevel = L500
+  val nrsNinoValue = "ninov"
+  val nrsSaUtrValue = "saUtr"
+  val nrsNameValue = Name(Some("name"), Some("lastname"))
+  val nrsDateOfBirth = Some(LocalDate.now().minusYears(25))
+  val nrsEmailValue = Some("nrsEmailValue")
+  val nrsAgentInformationValue = AgentInformation(Some("agentId"),
+                                                  Some("agentCode"),
+                                                  Some("agentFriendlyName"))
+  val nrsGroupIdentifierValue = Some("groupIdentifierValue")
+  val nrsCredentialRole = Some(User)
+  val nrsMdtpInformation = MdtpInformation("deviceId", "sessionId")
+  val nrsItmpName = ItmpName(Some("givenName"),
+                            Some("middleName"),
+                            Some("familyName"))
+  val nrsItmpAddress = ItmpAddress(Some("line1"),
+                                  Some("line2"),
+                                  Some("line3"),
+                                  Some("line4"),
+                                  Some("line5"),
+                                  Some("postCode"),
+                                  Some("countryName"),
+                                  Some("countryCode"))
+  val nrsAffinityGroup = Some(Individual)
+  val nrsCredentialStrength = Some("STRONG")
+
+  val currentLoginTime: DateTime = new DateTime(1530442800000L)
+  val previousLoginTime: DateTime = new DateTime(1530464400000L)
+  val nrsTimeStamp: DateTime = new DateTime(1530475200000L)
+
+  val nrsLoginTimes = LoginTimes(currentLoginTime, Some(previousLoginTime))
+
+  val nrsRetrievalValues = NrsRetrievalData(Some(nrsInternalIdValue),
+                                            Some(nrsExternalIdValue),
+                                            Some(nrsAgentCodeValue),
+                                            nrsCredentials,
+                                            nrsConfidenceLevel,
+                                            Some(nrsNinoValue),
+                                            Some(nrsSaUtrValue),
+                                            nrsNameValue,
+                                            nrsDateOfBirth,
+                                            nrsEmailValue,
+                                            nrsAgentInformationValue,
+                                            nrsGroupIdentifierValue,
+                                            nrsCredentialRole,
+                                            Some(nrsMdtpInformation),
+                                            nrsItmpName,
+                                            nrsDateOfBirth,
+                                            nrsItmpAddress,
+                                            nrsAffinityGroup,
+                                            nrsCredentialStrength,
+                                            nrsLoginTimes)
+
+  val nrsRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
+    Retrievals.nino and Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
+    Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
+    Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
+
+  val nrsReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
+    ,Some(nrsExternalIdValue)),
+    Some(nrsAgentCodeValue)),
+    nrsCredentials),
+    nrsConfidenceLevel),
+    Some(nrsNinoValue)),
+    Some(nrsSaUtrValue)),
+    nrsNameValue),
+    nrsDateOfBirth),
+    nrsEmailValue),
+    nrsAgentInformationValue),
+    nrsGroupIdentifierValue),
+    nrsCredentialRole),
+    Some(nrsMdtpInformation)),
+    nrsItmpName),
+    nrsDateOfBirth),
+    nrsItmpAddress),
+    nrsAffinityGroup),
+    nrsCredentialStrength),
+    nrsLoginTimes)
+
+  val nrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
+    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, JsObject(Map[String, JsValue]()),
+    JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
+
+  val nrsPayload = new NrsPayload("QW55Q29udGVudEFzWG1sKDxmb28+YmFyPC9mb28+KQ==", nrsMetadata)
+
   type EmulatedServiceFailure = UnsupportedOperationException
   val emulatedServiceFailure = new EmulatedServiceFailure("Emulated service failure.")
 
-  val mockUuidService: UuidService = MockitoSugar.mock[UuidService]
+  lazy val mockUuidService: UuidService = mock[UuidService]
 
   object TestModule extends AbstractModule {
     def configure(): Unit = {
@@ -79,7 +178,7 @@ object TestData {
     """.stripMargin)
 
   // note we can not mock service methods that return value classes - however using a simple stub IMHO it results in cleaner code (less mocking noise)
-  val stubUniqueIdsService = new UniqueIdsService(mockUuidService) {
+  lazy val stubUniqueIdsService = new UniqueIdsService(mockUuidService) {
     override def conversation: ConversationId = conversationId
 
     override def correlation: CorrelationId = correlationId
@@ -95,10 +194,10 @@ object TestData {
   val TestExtractedHeaders = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
 
   val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestCspAuthorisedRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier)
+  val TestCspAuthorisedRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, nrsRetrievalValues)
   val TestValidatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
-  val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, nrsRetrievalValues).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori, nrsRetrievalValues).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 
 }
 

@@ -26,9 +26,10 @@ import util.{AuditService, TestData}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.TestData._
-import util.externalservices.{ApiSubscriptionFieldsService, AuthService, UpscanInitiateService}
+import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, UpscanInitiateService}
 
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration.Duration
 
 class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
@@ -38,7 +39,8 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
   with UpscanInitiateService
   with ApiSubscriptionFieldsService
   with AuthService
-  with AuditService{
+  with AuditService
+  with GoogleAnalyticsService {
 
   private val endpoint = "/file-upload"
 
@@ -81,7 +83,6 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCsp())
     }
-
   }
 
   feature("File upload API authorises submissions from Software Houses with v3.0 accept header") {
@@ -89,6 +90,8 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     scenario("An unauthorised CSP is not allowed to submit a file upload request") {
       Given("A CSP wants to submit a valid file upload")
       val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV3Request.fromCsp.postTo(endpoint)
+
+      setupGoogleAnalyticsServiceToReturn(ACCEPTED)
 
       And("the CSP is unauthorised with its privileged application")
       authServiceUnauthorisesScopeForCSP()

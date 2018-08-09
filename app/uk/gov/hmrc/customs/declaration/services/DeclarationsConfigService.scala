@@ -17,12 +17,13 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
+
 import scalaz.ValidationNel
 import scalaz.syntax.apply._
 import scalaz.syntax.traverse._
 import uk.gov.hmrc.customs.api.common.config.ConfigValidationNelAdaptor
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{DeclarationsCircuitBreakerConfig, DeclarationsConfig, GoogleAnalyticsConfig}
+import uk.gov.hmrc.customs.declaration.model.{DeclarationsCircuitBreakerConfig, DeclarationsConfig, GoogleAnalyticsConfig, NrsConfig}
 
 @Singleton
 class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationNelAdaptor, logger: DeclarationsLogger) {
@@ -45,6 +46,8 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val gaEventValue = root.string("googleAnalytics.eventValue")
 
   private val upscanCallbackUrl = root.string("upscan-callback.url")
+  private val nrsEnabled = root.boolean("nrs.enabled")
+  private val nrsApiKey = root.string("nrs.apikey")
 
   private val validatedDeclarationsConfig: ValidationNel[String, DeclarationsConfig] = (
     apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel |@| upscanCallbackUrl
@@ -58,10 +61,15 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
     gaServiceUrl |@| gaTrackingId |@| gaClientId |@| gaEventValue
     ) (GoogleAnalyticsConfig.apply)
 
+  private val validatedNrsConfig: ValidationNel[String, NrsConfig] = (
+    nrsEnabled |@| nrsApiKey
+    ) (NrsConfig.apply)
+
   private val customsConfigHolder =
     (validatedDeclarationsConfig |@|
       validatedDeclarationsCircuitBreakerConfig |@|
-      validatedGoogleAnalyticsSenderConfig
+      validatedGoogleAnalyticsSenderConfig |@|
+      validatedNrsConfig
       ) (CustomsConfigHolder.apply) fold(
       fail = { nel =>
         // error case exposes nel (a NotEmptyList)
@@ -78,7 +86,10 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
 
   val googleAnalyticsConfig: GoogleAnalyticsConfig = customsConfigHolder.validatedGoogleAnalyticsConfig
 
+  val nrsConfig: NrsConfig = customsConfigHolder.validatedNrsConfig
+
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
                                          declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,
-                                         validatedGoogleAnalyticsConfig: GoogleAnalyticsConfig)
+                                         validatedGoogleAnalyticsConfig: GoogleAnalyticsConfig,
+                                         validatedNrsConfig: NrsConfig)
 }

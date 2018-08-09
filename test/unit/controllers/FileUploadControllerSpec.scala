@@ -45,7 +45,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.auth.core.AuthProvider.PrivilegedApplication
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, Retrievals}
+import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
@@ -81,11 +81,11 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService
     }
 
+    val mockFileUploadBusinessService = mock[FileUploadBusinessService]
+    val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     val stubAuthAction = new AuthAction(mockAuthConnector, mockLogger, mockGoogleAnalyticsConnector)
     val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger, mockGoogleAnalyticsConnector)
     val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
-    val mockFileUploadBusinessService = mock[FileUploadBusinessService]
-    val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
 
     val fileUploadPayloadValidationAction = new FileUploadPayloadValidationAction(mockXmlValidationService, mockLogger, mockGoogleAnalyticsConnector)
     val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, mockLogger)
@@ -117,10 +117,11 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       }
 
       when(mockXmlValidationService.validate(ValidFileUploadXml)).thenReturn(Future.successful(()))
-      when(mockAuthConnector.authorise(ameq(Enrolment(apiScope) and AuthProviders(PrivilegedApplication)), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext]))
+      when(mockAuthConnector.authorise(ameq(Enrolment(apiScope) and AuthProviders(PrivilegedApplication)), ameq(nrsRetrievalData))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Future.failed(new InsufficientEnrolments))
-      when(mockAuthConnector.authorise(any, ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
-        .thenReturn(Enrolments(Set(customsEnrolment)))
+      when(mockAuthConnector.authorise(any, ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
+        .thenReturn(new ~(nrsReturnData, Enrolments(Set(customsEnrolment))))
+
       when(mockFileUploadBusinessService.send(any[ValidatedUploadPayloadRequest[AnyContentAsXml]],any[HeaderCarrier])).thenReturn(Future.successful(Right(upscanInitiateResponsePayload)))
 
       val actual: Result = await(fileUploadController.post().apply(ValidRequest))

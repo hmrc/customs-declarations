@@ -52,6 +52,7 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
   override def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
 
     if (config.nrsConfig.nrsEnabled) {
+      logger.debug("nrs enabled")
       val nrsServiceCallFuture: Future[NrsResponsePayload] = nrsService.send(vpr, hc)
       val declarationServiceCallFuture: Future[Either[Result, Option[NrSubmissionId]]] = super.send
 
@@ -68,6 +69,7 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
         case Right(_) => Right(getNrSubmissionId(nrsServiceCallFuture)) // Unit - i.e. OK response
       }
     } else {
+      logger.debug("nrs not enabled")
       super.send
     }
   }
@@ -75,14 +77,12 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
   private def getNrSubmissionId[A](f: Future[NrsResponsePayload])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Option[NrSubmissionId]  = {
     f.value match {
       case Some(scala.util.Success(response)) => Some(response.nrSubmissionId)
-      case Some(scala.util.Failure(ex)) => {
+      case Some(scala.util.Failure(ex)) =>
         logger.debug("NRS Service call failed, nrSubmissionId not returned to client", ex)
         None
-      }
-      case None =>  {
+      case None =>
         logger.debug("NRS Service did not respond in time, nrSubmissionId not returned to client")
         None
-      }
     }
   }
 }

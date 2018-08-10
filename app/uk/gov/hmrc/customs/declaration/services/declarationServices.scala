@@ -45,47 +45,9 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
                                                      override val wrapper: MdgPayloadDecorator,
                                                      override val dateTimeProvider: DateTimeService,
                                                      override val uniqueIdsService: UniqueIdsService,
-                                                     val nrsService: NrsService,
-                                                     val config: DeclarationsConfigService
-                                                    ) extends DeclarationService {
-
-  override def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
-
-    if (config.nrsConfig.nrsEnabled) {
-      logger.debug("nrs enabled")
-      val nrsServiceCallFuture: Future[NrsResponsePayload] = nrsService.send(vpr, hc)
-      val declarationServiceCallFuture: Future[Either[Result, Option[NrSubmissionId]]] = super.send
-
-      declarationServiceCallFuture.map {
-        case Left(result) => Left(
-          {
-            val maybeSubmissionId = getNrSubmissionId(nrsServiceCallFuture)
-            if (getNrSubmissionId(nrsServiceCallFuture).isDefined) {
-              result.withNrSubmissionId(maybeSubmissionId.get)
-            } else {
-              result
-            }
-          })
-        case Right(_) => Right(getNrSubmissionId(nrsServiceCallFuture)) // Unit - i.e. OK response
-      }
-    } else {
-      logger.debug("nrs not enabled")
-      super.send
-    }
-  }
-
-  private def getNrSubmissionId[A](f: Future[NrsResponsePayload])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Option[NrSubmissionId]  = {
-    f.value match {
-      case Some(scala.util.Success(response)) => Some(response.nrSubmissionId)
-      case Some(scala.util.Failure(ex)) =>
-        logger.debug("NRS Service call failed, nrSubmissionId not returned to client", ex)
-        None
-      case None =>
-        logger.debug("NRS Service did not respond in time, nrSubmissionId not returned to client")
-        None
-    }
-  }
-}
+                                                     override val nrsService: NrsService,
+                                                     override val declarationsConfigService: DeclarationsConfigService
+                                                    ) extends DeclarationService
 
 @Singleton
 class CancellationDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
@@ -93,7 +55,9 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
                                                      override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                                      override val wrapper: MdgPayloadDecorator,
                                                      override val dateTimeProvider: DateTimeService,
-                                                     override val uniqueIdsService: UniqueIdsService) extends DeclarationService
+                                                     override val uniqueIdsService: UniqueIdsService,
+                                                     override val nrsService: NrsService,
+                                                     override val declarationsConfigService: DeclarationsConfigService) extends DeclarationService
 trait DeclarationService {
 
   def logger: DeclarationsLogger
@@ -108,18 +72,46 @@ trait DeclarationService {
 
   def uniqueIdsService: UniqueIdsService
 
+  def nrsService: NrsService
+
+  def declarationsConfigService: DeclarationsConfigService
+
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
-  def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
 
+  def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     futureApiSubFieldsId(vpr.clientId) flatMap {
       case Right(sfId) =>
-        callBackend(sfId)
+          callBackendAndNrs(vpr, hc, sfId)
       case Left(result) =>
         Future.successful(Left(result))
     }
   }
+
+  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier, sfId: SubscriptionFieldsId) = {
+    if (declarationsConfigService.nrsConfig.nrsEnabled) {
+      logger.debug("nrs enabled")
+      val nrsServiceCallFuture: Future[NrsResponsePayload] = nrsService.send(vpr, hc)
+
+      callBackend(sfId).map {
+        case Left(result) => Left(
+          {
+            val maybeSubmissionId = getNrSubmissionId(nrsServiceCallFuture)
+            if (getNrSubmissionId(nrsServiceCallFuture).isDefined) {
+              result.withNrSubmissionId(maybeSubmissionId.get)
+            } else {
+              result
+            }
+          })
+        case Right(_) => Right(getNrSubmissionId(nrsServiceCallFuture)) // Unit - i.e. OK response
+      }
+    } else {
+      logger.debug("nrs not enabled")
+      callBackend(sfId)
+    }
+  }
+
   //TODO: Service should not return a Result, it is controller's job to return the result in a format that the caller accept
   private def futureApiSubFieldsId[A](c: ClientId)
                                      (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
@@ -153,5 +145,17 @@ trait DeclarationService {
                                (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): NodeSeq = {
     logger.debug(s"preparePayload called")
     wrapper.wrap(xml, clientId, dateTime)
+  }
+
+  private def getNrSubmissionId[A](f: Future[NrsResponsePayload])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Option[NrSubmissionId]  = {
+    f.value match {
+      case Some(scala.util.Success(response)) => Some(response.nrSubmissionId)
+      case Some(scala.util.Failure(ex)) =>
+        logger.debug("NRS Service call failed, nrSubmissionId not returned to client", ex)
+        None
+      case None =>
+        logger.debug("NRS Service did not respond in time, nrSubmissionId not returned to client")
+        None
+    }
   }
 }

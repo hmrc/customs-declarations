@@ -51,9 +51,9 @@ import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, FileUploadController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, ValidatedUploadPayloadRequest}
-import uk.gov.hmrc.customs.declaration.model.{ConversationId, GoogleAnalyticsValues, UpscanInitiateResponsePayload, UpscanInitiateUploadRequest}
-import uk.gov.hmrc.customs.declaration.services.{FileUploadBusinessService, FileUploadXmlValidationService, UniqueIdsService}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, HasAnalyticsValues, HasConversationId, ValidatedUploadPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadBusinessService, FileUploadXmlValidationService, UniqueIdsService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
@@ -66,13 +66,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
 
-  private implicit val forConversions = TestConversationIdRequest
+  private implicit val forConversions: AnalyticsValuesAndConversationIdRequest[AnyContentAsXml] = TestConversationIdRequest
   private implicit val materializer: Materializer = app.materializer
 
   trait SetUp {
     val mockXmlValidationService: FileUploadXmlValidationService = mock[FileUploadXmlValidationService]
-    val mockCdsLogger = mock[CdsLogger]
-    val mockLogger = new DeclarationsLogger(mockCdsLogger)
+    val mockCdsLogger: CdsLogger = mock[CdsLogger]
+    val mockLogger: DeclarationsLogger = new DeclarationsLogger(mockCdsLogger)
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
     protected val endpointAction = new EndpointAction {
@@ -81,9 +81,10 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService
     }
 
-    val mockFileUploadBusinessService = mock[FileUploadBusinessService]
-    val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
-    val stubAuthAction = new AuthAction(mockAuthConnector, mockLogger, mockGoogleAnalyticsConnector)
+    val mockFileUploadBusinessService: FileUploadBusinessService = mock[FileUploadBusinessService]
+    val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
+    val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
+    val stubAuthAction = new AuthAction(mockAuthConnector, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger, mockGoogleAnalyticsConnector)
     val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
 
@@ -111,7 +112,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       val predicate: Predicate = Enrolment(apiScope) and AuthProviders(PrivilegedApplication)
       val customsEnrolmentName = "HMRC-CUS-ORG"
       val eoriIdentifier = "EORINumber"
-      val customsEnrolment = Enrolment(customsEnrolmentName).withIdentifier(eoriIdentifier, "EORI123")
+      val customsEnrolment: Enrolment = Enrolment(customsEnrolmentName).withIdentifier(eoriIdentifier, "EORI123")
       val conversationId = new HasConversationId {
         override val conversationId: ConversationId = ConversationId(UUID.fromString(upscanInitiateResponsePayload.reference))
       }
@@ -123,6 +124,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
         .thenReturn(new ~(nrsReturnData, Enrolments(Set(customsEnrolment))))
 
       when(mockFileUploadBusinessService.send(any[ValidatedUploadPayloadRequest[AnyContentAsXml]],any[HeaderCarrier])).thenReturn(Future.successful(Right(upscanInitiateResponsePayload)))
+      when(mockDeclarationConfigService.nrsConfig).thenReturn(NrsConfig(nrsEnabled = true, "x-api-key"))
 
       val actual: Result = await(fileUploadController.post().apply(ValidRequest))
 

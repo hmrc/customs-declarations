@@ -54,7 +54,7 @@ import scala.xml.SAXException
 
 class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
 
-  private implicit val forConversions = TestConversationIdRequest
+  private implicit val forConversions: AnalyticsValuesAndConversationIdRequest[AnyContentAsXml] = TestConversationIdRequest
   private val saxException = new SAXException("Boom!")
   private val expectedXmlSchemaErrorResult = ErrorResponse
     .errorBadRequest("Payload is not valid according to schema")
@@ -63,8 +63,8 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
   trait SetUp {
     val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
     val mockExportsLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
-    val payloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockExportsLogger, Some(mockGoogleAnalyticsConnector)){}
+    val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
+    val payloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockExportsLogger, Some(mockGoogleAnalyticsConnector)){}
   }
   "PayloadValidationAction" should {
     "return a ValidatedPayloadRequest when XML validation is OK" in new SetUp {
@@ -88,7 +88,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       private val errorMessage = "Request body does not contain a well-formed XML document."
       private val errorNotWellFormed = ErrorResponse.errorBadRequest(errorMessage).XmlResult.withConversationId
       private val authorisedRequestWithNonWellFormedXml = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, FakeRequest().withTextBody("<foo><foo>"))
-        .toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest(badgeIdentifier, nrsRetrievalValues)
+        .toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues))
 
       private val actual = await(payloadValidationAction.refine(authorisedRequestWithNonWellFormedXml))
 

@@ -59,10 +59,9 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
     GoogleAnalyticsValues.Submit,
     VersionTwo,
     ClientId("ABC"),
-    NonCsp(Eori("123")),
+    NonCsp(Eori("123"), Some(TestData.nrsRetrievalValues)),
     NodeSeq.Empty,
-    FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    Some(TestData.nrsRetrievalValues)
+    FakeRequest().withJsonBody(Json.obj("fake" -> "request"))
   )
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")

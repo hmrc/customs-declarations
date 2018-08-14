@@ -39,11 +39,16 @@ class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
       .toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues))
   }
 
+  //private val nrsExpectedString= "Some(NrsRetrievalData(Some(internalId),Some(externalId),Some(agentCode),Credentials(providerId,providerType),500,Some(ninov),Some(saUtr),Name(Some(name),Some(lastname)),Some(1993-08-14),Some(nrsEmailValue),AgentInformation(Some(agentId),Some(agentCode),Some(agentFriendlyName)),Some(groupIdentifierValue),Some(User),Some(MdtpInformation(deviceId,sessionId)),ItmpName(Some(givenName),Some(middleName),Some(familyName)),Some(1993-08-14),ItmpAddress(Some(line1),Some(line2),Some(line3),Some(line4),Some(line5),Some(postCode),Some(countryName),Some(countryCode)),Some(Individual),Some(STRONG),LoginTimes(2018-07-01T12:00:00.000+01:00,Some(2018-07-01T18:00:00.000+01:00))))"
+
   "DeclarationsLogger" should {
     "debug(s: => String)" in new SetUp {
       logger.debug("msg")
 
       PassByNameVerifier(mockCdsLogger, "debug")
+                        //[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d][clientId=SOME_X_CLIENT_ID][requestedApiVersion=1.0][authorisedAs=CSP(BADGEID123)] msg
+                        //[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d][clientId=SOME_X_CLIENT_ID][requestedApiVersion=1.0][authorisedAs=CSP(BADGEID123)] msg
+                        //[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d][clientId=SOME_X_CLIENT_ID][requestedApiVersion=1.0][authorisedAs=Csp$(BADGEID123)] msg
         .withByNameParam("[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d][clientId=SOME_X_CLIENT_ID][requestedApiVersion=1.0][authorisedAs=Csp(BADGEID123)] msg")
         .verify()
     }

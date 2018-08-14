@@ -38,7 +38,7 @@ class MdgPayloadDecorator() {
         <v1:clientID>{clientId}</v1:clientID>
         <v1:conversationID>{vpr.conversationId.uuid}</v1:conversationID>
         { vpr.authorisedAs match {
-            case Csp(badgeId) => <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>
+            case Csp(badgeId, _) => <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>
             case _ => NodeSeq.Empty
           }
         }

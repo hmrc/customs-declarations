@@ -43,7 +43,7 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
   override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedUploadPayloadRequest[A]]] = {
     implicit val implicitAr: AuthorisedRequest[A] = ar
     ar.authorisedAs match {
-      case NonCsp(_) =>
+      case NonCsp(_, _) =>
         fileUploadPayloadValidationAction.refine(ar).map {
           case Right(validatedPayloadRequest) =>
             Right(validatedPayloadRequest.toValidatedUploadPayloadRequest(

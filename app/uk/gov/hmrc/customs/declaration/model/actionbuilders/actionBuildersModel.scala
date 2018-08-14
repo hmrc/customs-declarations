@@ -48,18 +48,17 @@ object ActionBuilderModelHelper {
 
   implicit class ValidatedHeadersRequestOps[A](val vhr: ValidatedHeadersRequest[A]) extends AnyVal {
 
-    def toCspAuthorisedRequest(badgeId: BadgeIdentifier, nrsRetrievalData: NrsRetrievalData): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId), nrsRetrievalData)
+    def toCspAuthorisedRequest(badgeId: BadgeIdentifier, nrsRetrievalData: Option[NrsRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId, nrsRetrievalData))
 
-    def toNonCspAuthorisedRequest(eori: Eori, nrsRetrievalData: NrsRetrievalData): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori), nrsRetrievalData)
+    def toNonCspAuthorisedRequest(eori: Eori, nrsRetrievalData: Option[NrsRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori, nrsRetrievalData))
 
-    def toAuthorisedRequest(authorisedAs: AuthorisedAs, nrsRetrievalData: NrsRetrievalData): AuthorisedRequest[A] = AuthorisedRequest(
+    def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
       vhr.conversationId,
       vhr.analyticsValues,
       vhr.requestedApiVersion,
       vhr.clientId,
       authorisedAs,
-      vhr.request,
-      nrsRetrievalData
+      vhr.request
     )
   }
 
@@ -71,8 +70,7 @@ object ActionBuilderModelHelper {
       ar.clientId,
       ar.authorisedAs,
       xmlBody,
-      ar.request,
-      ar.nrsRetrievalData
+      ar.request
     )
   }
 
@@ -119,10 +117,6 @@ trait HasFileUploadProperties {
   val documentationType: DocumentationType
 }
 
-trait HasNrsProperties {
-  val nrsRetrievalData: NrsRetrievalData
-}
-
 case class ExtractedHeadersImpl(
   requestedApiVersion: ApiVersion,
   clientId: ClientId
@@ -158,9 +152,8 @@ case class AuthorisedRequest[A](
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
-  request: Request[A],
-  nrsRetrievalData: NrsRetrievalData
-) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs with HasNrsProperties
+  request: Request[A]
+) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs
 
 
 // Available after ValidatedPayloadAction builder
@@ -181,9 +174,8 @@ case class ValidatedPayloadRequest[A](
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
   xmlBody: NodeSeq,
-  request: Request[A],
-  nrsRetrievalData: NrsRetrievalData
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasNrsProperties
+  request: Request[A]
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
 
 case class ValidatedUploadPayloadRequest[A](
   conversationId: ConversationId,

@@ -165,9 +165,11 @@ object VersionThree extends ApiVersion{
   override val configPrefix: String = "v3."
 }
 
-sealed trait AuthorisedAs
-case class Csp(badgeIdentifier: BadgeIdentifier) extends AuthorisedAs
-case class NonCsp(eori: Eori) extends AuthorisedAs
+sealed trait AuthorisedAs {
+  val nrsRetrievalData: Option[NrsRetrievalData]
+}
+case class Csp(badgeIdentifier: BadgeIdentifier, nrsRetrievalData: Option[NrsRetrievalData]) extends AuthorisedAs
+case class NonCsp(eori: Eori, nrsRetrievalData: Option[NrsRetrievalData]) extends AuthorisedAs
 
 case class UpscanInitiatePayload(callbackUrl: String)
 

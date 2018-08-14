@@ -24,6 +24,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.{Json, Writes}
+import play.api.mvc.AnyContentAsJson
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
@@ -49,19 +50,18 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
 
   private val v1Config = ServiceConfig("v1-url", None, "v1-default")
   private val v2Config = ServiceConfig("v2-url", None, "v2-default")
-  private val nrsConfig =  NrsConfig(true, "nrs-api-key-value")
+  private val nrsConfig =  NrsConfig(nrsEnabled = true, "nrs-api-key-value")
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  private implicit val jsonRequest =  ValidatedPayloadRequest(
+  private implicit val jsonRequest: ValidatedPayloadRequest[AnyContentAsJson] =  ValidatedPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.Submit,
     VersionTwo,
     ClientId("ABC"),
-    NonCsp(Eori("123")),
+    NonCsp(Eori("123"), Some(TestData.nrsRetrievalValues)),
     NodeSeq.Empty,
-    FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    TestData.nrsRetrievalValues
+    FakeRequest().withJsonBody(Json.obj("fake" -> "request"))
   )
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")

@@ -58,7 +58,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
     GoogleAnalyticsValues.Fileupload,
     VersionTwo,
     ClientId("ABC"),
-    NonCsp(Eori("123")),
+    NonCsp(Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     DeclarationId("declarationId"),

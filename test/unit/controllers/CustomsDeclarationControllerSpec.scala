@@ -30,9 +30,9 @@ import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
+import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsValues, NrsConfig}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, ValidatedPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.{StandardDeclarationSubmissionService, UniqueIdsService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StandardDeclarationSubmissionService, UniqueIdsService, XmlValidationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.AuthConnectorStubbing
@@ -56,12 +56,15 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockResult: Result = mock[Result]
     protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
+    protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
+
     protected val endpointAction = new EndpointAction {
       override val logger: DeclarationsLogger = mockDeclarationsLogger
       override val googleAnalyticsValues: GoogleAnalyticsValues = GoogleAnalyticsValues.Submit
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService
     }
-    protected val stubAuthAction: AuthAction = new AuthAction(mockAuthConnector, mockDeclarationsLogger, mockGoogleAnalyticsConnector)
+
+    protected val stubAuthAction: AuthAction = new AuthAction(mockAuthConnector, mockDeclarationsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
     protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger, Some(mockGoogleAnalyticsConnector)) {}
 
@@ -79,6 +82,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
     when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(Future.successful(()))
     when(mockBusinessService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(Right(Some(nrSubmissionId))))
+    when(mockDeclarationConfigService.nrsConfig).thenReturn(NrsConfig(nrsEnabled = true, "x-api-key"))
   }
 
   private val errorResultEoriNotFoundInCustomsEnrolment = ErrorResponse(UNAUTHORIZED, errorCode = "UNAUTHORIZED",

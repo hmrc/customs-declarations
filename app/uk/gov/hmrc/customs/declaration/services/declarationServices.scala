@@ -34,7 +34,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Left
+import scala.util.{Failure, Left, Success}
 import scala.util.control.NonFatal
 import scala.xml.NodeSeq
 
@@ -98,7 +98,7 @@ trait DeclarationService {
         case Left(result) => Left(
           {
             val maybeSubmissionId = getNrSubmissionId(nrsServiceCallFuture)
-            if (getNrSubmissionId(nrsServiceCallFuture).isDefined) {
+            if (maybeSubmissionId.isDefined) {
               result.withNrSubmissionId(maybeSubmissionId.get)
             } else {
               result
@@ -149,8 +149,8 @@ trait DeclarationService {
 
   private def getNrSubmissionId[A](f: Future[NrsResponsePayload])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Option[NrSubmissionId]  = {
     f.value match {
-      case Some(scala.util.Success(response)) => Some(response.nrSubmissionId)
-      case Some(scala.util.Failure(ex)) =>
+      case Some(Success(response)) => Some(response.nrSubmissionId)
+      case Some(Failure(ex)) =>
         logger.debug("NRS Service call failed, nrSubmissionId not returned to client", ex)
         None
       case None =>

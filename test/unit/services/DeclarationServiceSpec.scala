@@ -79,7 +79,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
     when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.successful(NrsResponsePayload(nrSubmissionId)))
-    when(mockDeclarationsConfigService.nrsConfig).thenReturn(NrsConfig(true, "x-nrs-key"))
+    when(mockDeclarationsConfigService.nrsConfig).thenReturn(NrsConfig(nrsEnabled = true, "x-nrs-key"))
   }
     "BusinessService" should {
 
@@ -143,5 +143,17 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       result shouldBe Left(errorResponseServiceUnavailable.XmlResult.withNrSubmissionId(nrSubmissionId))
     }
+
+  "should not have nrs receipt id when call to nrs does not return in time" in new SetUp() {
+
+    val mockNrsFuture = mock[Future[NrsResponsePayload]]
+    when(mockNrsFuture.value).thenReturn(None)
+    when(mockNrsService.send(vpr, headerCarrier)).thenReturn(mockNrsFuture)
+
+    val result: Either[Result, Option[NrSubmissionId]] = send()
+
+    result shouldBe Right(None)
+    verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+  }
 }
 

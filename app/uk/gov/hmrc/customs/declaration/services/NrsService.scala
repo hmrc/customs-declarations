@@ -50,7 +50,7 @@ class NrsService @Inject()(logger: DeclarationsLogger,
       notableEvent = notableEventValue,
       payloadContentType = applicationXml,
       payloadSha256Checksum = sha256Hash(vpr.request.body.toString), // This should come from the end user NOT us
-      userSubmissionTimestamp = vpr.headers.get(XRequestTimestamp).map(nanos => new DateTime(nanos.toLong, DateTimeZone.UTC).toString).getOrElse(""),
+      userSubmissionTimestamp = dateTimeService.nowUtc().toString,
       userAuthToken = vpr.headers.get(XClientAuthorizationToken).getOrElse(""),
       identityData = vpr.authorisedAs.nrsRetrievalData.get, // this should always be populated when nrs is enabled and called
       headerData = new JsObject(vpr.request.headers.toMap.map(x => x._1 -> JsArray(x._2.map(JsString)))),

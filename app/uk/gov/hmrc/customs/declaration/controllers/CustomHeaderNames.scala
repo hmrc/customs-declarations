@@ -21,6 +21,5 @@ object CustomHeaderNames {
   val XClientIdHeaderName = "X-Client-ID"
   val XBadgeIdentifierHeaderName: String = "X-Badge-Identifier"
   val NonRepudiationReceiptId: String = "X-Receipt-ID"
-  val XRequestTimestamp = "X-Request-Timestamp"
   val XClientAuthorizationToken = "X-Client-Authorization-Token"
 }

@@ -23,10 +23,9 @@ import java.security.MessageDigest.getInstance
 import javax.inject.{Inject, Singleton}
 
 import com.google.common.io.BaseEncoding.base64
-import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.json.{JsArray, JsObject, JsString, JsValue}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XClientAuthorizationToken, XRequestTimestamp}
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.XClientAuthorizationToken
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.connectors
 
 import com.google.inject._
+import play.api.libs.json.Json
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -27,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.parsing.json.JSON
 
 @Singleton
 class NrsConnector @Inject()(http: HttpClient,
@@ -46,7 +48,7 @@ class NrsConnector @Inject()(http: HttpClient,
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    logger.debug(s"Sending request to nrs service. Url: $url Payload: ${payload.toString}")
+    logger.debug(s"Sending request to nrs service. Url: $url Payload: ${Json.prettyPrint(Json.toJson(payload))}")
 
     http.POST[NrsPayload, NrsResponsePayload](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
       .map { res =>

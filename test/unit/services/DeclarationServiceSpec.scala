@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationService}
+import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationService, DeclarationsConfigService, NrsService}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -56,6 +56,8 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     protected val mockPayloadDecorator = mock[MdgPayloadDecorator]
     protected val mockDateTimeProvider = mock[DateTimeService]
     protected val mockHttpResponse = mock[HttpResponse]
+    protected val mockNrsService = mock[NrsService]
+    protected val mockDeclarationsConfigService = mock[DeclarationsConfigService]
 
     protected lazy val service: DeclarationService = new DeclarationService {
       val logger = mockLogger
@@ -64,6 +66,8 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       val wrapper = mockPayloadDecorator
       val dateTimeProvider = mockDateTimeProvider
       val uniqueIdsService = stubUniqueIdsService
+      val nrsService = mockNrsService
+      val declarationsConfigService = mockDeclarationsConfigService
     }
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
@@ -74,6 +78,8 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+    when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.successful(NrsResponsePayload(nrSubmissionId)))
+    when(mockDeclarationsConfigService.nrsConfig).thenReturn(NrsConfig(nrsEnabled = true, "x-nrs-key"))
   }
     "BusinessService" should {
 
@@ -81,7 +87,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
         val result: Either[Result, Option[NrSubmissionId]] = send()
 
-        result shouldBe Right(None)
+        result shouldBe Right(Some(nrSubmissionId))
         verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
       }
     }
@@ -91,7 +97,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Right(None)
+      result shouldBe Right(Some(nrSubmissionId))
       verify(mockMdgDeclarationConnector).send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
 
@@ -99,7 +105,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Right(None)
+      result shouldBe Right(Some(nrSubmissionId))
       verify(mockMdgDeclarationConnector).send(any[NodeSeq], any[DateTime], any[UUID], meq(VersionOne))(any[ValidatedPayloadRequest[_]])
     }
 
@@ -107,7 +113,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Right(None)
+      result shouldBe Right(Some(nrSubmissionId))
       verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), meq[String](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], any[DateTime])(any[ValidatedPayloadRequest[_]])
       verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
     }
@@ -127,7 +133,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
     }
 
     "return 500 error response when MDG circuit breaker trips" in new SetUp() {
@@ -135,7 +141,19 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Left(errorResponseServiceUnavailable.XmlResult)
+      result shouldBe Left(errorResponseServiceUnavailable.XmlResult.withNrSubmissionId(nrSubmissionId))
     }
+
+  "should not have nrs receipt id when call to nrs does not return in time" in new SetUp() {
+
+    val mockNrsFuture = mock[Future[NrsResponsePayload]]
+    when(mockNrsFuture.value).thenReturn(None)
+    when(mockNrsService.send(vpr, headerCarrier)).thenReturn(mockNrsFuture)
+
+    val result: Either[Result, Option[NrSubmissionId]] = send()
+
+    result shouldBe Right(None)
+    verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+  }
 }
 

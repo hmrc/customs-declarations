@@ -20,15 +20,17 @@ import java.lang.String.format
 import java.math.BigInteger
 import java.nio.charset.StandardCharsets.UTF_8
 import java.security.MessageDigest.getInstance
+import javax.inject.{Inject, Singleton}
 
 import com.google.common.io.BaseEncoding.base64
-import javax.inject.{Inject, Singleton}
+import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.json.{JsArray, JsObject, JsString, JsValue}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XClientAuthorizationToken, XRequestTimestamp}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
@@ -47,8 +49,9 @@ class NrsService @Inject()(logger: DeclarationsLogger,
     val nrsMetadata = new NrsMetadata(businessId = businessIdValue,
       notableEvent = notableEventValue,
       payloadContentType = applicationXml,
-      payloadSha256Checksum = sha256Hash(vpr.request.body.toString),
+      payloadSha256Checksum = sha256Hash(vpr.request.body.toString), // This should come from the end user NOT us
       userSubmissionTimestamp = dateTimeService.nowUtc().toString,
+      userAuthToken = vpr.headers.get(XClientAuthorizationToken).getOrElse(""),
       identityData = vpr.authorisedAs.nrsRetrievalData.get, // this should always be populated when nrs is enabled and called
       headerData = new JsObject(vpr.request.headers.toMap.map(x => x._1 -> JsArray(x._2.map(JsString)))),
       searchKeys = JsObject(Map[String, JsValue](conversationIdKey -> JsString(vpr.conversationId.toString)))

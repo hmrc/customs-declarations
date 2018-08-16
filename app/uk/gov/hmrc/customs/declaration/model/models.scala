@@ -227,7 +227,7 @@ object GoogleAnalyticsRequest {
 }
 
 case class NrsMetadata(businessId: String, notableEvent: String, payloadContentType: String, payloadSha256Checksum: String,
-                       userSubmissionTimestamp: String, identityData: NrsRetrievalData, headerData: JsValue, searchKeys: JsValue)
+                       userSubmissionTimestamp: String, identityData: NrsRetrievalData, userAuthToken: String, headerData: JsValue, searchKeys: JsValue)
 
 object NrsMetadata {
   implicit val format = Json.format[NrsMetadata]

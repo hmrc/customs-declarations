@@ -20,6 +20,7 @@ import java.util.UUID
 import java.util.UUID.fromString
 
 import com.google.inject.AbstractModule
+import org.joda.time.DateTimeZone.UTC
 import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
@@ -99,9 +100,9 @@ object TestData {
   val nrsAffinityGroup = Some(Individual)
   val nrsCredentialStrength = Some("STRONG")
 
-  val currentLoginTime: DateTime = new DateTime(1530442800000L)
-  val previousLoginTime: DateTime = new DateTime(1530464400000L)
-  val nrsTimeStamp: DateTime = new DateTime(1530475200000L)
+  val currentLoginTime: DateTime = new DateTime(1530442800000L, UTC)
+  val previousLoginTime: DateTime = new DateTime(1530464400000L, UTC)
+  val nrsTimeStamp: DateTime = new DateTime(1530475200000L, UTC)
 
   val nrsLoginTimes = LoginTimes(currentLoginTime, Some(previousLoginTime))
 
@@ -153,7 +154,7 @@ object TestData {
     nrsLoginTimes)
 
   val nrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, JsObject(Map[String, JsValue]()),
+    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"X-Client-Authorization-Token":["bearer-token"]}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
 
   val nrsPayload = new NrsPayload("QW55Q29udGVudEFzWG1sKDxmb28+YmFyPC9mb28+KQ==", nrsMetadata)
@@ -188,7 +189,7 @@ object TestData {
   }
 
   val TestXmlPayload: Elem = <foo>bar</foo>
-  val TestFakeRequest: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload)
+  val TestFakeRequest: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(("X-Client-Authorization-Token", "bearer-token"))
 
   def testFakeRequestWithBadgeId(badgeIdString: String = badgeIdentifier.value): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString)

@@ -33,3 +33,6 @@ class ClearanceXmlValidationService @Inject()(configuration: Configuration) exte
 
 @Singleton
 class AmendXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.submit")
+
+@Singleton
+class ArrivalNotificationXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.submit")

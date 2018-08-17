@@ -71,6 +71,14 @@ class AmendDeclarationController @Inject()(
  analyticsValuesAction: DeclarationAmendValuesAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, None)
 
+@Singleton
+class ArrivalNotificationDeclarationController @Inject()(
+ common: Common,
+ businessService: StandardDeclarationSubmissionService,
+ payloadValidationAction: ArrivalNotificationPayloadValidationAction,
+ analyticsValuesAction: DeclarationAmendValuesAction
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, None)
+
 abstract class CustomsDeclarationController(
   val common: Common,
   val businessService: DeclarationService,

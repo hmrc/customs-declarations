@@ -30,11 +30,13 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
   private lazy val mockCancellationXmlValidationService = mock[CancellationXmlValidationService]
   private lazy val mockClearanceXmlValidationService = mock[ClearanceXmlValidationService]
   private lazy val mockAmendXmlValidationService = mock[AmendXmlValidationService]
+  private lazy val mockArrivalNotificationXmlValidationService = mock[ArrivalNotificationXmlValidationService]
   private lazy val mockFileUploadXmlValidationService = mock[FileUploadXmlValidationService]
   private lazy val mockDeclarationsLogger = mock[DeclarationsLogger]
   private lazy val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
   private lazy val clearanceController = app.injector.instanceOf[ClearanceDeclarationController]
   private lazy val amendController = app.injector.instanceOf[AmendDeclarationController]
+  private lazy val arrivalNotificationController = app.injector.instanceOf[ArrivalNotificationDeclarationController]
   private lazy val submitController = app.injector.instanceOf[SubmitDeclarationController]
   private lazy val cancelController = app.injector.instanceOf[CancelDeclarationController]
   private lazy val fileUploadController = app.injector.instanceOf[FileUploadController]
@@ -62,6 +64,12 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
       val action = amendController.payloadValidationAction
 
       action.getClass.getSimpleName shouldBe new AmendPayloadValidationAction(mockAmendXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
+      action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
+    }
+    "be wired into ArrivalNotificationDeclarationController" in {
+      val action = arrivalNotificationController.payloadValidationAction
+
+      action.getClass.getSimpleName shouldBe new ArrivalNotificationPayloadValidationAction(mockArrivalNotificationXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
     }
     "be wired into FileUploadController" in {

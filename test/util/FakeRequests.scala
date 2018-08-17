@@ -111,6 +111,14 @@ object FakeRequests {
     .withHeaders(ValidHeadersV3.toSeq: _*)
     .withXmlBody(ValidSubmissionXML)
 
+  lazy val ValidArrivalNotificationV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withXmlBody(ValidSubmissionXML)
+
+  lazy val ValidArrivalNotificationV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV3.toSeq: _*)
+    .withXmlBody(ValidSubmissionXML)
+
   lazy val ValidCancellationV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV3.toSeq: _*)
     .withXmlBody(validCancellationXML())

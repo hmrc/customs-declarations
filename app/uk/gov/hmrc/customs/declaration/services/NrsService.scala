@@ -23,9 +23,9 @@ import java.security.MessageDigest.getInstance
 import javax.inject.{Inject, Singleton}
 
 import com.google.common.io.BaseEncoding.base64
-import play.api.libs.json.{JsArray, JsObject, JsString, JsValue}
+import play.api.libs.json.{JsObject, JsString, JsValue}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.XClientAuthorizationToken
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.Authorization
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -50,7 +50,7 @@ class NrsService @Inject()(logger: DeclarationsLogger,
       payloadContentType = applicationXml,
       payloadSha256Checksum = sha256Hash(vpr.request.body.toString), // This should come from the end user NOT us
       userSubmissionTimestamp = dateTimeService.nowUtc().toString,
-      userAuthToken = vpr.headers.get(XClientAuthorizationToken).getOrElse(""),
+      userAuthToken = vpr.headers.get(Authorization).getOrElse(""),
       identityData = vpr.authorisedAs.nrsRetrievalData.get, // this should always be populated when nrs is enabled and called
       headerData = new JsObject(vpr.request.headers.toMap.map(x => x._1 -> JsString(x._2 mkString ","))),
       searchKeys = JsObject(Map[String, JsValue](conversationIdKey -> JsString(vpr.conversationId.toString)))

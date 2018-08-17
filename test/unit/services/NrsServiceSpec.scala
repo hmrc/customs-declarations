@@ -62,15 +62,20 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
       await(result) shouldBe nrsResponsePayload
       verify(mockNrsConnector).send(meq(TestData.nrsPayload), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
-  }
 
-  "return failed future when nrs service call fails" in new SetUp() {
+    "serialise multiple headers correctly" in new SetUp() {
 
-    when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new Exception()))
+      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(nrsResponsePayload))
+      val result = send(TestCspValidatedPayloadRequestMultipleHeaderValues)
+      await(result) shouldBe nrsResponsePayload
+      verify(mockNrsConnector).send(meq(TestData.nrsPayloadMultipleHeaderValues), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+    }
 
-    val result = send()
-    ScalaFutures.whenReady(result.failed) { ex =>
-      ex shouldBe a [Exception]
+    "return failed future when nrs service call fails" in new SetUp() {
+      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new Exception()))
+
+      val result = send()
+      ScalaFutures.whenReady(result.failed) { ex => ex shouldBe a[Exception] }
     }
   }
 }

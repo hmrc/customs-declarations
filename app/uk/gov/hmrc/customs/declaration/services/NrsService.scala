@@ -52,7 +52,7 @@ class NrsService @Inject()(logger: DeclarationsLogger,
       userSubmissionTimestamp = dateTimeService.nowUtc().toString,
       userAuthToken = vpr.headers.get(XClientAuthorizationToken).getOrElse(""),
       identityData = vpr.authorisedAs.nrsRetrievalData.get, // this should always be populated when nrs is enabled and called
-      headerData = new JsObject(vpr.request.headers.toMap.map(x => x._1 -> JsArray(x._2.map(JsString)))),
+      headerData = new JsObject(vpr.request.headers.toMap.map(x => x._1 -> JsString(x._2 mkString ","))),
       searchKeys = JsObject(Map[String, JsValue](conversationIdKey -> JsString(vpr.conversationId.toString)))
     )
 

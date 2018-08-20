@@ -103,8 +103,8 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
       And("v2 config was used")
       eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext))))
 
-      And("GA call wasn't made")
-      eventually(verifyGoogleAnalyticsServiceWasNotCalled())
+      And("GA call was made")
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
@@ -135,13 +135,13 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
       And("v3 config was used")
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV3ServiceContext)))
 
-      And("GA call wasn't made")
-      eventually(verifyGoogleAnalyticsServiceWasNotCalled())
+      And("GA call was made")
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
 
-  feature("Declaration API handles amendment of submission errors from CSPs as expected") {
+  feature("Declaration API handles arrival-notification submission errors from CSPs as expected") {
 
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")
@@ -162,8 +162,8 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
-      And("GA call wasn't made")
-      eventually(verifyGoogleAnalyticsServiceWasNotCalled())
+      And("GA call was made")
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }

@@ -59,7 +59,7 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
     GoogleAnalyticsValues.Submit,
     VersionTwo,
     ClientId("ABC"),
-    NonCsp(Eori("123"), Some(TestData.nrsRetrievalValues)),
+    NonCsp(Eori("123"), Some(TestData.nonCspRetrievalValues)),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request"))
   )

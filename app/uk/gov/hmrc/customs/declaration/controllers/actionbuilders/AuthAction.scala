@@ -71,14 +71,15 @@ class AuthAction @Inject()(
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
   private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
-  type NrsDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes
-  type CspRetrievalDataType = Retrieval[Option[String] ~ Option[String] ~ Option[String] ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Option[MdtpInformation] ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes]
-  type NonCspRetrievalDataType = Retrieval[NrsDataType ~ Enrolments]
+  type NonCspDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes
+  type CspDataType = Option[String] ~ Option[String] ~ Option[String] ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Option[MdtpInformation] ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes
+  type CspRetrievalDataType = Retrieval[CspDataType]
+  type NonCspRetrievalDataType = Retrieval[NonCspDataType ~ Enrolments]
 
   private val cspRetrievals: CspRetrievalDataType = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.confidenceLevel and
     Retrievals.nino and Retrievals.saUtr and Retrievals.mdtpInformation and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
 
-  private val nrsEnrolments: NonCspRetrievalDataType = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
+  private val nonCspRetrievals: NonCspRetrievalDataType = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
     Retrievals.nino and Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
     Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
     Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes and Retrievals.authorisedEnrolments
@@ -149,7 +150,7 @@ class AuthAction @Inject()(
   private def authoriseAsNonCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, AuthorisedRequest[A]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
-    authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(nrsEnrolments) {
+    authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
       case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
         credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes ~ allEnrolments =>
 
@@ -245,4 +246,3 @@ class AuthAction @Inject()(
     } yield Eori(eoriIdentifier.value)
   }
 }
-

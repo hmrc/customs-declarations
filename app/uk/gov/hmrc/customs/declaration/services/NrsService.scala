@@ -51,7 +51,7 @@ class NrsService @Inject()(logger: DeclarationsLogger,
       payloadSha256Checksum = sha256Hash(vpr.request.body.toString), // This should come from the end user NOT us
       userSubmissionTimestamp = dateTimeService.nowUtc().toString,
       userAuthToken = vpr.headers.get(Authorization).getOrElse(""),
-      identityData = vpr.authorisedAs.nrsRetrievalData.get, // this should always be populated when nrs is enabled and called
+      identityData = vpr.authorisedAs.retrievalData.get, // this should always be populated when nrs is enabled and called
       headerData = new JsObject(vpr.request.headers.toMap.map(x => x._1 -> JsString(x._2 mkString ","))),
       searchKeys = JsObject(Map[String, JsValue](conversationIdKey -> JsString(vpr.conversationId.toString)))
     )

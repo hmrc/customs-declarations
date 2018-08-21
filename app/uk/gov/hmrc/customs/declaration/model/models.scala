@@ -19,15 +19,9 @@ package uk.gov.hmrc.customs.declaration.model
 import java.util.UUID
 
 import org.joda.time.LocalDate
-import play.api.libs.json.{JsValue, Json, OFormat}
+import play.api.libs.json._
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
-import uk.gov.hmrc.auth.core.retrieve.Credentials
-import uk.gov.hmrc.auth.core.retrieve.Name
-import uk.gov.hmrc.auth.core.retrieve.AgentInformation
-import uk.gov.hmrc.auth.core.retrieve.MdtpInformation
-import uk.gov.hmrc.auth.core.retrieve.ItmpName
-import uk.gov.hmrc.auth.core.retrieve.ItmpAddress
-import uk.gov.hmrc.auth.core.retrieve.LoginTimes
+import uk.gov.hmrc.auth.core.retrieve._
 
 import scala.xml.{Elem, NodeSeq}
 
@@ -45,43 +39,80 @@ object NrSubmissionId {
   implicit val format = Json.format[NrSubmissionId]
 }
 
-case class NrsRetrievalData(internalId: Option[String],
+sealed trait RetrievalData
+
+case class CspRetrievalData(internalId: Option[String],
                             externalId: Option[String],
                             agentCode: Option[String],
-                            credentials: Credentials,
                             confidenceLevel: ConfidenceLevel,
                             nino: Option[String],
                             saUtr: Option[String],
-                            name: Name,
-                            dateOfBirth: Option[LocalDate],
-                            email: Option[String],
-                            agentInformation: AgentInformation,
-                            groupIdentifier: Option[String],
-                            credentialRole: Option[CredentialRole],
                             mdtpInformation: Option[MdtpInformation],
-                            itmpName: ItmpName,
-                            itmpDateOfBirth: Option[LocalDate],
-                            itmpAddress: ItmpAddress,
                             affinityGroup: Option[AffinityGroup],
                             credentialStrength: Option[String],
-                            loginTimes: LoginTimes)
+                            loginTimes: LoginTimes) extends RetrievalData
 
-object NrsRetrievalData {
-  implicit val credentialsFormat = Json.format[Credentials]
+case class NonCspRetrievalData(internalId: Option[String],
+                               externalId: Option[String],
+                               agentCode: Option[String],
+                               credentials: Credentials,
+                               confidenceLevel: ConfidenceLevel,
+                               nino: Option[String],
+                               saUtr: Option[String],
+                               name: Name,
+                               dateOfBirth: Option[LocalDate],
+                               email: Option[String],
+                               agentInformation: AgentInformation,
+                               groupIdentifier: Option[String],
+                               credentialRole: Option[CredentialRole],
+                               mdtpInformation: Option[MdtpInformation],
+                               itmpName: ItmpName,
+                               itmpDateOfBirth: Option[LocalDate],
+                               itmpAddress: ItmpAddress,
+                               affinityGroup: Option[AffinityGroup],
+                               credentialStrength: Option[String],
+                               loginTimes: LoginTimes) extends RetrievalData
 
-  implicit val nameFormat = Json.format[Name]
+//case class NonCspRetrievalData(override val internalId: Option[String],
+//                               override val externalId: Option[String],
+//                               override val agentCode: Option[String],
+//                               credentials: Credentials,
+//                               override val confidenceLevel: ConfidenceLevel,
+//                               override val nino: Option[String],
+//                               override val saUtr: Option[String],
+//                               name: Name,
+//                               dateOfBirth: Option[LocalDate],
+//                               email: Option[String],
+//                               agentInformation: AgentInformation,
+//                               groupIdentifier: Option[String],
+//                               credentialRole: Option[CredentialRole],
+//                               override val mdtpInformation: Option[MdtpInformation],
+//                               itmpName: ItmpName,
+//                               itmpDateOfBirth: Option[LocalDate],
+//                               itmpAddress: ItmpAddress,
+//                               override val affinityGroup: Option[AffinityGroup],
+//                               override val credentialStrength: Option[String],
+//                               override val loginTimes: LoginTimes) extends CspRetrievalData(internalId, externalId, agentCode, confidenceLevel, nino, saUtr, mdtpInformation, affinityGroup, credentialStrength, loginTimes)
 
-  implicit val agentInformationFormat = Json.format[AgentInformation]
+object RetrievalData {
+  implicit val format = Json.format[RetrievalData]
+}
 
+object CspRetrievalData {
   implicit val mdtpInformationFormat = Json.format[MdtpInformation]
-
-  implicit val itmpNameFormat = Json.format[ItmpName]
-
-  implicit val itmpAddressFormat = Json.format[ItmpAddress]
-
   implicit val loginTimesFormat = Json.format[LoginTimes]
+  implicit val cspRetrievalData = Json.format[CspRetrievalData]
+}
 
-  implicit val nrsRetrievalDataFormat = Json.format[NrsRetrievalData]
+object NonCspRetrievalData {
+  implicit val credentialsFormat = Json.format[Credentials]
+  implicit val nameFormat = Json.format[Name]
+  implicit val agentInformationFormat = Json.format[AgentInformation]
+  implicit val mdtpInformationFormat = Json.format[MdtpInformation]
+  implicit val itmpNameFormat = Json.format[ItmpName]
+  implicit val itmpAddressFormat = Json.format[ItmpAddress]
+  implicit val loginTimesFormat = Json.format[LoginTimes]
+  implicit val nonCspRetrievalData = Json.format[NonCspRetrievalData]
 }
 
 case class ClientId(value: String) extends AnyVal {
@@ -171,10 +202,10 @@ object VersionThree extends ApiVersion{
 }
 
 sealed trait AuthorisedAs {
-  val nrsRetrievalData: Option[NrsRetrievalData]
+  val retrievalData: Option[CspRetrievalData]
 }
-case class Csp(badgeIdentifier: BadgeIdentifier, nrsRetrievalData: Option[NrsRetrievalData]) extends AuthorisedAs
-case class NonCsp(eori: Eori, nrsRetrievalData: Option[NrsRetrievalData]) extends AuthorisedAs
+case class Csp(badgeIdentifier: BadgeIdentifier, retrievalData: Option[CspRetrievalData]) extends AuthorisedAs
+case class NonCsp(eori: Eori, retrievalData: Option[NonCspRetrievalData]) extends AuthorisedAs
 
 case class UpscanInitiatePayload(callbackUrl: String)
 
@@ -232,7 +263,7 @@ object GoogleAnalyticsRequest {
 }
 
 case class NrsMetadata(businessId: String, notableEvent: String, payloadContentType: String, payloadSha256Checksum: String,
-                       userSubmissionTimestamp: String, identityData: NrsRetrievalData, userAuthToken: String, headerData: JsValue, searchKeys: JsValue)
+                       userSubmissionTimestamp: String, identityData: CspRetrievalData, userAuthToken: String, headerData: JsValue, searchKeys: JsValue)
 
 object NrsMetadata {
   implicit val format = Json.format[NrsMetadata]

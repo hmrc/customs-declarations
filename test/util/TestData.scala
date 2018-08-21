@@ -106,7 +106,7 @@ object TestData {
 
   val nrsLoginTimes = LoginTimes(currentLoginTime, Some(previousLoginTime))
 
-  val nrsRetrievalValues = NrsRetrievalData(Some(nrsInternalIdValue),
+  val nrsRetrievalValues = NonCspRetrievalData(Some(nrsInternalIdValue),
                                             Some(nrsExternalIdValue),
                                             Some(nrsAgentCodeValue),
                                             nrsCredentials,

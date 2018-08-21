@@ -14,3 +14,5 @@ POST        /uploaded-file-upscan-notifications/decId/:decId/eori/:eori/document
 POST        /clearance                    @uk.gov.hmrc.customs.declaration.controllers.ClearanceDeclarationController.post()
 
 POST        /amend                        @uk.gov.hmrc.customs.declaration.controllers.AmendDeclarationController.post()
+
+POST        /arrival-notification         @uk.gov.hmrc.customs.declaration.controllers.ArrivalNotificationDeclarationController.post()

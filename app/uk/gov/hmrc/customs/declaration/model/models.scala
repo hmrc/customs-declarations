@@ -124,6 +124,11 @@ object GoogleAnalyticsValues {
     override lazy val success: String = ???
     override lazy val failure: String = ???
   }
+
+  val ArrivalNotification = new GoogleAnalyticsValues {
+    override val success: String = "declarationArrivalNotificationSuccess"
+    override val failure: String = "declarationArrivalNotificationFailure"
+  }
 }
 
 

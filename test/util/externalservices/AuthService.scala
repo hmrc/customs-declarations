@@ -64,7 +64,22 @@ trait AuthService {
         aResponse()
           .withStatus(Status.OK)
           .withBody(
-            """{"internalId":"Int-d67e2592-e560-4766-9e2a-bd2e107ab50a","externalId":"Ext-9cf74a8d-64eb-4ec1-83c1-e432ffa4aa65","agentCode":"123456789","confidenceLevel":50,"mdtpInformation":{"deviceId":"device-identifier-1234","sessionId":"session-id-12345"},"affinityGroup":"Individual","credentialStrength":"strong","loginTimes":{"currentLogin":"2018-04-23T09:26:45.069Z","previousLogin":"2018-04-05T13:59:54.082Z"}}""".stripMargin)
+            """{
+              |  "internalId":"Int-d67e2592-e560-4766-9e2a-bd2e107ab50a",
+              |  "externalId":"Ext-9cf74a8d-64eb-4ec1-83c1-e432ffa4aa65",
+              |  "agentCode":"123456789",
+              |  "confidenceLevel":50,
+              |  "mdtpInformation": {
+              |    "deviceId":"device-identifier-1234",
+              |    "sessionId":"session-id-12345"
+              |  },
+              |  "affinityGroup":"Individual",
+              |  "credentialStrength":"strong",
+              |  "loginTimes": {
+              |    "currentLogin":"2018-04-23T09:26:45.069Z",
+              |    "previousLogin":"2018-04-05T13:59:54.082Z"
+              |  }
+              |}""".stripMargin)
       )
     )
   }
@@ -90,10 +105,34 @@ trait AuthService {
         aResponse()
           .withStatus(Status.OK)
           .withBody(
-            s"""{"internalId":"Int-d67e2592-e560-4766-9e2a-bd2e107ab50a","externalId":"Ext-9cf74a8d-64eb-4ec1-83c1-e432ffa4aa65","agentCode":"123456789","credentials":{"providerId":"a-cred-id","providerType":"GovernmentGateway"},"confidenceLevel":50,"name":{"name":"TestUser"},"email":"","agentInformation":{},"groupIdentifier":"testGroupId-e2cc8c50-c38f-4014-8265-4e3b35db814d","mdtpInformation":{"deviceId":"device-identifier-1234","sessionId":"session-id-12345"},"affinityGroup":"Individual","credentialStrength":"strong","loginTimes":{"currentLogin":"2018-04-23T09:26:45.069Z","previousLogin":"2018-04-05T13:59:54.082Z"},
-               |"authorisedEnrolments": [ ${enrolmentRetrievalJson(customsEnrolmentName, "EORINumber", eori.value)} ],
-               |"itmpAddress": {},
-               |"itmpName": {}
+            s"""{
+               |  "internalId": "Int-d67e2592-e560-4766-9e2a-bd2e107ab50a",
+               |  "externalId": "Ext-9cf74a8d-64eb-4ec1-83c1-e432ffa4aa65",
+               |  "agentCode": "123456789",
+               |  "credentials": {
+               |    "providerId": "a-cred-id",
+               |    "providerType": "GovernmentGateway"
+               |  },
+               |  "confidenceLevel":50,
+               |    "name": {
+               |    "name": "TestUser"
+               |  },
+               |  "email": "",
+               |  "agentInformation":{},
+               |  "groupIdentifier": "testGroupId-e2cc8c50-c38f-4014-8265-4e3b35db814d",
+               |  "mdtpInformation": {
+               |    "deviceId": "device-identifier-1234",
+               |    "sessionId":"session-id-12345"
+               |  },
+               |  "affinityGroup":"Individual",
+               |  "credentialStrength":"strong",
+               |  "loginTimes": {
+               |    "currentLogin": "2018-04-23T09:26:45.069Z",
+               |    "previousLogin":"2018-04-05T13:59:54.082Z"
+               |  },
+               |  "authorisedEnrolments": [ ${enrolmentRetrievalJson(customsEnrolmentName, "EORINumber", eori.value)} ],
+               |  "itmpAddress": {},
+               |  "itmpName": {}
                |}""".stripMargin
           )
       )

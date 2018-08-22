@@ -45,7 +45,7 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
 
     protected lazy val service: NrsService = new NrsService(mockLogger, mockNrsConnector, mockDateTimeService)
 
-    protected val nrsResponsePayload = new NrsResponsePayload(TestData.nrSubmissionId)
+    protected val cspResponsePayload = new NrsResponsePayload(TestData.nrSubmissionId)
     protected val dateTime = new DateTime()
 
     protected def send(vupr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Future[NrsResponsePayload] = {
@@ -55,20 +55,20 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
   }
 
   "NrsService" should {
-    "send payload to connector" in new SetUp() {
+    "send CSP payload to connector" in new SetUp() {
 
-      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(nrsResponsePayload))
+      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(cspResponsePayload))
       val result = send()
-      await(result) shouldBe nrsResponsePayload
-      verify(mockNrsConnector).send(meq(TestData.nrsPayload), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+      await(result) shouldBe cspResponsePayload
+      verify(mockNrsConnector).send(meq(TestData.cspNrsPayload), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
 
     "serialise multiple headers correctly" in new SetUp() {
 
-      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(nrsResponsePayload))
+      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(cspResponsePayload))
       val result = send(TestCspValidatedPayloadRequestMultipleHeaderValues)
-      await(result) shouldBe nrsResponsePayload
-      verify(mockNrsConnector).send(meq(TestData.nrsPayloadMultipleHeaderValues), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+      await(result) shouldBe cspResponsePayload
+      verify(mockNrsConnector).send(meq(TestData.cspNrsPayloadMultipleHeaderValues), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
 
     "return failed future when nrs service call fails" in new SetUp() {

@@ -48,9 +48,9 @@ object ActionBuilderModelHelper {
 
   implicit class ValidatedHeadersRequestOps[A](val vhr: ValidatedHeadersRequest[A]) extends AnyVal {
 
-    def toCspAuthorisedRequest(badgeId: BadgeIdentifier, nrsRetrievalData: Option[NrsRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId, nrsRetrievalData))
+    def toCspAuthorisedRequest(badgeId: BadgeIdentifier, retrievalData: Option[CspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId, retrievalData))
 
-    def toNonCspAuthorisedRequest(eori: Eori, nrsRetrievalData: Option[NrsRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori, nrsRetrievalData))
+    def toNonCspAuthorisedRequest(eori: Eori, retrievalData: Option[NonCspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori, retrievalData))
 
     def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
       vhr.conversationId,

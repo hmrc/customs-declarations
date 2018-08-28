@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" targetNamespace="urn:wco:datamodel:WCO:DEC-DMS:2"
+           xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" targetNamespace="urn:wco:datamodel:WCO:DEC-DMS:2"
            elementFormDefault="qualified" version="2.3">
     <xs:import namespace="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-               schemaLocation="WCO_DS/CLEARANCE_TYPES.xsd"/>
+               schemaLocation="WCO_DS/WCO_DEC_DS_2_DMS.xsd"/>
+    <xs:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" schemaLocation="UNECE/UnqualifiedDataType_6_DMS.xsd"/>
+    
+    <xs:complexType name="ClearanceTypeCodeType">
+        <xs:simpleContent>
+            <xs:restriction base="udt:CodeType">
+                <xs:maxLength value="3"/>
+                <xs:pattern value="IMJ"/>
+                <xs:pattern value="IMK"/>
+                <xs:pattern value="EXJ"/>
+                <xs:pattern value="EXK"/>
+                <xs:pattern value="COJ"/>
+                <xs:pattern value="COK"/>
+            </xs:restriction>
+        </xs:simpleContent>
+    </xs:complexType>
+
     <xs:element name="Declaration" type="Declaration"/>
     <xs:complexType name="Declaration">
         <xs:sequence>
             <xs:element name="FunctionalReferenceID" type="ds:DeclarationFunctionalReferenceIDType"
                         minOccurs="0"/>
-            <xs:element name="TypeCode" type="ds:DeclarationTypeCodeType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="TypeCode" type="ClearanceTypeCodeType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="GoodsItemQuantity" type="ds:DeclarationGoodsItemQuantityType" minOccurs="0"/>
             <xs:element name="TotalGrossMassMeasure" type="ds:DeclarationTotalGrossMassMeasureType"
                         minOccurs="0">

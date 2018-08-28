@@ -32,7 +32,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndCo
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
-import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
+import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders, TestData}
 
 class AuthActionSpec extends UnitSpec with MockitoSugar {
 
@@ -62,12 +62,12 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
     val authAction: AuthAction = new AuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
-    when(mockDeclarationConfigService.nrsConfig).thenReturn(NrsConfig(nrsEnabled = true, "x-api-key"))
+    when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
   trait NrsDisabled extends AuthConnectorNrsDisabledStubbing with SetUp {
     val authAction: AuthAction = new AuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
-    when(mockDeclarationConfigService.nrsConfig).thenReturn(NrsConfig(nrsEnabled = false, "x-api-key"))
+    when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
   }
 
   "AuthAction Builder " can {

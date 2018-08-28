@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import java.net.URLEncoder
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.{Inject, Singleton}
 
 import org.joda.time.DateTime
@@ -29,12 +30,14 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
+import uk.gov.hmrc.customs.declaration.util.FutureUtil.futureWithTimeout
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Left, Success}
+import scala.concurrent.duration.Duration
+import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml.NodeSeq
 
@@ -79,7 +82,6 @@ trait DeclarationService {
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
-
   def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     futureApiSubFieldsId(vpr.clientId) flatMap {
       case Right(sfId) =>
@@ -89,25 +91,33 @@ trait DeclarationService {
     }
   }
 
-  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier, sfId: SubscriptionFieldsId) = {
-    if (declarationsConfigService.nrsConfig.nrsEnabled) {
-      logger.debug("nrs enabled")
-      val nrsServiceCallFuture: Future[NrsResponsePayload] = nrsService.send(vpr, hc)
+  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier, sfId: SubscriptionFieldsId): Future[Either[Result, Option[NrSubmissionId]]] = {
 
-      callBackend(sfId).map {
-        case Left(result) => Left(
-          {
-            val maybeSubmissionId = getNrSubmissionId(nrsServiceCallFuture)
-            if (maybeSubmissionId.isDefined) {
-              result.withNrSubmissionId(maybeSubmissionId.get)
-            } else {
-              result
-            }
-          })
-        case Right(_) => Right(getNrSubmissionId(nrsServiceCallFuture)) // Unit - i.e. OK response
+    if (declarationsConfigService.nrsConfig.nrsEnabled) {
+      logger.debug("NRS enabled. Calling NRS.")
+      val nrsServiceCallFutureWithTimeout = futureWithTimeout(nrsService.send(vpr, hc), Duration(declarationsConfigService.nrsConfig.nrsWaitTimeMillis, MILLISECONDS))
+      callBackend(sfId).flatMap{
+        case Left(result) =>
+          nrsServiceCallFutureWithTimeout.map(nrsResponsePayload => {
+            logger.debug(s"Backend call failed. NRS returned payload: $nrsResponsePayload")
+            Left(result.withNrSubmissionId(nrsResponsePayload.nrSubmissionId))
+          }).recover {
+            case _ =>
+              logger.debug("Backend call failed. NRS call failed")
+              Left(result)
+          }
+        case Right(_) =>
+          nrsServiceCallFutureWithTimeout.map(nrsResponsePayload => {
+            logger.debug(s"Backend call success. NRS returned payload: $nrsResponsePayload")
+            Right(Some(nrsResponsePayload.nrSubmissionId))
+          }).recover {
+            case _ =>
+              logger.debug("Backend call success. NRS call failed")
+              Right(None)
+          }
       }
     } else {
-      logger.debug("nrs not enabled")
+      logger.debug("NRS not enabled")
       callBackend(sfId)
     }
   }
@@ -145,17 +155,5 @@ trait DeclarationService {
                                (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): NodeSeq = {
     logger.debug(s"preparePayload called")
     wrapper.wrap(xml, clientId, dateTime)
-  }
-
-  private def getNrSubmissionId[A](f: Future[NrsResponsePayload])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Option[NrSubmissionId]  = {
-    f.value match {
-      case Some(Success(response)) => Some(response.nrSubmissionId)
-      case Some(Failure(ex)) =>
-        logger.debug("NRS Service call failed, nrSubmissionId not returned to client", ex)
-        None
-      case None =>
-        logger.debug("NRS Service did not respond in time, nrSubmissionId not returned to client")
-        None
-    }
   }
 }

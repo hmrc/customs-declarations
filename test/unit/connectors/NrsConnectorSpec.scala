@@ -36,6 +36,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundExcepti
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData
+import util.TestData.nrsConfigEnabled
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -50,7 +51,6 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
 
   private val v1Config = ServiceConfig("v1-url", None, "v1-default")
   private val v2Config = ServiceConfig("v2-url", None, "v2-default")
-  private val nrsConfig =  NrsConfig(nrsEnabled = true, "nrs-api-key-value")
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -70,7 +70,7 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
     reset(mockWsPost, mockLogger, mockServiceConfigProvider)
     when(mockServiceConfigProvider.getConfig("nrs-service")).thenReturn(v1Config)
     when(mockServiceConfigProvider.getConfig("v2.nrs-service")).thenReturn(v2Config)
-    when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfig)
+    when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
   "NrsConnector" can {

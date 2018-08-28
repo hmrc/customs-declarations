@@ -51,8 +51,8 @@ import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, FileUploadController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, HasAnalyticsValues, HasConversationId, ValidatedUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, HasAnalyticsValues, HasConversationId, ValidatedUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadBusinessService, FileUploadXmlValidationService, UniqueIdsService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
@@ -125,7 +125,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
         .thenReturn(new ~(nrsReturnData, Enrolments(Set(customsEnrolment))))
 
       when(mockFileUploadBusinessService.send(any[ValidatedUploadPayloadRequest[AnyContentAsXml]],any[HeaderCarrier])).thenReturn(Future.successful(Right(upscanInitiateResponsePayload)))
-      when(mockDeclarationConfigService.nrsConfig).thenReturn(NrsConfig(nrsEnabled = true, "x-api-key"))
+      when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
 
       val actual: Result = await(fileUploadController.post().apply(ValidRequest))
 

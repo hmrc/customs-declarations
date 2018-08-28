@@ -73,7 +73,7 @@ trait MdgDeclarationConnector extends UsingCircuitBreaker {
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, correlationId), authorization = Some(Authorization(bearerToken)))
     withCircuitBreaker(post(xml, config.url)).map{
-      response => logger.debug(s"Response: $response")
+      response => logger.debug(s"Response: ${response.body}")
       response
     }
   }

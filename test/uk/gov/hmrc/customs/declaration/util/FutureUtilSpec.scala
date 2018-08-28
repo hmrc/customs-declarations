@@ -29,9 +29,7 @@ class FutureUtilSpec extends AsyncFlatSpec with Matchers with OptionValues with 
     "complete the users future when it returns before the timeout" in {
 
     def myFuture: Future[Int] = Future[Int] {
-      //println(s"starting user future ${System.currentTimeMillis()}")
       Thread.sleep((2 seconds).toMillis)
-      //println(s"user future done ${System.currentTimeMillis()}")
       100
     }
 
@@ -43,9 +41,7 @@ class FutureUtilSpec extends AsyncFlatSpec with Matchers with OptionValues with 
   it should "not complete the future when it returns after the timeout" in {
 
     lazy val myFuture = Future[Int] {
-      //println(s"user future waiting 4 seconds ${System.currentTimeMillis()}")
       Thread.sleep((4 seconds).toMillis)
-      //println(s"user future done at ${System.currentTimeMillis()}")
       100
     }
 

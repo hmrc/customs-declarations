@@ -48,6 +48,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val upscanCallbackUrl = root.string("upscan-callback.url")
   private val nrsEnabled = root.boolean("nrs.enabled")
   private val nrsApiKey = root.string("nrs.apikey")
+  private val nrsWaitTimeMillis = root.int("nrs.waittime.millis")
 
   private val validatedDeclarationsConfig: ValidationNel[String, DeclarationsConfig] = (
     apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel |@| upscanCallbackUrl
@@ -62,7 +63,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
     ) (GoogleAnalyticsConfig.apply)
 
   private val validatedNrsConfig: ValidationNel[String, NrsConfig] = (
-    nrsEnabled |@| nrsApiKey
+    nrsEnabled |@| nrsApiKey |@| nrsWaitTimeMillis
     ) (NrsConfig.apply)
 
   private val customsConfigHolder =

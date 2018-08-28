@@ -34,6 +34,7 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
+import util.TestData
 import util.TestData._
 
 import scala.concurrent.Future
@@ -78,7 +79,7 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
   "StandardDeclarationSubmissionService" should {
 
     "send to connector when nrs enabled" in new SetUp() {
-      when(mockDeclarationsConfigService.nrsConfig).thenReturn(NrsConfig(true, "nrs-api-key"))
+      when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
@@ -88,7 +89,7 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
     }
 
       "not send to connector when nrs disabled" in new SetUp() {
-        when(mockDeclarationsConfigService.nrsConfig).thenReturn(NrsConfig(false, "nrs-api-key"))
+        when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
 
         val result: Either[Result, Option[NrSubmissionId]] = send()
         result shouldBe Right(None)
@@ -97,7 +98,7 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
       }
 
     "should still contain nrs submission id even if call to downstream fails" in new SetUp() {
-      when(mockDeclarationsConfigService.nrsConfig).thenReturn(NrsConfig(true, "nrs-api-key"))
+      when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(ApiSubscriptionFieldsResponse(subscriptionFieldsIdUuid)))
       when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
       val result: Either[Result, Option[NrSubmissionId]] = send()

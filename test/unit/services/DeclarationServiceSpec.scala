@@ -21,8 +21,6 @@ import java.util.UUID
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
-import org.mockito.invocation.InvocationOnMock
-import org.mockito.stubbing.Answer
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
@@ -40,8 +38,8 @@ import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
 import util.TestData._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.duration.Duration
 import scala.xml.NodeSeq
 
 class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
@@ -74,7 +72,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
-      await(service.send(vpr, hc))(Duration.Inf) // TODO remove this
+      await(service.send(vpr, hc))
     }
 
     when(mockPayloadDecorator.wrap(meq(TestXmlPayload), meq[String](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
@@ -148,16 +146,9 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
   "should not have nrs receipt id when call to nrs does not return in time" in new SetUp() {
 
-    //when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.failed(new TimeoutException()))
-
-    when(mockNrsService.send(vpr, headerCarrier)).thenAnswer(new Answer[Future[NrsResponsePayload]] {
-      override def answer(invocation: InvocationOnMock) = {
-        lazy val eventualPayload = {
-          Thread.sleep(1000)
-          Future.successful(NrsResponsePayload(nrSubmissionId))
-        }
-        eventualPayload
-      }
+    when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future {
+      Thread.sleep(1000)
+      NrsResponsePayload(nrSubmissionId)
     })
 
     val result: Either[Result, Option[NrSubmissionId]] = send()

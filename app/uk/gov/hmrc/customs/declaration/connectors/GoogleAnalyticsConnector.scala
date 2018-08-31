@@ -57,20 +57,25 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
 
   def send[A](eventName: String, eventLabel: String)(implicit hasConversationId: HasConversationId with HasAnalyticsValues): Future[Unit] = {
 
-    val msg = "Calling public notification (google analytics) service"
-    val url = config.url
-    implicit val hc: HeaderCarrier = new HeaderCarrier
-    val request = GoogleAnalyticsRequest(payload(eventName, eventLabel))
-    val payloadAsJsonString = Json.prettyPrint(Json.toJson(request))
-    logger.debug(s"$msg at $url with\nheaders=${hc.headers} and\npayload=$payloadAsJsonString googleAnalyticsRequest")
+    if (declarationsConfigService.googleAnalyticsConfig.enabled) {
+      val msg = "Calling public notification (google analytics) service"
+      val url = config.url
+      implicit val hc: HeaderCarrier = new HeaderCarrier
+      val request = GoogleAnalyticsRequest(payload(eventName, eventLabel))
+      val payloadAsJsonString = Json.prettyPrint(Json.toJson(request))
+      logger.debug(s"$msg at $url with\nheaders=${hc.headers} and\npayload=$payloadAsJsonString googleAnalyticsRequest")
 
-    http.POST[GoogleAnalyticsRequest, HttpResponse](url, request, outboundHeaders)
-      .map { _ =>
-        logger.debug(s"Successfully sent GA event to $url, eventName= $eventName, eventLabel= $eventLabel, trackingId= ${config.trackingId}")
-        ()
-      }.recover {
-      case ex: Throwable =>
-        logger.error(s"Call to GoogleAnalytics sender service failed. POST url= ${config.url}, eventName= $eventName, eventLabel= $eventLabel, reason= ${ex.getMessage}")
+      http.POST[GoogleAnalyticsRequest, HttpResponse](url, request, outboundHeaders)
+        .map { _ =>
+          logger.debug(s"Successfully sent GA event to $url, eventName= $eventName, eventLabel= $eventLabel, trackingId= ${config.trackingId}")
+          ()
+        }.recover {
+        case ex: Throwable =>
+          logger.error(s"Call to GoogleAnalytics sender service failed. POST url= ${config.url}, eventName= $eventName, eventLabel= $eventLabel, reason= ${ex.getMessage}")
+      }
+    } else {
+      logger.info("GoogleAnalytics disabled in configuration")
+      Future.successful(())
     }
   }
 }

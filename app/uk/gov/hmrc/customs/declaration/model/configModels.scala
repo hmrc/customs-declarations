@@ -25,7 +25,8 @@ case class DeclarationsCircuitBreakerConfig(numberOfCallsToTriggerStateChange: I
                                             unavailablePeriodDurationInMillis: Int,
                                             unstablePeriodDurationInMillis: Int)
 
-case class GoogleAnalyticsConfig(url: String,
+case class GoogleAnalyticsConfig(enabled: Boolean,
+                                 url: String,
                                  trackingId: String,
                                  clientId: String,
                                  eventValue: String)

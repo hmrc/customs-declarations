@@ -18,7 +18,7 @@ package unit.services
 
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.mockito.MockitoSugar
-import play.api.{Configuration, Environment}
+import play.api.{Configuration, Environment, Mode}
 import uk.gov.hmrc.customs.api.common.config.{ConfigValidationNelAdaptor, ServicesConfig}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
@@ -38,6 +38,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.google-analytics-sender.host=some-host3
       |microservice.services.google-analytics-sender.port=1113
       |microservice.services.google-analytics-sender.context=/some-context3
+      |googleAnalytics.enabled=true
       |googleAnalytics.trackingId=ga-tr,
       |googleAnalytics.clientId=gl-cl-id,
       |googleAnalytics.eventValue=ga-ev-id
@@ -81,6 +82,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'
+          |Could not find config key 'googleAnalytics.enabled'
           |Could not find config google-analytics-sender.host
           |Service configuration not found for key: google-analytics-sender.context
           |Could not find config key 'googleAnalytics.trackingId'
@@ -97,7 +99,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
   }
 
   private def testServicesConfig(configuration: Configuration) = new ServicesConfig(configuration, mock[Environment]) {
-    override val mode = play.api.Mode.Test
+    override val mode: Mode.Value = play.api.Mode.Test
   }
 
 }

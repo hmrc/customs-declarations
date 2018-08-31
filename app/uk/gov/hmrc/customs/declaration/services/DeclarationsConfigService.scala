@@ -40,6 +40,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
 
+  private val gaEnabled = root.boolean("googleAnalytics.enabled")
   private val gaServiceUrl = configValidationNel.service("google-analytics-sender").serviceUrl
   private val gaTrackingId = root.string("googleAnalytics.trackingId")
   private val gaClientId = root.string("googleAnalytics.clientId")
@@ -59,7 +60,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
     ) (DeclarationsCircuitBreakerConfig.apply)
 
   val validatedGoogleAnalyticsSenderConfig: ValidationNel[String, GoogleAnalyticsConfig] = (
-    gaServiceUrl |@| gaTrackingId |@| gaClientId |@| gaEventValue
+    gaEnabled |@| gaServiceUrl |@| gaTrackingId |@| gaClientId |@| gaEventValue
     ) (GoogleAnalyticsConfig.apply)
 
   private val validatedNrsConfig: ValidationNel[String, NrsConfig] = (

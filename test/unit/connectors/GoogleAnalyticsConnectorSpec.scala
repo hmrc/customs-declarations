@@ -24,10 +24,11 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
 import play.api.libs.json.{JsValue, Writes}
+import play.api.mvc.AnyContentAsXml
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsConfig, GoogleAnalyticsRequest}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
@@ -45,6 +46,7 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
   private val declarationsLogger = mock[DeclarationsLogger]
   private val mockConfigService = mock[DeclarationsConfigService]
 
+  private val gaEnabled = true
   private val url = "the-url"
   private val gaTrackingId: String = "real-tracking-id"
   private val gaClientId: String = "555"
@@ -52,7 +54,7 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
   private val eventName: String = "event-name"
   private val eventLabel: String = "event-label"
 
-  private implicit val vpr = TestData.TestCspValidatedPayloadRequest
+  private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
 
   private lazy val connector = new GoogleAnalyticsConnector(
     mockHttpClient,
@@ -62,14 +64,14 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
 
   override def beforeEach(): Unit = {
     reset(mockConfigService, mockCdsLogger, mockHttpClient)
-    when(mockConfigService.googleAnalyticsConfig).thenReturn(GoogleAnalyticsConfig(url, gaTrackingId, gaClientId, gaEventValue))
+    when(mockConfigService.googleAnalyticsConfig).thenReturn(GoogleAnalyticsConfig(gaEnabled, url, gaTrackingId, gaClientId, gaEventValue))
     when(mockHttpClient.POST(any[String](), any[JsValue](), any[Seq[(String, String)]]())(any[Writes[JsValue]](), any[HttpReads[HttpResponse]](), any[HeaderCarrier], any[ExecutionContext]()))
       .thenReturn(Future.successful(mock[HttpResponse]))
   }
 
   private val emulatedHttpVerbsException = new RuntimeException("Something has gone wrong....")
 
-  "GoogleAnalyticsSenderConnector" should {
+  "GoogleAnalyticsSenderConnector when enabled" should {
 
     "POST valid payload" in {
 
@@ -102,6 +104,27 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
         .withByNameParam(s"Call to GoogleAnalytics sender service failed. POST url= $url, eventName= $eventName, eventLabel= $eventLabel, reason= ${emulatedHttpVerbsException.getMessage}")
         .withParamMatcher(any[HasConversationId])
         .verify()
+    }
+
+  }
+
+  "GoogleAnalyticsSenderConnector when disabled" should {
+
+    "POST valid payload" in {
+      when(mockConfigService.googleAnalyticsConfig).thenReturn(GoogleAnalyticsConfig(enabled = false, url, gaTrackingId, gaClientId, gaEventValue))
+
+      await(connector.send(eventName, eventLabel))
+
+      verifyZeroInteractions(mockHttpClient)
+
+    }
+
+    "POST valid headers" in {
+      when(mockConfigService.googleAnalyticsConfig).thenReturn(GoogleAnalyticsConfig(enabled = false, url, gaTrackingId, gaClientId, gaEventValue))
+
+      await(connector.send(eventName, eventLabel))
+
+      verifyZeroInteractions(mockHttpClient)
     }
 
   }

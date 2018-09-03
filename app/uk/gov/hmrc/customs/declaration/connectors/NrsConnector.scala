@@ -21,14 +21,13 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrsPayload, NrsResponsePayload}
+import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.parsing.json.JSON
 
 @Singleton
 class NrsConnector @Inject()(http: HttpClient,
@@ -39,7 +38,7 @@ class NrsConnector @Inject()(http: HttpClient,
   private val configKey = "nrs-service"
   private val XApiKey = "X-API-Key"
 
-  def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[NrsResponsePayload] = {
+  def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[NrSubmissionId] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     post(nrsPayload, config.url)
   }
@@ -50,7 +49,7 @@ class NrsConnector @Inject()(http: HttpClient,
 
     logger.debug(s"Sending request to nrs service. Url: $url Payload: ${Json.prettyPrint(Json.toJson(payload))}")
 
-    http.POST[NrsPayload, NrsResponsePayload](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
+    http.POST[NrsPayload, NrSubmissionId](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
       .map { res =>
         logger.debug(s"Response received from nrs service $res")
         res

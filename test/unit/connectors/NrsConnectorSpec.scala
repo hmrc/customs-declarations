@@ -78,7 +78,7 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
     "when making a successful request" should {
 
       "pass URL from config" in {
-        returnResponseForRequest(Future.successful(mock[NrsResponsePayload]))
+        returnResponseForRequest(Future.successful(TestData.nrSubmissionId))
 
         awaitRequest
 
@@ -87,16 +87,16 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
       }
 
       "pass in the body" in {
-        returnResponseForRequest(Future.successful(mock[NrsResponsePayload]))
+        returnResponseForRequest(Future.successful(TestData.nrSubmissionId))
 
         awaitRequest
 
         verify(mockWsPost).POST(anyString, ameq(TestData.nrsPayload), any[SeqOfHeader])(
-          any[Writes[NrsPayload]], any[HttpReads[NrsResponsePayload]](), any[HeaderCarrier](), any[ExecutionContext])
+          any[Writes[NrsPayload]], any[HttpReads[NrSubmissionId]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
       "prefix the config key with the prefix if passed" in {
-        returnResponseForRequest(Future.successful(mock[NrsResponsePayload]))
+        returnResponseForRequest(Future.successful(TestData.nrSubmissionId))
 
         await(connector.send(TestData.nrsPayload, VersionTwo))
 
@@ -140,9 +140,9 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
     await(connector.send(TestData.nrsPayload, VersionTwo))
   }
 
-  private def returnResponseForRequest(eventualResponse: Future[NrsResponsePayload]) = {
+  private def returnResponseForRequest(eventualResponse: Future[NrSubmissionId]) = {
     when(mockWsPost.POST(anyString, any[NrsPayload], any[SeqOfHeader])(
-      any[Writes[NrsPayload]], any[HttpReads[NrsResponsePayload]](), any[HeaderCarrier](), any[ExecutionContext]))
+      any[Writes[NrsPayload]], any[HttpReads[NrSubmissionId]](), any[HeaderCarrier](), any[ExecutionContext]))
       .thenReturn(eventualResponse)
   }
 }

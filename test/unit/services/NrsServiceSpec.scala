@@ -45,10 +45,10 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
 
     protected lazy val service: NrsService = new NrsService(mockLogger, mockNrsConnector, mockDateTimeService)
 
-    protected val cspResponsePayload = new NrsResponsePayload(TestData.nrSubmissionId)
+    protected val cspResponsePayload = TestData.nrSubmissionId
     protected val dateTime = new DateTime()
 
-    protected def send(vupr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Future[NrsResponsePayload] = {
+    protected def send(vupr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Future[NrSubmissionId] = {
       when(mockDateTimeService.nowUtc()).thenReturn(TestData.nrsTimeStamp)
       await(service.send(vupr, hc))
     }

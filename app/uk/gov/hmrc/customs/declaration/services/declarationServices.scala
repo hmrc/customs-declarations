@@ -98,18 +98,18 @@ trait DeclarationService {
       val nrsServiceCallFutureWithTimeout = futureWithTimeout(nrsService.send(vpr, hc), Duration(declarationsConfigService.nrsConfig.nrsWaitTimeMillis, MILLISECONDS))
       callBackend(sfId).flatMap{
         case Left(result) =>
-          nrsServiceCallFutureWithTimeout.map(nrsResponsePayload => {
-            logger.debug(s"Backend call failed. NRS returned payload: $nrsResponsePayload")
-            Left(result.withNrSubmissionId(nrsResponsePayload.nrSubmissionId))
+          nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {
+            logger.debug(s"Backend call failed. NRS returned payload: $nrSubmissionId")
+            Left(result.withNrSubmissionId(nrSubmissionId))
           }).recover {
             case _ =>
               logger.debug("Backend call failed. NRS call failed")
               Left(result)
           }
         case Right(_) =>
-          nrsServiceCallFutureWithTimeout.map(nrsResponsePayload => {
-            logger.debug(s"Backend call success. NRS returned payload: $nrsResponsePayload")
-            Right(Some(nrsResponsePayload.nrSubmissionId))
+          nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {
+            logger.debug(s"Backend call success. NRS returned payload: $nrSubmissionId")
+            Right(Some(nrSubmissionId))
           }).recover {
             case _ =>
               logger.debug("Backend call success. NRS call failed")

@@ -79,7 +79,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.successful(NrsResponsePayload(nrSubmissionId)))
+    when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.successful(nrSubmissionId))
     when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
     "BusinessService" should {
@@ -148,7 +148,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
     when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future {
       Thread.sleep(1000)
-      NrsResponsePayload(nrSubmissionId)
+      nrSubmissionId
     })
 
     val result: Either[Result, Option[NrSubmissionId]] = send()

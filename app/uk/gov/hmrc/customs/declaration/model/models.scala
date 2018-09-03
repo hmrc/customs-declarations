@@ -31,8 +31,8 @@ case class Eori(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
 
-case class NrSubmissionId(value: UUID) extends AnyVal {
-  override def toString: String = value.toString
+case class NrSubmissionId(nrSubmissionId: UUID) extends AnyVal {
+  override def toString: String = nrSubmissionId.toString
 }
 
 object NrSubmissionId {
@@ -281,10 +281,4 @@ case class NrsPayload(payload: String, metadata: NrsMetadata)
 
 object NrsPayload {
   implicit val format = Json.format[NrsPayload]
-}
-
-case class NrsResponsePayload(nrSubmissionId: NrSubmissionId)
-
-object NrsResponsePayload {
-  implicit val format = Json.format[NrsResponsePayload]
 }

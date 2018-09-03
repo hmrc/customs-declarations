@@ -43,7 +43,7 @@ class NrsService @Inject()(logger: DeclarationsLogger,
   private val businessIdValue = "cds"
   private val notableEventValue = "cds-declaration"
 
-  def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[NrsResponsePayload] = {
+  def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[NrSubmissionId] = {
 
     val nrsMetadata = new NrsMetadata(businessId = businessIdValue,
       notableEvent = notableEventValue,

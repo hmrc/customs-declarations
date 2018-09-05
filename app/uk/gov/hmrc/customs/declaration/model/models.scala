@@ -132,6 +132,7 @@ case class ConversationId(uuid: UUID) extends AnyVal {
 }
 
 sealed trait GoogleAnalyticsValues {
+  val enabled: Boolean = true
   val success: String
   val failure: String
 }
@@ -157,11 +158,10 @@ object GoogleAnalyticsValues {
     override val failure: String = "declarationClearanceFailure"
   }
 
-  //according to the ticket, amend endpoint should not call GA
-  //hence, to be on a safe side exception might be in order
   val Amend = new GoogleAnalyticsValues {
-    override lazy val success: String = ???
-    override lazy val failure: String = ???
+    override val enabled: Boolean = false
+    override lazy val success: String = ""
+    override lazy val failure: String = ""
   }
 
   val ArrivalNotification = new GoogleAnalyticsValues {

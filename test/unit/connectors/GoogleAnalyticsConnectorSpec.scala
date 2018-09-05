@@ -108,9 +108,9 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
 
   }
 
-  "GoogleAnalyticsSenderConnector when disabled" should {
+  "GoogleAnalyticsSenderConnector when disabled in configuration" should {
 
-    "POST valid payload" in {
+    "not POST valid payload" in {
       when(mockConfigService.googleAnalyticsConfig).thenReturn(GoogleAnalyticsConfig(enabled = false, url, gaTrackingId, gaClientId, gaEventValue))
 
       await(connector.send(eventName, eventLabel))
@@ -119,9 +119,30 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
 
     }
 
-    "POST valid headers" in {
+    "not POST valid headers" in {
       when(mockConfigService.googleAnalyticsConfig).thenReturn(GoogleAnalyticsConfig(enabled = false, url, gaTrackingId, gaClientId, gaEventValue))
 
+      await(connector.send(eventName, eventLabel))
+
+      verifyZeroInteractions(mockHttpClient)
+    }
+
+  }
+
+  "GoogleAnalyticsSenderConnector when disabled by endpoint" should {
+
+    "not POST valid payload" in {
+
+      implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequestWithGoogleAnalyticsEndpointDisabled
+      await(connector.send(eventName, eventLabel))
+
+      verifyZeroInteractions(mockHttpClient)
+
+    }
+
+    "not POST valid headers" in {
+
+      implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequestWithGoogleAnalyticsEndpointDisabled
       await(connector.send(eventName, eventLabel))
 
       verifyZeroInteractions(mockHttpClient)

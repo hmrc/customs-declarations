@@ -57,7 +57,7 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
 
   def send[A](eventName: String, eventLabel: String)(implicit hasConversationId: HasConversationId with HasAnalyticsValues): Future[Unit] = {
 
-    if (declarationsConfigService.googleAnalyticsConfig.enabled) {
+    if (declarationsConfigService.googleAnalyticsConfig.enabled && hasConversationId.analyticsValues.enabled) {
       val msg = "Calling public notification (google analytics) service"
       val url = config.url
       implicit val hc: HeaderCarrier = new HeaderCarrier
@@ -74,7 +74,7 @@ class GoogleAnalyticsConnector @Inject()(http: HttpClient,
           logger.error(s"Call to GoogleAnalytics sender service failed. POST url= ${config.url}, eventName= $eventName, eventLabel= $eventLabel, reason= ${ex.getMessage}")
       }
     } else {
-      logger.info("GoogleAnalytics disabled in configuration")
+      logger.info("GoogleAnalytics disabled in configuration or for endpoint")
       Future.successful(())
     }
   }

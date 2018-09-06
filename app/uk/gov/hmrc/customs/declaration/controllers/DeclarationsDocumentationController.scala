@@ -18,12 +18,13 @@ package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
-import play.api.http.HttpErrorHandler
+import play.api.http.{HttpErrorHandler, MimeTypes}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.customs.api.common.controllers.DocumentationController
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 
 @Singleton
-class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorHandler, configuration: Configuration) extends DocumentationController(httpErrorHandler) {
+class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorHandler, configuration: Configuration, logger: DeclarationsLogger) extends DocumentationController(httpErrorHandler) {
 
   private lazy val mayBeV1WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-1.0.whitelistedApplicationIds")
   private lazy val mayBeV2WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-2.0.whitelistedApplicationIds")
@@ -33,11 +34,12 @@ class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorH
   private lazy val v3Enabled = configuration.getBoolean("api.access.version-3.0.enabled").getOrElse(true)
 
   def definition(): Action[AnyContent] = Action {
+    logger.debugWithoutRequestContext("DeclarationsDocumentationController definition endpoint has been called")
     Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(
       mayBeV1WhitelistedApplicationIds,
       mayBeV2WhitelistedApplicationIds,
       mayBeV3WhitelistedApplicationIds,
       v2Enabled,
-      v3Enabled)).withHeaders(CONTENT_TYPE -> JSON)
+      v3Enabled)).as(MimeTypes.JSON)
   }
 }

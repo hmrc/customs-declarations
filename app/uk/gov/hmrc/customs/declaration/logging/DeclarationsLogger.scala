@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.logging
 
-import javax.inject.Singleton
-
 import com.google.inject.Inject
+import javax.inject.Singleton
 import play.api.mvc.Request
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.logging.LoggingHelper._
@@ -51,5 +50,8 @@ class DeclarationsLogger @Inject()(logger: CdsLogger) {
 
   def errorWithoutRequestContext(s: => String): Unit =
     logger.error(s)
+
+  def debugWithoutRequestContext(s: => String): Unit =
+    logger.debug(s)
 
 }

@@ -23,13 +23,16 @@ import org.scalatestplus.play._
 import play.api.http.HttpErrorHandler
 import play.api.libs.json.Json
 import play.api.mvc._
-import play.api.test._
 import play.api.test.Helpers._
+import play.api.test._
 import uk.gov.hmrc.customs.declaration.controllers.DeclarationsDocumentationController
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 
 class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar with Results with BeforeAndAfterEach {
 
   private val mockService = mock[HttpErrorHandler]
+
+  private val mockLogger = mock[DeclarationsLogger]
 
   private val v1WhitelistedAppIdsConfigs = Map(
     "api.access.version-1.0.whitelistedApplicationIds.0" -> "v1AppId-1",
@@ -45,7 +48,7 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
     "api.access.version-3.0.whitelistedApplicationIds.1" -> "v3AppId-2")
 
   private def getApiDefinitionWith(configMap: Map[String, Any]) =
-    new DeclarationsDocumentationController(mockService, play.api.Configuration.from(configMap))
+    new DeclarationsDocumentationController(mockService, play.api.Configuration.from(configMap), mockLogger)
       .definition()
 
   override def beforeEach() {

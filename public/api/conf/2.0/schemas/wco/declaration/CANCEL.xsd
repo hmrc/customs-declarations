@@ -343,6 +343,35 @@
 							</xs:annotation>
 							<xs:complexType>
 								<xs:sequence>
+									<xs:element name="SequenceNumeric" type="ds:PointerSequenceNumericType"
+												minOccurs="0">
+										<xs:annotation>
+											<xs:documentation xml:lang="EN">
+												<WCOFormat>n..5</WCOFormat>
+											</xs:documentation>
+											<xs:documentation>
+												<TDEDUID>1050</TDEDUID>
+												<TDEDName>Sequence. Position.Identifier</TDEDName>
+												<DictionaryEntryName>Pointer. Sequence. Numeric
+												</DictionaryEntryName>
+												<NamedComplexType>PointerSequenceNumericType
+												</NamedComplexType>
+												<XMLTag>SequenceNumeric</XMLTag>
+											</xs:documentation>
+											<xs:documentation xml:lang="EN">
+												<WCOID>006</WCOID>
+											</xs:documentation>
+											<xs:documentation>
+												<UniquePositionID>424</UniquePositionID>
+												<WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+												<WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+												<WCOUsageDeclarationCRI>X</WCOUsageDeclarationCRI>
+												<WCOUsageDeclarationCRE>X</WCOUsageDeclarationCRE>
+												<WCOUsageDeclarationCONV>X</WCOUsageDeclarationCONV>
+												<WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+											</xs:documentation>
+										</xs:annotation>
+									</xs:element>
 									<xs:element name="DocumentSectionCode" type="ds:PointerDocumentSectionCodeType"
 												minOccurs="0">
 										<xs:annotation>

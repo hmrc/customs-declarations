@@ -3,16 +3,14 @@ import sbt._
 object AppDependencies {
 
   val hmrcTestVersion = "3.0.0"
-  val scalaTestVersion = "3.0.4"
+  val scalaTestVersion = "3.0.5"
   val scalatestplusVersion = "2.0.1"
-  val mockitoVersion = "2.6.2"
+  val mockitoVersion = "2.10.0"
   val pegdownVersion = "1.6.0"
-  val wireMockVersion = "2.10.1"
-  val customsApiCommonVersion = "1.27.0"
+  val wireMockVersion = "2.18.0"
+  val customsApiCommonVersion = "1.28.0"
   val circuitBreakerVersion = "3.2.0"
   val testScope = "test,it"
-
-  val xmlResolver = "xml-resolver" % "xml-resolver" % "1.2"
 
   val hmrcTest = "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % testScope
 

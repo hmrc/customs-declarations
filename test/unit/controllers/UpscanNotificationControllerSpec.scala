@@ -173,7 +173,7 @@ class UpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with R
        |    "reference" : "$fileReference",
        |    "fileStatus" : "FAILED",
        |    "failureDetails": {
-       |        "failureReason": "QUARANTINED",
+       |        "failureReason": "QUARANTINE",
        |        "message": "This file has a virus"
        |    }
        |}

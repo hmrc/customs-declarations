@@ -18,8 +18,9 @@ package uk.gov.hmrc.customs.declaration.services
 
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit.MILLISECONDS
-import javax.inject.{Inject, Singleton}
 
+import akka.actor.ActorSystem
+import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
@@ -49,7 +50,8 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
                                                      override val dateTimeProvider: DateTimeService,
                                                      override val uniqueIdsService: UniqueIdsService,
                                                      override val nrsService: NrsService,
-                                                     override val declarationsConfigService: DeclarationsConfigService
+                                                     override val declarationsConfigService: DeclarationsConfigService,
+                                                     override val actorSystem: ActorSystem
                                                     ) extends DeclarationService
 
 @Singleton
@@ -60,7 +62,9 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
                                                      override val dateTimeProvider: DateTimeService,
                                                      override val uniqueIdsService: UniqueIdsService,
                                                      override val nrsService: NrsService,
-                                                     override val declarationsConfigService: DeclarationsConfigService) extends DeclarationService
+                                                     override val declarationsConfigService: DeclarationsConfigService,
+                                                     override val actorSystem: ActorSystem) extends DeclarationService {
+}
 trait DeclarationService {
 
   def logger: DeclarationsLogger
@@ -79,6 +83,8 @@ trait DeclarationService {
 
   def declarationsConfigService: DeclarationsConfigService
 
+  def actorSystem: ActorSystem
+
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
@@ -95,7 +101,8 @@ trait DeclarationService {
 
     if (declarationsConfigService.nrsConfig.nrsEnabled) {
       logger.debug("NRS enabled. Calling NRS.")
-      val nrsServiceCallFutureWithTimeout = futureWithTimeout(nrsService.send(vpr, hc), Duration(declarationsConfigService.nrsConfig.nrsWaitTimeMillis, MILLISECONDS))
+
+      val nrsServiceCallFutureWithTimeout = futureWithTimeout(nrsService.send(vpr, hc), Duration(declarationsConfigService.nrsConfig.nrsWaitTimeMillis, MILLISECONDS), actorSystem)
       callBackend(sfId).flatMap{
         case Left(result) =>
           nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {

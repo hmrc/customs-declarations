@@ -18,6 +18,7 @@ package unit.services
 
 import java.util.UUID
 
+import akka.actor.ActorSystem
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
@@ -34,7 +35,6 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
-import util.TestData
 import util.TestData._
 
 import scala.concurrent.Future
@@ -48,12 +48,12 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
   private val wrappedValidXML = <wrapped></wrapped>
 
   trait SetUp {
-    protected val mockLogger = mock[DeclarationsLogger]
-    protected val mockMdgDeclarationConnector = mock[MdgWcoDeclarationConnector]
-    protected val mockApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
-    protected val mockPayloadDecorator = mock[MdgPayloadDecorator]
-    protected val mockDateTimeProvider = mock[DateTimeService]
-    protected val mockHttpResponse = mock[HttpResponse]
+    protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
+    protected val mockMdgDeclarationConnector: MdgWcoDeclarationConnector = mock[MdgWcoDeclarationConnector]
+    protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
+    protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
+    protected val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
+    protected val mockHttpResponse: HttpResponse = mock[HttpResponse]
     protected val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
     protected val mockNrsService: NrsService = mock[NrsService]
 
@@ -64,7 +64,9 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
       mockDateTimeProvider,
       stubUniqueIdsService,
       mockNrsService,
-      mockDeclarationsConfigService)
+      mockDeclarationsConfigService,
+      ActorSystem("StandardDeclarationSubmissionServiceSpec")
+    )
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
       await(service.send(vpr, hc))

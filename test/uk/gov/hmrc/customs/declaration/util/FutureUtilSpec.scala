@@ -16,14 +16,17 @@
 
 package uk.gov.hmrc.customs.declaration.util
 
+import akka.actor.ActorSystem
 import org.scalatest._
 
-import scala.concurrent.{Future, TimeoutException}
 import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContextExecutor, Future, TimeoutException}
 
 class FutureUtilSpec extends AsyncFlatSpec with Matchers with OptionValues with Inside with Inspectors {
 
-  implicit override def executionContext = scala.concurrent.ExecutionContext.Implicits.global
+  implicit override def executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
+
+  val actorSystem = ActorSystem("test")
 
   "FutureUtil" should
     "complete the users future when it returns before the timeout" in {
@@ -33,7 +36,7 @@ class FutureUtilSpec extends AsyncFlatSpec with Matchers with OptionValues with 
       100
     }
 
-    FutureUtil.futureWithTimeout(myFuture, 3 seconds).map {
+    FutureUtil.futureWithTimeout(myFuture, 3 seconds, actorSystem).map {
       result => if(result == 100) succeed else fail
     }
   }
@@ -46,7 +49,7 @@ class FutureUtilSpec extends AsyncFlatSpec with Matchers with OptionValues with 
     }
 
     recoverToSucceededIf[TimeoutException] {
-      FutureUtil.futureWithTimeout(myFuture, 2 seconds)
+      FutureUtil.futureWithTimeout(myFuture, 2 seconds, actorSystem)
     }
   }
 }

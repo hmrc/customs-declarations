@@ -18,6 +18,7 @@ package unit.services
 
 import java.util.UUID
 
+import akka.actor.ActorSystem
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
@@ -31,7 +32,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationService, DeclarationsConfigService, NrsService}
+import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -51,24 +52,25 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
   trait SetUp {
-    protected val mockLogger = mock[DeclarationsLogger]
-    protected val mockMdgDeclarationConnector = mock[MdgDeclarationConnector]
-    protected val mockApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
-    protected val mockPayloadDecorator = mock[MdgPayloadDecorator]
-    protected val mockDateTimeProvider = mock[DateTimeService]
-    protected val mockHttpResponse = mock[HttpResponse]
-    protected val mockNrsService = mock[NrsService]
-    protected val mockDeclarationsConfigService = mock[DeclarationsConfigService]
+    protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
+    protected val mockMdgDeclarationConnector: MdgDeclarationConnector = mock[MdgDeclarationConnector]
+    protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
+    protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
+    protected val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
+    protected val mockHttpResponse: HttpResponse = mock[HttpResponse]
+    protected val mockNrsService: NrsService = mock[NrsService]
+    protected val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
     protected lazy val service: DeclarationService = new DeclarationService {
-      val logger = mockLogger
-      val connector = mockMdgDeclarationConnector
-      val apiSubFieldsConnector = mockApiSubscriptionFieldsConnector
-      val wrapper = mockPayloadDecorator
-      val dateTimeProvider = mockDateTimeProvider
-      val uniqueIdsService = stubUniqueIdsService
-      val nrsService = mockNrsService
-      val declarationsConfigService = mockDeclarationsConfigService
+      val logger: DeclarationsLogger = mockLogger
+      val connector: MdgDeclarationConnector = mockMdgDeclarationConnector
+      val apiSubFieldsConnector: ApiSubscriptionFieldsConnector = mockApiSubscriptionFieldsConnector
+      val wrapper: MdgPayloadDecorator = mockPayloadDecorator
+      val dateTimeProvider: DateTimeService = mockDateTimeProvider
+      val uniqueIdsService: UniqueIdsService = stubUniqueIdsService
+      val nrsService: NrsService = mockNrsService
+      val declarationsConfigService: DeclarationsConfigService = mockDeclarationsConfigService
+      val actorSystem: ActorSystem = ActorSystem("DeclarationServiceSpec")
     }
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {

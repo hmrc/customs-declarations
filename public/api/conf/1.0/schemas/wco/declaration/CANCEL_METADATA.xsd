@@ -14,7 +14,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="WCODataModelVersionCode" type="ds:MetaDataWCODataModelVersionCodeType" minOccurs="1">
+        <xs:element name="WCODataModelVersionCode" type="ds:MetaDataWCODataModelVersionCodeType" minOccurs="0">
           <xs:annotation>
             <xs:documentation>
               <WCOFormat>an..6</WCOFormat>
@@ -27,7 +27,7 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element name="WCOTypeName" type="ds:MetaDataWCOTypeNameTextType" minOccurs="1">
+        <xs:element name="WCOTypeName" type="ds:MetaDataWCOTypeNameTextType" minOccurs="0">
           <xs:annotation>
             <xs:documentation>
               <DictionaryEntryName>Document Meta Data. WCO Type Name. Text</DictionaryEntryName>
@@ -38,7 +38,7 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element name="ResponsibleCountryCode" type="ds:MetaDataResponsibleCountryCodeType" minOccurs="1">
+        <xs:element name="ResponsibleCountryCode" type="ds:MetaDataResponsibleCountryCodeType" minOccurs="0">
           <xs:annotation>
             <xs:documentation xml:lang="EN">
               <WCOCodeRemarks>EDIFACT codes (3207) = ISO 3166-1 2-alpha code</WCOCodeRemarks>
@@ -53,7 +53,7 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element name="ResponsibleAgencyName" type="ds:MetaDataResponsibleAgencyNameTextType" minOccurs="1">
+        <xs:element name="ResponsibleAgencyName" type="ds:MetaDataResponsibleAgencyNameTextType" minOccurs="0">
           <xs:annotation>
             <xs:documentation>
               <WCOFormat>an..70</WCOFormat>
@@ -65,7 +65,7 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element name="AgencyAssignedCustomizationVersionCode" type="ds:MetaDataAgencyAssignedCustomizationVersionCodeType" minOccurs="1">
+        <xs:element name="AgencyAssignedCustomizationVersionCode" type="ds:MetaDataAgencyAssignedCustomizationVersionCodeType" minOccurs="0">
           <xs:annotation>
             <xs:documentation>
               <WCOFormat>an..3</WCOFormat>

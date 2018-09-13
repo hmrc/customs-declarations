@@ -1,0 +1,25 @@
+<stat:declarationManagementInformationResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
+  <stat:declaration>
+    <!--Optional:-->
+    <stat:versionNumber>100</stat:versionNumber>
+    <!--Optional:-->
+    <stat:creationDate formatCode="string">2008-09-29T02:49:45</stat:creationDate>
+    <!--Optional:-->
+    <stat:goodsItemCount unitType="string" qualifier="string">1000.00</stat:goodsItemCount>
+    <!--Optional:-->
+    <stat:tradeMovementType type="token" responsibleAgent="token">token</stat:tradeMovementType>
+    <!--Optional:-->
+    <stat:type type="token" responsibleAgent="token">token</stat:type>
+    <!--Optional:-->
+    <stat:packageCount unitType="string" qualifier="string">1000.00</stat:packageCount>
+    <!--Optional:-->
+    <stat:acceptanceDate formatCode="string">2014-09-19T00:18:33</stat:acceptanceDate>
+    <!--Zero or more repetitions:-->
+    <stat:parties>
+      <!--Optional:-->
+      <stat:partyIdentification>
+        <stat:number>string</stat:number>
+      </stat:partyIdentification>
+    </stat:parties>
+  </stat:declaration>
+</stat:declarationManagementInformationResponse>

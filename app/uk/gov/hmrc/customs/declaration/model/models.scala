@@ -282,3 +282,6 @@ case class NrsPayload(payload: String, metadata: NrsMetadata)
 object NrsPayload {
   implicit val format = Json.format[NrsPayload]
 }
+
+//TODO add other values
+case class StatusResponse(versionNumber: String, creationDate: String)

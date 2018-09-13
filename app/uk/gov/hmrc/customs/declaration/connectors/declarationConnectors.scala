@@ -56,6 +56,16 @@ class MdgDeclarationCancellationConnector @Inject()(override val http: HttpClien
   override val configKey = "declaration-cancellation"
 }
 
+@Singleton
+class MdgDeclarationStatusConnector @Inject()(override val http: HttpClient,
+                                                    override val logger: DeclarationsLogger,
+                                                    override val serviceConfigProvider: ServiceConfigProvider,
+                                                    override val config: DeclarationsConfigService)
+  extends MdgDeclarationConnector with UsingCircuitBreaker {
+
+  override val configKey = "declaration-status"
+}
+
 trait MdgDeclarationConnector extends UsingCircuitBreaker {
 
   def http: HttpClient

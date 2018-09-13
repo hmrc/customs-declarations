@@ -70,3 +70,8 @@ class DeclarationAmendValuesAction @Inject()(override val logger: DeclarationsLo
 class DeclarationArrivalNotificationValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = ArrivalNotification
 }
+
+@Singleton
+class DeclarationStatusValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+  override val googleAnalyticsValues: GoogleAnalyticsValues = DeclarationStatus
+}

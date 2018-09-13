@@ -55,7 +55,9 @@ class NrsConnector @Inject()(http: HttpClient,
         res
       }
       .recoverWith {
-        case httpError: HttpException => Future.failed(new RuntimeException(httpError))
+        case httpError: HttpException =>
+          logger.error(s"Call to nrs service failed url=$url, HttpException=$httpError")
+          Future.failed(new RuntimeException(httpError))
         case e: Throwable =>
           logger.error(s"Call to nrs service failed url=$url, exception=$e")
           Future.failed(e)

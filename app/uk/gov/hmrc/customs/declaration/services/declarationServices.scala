@@ -106,7 +106,7 @@ trait DeclarationService {
       callBackend(sfId).flatMap{
         case Left(result) =>
           nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {
-            logger.debug(s"Backend call failed. NRS returned payload: $nrSubmissionId")
+            logger.debug(s"Backend call failed. NRS returned submission id: $nrSubmissionId")
             Left(result.withNrSubmissionId(nrSubmissionId))
           }).recover {
             case _ =>
@@ -115,7 +115,7 @@ trait DeclarationService {
           }
         case Right(_) =>
           nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {
-            logger.debug(s"Backend call success. NRS returned payload: $nrSubmissionId")
+            logger.debug(s"Backend call success. NRS returned submission id: $nrSubmissionId")
             Right(Some(nrSubmissionId))
           }).recover {
             case _ =>

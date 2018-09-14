@@ -45,6 +45,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |circuitBreaker.numberOfCallsToTriggerStateChange=5
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
+      |declarationStatus.requestDaysLimit=60
       |upscan-callback.url="http://upscan-callback.url"
       |nrs.enabled=true
       |nrs.apikey="nrs-api-key"
@@ -82,6 +83,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: customs-notification.context
           |Service configuration not found for key: customs-notification.bearer-token
           |Could not find config key 'upscan-callback.url'
+          |Could not find config key 'declarationStatus.requestDaysLimit'
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'

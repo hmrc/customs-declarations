@@ -283,5 +283,6 @@ object NrsPayload {
   implicit val format = Json.format[NrsPayload]
 }
 
-//TODO add other values
-case class StatusResponse(versionNumber: String, creationDate: String)
+case class StatusResponse(versionNumber: Option[String], creationDate: Option[String], acceptanceDate: Option[String],
+                          tradeMovementType: Option[String], declarationType: Option[String],goodsItemCount: Option[String],
+                          packageCount: Option[String], partyIdentificationNumbers: Option[Seq[String]])

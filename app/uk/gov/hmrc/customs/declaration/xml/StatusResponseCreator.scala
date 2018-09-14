@@ -4,23 +4,35 @@ import javax.inject.Singleton
 
 import uk.gov.hmrc.customs.declaration.model.StatusResponse
 
-import scala.xml.NodeSeq
+import scala.xml._
 
 @Singleton
 class StatusResponseCreator {
 
+  //TODO tests
   def create(statusResponse: StatusResponse): NodeSeq = {
 
-    //TODO substitute correct xml
-    <v1:submitDeclarationRequest
-    xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1"
-    xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2"
-    xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <v1:requestCommon>
-        <v1:regime>CDS</v1:regime>
-        <v1:receiptDate>{ statusResponse.creationDate}</v1:receiptDate>
-      </v1:requestCommon>
-    </v1:submitDeclarationRequest>
+    <stat:declarationManagementInformationResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
+      <stat:declaration>
+        {if (statusResponse.versionNumber.isDefined) <stat:versionNumber>{statusResponse.versionNumber}</stat:versionNumber>}
+        {if (statusResponse.creationDate.isDefined) <stat:creationDate formatCode="string">{statusResponse.creationDate}</stat:creationDate>}
+        {if (statusResponse.goodsItemCount.isDefined) <stat:goodsItemCount unitType="string" qualifier="string">{statusResponse.goodsItemCount}</stat:goodsItemCount>}
+        {if (statusResponse.tradeMovementType.isDefined) <stat:tradeMovementType type="token" responsibleAgent="token">{statusResponse.tradeMovementType}</stat:tradeMovementType>}
+        {if (statusResponse.declarationType.isDefined) <stat:type type="token" responsibleAgent="token">{statusResponse.declarationType}</stat:type>}
+        {if (statusResponse.packageCount.isDefined) <stat:packageCount unitType="string" qualifier="string">{statusResponse.packageCount}</stat:packageCount>}
+        {if (statusResponse.acceptanceDate.isDefined) <stat:acceptanceDate formatCode="string">{statusResponse.acceptanceDate}</stat:acceptanceDate>}
+        {if (statusResponse.partyIdentificationNumbers.isDefined) {
+          <stat:parties>
+            {statusResponse.partyIdentificationNumbers.get.map { value =>
+            <stat:partyIdentification>
+              <stat:number>
+                {value}
+              </stat:number>
+            </stat:partyIdentification>}}
+          </stat:parties>
+        }}
+      </stat:declaration>
+    </stat:declarationManagementInformationResponse>
   }
+
 }

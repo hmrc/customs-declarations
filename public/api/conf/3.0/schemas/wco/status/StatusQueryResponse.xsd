@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://gov.uk/customs/declarations/status-request" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://gov.uk/customs/declarations/status-request" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <xs:element name="declarationManagementInformationResponse" type="DeclarationManagementInformationResponse"/>
+
+    <xs:complexType name="DeclarationManagementInformationResponse">
+        <xs:sequence>
+            <xs:element name="declaration" type="Declaration"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Declaration">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="versionNumber" type="xs:integer"/>
+            <xs:element minOccurs="0" name="creationDate" type="DateTime"/>
+            <xs:element minOccurs="0" name="goodsItemCount" type="Quantity"/>
+            <xs:element minOccurs="0" name="tradeMovementType" type="TradeMovementType"/>
+            <xs:element minOccurs="0" name="type" type="DeclarationType"/>
+            <xs:element minOccurs="0" name="packageCount" type="Quantity"/>
+            <xs:element minOccurs="0" name="acceptanceDate" type="DateTime"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="parties" type="PartyRole"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="PartyRole">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="partyIdentification" type="PartyIdentification"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="PartyIdentification">
+        <xs:sequence>
+            <xs:element name="number" type="ReferenceNumber"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="ReferenceNumber">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:complexType name="DateTime">
+        <xs:simpleContent>
+            <xs:extension base="xs:dateTime">
+                <xs:attribute name="formatCode" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="Quantity">
+        <xs:simpleContent>
+            <xs:extension base="Measure"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="Measure">
+        <xs:simpleContent>
+            <xs:extension base="Real">
+                <xs:attribute name="unitType" type="xs:string"/>
+                <xs:attribute name="qualifier" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="Real">
+        <xs:restriction base="xs:decimal"/>
+    </xs:simpleType>
+
+    <xs:complexType name="TradeMovementType">
+        <xs:simpleContent>
+            <xs:extension base="CodeListElementField"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="CodeListElementField">
+        <xs:simpleContent>
+            <xs:extension base="xs:token">
+                <xs:attribute name="type" type="xs:token"/>
+                <xs:attribute name="responsibleAgent" type="xs:token"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="DeclarationType">
+        <xs:simpleContent>
+            <xs:extension base="CodeListElementField"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+</xs:schema>

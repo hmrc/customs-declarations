@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.util
+package unit.util
 
 import akka.actor.ActorSystem
 import org.scalatest._
+import uk.gov.hmrc.customs.declaration.util.FutureUtil
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContextExecutor, Future, TimeoutException}

@@ -27,8 +27,15 @@ import scala.xml.NodeSeq
 @Singleton
 class StatusResponseValidationService @Inject() (declarationsLogger: DeclarationsLogger, declarationsConfigService: DeclarationsConfigService) {
 
+  def validateCommunicationAddress(communicationAddress: String): Boolean = {
+    val regexString = "hmrcgwid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{16}:[0-9a-zA-Z]{10}"
+    val isCommunicationsAddressValid = communicationAddress.matches(regexString)
+    if(!isCommunicationsAddressValid) declarationsLogger.debugWithoutRequestContext(s"Status response communicationsAddress failed validation $communicationAddress")
+    isCommunicationsAddressValid
+  }
+
   def validateBadgeIdentifier(badgeIdentifier: BadgeIdentifier, communicationAddress: String): Boolean = {
-    badgeIdentifier.value == extractBadgeIdentifier(communicationAddress)
+    validateCommunicationAddress(communicationAddress) && badgeIdentifier.value == extractBadgeIdentifier(communicationAddress)
   }
 
   private def extractBadgeIdentifier(communicationAddress: String) = {
@@ -38,7 +45,9 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
   def validateReceivedDate(receiveDate: String): Boolean = {
     val parsedDateTime = ISODateTimeFormat.dateTime().withZone(DateTimeZone.UTC).parseDateTime(receiveDate)
     val validDateTime = DateTime.now(DateTimeZone.UTC).minusDays(declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit)
-    parsedDateTime.isAfter(validDateTime)
+    val isDateValid = parsedDateTime.isAfter(validDateTime)
+    if(!isDateValid) declarationsLogger.debugWithoutRequestContext(s"Status response receivedDate failed validation $receiveDate")
+    isDateValid
   }
 
   //TODO check badgeId & declaration date

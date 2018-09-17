@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.declaration.model.DeclarationsConfig
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseValidationService}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData.{badgeIdentifier, invalidBadgeIdentifier}
-import util.TestXMLData.{InvalidDEC65Response, generateValidDEC65Response}
+import util.TestXMLData._
 
 class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
 
@@ -46,28 +46,40 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
 
     "validate should return true when badgeIdentifiers match and date is within configured allowed period" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysLimit - 1)
-      val result: Boolean = service.validate(generateValidDEC65Response(dateWithinPeriod.toString), badgeIdentifier)
+      val result: Boolean = service.validate(validStatusResponse(dateWithinPeriod.toString), badgeIdentifier)
       result shouldBe true
     }
 
     "validate should return false when badgeIdentifiers match and date is outside configured allowed period" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysLimit + 1)
-      val result: Boolean = service.validate(generateValidDEC65Response(dateWithinPeriod.toString), badgeIdentifier)
+      val result: Boolean = service.validate(validStatusResponse(dateWithinPeriod.toString), badgeIdentifier)
       result shouldBe false
     }
 
     "validate should return false when badgeIdentifiers do not match" in new SetUp() {
-      val result: Boolean = service.validate(generateValidDEC65Response("2018-07-17T13:24:59.023Z"), invalidBadgeIdentifier)
+      val result: Boolean = service.validate(validStatusResponse("2018-07-17T13:24:59.023Z"), invalidBadgeIdentifier)
       result shouldBe false
     }
 
-    "validate should return false when xml does not contain values needed" in new SetUp() {
-      val result: Boolean = service.validate(InvalidDEC65Response, invalidBadgeIdentifier)
+    "validate should return false when xml does not contain receivedDate" in new SetUp() {
+      val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeNoDate), badgeIdentifier)
       result shouldBe false
     }
 
-    //TODO test for invalid dates? invalid communicationAddress format?
+    "validate should return false when xml contains invalid receivedDate" in new SetUp() {
+      val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeInvalidDate), badgeIdentifier)
+      result shouldBe false
+    }
 
+    "validate should return false when xml does not contain communicationAddress" in new SetUp() {
+      val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeCommunicationAddress), badgeIdentifier)
+      result shouldBe false
+    }
+
+    "validate should return false when xml does not contain a valid communicationAddress" in new SetUp() {
+      val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeCommunicationAddressFormatInvalid), badgeIdentifier)
+      result shouldBe false
+    }
 
   }
 

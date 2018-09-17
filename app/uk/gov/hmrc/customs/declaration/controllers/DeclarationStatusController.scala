@@ -35,16 +35,8 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
                                             val authAction: AuthStatusAction,
                                             val declarationStatusValuesAction: DeclarationStatusValuesAction,
                                             val declarationStatusService: DeclarationStatusService,
-                                            //val fileUploadAnalyticsValuesAction: FileUploadAnalyticsValuesAction,
                                             val logger: DeclarationsLogger,
                                             val googleAnalyticsConnector: GoogleAnalyticsConnector) extends BaseController {
-
-  private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {
-    case Right(xml) =>
-      Right(AnyContentAsXml(xml))
-    case _ =>
-      Right(AnyContentAsEmpty)
-  })
 
   def get(mrn: String): Action[AnyContent] = (
     Action andThen

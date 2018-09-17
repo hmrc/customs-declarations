@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
+import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -34,9 +34,7 @@ import scala.util.control.NonFatal
 
 @Singleton
 class DeclarationStatusService @Inject()(logger: DeclarationsLogger,
-                                         apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                         declarationStatusConnector: DeclarationStatusConnector,
-                                         config: DeclarationsConfigService,
+                                         connector: DeclarationStatusConnector,
                                          dateTimeProvider: DateTimeService,
                                          uniqueIdsService: UniqueIdsService) {
 
@@ -46,7 +44,7 @@ class DeclarationStatusService @Inject()(logger: DeclarationsLogger,
     val correlationId = uniqueIdsService.correlation
     val dmirId = uniqueIdsService.dmir
 
-    declarationStatusConnector.send(dateTime, correlationId, dmirId, asr.requestedApiVersion, mrn)
+    connector.send(dateTime, correlationId, dmirId, asr.requestedApiVersion, mrn)
       .map(f => Right(f)).recover{
       case NonFatal(e) =>
         logger.error(s"Upscan initiate call failed: ${e.getMessage}", e)

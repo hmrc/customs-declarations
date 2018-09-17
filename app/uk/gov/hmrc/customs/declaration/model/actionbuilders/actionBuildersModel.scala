@@ -147,10 +147,8 @@ case class ExtractedHeadersImpl(
   clientId: ClientId
 ) extends ExtractedHeaders
 
-trait ExtractedStatusHeaders {
-  val requestedApiVersion: ApiVersion
+trait ExtractedStatusHeaders extends ExtractedHeaders {
   val badgeIdentifier: BadgeIdentifier
-  val clientId: ClientId
 }
 
 case class ExtractedStatusHeadersImpl(
@@ -190,7 +188,7 @@ case class ValidatedHeadersStatusRequest[A](
  badgeIdentifier: BadgeIdentifier,
  clientId: ClientId,
  request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with HasBadgeIdentifier
+) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with HasBadgeIdentifier with ExtractedStatusHeaders
 
 // Available after Authorise action builder
 case class AuthorisedRequest[A](
@@ -210,7 +208,7 @@ case class AuthorisedStatusRequest[A](
  badgeIdentifier: BadgeIdentifier,
  clientId: ClientId,
  request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedStatusHeaders
+) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with HasBadgeIdentifier with ExtractedStatusHeaders
 
 // Available after ValidatedPayloadAction builder
 abstract class GenericValidatedPayloadRequest[A](

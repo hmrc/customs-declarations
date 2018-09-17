@@ -18,6 +18,7 @@ package uk.gov.hmrc.customs.declaration.controllers
 
 object CustomHeaderNames {
   val XConversationIdHeaderName: String = "X-Conversation-ID"
+  val XCorrelationIdHeaderName: String = "X-Correlation-ID"
   val XClientIdHeaderName = "X-Client-ID"
   val XBadgeIdentifierHeaderName: String = "X-Badge-Identifier"
   val NonRepudiationReceiptId: String = "X-Receipt-ID"

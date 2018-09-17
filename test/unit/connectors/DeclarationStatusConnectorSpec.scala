@@ -30,6 +30,7 @@ import play.api.libs.json.{Json, Writes}
 import play.api.mvc.{AnyContent, AnyContentAsJson, Request}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.{DeclarationStatusConnector, NrsConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -39,8 +40,9 @@ import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
+import unit.logging.StubDeclarationsLogger
 import util.{ApiSubscriptionFieldsTestData, TestData}
-import util.TestData.{badgeIdentifier, conversationId, correlationId, nrsConfigEnabled}
+import util.TestData._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -48,7 +50,7 @@ import scala.xml.NodeSeq
 class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
 
   private val mockWsPost = mock[HttpClient]
-  private val mockLogger = mock[DeclarationsLogger]
+  private val mockLogger = stubDeclarationsLogger
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
 
@@ -109,7 +111,7 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
   ), authorization = Some(Authorization("Bearer v2-bearer")))
 
   override protected def beforeEach() {
-    reset(mockWsPost, mockLogger, mockServiceConfigProvider)
+    reset(mockWsPost, mockServiceConfigProvider)
     when(mockServiceConfigProvider.getConfig("v2.declaration-status")).thenReturn(v2Config)
     when(mockServiceConfigProvider.getConfig("v3.declaration-status")).thenReturn(v3Config)
     when(mockDeclarationsConfigService.declarationsCircuitBreakerConfig).thenReturn(declarationsCircuitBreakerConfig)

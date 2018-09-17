@@ -25,6 +25,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.Mrn
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedHeadersStatusRequest}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -49,11 +50,11 @@ class AuthStatusAction @Inject()(override val authConnector: AuthConnector, logg
 
       authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
         logger.debug("Authorised as CSP")
-        Future.successful(Right(vhsr.toAuthorisedStatusRequest()))
+        Future.successful(Right(vhsr.toAuthorisedStatusRequest())) // Simply won't get through if no MRN is specified
       }.recover{
         case NonFatal(_: AuthorisationException) =>
           logger.error("Not authorised")
-          Left(errorResponseUnauthorisedGeneral.XmlResult.withConversationId)
+          Left(errorResponseUnauthorisedGeneral.XmlResult.withConversationId) // TODO Google Analytics here?
         case NonFatal(e) =>
           logger.error("Error authorising CSP", e)
           Left(ErrorInternalServerError.XmlResult.withConversationId)

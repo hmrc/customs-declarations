@@ -174,6 +174,7 @@ object FakeRequests {
 
   lazy val ValidGoogleAnalyticsRequestAsJsValue: Request[JsValue] = ValidGoogleAnalyticsRequest.copyFakeRequest[JsValue](body = ValidGoogleAnalyticsRequest.body.json)
 
+  lazy val ValidDeclarationStatusRequest = FakeRequest().withHeaders(ValidHeadersV2.toSeq: _*)
 
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")

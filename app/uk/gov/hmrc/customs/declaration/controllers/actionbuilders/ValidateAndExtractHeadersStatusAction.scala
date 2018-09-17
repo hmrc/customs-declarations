@@ -33,7 +33,7 @@ import scala.concurrent.Future
   * <li/>ERROR - 4XX Result if is a header validation error. This terminates the action builder pipeline.
   */
 @Singleton
-class ValidateAndExtractHeadersStatusAction @Inject()(validator: HeaderValidatorStatus, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends ActionRefiner[AnalyticsValuesAndConversationIdRequest, ValidatedHeadersStatusRequest] {
+class ValidateAndExtractHeadersStatusAction @Inject()(validator: HeaderStatusValidator, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends ActionRefiner[AnalyticsValuesAndConversationIdRequest, ValidatedHeadersStatusRequest] {
   actionName =>
 
   override def refine[A](cr: AnalyticsValuesAndConversationIdRequest[A]): Future[Either[Result, ValidatedHeadersStatusRequest[A]]] = Future.successful {

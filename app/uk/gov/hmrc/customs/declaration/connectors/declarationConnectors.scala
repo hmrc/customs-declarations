@@ -22,8 +22,8 @@ import com.google.inject._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE, DATE, X_FORWARDED_HOST}
 import play.api.http.MimeTypes
-import uk.gov.hmrc.circuitbreaker.{CircuitBreakerConfig, UsingCircuitBreaker}
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
+import uk.gov.hmrc.customs.declaration.config.DeclarationsCircuitBreaker
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.ApiVersion
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -41,7 +41,7 @@ class MdgWcoDeclarationConnector @Inject()(override val http: HttpClient,
                                          override val logger: DeclarationsLogger,
                                          override val serviceConfigProvider: ServiceConfigProvider,
                                          override val config: DeclarationsConfigService)
-  extends MdgDeclarationConnector with UsingCircuitBreaker {
+  extends MdgDeclarationConnector with DeclarationsCircuitBreaker {
 
   override val configKey = "wco-declaration"
 }
@@ -51,12 +51,12 @@ class MdgDeclarationCancellationConnector @Inject()(override val http: HttpClien
                                                     override val logger: DeclarationsLogger,
                                                     override val serviceConfigProvider: ServiceConfigProvider,
                                                     override val config: DeclarationsConfigService)
-  extends MdgDeclarationConnector with UsingCircuitBreaker {
+  extends MdgDeclarationConnector with DeclarationsCircuitBreaker {
 
   override val configKey = "declaration-cancellation"
 }
 
-trait MdgDeclarationConnector extends UsingCircuitBreaker {
+trait MdgDeclarationConnector extends DeclarationsCircuitBreaker {
 
   def http: HttpClient
 
@@ -96,18 +96,5 @@ trait MdgDeclarationConnector extends UsingCircuitBreaker {
           logger.error(s"Call to wco declaration submission failed. url=$url")
           Future.failed(e)
       }
-  }
-
-  override protected def circuitBreakerConfig: CircuitBreakerConfig =
-    CircuitBreakerConfig(
-      serviceName = configKey,
-      numberOfCallsToTriggerStateChange = config.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange,
-      unavailablePeriodDuration = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis,
-      unstablePeriodDuration = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
-    )
-
-  override protected def breakOnException(t: Throwable): Boolean = t match {
-    case _: BadRequestException | _: NotFoundException | _: Upstream4xxResponse => false
-    case _ => true
   }
 }

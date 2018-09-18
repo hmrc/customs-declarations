@@ -16,6 +16,8 @@
 
 package util
 
+import org.joda.time.{DateTime, DateTimeZone}
+
 import scala.xml.{Elem, NodeSeq}
 
 object TestXMLData {
@@ -607,7 +609,7 @@ object TestXMLData {
     <documentationType>docType123</documentationType>
   </upscanInitiate>
 
-  val InvalidDEC65Response: NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
+  def invalidStatusResponse(declarationNode: NodeSeq): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
     <n1:responseCommon>
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>
@@ -629,13 +631,30 @@ object TestXMLData {
         <n2:timeStamp>2001-12-17T09:30:47Z</n2:timeStamp>
         <n2:isFinal>true</n2:isFinal>
         <n2:externalId>String</n2:externalId>
-        <xsd_1:declaration>
-        </xsd_1:declaration>
+          {declarationNode}
       </n1:declarationManagementInformationResponse>
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 
-  def generateValidDEC65Response(receivedDate : String): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
+  def statusResponseDeclarationXmlNodeNoDate: Elem =    <xsd_1:declaration>
+    <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
+  </xsd_1:declaration>
+
+  def statusResponseDeclarationXmlNodeInvalidDate: Elem =    <xsd_1:declaration>
+    <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
+    <n3:receiveDate>2002-05-30T09:29:47.063Z</n3:receiveDate>
+  </xsd_1:declaration>
+
+  def statusResponseDeclarationXmlNodeCommunicationAddress: Elem =    <xsd_1:declaration>
+    <n3:receiveDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString}</n3:receiveDate>
+  </xsd_1:declaration>
+
+  def statusResponseDeclarationXmlNodeCommunicationAddressFormatInvalid: Elem =    <xsd_1:declaration>
+    <n3:communicationAddress>144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
+    <n3:receiveDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString}</n3:receiveDate>
+  </xsd_1:declaration>
+
+  def validStatusResponse(receivedDate : String): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
     <n1:responseCommon>
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>

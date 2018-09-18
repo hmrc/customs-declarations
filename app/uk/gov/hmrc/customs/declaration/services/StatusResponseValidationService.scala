@@ -27,37 +27,46 @@ import scala.xml.NodeSeq
 @Singleton
 class StatusResponseValidationService @Inject() (declarationsLogger: DeclarationsLogger, declarationsConfigService: DeclarationsConfigService) {
 
-  def validateBadgeIdentifier(badgeIdentifier: BadgeIdentifier, communicationAddress: String): Boolean = {
-    badgeIdentifier.value == extractBadgeIdentifier(communicationAddress)
+  def validate(xml: NodeSeq, badgeIdentifier: BadgeIdentifier): Boolean = {
+    val declarationNode = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
+    validateBadgeIdentifier(declarationNode, badgeIdentifier) && validateReceivedDate(declarationNode)
+  }
+
+  private def validateBadgeIdentifier(declarationNode: NodeSeq, badgeIdentifier: BadgeIdentifier): Boolean = {
+    extractField(declarationNode, "communicationAddress").fold(false)({ communicationAddress =>
+      validateCommunicationAddress(communicationAddress.head) && badgeIdentifier.value == extractBadgeIdentifier(communicationAddress.head)
+    })
   }
 
   private def extractBadgeIdentifier(communicationAddress: String) = {
     communicationAddress.split(":").last
   }
 
-  def validateReceivedDate(receiveDate: String): Boolean = {
-    val parsedDateTime = ISODateTimeFormat.dateTime().withZone(DateTimeZone.UTC).parseDateTime(receiveDate)
-    val validDateTime = DateTime.now(DateTimeZone.UTC).minusDays(declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit)
-    parsedDateTime.isAfter(validDateTime)
+  private def validateCommunicationAddress(communicationAddress: String): Boolean = {
+    val regexString = "hmrcgwid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{16}:[0-9a-zA-Z]{10}"
+    val isCommunicationsAddressValid = communicationAddress.matches(regexString)
+    if(!isCommunicationsAddressValid) declarationsLogger.debugWithoutRequestContext(s"Status response communicationsAddress failed validation $communicationAddress")
+    isCommunicationsAddressValid
   }
 
-  //TODO check badgeId & declaration date
-  def validate(xml: NodeSeq, badgeIdentifier: BadgeIdentifier): Boolean = {
-    val declarationNode = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
+  private def validateReceivedDate(declarationNode: NodeSeq): Boolean = {
+    extractField(declarationNode, "receiveDate").fold(false)(receiveDate => {
+     val parsedDateTime = ISODateTimeFormat.dateTime().withZone(DateTimeZone.UTC).parseDateTime(receiveDate.head)
+     val isDateValid = parsedDateTime.isAfter(getValidDateTimeUsingConfig)
+     if (!isDateValid) declarationsLogger.debugWithoutRequestContext(s"Status response receivedDate failed validation $receiveDate")
+     isDateValid
+   })
+  }
 
-    val maybeCommunicationAddress = (declarationNode \ "communicationAddress").theSeq match {
+  private def getValidDateTimeUsingConfig = {
+    DateTime.now(DateTimeZone.UTC).minusDays(declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit)
+  }
+
+  private def extractField(declarationNode: NodeSeq, nodeName: String): Option[Seq[String]] = {
+    val mayBeFieldValue = (declarationNode \ nodeName).theSeq match {
       case Nil => None
       case a => Some(a.map(_.text))
     }
-
-    val mayBeReceiveDate = (declarationNode \ "receiveDate").theSeq match {
-      case Nil => None
-      case a => Some(a.map(_.text))
-    }
-
-    maybeCommunicationAddress.fold(false)(address => validateBadgeIdentifier(badgeIdentifier, address.head)) &&
-    mayBeReceiveDate.fold(false)(receiveDate => validateReceivedDate(receiveDate.head))
-
+    mayBeFieldValue
   }
-
 }

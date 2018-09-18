@@ -33,10 +33,10 @@ class StatusResponseCreatorSpec extends UnitSpec with MockitoSugar {
 
     val statusResponse = StatusResponse(Some("1"), Some("some creation date"), Some("goods item count"),
       Some("trade movement type"), Some("declaration type"), Some("package count"), Some("some acceptance date"),
-      Some(Seq(Some("partyId1"), Some("partyId2"))))
+      Seq(Some("partyId1"), Some("partyId2")))
 
-    val statusResponseEmptyParties = statusResponse.copy(partyIdentificationNumbers = Some(Seq(None, None)))
-    val statusResponseNoParties = statusResponse.copy(partyIdentificationNumbers = None)
+    val statusResponseEmptyParties = statusResponse.copy(partyIdentificationNumbers = Seq(None, None))
+    val statusResponseNoParties = statusResponse.copy(partyIdentificationNumbers = Seq.empty)
     val statusResponseNoAcceptanceDate = statusResponse.copy(acceptanceDate = None)
 
     def createResponseWithAllValues(): NodeSeq = statusResponseCreator.create(statusResponse)

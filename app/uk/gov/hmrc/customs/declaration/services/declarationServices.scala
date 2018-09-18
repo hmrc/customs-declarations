@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
-
 import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
@@ -65,7 +64,6 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
                                                      override val nrsService: NrsService,
                                                      override val declarationsConfigService: DeclarationsConfigService,
                                                      override val actorSystem: ActorSystem) extends DeclarationService {
-
 }
 trait DeclarationService {
 

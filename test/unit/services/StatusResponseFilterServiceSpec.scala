@@ -58,7 +58,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
       statusResponse.declarationType.get shouldBe "declaration type"
       statusResponse.packageCount.get shouldBe "3"
       statusResponse.acceptanceDate.get shouldBe "2002-12-17T09:30:47Z"
-      statusResponse.partyIdentificationNumbers.get shouldBe List(Some("1"))
+      statusResponse.partyIdentificationNumbers shouldBe List(Some("1"))
     }
 
     "return filtered values when only two parties with id numbers and one without present" in new SetUp() {
@@ -76,7 +76,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
       statusResponse.declarationType shouldBe None
       statusResponse.packageCount shouldBe None
       statusResponse.acceptanceDate shouldBe None
-      statusResponse.partyIdentificationNumbers.get shouldBe List(Some("1"), Some("2"), None)
+      statusResponse.partyIdentificationNumbers shouldBe List(Some("1"), Some("2"), None)
     }
 
     "return no filtered values" in new SetUp() {
@@ -94,7 +94,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
       statusResponse.declarationType shouldBe None
       statusResponse.packageCount shouldBe None
       statusResponse.acceptanceDate shouldBe None
-      statusResponse.partyIdentificationNumbers shouldBe None
+      statusResponse.partyIdentificationNumbers shouldBe Seq.empty
     }
   }
 

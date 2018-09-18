@@ -285,4 +285,4 @@ object NrsPayload {
 
 case class StatusResponse(versionNumber: Option[String], creationDate: Option[String], goodsItemCount: Option[String],
                           tradeMovementType: Option[String], declarationType: Option[String], packageCount: Option[String],
-                          acceptanceDate: Option[String], partyIdentificationNumbers: Option[Seq[Option[String]]])
+                          acceptanceDate: Option[String], partyIdentificationNumbers: Seq[Option[String]])

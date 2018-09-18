@@ -31,13 +31,13 @@ class StatusResponseCreator @Inject() (declarationsLogger: DeclarationsLogger) {
     <stat:declarationManagementInformationResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
       <stat:declaration>
         {if (statusResponse.versionNumber.isDefined) <stat:versionNumber>{statusResponse.versionNumber.get}</stat:versionNumber>}
-        {if (statusResponse.creationDate.isDefined) <stat:creationDate formatCode="string">{statusResponse.creationDate.get}</stat:creationDate>}
-        {if (statusResponse.goodsItemCount.isDefined) <stat:goodsItemCount unitType="string" qualifier="string">{statusResponse.goodsItemCount.get}</stat:goodsItemCount>}
-        {if (statusResponse.tradeMovementType.isDefined) <stat:tradeMovementType type="token" responsibleAgent="token">{statusResponse.tradeMovementType.get}</stat:tradeMovementType>}
-        {if (statusResponse.declarationType.isDefined) <stat:type type="token" responsibleAgent="token">{statusResponse.declarationType.get}</stat:type>}
-        {if (statusResponse.packageCount.isDefined) <stat:packageCount unitType="string" qualifier="string">{statusResponse.packageCount.get}</stat:packageCount>}
-        {if (statusResponse.acceptanceDate.isDefined) <stat:acceptanceDate formatCode="string">{statusResponse.acceptanceDate.get}</stat:acceptanceDate>}
-        {if (statusResponse.partyIdentificationNumbers.isDefined) {{ statusResponse.partyIdentificationNumbers.get.map { maybeNumber => if (maybeNumber.isEmpty) <parties></parties> else {<parties><stat:partyIdentification><stat:number>{maybeNumber.get}</stat:number></stat:partyIdentification></parties>}}}}}
+        {if (statusResponse.creationDate.isDefined) <stat:creationDate>{statusResponse.creationDate.get}</stat:creationDate>}
+        {if (statusResponse.goodsItemCount.isDefined) <stat:goodsItemCount>{statusResponse.goodsItemCount.get}</stat:goodsItemCount>}
+        {if (statusResponse.tradeMovementType.isDefined) <stat:tradeMovementType>{statusResponse.tradeMovementType.get}</stat:tradeMovementType>}
+        {if (statusResponse.declarationType.isDefined) <stat:type>{statusResponse.declarationType.get}</stat:type>}
+        {if (statusResponse.packageCount.isDefined) <stat:packageCount>{statusResponse.packageCount.get}</stat:packageCount>}
+        {if (statusResponse.acceptanceDate.isDefined) <stat:acceptanceDate>{statusResponse.acceptanceDate.get}</stat:acceptanceDate>}
+        {statusResponse.partyIdentificationNumbers.map { maybeNumber => if (maybeNumber.isEmpty) <parties></parties> else <parties><stat:partyIdentification><stat:number>{maybeNumber.get}</stat:number></stat:partyIdentification></parties>}}
       </stat:declaration>
     </stat:declarationManagementInformationResponse>
   }

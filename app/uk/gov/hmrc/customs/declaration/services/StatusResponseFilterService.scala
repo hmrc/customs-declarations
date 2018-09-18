@@ -55,11 +55,11 @@ class StatusResponseFilterService @Inject() (statusResponseCreator: StatusRespon
     }
   }
 
-  private def extractParties(parties: NodeSeq): Option[Seq[Option[String]]] = {
+  private def extractParties(parties: NodeSeq): Seq[Option[String]] = {
     if (parties.isEmpty) {
-      None
+      Seq.empty
     } else {
-      Some(parties.map(party => extract(party \ "partyIdentification" \ "number")))
+      parties.map(party => extract(party \ "partyIdentification" \ "number"))
     }
   }
 

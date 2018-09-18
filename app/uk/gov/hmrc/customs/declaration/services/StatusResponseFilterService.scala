@@ -30,17 +30,18 @@ class StatusResponseFilterService @Inject() (statusResponseCreator: StatusRespon
 
   def filter(xml: NodeSeq): NodeSeq = {
 
-    //TODO fix path
-    val versionNumber = extract(xml \ "declarationManagementInformationResponse" \ "declaration" \ "versionNumber")
-    val creationDate = extract (xml \ "declarationManagementInformationResponse" \ "declaration" \ "creationDate")
-    val acceptanceDate = extract(xml \ "declarationManagementInformationResponse" \ "declaration" \ "acceptanceDate")
-    val tradeMovementType = extract(xml \ "declarationManagementInformationResponse" \ "declaration" \ "tradeMovementType")
-    val declarationType = extract(xml \ "declarationManagementInformationResponse" \ "declaration" \ "type")
-    val goodsItemCount = extract(xml \ "declarationManagementInformationResponse" \ "declaration" \ "goodsItemCount")
-    val packageCount = extract(xml \ "declarationManagementInformationResponse" \ "declaration" \ "packageCount")
-    val parties = extractParties(xml \ "declarationManagementInformationResponse" \ "declaration" \ "parties")
+    val path = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
+    val versionNumber = extract(path \ "versionNumber")
+    val creationDate = extract (path \ "creationDate")
+    val goodsItemCount = extract(path \ "goodsItemCount")
+    val tradeMovementType = extract(path \ "tradeMovementType")
+    val declarationType = extract(path \ "type")
+    val packageCount = extract(path \ "packageCount")
+    val acceptanceDate = extract(path \ "acceptanceDate")
+    val parties = extractParties(path \ "parties")
 
-    val statusResponse = StatusResponse(versionNumber, creationDate, acceptanceDate, tradeMovementType, declarationType, goodsItemCount, packageCount, parties)
+    val statusResponse = StatusResponse(versionNumber, creationDate, goodsItemCount, tradeMovementType,
+      declarationType, packageCount, acceptanceDate, parties)
 
     statusResponseCreator.create(statusResponse)
   }
@@ -54,11 +55,11 @@ class StatusResponseFilterService @Inject() (statusResponseCreator: StatusRespon
     }
   }
 
-  private def extractParties(parties: NodeSeq): Option[Seq[String]] = {
+  private def extractParties(parties: NodeSeq): Option[Seq[Option[String]]] = {
     if (parties.isEmpty) {
       None
     } else {
-      Some(parties.flatMap{ party => extract(party \ "partyIdentification" \ "number") })
+      Some(parties.map(party => extract(party \ "partyIdentification" \ "number")))
     }
   }
 

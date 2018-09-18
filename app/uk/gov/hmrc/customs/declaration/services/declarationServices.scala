@@ -27,7 +27,7 @@ import play.api.mvc.Result
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
-import uk.gov.hmrc.customs.declaration.connectors._
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgDeclarationCancellationConnector, MdgDeclarationConnector, MdgWcoDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -65,28 +65,6 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
                                                      override val nrsService: NrsService,
                                                      override val declarationsConfigService: DeclarationsConfigService,
                                                      override val actorSystem: ActorSystem) extends DeclarationService {
-}
-
-@Singleton
-class StatusDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
-                                                     override val connector: MdgDeclarationStatusConnector,
-                                                     override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                                     override val wrapper: MdgPayloadDecorator,
-                                                     override val dateTimeProvider: DateTimeService,
-                                                     override val uniqueIdsService: UniqueIdsService,
-                                                     override val nrsService: NrsService,
-                                                     override val declarationsConfigService: DeclarationsConfigService,
-                                                     override val actorSystem: ActorSystem) extends DeclarationService {
-
-  override def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
-    futureApiSubFieldsId(vpr.clientId) flatMap {
-      case Right(sfId) =>
-        callBackendAndNrs(vpr, hc, sfId)
-      case Left(result) =>
-        Future.successful(Left(result))
-    }
-  }
-
 
 }
 trait DeclarationService {
@@ -115,17 +93,13 @@ trait DeclarationService {
   def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     futureApiSubFieldsId(vpr.clientId) flatMap {
       case Right(sfId) =>
-          //do stuff
-          //validate
-          //filter
-
           callBackendAndNrs(vpr, hc, sfId)
       case Left(result) =>
         Future.successful(Left(result))
     }
   }
 
-  def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier, sfId: SubscriptionFieldsId): Future[Either[Result, Option[NrSubmissionId]]] = {
+  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier, sfId: SubscriptionFieldsId): Future[Either[Result, Option[NrSubmissionId]]] = {
 
     if (declarationsConfigService.nrsConfig.nrsEnabled) {
       logger.debug("NRS enabled. Calling NRS.")
@@ -158,7 +132,7 @@ trait DeclarationService {
   }
 
   //TODO: Service should not return a Result, it is controller's job to return the result in a format that the caller accept
-  def futureApiSubFieldsId[A](c: ClientId)
+  private def futureApiSubFieldsId[A](c: ClientId)
                                      (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>

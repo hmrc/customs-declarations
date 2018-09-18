@@ -46,7 +46,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
     "return filtered values" in new SetUp() {
       val statusResponseCaptor: ArgumentCaptor[StatusResponse] = ArgumentCaptor.forClass(classOf[StatusResponse])
 
-      service.filter(TestXMLData.generateValidDEC65Response(DateTime.now().toString))
+      service.filter(TestXMLData.validStatusResponse(DateTime.now().toString))
 
       verify(mockStatusResponseCreator).create(statusResponseCaptor.capture())
       val statusResponse = statusResponseCaptor.getValue

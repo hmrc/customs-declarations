@@ -7,11 +7,11 @@
 
     <logger name="uk.gov" level="${logger.uk.gov:-WARN}"/>
 
-    <logger name="customs-declarations" level="${logger.customs-declarations:-WARN}"/>
+    <logger name="customs-declarations" level="${logger.customs-declarations:-INFO}"/>
 
     <logger name="org.asynchttpclient.netty.handler" level="${logger.asynchttpclient:-WARN}"/>
 
-    <root level="${logger.application:-WARN}">
+    <root level="${logger.application:-INFO}">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

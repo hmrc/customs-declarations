@@ -20,31 +20,22 @@ import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
-import play.api.mvc.{AnyContentAsXml, Request}
+import play.api.mvc.AnyContentAsXml
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorInternalServerError
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthStatusAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues.DeclarationStatus
-import uk.gov.hmrc.customs.declaration.model.VersionTwo
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersStatusRequest
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
-import util.{ApiSubscriptionFieldsTestData, AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, TestData}
+import util.{AuthConnectorNrsDisabledStubbing, TestData}
 
 class AuthStatusActionSpec extends UnitSpec with MockitoSugar with TableDrivenPropertyChecks with BeforeAndAfterEach {
 
 
   private lazy val validatedHeadersRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest
-//  ValidatedHeadersStatusRequest(
-//    conversationId,
-//    DeclarationStatus,
-//    VersionTwo,
-//    badgeIdentifier,
-//    ApiSubscriptionFieldsTestData.clientId,
-//    mock[Request[AnyContentAsXml]])
 
   private val mockAuthenticationConnector: AuthConnector = mock[AuthConnector]
   private val mockImportsLogger= mock[DeclarationsLogger]

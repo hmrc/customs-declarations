@@ -37,7 +37,6 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
-import util.TestData
 import util.TestData._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -53,7 +52,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
   trait SetUp {
-    protected val mockLogger: DeclarationsLogger = TestData.stubDeclarationsLogger
+    protected val mockLogger: DeclarationsLogger = stubDeclarationsLogger
     protected val mockMdgDeclarationConnector: MdgDeclarationConnector = mock[MdgDeclarationConnector]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]

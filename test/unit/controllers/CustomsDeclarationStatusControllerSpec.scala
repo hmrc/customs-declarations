@@ -31,22 +31,21 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.{DeclarationStatusConnector, GoogleAnalyticsConnector}
+import uk.gov.hmrc.customs.declaration.controllers.DeclarationStatusController
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{ValidateAndExtractHeadersStatusAction, _}
-import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController, DeclarationStatusController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, HasAnalyticsValues, HasConversationId, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, HasAnalyticsValues, HasConversationId}
 import uk.gov.hmrc.customs.declaration.services._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
-import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, TestData, TestXMLData}
+import util.AuthConnectorNrsDisabledStubbing
 import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._
 import util.TestXMLData.DeclarationStatusOkResponse
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.NodeSeq
+import scala.concurrent.Future
 
 class CustomsDeclarationStatusControllerSpec extends UnitSpec
   with Matchers with MockitoSugar with BeforeAndAfterEach {

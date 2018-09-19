@@ -23,9 +23,9 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.mvc.{AnyContentAsXml, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{HeaderStatusValidator, HeaderValidator, ValidateAndExtractHeadersAction, ValidateAndExtractHeadersStatusAction}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{HeaderStatusValidator, ValidateAndExtractHeadersStatusAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest, ValidatedHeadersStatusRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ValidatedHeadersStatusRequest}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.RequestHeaders
 import util.TestData._

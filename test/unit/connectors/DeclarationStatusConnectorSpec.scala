@@ -26,13 +26,11 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE, DATE, X_FORWARDED_HOST}
 import play.api.http.MimeTypes
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.Json
 import play.api.mvc.{AnyContent, AnyContentAsJson, Request}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.connectors.{DeclarationStatusConnector, NrsConnector}
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
@@ -40,9 +38,8 @@ import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
-import unit.logging.StubDeclarationsLogger
-import util.{ApiSubscriptionFieldsTestData, TestData}
 import util.TestData._
+import util.{ApiSubscriptionFieldsTestData, TestData}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq

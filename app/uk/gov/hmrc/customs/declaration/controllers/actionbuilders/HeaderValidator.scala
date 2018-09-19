@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
+
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
 import play.api.mvc.Headers
@@ -25,12 +26,12 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ExtractedHeadersImpl}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ExtractedHeaders, ExtractedHeadersImpl}
 
 @Singleton
 class HeaderValidator @Inject()(logger: DeclarationsLogger) {
 
-  private val versionsByAcceptHeader: Map[String, ApiVersion] = Map(
+  protected val versionsByAcceptHeader: Map[String, ApiVersion] = Map(
     "application/vnd.hmrc.1.0+xml" -> VersionOne,
     "application/vnd.hmrc.2.0+xml" -> VersionTwo,
     "application/vnd.hmrc.3.0+xml" -> VersionThree
@@ -39,7 +40,7 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   private lazy val xClientIdRegex = "^\\S+$".r
 
 
-  def validateHeaders[A](implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeadersImpl] = {
+  def validateHeaders[A](implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeaders] = {
     implicit val headers: Headers = conversationIdRequest.headers
 
     def hasAccept = validateHeader(ACCEPT, versionsByAcceptHeader.keySet.contains(_), ErrorAcceptHeaderInvalid)
@@ -48,7 +49,7 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
 
     def hasXClientId = validateHeader(XClientIdHeaderName, xClientIdRegex.findFirstIn(_).nonEmpty, ErrorInternalServerError)
 
-    val theResult: Either[ErrorResponse, ExtractedHeadersImpl] = for {
+    val theResult: Either[ErrorResponse, ExtractedHeaders] = for {
       acceptValue <- hasAccept.right
       contentTypeValue <- hasContentType.right
       xClientIdValue <- hasXClientId.right
@@ -62,7 +63,7 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     theResult
   }
 
-  private def validateHeader[A](headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)
+  protected def validateHeader[A](headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)
                                (implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A], h: Headers): Either[ErrorResponse, String] = {
     val left = Left(errorResponse)
     def leftWithLog(headerName: String) = {

@@ -1506,4 +1506,5 @@ object TestXMLData {
       </n1:declarationManagementInformationResponse>
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
+
 }

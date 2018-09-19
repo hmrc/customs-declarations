@@ -44,6 +44,15 @@ object ActionBuilderModelHelper {
       eh.clientId,
       cir.request
     )
+
+    def toValidatedHeadersStatusRequest(eh: ExtractedStatusHeaders): ValidatedHeadersStatusRequest[A] = ValidatedHeadersStatusRequest(
+      cir.conversationId,
+      cir.analyticsValues,
+      eh.requestedApiVersion,
+      eh.badgeIdentifier,
+      eh.clientId,
+      cir.request
+    )
   }
 
   implicit class ValidatedHeadersRequestOps[A](val vhr: ValidatedHeadersRequest[A]) extends AnyVal {
@@ -59,6 +68,18 @@ object ActionBuilderModelHelper {
       vhr.clientId,
       authorisedAs,
       vhr.request
+    )
+  }
+
+  implicit class ValidatedHeadersStatusRequestOps[A](val vhsr: ValidatedHeadersStatusRequest[A]) extends AnyVal {
+
+    def toAuthorisedStatusRequest(): AuthorisedStatusRequest[A] = AuthorisedStatusRequest(
+      vhsr.conversationId,
+      vhsr.analyticsValues,
+      vhsr.requestedApiVersion,
+      vhsr.badgeIdentifier,
+      vhsr.clientId,
+      vhsr.request
     )
   }
 
@@ -117,10 +138,24 @@ trait HasFileUploadProperties {
   val documentationType: DocumentationType
 }
 
+trait HasBadgeIdentifier {
+  val badgeIdentifier: BadgeIdentifier
+}
+
 case class ExtractedHeadersImpl(
   requestedApiVersion: ApiVersion,
   clientId: ClientId
 ) extends ExtractedHeaders
+
+trait ExtractedStatusHeaders extends ExtractedHeaders {
+  val badgeIdentifier: BadgeIdentifier
+}
+
+case class ExtractedStatusHeadersImpl(
+  requestedApiVersion: ApiVersion,
+  badgeIdentifier: BadgeIdentifier,
+  clientId: ClientId
+) extends ExtractedStatusHeaders
 
 /*
  * We need multiple WrappedRequest classes to reflect additions to context during the request processing pipeline.
@@ -145,6 +180,16 @@ case class ValidatedHeadersRequest[A](
   request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders
 
+// Specifically for status endpoint
+case class ValidatedHeadersStatusRequest[A](
+ conversationId: ConversationId,
+ analyticsValues: GoogleAnalyticsValues,
+ requestedApiVersion: ApiVersion,
+ badgeIdentifier: BadgeIdentifier,
+ clientId: ClientId,
+ request: Request[A]
+) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with HasBadgeIdentifier with ExtractedStatusHeaders
+
 // Available after Authorise action builder
 case class AuthorisedRequest[A](
   conversationId: ConversationId,
@@ -155,6 +200,15 @@ case class AuthorisedRequest[A](
   request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs
 
+// Available after Authorise action builder
+case class AuthorisedStatusRequest[A](
+ conversationId: ConversationId,
+ analyticsValues: GoogleAnalyticsValues,
+ requestedApiVersion: ApiVersion,
+ badgeIdentifier: BadgeIdentifier,
+ clientId: ClientId,
+ request: Request[A]
+) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with HasBadgeIdentifier with ExtractedStatusHeaders
 
 // Available after ValidatedPayloadAction builder
 abstract class GenericValidatedPayloadRequest[A](

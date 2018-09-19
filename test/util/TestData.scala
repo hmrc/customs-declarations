@@ -34,10 +34,12 @@ import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core.ConfidenceLevel.L500
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve._
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
+import unit.logging.StubDeclarationsLogger
 
 import scala.xml.Elem
 
@@ -49,6 +51,13 @@ object TestData {
   val correlationIdValue = "e61f8eee-812c-4b8f-b193-06aedc60dca2"
   val correlationIdUuid: UUID = fromString(correlationIdValue)
   val correlationId = CorrelationId(correlationIdUuid)
+
+  val dmirIdValue = "1b0a48a8-1259-42c9-9d6a-e797b919eb16"
+  val dmirIdUuid: UUID = fromString(dmirIdValue)
+  val dmirId = DeclarationManagementInformationRequestId(dmirIdUuid)
+
+  val mrnValue = "theMrn"
+  val mrn = Mrn(mrnValue)
 
   val subscriptionFieldsIdString: String = "b82f31c6-2239-4253-b6f5-ed75e37ab7a5"
   val subscriptionFieldsIdUuid: UUID = fromString("b82f31c6-2239-4253-b6f5-ed75e37ab7a5")
@@ -203,6 +212,8 @@ object TestData {
 
   lazy val mockUuidService: UuidService = mock[UuidService]
 
+  lazy val stubDeclarationsLogger = new StubDeclarationsLogger(mock[CdsLogger])
+
   object TestModule extends AbstractModule {
     def configure(): Unit = {
       bind(classOf[UuidService]) toInstance mockUuidService
@@ -225,6 +236,8 @@ object TestData {
     override def conversation: ConversationId = conversationId
 
     override def correlation: CorrelationId = correlationId
+
+    override def dmir: DeclarationManagementInformationRequestId = dmirId
   }
 
   val TestXmlPayload: Elem = <foo>bar</foo>
@@ -234,12 +247,19 @@ object TestData {
   def testFakeRequestWithBadgeId(badgeIdString: String = badgeIdentifier.value): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString)
 
+  // For Status endpoint
+  val TestConversationIdStatusRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, TestFakeRequest)
+  val TestExtractedStatusHeaders = ExtractedStatusHeadersImpl(VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
+  val TestValidatedHeadersStatusRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestConversationIdStatusRequest.toValidatedHeadersStatusRequest(TestExtractedStatusHeaders)
+  val TestAuthorisedStatusRequest: AuthorisedStatusRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest.toAuthorisedStatusRequest()
+
+
   val TestConversationIdRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, TestFakeRequest)
   val TestConversationIdRequestWithGoogleAnalyticsEndpointDisabled = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Amend, TestFakeRequest)
   val TestConversationIdRequestMultipleHeaderValues = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, TestFakeRequestMultipleHeaderValues)
   val TestExtractedHeaders = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
-
   val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
+
   val TestValidatedHeadersRequestWithGoogleAnalyticsEndpointDisabled: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithGoogleAnalyticsEndpointDisabled.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestValidatedHeadersRequestMultipleHeaderValues: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestMultipleHeaderValues.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestCspAuthorisedRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, Some(cspRetrievalValues))

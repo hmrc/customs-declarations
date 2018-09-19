@@ -27,9 +27,60 @@ import scala.xml.NodeSeq
 @Singleton
 class StatusResponseValidationService @Inject() (declarationsLogger: DeclarationsLogger, declarationsConfigService: DeclarationsConfigService) {
 
+  val IMPORT_MOVEMENT_TYPE : String = "IM"
+  val EXPORT_MOVEMENT_TYPE : String = "EX"
+  val CO_MOVEMENT_TYPE : String = "CO"
+
+  val importProcedureCategories: Seq[String] = Seq( "40", "42", "61", "07", "51", "53", "71")
+  val exportProcedureCategories: Seq[String] = Seq( "10")
+
+ // tradeMovementType procedureCategory
+
   def validate(xml: NodeSeq, badgeIdentifier: BadgeIdentifier): Boolean = {
     val declarationNode = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
-    validateBadgeIdentifier(declarationNode, badgeIdentifier) && validateReceivedDate(declarationNode)
+    extractMovementType(declarationNode) match {
+      case Some(IMPORT_MOVEMENT_TYPE) => (validateBadgeIdentifier(declarationNode, badgeIdentifier) && validateReceivedDate(declarationNode))
+      case Some(EXPORT_MOVEMENT_TYPE) => validateReceivedDate(declarationNode)
+      case Some(_) => false
+      case None => false
+    }
+  }
+
+
+  def extractMovementType(declarationNode: NodeSeq): Option[String]  = {
+    val mayBetradeMovementType = extractField(declarationNode, "tradeMovementType").fold[Option[String]](None)(tradeMovementType => Some(tradeMovementType.head.substring(0,2)))
+    if(mayBetradeMovementType.isDefined && mayBetradeMovementType.get == CO_MOVEMENT_TYPE) {
+      Some(deriveTradeMovementTypeFromProcedureCategory(extractProcedureCategory(declarationNode)))
+    } else {
+      mayBetradeMovementType
+    }
+  }
+
+  private def deriveTradeMovementTypeFromProcedureCategory(maybeProcedureCategory: Option[String]):  String  = {
+     if(isImportProcedureCategory(maybeProcedureCategory)){
+       IMPORT_MOVEMENT_TYPE
+     } else if(isExportProcedureCategory(maybeProcedureCategory)){
+        EXPORT_MOVEMENT_TYPE
+     } else{
+       CO_MOVEMENT_TYPE
+     }
+   }
+
+  private def isExportProcedureCategory(maybeProcedureCategory: Option[String]): Boolean = {
+   matchAgainstGivenCategories(maybeProcedureCategory, exportProcedureCategories)
+  }
+
+
+  private def isImportProcedureCategory(maybeProcedureCategory: Option[String]): Boolean = {
+    matchAgainstGivenCategories(maybeProcedureCategory, importProcedureCategories)
+  }
+
+  private def matchAgainstGivenCategories(maybeProcedureCategory: Option[String], categoriesToMatch: Seq[String]): Boolean ={
+    maybeProcedureCategory.exists(procedureCategory => categoriesToMatch.contains(procedureCategory))
+  }
+
+  private def extractProcedureCategory(declarationNode: NodeSeq): Option[String]  = {
+    extractField(declarationNode, "procedureCategory").fold[Option[String]](None)(procedureCategory => Some(procedureCategory.head.substring(0,2)))
   }
 
   private def validateBadgeIdentifier(declarationNode: NodeSeq, badgeIdentifier: BadgeIdentifier): Boolean = {

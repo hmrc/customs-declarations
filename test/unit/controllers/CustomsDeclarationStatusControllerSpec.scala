@@ -42,8 +42,8 @@ import uk.gov.hmrc.play.test.UnitSpec
 import util.AuthConnectorNrsDisabledStubbing
 import util.FakeRequests._
 import util.RequestHeaders._
+import util.StatusTestXMLData.generateDeclarationManagementInformationResponse
 import util.TestData._
-import util.TestXMLData.validStatusResponse
 
 import scala.concurrent.Future
 
@@ -60,9 +60,9 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
-    protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(validStatusResponse("2018-07-17T13:24:59.023Z").toString))
+    protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(generateDeclarationManagementInformationResponse("2018-07-17T13:24:59.023Z", "IM", "40").toString))
 
-    protected val endpointAction = new EndpointAction {
+    protected val endpointAction: EndpointAction = new EndpointAction {
       override val logger: DeclarationsLogger = mockDeclarationsLogger
       override val googleAnalyticsValues: GoogleAnalyticsValues = GoogleAnalyticsValues.Submit
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService

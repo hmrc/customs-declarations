@@ -21,11 +21,13 @@ import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.DeclarationsConfig
+import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, DeclarationsConfig}
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseValidationService}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.StatusTestXMLData._
 import util.TestData.{badgeIdentifier, invalidBadgeIdentifier}
-import util.TestXMLData._
+
+import scala.xml.Elem
 
 class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
 
@@ -33,6 +35,9 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
   protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
   protected val mockDeclarationsConfig: DeclarationsConfig = mock[DeclarationsConfig]
   private val statusRequestDaysLimit: Int = 60
+  private val statusRequestDaysOutsideLimit: Int = statusRequestDaysLimit + 2
+  private val statusRequestDaysInsideLimit: Int = statusRequestDaysLimit - 2
+
 
   trait SetUp {
 
@@ -45,44 +50,96 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
   "StatusResponseValidationService" should {
 
     "validate should return true when badgeIdentifiers match and date is within configured allowed period" in new SetUp() {
-      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysLimit - 1)
-      val result: Boolean = service.validate(validStatusResponse(dateWithinPeriod.toString), badgeIdentifier)
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier)
       result shouldBe true
     }
 
     "validate should return false when badgeIdentifiers match and date is outside configured allowed period" in new SetUp() {
-      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysLimit + 1)
-      val result: Boolean = service.validate(validStatusResponse(dateWithinPeriod.toString), badgeIdentifier)
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier)
       result shouldBe false
     }
 
     "validate should return false when badgeIdentifiers do not match" in new SetUp() {
-      val result: Boolean = service.validate(validStatusResponse("2018-07-17T13:24:59.023Z"), invalidBadgeIdentifier)
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ImportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
+      result shouldBe false
+    }
+
+    "validate should return true when response is tradeMovementType of EX... date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ExportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
+      result shouldBe true
+    }
+
+    "validate should return true when response is tradeMovementType of CO... procedure category is ImportType date is inside configured allowed period and badgeIdentifiers match" in new SetUp() {
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, ValidImportProcedureCategory), badgeIdentifier)
+      result shouldBe true
+    }
+
+    "validate should return false when response is tradeMovementType of CO... procedure category is ImportType date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, ValidImportProcedureCategory), invalidBadgeIdentifier)
+      result shouldBe false
+    }
+
+    "validate should return false when response is tradeMovementType of EX... date outside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ExportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
+      result shouldBe false
+    }
+
+    "validate should return true when response is tradeMovementType of CO... procedure category is ExportType, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, ValidExportProcedureCategory), invalidBadgeIdentifier)
+      result shouldBe true
+    }
+
+    "validate should return false when response is tradeMovementType of CO... procedure category is ExportType, date is outside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, ValidExportProcedureCategory), badgeIdentifier)
+      result shouldBe false
+    }
+
+    "validate should return false when response is tradeMovementType of CO... procedure category is invalid, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
+      val result: Boolean = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, InValidProcedureCategory), badgeIdentifier)
       result shouldBe false
     }
 
     "validate should return false when xml does not contain receivedDate" in new SetUp() {
-      val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeNoDate), badgeIdentifier)
-      result shouldBe false
+      testService(service, statusResponseDeclarationNoReceiveDate, badgeIdentifier, expectedResult = false)
     }
 
-    "validate should return false when xml contains invalid receivedDate" in new SetUp() {
-      val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeInvalidDate), badgeIdentifier)
-      result shouldBe false
+    "validate should return false when xml does not contain procedureCategory" in new SetUp() {
+      testService(service, statusResponseDeclarationNoProcedureCategory, badgeIdentifier, expectedResult = false)
     }
 
-    "validate should return false when xml does not contain communicationAddress" in new SetUp() {
-      val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeCommunicationAddress), badgeIdentifier)
-      result shouldBe false
+    "validate should return false when xml does not contain tradeMovementType" in new SetUp() {
+      testService(service, statusResponseDeclarationNoTradeMovementType, badgeIdentifier, expectedResult = false)
     }
 
-    "validate should return false when xml does not contain a valid communicationAddress" in new SetUp() {
-      val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeCommunicationAddressFormatInvalid), badgeIdentifier)
-      result shouldBe false
+    "validate should return false when response xml contains invalid receivedDate" in new SetUp() {
+      testService(service, statusResponseDeclarationInvalidReceiveDate, badgeIdentifier, expectedResult = false)
     }
+
+    "validate should return false when response xml does not contain communicationAddress" in new SetUp() {
+      testService(service, statusResponseDeclarationNoCommunicationAddress, badgeIdentifier, expectedResult = false)
+    }
+
+    "validate should return false when response xml does not contain a valid communicationAddress" in new SetUp() {
+      testService(service, statusResponseDeclarationCommunicationAddressFormatInvalid, badgeIdentifier, expectedResult = false)
+    }
+
+    def testService(service: StatusResponseValidationService, xmlResponse: Elem, badgeIdentifier: BadgeIdentifier, expectedResult: Boolean){
+      val result: Boolean = service.validate(invalidStatusResponse(xmlResponse), badgeIdentifier)
+      result shouldBe expectedResult
+    }
+
 
   }
-
 
 
 }

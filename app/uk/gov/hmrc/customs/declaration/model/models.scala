@@ -131,6 +131,10 @@ case class ConversationId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
 }
 
+case class Mrn(value: String) extends AnyVal {
+  override def toString: String = value.toString
+}
+
 sealed trait GoogleAnalyticsValues {
   val enabled: Boolean = true
   val success: String
@@ -168,10 +172,19 @@ object GoogleAnalyticsValues {
     override val success: String = "declarationArrivalNotificationSuccess"
     override val failure: String = "declarationArrivalNotificationFailure"
   }
+
+  val DeclarationStatus = new GoogleAnalyticsValues {
+    override val success: String = "declarationStatusSuccess"
+    override val failure: String = "declarationStatusFailure"
+  }
 }
 
 
 case class CorrelationId(uuid: UUID) extends AnyVal {
+  override def toString: String = uuid.toString
+}
+
+case class DeclarationManagementInformationRequestId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
 }
 
@@ -282,3 +295,15 @@ case class NrsPayload(payload: String, metadata: NrsMetadata)
 object NrsPayload {
   implicit val format = Json.format[NrsPayload]
 }
+
+private object NotAvailable { val na = Some("NOT AVAILABLE") }
+
+case class DeclarationManagementInformationResponse(declaration: Declaration)
+case class Declaration(versionNumber: Option[String] = NotAvailable.na, creationDate: Option[String] = NotAvailable.na, acceptanceDate: Option[String] = NotAvailable.na,  tradeMovementType: Option[String] = NotAvailable.na,  `type`: Option[String] = NotAvailable.na,  parties: Parties, goodsItemCount: Option[String] = NotAvailable.na,  packageCount: Option[String] = NotAvailable.na)
+case class Parties(partyIdentification: PartyIdentification)
+case class PartyIdentification(number: Option[String] = NotAvailable.na)
+
+object PartyIdentification { implicit val format = Json.format[PartyIdentification] }
+object Parties { implicit val format = Json.format[Parties] }
+object Declaration { implicit val format = Json.format[Declaration] }
+object DeclarationManagementInformationResponse { implicit val format = Json.format[DeclarationManagementInformationResponse] }

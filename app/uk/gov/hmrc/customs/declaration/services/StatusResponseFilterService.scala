@@ -17,50 +17,72 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.StatusResponse
-import uk.gov.hmrc.customs.declaration.xml.StatusResponseCreator
 
-import scala.xml.NodeSeq
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+
+import scala.xml._
 
 @Singleton
-class StatusResponseFilterService @Inject() (statusResponseCreator: StatusResponseCreator,
-                                             declarationsLogger: DeclarationsLogger,
+class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLogger,
                                              declarationsConfigService: DeclarationsConfigService) {
 
-  def filter(xml: NodeSeq): NodeSeq = {
+  val namespacePrefix = "stat"
+  val namespaceBinding = NamespaceBinding(namespacePrefix, "http://gov.uk/customs/declarations/status-request", TopScope)
+  val minimizeEmptyElement = false
 
-    val path = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
-    val versionNumber = extract(path \ "versionNumber")
-    val creationDate = extract (path \ "creationDate")
-    val goodsItemCount = extract(path \ "goodsItemCount")
-    val tradeMovementType = extract(path \ "tradeMovementType")
-    val declarationType = extract(path \ "type")
-    val packageCount = extract(path \ "packageCount")
-    val acceptanceDate = extract(path \ "acceptanceDate")
-    val parties = extractParties(path \ "parties")
+  def transform(xml: NodeSeq): NodeSeq = {
 
-    val statusResponse = StatusResponse(versionNumber, creationDate, goodsItemCount, tradeMovementType,
-      declarationType, packageCount, acceptanceDate, parties)
+    var dec = Elem(namespacePrefix, "declaration", Null, namespaceBinding, minimizeEmptyElement)
+    val path: NodeSeq = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
 
-    statusResponseCreator.create(statusResponse)
+    dec = maybeAddNode(path, dec, "versionNumber")
+    dec = maybeAddNode(path, dec, "creationDate")
+    dec = maybeAddNode(path, dec, "goodsItemCount")
+    dec = maybeAddNode(path, dec, "tradeMovementType")
+    dec = maybeAddNode(path, dec, "type")
+    dec = maybeAddNode(path, dec, "packageCount")
+    dec = maybeAddNode(path, dec, "acceptanceDate")
+
+    (path \ "parties").foreach { parties =>
+      val numberNode = parties \ "partyIdentification" \ "number"
+      if (numberNode.isEmpty) {
+        val partiesElement = Elem(namespacePrefix, "parties", Null, namespaceBinding, minimizeEmptyElement)
+        dec = addChild(dec, partiesElement)
+      } else {
+        val responseNode = buildPartyIdentificationNumberElement(parties, numberNode)
+        dec = addChild(dec, responseNode)
+      }
+    }
+
+    val root = Elem(namespacePrefix, "declarationManagementInformationResponse", Null, namespaceBinding, minimizeEmptyElement, dec)
+    declarationsLogger.debugWithoutRequestContext(s"created status response xml ${root.toString()}")
+    root
   }
 
-  private def extract(xml: NodeSeq): Option[String] = {
-    val value = xml.text
-    if (value.isEmpty) {
-      None
+  private def maybeAddNode(path: NodeSeq, dec: Elem, label: String) = {
+    val inputNode = path \ label
+    if (inputNode.nonEmpty) {
+      addNode(inputNode.head, dec)
     } else {
-      Some(value)
+      dec
     }
   }
 
-  private def extractParties(parties: NodeSeq): Seq[Option[String]] = {
-    if (parties.isEmpty) {
-      Seq.empty
-    } else {
-      parties.map(party => extract(party \ "partyIdentification" \ "number"))
-    }
+  private def addNode(node: Node, dec: Elem): Elem = {
+    val responseNode = Elem(namespacePrefix, node.label, node.attributes, namespaceBinding, minimizeEmptyElement, Text(node.text))
+    addChild(dec, responseNode)
+  }
+
+  private def buildPartyIdentificationNumberElement(parties: NodeSeq, numberNode: NodeSeq) = {
+    val partyNumber = Elem(namespacePrefix, "number", Null, namespaceBinding, minimizeEmptyElement, Text(numberNode.head.text))
+    val partyIdentification = Elem(namespacePrefix, "partyIdentification", Null, namespaceBinding, minimizeEmptyElement, partyNumber)
+    Elem(namespacePrefix, "parties", Null, namespaceBinding, minimizeEmptyElement, partyIdentification)
+  }
+
+  private def addChild(n: Node, newChild: Node): Elem = n match {
+    case Elem(prefix, label, attributes, scope, child @ _*) =>
+      Elem(prefix, label, attributes, scope, minimizeEmptyElement, child ++ newChild : _*)
+    case _ => throw new RuntimeException("unable to add child node")
   }
 
 }

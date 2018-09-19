@@ -679,7 +679,7 @@ object TestXMLData {
         <xsd_1:declaration>
           <tns_3:isCurrent>true</tns_3:isCurrent>
           <tns_3:versionNumber>0</tns_3:versionNumber>
-          <tns_3:creationDate>2001-12-17T09:30:47Z</tns_3:creationDate>
+          <tns_3:creationDate formatCode="string">2001-12-17T09:30:47Z</tns_3:creationDate>
           <tns_3:isDisplayable>true</tns_3:isDisplayable>
           <n3:extensions>
             <tns_3:value>String</tns_3:value>

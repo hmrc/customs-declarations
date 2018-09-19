@@ -282,7 +282,3 @@ case class NrsPayload(payload: String, metadata: NrsMetadata)
 object NrsPayload {
   implicit val format = Json.format[NrsPayload]
 }
-
-case class StatusResponse(versionNumber: Option[String], creationDate: Option[String], goodsItemCount: Option[String],
-                          tradeMovementType: Option[String], declarationType: Option[String], packageCount: Option[String],
-                          acceptanceDate: Option[String], partyIdentificationNumbers: Seq[Option[String]])

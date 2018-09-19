@@ -17,14 +17,10 @@
 package unit.services
 
 import org.joda.time.DateTime
-import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.{eq => meq, _}
-import org.mockito.Mockito.{verify, when}
+import org.mockito.ArgumentMatchers.{eq => meq}
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.StatusResponse
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseFilterService}
-import uk.gov.hmrc.customs.declaration.xml.StatusResponseCreator
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestXMLData
 
@@ -34,68 +30,88 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
 
-    val mockStatusResponseCreator = mock[StatusResponseCreator]
     val mockDeclarationsLogger = mock[DeclarationsLogger]
     val mockDeclarationsConfigService = mock[DeclarationsConfigService]
 
-    val service = new StatusResponseFilterService(mockStatusResponseCreator, mockDeclarationsLogger, mockDeclarationsConfigService)
-    when(mockStatusResponseCreator.create(any[StatusResponse])).thenReturn(any[NodeSeq])
+    val service = new StatusResponseFilterService(mockDeclarationsLogger, mockDeclarationsConfigService)
+
+    def createStatusResponseWithAllValues(): NodeSeq = service.transform(TestXMLData.validStatusResponse(DateTime.now().toString))
   }
 
-  "StatusResponseFilterService" should {
-    "return filtered values" in new SetUp() {
-      val statusResponseCaptor: ArgumentCaptor[StatusResponse] = ArgumentCaptor.forClass(classOf[StatusResponse])
+  "Status Response Filter Service" should {
 
-      service.filter(TestXMLData.validStatusResponse(DateTime.now().toString))
+    "create the version number" in new SetUp {
+      private val response = createStatusResponseWithAllValues()
+      private val node = response \\ "versionNumber"
 
-      verify(mockStatusResponseCreator).create(statusResponseCaptor.capture())
-      val statusResponse = statusResponseCaptor.getValue
-
-      statusResponse.versionNumber.get shouldBe "0"
-      statusResponse.creationDate.get shouldBe "2001-12-17T09:30:47Z"
-      statusResponse.goodsItemCount.get shouldBe "2"
-      statusResponse.tradeMovementType.get shouldBe "trade movement type"
-      statusResponse.declarationType.get shouldBe "declaration type"
-      statusResponse.packageCount.get shouldBe "3"
-      statusResponse.acceptanceDate.get shouldBe "2002-12-17T09:30:47Z"
-      statusResponse.partyIdentificationNumbers shouldBe List(Some("1"))
+      node.text shouldBe "0"
     }
 
-    "return filtered values when only two parties with id numbers and one without present" in new SetUp() {
-      val statusResponseCaptor: ArgumentCaptor[StatusResponse] = ArgumentCaptor.forClass(classOf[StatusResponse])
+    "create the creation date" in new SetUp {
+      private val response = createStatusResponseWithAllValues()
+      private val node = response \\ "creationDate"
 
-      service.filter(TestXMLData.generateValidStatusResponseWithMultiplePartiesOnly)
-
-      verify(mockStatusResponseCreator).create(statusResponseCaptor.capture())
-      val statusResponse = statusResponseCaptor.getValue
-
-      statusResponse.versionNumber shouldBe None
-      statusResponse.creationDate shouldBe None
-      statusResponse.goodsItemCount shouldBe None
-      statusResponse.tradeMovementType shouldBe None
-      statusResponse.declarationType shouldBe None
-      statusResponse.packageCount shouldBe None
-      statusResponse.acceptanceDate shouldBe None
-      statusResponse.partyIdentificationNumbers shouldBe List(Some("1"), Some("2"), None)
+      node.text shouldBe "2001-12-17T09:30:47Z"
+      node.head.attribute("formatCode").get.text shouldBe "string"
     }
 
-    "return no filtered values" in new SetUp() {
-      val statusResponseCaptor: ArgumentCaptor[StatusResponse] = ArgumentCaptor.forClass(classOf[StatusResponse])
+    "create the goods item count" in new SetUp {
+      private val response = createStatusResponseWithAllValues()
+      private val node = response \\ "goodsItemCount"
 
-      service.filter(TestXMLData.generateValidStatusResponseNoStatusValues)
-
-      verify(mockStatusResponseCreator).create(statusResponseCaptor.capture())
-      val statusResponse = statusResponseCaptor.getValue
-
-      statusResponse.versionNumber shouldBe None
-      statusResponse.creationDate shouldBe None
-      statusResponse.goodsItemCount shouldBe None
-      statusResponse.tradeMovementType shouldBe None
-      statusResponse.declarationType shouldBe None
-      statusResponse.packageCount shouldBe None
-      statusResponse.acceptanceDate shouldBe None
-      statusResponse.partyIdentificationNumbers shouldBe Seq.empty
+      node.text shouldBe "2"
     }
+
+    "create the trade movement type" in new SetUp {
+      private val response = createStatusResponseWithAllValues()
+      private val node = response \\ "tradeMovementType"
+
+      node.text shouldBe "trade movement type"
+    }
+
+    "create the declaration type" in new SetUp {
+      private val response = createStatusResponseWithAllValues()
+      private val node = response \\ "type"
+
+      node.text shouldBe "declaration type"
+    }
+
+    "create the package count" in new SetUp {
+      private val response = createStatusResponseWithAllValues()
+      private val node = response \\ "packageCount"
+
+      node.text shouldBe "3"
+    }
+
+    "create the acceptance date" in new SetUp {
+      private val response = createStatusResponseWithAllValues()
+      private val node = response \\ "acceptanceDate"
+
+      node.text shouldBe "2002-12-17T09:30:47Z"
+    }
+
+    "create the party identification numbers" in new SetUp {
+      private val response = createStatusResponseWithAllValues()
+      private val node = response \\ "parties" \ "partyIdentification" \ "number"
+
+      node.head.text shouldBe "1"
+    }
+
+    "create the party identification numbers when there are two parties with id numbers and one without id" in new SetUp{
+      private val response = service.transform(TestXMLData.generateValidStatusResponseWithMultiplePartiesOnly)
+      private val node = response \\ "parties"
+
+      (node.head \ "partyIdentification" \ "number").head.text shouldBe "1"
+      (node(1) \ "partyIdentification" \ "number").head.text shouldBe "2"
+      (node(2) \ "partyIdentification" \ "number").size shouldBe 0
+    }
+
+    "not create acceptance date when not provided" in new SetUp {
+      private val response = service.transform(TestXMLData.generateValidStatusResponseWithMultiplePartiesOnly)
+      private val node = response \\ "acceptanceDate"
+
+      node shouldBe empty
+    }
+
   }
-
 }

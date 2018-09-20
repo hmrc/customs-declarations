@@ -409,19 +409,24 @@ documentation:
               example: application/vnd.hmrc.3.0+xml
             Content-Type:
               description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-               Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/2.0/wco-declaration-schemas.zip).
+               Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
               type: string
               required: true
               example: application/xml; charset=UTF-8
             X-Badge-Identifier:
-                description: Represents the end-user who is interacting with the subscribed application. Required for CSP users. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 12.
+                description: Represents the end-user who is interacting with the subscribed application. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 12.
                 type: string
                 required: true
                 example: ABC123
           (annotations.scope): "write:customs-declaration"
           securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
           responses:
-            202:
+            200:
+              body:
+                appliction/xml:
+                  description: Successful response payload
+                  type: !include schemas/wco/status/StatusQueryResponse.xsd
+                  example: !include schemas/wco/status/StatusQueryResponseExample.xml
             500:
               body:
                 application/xml:

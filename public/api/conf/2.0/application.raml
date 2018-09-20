@@ -414,14 +414,19 @@ documentation:
               required: true
               example: application/xml; charset=UTF-8
             X-Badge-Identifier:
-                description: Represents the end-user who is interacting with the subscribed application. Required for CSP users. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 12.
+                description: Represents the end-user who is interacting with the subscribed application. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 12.
                 type: string
                 required: true
                 example: ABC123
           (annotations.scope): "write:customs-declaration"
           securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
           responses:
-            202:
+            200:
+              body:
+                appliction/xml:
+                  description: Successful response payload
+                  type: !include schemas/wco/status/StatusQueryResponse.xsd
+                  example: !include schemas/wco/status/StatusQueryResponseExample.xml
             500:
               body:
                 application/xml:

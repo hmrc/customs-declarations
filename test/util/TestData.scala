@@ -154,7 +154,7 @@ object TestData {
     Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
     Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
 
-  val cspRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.confidenceLevel and
+    val cspRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.confidenceLevel and
     Retrievals.nino and Retrievals.saUtr and Retrievals.mdtpInformation and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
 
   val nrsReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
@@ -299,9 +299,6 @@ object RequestHeaders {
   val ACCEPT_HMRC_XML_V2_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V2_VALUE
   val ACCEPT_HMRC_XML_V3_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V3_VALUE
   val ACCEPT_HEADER_INVALID: (String, String) = ACCEPT -> "invalid"
-
-  val AUTH_HEADER_VALUE: String = "AUTH_HEADER_VALUE"
-  val AUTH_HEADER: (String, String) = HeaderNames.AUTHORIZATION -> AUTH_HEADER_VALUE
 
   val ValidHeadersV2 = Map(
     CONTENT_TYPE_HEADER,

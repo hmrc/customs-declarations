@@ -57,7 +57,7 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     "validate should return false when badgeIdentifiers do not match" in new SetUp() {
-      val result: Boolean = service.validate(validStatusResponse("2018-07-17T13:24:59.023Z"), invalidBadgeIdentifier)
+      val result: Boolean = service.validate(validStatusResponse(), invalidBadgeIdentifier)
       result shouldBe false
     }
 

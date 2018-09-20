@@ -35,7 +35,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
 
     val service = new StatusResponseFilterService(mockDeclarationsLogger, mockDeclarationsConfigService)
 
-    def createStatusResponseWithAllValues(): NodeSeq = service.transform(TestXMLData.validStatusResponse(DateTime.now().toString))
+    def createStatusResponseWithAllValues(): NodeSeq = service.transform(TestXMLData.validStatusResponse())
   }
 
   "Status Response Filter Service" should {

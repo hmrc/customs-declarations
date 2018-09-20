@@ -654,7 +654,7 @@ object TestXMLData {
     <n3:receiveDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString}</n3:receiveDate>
   </xsd_1:declaration>
 
-  def validStatusResponse(receivedDate : String): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
+  def validStatusResponse(receivedDate : String = DateTime.now().toString): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
     <n1:responseCommon>
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>

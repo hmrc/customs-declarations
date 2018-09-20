@@ -24,7 +24,7 @@ import org.joda.time.DateTimeZone.UTC
 import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
-import play.api.http.{HeaderNames, MimeTypes}
+import play.api.http.MimeTypes
 import play.api.inject.guice.GuiceableModule
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc.AnyContentAsXml
@@ -58,6 +58,8 @@ object TestData {
 
   val mrnValue = "theMrn"
   val mrn = Mrn(mrnValue)
+
+  val date = DateTime.parse("2018-09-11T10:28:54.128Z")
 
   val subscriptionFieldsIdString: String = "b82f31c6-2239-4253-b6f5-ed75e37ab7a5"
   val subscriptionFieldsIdUuid: UUID = fromString("b82f31c6-2239-4253-b6f5-ed75e37ab7a5")

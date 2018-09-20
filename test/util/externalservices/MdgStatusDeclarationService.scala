@@ -43,7 +43,7 @@ trait MdgStatusDeclarationService extends WireMockRunner {
                                           expectedAuthToken: String = ExternalServicesConfig.AuthToken,
                                           maybeUnexpectedAuthToken: Option[String] = None) {
     verify(1, postRequestedFor(v2URL)
-      .withHeader(CONTENT_TYPE, equalTo(XML))
+      .withHeader(CONTENT_TYPE, equalTo(XML + "; charset=utf-8"))
       .withHeader(ACCEPT, equalTo(XML))
       .withHeader(AUTHORIZATION, equalTo(s"Bearer $expectedAuthToken"))
       .withHeader(DATE, notMatching(""))

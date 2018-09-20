@@ -609,6 +609,27 @@ object TestXMLData {
     <documentationType>docType123</documentationType>
   </upscanInitiate>
 
+  val expectedDeclarationStatusPayload: Elem =
+    <n1:queryDeclarationInformationRequest
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/"
+    xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns_1="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/"
+    xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 request_schema.xsd">
+      <n1:requestCommon>
+        <n1:clientID>SOME_X_CLIENT_ID</n1:clientID>
+        <n1:conversationID>38400000-8cf0-11bd-b23e-10b96e4ef00d</n1:conversationID>
+        <n1:correlationID>e61f8eee-812c-4b8f-b193-06aedc60dca2</n1:correlationID>
+        <n1:badgeIdentifier>BADGEID123</n1:badgeIdentifier>
+        <n1:dateTimeStamp>2018-09-11T10:28:54.128Z</n1:dateTimeStamp>
+      </n1:requestCommon>
+      <n1:requestDetail>
+        <n1:declarationManagementInformationRequest>
+          <tns_1:id>1b0a48a8-1259-42c9-9d6a-e797b919eb16</tns_1:id>
+          <tns_1:timeStamp>2018-09-11T10:28:54.128Z</tns_1:timeStamp>
+          <xsd_1:reference>theMrn</xsd_1:reference>
+        </n1:declarationManagementInformationRequest>
+      </n1:requestDetail>
+    </n1:queryDeclarationInformationRequest>
+
   def invalidStatusResponse(declarationNode: NodeSeq): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
     <n1:responseCommon>
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>

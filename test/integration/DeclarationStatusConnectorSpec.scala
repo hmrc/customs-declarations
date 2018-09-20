@@ -16,27 +16,10 @@
 
 package integration
 
-import java.util.UUID
-
-import org.joda.time.DateTime
-import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers._
-import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
-import uk.gov.hmrc.customs.declaration.connectors.{DeclarationStatusConnector, MdgDeclarationCancellationConnector}
-import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.logging.Authorization
-import util.ExternalServicesConfig.{AuthToken, Host, Port}
-import util.TestData._
-import util.TestXMLData.ValidSubmissionXML
 import util.externalservices.MdgCancellationDeclarationService
-import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 //TODO complete all status connector integration tests
 class DeclarationStatusConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar

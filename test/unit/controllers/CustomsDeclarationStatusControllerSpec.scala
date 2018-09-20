@@ -39,11 +39,10 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusReq
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
-import util.AuthConnectorNrsDisabledStubbing
 import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._
-import util.TestXMLData.validStatusResponse
+import util.{AuthConnectorNrsDisabledStubbing, StatusTestXMLData}
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq
@@ -62,7 +61,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
-    protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(validStatusResponse().toString))
+    protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(StatusTestXMLData.generateDeclarationManagementInformationResponse().toString))
 
     protected val endpointAction = new EndpointAction {
       override val logger: DeclarationsLogger = mockDeclarationsLogger

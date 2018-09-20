@@ -24,7 +24,7 @@ import org.joda.time.DateTimeZone.UTC
 import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
-import play.api.http.{HeaderNames, MimeTypes}
+import play.api.http.MimeTypes
 import play.api.inject.guice.GuiceableModule
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc.AnyContentAsXml

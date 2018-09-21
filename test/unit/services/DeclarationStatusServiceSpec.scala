@@ -83,4 +83,3 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar {
     }
   }
 }
-

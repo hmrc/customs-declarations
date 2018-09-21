@@ -20,51 +20,54 @@ import javax.inject.{Inject, Singleton}
 
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 
+import scala.annotation.tailrec
 import scala.xml._
 
 @Singleton
 class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLogger,
                                              declarationsConfigService: DeclarationsConfigService) {
 
-  val namespacePrefix = "stat"
-  val namespaceBinding = NamespaceBinding(namespacePrefix, "http://gov.uk/customs/declarations/status-request", TopScope)
-  val minimizeEmptyElement = false
+  private val namespacePrefix = "stat"
+  private val namespaceBinding = NamespaceBinding(namespacePrefix, "http://gov.uk/customs/declarations/status-request", TopScope)
+  private val minimizeEmptyElement = false
 
   def transform(xml: NodeSeq): NodeSeq = {
 
-    var dec = Elem(namespacePrefix, "declaration", Null, namespaceBinding, minimizeEmptyElement)
+    var declaration = Elem(namespacePrefix, "declaration", Null, namespaceBinding, minimizeEmptyElement)
     val path: NodeSeq = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
 
-    dec = maybeAddNode(path, dec, "versionNumber")
-    dec = maybeAddNode(path, dec, "creationDate")
-    dec = maybeAddNode(path, dec, "goodsItemCount")
-    dec = maybeAddNode(path, dec, "tradeMovementType")
-    dec = maybeAddNode(path, dec, "type")
-    dec = maybeAddNode(path, dec, "packageCount")
-    dec = maybeAddNode(path, dec, "acceptanceDate")
+    val labels = Seq("versionNumber", "creationDate", "goodsItemCount", "tradeMovementType", "type", "packageCount", "acceptanceDate")
+    declaration = maybeAddNode(path, declaration, labels)
 
     (path \ "parties").foreach { parties =>
       val numberNode = parties \ "partyIdentification" \ "number"
       if (numberNode.isEmpty) {
         val partiesElement = Elem(namespacePrefix, "parties", Null, namespaceBinding, minimizeEmptyElement)
-        dec = addChild(dec, partiesElement)
+        declaration = addChild(declaration, partiesElement)
       } else {
         val responseNode = buildPartyIdentificationNumberElement(parties, numberNode)
-        dec = addChild(dec, responseNode)
+        declaration = addChild(declaration, responseNode)
       }
     }
 
-    val root = Elem(namespacePrefix, "declarationManagementInformationResponse", Null, namespaceBinding, minimizeEmptyElement, dec)
+    val root = Elem(namespacePrefix, "declarationManagementInformationResponse", Null, namespaceBinding, minimizeEmptyElement, declaration)
     declarationsLogger.debugWithoutRequestContext(s"created status response xml ${root.toString()}")
     root
   }
 
-  private def maybeAddNode(path: NodeSeq, dec: Elem, label: String) = {
-    val inputNode = path \ label
-    if (inputNode.nonEmpty) {
-      addNode(inputNode.head, dec)
+  @tailrec
+  private def maybeAddNode(path: NodeSeq, declaration: Elem, labels: Seq[String]): Elem = {
+
+    if (labels.isEmpty) {
+      declaration
     } else {
-      dec
+      val inputNode = path \ labels.head
+      val decChild = if (inputNode.nonEmpty) {
+        addNode(inputNode.head, declaration)
+      } else {
+        declaration
+      }
+      maybeAddNode(path, decChild, labels.tail)
     }
   }
 
@@ -82,7 +85,7 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
   private def addChild(n: Node, newChild: Node): Elem = n match {
     case Elem(prefix, label, attributes, scope, child @ _*) =>
       Elem(prefix, label, attributes, scope, minimizeEmptyElement, child ++ newChild : _*)
-    case _ => throw new RuntimeException("unable to add child node")
+    case _ => throw new IllegalStateException("unable to add child node")
   }
 
 }

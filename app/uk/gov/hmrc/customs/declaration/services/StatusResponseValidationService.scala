@@ -34,7 +34,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
 
   private def validateBadgeIdentifier(declarationNode: NodeSeq, badgeIdentifier: BadgeIdentifier): Boolean = {
     extractField(declarationNode, "communicationAddress").fold(false)({ communicationAddress =>
-      validateCommunicationAddress(communicationAddress.head) && badgeIdentifier.value == extractBadgeIdentifier(communicationAddress.head)
+      badgeIdentifier.value == extractBadgeIdentifier(communicationAddress.head)
     })
   }
 
@@ -42,12 +42,6 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
     communicationAddress.split(":").last
   }
 
-  private def validateCommunicationAddress(communicationAddress: String): Boolean = {
-    val regexString = "hmrcgwid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{16}:[0-9a-zA-Z]{10}"
-    val isCommunicationsAddressValid = communicationAddress.matches(regexString)
-    if(!isCommunicationsAddressValid) declarationsLogger.debugWithoutRequestContext(s"Status response communicationsAddress failed validation $communicationAddress")
-    isCommunicationsAddressValid
-  }
 
   private def validateReceivedDate(declarationNode: NodeSeq): Boolean = {
     extractField(declarationNode, "receiveDate").fold(false)(receiveDate => {

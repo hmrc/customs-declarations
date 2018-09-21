@@ -44,40 +44,35 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
 
   "StatusResponseValidationService" should {
 
-    "validate should return true when badgeIdentifiers match and date is within configured allowed period" in new SetUp() {
+    "return true when badgeIdentifiers match and date is within configured allowed period" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysLimit - 1)
       val result: Boolean = service.validate(validStatusResponse(dateWithinPeriod.toString), badgeIdentifier)
       result shouldBe true
     }
 
-    "validate should return false when badgeIdentifiers match and date is outside configured allowed period" in new SetUp() {
+    "return false when badgeIdentifiers match and date is outside configured allowed period" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysLimit + 1)
       val result: Boolean = service.validate(validStatusResponse(dateWithinPeriod.toString), badgeIdentifier)
       result shouldBe false
     }
 
-    "validate should return false when badgeIdentifiers do not match" in new SetUp() {
+    "return false when badgeIdentifiers do not match" in new SetUp() {
       val result: Boolean = service.validate(validStatusResponse(), invalidBadgeIdentifier)
       result shouldBe false
     }
 
-    "validate should return false when xml does not contain receivedDate" in new SetUp() {
+    "return false when xml does not contain receivedDate" in new SetUp() {
       val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeNoDate), badgeIdentifier)
       result shouldBe false
     }
 
-    "validate should return false when xml contains invalid receivedDate" in new SetUp() {
+    "return false when xml contains invalid receivedDate" in new SetUp() {
       val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeInvalidDate), badgeIdentifier)
       result shouldBe false
     }
 
-    "validate should return false when xml does not contain communicationAddress" in new SetUp() {
+    "return false when xml does not contain communicationAddress" in new SetUp() {
       val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeCommunicationAddress), badgeIdentifier)
-      result shouldBe false
-    }
-
-    "validate should return false when xml does not contain a valid communicationAddress" in new SetUp() {
-      val result: Boolean = service.validate(invalidStatusResponse(statusResponseDeclarationXmlNodeCommunicationAddressFormatInvalid), badgeIdentifier)
       result shouldBe false
     }
 

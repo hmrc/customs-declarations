@@ -17,16 +17,15 @@
 package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
-import org.joda.time.DateTime
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
-import util.RequestHeaders.{ValidHeadersV2, ValidHeadersV3, X_CONVERSATION_ID_NAME}
+import util.RequestHeaders.{ValidHeadersV2, ValidHeadersV3}
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgStatusDeclarationService}
-import util.{AuditService, CustomsDeclarationsExternalServicesConfig, TestXMLData}
+import util.{AuditService, CustomsDeclarationsExternalServicesConfig}
 
 import scala.concurrent.Future
 
@@ -42,7 +41,6 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
   private val mrn = "some-mrn"
   private val endpoint = s"/status-request/mrn/$mrn"
-//  private implicit val materializer: Materializer = app.materializer
 
   private val apiSubscriptionKeyForXClientIdV1 =
     ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
@@ -142,33 +140,5 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
   }
-
-//  feature("Declaration API handles status request errors from CSPs as expected") {
-//
-//    scenario("Response status 400 when user submits an MRN that it does not match badge identifier") {
-//      Given("the API is available")
-//      startMdgStatusV3Service(body = TestXMLData.validStatusResponse(DateTime.now().minusYears(1).toString))
-//      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
-//
-//      And("the CSP is authorised with its privileged application")
-//      authServiceAuthorizesCSPNoNrs()
-//
-//      When("a POST request with data is sent to the API")
-//      val result: Future[Result] = route(app = app, validRequestV3).value
-//
-//      Then(s"a response with a 400 status is received")
-//      result shouldBe 'defined
-//
-//      status(result) shouldBe BAD_REQUEST
-//      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
-//
-//      And("the response body is a \"invalid xml\" XML")
-//      string2xml(contentAsString(result)) shouldBe string2xml(BadRequestErrorWith2Errors)
-//
-//      And("GA call was made")
-//      eventually(verifyGoogleAnalyticsServiceWasCalled())
-//    }
-//
-//  }
 
 }

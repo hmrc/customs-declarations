@@ -83,6 +83,4 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
 
   }
 
-
-
 }

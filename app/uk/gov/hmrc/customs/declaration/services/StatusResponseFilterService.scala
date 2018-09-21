@@ -58,15 +58,16 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
   @tailrec
   private def maybeAddNode(path: NodeSeq, declaration: Elem, labels: Seq[String]): Elem = {
 
-    var mutableDeclaration = declaration
     if (labels.isEmpty) {
       declaration
     } else {
       val inputNode = path \ labels.head
-      if (inputNode.nonEmpty) {
-        mutableDeclaration = addNode(inputNode.head, mutableDeclaration)
+      val decChild = if (inputNode.nonEmpty) {
+        addNode(inputNode.head, declaration)
+      } else {
+        declaration
       }
-      maybeAddNode(path, mutableDeclaration,labels.tail)
+      maybeAddNode(path, decChild, labels.tail)
     }
   }
 

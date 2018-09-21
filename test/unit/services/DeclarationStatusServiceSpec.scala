@@ -43,6 +43,7 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar {
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
 
   trait SetUp {
+    protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected lazy val mockDeclarationStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
     protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
@@ -51,7 +52,8 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar {
     protected val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
     protected val mrn = Mrn("theMrn")
 
-    protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockLogger, mockDeclarationStatusConnector, mockDateTimeProvider, stubUniqueIdsService)
+    protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService,
+      mockLogger, mockDeclarationStatusConnector, mockDateTimeProvider, stubUniqueIdsService)
 
     protected def send(vpr: AuthorisedStatusRequest[AnyContentAsXml] = TestAuthorisedStatusRequest, hc: HeaderCarrier = headerCarrier): Either[Result, HttpResponse] = {
       await(service.send(mrn) (vpr, hc))
@@ -59,16 +61,18 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar {
 
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockDeclarationStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
+    when(mockHttpResponse.body).thenReturn("<xml>some xml</xml>")
+    when(mockHttpResponse.allHeaders).thenReturn(any[Map[String, Seq[String]]])
+    when(mockStatusResponseFilterService.transform(<xml>backendXml</xml>)).thenReturn(<xml>transformed</xml>)
   }
   "BusinessService" should {
 
-    "send transformed xml to connector" in new SetUp() {
+    "send xml to connector" in new SetUp() {
 
-        val result: Either[Result, HttpResponse] = send()
+      val result: Either[Result, HttpResponse] = send()
 
-        result shouldBe Right(mockHttpResponse)
-        verify(mockDeclarationStatusConnector).send(dateTime, correlationId, dmirId, VersionTwo, mrn)(TestAuthorisedStatusRequest)
-      }
+      result.right.get.body shouldBe "<xml>transformed</xml>"
+      verify(mockDeclarationStatusConnector).send(dateTime, correlationId, dmirId, VersionTwo, mrn)(TestAuthorisedStatusRequest)
     }
 
     "return 500 error response when MDG call fails" in new SetUp() {
@@ -77,5 +81,5 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar {
 
       result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
     }
+  }
 }
-

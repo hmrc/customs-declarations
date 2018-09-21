@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-
 import scalaz.ValidationNel
 import scalaz.syntax.apply._
 import scalaz.syntax.traverse._
@@ -36,6 +35,8 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
   private val unstablePeriodDurationInMillisNel = root.int("circuitBreaker.unstablePeriodDurationInMillis")
 
+  private val declarationStatusRequestDaysLimit = root.int("declarationStatus.requestDaysLimit")
+
   private val bearerTokenNel = customsNotificationsService.string("bearer-token")
   private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
@@ -52,7 +53,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val nrsWaitTimeMillis = root.int("nrs.waittime.millis")
 
   private val validatedDeclarationsConfig: ValidationNel[String, DeclarationsConfig] = (
-    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel |@| upscanCallbackUrl
+    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel |@| upscanCallbackUrl |@| declarationStatusRequestDaysLimit
     ) (DeclarationsConfig.apply)
 
   private val validatedDeclarationsCircuitBreakerConfig: ValidationNel[String, DeclarationsCircuitBreakerConfig] = (

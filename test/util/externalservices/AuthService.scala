@@ -84,6 +84,18 @@ trait AuthService {
     )
   }
 
+  def authServiceAuthorizesCSPNoNrs(bearerToken: String = TestData.cspBearerToken): Unit = {
+    stubFor(post(authUrlMatcher)
+      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate)))
+      .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
+      .willReturn(
+        aResponse()
+          .withStatus(Status.OK)
+          .withBody("{}")
+      )
+    )
+  }
+
   def authServiceUnauthorisesScopeForCSP(bearerToken: String = TestData.cspBearerToken): Unit = {
     stubFor(post(authUrlMatcher)
       .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate, cspRetrieval)))
@@ -154,6 +166,13 @@ trait AuthService {
   def verifyAuthServiceCalledForCsp(bearerToken: String = TestData.cspBearerToken): Unit = {
     verify(1, postRequestedFor(authUrlMatcher)
       .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate, cspRetrieval)))
+      .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
+    )
+  }
+
+  def verifyAuthServiceCalledForCspNoNrs(bearerToken: String = TestData.cspBearerToken): Unit = {
+    verify(1, postRequestedFor(authUrlMatcher)
+      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate)))
       .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
     )
   }

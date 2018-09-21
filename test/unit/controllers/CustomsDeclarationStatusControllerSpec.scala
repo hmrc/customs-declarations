@@ -43,9 +43,10 @@ import util.AuthConnectorNrsDisabledStubbing
 import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._
-import util.TestXMLData.DeclarationStatusOkResponse
+import util.TestXMLData.validStatusResponse
 
 import scala.concurrent.Future
+import scala.xml.NodeSeq
 
 class CustomsDeclarationStatusControllerSpec extends UnitSpec
   with Matchers with MockitoSugar with BeforeAndAfterEach {
@@ -53,6 +54,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
   trait SetUp extends AuthConnectorNrsDisabledStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
+    protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
     protected val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
@@ -60,7 +62,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
-    protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(DeclarationStatusOkResponse.toString))
+    protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(validStatusResponse().toString))
 
     protected val endpointAction = new EndpointAction {
       override val logger: DeclarationsLogger = mockDeclarationsLogger
@@ -74,16 +76,13 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
-    protected val stubDeclarationStatusService = new DeclarationStatusService(mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
-    protected val mockDeclarationStatusValuesAction = new DeclarationStatusValuesAction(mockDeclarationsLogger, stubUniqueIdsService)
-
-    //protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger, Some(mockGoogleAnalyticsConnector)) {}
-
+    protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
+    protected val stubDeclarationStatusValuesAction = new DeclarationStatusValuesAction(mockDeclarationsLogger, stubUniqueIdsService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(
       stubValidateAndExtractHeadersStatusAction,
       stubAuthStatusAction,
-      mockDeclarationStatusValuesAction,
+      stubDeclarationStatusValuesAction,
       stubDeclarationStatusService,
       mockDeclarationsLogger,
       mockGoogleAnalyticsConnector) {}
@@ -98,20 +97,13 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
     when(mockStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]])).thenReturn(Future.successful(stubHttpResponse))
     when(mockDateTimeService.nowUtc()).thenReturn(dateTime)
-    //when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(Future.successful(()))
-    //when(mockBusinessService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(Right(Some(nrSubmissionId))))
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
+    when(mockStatusResponseFilterService.transform(any[NodeSeq])).thenReturn(<xml>some xml</xml>)
   }
-
-  private val errorResultEoriNotFoundInCustomsEnrolment = ErrorResponse(UNAUTHORIZED, errorCode = "UNAUTHORIZED",
-    message = "EORI number not found in Customs Enrolment").XmlResult.withHeaders(X_CONVERSATION_ID_HEADER)
-
-  private val errorResultUnauthorised = ErrorResponse(UNAUTHORIZED, errorCode = "UNAUTHORIZED",
-    message = "Unauthorised request").XmlResult.withHeaders(X_CONVERSATION_ID_HEADER)
 
   private val errorResultBadgeIdentifier = errorBadRequest("X-Badge-Identifier header is missing or invalid").XmlResult.withHeaders(X_CONVERSATION_ID_HEADER)
 
-  "CustomsDeclarationController" should {
+  "CustomsDeclarationStatusController" should {
     "process CSP request when call is authorised for CSP" in new SetUp() {
       authoriseCsp()
 

@@ -24,7 +24,7 @@ import org.joda.time.DateTimeZone.UTC
 import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
-import play.api.http.{HeaderNames, MimeTypes}
+import play.api.http.MimeTypes
 import play.api.inject.guice.GuiceableModule
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc.AnyContentAsXml
@@ -58,6 +58,8 @@ object TestData {
 
   val mrnValue = "theMrn"
   val mrn = Mrn(mrnValue)
+
+  val date = DateTime.parse("2018-09-11T10:28:54.128Z")
 
   val subscriptionFieldsIdString: String = "b82f31c6-2239-4253-b6f5-ed75e37ab7a5"
   val subscriptionFieldsIdUuid: UUID = fromString("b82f31c6-2239-4253-b6f5-ed75e37ab7a5")
@@ -154,7 +156,7 @@ object TestData {
     Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
     Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
 
-  val cspRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.confidenceLevel and
+    val cspRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.confidenceLevel and
     Retrievals.nino and Retrievals.saUtr and Retrievals.mdtpInformation and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
 
   val nrsReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
@@ -299,9 +301,6 @@ object RequestHeaders {
   val ACCEPT_HMRC_XML_V2_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V2_VALUE
   val ACCEPT_HMRC_XML_V3_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V3_VALUE
   val ACCEPT_HEADER_INVALID: (String, String) = ACCEPT -> "invalid"
-
-  val AUTH_HEADER_VALUE: String = "AUTH_HEADER_VALUE"
-  val AUTH_HEADER: (String, String) = HeaderNames.AUTHORIZATION -> AUTH_HEADER_VALUE
 
   val ValidHeadersV2 = Map(
     CONTENT_TYPE_HEADER,

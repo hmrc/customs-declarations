@@ -18,7 +18,7 @@
     <stat:parties>
       <!--Optional:-->
       <stat:partyIdentification>
-        <stat:number>string</stat:number>
+          <stat:number>string</stat:number>
       </stat:partyIdentification>
     </stat:parties>
   </stat:declaration>

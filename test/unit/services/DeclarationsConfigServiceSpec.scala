@@ -47,6 +47,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |circuitBreaker.unstablePeriodDurationInMillis=1000
       |declarationStatus.requestDaysLimit=60
       |upscan-callback.url="http://upscan-callback.url"
+      |fileUpload.fileGroupSize.maximum=10
       |nrs.enabled=true
       |nrs.apikey="nrs-api-key"
       |nrs.waittime.millis=300
@@ -82,7 +83,6 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config customs-notification.host
           |Service configuration not found for key: customs-notification.context
           |Service configuration not found for key: customs-notification.bearer-token
-          |Could not find config key 'upscan-callback.url'
           |Could not find config key 'declarationStatus.requestDaysLimit'
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
@@ -95,7 +95,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'googleAnalytics.eventValue'
           |Could not find config key 'nrs.enabled'
           |Could not find config key 'nrs.apikey'
-          |Could not find config key 'nrs.waittime.millis'""".stripMargin
+          |Could not find config key 'nrs.waittime.millis'
+          |Could not find config key 'upscan-callback.url'
+          |Could not find config key 'fileUpload.fileGroupSize.maximum'""".stripMargin
 
       val caught = intercept[IllegalStateException](customsConfigService(emptyServicesConfiguration))
       caught.getMessage shouldBe expectedErrorMessage

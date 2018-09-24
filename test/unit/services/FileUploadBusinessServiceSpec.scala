@@ -48,7 +48,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockUpscanInitiateConnector: UpscanInitiateConnector = mock[UpscanInitiateConnector]
     protected val mockUpscanInitiateResponsePayload: UpscanInitiateResponsePayload = mock[UpscanInitiateResponsePayload]
-    protected val mockDeclarationsConfig = mock[DeclarationsConfig]
+    protected val mockMultiFileUploadConfig = mock[MultiFileUploadConfig]
     protected val mockConfiguration = mock[DeclarationsConfigService]
 
     protected lazy val service: FileUploadBusinessService = new FileUploadBusinessService(mockLogger, mockApiSubscriptionFieldsConnector, mockUpscanInitiateConnector, mockConfiguration)
@@ -70,8 +70,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     protected def send(vupr: ValidatedUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, UpscanInitiateResponsePayload] = {
       await(service.send(vupr, hc))
     }
-    when(mockDeclarationsConfig.upscanCallbackUrl).thenReturn("http://upscan-callback.url")
-    when(mockConfiguration.declarationsConfig).thenReturn(mockDeclarationsConfig)
+    when(mockMultiFileUploadConfig.upscanCallbackUrl).thenReturn("http://upscan-callback.url")
+    when(mockConfiguration.multiFileUploadConfig).thenReturn(mockMultiFileUploadConfig)
     when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockUpscanInitiateResponsePayload)
   }
 

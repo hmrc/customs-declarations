@@ -157,6 +157,12 @@ object GoogleAnalyticsValues {
     override val failure: String = "declarationFileUploadFailure"
   }
 
+  //TODO do these values need to change?
+  val MultiFileUpload = new GoogleAnalyticsValues {
+    override val success: String = "declarationFileUploadSuccess"
+    override val failure: String = "declarationFileUploadFailure"
+  }
+
   val Clearance = new GoogleAnalyticsValues {
     override val success: String = "declarationClearanceSuccess"
     override val failure: String = "declarationClearanceFailure"
@@ -201,6 +207,14 @@ case class DeclarationId(value: String) extends AnyVal{
 }
 
 case class DocumentationType(value: String) extends AnyVal{
+  override def toString: String = value.toString
+}
+
+case class SequenceNumber(value: Int) extends AnyVal{
+  override def toString: String = value.toString
+}
+
+case class FileGroupSize(value: Int) extends AnyVal{
   override def toString: String = value.toString
 }
 

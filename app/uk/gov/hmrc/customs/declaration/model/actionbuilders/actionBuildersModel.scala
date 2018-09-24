@@ -109,7 +109,24 @@ object ActionBuilderModelHelper {
       declarationId,
       documentationType
     )
+
+    def toValidatedMultiFileUploadPayloadRequest(declarationId: DeclarationId,
+                                                 fileGroupSize: FileGroupSize,
+                                                 fileUploadProperties: List[MultiFileUploadProperties]): ValidatedMultiFileUploadPayloadRequest[A] =
+      ValidatedMultiFileUploadPayloadRequest(
+        vpr.conversationId,
+        vpr.analyticsValues,
+        vpr.requestedApiVersion,
+        vpr.clientId,
+        vpr.authorisedAs,
+        vpr.xmlBody,
+        vpr.request,
+        declarationId,
+        fileGroupSize,
+        fileUploadProperties
+      )
   }
+
 }
 
 trait HasConversationId {
@@ -136,6 +153,14 @@ trait HasXmlBody {
 trait HasFileUploadProperties {
   val declarationId: DeclarationId
   val documentationType: DocumentationType
+}
+
+case class MultiFileUploadProperties (sequenceNumber: SequenceNumber, documentationType: DocumentationType)
+
+trait HasMultiFileUploadProperties {
+  val declarationId: DeclarationId
+  val fileGroupSize: FileGroupSize
+  val uploadProperties: List[MultiFileUploadProperties]
 }
 
 trait HasBadgeIdentifier {
@@ -242,3 +267,16 @@ case class ValidatedUploadPayloadRequest[A](
   declarationId: DeclarationId,
   documentationType: DocumentationType
 ) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
+
+case class ValidatedMultiFileUploadPayloadRequest[A](
+  conversationId: ConversationId,
+  analyticsValues: GoogleAnalyticsValues,
+  requestedApiVersion: ApiVersion,
+  clientId: ClientId,
+  authorisedAs: AuthorisedAs,
+  xmlBody: NodeSeq,
+  request: Request[A],
+  declarationId: DeclarationId,
+  fileGroupSize: FileGroupSize,
+  uploadProperties: List[MultiFileUploadProperties]
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasMultiFileUploadProperties

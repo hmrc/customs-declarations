@@ -18,7 +18,6 @@ package unit.controllers.actionbuilders
 
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
-import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.mvc.Http.Status.FORBIDDEN
@@ -31,13 +30,13 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest, ValidatedUploadPayloadRequest}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.clientId
-import util.{RequestHeaders, TestData}
+import util.RequestHeaders
 import util.TestData._
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with MockitoSugar with TableDrivenPropertyChecks {
+class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]

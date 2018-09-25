@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="hmrc:fileupload2"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="hmrc:fileupload2"
+           elementFormDefault="qualified">
+
+    <xs:element name="FileUploadRequest" type="FileUploadRequestType"/>
+
+    <xs:simpleType name="DeclarationIDType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="22"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="NonZeroIntegerType">
+        <xs:restriction base="xs:nonNegativeInteger">
+            <xs:minInclusive value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="FileType">
+        <xs:sequence>
+            <xs:element type="NonZeroIntegerType" name="FileSequenceNo"/>
+            <xs:element type="xs:string" name="DocumentType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FilesType">
+        <xs:sequence>
+            <xs:element type="FileType" name="File" maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FileUploadRequestType">
+        <xs:sequence>
+            <xs:element type="DeclarationIDType" name="DeclarationID"/>
+            <xs:element type="NonZeroIntegerType" name="FileGroupSize"/>
+            <xs:element type="FilesType" name="Files" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

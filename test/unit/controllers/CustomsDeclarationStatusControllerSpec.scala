@@ -54,6 +54,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
     protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
+    protected val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
     protected val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
@@ -75,7 +76,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
-    protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
+    protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
     protected val stubDeclarationStatusValuesAction = new DeclarationStatusValuesAction(mockDeclarationsLogger, stubUniqueIdsService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(
@@ -98,6 +99,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     when(mockDateTimeService.nowUtc()).thenReturn(dateTime)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
     when(mockStatusResponseFilterService.transform(any[NodeSeq])).thenReturn(<xml>some xml</xml>)
+    when(mockStatusResponseValidationService.validate(any[NodeSeq],meq(validBadgeIdentifierValue).asInstanceOf[BadgeIdentifier])).thenReturn(Right(true))
   }
 
   private val errorResultBadgeIdentifier = errorBadRequest("X-Badge-Identifier header is missing or invalid").XmlResult.withHeaders(X_CONVERSATION_ID_HEADER)

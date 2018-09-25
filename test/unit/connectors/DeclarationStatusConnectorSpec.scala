@@ -35,7 +35,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundExcepti
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
-import util.{ApiSubscriptionFieldsTestData, TestData, TestXMLData}
+import util.{ApiSubscriptionFieldsTestData, StatusTestXMLData, TestData}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -94,7 +94,7 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
 
         awaitRequest
 
-        verify(mockWsPost).POSTString(anyString, ameq(TestXMLData.expectedDeclarationStatusPayload.toString()), any[SeqOfHeader])(
+        verify(mockWsPost).POSTString(anyString, ameq(StatusTestXMLData.expectedDeclarationStatusPayload.toString()), any[SeqOfHeader])(
           any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 

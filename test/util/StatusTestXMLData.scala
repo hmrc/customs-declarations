@@ -32,6 +32,27 @@ object StatusTestXMLData {
 
   val validCommunicationAddress: String = "hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123"
 
+  val expectedDeclarationStatusPayload: Elem =
+    <n1:queryDeclarationInformationRequest
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/"
+    xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns_1="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/"
+    xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 request_schema.xsd">
+      <n1:requestCommon>
+        <n1:clientID>SOME_X_CLIENT_ID</n1:clientID>
+        <n1:conversationID>38400000-8cf0-11bd-b23e-10b96e4ef00d</n1:conversationID>
+        <n1:correlationID>e61f8eee-812c-4b8f-b193-06aedc60dca2</n1:correlationID>
+        <n1:badgeIdentifier>BADGEID123</n1:badgeIdentifier>
+        <n1:dateTimeStamp>2018-09-11T10:28:54.128Z</n1:dateTimeStamp>
+      </n1:requestCommon>
+      <n1:requestDetail>
+        <n1:declarationManagementInformationRequest>
+          <tns_1:id>1b0a48a8-1259-42c9-9d6a-e797b919eb16</tns_1:id>
+          <tns_1:timeStamp>2018-09-11T10:28:54.128Z</tns_1:timeStamp>
+          <xsd_1:reference>theMrn</xsd_1:reference>
+        </n1:declarationManagementInformationRequest>
+      </n1:requestDetail>
+    </n1:queryDeclarationInformationRequest>
+
   val generateValidStatusResponseWithMultiplePartiesOnly: NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
     <n1:responseCommon>
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
@@ -212,7 +233,7 @@ object StatusTestXMLData {
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 
-  def generateDeclarationManagementInformationResponse(receivedDate: String = DateTime.now(DateTimeZone.UTC).toString,  tradeMovementType: String = ImportTradeMovementType, procedureCategory: String = ValidImportProcedureCategory, communicationAddress: String = validCommunicationAddress): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
+  def generateDeclarationManagementInformationResponse(acceptanceDate: String = DateTime.now(DateTimeZone.UTC).toString,  tradeMovementType: String = ImportTradeMovementType, procedureCategory: String = ValidImportProcedureCategory, communicationAddress: String = validCommunicationAddress): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
     <n1:responseCommon>
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>
@@ -247,7 +268,7 @@ object StatusTestXMLData {
           <n3:modeOfEntry>token</n3:modeOfEntry>
           <n3:goodsItemCount>2</n3:goodsItemCount>
           <n3:communicationAddress>{communicationAddress}</n3:communicationAddress>
-          <n3:receiveDate>{receivedDate}</n3:receiveDate>
+          <n3:receiveDate>001-12-17T09:30:47Z</n3:receiveDate>
           <n3:reference>String</n3:reference>
           <n3:submitterReference>String</n3:submitterReference>
           <n3:tradeMovementType>{tradeMovementType}</n3:tradeMovementType>
@@ -255,7 +276,7 @@ object StatusTestXMLData {
           <n3:goodsCommunityStatus>token</n3:goodsCommunityStatus>
           <n3:loadingListCount>0</n3:loadingListCount>
           <n3:packageCount>3</n3:packageCount>
-          <n3:acceptanceDate>2002-12-17T09:30:47Z</n3:acceptanceDate>
+          <n3:acceptanceDate>{acceptanceDate}</n3:acceptanceDate>
           <n3:invoiceAmount>0</n3:invoiceAmount>
           <n3:procedureCategory>{procedureCategory}</n3:procedureCategory>
           <n3:batchId>String</n3:batchId>
@@ -767,39 +788,32 @@ object StatusTestXMLData {
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 
-  def statusResponseDeclarationCommunicationAddressFormatInvalid: Elem =    <xsd_1:declaration>
-    <n3:communicationAddress>144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
-    <n3:receiveDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString}</n3:receiveDate>
-    <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
-    <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
-  </xsd_1:declaration>
-
   def statusResponseDeclarationNoCommunicationAddress: Elem =    <xsd_1:declaration>
-    <n3:receiveDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString}</n3:receiveDate>
+    <n3:acceptanceDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString}</n3:acceptanceDate>
     <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
   </xsd_1:declaration>
 
-  def statusResponseDeclarationInvalidReceiveDate: Elem =    <xsd_1:declaration>
+  def statusResponseDeclarationInvalidAcceptanceDate: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
-    <n3:receiveDate>2002-05-30T09:29:47.063Z</n3:receiveDate>
+    <n3:acceptanceDate>2002-05-30T09:29:47.063Z</n3:acceptanceDate>
     <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
   </xsd_1:declaration>
 
   def statusResponseDeclarationNoProcedureCategory: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
-    <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
-    <n3:receiveDate>2002-05-30T09:29:47.063Z</n3:receiveDate>
+    <n3:tradeMovementType>{COTradeMovementType}</n3:tradeMovementType>
+    <n3:acceptanceDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString}</n3:acceptanceDate>
   </xsd_1:declaration>
 
   def statusResponseDeclarationNoTradeMovementType: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
-    <n3:receiveDate>2002-05-30T09:29:47.063Z</n3:receiveDate>
+    <n3:acceptanceDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString}</n3:acceptanceDate>
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
   </xsd_1:declaration>
 
-  def statusResponseDeclarationNoReceiveDate: Elem =    <xsd_1:declaration>
+  def statusResponseDeclarationNoAcceptanceDate: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
     <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>

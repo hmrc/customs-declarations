@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
-import util.RequestHeaders.{ValidHeadersV2, ValidHeadersV3, X_CONVERSATION_ID_NAME}
+import util.RequestHeaders.{ValidHeadersV2, ValidHeadersV3}
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgStatusDeclarationService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTestXMLData}
 
@@ -51,8 +51,8 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
   private val apiSubscriptionKeyForXClientIdV3 = apiSubscriptionKeyForXClientIdV2.copy(version = VersionThree)
 
-  private val validResponse =
-    """<stat:declarationManagementInformationResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
+  private def validResponse(acceptanceDateVal : String) =
+    raw"""<stat:declarationManagementInformationResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
       |  <stat:declaration>
       |    <stat:versionNumber>0</stat:versionNumber>
       |    <stat:creationDate formatCode="string">2001-12-17T09:30:47Z</stat:creationDate>
@@ -60,7 +60,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       |    <stat:tradeMovementType>IM4567</stat:tradeMovementType>
       |    <stat:type>declaration type</stat:type>
       |    <stat:packageCount>3</stat:packageCount>
-      |    <stat:acceptanceDate>2002-12-17T09:30:47Z</stat:acceptanceDate>
+      |    <stat:acceptanceDate>$acceptanceDateVal</stat:acceptanceDate>
       |    <stat:parties>
       |      <stat:partyIdentification>
       |        <stat:number>1</stat:number>
@@ -69,8 +69,8 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       |  </stat:declaration>
       |</stat:declarationManagementInformationResponse>""".stripMargin
 
-  val validRequestV2 = FakeRequest("GET", endpoint).withHeaders(ValidHeadersV2.toSeq: _*).fromCsp
-  val validRequestV3 = validRequestV2.withHeaders(ValidHeadersV3.toSeq: _*)
+  val validRequestV2: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", endpoint).withHeaders(ValidHeadersV2.toSeq: _*).fromCsp
+  val validRequestV3: FakeRequest[AnyContentAsEmpty.type] = validRequestV2.withHeaders(ValidHeadersV3.toSeq: _*)
 
   override protected def beforeAll() {
     startMockServer()
@@ -101,7 +101,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString)
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())
@@ -130,7 +130,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString)
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())
@@ -145,9 +145,9 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
   feature("Declaration API handles status request errors from CSPs as expected") {
 
-    scenario("Response status 400 when user submits an MRN that it does not match badge identifier") {
+    scenario("Response status 400 when Date of declaration is older than configured allowed value") {
       Given("the API is available")
-      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationManagementInformationResponse(receivedDate = DateTime.now().minusYears(1).toString))
+      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationManagementInformationResponse(acceptanceDate = DateTime.now().minusYears(1).toString))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
 
       And("the CSP is authorised with its privileged application")
@@ -157,18 +157,50 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       val result: Future[Result] = route(app = app, validRequestV3).value
 
       Then(s"a response with a 400 status is received")
-      result shouldBe 'defined
-
       status(result) shouldBe BAD_REQUEST
-      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is a \"invalid xml\" XML")
-      string2xml(contentAsString(result)) shouldBe string2xml(BadRequestErrorWith2Errors)
+      string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorInvalidDate)
 
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
+    scenario("Response status 400 when Declaration Management Information Response does not contain a valid communicationAddress") {
+      Given("the API is available")
+      startMdgStatusV3Service(body = StatusTestXMLData.statusResponseDeclarationNoCommunicationAddress)
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
+
+      And("the CSP is authorised with its privileged application")
+      authServiceAuthorizesCSPNoNrs()
+
+      When("a POST request with data is sent to the API")
+      val result: Future[Result] = route(app = app, validRequestV3).value
+
+      Then(s"a response with a 400 status is received")
+      status(result) shouldBe BAD_REQUEST
+
+      And("the response body is a \"invalid xml\" XML")
+      string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorTradeMovementTypeMissing)
+
+    }
+
+    scenario("Response status 400 when Declaration Management Information Response does contains different Badge Identifier") {
+      Given("the API is available")
+      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationManagementInformationResponse(communicationAddress = "hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:IWONTMATCH"))
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
+
+      And("the CSP is authorised with its privileged application")
+      authServiceAuthorizesCSPNoNrs()
+
+      When("a POST request with data is sent to the API")
+      val result: Future[Result] = route(app = app, validRequestV3).value
+
+      Then(s"a response with a 400 status is received")
+      status(result) shouldBe BAD_REQUEST
+
+      And("the response body is a \"invalid xml\" XML")
+      string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
+
+    }
   }
 
 }

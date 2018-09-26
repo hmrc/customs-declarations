@@ -17,7 +17,6 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito.when
-import org.scalatest.Ignore
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest

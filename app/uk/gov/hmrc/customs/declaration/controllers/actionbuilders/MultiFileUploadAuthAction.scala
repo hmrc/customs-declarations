@@ -139,7 +139,7 @@ class MultiFileUploadAuthAction @Inject()(override val authConnector: AuthConnec
   }
 
   private def maybeValidEori(maybeValue: Option[String]) = {
-    maybeValue.filter(xEoriIdentifierRegex.findFirstIn(_).nonEmpty).map(Eori)
+    maybeValue.filter(xEoriIdentifierRegex.findFirstIn(_).nonEmpty).map(Eori.apply)
   }
 
   private def maybeHeader[A](headerName: String)(implicit vhr: ValidatedHeadersRequest[A]) = {

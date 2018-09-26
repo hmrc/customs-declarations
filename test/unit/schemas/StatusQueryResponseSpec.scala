@@ -43,7 +43,7 @@ class StatusQueryResponseSpec extends UnitSpec with MockitoSugar with BeforeAndA
     when(MockConfiguration.getInt("xml.max-errors")).thenReturn(None)
   }
 
-  "A status query request" should {
+  "A status query response" should {
     "be successfully validated if correct" in {
       val result = await(xmlValidationService.validate(ValidStatusQueryResponseXML))
 

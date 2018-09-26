@@ -21,7 +21,6 @@ import java.util.UUID
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.mockito.MockitoSugar
-import play.api.Configuration
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -48,7 +47,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockUpscanInitiateConnector: UpscanInitiateConnector = mock[UpscanInitiateConnector]
     protected val mockUpscanInitiateResponsePayload: UpscanInitiateResponsePayload = mock[UpscanInitiateResponsePayload]
-    protected val mockDeclarationsConfig = mock[DeclarationsConfig]
+    protected val mockBatchFileUploadConfig = mock[BatchFileUploadConfig]
     protected val mockConfiguration = mock[DeclarationsConfigService]
 
     protected lazy val service: FileUploadBusinessService = new FileUploadBusinessService(mockLogger, mockApiSubscriptionFieldsConnector, mockUpscanInitiateConnector, mockConfiguration)
@@ -70,8 +69,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     protected def send(vupr: ValidatedUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, UpscanInitiateResponsePayload] = {
       await(service.send(vupr, hc))
     }
-    when(mockDeclarationsConfig.upscanCallbackUrl).thenReturn("http://upscan-callback.url")
-    when(mockConfiguration.declarationsConfig).thenReturn(mockDeclarationsConfig)
+    when(mockBatchFileUploadConfig.upscanCallbackUrl).thenReturn("http://upscan-callback.url")
+    when(mockConfiguration.batchFileUploadConfig).thenReturn(mockBatchFileUploadConfig)
     when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockUpscanInitiateResponsePayload)
   }
 

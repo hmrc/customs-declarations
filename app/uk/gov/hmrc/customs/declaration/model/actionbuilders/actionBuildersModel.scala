@@ -59,6 +59,8 @@ object ActionBuilderModelHelper {
 
     def toCspAuthorisedRequest(badgeId: BadgeIdentifier, retrievalData: Option[CspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId, retrievalData))
 
+    def toBatchFileUploadCspAuthorisedRequest(badgeId: BadgeIdentifier, eori: Eori, retrievalData: Option[CspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(BatchFileUploadCsp(badgeId, eori, retrievalData))
+
     def toNonCspAuthorisedRequest(eori: Eori, retrievalData: Option[NonCspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori, retrievalData))
 
     def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
@@ -109,7 +111,24 @@ object ActionBuilderModelHelper {
       declarationId,
       documentationType
     )
+
+    def toValidatedBatchFileUploadPayloadRequest(declarationId: DeclarationId,
+                                                 fileGroupSize: FileGroupSize,
+                                                 fileUploadProperties: List[BatchFileUploadProperties]): ValidatedBatchFileUploadPayloadRequest[A] =
+      ValidatedBatchFileUploadPayloadRequest(
+        vpr.conversationId,
+        vpr.analyticsValues,
+        vpr.requestedApiVersion,
+        vpr.clientId,
+        vpr.authorisedAs,
+        vpr.xmlBody,
+        vpr.request,
+        declarationId,
+        fileGroupSize,
+        fileUploadProperties
+      )
   }
+
 }
 
 trait HasConversationId {
@@ -136,6 +155,14 @@ trait HasXmlBody {
 trait HasFileUploadProperties {
   val declarationId: DeclarationId
   val documentationType: DocumentationType
+}
+
+case class BatchFileUploadProperties(sequenceNumber: SequenceNumber, documentationType: DocumentationType)
+
+trait HasBatchFileUploadProperties {
+  val declarationId: DeclarationId
+  val fileGroupSize: FileGroupSize
+  val uploadProperties: List[BatchFileUploadProperties]
 }
 
 trait HasBadgeIdentifier {
@@ -242,3 +269,16 @@ case class ValidatedUploadPayloadRequest[A](
   declarationId: DeclarationId,
   documentationType: DocumentationType
 ) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
+
+case class ValidatedBatchFileUploadPayloadRequest[A](
+  conversationId: ConversationId,
+  analyticsValues: GoogleAnalyticsValues,
+  requestedApiVersion: ApiVersion,
+  clientId: ClientId,
+  authorisedAs: AuthorisedAs,
+  xmlBody: NodeSeq,
+  request: Request[A],
+  declarationId: DeclarationId,
+  fileGroupSize: FileGroupSize,
+  uploadProperties: List[BatchFileUploadProperties]
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasBatchFileUploadProperties

@@ -22,7 +22,7 @@ import scalaz.syntax.apply._
 import scalaz.syntax.traverse._
 import uk.gov.hmrc.customs.api.common.config.ConfigValidationNelAdaptor
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{DeclarationsCircuitBreakerConfig, DeclarationsConfig, GoogleAnalyticsConfig, NrsConfig}
+import uk.gov.hmrc.customs.declaration.model._
 
 @Singleton
 class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationNelAdaptor, logger: DeclarationsLogger) {
@@ -47,13 +47,15 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val gaClientId = root.string("googleAnalytics.clientId")
   private val gaEventValue = root.string("googleAnalytics.eventValue")
 
-  private val upscanCallbackUrl = root.string("upscan-callback.url")
   private val nrsEnabled = root.boolean("nrs.enabled")
   private val nrsApiKey = root.string("nrs.apikey")
   private val nrsWaitTimeMillis = root.int("nrs.waittime.millis")
 
+  private val upscanCallbackUrl = root.string("upscan-callback.url")
+  private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
+
   private val validatedDeclarationsConfig: ValidationNel[String, DeclarationsConfig] = (
-    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel |@| upscanCallbackUrl |@| declarationStatusRequestDaysLimit
+    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel |@| declarationStatusRequestDaysLimit
     ) (DeclarationsConfig.apply)
 
   private val validatedDeclarationsCircuitBreakerConfig: ValidationNel[String, DeclarationsCircuitBreakerConfig] = (
@@ -68,11 +70,16 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
     nrsEnabled |@| nrsApiKey |@| nrsWaitTimeMillis
     ) (NrsConfig.apply)
 
+  private val validatedBatchFileUploadConfig: ValidationNel[String, BatchFileUploadConfig] = (
+    upscanCallbackUrl |@| fileGroupSizeMaximum
+  ) (BatchFileUploadConfig.apply)
+
   private val customsConfigHolder =
     (validatedDeclarationsConfig |@|
       validatedDeclarationsCircuitBreakerConfig |@|
       validatedGoogleAnalyticsSenderConfig |@|
-      validatedNrsConfig
+      validatedNrsConfig |@|
+      validatedBatchFileUploadConfig
       ) (CustomsConfigHolder.apply) fold(
       fail = { nel =>
         // error case exposes nel (a NotEmptyList)
@@ -91,8 +98,11 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
 
   val nrsConfig: NrsConfig = customsConfigHolder.validatedNrsConfig
 
+  val batchFileUploadConfig: BatchFileUploadConfig = customsConfigHolder.validatedBatchFileUploadConfig
+
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
                                          declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,
                                          validatedGoogleAnalyticsConfig: GoogleAnalyticsConfig,
-                                         validatedNrsConfig: NrsConfig)
+                                         validatedNrsConfig: NrsConfig,
+                                         validatedBatchFileUploadConfig: BatchFileUploadConfig)
 }

@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import org.joda.time.LocalDate
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
@@ -66,10 +65,10 @@ class AuthAction @Inject()(
 
   private val errorResponseUnauthorisedGeneral =
     ErrorResponse(Status.UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
-  private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"${CustomHeaderNames.XBadgeIdentifierHeaderName} header is missing or invalid")
+  protected val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"${CustomHeaderNames.XBadgeIdentifierHeaderName} header is missing or invalid")
   private lazy val errorResponseEoriNotFoundInCustomsEnrolment =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
-  private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
+  protected lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
   type NonCspDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~
                         Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
@@ -82,12 +81,12 @@ class AuthAction @Inject()(
   type CspRetrievalDataType = Retrieval[CspDataType]
   type NonCspRetrievalDataType = Retrieval[NonCspDataType ~ Enrolments]
 
-  private val cspRetrievals: CspRetrievalDataType = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
+  protected val cspRetrievals: CspRetrievalDataType = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
                                                     Retrievals.confidenceLevel and Retrievals.nino and Retrievals.saUtr and
                                                     Retrievals.mdtpInformation and Retrievals.affinityGroup and
                                                     Retrievals.credentialStrength and Retrievals.loginTimes
 
-  private val nonCspRetrievals: NonCspRetrievalDataType = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
+  protected val nonCspRetrievals: NonCspRetrievalDataType = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
                                                           Retrievals.credentials and Retrievals.confidenceLevel and Retrievals.nino and
                                                           Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
                                                           Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and
@@ -121,7 +120,7 @@ class AuthAction @Inject()(
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
   // Right(None) if not authorised as CSP
-  private def futureAuthoriseAsCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])]]] = {
+  protected def futureAuthoriseAsCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
       authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
@@ -158,7 +157,7 @@ class AuthAction @Inject()(
   // pure function that tames exceptions throw by HMRC auth api into an Either
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(AuthorisedRequest) on success
-  private def authoriseAsNonCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, AuthorisedRequest[A]]] = {
+  protected def authoriseAsNonCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, AuthorisedRequest[A]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
@@ -195,7 +194,7 @@ class AuthAction @Inject()(
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
   // Right(None) if not authorised as CSP
-  private def futureAuthoriseAsCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])] ] ] = {
+  protected def futureAuthoriseAsCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])] ] ] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
@@ -222,7 +221,7 @@ class AuthAction @Inject()(
   // pure function that tames exceptions throw by HMRC auth api into an Either
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(AuthorisedRequest) on success
-  private def authoriseAsNonCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, AuthorisedRequest[A]]] = {
+  protected def authoriseAsNonCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, AuthorisedRequest[A]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(Retrievals.authorisedEnrolments) {

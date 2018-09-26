@@ -47,6 +47,11 @@ class FileUploadAnalyticsValuesAction @Inject()(override val logger: Declaration
 }
 
 @Singleton
+class BatchFileUploadAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+  override val googleAnalyticsValues: GoogleAnalyticsValues = BatchFileUpload //TODO can existing `Fileupload` values be used?
+}
+
+@Singleton
 class DeclarationSubmitAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = Submit
 }

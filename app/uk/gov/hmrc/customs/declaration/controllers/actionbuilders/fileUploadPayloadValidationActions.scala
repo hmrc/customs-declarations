@@ -32,10 +32,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class FileUploadPayloadValidationAction @Inject() (fileUploadXmlValidationService: FileUploadXmlValidationService, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends PayloadValidationAction(fileUploadXmlValidationService, logger, Some(googleAnalyticsConnector))
+class FileUploadPayloadValidationAction @Inject() (fileUploadXmlValidationService: FileUploadXmlValidationService,
+                                                   logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector)
+  extends PayloadValidationAction(fileUploadXmlValidationService, logger, Some(googleAnalyticsConnector))
 
 @Singleton
-class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction, val logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedUploadPayloadRequest] {
+class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction,
+                                                          val logger: DeclarationsLogger)
+  extends ActionRefiner[AuthorisedRequest, ValidatedUploadPayloadRequest] {
 
   private val declarationIdPropertyName = "declarationID"
   private val documentationTypePropertyName = "documentationType"

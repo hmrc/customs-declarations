@@ -1,0 +1,31 @@
+<fileUploadResponse xmlns="http://gov.uk/customs/declarations/file-upload">
+  <files>
+    <!--Zero or more repetitions:-->
+    <file>
+      <reference>string</reference>
+      <uploadRequest>
+        <href>string</href>
+        <fields>
+          <!--Optional:-->
+          <content-type>string</content-type>
+          <!--Optional:-->
+          <acl>string</acl>
+          <!--Optional:-->
+          <key>string</key>
+          <!--Optional:-->
+          <policy>string</policy>
+          <!--Optional:-->
+          <X-Amz-algorithm>string</X-Amz-algorithm>
+          <!--Optional:-->
+          <X-Amz-credential>string</X-Amz-credential>
+          <!--Optional:-->
+          <X-Amz-date>string</X-Amz-date>
+          <!--Optional:-->
+          <x-amz-meta-callback-url>string</x-amz-meta-callback-url>
+          <!--Optional:-->
+          <X-Amz-signature>string</X-Amz-signature>
+        </fields>
+      </uploadRequest>
+    </file>
+  </files>
+</fileUploadResponse>

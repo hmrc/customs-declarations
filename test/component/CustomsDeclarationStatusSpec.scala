@@ -18,6 +18,7 @@ package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import org.scalatest._
 import play.api.mvc._
 import play.api.test.FakeRequest
@@ -30,7 +31,7 @@ import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTest
 
 import scala.concurrent.Future
 
-class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService with CancelAfterFailure with ExpectedTestResponses
+class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
   with OptionValues
   with BeforeAndAfterAll
@@ -101,7 +102,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString)
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")))
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())
@@ -130,7 +131,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString)
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")))
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())

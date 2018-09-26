@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -79,7 +79,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
       declarationsLogger.errorWithoutRequestContext("Status response acceptanceDate field is missing")
       Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
     })(acceptanceDate => {
-      val parsedDateTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").parseDateTime(acceptanceDate.head)
+      val parsedDateTime = ISODateTimeFormat.dateTimeNoMillis.withZoneUTC().parseDateTime(acceptanceDate.head)
       val isDateValid = parsedDateTime.isAfter(getValidDateTimeUsingConfig)
       if (!isDateValid) {
         declarationsLogger.debugWithoutRequestContext(s"Status response acceptanceDate failed validation $acceptanceDate")

@@ -22,16 +22,16 @@ import play.api.mvc.Result
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.UpscanInitiateResponsePayload
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedMultiFileUploadPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedBatchFileUploadPayloadRequest
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
 @Singleton
-class MultiFileUploadBusinessService @Inject()(logger: DeclarationsLogger,
+class BatchFileUploadBusinessService @Inject()(logger: DeclarationsLogger,
                                                apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                                config: DeclarationsConfigService) {
 
-  def send[A](implicit vupr: ValidatedMultiFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, UpscanInitiateResponsePayload]] = ???
+  def send[A](implicit vupr: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, UpscanInitiateResponsePayload]] = ???
 
 }

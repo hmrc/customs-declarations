@@ -164,7 +164,7 @@ object GoogleAnalyticsValues {
   }
 
   //TODO do these values need to change?
-  val MultiFileUpload = new GoogleAnalyticsValues {
+  val BatchFileUpload = new GoogleAnalyticsValues {
     override val success: String = "declarationFileUploadSuccess"
     override val failure: String = "declarationFileUploadFailure"
   }
@@ -259,7 +259,7 @@ sealed trait AuthorisedAs {
 }
 case class Csp(badgeIdentifier: BadgeIdentifier, retrievalData: Option[CspRetrievalData]) extends AuthorisedAs
 case class NonCsp(eori: Eori, retrievalData: Option[NonCspRetrievalData]) extends AuthorisedAs
-case class MultiFileUploadCsp(badgeIdentifier: BadgeIdentifier, eori: Eori, retrievalData: Option[CspRetrievalData]) extends AuthorisedAs
+case class BatchFileUploadCsp(badgeIdentifier: BadgeIdentifier, eori: Eori, retrievalData: Option[CspRetrievalData]) extends AuthorisedAs
 
 case class UpscanInitiatePayload(callbackUrl: String)
 

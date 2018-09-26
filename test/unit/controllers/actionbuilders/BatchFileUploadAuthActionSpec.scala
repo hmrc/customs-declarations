@@ -21,7 +21,7 @@ import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XEoriIdentifierHeaderName}
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.MultiFileUploadAuthAction
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.BatchFileUploadAuthAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
 
-class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
+class BatchFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
   private val errorResponseBadgeIdentifierHeaderMissing =
     errorBadRequest(s"$XBadgeIdentifierHeaderName header is missing or invalid")
@@ -64,12 +64,12 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
   }
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
-    val multiFileUploadAuthAction = new MultiFileUploadAuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
   trait NrsDisabled extends AuthConnectorNrsDisabledStubbing with SetUp {
-    val multiFileUploadAuthAction = new MultiFileUploadAuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
   }
 
@@ -79,15 +79,15 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "authorise as CSP when authorised by auth API and badge identifier exists" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toMultiFileUploadCspAuthorisedRequest(badgeIdentifier, declarantEori, Some(cspRetrievalValues)))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toBatchFileUploadCspAuthorisedRequest(badgeIdentifier, declarantEori, Some(cspRetrievalValues)))
         verifyNonCspAuthorisationNotCalled
       }
 
       "Return 401 response when authorised by auth API but both badge identifier and eori are invalid" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdEoriPair))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdEoriPair))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -97,7 +97,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier does not exist" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
+        private val actual = await(batchFileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -107,7 +107,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier does not exist and eori does" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(TestValidatedHeadersRequestWithEoriAndNoBadgeId))
+        private val actual = await(batchFileUploadAuthAction.refine(TestValidatedHeadersRequestWithEoriAndNoBadgeId))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -117,7 +117,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier is too long" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooLong))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooLong))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -127,7 +127,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier is too short" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooShort))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooShort))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -137,7 +137,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier contains invalid chars" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdInvalidChars))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdInvalidChars))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -147,7 +147,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier contains all lowercase chars" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdLowerCase))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdLowerCase))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -157,7 +157,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API where badge identifier exists and eori does not" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(TestValidatedHeadersRequestWithBadgeIdAndNoEori))
+        private val actual = await(batchFileUploadAuthAction.refine(TestValidatedHeadersRequestWithBadgeIdAndNoEori))
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -167,7 +167,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API with empty eori" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEmptyEori))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEmptyEori))
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -177,7 +177,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API with eori too long" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEoriTooLong))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEoriTooLong))
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -187,7 +187,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API with eori containing invalid characters" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidEoriInvalidChars))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidEoriInvalidChars))
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -197,7 +197,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 500 response if errors occur in CSP auth API call" in new NrsEnabled {
         authoriseCspError()
 
-        private val actual = await(multiFileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
+        private val actual = await(batchFileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
 
         actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -209,15 +209,15 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "authorise as CSP when authorised by auth API and badge identifier exists" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toMultiFileUploadCspAuthorisedRequest(badgeIdentifier, declarantEori, None))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toBatchFileUploadCspAuthorisedRequest(badgeIdentifier, declarantEori, None))
         verifyNonCspAuthorisationNotCalled
       }
 
       "Return 401 response when authorised by auth API but badge identifier does not exist" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
+        private val actual = await(batchFileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -227,7 +227,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier does not exist and eori does" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(TestValidatedHeadersRequestWithEoriAndNoBadgeId))
+        private val actual = await(batchFileUploadAuthAction.refine(TestValidatedHeadersRequestWithEoriAndNoBadgeId))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -237,7 +237,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier exists but is too long" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooLong))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooLong))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -247,7 +247,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier exists but is too short" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooShort))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooShort))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -257,7 +257,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier exists but contains invalid chars" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdInvalidChars))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdInvalidChars))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -267,7 +267,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier exists but contains all lowercase chars" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdLowerCase))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdLowerCase))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -277,7 +277,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API where badge identifier exists and eori does not" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(TestValidatedHeadersRequestWithBadgeIdAndNoEori))
+        private val actual = await(batchFileUploadAuthAction.refine(TestValidatedHeadersRequestWithBadgeIdAndNoEori))
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -287,7 +287,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API empty eori" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEmptyEori))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEmptyEori))
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -297,7 +297,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API with eori too long" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEoriTooLong))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEoriTooLong))
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -307,7 +307,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API with eori containing invalid characters" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(multiFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidEoriInvalidChars))
+        private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithInvalidEoriInvalidChars))
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -317,7 +317,7 @@ class MultiFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 500 response if errors occur in CSP auth API call" in new NrsDisabled {
         authoriseCspError()
 
-        private val actual = await(multiFileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
+        private val actual = await(batchFileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
 
         actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled

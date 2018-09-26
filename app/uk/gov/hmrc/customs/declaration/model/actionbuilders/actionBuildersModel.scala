@@ -59,7 +59,7 @@ object ActionBuilderModelHelper {
 
     def toCspAuthorisedRequest(badgeId: BadgeIdentifier, retrievalData: Option[CspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId, retrievalData))
 
-    def toMultiFileUploadCspAuthorisedRequest(badgeId: BadgeIdentifier, eori: Eori, retrievalData: Option[CspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(MultiFileUploadCsp(badgeId, eori, retrievalData))
+    def toBatchFileUploadCspAuthorisedRequest(badgeId: BadgeIdentifier, eori: Eori, retrievalData: Option[CspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(BatchFileUploadCsp(badgeId, eori, retrievalData))
 
     def toNonCspAuthorisedRequest(eori: Eori, retrievalData: Option[NonCspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori, retrievalData))
 
@@ -112,10 +112,10 @@ object ActionBuilderModelHelper {
       documentationType
     )
 
-    def toValidatedMultiFileUploadPayloadRequest(declarationId: DeclarationId,
+    def toValidatedBatchFileUploadPayloadRequest(declarationId: DeclarationId,
                                                  fileGroupSize: FileGroupSize,
-                                                 fileUploadProperties: List[MultiFileUploadProperties]): ValidatedMultiFileUploadPayloadRequest[A] =
-      ValidatedMultiFileUploadPayloadRequest(
+                                                 fileUploadProperties: List[BatchFileUploadProperties]): ValidatedBatchFileUploadPayloadRequest[A] =
+      ValidatedBatchFileUploadPayloadRequest(
         vpr.conversationId,
         vpr.analyticsValues,
         vpr.requestedApiVersion,
@@ -157,12 +157,12 @@ trait HasFileUploadProperties {
   val documentationType: DocumentationType
 }
 
-case class MultiFileUploadProperties (sequenceNumber: SequenceNumber, documentationType: DocumentationType)
+case class BatchFileUploadProperties(sequenceNumber: SequenceNumber, documentationType: DocumentationType)
 
-trait HasMultiFileUploadProperties {
+trait HasBatchFileUploadProperties {
   val declarationId: DeclarationId
   val fileGroupSize: FileGroupSize
-  val uploadProperties: List[MultiFileUploadProperties]
+  val uploadProperties: List[BatchFileUploadProperties]
 }
 
 trait HasBadgeIdentifier {
@@ -270,7 +270,7 @@ case class ValidatedUploadPayloadRequest[A](
   documentationType: DocumentationType
 ) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
 
-case class ValidatedMultiFileUploadPayloadRequest[A](
+case class ValidatedBatchFileUploadPayloadRequest[A](
   conversationId: ConversationId,
   analyticsValues: GoogleAnalyticsValues,
   requestedApiVersion: ApiVersion,
@@ -280,5 +280,5 @@ case class ValidatedMultiFileUploadPayloadRequest[A](
   request: Request[A],
   declarationId: DeclarationId,
   fileGroupSize: FileGroupSize,
-  uploadProperties: List[MultiFileUploadProperties]
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasMultiFileUploadProperties
+  uploadProperties: List[BatchFileUploadProperties]
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasBatchFileUploadProperties

@@ -26,37 +26,37 @@ import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, MultiFileUploadProperties, ValidatedMultiFileUploadPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.MultiFileUploadXmlValidationService
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, BatchFileUploadProperties, ValidatedBatchFileUploadPayloadRequest}
+import uk.gov.hmrc.customs.declaration.services.BatchFileUploadXmlValidationService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class MultiFileUploadPayloadValidationAction @Inject() (multiFileUploadXmlValidationService: MultiFileUploadXmlValidationService,
-                                                        logger: DeclarationsLogger,
-                                                        googleAnalyticsConnector: GoogleAnalyticsConnector)
-    extends PayloadValidationAction(multiFileUploadXmlValidationService, logger, Some(googleAnalyticsConnector))
+class BatchFileUploadPayloadValidationAction @Inject()(batchFileUploadXmlValidationService: BatchFileUploadXmlValidationService,
+                                                       logger: DeclarationsLogger,
+                                                       googleAnalyticsConnector: GoogleAnalyticsConnector)
+    extends PayloadValidationAction(batchFileUploadXmlValidationService, logger, Some(googleAnalyticsConnector))
 
-class MultiFileUploadPayloadValidationComposedAction @Inject()(val multiFileUploadPayloadValidationAction: MultiFileUploadPayloadValidationAction,
+class BatchFileUploadPayloadValidationComposedAction @Inject()(val batchFileUploadPayloadValidationAction: BatchFileUploadPayloadValidationAction,
                                                                val logger: DeclarationsLogger)
-  extends ActionRefiner[AuthorisedRequest, ValidatedMultiFileUploadPayloadRequest]  {
+  extends ActionRefiner[AuthorisedRequest, ValidatedBatchFileUploadPayloadRequest]  {
 
   private val declarationIdLabel = "DeclarationID"
   private val documentationTypeLabel = "DocumentType"
   private val groupSizeLabel = "FileGroupSize"
   private val sequenceNumber = "FileSequenceNo"
 
-  override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedMultiFileUploadPayloadRequest[A]]] = {
+  override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedBatchFileUploadPayloadRequest[A]]] = {
     implicit val implicitAr: AuthorisedRequest[A] = ar
     ar.authorisedAs match {
       case NonCsp(_, _) =>
-        multiFileUploadPayloadValidationAction.refine(ar).map {
-          case Right(validatedMultiFilePayloadRequest) =>
+        batchFileUploadPayloadValidationAction.refine(ar).map {
+          case Right(validatedBatchFilePayloadRequest) =>
             //TODO extract & validate values
-            Right(validatedMultiFilePayloadRequest.toValidatedMultiFileUploadPayloadRequest(
+            Right(validatedBatchFilePayloadRequest.toValidatedBatchFileUploadPayloadRequest(
               DeclarationId("decId"), FileGroupSize(2),
-              List(MultiFileUploadProperties(SequenceNumber(1), DocumentationType("doctype1")), MultiFileUploadProperties(SequenceNumber(2), DocumentationType("doctype2")))
+              List(BatchFileUploadProperties(SequenceNumber(1), DocumentationType("doctype1")), BatchFileUploadProperties(SequenceNumber(2), DocumentationType("doctype2")))
             ))
           case Left(b) => Left(b)
         }

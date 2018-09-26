@@ -27,7 +27,7 @@ class FileUploadXmlValidationService @Inject()(configuration: Configuration) ext
 
 @Singleton
 //TODO add post-parsing validation rules here?
-class MultiFileUploadXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.multifileupload")
+class BatchFileUploadXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.batchfileupload")
 
 @Singleton
 class CancellationXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.cancel")

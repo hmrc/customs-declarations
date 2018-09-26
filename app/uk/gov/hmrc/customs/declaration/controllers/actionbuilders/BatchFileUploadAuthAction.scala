@@ -39,10 +39,10 @@ import scala.util.Left
 import scala.util.control.NonFatal
 
 @Singleton
-class MultiFileUploadAuthAction @Inject()(override val authConnector: AuthConnector,
-                                           logger: DeclarationsLogger,
-                                           googleAnalyticsConnector: GoogleAnalyticsConnector,
-                                           declarationConfigService: DeclarationsConfigService)
+class BatchFileUploadAuthAction @Inject()(override val authConnector: AuthConnector,
+                                          logger: DeclarationsLogger,
+                                          googleAnalyticsConnector: GoogleAnalyticsConnector,
+                                          declarationConfigService: DeclarationsConfigService)
   extends AuthAction(authConnector, logger, googleAnalyticsConnector, declarationConfigService) {
 
   private lazy val xEoriIdentifierRegex = "^[0-9A-Za-z]{1,17}$".r
@@ -51,7 +51,7 @@ class MultiFileUploadAuthAction @Inject()(override val authConnector: AuthConnec
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val implicitVhr: ValidatedHeadersRequest[A] = vhr
 
-    def futureAuthoriseAsCsp = if (declarationConfigService.nrsConfig.nrsEnabled) futureAuthoriseAsMultiFileUploadCspNrsEnabled else futureAuthoriseAsMultiFileUploadCspNrsDisabled
+    def futureAuthoriseAsCsp = if (declarationConfigService.nrsConfig.nrsEnabled) futureAuthoriseAsBatchFileUploadCspNrsEnabled else futureAuthoriseAsBatchFileUploadCspNrsDisabled
     def authoriseAsNonCsp = if (declarationConfigService.nrsConfig.nrsEnabled) authoriseAsNonCspNrsEnabled else authoriseAsNonCspNrsDisabled
 
     futureAuthoriseAsCsp.flatMap{
@@ -63,7 +63,7 @@ class MultiFileUploadAuthAction @Inject()(override val authConnector: AuthConnec
             case Right(a) => Right(a)
           }
         } {pair =>
-          Future.successful(Right(vhr.toMultiFileUploadCspAuthorisedRequest(pair._1.asInstanceOf[BadgeIdentifierEoriPair].badgeIdentifier,
+          Future.successful(Right(vhr.toBatchFileUploadCspAuthorisedRequest(pair._1.asInstanceOf[BadgeIdentifierEoriPair].badgeIdentifier,
             pair._1.asInstanceOf[BadgeIdentifierEoriPair].eori, pair._2.asInstanceOf[Option[CspRetrievalData]])))
         }
       case Left(result) =>
@@ -71,7 +71,7 @@ class MultiFileUploadAuthAction @Inject()(override val authConnector: AuthConnec
     }
   }
 
-  protected def futureAuthoriseAsMultiFileUploadCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[(BadgeIdentifierEoriPair, Option[RetrievalData])]]] = {
+  protected def futureAuthoriseAsBatchFileUploadCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[(BadgeIdentifierEoriPair, Option[RetrievalData])]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
@@ -88,7 +88,7 @@ class MultiFileUploadAuthAction @Inject()(override val authConnector: AuthConnec
     }
   }
 
-  protected def futureAuthoriseAsMultiFileUploadCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[(BadgeIdentifierEoriPair, Option[RetrievalData])]]] = {
+  protected def futureAuthoriseAsBatchFileUploadCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[(BadgeIdentifierEoriPair, Option[RetrievalData])]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {

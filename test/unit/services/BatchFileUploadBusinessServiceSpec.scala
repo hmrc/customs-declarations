@@ -19,6 +19,6 @@ package unit.services
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.UnitSpec
 
-class MultiFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
+class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
 }

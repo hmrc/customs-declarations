@@ -61,7 +61,7 @@ object LoggingHelper {
         a.authorisedAs match {
           case Csp(badgeIdentifier, _) => s"[authorisedAs=Csp($badgeIdentifier)]"
           case NonCsp(eori, _) => s"[authorisedAs=NonCsp($eori)]"
-          case MultiFileUploadCsp(eori, badgeIdentifier, _) => s"[authorisedAs=MultiFileUploadCsp($eori, $badgeIdentifier)]"
+          case BatchFileUploadCsp(eori, badgeIdentifier, _) => s"[authorisedAs=BatchFileUploadCsp($eori, $badgeIdentifier)]"
         }
       case _ => ""
     }

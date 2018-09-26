@@ -21,22 +21,22 @@ import javax.inject.{Inject, Singleton}
 
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{MultiFileUploadAnalyticsValuesAction, MultiFileUploadAuthAction, MultiFileUploadPayloadValidationComposedAction}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{BatchFileUploadAnalyticsValuesAction, BatchFileUploadAuthAction, BatchFileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.model.ConversationId
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedMultiFileUploadPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.MultiFileUploadBusinessService
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedBatchFileUploadPayloadRequest}
+import uk.gov.hmrc.customs.declaration.services.BatchFileUploadBusinessService
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class MultiFileUploadController @Inject() (val common: Common,
-                                           val multiFileUploadBusinessService: MultiFileUploadBusinessService,
-                                           val multiFileUploadPayloadValidationComposedAction: MultiFileUploadPayloadValidationComposedAction,
-                                           val multiFileUploadAnalyticsValuesAction: MultiFileUploadAnalyticsValuesAction,
-                                           val multiFileUploadAuthAction: MultiFileUploadAuthAction,
-                                           val googleAnalyticsConnector: GoogleAnalyticsConnector)
+class BatchFileUploadController @Inject()(val common: Common,
+                                          val batchFileUploadBusinessService: BatchFileUploadBusinessService,
+                                          val batchFileUploadPayloadValidationComposedAction: BatchFileUploadPayloadValidationComposedAction,
+                                          val batchFileUploadAnalyticsValuesAction: BatchFileUploadAnalyticsValuesAction,
+                                          val batchFileUploadAuthAction: BatchFileUploadAuthAction,
+                                          val googleAnalyticsConnector: GoogleAnalyticsConnector)
   extends BaseController {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {
@@ -48,20 +48,20 @@ class MultiFileUploadController @Inject() (val common: Common,
 
   def post(): Action[AnyContent] = (
     Action andThen
-      multiFileUploadAnalyticsValuesAction andThen
+      batchFileUploadAnalyticsValuesAction andThen
       common.validateAndExtractHeadersAction andThen
-      multiFileUploadAuthAction andThen
-      multiFileUploadPayloadValidationComposedAction
+      batchFileUploadAuthAction andThen
+      batchFileUploadPayloadValidationComposedAction
     ).async(bodyParser = xmlOrEmptyBody) {
 
-    implicit vmfupr: ValidatedMultiFileUploadPayloadRequest[AnyContent] =>
+    implicit vmfupr: ValidatedBatchFileUploadPayloadRequest[AnyContent] =>
       val logger = common.logger
 
       logger.debug(s"Request received. Payload = ${vmfupr.body.toString} headers = ${vmfupr.headers.headers}")
 
-      multiFileUploadBusinessService.send map {
+      batchFileUploadBusinessService.send map {
         case Right(res) =>
-          //TODO check that this convoId functionality is same for multi-file
+          //TODO check that this convoId functionality is same for batch file upload
           val referenceConversationId = ConversationId(UUID.fromString(res.reference))
           logger.debug(s"Replacing conversationId with $referenceConversationId")
           val id = new HasConversationId {

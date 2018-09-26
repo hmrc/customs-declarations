@@ -73,7 +73,7 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
   }
 
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId)(implicit vupr: ValidatedUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
-    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.multiFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${vupr.declarationId.value}/eori/${vupr.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${vupr.documentationType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
+    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${vupr.declarationId.value}/eori/${vupr.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${vupr.documentationType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
     logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
     upscanInitiatePayload
   }

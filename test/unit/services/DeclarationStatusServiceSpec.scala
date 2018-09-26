@@ -60,7 +60,9 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
-    when(mockDeclarationStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
+    when(mockDeclarationStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
+      meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion],
+      meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockHttpResponse.body).thenReturn("<xml>some xml</xml>")
     when(mockHttpResponse.allHeaders).thenReturn(any[Map[String, Seq[String]]])
     when(mockStatusResponseFilterService.transform(<xml>backendXml</xml>)).thenReturn(<xml>transformed</xml>)

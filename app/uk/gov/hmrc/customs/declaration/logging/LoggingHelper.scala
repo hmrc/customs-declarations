@@ -19,7 +19,7 @@ package uk.gov.hmrc.customs.declaration.logging
 import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE}
 import play.api.mvc.Request
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
-import uk.gov.hmrc.customs.declaration.model.{AuthorisedAs, Csp, Eori, NonCsp}
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ExtractedHeaders, HasAuthorisedAs, HasConversationId}
 
 object LoggingHelper {
@@ -61,6 +61,7 @@ object LoggingHelper {
         a.authorisedAs match {
           case Csp(badgeIdentifier, _) => s"[authorisedAs=Csp($badgeIdentifier)]"
           case NonCsp(eori, _) => s"[authorisedAs=NonCsp($eori)]"
+          case BatchFileUploadCsp(eori, badgeIdentifier, _) => s"[authorisedAs=BatchFileUploadCsp($eori, $badgeIdentifier)]"
         }
       case _ => ""
     }

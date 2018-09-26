@@ -35,6 +35,8 @@ object Eori {
   implicit val reader = Reads.of[String].map(new Eori(_))
 }
 
+case class BadgeIdentifierEoriPair(badgeIdentifier: BadgeIdentifier, eori: Eori)
+
 case class NrSubmissionId(nrSubmissionId: UUID) extends AnyVal {
   override def toString: String = nrSubmissionId.toString
 }
@@ -161,6 +163,12 @@ object GoogleAnalyticsValues {
     override val failure: String = "declarationFileUploadFailure"
   }
 
+  //TODO do these values need to change?
+  val BatchFileUpload = new GoogleAnalyticsValues {
+    override val success: String = "declarationFileUploadSuccess"
+    override val failure: String = "declarationFileUploadFailure"
+  }
+
   val Clearance = new GoogleAnalyticsValues {
     override val success: String = "declarationClearanceSuccess"
     override val failure: String = "declarationClearanceFailure"
@@ -220,6 +228,14 @@ object DocumentationType {
   implicit val reader = Reads.of[String].map(new DocumentationType(_))
 }
 
+case class SequenceNumber(value: Int) extends AnyVal{
+  override def toString: String = value.toString
+}
+
+case class FileGroupSize(value: Int) extends AnyVal{
+  override def toString: String = value.toString
+}
+
 sealed trait ApiVersion {
   val value: String
   val configPrefix: String
@@ -243,6 +259,7 @@ sealed trait AuthorisedAs {
 }
 case class Csp(badgeIdentifier: BadgeIdentifier, retrievalData: Option[CspRetrievalData]) extends AuthorisedAs
 case class NonCsp(eori: Eori, retrievalData: Option[NonCspRetrievalData]) extends AuthorisedAs
+case class BatchFileUploadCsp(badgeIdentifier: BadgeIdentifier, eori: Eori, retrievalData: Option[CspRetrievalData]) extends AuthorisedAs
 
 case class UpscanInitiatePayload(callbackUrl: String)
 

@@ -30,6 +30,10 @@ case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 case class Eori(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
+object Eori {
+  implicit val writer = Writes[Eori] { x => JsString(x.value) }
+  implicit val reader = Reads.of[String].map(new Eori(_))
+}
 
 case class NrSubmissionId(nrSubmissionId: UUID) extends AnyVal {
   override def toString: String = nrSubmissionId.toString
@@ -195,13 +199,25 @@ case class BadgeIdentifier(value: String) extends AnyVal {
 case class SubscriptionFieldsId(value: String) extends AnyVal{
   override def toString: String = value.toString
 }
+object SubscriptionFieldsId {
+  implicit val writer = Writes[SubscriptionFieldsId] { x => JsString(x.value) }
+  implicit val reader = Reads.of[String].map(new SubscriptionFieldsId(_))
+}
 
 case class DeclarationId(value: String) extends AnyVal{
   override def toString: String = value.toString
 }
+object DeclarationId {
+  implicit val writer = Writes[DeclarationId] { x => JsString(x.value) }
+  implicit val reader = Reads.of[String].map(new DeclarationId(_))
+}
 
 case class DocumentationType(value: String) extends AnyVal{
   override def toString: String = value.toString
+}
+object DocumentationType {
+  implicit val writer = Writes[DocumentationType] { x => JsString(x.value) }
+  implicit val reader = Reads.of[String].map(new DocumentationType(_))
 }
 
 sealed trait ApiVersion {

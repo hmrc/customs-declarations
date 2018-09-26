@@ -54,7 +54,7 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
         await(xmlValidationService.validate(InvalidFileUploadResponseXML))
       }
 
-      caught.getMessage shouldBe "cvc-complex-type.2.4.b: The content of element 'file' is not complete. One of '{\"http://gov.uk/customs/declarations/file-upload\":reference, \"http://gov.uk/customs/declarations/file-upload\":uploadRequest}' is expected."
+      caught.getMessage shouldBe "cvc-complex-type.2.4.b: The content of element 'file' is not complete. One of '{\"hmrc:fileupload\":reference, \"hmrc:fileupload\":uploadRequest}' is expected."
 
       Option(caught.getException) shouldBe None
     }
@@ -62,14 +62,14 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
   }
 
   private val InvalidFileUploadResponseXML =
-    <fileUploadResponse xmlns="http://gov.uk/customs/declarations/file-upload">
+    <fileUploadResponse xmlns="hmrc:fileupload">
       <files>
         <file></file>
       </files>
     </fileUploadResponse>
 
   private val ValidFileUploadResponseXML: Elem =
-    <fileUploadResponse xmlns="http://gov.uk/customs/declarations/file-upload">
+    <fileUploadResponse xmlns="hmrc:fileupload">
       <files>
         <file>
           <reference>11370e18-6e24-453e-b45a-76d3e32ea33d</reference>

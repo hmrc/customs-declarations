@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://gov.uk/customs/declarations/file-upload" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://gov.uk/customs/declarations/file-upload" elementFormDefault="qualified"
+<xs:schema xmlns="hmrc:fileupload" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="hmrc:fileupload" elementFormDefault="qualified"
            attributeFormDefault="unqualified">
 
     <xs:element name="fileUploadResponse" type="FileUploadResponse"/>

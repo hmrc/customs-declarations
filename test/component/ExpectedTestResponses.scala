@@ -86,14 +86,6 @@ trait ExpectedTestResponses {
       | </errorResponse>
     """.stripMargin
 
-  protected val BadStatusResponseErrorTradeMovementTypeMissing: String =
-    """<?xml version="1.0" encoding="UTF-8"?>
-      | <errorResponse>
-      |   <code>BAD_REQUEST</code>
-      |   <message>tradeMovementType element is missing from the response</message>
-      |   </errorResponse>
-    """.stripMargin
-
   protected val BadStatusResponseErrorBadgeIdMissingOrInvalid: String =
     """<?xml version="1.0" encoding="UTF-8"?>
       | <errorResponse>

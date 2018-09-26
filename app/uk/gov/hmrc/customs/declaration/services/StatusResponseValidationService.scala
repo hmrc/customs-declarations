@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.format.ISODateTimeFormat
+import org.joda.time.format.DateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -48,9 +48,8 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
 
   def handleValidationForTradeTypes(badgeIdentifier: BadgeIdentifier, tradeMovementType: String, declarationNode: NodeSeq): Either[ErrorResponse, Boolean] ={
     tradeMovementType match {
-      case IMPORT_MOVEMENT_TYPE => validateImports(badgeIdentifier, declarationNode)
       case EXPORT_MOVEMENT_TYPE => validateAcceptanceDate(declarationNode)
-      case _ => Left(ErrorResponse.errorBadRequest("Unable to determine TradeMovementType from response details"))
+      case _ => validateImports(badgeIdentifier, declarationNode)
     }
   }
 
@@ -78,9 +77,9 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
   private def validateAcceptanceDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] = {
     extractField(declarationNode, "acceptanceDate").fold[Either[ErrorResponse, Boolean]]({
       declarationsLogger.errorWithoutRequestContext("Status response acceptanceDate field is missing")
-      Left(ErrorResponse.ErrorInternalServerError)
+      Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
     })(acceptanceDate => {
-      val parsedDateTime = ISODateTimeFormat.dateTime().withZone(DateTimeZone.UTC).parseDateTime(acceptanceDate.head)
+      val parsedDateTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").parseDateTime(acceptanceDate.head)
       val isDateValid = parsedDateTime.isAfter(getValidDateTimeUsingConfig)
       if (!isDateValid) {
         declarationsLogger.debugWithoutRequestContext(s"Status response acceptanceDate failed validation $acceptanceDate")
@@ -95,8 +94,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
     val maybeExtractedTradeMovementType = extractField(declarationNode, "tradeMovementType").fold[Option[String]](None)(tradeMovementType => Some(tradeMovementType.head.substring(0,2)))
 
     maybeExtractedTradeMovementType.fold[Either[ErrorResponse, String]]({
-      declarationsLogger.errorWithoutRequestContext("Unable to extract MovementType from response")
-      Left(ErrorResponse.errorBadRequest("tradeMovementType element is missing from the response"))
+      Right(IMPORT_MOVEMENT_TYPE)
     })(extractedTradeMovementType => {
       if(extractedTradeMovementType.equals(CO_MOVEMENT_TYPE)) {
         Right(deriveTradeMovementTypeFromProcedureCategory(extractProcedureCategory(declarationNode)))
@@ -112,7 +110,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
     } else if(isExportProcedureCategory(maybeProcedureCategory)){
       EXPORT_MOVEMENT_TYPE
     } else{
-      CO_MOVEMENT_TYPE
+      IMPORT_MOVEMENT_TYPE
     }
   }
 

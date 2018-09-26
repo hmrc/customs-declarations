@@ -18,7 +18,7 @@ package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
 import org.joda.time.DateTime
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import org.scalatest._
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
@@ -30,7 +30,7 @@ import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTest
 
 import scala.concurrent.Future
 
-class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
+class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService with CancelAfterFailure with ExpectedTestResponses
   with Matchers
   with OptionValues
   with BeforeAndAfterAll
@@ -147,7 +147,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
     scenario("Response status 400 when Date of declaration is older than configured allowed value") {
       Given("the API is available")
-      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationManagementInformationResponse(acceptanceDate = DateTime.now().minusYears(1).toString))
+      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationManagementInformationResponse(acceptanceDate = DateTime.now().minusYears(1)))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
 
       And("the CSP is authorised with its privileged application")
@@ -179,7 +179,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe BAD_REQUEST
 
       And("the response body is a \"invalid xml\" XML")
-      string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorTradeMovementTypeMissing)
+      string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
 
     }
 

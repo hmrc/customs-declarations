@@ -41,8 +41,6 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
 
   private val invalidDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${statusRequestDaysLimit} days old")
   private val invalidOrMissingBadgeIdentifiersErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid")
-  private val tradeMovementTypeElementMissingErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("tradeMovementType element is missing from the response")
-  private val unableToDetermineTradeMovementTypeErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Unable to determine TradeMovementType from response details")
 
   trait SetUp {
 
@@ -56,85 +54,85 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
 
     "return Right of true when badgeIdentifiers match and date is within configured allowed period" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ImportTradeMovementType, InValidProcedureCategory)
+      val xmlBody: NodeSeq = generateDeclarationManagementInformationResponse(dateWithinPeriod, ImportTradeMovementType, InValidProcedureCategory)
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, badgeIdentifier)
       result shouldBe Right(true)
     }
 
     "return Left of Invalid Date ErrorResponse when badgeIdentifiers match and date is outside configured allowed period" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier)
       result.left.get.message shouldBe invalidDateErrorResponse.message
     }
 
     "return Left of Invalid or missing Badge Identifier ErrorResponse  when badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ImportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod, ImportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
       result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
     }
 
     "return Right of true when response is tradeMovementType of EX... date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ExportTradeMovementType, InValidProcedureCategory)
+      val xmlBody: NodeSeq = generateDeclarationManagementInformationResponse(dateWithinPeriod, ExportTradeMovementType, InValidProcedureCategory)
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, invalidBadgeIdentifier)
       result shouldBe Right(true)
     }
 
     "return Right of true when response is tradeMovementType of CO... procedure category is ImportType date is inside configured allowed period and badgeIdentifiers match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, ValidImportProcedureCategory)
+      val xmlBody: NodeSeq = generateDeclarationManagementInformationResponse(dateWithinPeriod, COTradeMovementType, ValidImportProcedureCategory)
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, badgeIdentifier)
       result shouldBe Right(true)
     }
 
     "return Left of Invalid or missing Badge Identifier ErrorResponse when response is tradeMovementType of CO... procedure category is ImportType date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, ValidImportProcedureCategory), invalidBadgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod, COTradeMovementType, ValidImportProcedureCategory), invalidBadgeIdentifier)
       result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
     }
 
     "return Left of Invalid Date ErrorResponse when response is tradeMovementType of EX... date outside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, ExportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod, ExportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
       result.left.get.message shouldBe invalidDateErrorResponse.message
     }
 
     "return Right of true when response is tradeMovementType of CO... procedure category is ExportType, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, ValidExportProcedureCategory)
+      val xmlBody: NodeSeq = generateDeclarationManagementInformationResponse(dateWithinPeriod, COTradeMovementType, ValidExportProcedureCategory)
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, invalidBadgeIdentifier)
       result shouldBe Right(true)
     }
 
     "return Left of Invalid Date ErrorResponse when response is tradeMovementType of CO... procedure category is ExportType, date is outside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, ValidExportProcedureCategory), badgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod, COTradeMovementType, ValidExportProcedureCategory), badgeIdentifier)
       result.left.get.message shouldBe invalidDateErrorResponse.message
     }
 
-    "return Left of unable to Determine TradeMovementType ErrorResponse when response is tradeMovementType of CO... procedure category is invalid, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
+    "return Left of Invalid or missing Badge Identifier ErrorResponse when response is tradeMovementType of CO... procedure category is invalid, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod.toString, COTradeMovementType, InValidProcedureCategory), badgeIdentifier)
-      result.left.get.message shouldBe unableToDetermineTradeMovementTypeErrorResponse.message
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod, COTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
+      result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
     }
 
-    "return Left of Internal Server Error when xml does not contain acceptanceDate" in new SetUp() {
-      testServiceErrors(service, statusResponseDeclarationNoAcceptanceDate, badgeIdentifier, ErrorResponse.ErrorInternalServerError)
+    "return Left of Invalid Date ErrorResponse when xml does not contain acceptanceDate" in new SetUp() {
+      testServiceErrors(service, statusResponseDeclarationNoAcceptanceDate, badgeIdentifier, invalidDateErrorResponse)
     }
 
-    "return Left of unable to Determine TradeMovementType ErrorResponse  false when xml does not contain procedureCategory" in new SetUp() {
-      testServiceErrors(service, statusResponseDeclarationNoProcedureCategory, badgeIdentifier, unableToDetermineTradeMovementTypeErrorResponse)
+    "return Left of Invalid Date ErrorResponse when xml does not contain procedureCategory" in new SetUp() {
+      testServiceErrors(service, statusResponseDeclarationNoProcedureCategory, badgeIdentifier, invalidDateErrorResponse)
     }
 
-    "return Left of TradeMovementType is missing ErrorResponse  false when xml does not contain tradeMovementType" in new SetUp() {
-      testServiceErrors(service, statusResponseDeclarationNoTradeMovementType, badgeIdentifier, tradeMovementTypeElementMissingErrorResponse)
+    "return Left of Invalid Date ErrorResponse when xml does not contain tradeMovementType" in new SetUp() {
+      testServiceErrors(service, statusResponseDeclarationNoTradeMovementType, badgeIdentifier, invalidDateErrorResponse)
     }
 
     "return Left of Invalid Date ErrorResponse when response xml contains invalid acceptanceDate" in new SetUp() {
       testServiceErrors(service, statusResponseDeclarationInvalidAcceptanceDate, badgeIdentifier, invalidDateErrorResponse)
     }
 
-    "return Left of Invalid or missing Badge Identifier ErrorResponse  when response xml does not contain communicationAddress" in new SetUp() {
+    "return Left of Invalid or missing Badge Identifier ErrorResponse when response xml does not contain communicationAddress" in new SetUp() {
       testServiceErrors(service, statusResponseDeclarationNoCommunicationAddress, badgeIdentifier, invalidOrMissingBadgeIdentifiersErrorResponse)
     }
 

@@ -30,9 +30,9 @@ trait MdgStatusDeclarationService extends WireMockRunner {
 
   val acceptanceDateVal = DateTime.now(DateTimeZone.UTC).minusDays(30)
 
-  def startMdgStatusV2Service(status: Int = OK, body: NodeSeq = StatusTestXMLData.generateDeclarationManagementInformationResponse(acceptanceDate = acceptanceDateVal.toString)): Unit = startService(status, v2URL, body)
+  def startMdgStatusV2Service(status: Int = OK, body: NodeSeq = StatusTestXMLData.generateDeclarationManagementInformationResponse(acceptanceDate = acceptanceDateVal)): Unit = startService(status, v2URL, body)
 
-  def startMdgStatusV3Service(status: Int = OK, body: NodeSeq = StatusTestXMLData.generateDeclarationManagementInformationResponse(acceptanceDate = acceptanceDateVal.toString)): Unit = startService(status, v3URL, body)
+  def startMdgStatusV3Service(status: Int = OK, body: NodeSeq = StatusTestXMLData.generateDeclarationManagementInformationResponse(acceptanceDate = acceptanceDateVal)): Unit = startService(status, v3URL, body)
 
   private def startService (status: Int, url: UrlPattern, body: NodeSeq) = {
     stubFor(post(url).

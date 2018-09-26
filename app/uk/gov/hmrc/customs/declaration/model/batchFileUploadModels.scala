@@ -1,0 +1,66 @@
+/*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.gov.hmrc.customs.declaration.model
+
+import java.net.URL
+import java.util.UUID
+
+import play.api.data.validation.ValidationError
+import play.api.libs.json._
+
+import scala.util.Try
+
+object HttpUrlFormat extends Format[URL] {
+
+  override def reads(json: JsValue): JsResult[URL] = json match {
+    case JsString(s) => {
+      parseUrl(s).map(JsSuccess(_)).getOrElse(JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.url")))))
+    }
+    case _ => JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.url"))))
+  }
+
+  private def parseUrl(s: String): Option[URL] = Try(new URL(s)).toOption
+
+  override def writes(o: URL): JsValue = JsString(o.toString)
+}
+
+case class BatchFile(
+  reference: String, // can be used as UNIQUE KEY, upscan-initiate
+  name: String, // user request
+  mimeType: String, // upscan-notify
+  checksum: String, // upscan-notify
+  location: URL, // upscan-initiate
+  sequenceNumber: Int, // derived from user request
+  size: Int, // assumption - it appears to be mandatory but is ignored
+  documentType: DocumentationType
+)
+object BatchFile {
+  implicit val urlFormat = HttpUrlFormat
+  implicit val format = Json.format[BatchFile]
+}
+
+case class BatchFileUploadMetaData(
+  declarationId: DeclarationId,
+  eori: Eori,
+  csId: SubscriptionFieldsId,
+  batchId: UUID,
+  fileCount: Int,
+  files: Seq[BatchFile]
+)
+object BatchFileUploadMetaData {
+  implicit val format = Json.format[BatchFileUploadMetaData]
+}

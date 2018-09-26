@@ -31,6 +31,8 @@ case class Eori(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
 
+case class BadgeIdentifierEoriPair(badgeIdentifier: BadgeIdentifier, eori: Eori)
+
 case class NrSubmissionId(nrSubmissionId: UUID) extends AnyVal {
   override def toString: String = nrSubmissionId.toString
 }
@@ -241,6 +243,7 @@ sealed trait AuthorisedAs {
 }
 case class Csp(badgeIdentifier: BadgeIdentifier, retrievalData: Option[CspRetrievalData]) extends AuthorisedAs
 case class NonCsp(eori: Eori, retrievalData: Option[NonCspRetrievalData]) extends AuthorisedAs
+case class MultiFileUploadCsp(badgeIdentifier: BadgeIdentifier, eori: Eori, retrievalData: Option[CspRetrievalData]) extends AuthorisedAs
 
 case class UpscanInitiatePayload(callbackUrl: String)
 

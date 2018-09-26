@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{MultiFileUploadAnalyticsValuesAction, MultiFileUploadPayloadValidationComposedAction}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{MultiFileUploadAnalyticsValuesAction, MultiFileUploadAuthAction, MultiFileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedMultiFileUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services.MultiFileUploadBusinessService
@@ -35,6 +35,7 @@ class MultiFileUploadController @Inject() (val common: Common,
                                            val multiFileUploadBusinessService: MultiFileUploadBusinessService,
                                            val multiFileUploadPayloadValidationComposedAction: MultiFileUploadPayloadValidationComposedAction,
                                            val multiFileUploadAnalyticsValuesAction: MultiFileUploadAnalyticsValuesAction,
+                                           val multiFileUploadAuthAction: MultiFileUploadAuthAction,
                                            val googleAnalyticsConnector: GoogleAnalyticsConnector)
   extends BaseController {
 
@@ -49,7 +50,7 @@ class MultiFileUploadController @Inject() (val common: Common,
     Action andThen
       multiFileUploadAnalyticsValuesAction andThen
       common.validateAndExtractHeadersAction andThen
-      common.authAction andThen
+      multiFileUploadAuthAction andThen
       multiFileUploadPayloadValidationComposedAction
     ).async(bodyParser = xmlOrEmptyBody) {
 

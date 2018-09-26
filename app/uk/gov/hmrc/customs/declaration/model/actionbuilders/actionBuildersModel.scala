@@ -59,6 +59,8 @@ object ActionBuilderModelHelper {
 
     def toCspAuthorisedRequest(badgeId: BadgeIdentifier, retrievalData: Option[CspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId, retrievalData))
 
+    def toMultiFileUploadCspAuthorisedRequest(badgeId: BadgeIdentifier, eori: Eori, retrievalData: Option[CspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(MultiFileUploadCsp(badgeId, eori, retrievalData))
+
     def toNonCspAuthorisedRequest(eori: Eori, retrievalData: Option[NonCspRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori, retrievalData))
 
     def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(

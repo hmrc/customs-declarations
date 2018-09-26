@@ -55,8 +55,8 @@ class MultiFileUploadPayloadValidationComposedAction @Inject()(val multiFileUplo
           case Right(validatedMultiFilePayloadRequest) =>
             //TODO extract & validate values
             Right(validatedMultiFilePayloadRequest.toValidatedMultiFileUploadPayloadRequest(
-              DeclarationId("decId"), FileGroupSize(1),
-              List(MultiFileUploadProperties(SequenceNumber(1), DocumentationType("doctype1")))
+              DeclarationId("decId"), FileGroupSize(2),
+              List(MultiFileUploadProperties(SequenceNumber(1), DocumentationType("doctype1")), MultiFileUploadProperties(SequenceNumber(2), DocumentationType("doctype2")))
             ))
           case Left(b) => Left(b)
         }

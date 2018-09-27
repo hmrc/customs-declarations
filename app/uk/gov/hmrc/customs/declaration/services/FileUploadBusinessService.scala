@@ -55,7 +55,7 @@ class FileUploadBusinessService @Inject()(logger: DeclarationsLogger,
                                      (implicit vupr: GenericValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vupr.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
-        Right(SubscriptionFieldsId(response.fieldsId.toString))
+        Right(SubscriptionFieldsId(response.fieldsId))
     }).recover {
       case NonFatal(e) =>
         logger.error(s"Subscriptions fields lookup call failed: ${e.getMessage}", e)

@@ -1,4 +1,0 @@
-<hmrc:upscanInitiate xmlns:hmrc="hmrc:fileupload">
-  <hmrc:declarationID>DEC123</hmrc:declarationID>
-  <hmrc:documentationType>DOCTYPE123</hmrc:documentationType>
-</hmrc:upscanInitiate>

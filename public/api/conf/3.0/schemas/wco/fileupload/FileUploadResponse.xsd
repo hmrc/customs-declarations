@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="hmrc:fileupload2" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="hmrc:fileupload2" elementFormDefault="qualified">
+
+    <xs:element name="FileUploadResponse" type="FileUploadResponse"/>
+
+    <xs:complexType name="FileUploadResponse">
+        <xs:sequence>
+            <xs:element name="Files" type="Files"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Files">
+        <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="unbounded" name="File" type="File"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="File">
+        <xs:all>
+            <xs:element minOccurs="1" name="reference" type="xs:string"/>
+            <xs:element minOccurs="1" name="uploadRequest" type="UploadRequest"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="UploadRequest">
+        <xs:all>
+            <xs:element minOccurs="1" name="href" type="xs:string"/>
+            <xs:element minOccurs="1" name="fields" type="Fields" />
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="Fields">
+        <xs:sequence>
+            <xs:any maxOccurs="unbounded" processContents="lax" />
+        </xs:sequence>
+    </xs:complexType>
+
+
+</xs:schema>

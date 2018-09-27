@@ -5,7 +5,7 @@ object AppDependencies {
   private val hmrcTestVersion = "3.0.0"
   private val scalaTestVersion = "3.0.5"
   private val scalatestplusVersion = "2.0.1"
-  private val mockitoVersion = "2.10.0"
+  private val mockitoVersion = "2.22.0"
   private val pegdownVersion = "1.6.0"
   private val wireMockVersion = "2.18.0"
   private val customsApiCommonVersion = "1.28.0"

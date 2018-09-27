@@ -54,7 +54,7 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
         await(xmlValidationService.validate(InvalidFileUploadResponseXML))
       }
 
-      caught.getMessage shouldBe "cvc-complex-type.2.4.b: The content of element 'file' is not complete. One of '{\"hmrc:fileupload\":reference, \"hmrc:fileupload\":uploadRequest}' is expected."
+      caught.getMessage shouldBe "cvc-complex-type.2.4.b: The content of element 'file' is not complete. One of '{\"hmrc:fileupload2\":reference, \"hmrc:fileupload2\":uploadRequest}' is expected."
 
       Option(caught.getException) shouldBe None
     }
@@ -62,29 +62,29 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
   }
 
   private val InvalidFileUploadResponseXML =
-    <fileUploadResponse xmlns="hmrc:fileupload">
+    <FileUploadResponse xmlns="hmrc:fileupload2">
       <files>
         <file></file>
       </files>
-    </fileUploadResponse>
+    </FileUploadResponse>
 
   private val ValidFileUploadResponseXML: Elem =
-    <fileUploadResponse xmlns="hmrc:fileupload">
+    <FileUploadResponse xmlns="hmrc:fileupload2">
       <files>
         <file>
           <reference>11370e18-6e24-453e-b45a-76d3e32ea33d</reference>
           <uploadRequest>
             <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
             <fields>
-              <content-type>application/xml</content-type>
+              <Content-Type>application/xml</Content-Type>
               <acl>private</acl>
               <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
               <policy>xxxxxxxx==</policy>
-              <X-Amz-algorithm>AWS4-HMAC-SHA256</X-Amz-algorithm>
-              <X-Amz-credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-credential>
-              <X-Amz-date>2018-02-09T12:35:45.297Z</X-Amz-date>
+              <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+              <x-amz-credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</x-amz-credential>
+              <x-amz-date>2018-02-09T12:35:45.297Z</x-amz-date>
               <x-amz-meta-callback-url>https://myservice.com/callback</x-amz-meta-callback-url>
-              <X-Amz-signature>xxxx</X-Amz-signature>
+              <x-amz-signature>xxxx</x-amz-signature>
             </fields>
           </uploadRequest>
         </file>
@@ -93,18 +93,18 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
           <uploadRequest>
             <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
             <fields>
-              <content-type>application/xml</content-type>
+              <Content-Type>application/xml</Content-Type>
               <acl>private</acl>
               <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
               <policy>xxxxxxxx==</policy>
-              <X-Amz-algorithm>AWS4-HMAC-SHA256</X-Amz-algorithm>
-              <X-Amz-credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-credential>
-              <X-Amz-date>2018-02-09T12:35:45.297Z</X-Amz-date>
+              <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+              <x-amz-credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</x-amz-credential>
+              <x-amz-date>2018-02-09T12:35:45.297Z</x-amz-date>
               <x-amz-meta-callback-url>https://myservice.com/callback</x-amz-meta-callback-url>
-              <X-Amz-signature>xxxx</X-Amz-signature>
+              <x-amz-signature>xxxx</x-amz-signature>
             </fields>
           </uploadRequest>
         </file>
       </files>
-    </fileUploadResponse>
+    </FileUploadResponse>
 }

@@ -1,31 +1,31 @@
-<fileUploadResponse xmlns="http://gov.uk/customs/declarations/file-upload">
-  <files>
-    <!--Zero or more repetitions:-->
-    <file>
-      <reference>string</reference>
-      <uploadRequest>
-        <href>string</href>
-        <fields>
+<hmrc:FileUploadResponse xmlns:hmrc="hmrc:fileupload2">
+  <hmrc:files>
+    <!--1 or more repetitions:-->
+    <hmrc:file>
+      <hmrc:reference>string</hmrc:reference>
+      <hmrc:uploadRequest>
+        <hmrc:href>string</hmrc:href>
+        <hmrc:fields>
           <!--Optional:-->
-          <content-type>string</content-type>
+          <hmrc:Content-Type>string</hmrc:Content-Type>
           <!--Optional:-->
-          <acl>string</acl>
+          <hmrc:acl>string</hmrc:acl>
           <!--Optional:-->
-          <key>string</key>
+          <hmrc:key>string</hmrc:key>
           <!--Optional:-->
-          <policy>string</policy>
+          <hmrc:policy>string</hmrc:policy>
           <!--Optional:-->
-          <X-Amz-algorithm>string</X-Amz-algorithm>
+          <hmrc:x-amz-algorithm>string</hmrc:x-amz-algorithm>
           <!--Optional:-->
-          <X-Amz-credential>string</X-Amz-credential>
+          <hmrc:x-amz-credential>string</hmrc:x-amz-credential>
           <!--Optional:-->
-          <X-Amz-date>string</X-Amz-date>
+          <hmrc:x-amz-date>string</hmrc:x-amz-date>
           <!--Optional:-->
-          <x-amz-meta-callback-url>string</x-amz-meta-callback-url>
+          <hmrc:x-amz-meta-callback-url>string</hmrc:x-amz-meta-callback-url>
           <!--Optional:-->
-          <X-Amz-signature>string</X-Amz-signature>
-        </fields>
-      </uploadRequest>
-    </file>
-  </files>
-</fileUploadResponse>
+          <hmrc:x-amz-signature>string</hmrc:x-amz-signature>
+        </hmrc:fields>
+      </hmrc:uploadRequest>
+    </hmrc:file>
+  </hmrc:files>
+</hmrc:FileUploadResponse>

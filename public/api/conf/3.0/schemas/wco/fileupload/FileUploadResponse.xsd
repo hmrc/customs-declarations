@@ -6,13 +6,13 @@
 
     <xs:complexType name="FileUploadResponse">
         <xs:sequence>
-            <xs:element name="files" type="Files"/>
+            <xs:element name="Files" type="Files"/>
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="Files">
         <xs:sequence>
-            <xs:element minOccurs="1" maxOccurs="unbounded" name="file" type="File"/>
+            <xs:element minOccurs="1" maxOccurs="unbounded" name="File" type="File"/>
         </xs:sequence>
     </xs:complexType>
 

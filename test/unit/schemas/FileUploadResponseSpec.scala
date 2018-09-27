@@ -54,7 +54,7 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
         await(xmlValidationService.validate(InvalidFileUploadResponseXML))
       }
 
-      caught.getMessage shouldBe "cvc-complex-type.2.4.b: The content of element 'file' is not complete. One of '{\"hmrc:fileupload2\":reference, \"hmrc:fileupload2\":uploadRequest}' is expected."
+      caught.getMessage shouldBe "cvc-complex-type.2.4.b: The content of element 'File' is not complete. One of '{\"hmrc:fileupload2\":reference, \"hmrc:fileupload2\":uploadRequest}' is expected."
 
       Option(caught.getException) shouldBe None
     }
@@ -63,15 +63,15 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
 
   private val InvalidFileUploadResponseXML =
     <FileUploadResponse xmlns="hmrc:fileupload2">
-      <files>
-        <file></file>
-      </files>
+      <Files>
+        <File></File>
+      </Files>
     </FileUploadResponse>
 
   private val ValidFileUploadResponseXML: Elem =
     <FileUploadResponse xmlns="hmrc:fileupload2">
-      <files>
-        <file>
+      <Files>
+        <File>
           <reference>11370e18-6e24-453e-b45a-76d3e32ea33d</reference>
           <uploadRequest>
             <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
@@ -87,8 +87,8 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
               <x-amz-signature>xxxx</x-amz-signature>
             </fields>
           </uploadRequest>
-        </file>
-        <file>
+        </File>
+        <File>
           <reference>11370e18-6e24-453e-b45a-76d3e32ea33d</reference>
           <uploadRequest>
             <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
@@ -104,7 +104,7 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
               <x-amz-signature>xxxx</x-amz-signature>
             </fields>
           </uploadRequest>
-        </file>
-      </files>
+        </File>
+      </Files>
     </FileUploadResponse>
 }

@@ -6,24 +6,8 @@
       <hmrc:uploadRequest>
         <hmrc:href>string</hmrc:href>
         <hmrc:fields>
-          <!--Optional:-->
-          <hmrc:Content-Type>string</hmrc:Content-Type>
-          <!--Optional:-->
-          <hmrc:acl>string</hmrc:acl>
-          <!--Optional:-->
-          <hmrc:key>string</hmrc:key>
-          <!--Optional:-->
-          <hmrc:policy>string</hmrc:policy>
-          <!--Optional:-->
-          <hmrc:x-amz-algorithm>string</hmrc:x-amz-algorithm>
-          <!--Optional:-->
-          <hmrc:x-amz-credential>string</hmrc:x-amz-credential>
-          <!--Optional:-->
-          <hmrc:x-amz-date>string</hmrc:x-amz-date>
-          <!--Optional:-->
-          <hmrc:x-amz-meta-callback-url>string</hmrc:x-amz-meta-callback-url>
-          <!--Optional:-->
-          <hmrc:x-amz-signature>string</hmrc:x-amz-signature>
+          <!--You may enter ANY elements at this point-->
+          <AnyElement/>
         </hmrc:fields>
       </hmrc:uploadRequest>
     </hmrc:file>

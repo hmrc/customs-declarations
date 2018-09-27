@@ -26,22 +26,15 @@
     <xs:complexType name="UploadRequest">
         <xs:all>
             <xs:element minOccurs="1" name="href" type="xs:string"/>
-            <xs:element minOccurs="1" name="fields">
-                <xs:complexType>
-                    <xs:all>
-                        <xs:element minOccurs="0" name="Content-Type" type="xs:string"/>
-                        <xs:element minOccurs="0" name="acl" type="xs:string"/>
-                        <xs:element minOccurs="0" name="key" type="xs:string"/>
-                        <xs:element minOccurs="0" name="policy" type="xs:string"/>
-                        <xs:element minOccurs="0" name="x-amz-algorithm" type="xs:string"/>
-                        <xs:element minOccurs="0" name="x-amz-credential" type="xs:string"/>
-                        <xs:element minOccurs="0" name="x-amz-date" type="xs:string"/>
-                        <xs:element minOccurs="0" name="x-amz-meta-callback-url" type="xs:string"/>
-                        <xs:element minOccurs="0" name="x-amz-signature" type="xs:string"/>
-                    </xs:all>
-                </xs:complexType>
-            </xs:element>
+            <xs:element minOccurs="1" name="fields" type="Fields" />
         </xs:all>
     </xs:complexType>
+
+    <xs:complexType name="Fields">
+        <xs:sequence>
+            <xs:any maxOccurs="unbounded" processContents="lax" />
+        </xs:sequence>
+    </xs:complexType>
+
 
 </xs:schema>

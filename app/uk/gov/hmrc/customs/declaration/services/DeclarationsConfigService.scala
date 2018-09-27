@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-
 import scalaz.ValidationNel
 import scalaz.syntax.apply._
 import scalaz.syntax.traverse._

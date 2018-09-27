@@ -39,11 +39,10 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusReq
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
-import util.AuthConnectorNrsDisabledStubbing
 import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._
-import util.TestXMLData.validStatusResponse
+import util.{AuthConnectorNrsDisabledStubbing, StatusTestXMLData}
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq
@@ -55,6 +54,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
     protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
+    protected val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
     protected val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
@@ -62,7 +62,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
-    protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(validStatusResponse().toString))
+    protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(StatusTestXMLData.generateDeclarationManagementInformationResponse().toString))
 
     protected val endpointAction = new EndpointAction {
       override val logger: DeclarationsLogger = mockDeclarationsLogger
@@ -76,7 +76,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
-    protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
+    protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
     protected val stubDeclarationStatusValuesAction = new DeclarationStatusValuesAction(mockDeclarationsLogger, stubUniqueIdsService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(
@@ -99,6 +99,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     when(mockDateTimeService.nowUtc()).thenReturn(dateTime)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
     when(mockStatusResponseFilterService.transform(any[NodeSeq])).thenReturn(<xml>some xml</xml>)
+    when(mockStatusResponseValidationService.validate(any[NodeSeq],meq(validBadgeIdentifierValue).asInstanceOf[BadgeIdentifier])).thenReturn(Right(true))
   }
 
   private val errorResultBadgeIdentifier = errorBadRequest("X-Badge-Identifier header is missing or invalid").XmlResult.withHeaders(X_CONVERSATION_ID_HEADER)

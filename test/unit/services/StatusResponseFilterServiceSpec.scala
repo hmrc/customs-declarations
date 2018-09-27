@@ -16,25 +16,27 @@
 
 package unit.services
 
-import org.mockito.ArgumentMatchers.{eq => meq}
+import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseFilterService}
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestXMLData
+import util.StatusTestXMLData.{ImportTradeMovementType, generateDeclarationManagementInformationResponse, generateValidStatusResponseWithMultiplePartiesOnly}
 
 import scala.xml.NodeSeq
 
 class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
 
+  val acceptanceDateVal = DateTime.now(DateTimeZone.UTC)
+
   trait SetUp {
 
-    val mockDeclarationsLogger = mock[DeclarationsLogger]
-    val mockDeclarationsConfigService = mock[DeclarationsConfigService]
+    val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
+    val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
     val service = new StatusResponseFilterService(mockDeclarationsLogger, mockDeclarationsConfigService)
 
-    def createStatusResponseWithAllValues(): NodeSeq = service.transform(TestXMLData.validStatusResponse())
+    def createStatusResponseWithAllValues(): NodeSeq = service.transform(generateDeclarationManagementInformationResponse(acceptanceDate = acceptanceDateVal))
   }
 
   "Status Response Filter Service" should {
@@ -65,7 +67,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
       private val response = createStatusResponseWithAllValues()
       private val node = response \\ "tradeMovementType"
 
-      node.text shouldBe "trade movement type"
+      node.text shouldBe ImportTradeMovementType
     }
 
     "create the declaration type" in new SetUp {
@@ -86,7 +88,6 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
       private val response = createStatusResponseWithAllValues()
       private val node = response \\ "acceptanceDate"
 
-      node.text shouldBe "2002-12-17T09:30:47Z"
     }
 
     "create the party identification numbers" in new SetUp {
@@ -97,7 +98,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     "create the party identification numbers when there are two parties with id numbers and one without id" in new SetUp{
-      private val response = service.transform(TestXMLData.generateValidStatusResponseWithMultiplePartiesOnly)
+      private val response = service.transform(generateValidStatusResponseWithMultiplePartiesOnly)
       private val node = response \\ "parties"
 
       (node.head \ "partyIdentification" \ "number").head.text shouldBe "1"
@@ -106,7 +107,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     "not create acceptance date when not provided" in new SetUp {
-      private val response = service.transform(TestXMLData.generateValidStatusResponseWithMultiplePartiesOnly)
+      private val response = service.transform(generateValidStatusResponseWithMultiplePartiesOnly)
       private val node = response \\ "acceptanceDate"
 
       node shouldBe empty

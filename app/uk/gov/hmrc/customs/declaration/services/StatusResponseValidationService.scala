@@ -17,39 +17,130 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.format.ISODateTimeFormat
+import org.joda.time.format.{DateTimeFormatter, ISODateTimeFormat}
 import org.joda.time.{DateTime, DateTimeZone}
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.BadgeIdentifier
 
+import scala.util.Try
 import scala.xml.NodeSeq
 
 @Singleton
 class StatusResponseValidationService @Inject() (declarationsLogger: DeclarationsLogger, declarationsConfigService: DeclarationsConfigService) {
 
-  def validate(xml: NodeSeq, badgeIdentifier: BadgeIdentifier): Boolean = {
+  val IMPORT_MOVEMENT_TYPE : String = "IM"
+  val EXPORT_MOVEMENT_TYPE : String = "EX"
+  val CO_MOVEMENT_TYPE : String = "CO"
+
+  val importProcedureCategories: Seq[String] = Seq( "40", "42", "61", "07", "51", "53", "71")
+  val exportProcedureCategories: Seq[String] = Seq( "10")
+
+  val ISO_UTC_DateTimeFormat_noMillis: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis.withZoneUTC()
+
+  def validate(xml: NodeSeq, badgeIdentifier: BadgeIdentifier): Either[ErrorResponse, Boolean] = {
     val declarationNode = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
-    validateBadgeIdentifier(declarationNode, badgeIdentifier) && validateReceivedDate(declarationNode)
+    val theResult =  for {
+      tradeMovementType <- extractTradeMovementType(declarationNode).right
+      xmlNode <- handleValidationForTradeTypes(badgeIdentifier, tradeMovementType, declarationNode).right
+    } yield xmlNode
+    theResult
   }
 
-  private def validateBadgeIdentifier(declarationNode: NodeSeq, badgeIdentifier: BadgeIdentifier): Boolean = {
-    extractField(declarationNode, "communicationAddress").fold(false)({ communicationAddress =>
-      badgeIdentifier.value == extractBadgeIdentifier(communicationAddress.head)
+  def handleValidationForTradeTypes(badgeIdentifier: BadgeIdentifier, tradeMovementType: String, declarationNode: NodeSeq): Either[ErrorResponse, Boolean] ={
+    tradeMovementType match {
+      case EXPORT_MOVEMENT_TYPE => validateAcceptanceDate(declarationNode)
+      case _ => validateImports(badgeIdentifier, declarationNode)
+    }
+  }
+
+  private def validateImports(badgeIdentifier: BadgeIdentifier, declarationNode: NodeSeq): Either[ErrorResponse, Boolean] = {
+    val result: Either[ErrorResponse, Boolean] = for {
+      _ <- validateBadgeIdentifier(declarationNode, badgeIdentifier).right
+      _ <- validateAcceptanceDate(declarationNode).right
+    } yield true
+    result
+  }
+
+  private def validateBadgeIdentifier(declarationNode: NodeSeq, badgeIdentifier: BadgeIdentifier): Either[ErrorResponse, Boolean] = {
+    extractField(declarationNode, "communicationAddress").fold[Either[ErrorResponse, Boolean]]({
+      declarationsLogger.errorWithoutRequestContext("Status response BadgeId field is missing")
+      Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
+    })({ communicationAddress =>
+      if(badgeIdentifier.value.toUpperCase != extractBadgeIdentifier(communicationAddress.head).toUpperCase){
+        Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
+      }else{
+        Right(true)
+      }
     })
+  }
+
+  private def validateAcceptanceDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] = extractField(declarationNode, "acceptanceDate").fold[Either[ErrorResponse, Boolean]]({
+    declarationsLogger.errorWithoutRequestContext("Status response acceptanceDate field is missing")
+    Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
+  })(acceptanceDate => {
+    val parsedDateTime = Try(ISO_UTC_DateTimeFormat_noMillis.parseDateTime(acceptanceDate.head)).toOption
+    val isDateValid = parsedDateTime.fold(false)(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
+    if (!isDateValid) {
+      declarationsLogger.debugWithoutRequestContext(s"Status response acceptanceDate failed validation $acceptanceDate")
+      Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
+    } else{
+      Right(true)
+    }
+  })
+
+  private def safelyExtractValue(extractedValues : Seq[String]): Option[String] = {
+    if(extractedValues.nonEmpty && !extractedValues.head.isEmpty && extractedValues.head.length > 1) {
+      Some(extractedValues.head.substring(0,2))
+    } else {
+      None
+    }
+  }
+
+  def extractTradeMovementType(declarationNode: NodeSeq): Either[ErrorResponse, String]  = {
+    val maybeExtractedTradeMovementType = extractField(declarationNode, "tradeMovementType").fold[Option[String]](None)(tradeMovementType => {
+      safelyExtractValue(tradeMovementType)
+    })
+
+    maybeExtractedTradeMovementType.fold[Either[ErrorResponse, String]]({
+      Right(IMPORT_MOVEMENT_TYPE)
+    })(extractedTradeMovementType => {
+      if(extractedTradeMovementType.equals(CO_MOVEMENT_TYPE)) {
+        Right(deriveTradeMovementTypeFromProcedureCategory(extractProcedureCategory(declarationNode)))
+      } else{
+        Right(extractedTradeMovementType)
+      }
+    })
+  }
+
+  private def deriveTradeMovementTypeFromProcedureCategory(maybeProcedureCategory: Option[String]):  String  = {
+    if(isImportProcedureCategory(maybeProcedureCategory)){
+      IMPORT_MOVEMENT_TYPE
+    } else if(isExportProcedureCategory(maybeProcedureCategory)){
+      EXPORT_MOVEMENT_TYPE
+    } else{
+      IMPORT_MOVEMENT_TYPE
+    }
+  }
+
+  private def isExportProcedureCategory(maybeProcedureCategory: Option[String]): Boolean = {
+    matchAgainstGivenCategories(maybeProcedureCategory, exportProcedureCategories)
+  }
+
+  private def isImportProcedureCategory(maybeProcedureCategory: Option[String]): Boolean = {
+    matchAgainstGivenCategories(maybeProcedureCategory, importProcedureCategories)
+  }
+
+  private def matchAgainstGivenCategories(maybeProcedureCategory: Option[String], categoriesToMatch: Seq[String]): Boolean ={
+    maybeProcedureCategory.exists(procedureCategory => categoriesToMatch.contains(procedureCategory))
+  }
+
+  private def extractProcedureCategory(declarationNode: NodeSeq): Option[String]  = {
+    extractField(declarationNode, "procedureCategory").fold[Option[String]](None)(procedureCategory => safelyExtractValue(procedureCategory))
   }
 
   private def extractBadgeIdentifier(communicationAddress: String) = {
     communicationAddress.split(":").last
-  }
-
-
-  private def validateReceivedDate(declarationNode: NodeSeq): Boolean = {
-    extractField(declarationNode, "receiveDate").fold(false)(receiveDate => {
-     val parsedDateTime = ISODateTimeFormat.dateTime().withZone(DateTimeZone.UTC).parseDateTime(receiveDate.head)
-     val isDateValid = parsedDateTime.isAfter(getValidDateTimeUsingConfig)
-     if (!isDateValid) declarationsLogger.debugWithoutRequestContext(s"Status response receivedDate failed validation $receiveDate")
-     isDateValid
-   })
   }
 
   private def getValidDateTimeUsingConfig = {

@@ -31,10 +31,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Left
 import scala.util.control.NonFatal
-import scala.xml.{PrettyPrinter, TopScope, XML}
+import scala.xml.{Elem, PrettyPrinter, TopScope, XML}
 
 @Singleton
 class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResponseFilterService,
+                                         statusResponseValidationService: StatusResponseValidationService,
                                          logger: DeclarationsLogger,
                                          connector: DeclarationStatusConnector,
                                          dateTimeProvider: DateTimeService,
@@ -47,18 +48,25 @@ class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResp
     val dmirId = uniqueIdsService.dmir
 
     connector.send(dateTime, correlationId, dmirId, asr.requestedApiVersion, mrn)
-      .map(response => Right(filterResponse(response))).recover{
+      .map(response => {
+        val xmlResponseBody = XML.loadString(response.body)
+        statusResponseValidationService.validate(xmlResponseBody, asr.badgeIdentifier) match {
+          case Right(_) => Right(filterResponse(response, xmlResponseBody))
+          case Left(errorResponse) => Left(errorResponse.XmlResult.withConversationId)
+          case _ => Left(ErrorResponse.ErrorGenericBadRequest.XmlResult.withConversationId)
+        }
+      }).recover{
       case NonFatal(e) =>
         logger.error(s"declaration status call failed: ${e.getMessage}", e)
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
     }
   }
 
-  private def filterResponse(response: HttpResponse): HttpResponse = {
+  private def filterResponse(response: HttpResponse, xmlResponseBody: Elem): HttpResponse = {
     val xmlWidth = 120
     val xmlIndent = 2
 
-    val statusResponseXml = statusResponseFilterService.transform(XML.loadString(response.body)).head
+    val statusResponseXml = statusResponseFilterService.transform(xmlResponseBody).head
     val statusResponseString = new PrettyPrinter(xmlWidth, xmlIndent).format(statusResponseXml, TopScope)
 
     HttpResponse(response.status, None, response.allHeaders, Some(statusResponseString))

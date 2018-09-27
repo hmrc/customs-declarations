@@ -78,7 +78,21 @@ trait ExpectedTestResponses {
       |</errorResponse>
     """.stripMargin
 
+  protected val BadStatusResponseErrorInvalidDate: String =
+    """<?xml version="1.0" encoding="UTF-8"?>
+      | <errorResponse>
+      |   <code>BAD_REQUEST</code>
+      |   <message>Declaration acceptance date is greater than 60 days old</message>
+      | </errorResponse>
+    """.stripMargin
 
+  protected val BadStatusResponseErrorBadgeIdMissingOrInvalid: String =
+    """<?xml version="1.0" encoding="UTF-8"?>
+      | <errorResponse>
+      |   <code>BAD_REQUEST</code>
+      |   <message>Badge Identifier is missing or invalid</message>
+      |   </errorResponse>
+      |""".stripMargin
 
   protected val BadRequestErrorXBadgeIdentifierMissingOrInvalid: String =
     """<?xml version="1.0" encoding="UTF-8"?>

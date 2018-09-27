@@ -32,8 +32,8 @@ import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
 import util.ExternalServicesConfig.{AuthToken, Host, Port}
 import util.TestData._
+import util._
 import util.externalservices.MdgStatusDeclarationService
-import util.{ApiSubscriptionFieldsTestData, CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig, TestXMLData}
 
 class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   with GuiceOneAppPerSuite
@@ -46,7 +46,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   private val incomingAuthToken = s"Bearer ${ExternalServicesConfig.AuthToken}"
   private val numberOfCallsToTriggerStateChange = 5
   private val unavailablePeriodDurationInMillis = 1000
-  private implicit val asr = AuthorisedStatusRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, mock[Request[AnyContent]])
+  private implicit val asr: AuthorisedStatusRequest[AnyContent] = AuthorisedStatusRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, mock[Request[AnyContent]])
   private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
 
   override protected def beforeAll() {
@@ -78,7 +78,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
     "make a correct request" in {
       startMdgStatusV2Service()
       await(sendValidXml())
-      verifyMdgStatusDecServiceWasCalledWith(requestBody = TestXMLData.expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+      verifyMdgStatusDecServiceWasCalledWith(requestBody = StatusTestXMLData.expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
     }
 
     "circuit breaker trips after specified number of failures" in {
@@ -103,7 +103,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
         resetMockServer()
         startMdgStatusV2Service(ACCEPTED)
         await(sendValidXml())
-        verifyMdgStatusDecServiceWasCalledWith(requestBody = TestXMLData.expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+        verifyMdgStatusDecServiceWasCalledWith(requestBody = StatusTestXMLData.expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
       }
     }
 

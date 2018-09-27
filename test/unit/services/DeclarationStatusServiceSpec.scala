@@ -20,7 +20,8 @@ import java.util.UUID
 
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
@@ -36,43 +37,50 @@ import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData.{correlationId, _}
 
 import scala.concurrent.Future
+import scala.xml.NodeSeq
 
-class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar {
+class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach{
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
 
-  trait SetUp {
-    protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
-    protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    protected lazy val mockDeclarationStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
-    protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
-    protected val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
-    protected val mockHttpResponse: HttpResponse = mock[HttpResponse]
-    protected val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
-    protected val mrn = Mrn("theMrn")
+  protected lazy val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
+  protected lazy val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
+  protected lazy val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
+  protected lazy val mockDeclarationStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
+  protected lazy val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
+  protected lazy val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
+  protected lazy val mockHttpResponse: HttpResponse = mock[HttpResponse]
+  protected lazy val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
+  protected val mrn = Mrn("theMrn")
 
-    protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService,
+  trait SetUp {
+    when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
+    when(mockDeclarationStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
+      meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion],
+      meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]]))
+      .thenReturn(Future.successful(mockHttpResponse))
+    when(mockHttpResponse.body).thenReturn("<xml>some xml</xml>")
+    when(mockHttpResponse.allHeaders).thenReturn(any[Map[String, Seq[String]]])
+    when(mockStatusResponseFilterService.transform(<xml>backendXml</xml>)).thenReturn(<xml>transformed</xml>)
+
+    protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService,
       mockLogger, mockDeclarationStatusConnector, mockDateTimeProvider, stubUniqueIdsService)
 
     protected def send(vpr: AuthorisedStatusRequest[AnyContentAsXml] = TestAuthorisedStatusRequest, hc: HeaderCarrier = headerCarrier): Either[Result, HttpResponse] = {
       await(service.send(mrn) (vpr, hc))
     }
+  }
 
-    when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
-    when(mockDeclarationStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-      meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion],
-      meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
-    when(mockHttpResponse.body).thenReturn("<xml>some xml</xml>")
-    when(mockHttpResponse.allHeaders).thenReturn(any[Map[String, Seq[String]]])
-    when(mockStatusResponseFilterService.transform(<xml>backendXml</xml>)).thenReturn(<xml>transformed</xml>)
+  override def beforeEach(): Unit = {
+    reset(mockDateTimeProvider, mockDeclarationStatusConnector, mockHttpResponse, mockStatusResponseFilterService, mockStatusResponseValidationService)
   }
   "BusinessService" should {
 
     "send xml to connector" in new SetUp() {
+      when(mockStatusResponseValidationService.validate(any[NodeSeq], meq(validBadgeIdentifierValue).asInstanceOf[BadgeIdentifier])).thenReturn(Right(true))
 
       val result: Either[Result, HttpResponse] = send()
-
       result.right.get.body shouldBe "<xml>transformed</xml>"
       verify(mockDeclarationStatusConnector).send(dateTime, correlationId, dmirId, VersionTwo, mrn)(TestAuthorisedStatusRequest)
     }
@@ -82,6 +90,13 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar {
       val result: Either[Result, HttpResponse] = send()
 
       result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+    }
+
+    "return 400 when validationService fails validation" in new SetUp() {
+
+      val result: Either[Result, HttpResponse] = send()
+      result shouldBe Left(ErrorResponse.ErrorGenericBadRequest.XmlResult.withConversationId)
+
     }
   }
 }

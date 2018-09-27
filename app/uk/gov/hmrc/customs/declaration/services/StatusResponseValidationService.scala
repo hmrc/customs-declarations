@@ -35,7 +35,6 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
 
   val importProcedureCategories: Seq[String] = Seq( "40", "42", "61", "07", "51", "53", "71")
   val exportProcedureCategories: Seq[String] = Seq( "10")
-  protected lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
   val ISO_UTC_DateTimeFormat_noMillis: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis.withZoneUTC()
 
@@ -91,7 +90,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
   })
 
   private def safelyExtractValue(extractedValues : Seq[String]): Option[String] = {
-    if(extractedValues.size > 0 && !extractedValues.head.isEmpty && extractedValues.head.length > 1) {
+    if(extractedValues.nonEmpty && !extractedValues.head.isEmpty && extractedValues.head.length > 1) {
       Some(extractedValues.head.substring(0,2))
     } else {
       None

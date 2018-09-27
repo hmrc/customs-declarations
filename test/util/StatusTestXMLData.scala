@@ -16,7 +16,7 @@
 
 package util
 
-import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.{DateTimeFormat, DateTimeFormatter, ISODateTimeFormat}
 import org.joda.time.{DateTime, DateTimeZone}
 
 import scala.xml.{Elem, NodeSeq}
@@ -234,7 +234,7 @@ object StatusTestXMLData {
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 
-  def generateDeclarationManagementInformationResponse(acceptanceDate: DateTime = DateTime.now(DateTimeZone.UTC),  tradeMovementType: String = ImportTradeMovementType, procedureCategory: String = ValidImportProcedureCategory, communicationAddress: String = validCommunicationAddress): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
+  def generateDeclarationManagementInformationResponse(acceptanceDate: DateTime = DateTime.now(DateTimeZone.UTC),  tradeMovementType: String = ImportTradeMovementType, procedureCategory: String = ValidImportProcedureCategory, communicationAddress: String = validCommunicationAddress, dateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC()): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
     <n1:responseCommon>
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>
@@ -277,7 +277,7 @@ object StatusTestXMLData {
           <n3:goodsCommunityStatus>token</n3:goodsCommunityStatus>
           <n3:loadingListCount>0</n3:loadingListCount>
           <n3:packageCount>3</n3:packageCount>
-          <n3:acceptanceDate>{acceptanceDate.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))}</n3:acceptanceDate>
+          <n3:acceptanceDate>{acceptanceDate.toString(dateTimeFormat)}</n3:acceptanceDate>
           <n3:invoiceAmount>0</n3:invoiceAmount>
           <n3:procedureCategory>{procedureCategory}</n3:procedureCategory>
           <n3:batchId>String</n3:batchId>

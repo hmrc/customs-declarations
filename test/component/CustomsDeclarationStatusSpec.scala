@@ -18,7 +18,7 @@ package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.{DateTimeFormatter, ISODateTimeFormat}
 import org.scalatest._
 import play.api.mvc._
 import play.api.test.FakeRequest
@@ -43,7 +43,8 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
   private val mrn = "some-mrn"
   private val endpoint = s"/status-request/mrn/$mrn"
-//  private implicit val materializer: Materializer = app.materializer
+
+  private val ISO_UTC_DateTimeFormat_noMillis: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC()
 
   private val apiSubscriptionKeyForXClientIdV1 =
     ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
@@ -102,7 +103,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")))
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(ISO_UTC_DateTimeFormat_noMillis))
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())
@@ -131,7 +132,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")))
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(ISO_UTC_DateTimeFormat_noMillis))
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())

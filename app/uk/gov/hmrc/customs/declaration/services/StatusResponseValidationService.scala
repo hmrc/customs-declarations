@@ -17,12 +17,13 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.format.ISODateTimeFormat
+import org.joda.time.format.{DateTimeFormatter, ISODateTimeFormat}
 import org.joda.time.{DateTime, DateTimeZone}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.BadgeIdentifier
 
+import scala.util.Try
 import scala.xml.NodeSeq
 
 @Singleton
@@ -34,8 +35,9 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
 
   val importProcedureCategories: Seq[String] = Seq( "40", "42", "61", "07", "51", "53", "71")
   val exportProcedureCategories: Seq[String] = Seq( "10")
+  protected lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
- // tradeMovementType procedureCategory
+  val ISO_UTC_DateTimeFormat_noMillis: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis.withZoneUTC()
 
   def validate(xml: NodeSeq, badgeIdentifier: BadgeIdentifier): Either[ErrorResponse, Boolean] = {
     val declarationNode = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
@@ -66,7 +68,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
       declarationsLogger.errorWithoutRequestContext("Status response BadgeId field is missing")
       Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
     })({ communicationAddress =>
-      if(badgeIdentifier.value != extractBadgeIdentifier(communicationAddress.head)){
+      if(badgeIdentifier.value != extractBadgeIdentifier(communicationAddress.head).toUpperCase){
         Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
       }else{
         Right(true)
@@ -74,24 +76,32 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
     })
   }
 
-  private def validateAcceptanceDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] = {
-    extractField(declarationNode, "acceptanceDate").fold[Either[ErrorResponse, Boolean]]({
-      declarationsLogger.errorWithoutRequestContext("Status response acceptanceDate field is missing")
+  private def validateAcceptanceDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] = extractField(declarationNode, "acceptanceDate").fold[Either[ErrorResponse, Boolean]]({
+    declarationsLogger.errorWithoutRequestContext("Status response acceptanceDate field is missing")
+    Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
+  })(acceptanceDate => {
+    val parsedDateTime = Try(ISO_UTC_DateTimeFormat_noMillis.parseDateTime(acceptanceDate.head)).toOption
+    val isDateValid = parsedDateTime.fold(false)(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
+    if (!isDateValid) {
+      declarationsLogger.debugWithoutRequestContext(s"Status response acceptanceDate failed validation $acceptanceDate")
       Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
-    })(acceptanceDate => {
-      val parsedDateTime = ISODateTimeFormat.dateTimeNoMillis.withZoneUTC().parseDateTime(acceptanceDate.head)
-      val isDateValid = parsedDateTime.isAfter(getValidDateTimeUsingConfig)
-      if (!isDateValid) {
-        declarationsLogger.debugWithoutRequestContext(s"Status response acceptanceDate failed validation $acceptanceDate")
-        Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
-      } else{
-        Right(true)
-      }
-    })
+    } else{
+      Right(true)
+    }
+  })
+
+  private def safelyExtractValue(extractedValues : Seq[String]): Option[String] = {
+    if(extractedValues.size > 0 && !extractedValues.head.isEmpty && extractedValues.head.length > 1) {
+      Some(extractedValues.head.substring(0,2))
+    } else {
+      None
+    }
   }
 
   def extractTradeMovementType(declarationNode: NodeSeq): Either[ErrorResponse, String]  = {
-    val maybeExtractedTradeMovementType = extractField(declarationNode, "tradeMovementType").fold[Option[String]](None)(tradeMovementType => Some(tradeMovementType.head.substring(0,2)))
+    val maybeExtractedTradeMovementType = extractField(declarationNode, "tradeMovementType").fold[Option[String]](None)(tradeMovementType => {
+      safelyExtractValue(tradeMovementType)
+    })
 
     maybeExtractedTradeMovementType.fold[Either[ErrorResponse, String]]({
       Right(IMPORT_MOVEMENT_TYPE)
@@ -127,7 +137,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
   }
 
   private def extractProcedureCategory(declarationNode: NodeSeq): Option[String]  = {
-    extractField(declarationNode, "procedureCategory").fold[Option[String]](None)(procedureCategory => Some(procedureCategory.head.substring(0,2)))
+    extractField(declarationNode, "procedureCategory").fold[Option[String]](None)(procedureCategory => safelyExtractValue(procedureCategory))
   }
 
   private def extractBadgeIdentifier(communicationAddress: String) = {

@@ -21,15 +21,15 @@ import java.util.UUID
 
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
+import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
 
 import scala.util.Try
 
 object HttpUrlFormat extends Format[URL] {
 
   override def reads(json: JsValue): JsResult[URL] = json match {
-    case JsString(s) => {
+    case JsString(s) =>
       parseUrl(s).map(JsSuccess(_)).getOrElse(JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.url")))))
-    }
     case _ => JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.url"))))
   }
 
@@ -38,13 +38,29 @@ object HttpUrlFormat extends Format[URL] {
   override def writes(o: URL): JsValue = JsString(o.toString)
 }
 
+case class BatchId(value: UUID) extends AnyVal{
+  override def toString: String = value.toString
+}
+object BatchId {
+  implicit val writer = Writes[BatchId] { x => JsString(x.value.toString) }
+  implicit val reader = Reads.of[UUID].map(new BatchId(_))
+}
+
+case class FileReference(value: UUID) extends AnyVal{
+  override def toString: String = value.toString
+}
+object FileReference {
+  implicit val writer = Writes[FileReference] { x => JsString(x.value.toString) }
+  implicit val reader = Reads.of[UUID].map(new FileReference(_))
+}
+
 case class BatchFile(
-  reference: String, // can be used as UNIQUE KEY, upscan-initiate
+  reference: FileReference, // can be used as UNIQUE KEY, upscan-initiate
   name: String, // user request
   mimeType: String, // upscan-notify
   checksum: String, // upscan-notify
   location: URL, // upscan-initiate
-  sequenceNumber: Int, // derived from user request
+  sequenceNumber: SequenceNumber, // derived from user request
   size: Int, // assumption - it appears to be mandatory but is ignored
   documentType: DocumentationType
 )
@@ -53,14 +69,15 @@ object BatchFile {
   implicit val format = Json.format[BatchFile]
 }
 
-case class BatchFileUploadMetaData(
+case class BatchFileUploadMetadata(
   declarationId: DeclarationId,
   eori: Eori,
   csId: SubscriptionFieldsId,
-  batchId: UUID,
+  batchId: BatchId,
   fileCount: Int,
   files: Seq[BatchFile]
 )
-object BatchFileUploadMetaData {
-  implicit val format = Json.format[BatchFileUploadMetaData]
+object BatchFileUploadMetadata {
+  implicit val format = Json.format[BatchFileUploadMetadata]
+  implicit val batchFileUploadMetadataJF = ReactiveMongoFormats.mongoEntity(Json.format[BatchFileUploadMetadata])
 }

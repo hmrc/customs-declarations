@@ -16,30 +16,21 @@
 
 package unit.model
 
-import java.net.URL
-import java.util.UUID
-import java.util.UUID.fromString
-
 import play.api.libs.json.{JsSuccess, Json}
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.play.test.UnitSpec
+import util.TestData.BatchFileMetadataWithFileOne
 
-class BatchFileUploadMetaDataSpec extends UnitSpec {
-  private val batchIdValue = "38400000-8cf0-11bd-b23e-10b96e4ef00d"
-  private val batchIdUuid: UUID = fromString(batchIdValue)
-  private val metadata = BatchFileUploadMetaData(DeclarationId("1"), Eori("123"), csId = SubscriptionFieldsId("123"), batchId = batchIdUuid, fileCount = 1, Seq(
-    BatchFile(reference = "ref1", name = "name1", mimeType = "application/xml", checksum = "checksum1",
-      location = new URL("https://a.b.com"), sequenceNumber = 1, size = 1, documentType = DocumentationType("Document Type 1"))
-  ))
+class BatchFileUploadMetadataSpec extends UnitSpec {
   private val jsonString = """{
                      |  "declarationId": "1",
                      |  "eori": "123",
-                     |  "csId": "123",
-                     |  "batchId": "38400000-8cf0-11bd-b23e-10b96e4ef00d",
+                     |  "csId": "327d9145-4965-4d28-a2c5-39dedee50334",
+                     |  "batchId": "48400000-8cf0-11bd-b23e-10b96e4ef001",
                      |  "fileCount": 1,
                      |  "files": [
                      |    {
-                     |      "reference": "ref1",
+                     |      "reference": "38400000-8ce0-11bd-b23e-10b96e4ef00f",
                      |      "name": "name1",
                      |      "mimeType": "application/xml",
                      |      "checksum": "checksum1",
@@ -56,16 +47,16 @@ class BatchFileUploadMetaDataSpec extends UnitSpec {
   "BatchFileUploadMetaData model" should {
     "serialise to Json" in {
 
-      val actualJson = Json.toJson(metadata)
+      val actualJson = Json.toJson(BatchFileMetadataWithFileOne)
 
       actualJson shouldBe json
     }
 
     "de-serialise from Json" in {
 
-      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[BatchFileUploadMetaData]
+      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[BatchFileUploadMetadata]
 
-      actualMetaData shouldBe metadata
+      actualMetaData shouldBe BatchFileMetadataWithFileOne
     }
   }
 

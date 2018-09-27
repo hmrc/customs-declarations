@@ -72,10 +72,10 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
       result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
     }
 
-    "return Left of Invalid or missing Badge Identifier ErrorResponse  when badgeIdentifier cases do not match" in new SetUp() {
+    "return Right of true or missing Badge Identifier ErrorResponse  when badgeIdentifier cases do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
       val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationManagementInformationResponse(dateWithinPeriod, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier.copy(badgeIdentifier.value.toLowerCase))
-      result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
+      result shouldBe Right(true)
     }
 
     "return Right of true when response is tradeMovementType of EX... date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {

@@ -67,7 +67,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
       declarationsLogger.errorWithoutRequestContext("Status response BadgeId field is missing")
       Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
     })({ communicationAddress =>
-      if(badgeIdentifier.value != extractBadgeIdentifier(communicationAddress.head).toUpperCase){
+      if(badgeIdentifier.value.toUpperCase != extractBadgeIdentifier(communicationAddress.head).toUpperCase){
         Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
       }else{
         Right(true)

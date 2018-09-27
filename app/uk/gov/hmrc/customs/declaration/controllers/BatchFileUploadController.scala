@@ -17,15 +17,15 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import java.util.UUID
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{BatchFileUploadAnalyticsValuesAction, BatchFileUploadAuthAction, BatchFileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.model.ConversationId
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedBatchFileUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services.BatchFileUploadBusinessService
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global

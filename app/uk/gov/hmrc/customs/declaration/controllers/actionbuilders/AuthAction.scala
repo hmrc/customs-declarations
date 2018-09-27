@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import org.joda.time.LocalDate
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED

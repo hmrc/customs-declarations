@@ -604,6 +604,21 @@ object TestXMLData {
     <documentationType>docType123</documentationType>
   </upscanInitiate>
 
+  val ValidBatchFileUploadXml: Elem = <FileUploadRequest xmlns="hmrc:fileupload2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="hmrc:fileupload2 FileUploadRequest.xsd ">
+      <DeclarationID>declarationId</DeclarationID>
+      <FileGroupSize>2</FileGroupSize>
+      <Files>
+        <File>
+          <FileSequenceNo>1</FileSequenceNo>
+          <DocumentType>document type 1</DocumentType>
+        </File>
+        <File>
+          <FileSequenceNo>2</FileSequenceNo>
+          <DocumentType>document type 2</DocumentType>
+        </File>
+      </Files>
+    </FileUploadRequest>
+
   val InvalidFileUploadXml: Elem = <upscanInitiate xmlns="hmrc:fileupload">
     <declarationID foo="bar">dec123</declarationID>
     <documentationType>docType123</documentationType>

@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.controllers
+package unit.services
 
-object CustomHeaderNames {
-  val XConversationIdHeaderName: String = "X-Conversation-ID"
-  val XCorrelationIdHeaderName: String = "X-Correlation-ID"
-  val XClientIdHeaderName = "X-Client-ID"
-  val XBadgeIdentifierHeaderName: String = "X-Badge-Identifier"
-  val NonRepudiationReceiptId: String = "X-Receipt-ID"
-  val Authorization = "Authorization"
-  val XEoriIdentifierHeaderName = "X-EORI-Identifier"
+import org.scalatest.mockito.MockitoSugar
+import uk.gov.hmrc.play.test.UnitSpec
+
+class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
+
 }

@@ -19,7 +19,6 @@ package uk.gov.hmrc.customs.declaration.model
 case class DeclarationsConfig(apiSubscriptionFieldsBaseUrl: String,
                               customsNotificationBaseBaseUrl: String,
                               customsNotificationBearerToken: String,
-                              upscanCallbackUrl: String,
                               declarationStatusRequestDaysLimit: Int)
 
 case class NrsConfig(nrsEnabled: Boolean, nrsApiKey: String, nrsWaitTimeMillis: Int)
@@ -33,3 +32,6 @@ case class GoogleAnalyticsConfig(enabled: Boolean,
                                  trackingId: String,
                                  clientId: String,
                                  eventValue: String)
+
+case class BatchFileUploadConfig(upscanCallbackUrl: String,
+                                 fileGroupSizeMaximum: Int)

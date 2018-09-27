@@ -49,7 +49,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
   private val apiSubscriptionKeyForXClientIdV3 = apiSubscriptionKeyForXClientIdV2.copy(version = VersionThree)
 
-  protected override val BadStatusResponseErrorInvalidDate: String =
+  protected override val BadRequestErrorWith2Errors: String =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>
       |  <code>BAD_REQUEST</code>
@@ -222,7 +222,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is a \"invalid xml\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadStatusResponseErrorInvalidDate)
+      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
       And("GA call was made")
       eventually(verifyGoogleAnalyticsServiceWasCalled())

@@ -21,6 +21,7 @@ import java.util.UUID
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.mockito.MockitoSugar
+import play.api.Configuration
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.mvc._

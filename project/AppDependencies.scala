@@ -2,15 +2,17 @@ import sbt._
 
 object AppDependencies {
 
-  val hmrcTestVersion = "3.0.0"
-  val scalaTestVersion = "3.0.5"
-  val scalatestplusVersion = "2.0.1"
-  val mockitoVersion = "2.10.0"
-  val pegdownVersion = "1.6.0"
-  val wireMockVersion = "2.18.0"
-  val customsApiCommonVersion = "1.28.0"
-  val circuitBreakerVersion = "3.2.0"
-  val testScope = "test,it"
+  private val hmrcTestVersion = "3.0.0"
+  private val scalaTestVersion = "3.0.5"
+  private val scalatestplusVersion = "2.0.1"
+  private val mockitoVersion = "2.22.0"
+  private val pegdownVersion = "1.6.0"
+  private val wireMockVersion = "2.18.0"
+  private val customsApiCommonVersion = "1.28.0"
+  private val circuitBreakerVersion = "3.2.0"
+  private val playReactivemongoVersion = "6.2.0"
+  private val reactivemongoTestVersion = "3.1.0"
+  private val testScope = "test,it"
 
   val hmrcTest = "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % testScope
 
@@ -29,4 +31,9 @@ object AppDependencies {
   val customsApiCommonTests = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion % testScope classifier "tests"
 
   val circuitBreaker = "uk.gov.hmrc" %% "reactive-circuit-breaker" % circuitBreakerVersion
+
+  val playReactiveMongo = "uk.gov.hmrc" %% "play-reactivemongo" % playReactivemongoVersion
+
+  val reactiveMongoTest = "uk.gov.hmrc" %% "reactivemongo-test" % reactivemongoTestVersion % testScope
+
 }

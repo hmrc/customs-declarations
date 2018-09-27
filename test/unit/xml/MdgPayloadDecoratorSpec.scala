@@ -18,9 +18,9 @@ package unit.xml
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
+import util.ApiSubscriptionFieldsTestData
 import util.TestData._
 
 import scala.xml.NodeSeq
@@ -29,7 +29,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
   private val xml: NodeSeq = <node1></node1>
 
-  private val clientId = SubscriptionFieldsId("clientId")
+  private val clientId = ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
   private val year = 2017
   private val monthOfYear = 6
@@ -73,7 +73,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
       val rd = result \\ "clientID"
 
-      rd.head.text shouldBe clientId.value
+      rd.head.text shouldBe clientId.value.toString
     }
 
     "set the badgeIdentifier when present" in {
@@ -118,7 +118,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
       val rd = result \\ "clientID"
 
-      rd.head.text shouldBe clientId.value
+      rd.head.text shouldBe clientId.value.toString
     }
 
     "should not set the badgeIdentifier when absent" in {

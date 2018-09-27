@@ -25,7 +25,7 @@ import util.ExternalServicesConfig.{Host, Port}
 
 trait ApiSubscriptionFieldsTestData {
   val subscriptionFieldsIdString = "327d9145-4965-4d28-a2c5-39dedee50334"
-  val subscriptionFieldsId = SubscriptionFieldsId(subscriptionFieldsIdString)
+  val subscriptionFieldsId = SubscriptionFieldsId(UUID.fromString(subscriptionFieldsIdString))
   val xClientId = "SOME_X_CLIENT_ID"
   val clientId = ClientId(xClientId)
   val apiContext = "some/api/context"

@@ -204,12 +204,12 @@ case class BadgeIdentifier(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
 
-case class SubscriptionFieldsId(value: String) extends AnyVal{
+case class SubscriptionFieldsId(value: UUID) extends AnyVal{
   override def toString: String = value.toString
 }
 object SubscriptionFieldsId {
-  implicit val writer = Writes[SubscriptionFieldsId] { x => JsString(x.value) }
-  implicit val reader = Reads.of[String].map(new SubscriptionFieldsId(_))
+  implicit val writer = Writes[SubscriptionFieldsId] { x => JsString(x.value.toString) }
+  implicit val reader = Reads.of[UUID].map(new SubscriptionFieldsId(_))
 }
 
 case class DeclarationId(value: String) extends AnyVal{
@@ -230,6 +230,13 @@ object DocumentationType {
 
 case class SequenceNumber(value: Int) extends AnyVal{
   override def toString: String = value.toString
+}
+object SequenceNumber {
+  implicit val writer = Writes[SequenceNumber] { x =>
+    val d: BigDecimal = x.value
+    JsNumber(d)
+  }
+  implicit val reader = Reads.of[Int].map(new SequenceNumber(_))
 }
 
 case class FileGroupSize(value: Int) extends AnyVal{

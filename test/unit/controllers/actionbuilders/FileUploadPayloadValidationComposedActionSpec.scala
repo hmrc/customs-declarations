@@ -69,7 +69,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
 
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val expectedVupr: ValidatedUploadPayloadRequest[AnyContentAsXml] = testVpr.toValidatedUploadPayloadRequest(DeclarationId("dec123"), DocumentationType("docType123"))
+      val expectedVupr: ValidatedUploadPayloadRequest[AnyContentAsXml] = testVpr.toValidatedUploadPayloadRequest(DeclarationId("dec123"), DocumentType("docType123"))
       await(fileUploadPayloadValidationComposedAction.refine(testAr)) shouldBe Right(expectedVupr)
     }
   }

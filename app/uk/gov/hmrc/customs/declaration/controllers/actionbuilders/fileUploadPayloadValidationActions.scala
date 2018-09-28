@@ -52,7 +52,7 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
           case Right(validatedPayloadRequest) =>
             Right(validatedPayloadRequest.toValidatedUploadPayloadRequest(
               DeclarationId((validatedPayloadRequest.xmlBody \ declarationIdPropertyName).text),
-              DocumentationType((validatedPayloadRequest.xmlBody \ documentationTypePropertyName).text)))
+              DocumentType((validatedPayloadRequest.xmlBody \ documentationTypePropertyName).text)))
           case Left(b) => Left(b)
         }
       case _ => Future.successful(Left(ErrorResponse(FORBIDDEN, ForbiddenCode, "Not an authorized service").XmlResult.withConversationId))

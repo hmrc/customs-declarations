@@ -62,7 +62,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     DeclarationId("declarationId"),
-    DocumentationType("documentationType")
+    DocumentType("documentationType")
   )
   override protected def beforeEach() {
     reset(mockWsPost, mockLogger, mockServiceConfigProvider)

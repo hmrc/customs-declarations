@@ -18,7 +18,19 @@ package uk.gov.hmrc.customs.declaration.model
 
 import java.net.URL
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsNumber, Json, Reads, Writes}
+
+case class SequenceNumber(value: Int) extends AnyVal{
+  override def toString: String = value.toString
+}
+
+object SequenceNumber {
+  implicit val writer = Writes[SequenceNumber] { x =>
+    val d: BigDecimal = x.value
+    JsNumber(d)
+  }
+  implicit val reader = Reads.of[Int].map(new SequenceNumber(_))
+}
 
 case class FileTransmissionBatch(
   id: BatchId,

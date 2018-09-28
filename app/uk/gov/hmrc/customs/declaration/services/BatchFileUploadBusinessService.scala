@@ -87,7 +87,7 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
                             (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
                              hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
 
-    val upscanInitiateRequests = validatedRequest.uploadProperties.map { uploadProperties =>
+    val upscanInitiateRequests = validatedRequest.batchFileUploadRequest.files.map { uploadProperties =>
       UpscanInitiateRequest(subscriptionFieldsId, uploadProperties.documentType)
     }
     failFastSequence(upscanInitiateRequests)(i => backendCall(i))
@@ -98,11 +98,11 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
     //TODO ensure/check that ordering of uploadProperties matches batchFiles
     val batchFiles = fileDetails.zipWithIndex.map { case (fileDetail, index) =>
       BatchFile(FileReference(UUID.fromString(fileDetail.reference)), None, new URL(fileDetail.uploadRequest.href),
-        request.uploadProperties(index).sequenceNumber, 1, request.uploadProperties(index).documentType)
+        SequenceNumber(request.batchFileUploadRequest.files(index).fileSequenceNo.value), 1, request.batchFileUploadRequest.files(index).documentType)
     }
 
-    val metadata = BatchFileUploadMetadata(request.declarationId, extractEori(request.authorisedAs), sfId,
-      BatchId(uuidService.uuid()), request.fileGroupSize.value, batchFiles)
+    val metadata = BatchFileUploadMetadata(request.batchFileUploadRequest.declarationId, extractEori(request.authorisedAs), sfId,
+      BatchId(uuidService.uuid()), request.batchFileUploadRequest.fileGroupSize.value, batchFiles)
 
     batchFileUploadMetadataRepo.create(metadata)
   }
@@ -154,7 +154,7 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId,
                                 documentType: DocumentType)
                                (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
-    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${validatedRequest.declarationId.value}/eori/${validatedRequest.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${documentType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
+    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${validatedRequest.batchFileUploadRequest.declarationId.value}/eori/${validatedRequest.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${documentType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
     logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
     upscanInitiatePayload
   }

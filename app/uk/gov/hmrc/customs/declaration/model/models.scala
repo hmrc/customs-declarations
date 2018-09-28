@@ -220,23 +220,24 @@ object DeclarationId {
   implicit val reader = Reads.of[String].map(new DeclarationId(_))
 }
 
-case class DocumentationType(value: String) extends AnyVal{
+case class BatchFileUploadDocumentType(value: String) extends AnyVal{
   override def toString: String = value.toString
-}
-object DocumentationType {
-  implicit val writer = Writes[DocumentationType] { x => JsString(x.value) }
-  implicit val reader = Reads.of[String].map(new DocumentationType(_))
 }
 
-case class SequenceNumber(value: Int) extends AnyVal{
+object BatchFileUploadDocumentType {
+  implicit val writer = Writes[BatchFileUploadDocumentType] { x => JsString(x.value) }
+  implicit val reader = Reads.of[String].map(new BatchFileUploadDocumentType(_))
+}
+
+case class FileSequenceNo(value: Int) extends AnyVal{
   override def toString: String = value.toString
 }
-object SequenceNumber {
-  implicit val writer = Writes[SequenceNumber] { x =>
+object FileSequenceNo {
+  implicit val writer = Writes[FileSequenceNo] { x =>
     val d: BigDecimal = x.value
     JsNumber(d)
   }
-  implicit val reader = Reads.of[Int].map(new SequenceNumber(_))
+  implicit val reader = Reads.of[Int].map(new FileSequenceNo(_))
 }
 
 case class FileGroupSize(value: Int) extends AnyVal{

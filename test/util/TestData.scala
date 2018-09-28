@@ -93,9 +93,8 @@ object TestData {
     NonCsp(Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    DeclarationId("decId123"),
-    FileGroupSize(2),
-    List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("docType1")), BatchFileUploadProperties(SequenceNumber(2), DocumentType("docType2")))
+    BatchFileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
+    Seq(BatchFileUploadFile(FileSequenceNo(1), DocumentType("docType1")), BatchFileUploadFile(FileSequenceNo(2), DocumentType("docType2"))))
   )
 
   val ValidatedBatchFileUploadPayloadRequestWithFourFiles = ValidatedBatchFileUploadPayloadRequest(
@@ -106,12 +105,13 @@ object TestData {
     NonCsp(Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    DeclarationId("decId123"),
-    FileGroupSize(4),
-    List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("docType1")),
-      BatchFileUploadProperties(SequenceNumber(2), DocumentType("docType2")),
-      BatchFileUploadProperties(SequenceNumber(3), DocumentType("docType3")),
-      BatchFileUploadProperties(SequenceNumber(4), DocumentType("docType4")))
+    BatchFileUploadRequest(
+      DeclarationId("decId123"),
+      FileGroupSize(4),
+      Seq(BatchFileUploadFile(FileSequenceNo(1), DocumentType("docType1")),
+        BatchFileUploadFile(FileSequenceNo(2), DocumentType("docType2")),
+        BatchFileUploadFile(FileSequenceNo(3), DocumentType("docType3")),
+        BatchFileUploadFile(FileSequenceNo(4), DocumentType("docType4"))))
   )
 
   val nrsInternalIdValue = "internalId"

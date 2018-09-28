@@ -56,13 +56,13 @@ object FileReference {
 
 case class BatchFile(
   reference: FileReference, // can be used as UNIQUE KEY, upscan-initiate
-  name: String, // user request
-  mimeType: String, // upscan-notify
-  checksum: String, // upscan-notify
+  name: Option[String], // upscan-notify
+  mimeType: Option[String], // upscan-notify
+  checksum: Option[String], // upscan-notify
   location: URL, // upscan-initiate
   sequenceNumber: SequenceNumber, // derived from user request
   size: Int, // assumption - it appears to be mandatory but is ignored
-  documentType: DocumentationType
+  documentType: DocumentationType // user request
 )
 object BatchFile {
   implicit val urlFormat = HttpUrlFormat

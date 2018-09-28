@@ -88,7 +88,7 @@ class BatchFileUploadMetadataRepoSpec extends UnitSpec
       val findResult = await(repository.collection.find(selector(BatchFileOne.reference.toString)).one[BatchFileUploadMetadata]).get
 
       findResult shouldBe BatchFileMetadataWithFileOne
-      logVerifier("debug", "saving batchFileUploadMetadata: BatchFileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,List(BatchFile(38400000-8ce0-11bd-b23e-10b96e4ef00f,name1,application/xml,checksum1,https://a.b.com,1,1,Document Type 1)))")
+      logVerifier("debug", "saving batchFileUploadMetadata: BatchFileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,name1,application/xml,checksum1,https://a.b.com,1,1,Document Type 1)))")
     }
 
     "successfully save when create is called multiple times" in {
@@ -105,6 +105,30 @@ class BatchFileUploadMetadataRepoSpec extends UnitSpec
       findResult2 shouldBe BatchFileMetadataWithFileTwo
     }
 
+    "successfully update checksum, searching by reference" in {
+      await(repository.create(BatchFileMetadataWithFilesOneAndThree))
+      await(repository.create(BatchFileMetadataWithFileTwo))
+      val updatedFileOne = BatchFileOne.copy(checksum = "UPDATED")
+      val expectedRecord = BatchFileMetadataWithFilesOneAndThree.copy(files = Seq(updatedFileOne, BatchFileThree))
+
+      val maybeActual = await(repository.updateChecksum(FileReferenceOne, "UPDATED"))
+
+      maybeActual shouldBe Some(expectedRecord)
+      await(repository.fetch(BatchFileOne.reference)) shouldBe Some(expectedRecord)
+      await(repository.fetch(BatchFileTwo.reference)) shouldBe Some(BatchFileMetadataWithFileTwo)
+      logVerifier("debug", "updating batch file upload metatdata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f with checksum UPDATED")
+    }
+
+    "not update checksum, when searching by reference fails" in {
+      await(repository.create(BatchFileMetadataWithFileTwo))
+      val updatedFileOne = BatchFileOne.copy(checksum = "UPDATED")
+      val expected = BatchFileMetadataWithFileOne.copy(files = Seq(updatedFileOne))
+
+      val maybeActual = await(repository.updateChecksum(FileReferenceOne, "UPDATED"))
+
+      maybeActual shouldBe None
+    }
+
     "return Some when fetch by file reference is successful" in {
       await(repository.create(BatchFileMetadataWithFileOne))
       await(repository.create(BatchFileMetadataWithFileTwo))
@@ -116,8 +140,8 @@ class BatchFileUploadMetadataRepoSpec extends UnitSpec
       val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
 
       maybeFoundRecordTwo shouldBe Some(BatchFileMetadataWithFileTwo)
-      logVerifier("debug", "fetching batch file upload metatdata with file reference: 38400000-8ce0-11bd-b23e-10b96e4ef00f")
-      logVerifier("debug", "fetching batch file upload metatdata with file reference: 38400000-8cf0-11bd-b23e-10b96e4ef00f")
+      logVerifier("debug", "fetching batch file upload metatdata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f")
+      logVerifier("debug", "fetching batch file upload metatdata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f")
     }
 
     "return None when fetch by file reference is un-successful" in {
@@ -143,7 +167,7 @@ class BatchFileUploadMetadataRepoSpec extends UnitSpec
       val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
 
       maybeFoundRecordTwo shouldBe Some(BatchFileMetadataWithFileTwo)
-      logVerifier("debug", "deleting batchFileUploadMetadata: BatchFileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,List(BatchFile(38400000-8ce0-11bd-b23e-10b96e4ef00f,name1,application/xml,checksum1,https://a.b.com,1,1,Document Type 1)))")
+      logVerifier("debug", "deleting batchFileUploadMetadata: BatchFileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,name1,application/xml,checksum1,https://a.b.com,1,1,Document Type 1)))")
     }
 
     "collection should be same size when deleting non-existent record" in {

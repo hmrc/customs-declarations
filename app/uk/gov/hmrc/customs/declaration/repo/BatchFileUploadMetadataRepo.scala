@@ -39,6 +39,8 @@ trait BatchFileUploadMetadataRepo {
   def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]]
 
   def delete(clientNotification: BatchFileUploadMetadata)(implicit r: HasConversationId): Future[Unit]
+
+  def updateChecksum(reference: FileReference, checksum: String)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]]
 }
 
 @Singleton
@@ -46,7 +48,7 @@ class BatchFileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvide
                                                  errorHandler: BatchFileUploadMetadataRepoErrorHandler,
                                                  logger: DeclarationsLogger)
   extends ReactiveRepository[BatchFileUploadMetadata, BSONObjectID](
-    collectionName = "fileUploadMetadata",
+    collectionName = "batchFileUploads",
     mongo = mongoDbProvider.mongo,
     domainFormat = BatchFileUploadMetadata.batchFileUploadMetadataJF
   ) with BatchFileUploadMetadataRepo {
@@ -90,4 +92,26 @@ class BatchFileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvide
     lazy val errorMsg = s"Could not delete entity for selector: $selector"
     collection.remove(selector).map(errorHandler.handleDeleteError(_, errorMsg))
   }
+
+  def updateChecksum(reference: FileReference, checksum: String)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]] = {
+    logger.debug(s"updating batch file upload metatdata with file reference: $reference with checksum $checksum")
+
+    val selector = Json.obj("files.reference" -> reference.toString)
+    val update = Json.obj("$set" -> Json.obj("files.$.checksum" -> checksum))
+
+    val updateOp = collection.updateModifier(
+      update = update,
+      fetchNewObject = true,
+      upsert = false
+    )
+
+    collection.findAndModify(selector, updateOp).map(findAndModifyResult =>
+      findAndModifyResult.value match {
+        case None => None
+        case Some(jsonDoc) =>
+          val record = jsonDoc.as[BatchFileUploadMetadata]
+          Some(record)
+      })
+  }
+
 }

@@ -298,20 +298,23 @@ object TestData {
   val BatchIdOne = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef001"))
   val BatchIdTwo = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef002"))
   val BatchIdThree = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef003"))
-  val FileReferenceOne = FileReference(fromString("38400000-8ce0-11bd-b23e-10b96e4ef00f"))
-  val FileReferenceTwo = FileReference(fromString("38400000-8cf0-11bd-b23e-10b96e4ef00f"))
+  val FileReferenceOne = FileReference(fromString("31400000-8ce0-11bd-b23e-10b96e4ef00f"))
+  val FileReferenceTwo = FileReference(fromString("32400000-8cf0-11bd-b23e-10b96e4ef00f"))
+  val FileReferenceThree = FileReference(fromString("33400000-8cd0-11bd-b23e-10b96e4ef00f"))
   val BatchFileOne = BatchFile(reference = FileReferenceOne, name = "name1", mimeType = "application/xml", checksum = "checksum1",
     location = new URL("https://a.b.com"), sequenceNumber = SequenceNumber(1), size = 1, documentType = DocumentationType("Document Type 1"))
   val BatchFileTwo = BatchFile(reference = FileReferenceTwo, name = "name2", mimeType = "application/xml", checksum = "checksum2",
     location = new URL("https://a.b.com"), sequenceNumber = SequenceNumber(2), size = 1, documentType = DocumentationType("Document Type 2"))
+  val BatchFileThree = BatchFile(reference = FileReferenceThree, name = "name3", mimeType = "application/xml", checksum = "checksum3",
+    location = new URL("https://a.b.com"), sequenceNumber = SequenceNumber(3), size = 1, documentType = DocumentationType("Document Type 3"))
   val BatchFileMetadataWithFileOne = BatchFileUploadMetadata(DeclarationId("1"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdOne, fileCount = 1, Seq(
     BatchFileOne
   ))
   val BatchFileMetadataWithFileTwo = BatchFileUploadMetadata(DeclarationId("2"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdTwo, fileCount = 1, Seq(
     BatchFileTwo
   ))
-  val BatchFileMetadataWithFilesOneAndTwo = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdThree, fileCount = 1, Seq(
-    BatchFileOne, BatchFileTwo
+  val BatchFileMetadataWithFilesOneAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdThree, fileCount = 1, Seq(
+    BatchFileOne, BatchFileThree
   ))
 
 }

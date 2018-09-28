@@ -30,7 +30,7 @@ class BatchFileUploadMetadataSpec extends UnitSpec {
                      |  "fileCount": 1,
                      |  "files": [
                      |    {
-                     |      "reference": "38400000-8ce0-11bd-b23e-10b96e4ef00f",
+                     |      "reference": "31400000-8ce0-11bd-b23e-10b96e4ef00f",
                      |      "name": "name1",
                      |      "mimeType": "application/xml",
                      |      "checksum": "checksum1",

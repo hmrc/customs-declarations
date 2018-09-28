@@ -38,12 +38,12 @@ import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedBatchFileUploadPayloadRequest, _}
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 import unit.logging.StubDeclarationsLogger
 import util.TestData.declarantEori
 
-import scala.xml.Elem
+import scala.xml.{Elem, NodeSeq}
 
 object TestData {
   val conversationIdValue = "38400000-8cf0-11bd-b23e-10b96e4ef00d"
@@ -84,6 +84,19 @@ object TestData {
   val declarantEoriValue = "ZZ123456789000"
   val declarantEori = Eori(declarantEoriValue)
   val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
+
+  val validatedBatchFileUploadPayloadRequest = ValidatedBatchFileUploadPayloadRequest(
+    ConversationId(UUID.randomUUID()),
+    GoogleAnalyticsValues.Fileupload,
+    VersionTwo,
+    ClientId("ABC"),
+    NonCsp(Eori("123"), None),
+    NodeSeq.Empty,
+    FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
+    DeclarationId("decId123"),
+    FileGroupSize(2),
+    List(BatchFileUploadProperties(SequenceNumber(1), DocumentationType("doctype1")), BatchFileUploadProperties(SequenceNumber(2), DocumentationType("doctype2")))
+  )
 
   val nrsInternalIdValue = "internalId"
   val nrsExternalIdValue = "externalId"

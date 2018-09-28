@@ -16,21 +16,119 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
+import java.net.URLEncoder
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
-import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, BatchUpscanInitiateConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.UpscanInitiateResponsePayload
+import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedBatchFileUploadPayloadRequest
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.Left
+import scala.util.control.NonFatal
+import scala.xml.{NodeSeq, Text}
 
 @Singleton
-class BatchFileUploadBusinessService @Inject()(logger: DeclarationsLogger,
+class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: BatchUpscanInitiateConnector,
+                                               logger: DeclarationsLogger,
                                                apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                                config: DeclarationsConfigService) {
 
-  def send[A](implicit vupr: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, UpscanInitiateResponsePayload]] = ???
+  private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
+
+  def callInitiate[A](implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A],
+                      hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
+
+    send flatMap {
+      case Right(payloads) =>
+        Future.successful(Right(serialize(payloads)))
+      case Left(errorResult) => Future.successful(Left(errorResult))
+    }
+  }
+
+  private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {
+
+    <FileUploadResponse>
+      <Files>
+        {payloads.map(payload =>
+        <File>
+          <reference>{payload.reference}</reference>
+          <uploadRequest>
+            <href>{payload.uploadRequest.href}</href>
+            <fields>
+              {payload.uploadRequest.fields.map(field =>
+              {<a/>.copy(label = field._1, child = Text(field._2))}
+              )}
+            </fields>
+          </uploadRequest>
+        </File>)}
+      </Files>
+    </FileUploadResponse>
+  }
+
+  private def send[A](implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A],
+                      hc: HeaderCarrier): Future[Either[Result, Seq[UpscanInitiateResponsePayload]]] = {
+
+    futureApiSubFieldsId(vbfupr.clientId) flatMap {
+      case Right(sfId) =>
+        callBackend(sfId).map { payloads =>
+          Right(payloads)
+        }.recover {
+          case NonFatal(e) =>
+            logger.error(s"Upscan initiate call failed: ${e.getMessage}", e)
+            Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+        }
+      case Left(result) =>
+        Future.successful(Left(result))
+    }
+  }
+
+  private def callBackend[A](subscriptionFieldsId: SubscriptionFieldsId)
+                            (implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A],
+                             hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
+
+//    failFastSequence(vbfupr.uploadProperties.map { uploadProperties =>
+//      batchUpscanInitiateConnector.send(preparePayload(subscriptionFieldsId, uploadProperties.documentationType), vbfupr.requestedApiVersion)
+//    })
+    Future.sequence(vbfupr.uploadProperties.map { uploadProperties =>
+      batchUpscanInitiateConnector.send(preparePayload(subscriptionFieldsId, uploadProperties.documentationType), vbfupr.requestedApiVersion)
+    })
+  }
+
+  private def futureApiSubFieldsId[A](c: ClientId)
+                                     (implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A],
+                                      hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
+    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vbfupr.requestedApiVersion)) map {
+      response: ApiSubscriptionFieldsResponse =>
+        Right(SubscriptionFieldsId(response.fieldsId))
+    }).recover {
+      case NonFatal(e) =>
+        logger.error(s"Subscriptions fields lookup call failed: ${e.getMessage}", e)
+        Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+    }
+  }
+
+  private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId,
+                                documentationType: DocumentationType)
+                               (implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
+    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${vbfupr.declarationId.value}/eori/${vbfupr.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${documentationType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
+    logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
+    upscanInitiatePayload
+  }
+
+  private def failFastSequence[A,B](iter: Iterable[A])(fn: A => Future[B]): Future[Seq[B]] =
+    iter.foldLeft(Future(Seq.empty[B])) {
+      (previousFuture, next) =>
+        for {
+          previousResults <- previousFuture
+          next <- fn(next)
+        } yield previousResults :+ next
+    }
+
 
 }

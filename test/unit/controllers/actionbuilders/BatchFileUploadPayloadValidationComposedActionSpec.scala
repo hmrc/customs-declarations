@@ -50,7 +50,7 @@ class BatchFileUploadPayloadValidationComposedActionSpec extends UnitSpec with M
 
       when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val uploadProperties = List(BatchFileUploadProperties(SequenceNumber(1), DocumentationType("docType1")), BatchFileUploadProperties(SequenceNumber(2), DocumentationType("docType2")))
+      val uploadProperties = List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("docType1")), BatchFileUploadProperties(SequenceNumber(2), DocumentType("docType2")))
       val expectedVbfupr: ValidatedBatchFileUploadPayloadRequest[AnyContentAsXml] = testVpr.toValidatedBatchFileUploadPayloadRequest(DeclarationId("decId"), FileGroupSize(2), uploadProperties)
       val result = await(action.refine(testAr))
       result shouldBe Right(expectedVbfupr)

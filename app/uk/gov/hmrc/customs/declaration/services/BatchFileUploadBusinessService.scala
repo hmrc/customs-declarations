@@ -52,14 +52,11 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
 
     futureApiSubFieldsId(vbfupr.clientId).flatMap {
       case Right(sfId) =>
-        callBackend(sfId).map { fileDetails =>
-          val xml = serialize(fileDetails)
-          //TODO fix false case
-          persist(fileDetails, sfId).map[Either[Result, NodeSeq]] {
-            case true => Right(xml)
+        callBackend(sfId).flatMap { fileDetails =>
+          persist(fileDetails, sfId).map {
+            case true => Right(serialize(fileDetails))
             case false => Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
           }
-          Right(xml)
         }.recover {
           case NonFatal(e) =>
             logger.error(s"Upscan initiate call failed: ${e.getMessage}", e)
@@ -74,11 +71,11 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
                             (implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A],
                              hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
 
-    //    failFastSequence(vbfupr.uploadProperties.map { uploadProperties =>
-    //      batchUpscanInitiateConnector.send(preparePayload(subscriptionFieldsId, uploadProperties.documentationType), vbfupr.requestedApiVersion)
-    //    })
+//      failFastSequence(vbfupr.uploadProperties.map { uploadProperties =>
+//        batchUpscanInitiateConnector.send(preparePayload(subscriptionFieldsId, uploadProperties.documentType), vbfupr.requestedApiVersion)
+//      })
     Future.sequence(vbfupr.uploadProperties.map { uploadProperties =>
-      batchUpscanInitiateConnector.send(preparePayload(subscriptionFieldsId, uploadProperties.documentationType), vbfupr.requestedApiVersion)
+      batchUpscanInitiateConnector.send(preparePayload(subscriptionFieldsId, uploadProperties.documentType), vbfupr.requestedApiVersion)
     })
   }
 
@@ -87,8 +84,8 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
 
     //TODO ensure/check that ordering of uploadProperties matches batchFiles
     val batchFiles = fileDetails.zipWithIndex.map { case (fileDetail, index) =>
-      BatchFile(FileReference(UUID.fromString(fileDetail.reference)), "", "", "",new URL(fileDetail.uploadRequest.href),
-        request.uploadProperties(index).sequenceNumber, 1, request.uploadProperties(index).documentationType)
+      BatchFile(FileReference(UUID.fromString(fileDetail.reference)), None, new URL(fileDetail.uploadRequest.href),
+        request.uploadProperties(index).sequenceNumber, 1, request.uploadProperties(index).documentType)
     }
 
     val metadata = BatchFileUploadMetadata(request.declarationId, extractEori(request.authorisedAs), sfId,
@@ -140,9 +137,9 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
   }
 
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId,
-                                documentationType: DocumentationType)
+                                documentType: DocumentType)
                                (implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
-    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${vbfupr.declarationId.value}/eori/${vbfupr.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${documentationType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
+    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${vbfupr.declarationId.value}/eori/${vbfupr.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${documentType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
     logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
     upscanInitiatePayload
   }

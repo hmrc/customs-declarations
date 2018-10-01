@@ -56,7 +56,7 @@ class BatchFileUploadPayloadValidationComposedAction @Inject()(val batchFileUplo
             Right(validatedBatchFilePayloadRequest.toValidatedBatchFileUploadPayloadRequest(
               DeclarationId((validatedBatchFilePayloadRequest.xmlBody \ declarationIdLabel).text),
               FileGroupSize((validatedBatchFilePayloadRequest.xmlBody \ groupSizeLabel).text.toInt),
-              List(BatchFileUploadProperties(SequenceNumber(1), DocumentationType("doctype1")), BatchFileUploadProperties(SequenceNumber(2), DocumentationType("doctype2")))
+              List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("doctype1")), BatchFileUploadProperties(SequenceNumber(2), DocumentType("doctype2")))
             ))
           case Left(b) => Left(b)
         }

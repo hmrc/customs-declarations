@@ -157,7 +157,7 @@ trait HasFileUploadProperties {
   val documentationType: DocumentationType
 }
 
-case class BatchFileUploadProperties(sequenceNumber: SequenceNumber, documentationType: DocumentationType)
+case class BatchFileUploadProperties(sequenceNumber: SequenceNumber, documentType: DocumentType)
 
 trait HasBatchFileUploadProperties {
   val declarationId: DeclarationId

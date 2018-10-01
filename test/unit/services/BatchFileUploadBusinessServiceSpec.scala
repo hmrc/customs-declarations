@@ -22,7 +22,7 @@ import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{verify, when, _}
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsJson, AnyContentAsXml, Result}
+import play.api.mvc.{AnyContentAsJson, Result}
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, BatchUpscanInitiateConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedBatchFileUploadPayloadRequest, ValidatedPayloadRequest}
@@ -33,7 +33,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData
-import util.TestData.{TestCspValidatedPayloadRequest, emulatedServiceFailure}
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq
@@ -41,7 +40,6 @@ import scala.xml.NodeSeq
 class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
-  private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
 
   trait SetUp {
     protected val mockBatchFileUploadMetadataRepo: BatchFileUploadMetadataRepo = mock[BatchFileUploadMetadataRepo]
@@ -59,19 +57,19 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     val xmlResponse = <FileUploadResponse>
       <Files>
         <File>
-          <reference>ref1</reference>
+          <reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</reference>
           <uploadRequest>
-            <href>some-url</href>
+            <href>https://a.b.com</href>
             <fields>
               <label1>value1</label1><label2>value2</label2>
             </fields>
           </uploadRequest>
         </File><File>
-          <reference>ref1</reference>
+          <reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</reference>
           <uploadRequest>
-            <href>some-url</href>
+            <href>https://x.y.com</href>
             <fields>
-              <label1>value1</label1><label2>value2</label2>
+              <labelx>valuey</labelx>
             </fields>
           </uploadRequest>
         </File>
@@ -80,21 +78,24 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
     implicit val jsonRequest = TestData.validatedBatchFileUploadPayloadRequest
 
-    val upscanInitiatePayload = UpscanInitiatePayload("http://upscan-callback.url/uploaded-file-upscan-notifications/decId/decId123/eori/123/documentationType/doctype1/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
-    val upscanInitiateResponsePayload = UpscanInitiateResponsePayload("ref1", UpscanInitiateUploadRequest("some-url", Map(("label1","value1"), ("label2","value2"))))
+    val upscanInitiatePayload = UpscanInitiatePayload("http://upscan-callback.url/uploaded-file-upscan-notifications/decId/decId123/eori/123/documentationType/docType1/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
+    val upscanInitiateResponsePayload1 = UpscanInitiateResponsePayload(TestData.FileReferenceOne.value.toString, UpscanInitiateUploadRequest("https://a.b.com", Map(("label1","value1"), ("label2","value2"))))
+    val upscanInitiateResponsePayload2 = UpscanInitiateResponsePayload(TestData.FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", Map(("labelx","valuey"))))
 
     protected def send(vupr: ValidatedBatchFileUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, NodeSeq] = {
       await(service.send(vupr, hc))
     }
+
     when(mockBatchFileUploadConfig.upscanCallbackUrl).thenReturn("http://upscan-callback.url")
     when(mockConfiguration.batchFileUploadConfig).thenReturn(mockBatchFileUploadConfig)
-    when(mockUuidService.uuid()).thenReturn(UUID.randomUUID())
+    when(mockUuidService.uuid()).thenReturn(any[UUID])
+    when(mockBatchFileUploadMetadataRepo.create(any[BatchFileUploadMetadata])).thenReturn(Future.successful(true))
   }
 
   "BatchFileUploadBusinessService" should {
     "send payload to connector" in new SetUp() {
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])).thenReturn(upscanInitiateResponsePayload)
+      when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])).thenReturn(upscanInitiateResponsePayload1, upscanInitiateResponsePayload2)
 
       val result = send()
 
@@ -103,7 +104,7 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     "return 500 error response when subscription field lookup fails" in new SetUp() {
-      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(TestData.emulatedServiceFailure))
       when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])).thenReturn(mockUpscanInitiateResponsePayload)
 
       val result = send().left.get
@@ -113,7 +114,7 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
     "return 500 error response when upscan initiate call fails" in new SetUp() {
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])).thenReturn(Future.failed(TestData.emulatedServiceFailure))
 
       val result = send().left.get
 

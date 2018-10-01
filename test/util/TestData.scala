@@ -95,7 +95,7 @@ object TestData {
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     DeclarationId("decId123"),
     FileGroupSize(2),
-    List(BatchFileUploadProperties(SequenceNumber(1), DocumentationType("doctype1")), BatchFileUploadProperties(SequenceNumber(2), DocumentationType("doctype2")))
+    List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("docType1")), BatchFileUploadProperties(SequenceNumber(2), DocumentType("docType2")))
   )
 
   val nrsInternalIdValue = "internalId"

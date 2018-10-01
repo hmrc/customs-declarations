@@ -23,24 +23,27 @@ import util.TestData.BatchFileMetadataWithFileOne
 
 class BatchFileUploadMetadataSpec extends UnitSpec {
   private val jsonString = """{
-                     |  "declarationId": "1",
-                     |  "eori": "123",
-                     |  "csId": "327d9145-4965-4d28-a2c5-39dedee50334",
-                     |  "batchId": "48400000-8cf0-11bd-b23e-10b96e4ef001",
-                     |  "fileCount": 1,
-                     |  "files": [
-                     |    {
-                     |      "reference": "31400000-8ce0-11bd-b23e-10b96e4ef00f",
-                     |      "name": "name1",
-                     |      "mimeType": "application/xml",
-                     |      "checksum": "checksum1",
-                     |      "location": "https://a.b.com",
-                     |      "sequenceNumber": 1,
-                     |      "size": 1,
-                     |      "documentType": "Document Type 1"
-                     |    }
-                     |  ]
-                     |}""".stripMargin
+                             |  "declarationId": "1",
+                             |  "eori": "123",
+                             |  "csId": "327d9145-4965-4d28-a2c5-39dedee50334",
+                             |  "batchId": "48400000-8cf0-11bd-b23e-10b96e4ef001",
+                             |  "fileCount": 1,
+                             |  "files": [
+                             |    {
+                             |      "reference": "31400000-8ce0-11bd-b23e-10b96e4ef00f",
+                             |      "maybeCallbackFields": {
+                             |        "name": "name1",
+                             |        "mimeType": "application/xml",
+                             |        "checksum": "checksum1"
+                             |      },
+                             |      "location": "https://a.b.com",
+                             |      "sequenceNumber": 1,
+                             |      "size": 1,
+                             |      "documentType": "Document Type 1"
+                             |    }
+                             |  ]
+                             |}
+                             |""".stripMargin
 
   private val json = Json.parse(jsonString)
 

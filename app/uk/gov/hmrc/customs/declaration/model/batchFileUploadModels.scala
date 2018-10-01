@@ -46,6 +46,14 @@ object BatchId {
   implicit val reader = Reads.of[UUID].map(new BatchId(_))
 }
 
+case class DocumentType(value: String) extends AnyVal{
+  override def toString: String = value.toString
+}
+object DocumentType {
+  implicit val writer = Writes[DocumentType] { x => JsString(x.value) }
+  implicit val reader = Reads.of[String].map(new DocumentType(_))
+}
+
 case class FileReference(value: UUID) extends AnyVal{
   override def toString: String = value.toString
 }
@@ -54,15 +62,18 @@ object FileReference {
   implicit val reader = Reads.of[UUID].map(new FileReference(_))
 }
 
+case class CallbackFields(name: String, mimeType: String, checksum: String)
+object CallbackFields {
+  implicit val format = Json.format[CallbackFields]
+}
+
 case class BatchFile(
   reference: FileReference, // can be used as UNIQUE KEY, upscan-initiate
-  name: String, // user request
-  mimeType: String, // upscan-notify
-  checksum: String, // upscan-notify
+  maybeCallbackFields: Option[CallbackFields], // upscan-notify
   location: URL, // upscan-initiate
   sequenceNumber: SequenceNumber, // derived from user request
   size: Int, // assumption - it appears to be mandatory but is ignored
-  documentType: DocumentationType
+  documentType: DocumentType // user request
 )
 object BatchFile {
   implicit val urlFormat = HttpUrlFormat

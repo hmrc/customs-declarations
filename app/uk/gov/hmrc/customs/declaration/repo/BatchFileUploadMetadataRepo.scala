@@ -25,7 +25,7 @@ import reactivemongo.bson.BSONObjectID
 import reactivemongo.play.json.JsObjectDocumentWriter
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.model.{BatchFileUploadMetadata, FileReference}
+import uk.gov.hmrc.customs.declaration.model.{BatchFileUploadMetadata, CallbackFields, FileReference}
 import uk.gov.hmrc.mongo.ReactiveRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +40,7 @@ trait BatchFileUploadMetadataRepo {
 
   def delete(clientNotification: BatchFileUploadMetadata)(implicit r: HasConversationId): Future[Unit]
 
-  def updateChecksum(reference: FileReference, checksum: String)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]]
+  def update(reference: FileReference, callbackFields: CallbackFields)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]]
 }
 
 @Singleton
@@ -70,7 +70,6 @@ class BatchFileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvide
 
   override def create(batchFileUploadMetadata: BatchFileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
     logger.debug(s"saving batchFileUploadMetadata: $batchFileUploadMetadata")
-
     lazy val errorMsg = s"Batch file meta data not inserted for $batchFileUploadMetadata"
 
     collection.insert(batchFileUploadMetadata).map {
@@ -93,11 +92,11 @@ class BatchFileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvide
     collection.remove(selector).map(errorHandler.handleDeleteError(_, errorMsg))
   }
 
-  def updateChecksum(reference: FileReference, checksum: String)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]] = {
-    logger.debug(s"updating batch file upload metatdata with file reference: $reference with checksum $checksum")
+  def update(reference: FileReference, cf: CallbackFields)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]] = {
+    logger.debug(s"updating batch file upload metatdata with file reference: $reference with callbackField=$cf")
 
     val selector = Json.obj("files.reference" -> reference.toString)
-    val update = Json.obj("$set" -> Json.obj("files.$.checksum" -> checksum))
+    val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum)))
 
     val updateOp = collection.updateModifier(
       update = update,

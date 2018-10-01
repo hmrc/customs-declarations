@@ -46,6 +46,14 @@ object BatchId {
   implicit val reader = Reads.of[UUID].map(new BatchId(_))
 }
 
+case class DocumentType(value: String) extends AnyVal{
+  override def toString: String = value.toString
+}
+object DocumentType {
+  implicit val writer = Writes[DocumentType] { x => JsString(x.value) }
+  implicit val reader = Reads.of[String].map(new DocumentType(_))
+}
+
 case class FileReference(value: UUID) extends AnyVal{
   override def toString: String = value.toString
 }
@@ -65,7 +73,7 @@ case class BatchFile(
   location: URL, // upscan-initiate
   sequenceNumber: SequenceNumber, // derived from user request
   size: Int, // assumption - it appears to be mandatory but is ignored
-  documentType: DocumentationType // user request
+  documentType: DocumentType // user request
 )
 object BatchFile {
   implicit val urlFormat = HttpUrlFormat

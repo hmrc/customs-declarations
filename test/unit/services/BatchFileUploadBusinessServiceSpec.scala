@@ -16,6 +16,8 @@
 
 package unit.services
 
+import java.util.UUID
+
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{verify, when, _}
 import org.scalatest.mockito.MockitoSugar
@@ -25,7 +27,8 @@ import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnecto
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedBatchFileUploadPayloadRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.{UpscanInitiateResponsePayload, _}
-import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadBusinessService, DeclarationsConfigService}
+import uk.gov.hmrc.customs.declaration.repo.BatchFileUploadMetadataRepo
+import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadBusinessService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
@@ -41,14 +44,17 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
 
   trait SetUp {
+    protected val mockBatchFileUploadMetadataRepo: BatchFileUploadMetadataRepo = mock[BatchFileUploadMetadataRepo]
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockBatchUpscanInitiateConnector: BatchUpscanInitiateConnector = mock[BatchUpscanInitiateConnector]
     protected val mockUpscanInitiateResponsePayload: UpscanInitiateResponsePayload = mock[UpscanInitiateResponsePayload]
     protected val mockBatchFileUploadConfig = mock[BatchFileUploadConfig]
     protected val mockConfiguration = mock[DeclarationsConfigService]
+    protected val mockUuidService = mock[UuidService]
 
-    protected lazy val service = new BatchFileUploadBusinessService(mockBatchUpscanInitiateConnector, mockLogger, mockApiSubscriptionFieldsConnector, mockConfiguration)
+    protected lazy val service = new BatchFileUploadBusinessService(mockBatchUpscanInitiateConnector,
+      mockBatchFileUploadMetadataRepo, mockUuidService, mockLogger, mockApiSubscriptionFieldsConnector, mockConfiguration)
 
     val xmlResponse = <FileUploadResponse>
       <Files>
@@ -78,10 +84,11 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     val upscanInitiateResponsePayload = UpscanInitiateResponsePayload("ref1", UpscanInitiateUploadRequest("some-url", Map(("label1","value1"), ("label2","value2"))))
 
     protected def send(vupr: ValidatedBatchFileUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, NodeSeq] = {
-      await(service.callInitiate(vupr, hc))
+      await(service.send(vupr, hc))
     }
     when(mockBatchFileUploadConfig.upscanCallbackUrl).thenReturn("http://upscan-callback.url")
     when(mockConfiguration.batchFileUploadConfig).thenReturn(mockBatchFileUploadConfig)
+    when(mockUuidService.uuid()).thenReturn(UUID.randomUUID())
   }
 
   "BatchFileUploadBusinessService" should {

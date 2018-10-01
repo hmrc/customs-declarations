@@ -49,7 +49,7 @@ class BatchFileUploadPayloadValidationComposedAction @Inject()(val batchFileUplo
   override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedBatchFileUploadPayloadRequest[A]]] = {
     implicit val implicitAr: AuthorisedRequest[A] = ar
     ar.authorisedAs match {
-      case BatchFileUploadCsp(_, _, _) =>
+      case BatchFileUploadCsp(_, _, _) | NonCsp(_, _) =>
         batchFileUploadPayloadValidationAction.refine(ar).map {
           case Right(validatedBatchFilePayloadRequest) =>
             //TODO extract & validate values

@@ -57,7 +57,7 @@ class BatchFileUploadController @Inject()(val common: Common,
 
       logger.debug(s"Request received. Payload = ${vbfupr.body.toString} headers = ${vbfupr.headers.headers}")
 
-      batchFileUploadBusinessService.callInitiate map {
+      batchFileUploadBusinessService.send map {
         case Right(res) =>
           logger.info("Upload initiate request processed successfully")
           googleAnalyticsConnector.success

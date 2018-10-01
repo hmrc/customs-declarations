@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import java.net.URLEncoder
-import java.net.URL
+import java.net.{URL, URLEncoder}
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
@@ -46,13 +45,14 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
                                                config: DeclarationsConfigService) {
 
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
+  private case class UpscanInitiateRequest(subscriptionFieldsId: SubscriptionFieldsId, documentType: DocumentType)
 
-  def send[A](implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A],
-                      hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
+  def send[A](implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
+              hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
 
-    futureApiSubFieldsId(vbfupr.clientId).flatMap {
+    futureApiSubFieldsId(validatedRequest.clientId).flatMap {
       case Right(sfId) =>
-        callBackend(sfId).flatMap { fileDetails =>
+        batchBackendCalls(sfId).flatMap { fileDetails =>
           persist(fileDetails, sfId).map {
             case true => Right(serialize(fileDetails))
             case false => Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
@@ -67,21 +67,33 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
     }
   }
 
-  private def callBackend[A](subscriptionFieldsId: SubscriptionFieldsId)
-                            (implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A],
+  private def batchBackendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
+                            (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
                              hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
 
-//      failFastSequence(vbfupr.uploadProperties.map { uploadProperties =>
-//        batchUpscanInitiateConnector.send(preparePayload(subscriptionFieldsId, uploadProperties.documentType), vbfupr.requestedApiVersion)
-//      })
-    Future.sequence(vbfupr.uploadProperties.map { uploadProperties =>
-      batchUpscanInitiateConnector.send(preparePayload(subscriptionFieldsId, uploadProperties.documentType), vbfupr.requestedApiVersion)
-    })
+    val upscanInitiateRequests = validatedRequest.uploadProperties.map { uploadProperties =>
+      UpscanInitiateRequest(subscriptionFieldsId, uploadProperties.documentType)
+    }
+    failFastSequence(upscanInitiateRequests)(i => backendCall(i))
   }
+
+  private def backendCall[A](upscanInitiateRequest: UpscanInitiateRequest)
+                              (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
+    batchUpscanInitiateConnector.send(
+      preparePayload(upscanInitiateRequest.subscriptionFieldsId, upscanInitiateRequest.documentType), validatedRequest.requestedApiVersion)
+  }
+
+  private def failFastSequence[A,B](iter: Iterable[A])(fn: A => Future[B]): Future[Seq[B]] =
+    iter.foldLeft(Future(Seq.empty[B])) {
+      (previousFuture, next) =>
+        for {
+          previousResults <- previousFuture
+          next <- fn(next)
+        } yield previousResults :+ next
+    }
 
   private def persist[A](fileDetails: Seq[UpscanInitiateResponsePayload], sfId: SubscriptionFieldsId)
                         (implicit request: ValidatedBatchFileUploadPayloadRequest[A]): Future[Boolean] = {
-
     //TODO ensure/check that ordering of uploadProperties matches batchFiles
     val batchFiles = fileDetails.zipWithIndex.map { case (fileDetail, index) =>
       BatchFile(FileReference(UUID.fromString(fileDetail.reference)), None, new URL(fileDetail.uploadRequest.href),
@@ -95,7 +107,6 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
   }
 
   private def extractEori(authorisedAs: AuthorisedAs): Eori = {
-
     authorisedAs match {
       case nonCsp: NonCsp => nonCsp.eori
       case batchFileUploadCsp: BatchFileUploadCsp => batchFileUploadCsp.eori
@@ -118,15 +129,16 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
               )}
             </fields>
           </uploadRequest>
-        </File>)}
+        </File>
+      )}
       </Files>
     </FileUploadResponse>
   }
 
   private def futureApiSubFieldsId[A](c: ClientId)
-                                     (implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A],
+                                     (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
                                       hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
-    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vbfupr.requestedApiVersion)) map {
+    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, validatedRequest.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
         Right(SubscriptionFieldsId(response.fieldsId))
     }).recover {
@@ -138,20 +150,10 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
 
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId,
                                 documentType: DocumentType)
-                               (implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
-    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${vbfupr.declarationId.value}/eori/${vbfupr.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${documentType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
+                               (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
+    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${validatedRequest.declarationId.value}/eori/${validatedRequest.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${documentType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
     logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
     upscanInitiatePayload
   }
-
-  private def failFastSequence[A,B](iter: Iterable[A])(fn: A => Future[B]): Future[Seq[B]] =
-    iter.foldLeft(Future(Seq.empty[B])) {
-      (previousFuture, next) =>
-        for {
-          previousResults <- previousFuture
-          next <- fn(next)
-        } yield previousResults :+ next
-    }
-
 
 }

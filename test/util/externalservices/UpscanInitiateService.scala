@@ -16,18 +16,19 @@
 
 package util.externalservices
 
+import java.util.UUID
+
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers._
 import util.CustomsDeclarationsExternalServicesConfig.UpscanInitiateContext
-import util.TestData.upscanInitiateReference
-import util.{TestData, WireMockRunner}
+import util.WireMockRunner
 
 trait UpscanInitiateService extends WireMockRunner {
   private val urlMatchingRequestPath = urlMatching(UpscanInitiateContext)
 
   private val validUpscanInitiateResponse = s"""{
-    "reference": "${upscanInitiateReference}",
+    "reference": "${UUID.randomUUID()}",
     "uploadRequest": {
       "href": "https://bucketName.s3.eu-west-2.amazonaws.com",
       "fields": {

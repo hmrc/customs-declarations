@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="hmrc:fileupload2"
+<xs:schema xmlns="hmrc:batchfileupload"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="hmrc:fileupload2"
+           targetNamespace="hmrc:batchfileupload"
            elementFormDefault="qualified">
 
     <xs:element name="FileUploadRequest" type="FileUploadRequestType"/>

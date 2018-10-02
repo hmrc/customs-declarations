@@ -1,4 +1,4 @@
-<FileUploadResponse xmlns="hmrc:fileupload2">
+<FileUploadResponse xmlns="hmrc:batchfileupload">
   <Files>
     <File>
       <reference>11370e18-6e24-453e-b45a-76d3e32ea33d</reference>

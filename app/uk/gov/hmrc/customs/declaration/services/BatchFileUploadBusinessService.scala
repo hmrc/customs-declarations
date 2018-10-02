@@ -119,7 +119,7 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
 
   private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {
 
-    <FileUploadResponse>
+    <FileUploadResponse xmlns="hmrc:batchfileupload">
       <Files>
         {payloads.map(payload =>
         <File>

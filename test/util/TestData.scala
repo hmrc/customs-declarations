@@ -85,7 +85,7 @@ object TestData {
   val declarantEori = Eori(declarantEoriValue)
   val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
 
-  val validatedBatchFileUploadPayloadRequest = ValidatedBatchFileUploadPayloadRequest(
+  val ValidatedBatchFileUploadPayloadRequestWithTwoFiles = ValidatedBatchFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.Fileupload,
     VersionTwo,
@@ -96,6 +96,22 @@ object TestData {
     DeclarationId("decId123"),
     FileGroupSize(2),
     List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("docType1")), BatchFileUploadProperties(SequenceNumber(2), DocumentType("docType2")))
+  )
+
+  val ValidatedBatchFileUploadPayloadRequestWithFourFiles = ValidatedBatchFileUploadPayloadRequest(
+    ConversationId(UUID.randomUUID()),
+    GoogleAnalyticsValues.Fileupload,
+    VersionTwo,
+    ClientId("ABC"),
+    NonCsp(Eori("123"), None),
+    NodeSeq.Empty,
+    FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
+    DeclarationId("decId123"),
+    FileGroupSize(4),
+    List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("docType1")),
+      BatchFileUploadProperties(SequenceNumber(2), DocumentType("docType2")),
+      BatchFileUploadProperties(SequenceNumber(3), DocumentType("docType3")),
+      BatchFileUploadProperties(SequenceNumber(4), DocumentType("docType4")))
   )
 
   val nrsInternalIdValue = "internalId"

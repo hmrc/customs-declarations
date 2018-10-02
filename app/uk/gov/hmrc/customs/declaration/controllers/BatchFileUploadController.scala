@@ -52,10 +52,10 @@ class BatchFileUploadController @Inject()(val common: Common,
       batchFileUploadPayloadValidationComposedAction
     ).async(bodyParser = xmlOrEmptyBody) {
 
-    implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[AnyContent] =>
+    implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[AnyContent] =>
       val logger = common.logger
 
-      logger.debug(s"Request received. Payload = ${vbfupr.body.toString} headers = ${vbfupr.headers.headers}")
+      logger.debug(s"Batch file upload initiate request received. Payload=${validatedRequest.body.toString} headers=${validatedRequest.headers.headers}")
 
       batchFileUploadBusinessService.send map {
         case Right(res) =>

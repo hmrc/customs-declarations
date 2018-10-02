@@ -19,7 +19,7 @@ package unit.services
 import java.util.UUID
 
 import org.mockito.ArgumentMatchers.{any, eq => meq}
-import org.mockito.Mockito.{verify, when, _}
+import org.mockito.Mockito.{atLeastOnce, times, verify, when}
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsJson, Result}
@@ -76,7 +76,7 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       </Files>
     </FileUploadResponse>
 
-    implicit val jsonRequest = TestData.validatedBatchFileUploadPayloadRequest
+    implicit val jsonRequest = TestData.ValidatedBatchFileUploadPayloadRequestWithTwoFiles
 
     val upscanInitiatePayload = UpscanInitiatePayload("http://upscan-callback.url/uploaded-file-upscan-notifications/decId/decId123/eori/123/documentationType/docType1/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
     val upscanInitiateResponsePayload1 = UpscanInitiateResponsePayload(TestData.FileReferenceOne.value.toString, UpscanInitiateUploadRequest("https://a.b.com", Map(("label1","value1"), ("label2","value2"))))
@@ -97,10 +97,22 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
       when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])).thenReturn(upscanInitiateResponsePayload1, upscanInitiateResponsePayload2)
 
-      val result = send()
+      val result = send().right.get
 
-      result.right.get shouldBe xmlResponse
+      result shouldBe xmlResponse
       verify(mockBatchUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(jsonRequest))
+    }
+
+    "fail fast when sending payloads to connector" in new SetUp() {
+
+      val successfulConnectorSend = Future.successful(upscanInitiateResponsePayload1)
+      val failedConnectorSend = Future.failed(TestData.emulatedServiceFailure)
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+      when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend, successfulConnectorSend, failedConnectorSend, successfulConnectorSend)
+
+      val result = send(TestData.ValidatedBatchFileUploadPayloadRequestWithFourFiles).left.get
+
+      verify(mockBatchUpscanInitiateConnector, times(3)).send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])
     }
 
     "return 500 error response when subscription field lookup fails" in new SetUp() {

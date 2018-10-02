@@ -54,7 +54,10 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
       case Right(sfId) =>
         batchBackendCalls(sfId).flatMap { fileDetails =>
           persist(fileDetails, sfId).map {
-            case true => Right(serialize(fileDetails))
+            case true =>
+              val responseBodyXml = serialize(fileDetails)
+              logger.debug(s"response body xml to be returned=${responseBodyXml.toString()}")
+              Right(responseBodyXml)
             case false => Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
           }
         }.recover {

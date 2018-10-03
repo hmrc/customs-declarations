@@ -42,20 +42,21 @@ class BatchFileUploadPayloadValidationComposedAction @Inject()(val batchFileUplo
   extends ActionRefiner[AuthorisedRequest, ValidatedBatchFileUploadPayloadRequest]  {
 
   private val declarationIdLabel = "DeclarationID"
-  private val documentationTypeLabel = "DocumentType"
   private val groupSizeLabel = "FileGroupSize"
+  private val documentationTypeLabel = "DocumentType"
   private val sequenceNumber = "FileSequenceNo"
 
   override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedBatchFileUploadPayloadRequest[A]]] = {
     implicit val implicitAr: AuthorisedRequest[A] = ar
     ar.authorisedAs match {
-      case NonCsp(_, _) =>
+      case BatchFileUploadCsp(_, _, _) | NonCsp(_, _) =>
         batchFileUploadPayloadValidationAction.refine(ar).map {
           case Right(validatedBatchFilePayloadRequest) =>
             //TODO extract & validate values
             Right(validatedBatchFilePayloadRequest.toValidatedBatchFileUploadPayloadRequest(
-              DeclarationId("decId"), FileGroupSize(2),
-              List(BatchFileUploadProperties(SequenceNumber(1), DocumentationType("doctype1")), BatchFileUploadProperties(SequenceNumber(2), DocumentationType("doctype2")))
+              DeclarationId((validatedBatchFilePayloadRequest.xmlBody \ declarationIdLabel).text),
+              FileGroupSize((validatedBatchFilePayloadRequest.xmlBody \ groupSizeLabel).text.toInt),
+              List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("doctype1")), BatchFileUploadProperties(SequenceNumber(2), DocumentType("doctype2")))
             ))
           case Left(b) => Left(b)
         }

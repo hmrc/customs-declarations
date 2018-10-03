@@ -76,48 +76,36 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
   "BusinessService" should {
 
-
     "send payload to connector" in new SetUp() {
 
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
       when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockUpscanInitiateResponsePayload)
+
       val result: Either[Result, UpscanInitiateResponsePayload] = send()
 
       result shouldBe Right(mockUpscanInitiateResponsePayload)
       verify(mockUpscanInitiateConnector).send(meq(upscanInitiatePayload), any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])
     }
+
+    "return 500 error response when subscription field lookup fails" in new SetUp() {
+
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(new Exception))
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockUpscanInitiateResponsePayload)
+
+      val result: Result = send().left.get
+
+      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+    }
+
+    "return 500 error response when upscan initiate call fails" in new SetUp() {
+
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(Future.failed(new Exception))
+
+      val result: Result = send().left.get
+
+      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+    }
   }
-
-  "pass in version to connector" in new SetUp() {
-
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockUpscanInitiateResponsePayload)
-
-    val result: Either[Result, UpscanInitiateResponsePayload] = send()
-
-    result shouldBe Right(mockUpscanInitiateResponsePayload)
-    verify(mockUpscanInitiateConnector).send(meq(upscanInitiatePayload), any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])
-  }
-
-  "return 500 error response when subscription field lookup fails" in new SetUp() {
-
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(new Exception))
-    when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(mockUpscanInitiateResponsePayload)
-
-    val result: Result = send().left.get
-
-    status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-  }
-
-  "return 500 error response when upscan initiate call fails" in new SetUp() {
-
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedUploadPayloadRequest[_]])).thenReturn(Future.failed(new Exception))
-
-    val result: Result = send().left.get
-
-    status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-  }
-
 }
 

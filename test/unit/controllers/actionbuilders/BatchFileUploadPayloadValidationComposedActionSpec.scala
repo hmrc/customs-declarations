@@ -22,9 +22,9 @@ import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{BatchFileUploadPayloadValidationAction, BatchFileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
-import uk.gov.hmrc.customs.declaration.model.{DocumentationType, _}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.clientId
 import util.TestData.{conversationId, nonCspRetrievalValues}
@@ -50,7 +50,7 @@ class BatchFileUploadPayloadValidationComposedActionSpec extends UnitSpec with M
 
       when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val uploadProperties = List(BatchFileUploadProperties(SequenceNumber(1), DocumentationType("docType1")), BatchFileUploadProperties(SequenceNumber(2), DocumentationType("docType2")))
+      val uploadProperties = List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("docType1")), BatchFileUploadProperties(SequenceNumber(2), DocumentType("docType2")))
       val expectedVbfupr: ValidatedBatchFileUploadPayloadRequest[AnyContentAsXml] = testVpr.toValidatedBatchFileUploadPayloadRequest(DeclarationId("decId"), FileGroupSize(2), uploadProperties)
       val result = await(action.refine(testAr))
       result shouldBe Right(expectedVbfupr)

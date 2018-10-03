@@ -16,15 +16,13 @@
 
 package uk.gov.hmrc.customs.declaration.controllers
 
-import java.util.UUID
-
 import javax.inject.{Inject, Singleton}
+
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{BatchFileUploadAnalyticsValuesAction, BatchFileUploadAuthAction, BatchFileUploadPayloadValidationComposedAction}
-import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedBatchFileUploadPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedBatchFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.BatchFileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
@@ -54,22 +52,16 @@ class BatchFileUploadController @Inject()(val common: Common,
       batchFileUploadPayloadValidationComposedAction
     ).async(bodyParser = xmlOrEmptyBody) {
 
-    implicit vmfupr: ValidatedBatchFileUploadPayloadRequest[AnyContent] =>
+    implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[AnyContent] =>
       val logger = common.logger
 
-      logger.debug(s"Request received. Payload = ${vmfupr.body.toString} headers = ${vmfupr.headers.headers}")
+      logger.debug(s"Batch file upload initiate request received. Payload=${validatedRequest.body.toString} headers=${validatedRequest.headers.headers}")
 
       batchFileUploadBusinessService.send map {
         case Right(res) =>
-          //TODO check that this convoId functionality is same for batch file upload
-          val referenceConversationId = ConversationId(UUID.fromString(res.reference))
-          logger.debug(s"Replacing conversationId with $referenceConversationId")
-          val id = new HasConversationId {
-            override val conversationId: ConversationId = referenceConversationId
-          }
-          logger.info(s"Upload initiate request processed successfully.")(id)
+          logger.info("Upload initiate request processed successfully")
           googleAnalyticsConnector.success
-          Ok(res.uploadRequest.toXml).withConversationId(id)
+          Ok(res).withConversationId
         case Left(errorResult) =>
           errorResult
       }

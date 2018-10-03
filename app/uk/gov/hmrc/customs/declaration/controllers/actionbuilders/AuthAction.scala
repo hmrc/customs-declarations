@@ -120,7 +120,7 @@ class AuthAction @Inject()(
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
   // Right(None) if not authorised as CSP
-  protected def futureAuthoriseAsCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])]]] = {
+  private def futureAuthoriseAsCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
       authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
@@ -184,7 +184,7 @@ class AuthAction @Inject()(
         googleAnalyticsConnector.failure(errorResponseUnauthorisedGeneral.message)
         Left(errorResponseUnauthorisedGeneral)
       case NonFatal(e) =>
-        logger.error("Error authorising Non CSP", e)
+        logger.error("Error authorising non-CSP", e)
         Left(ErrorInternalServerError)
     }
   }
@@ -194,7 +194,7 @@ class AuthAction @Inject()(
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
   // Right(None) if not authorised as CSP
-  protected def futureAuthoriseAsCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])] ] ] = {
+  private def futureAuthoriseAsCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])] ] ] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
@@ -240,7 +240,7 @@ class AuthAction @Inject()(
         googleAnalyticsConnector.failure(errorResponseUnauthorisedGeneral.message)
         Left(errorResponseUnauthorisedGeneral)
       case NonFatal(e) =>
-        logger.error("Error authorising Non CSP", e)
+        logger.error("Error authorising non-CSP", e)
         Left(ErrorInternalServerError)
     }
   }

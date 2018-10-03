@@ -70,6 +70,19 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
     }
   }
 
+  private def futureApiSubFieldsId[A](c: ClientId)
+                                     (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
+                                      hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
+    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, validatedRequest.requestedApiVersion)) map {
+      response: ApiSubscriptionFieldsResponse =>
+        Right(SubscriptionFieldsId(response.fieldsId))
+    }).recover {
+      case NonFatal(e) =>
+        logger.error(s"Subscriptions fields lookup call failed: ${e.getMessage}", e)
+        Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+    }
+  }
+
   private def batchBackendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
                             (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
                              hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
@@ -79,21 +92,6 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
     }
     failFastSequence(upscanInitiateRequests)(i => backendCall(i))
   }
-
-  private def backendCall[A](upscanInitiateRequest: UpscanInitiateRequest)
-                              (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
-    batchUpscanInitiateConnector.send(
-      preparePayload(upscanInitiateRequest.subscriptionFieldsId, upscanInitiateRequest.documentType), validatedRequest.requestedApiVersion)
-  }
-
-  private def failFastSequence[A,B](iter: Iterable[A])(fn: A => Future[B]): Future[Seq[B]] =
-    iter.foldLeft(Future(Seq.empty[B])) {
-      (previousFuture, next) =>
-        for {
-          previousResults <- previousFuture
-          next <- fn(next)
-        } yield previousResults :+ next
-    }
 
   private def persist[A](fileDetails: Seq[UpscanInitiateResponsePayload], sfId: SubscriptionFieldsId)
                         (implicit request: ValidatedBatchFileUploadPayloadRequest[A]): Future[Boolean] = {
@@ -109,14 +107,6 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
     batchFileUploadMetadataRepo.create(metadata)
   }
 
-  private def extractEori(authorisedAs: AuthorisedAs): Eori = {
-    authorisedAs match {
-      case nonCsp: NonCsp => nonCsp.eori
-      case batchFileUploadCsp: BatchFileUploadCsp => batchFileUploadCsp.eori
-      case _: Csp => throw new IllegalStateException("CSP route must be via BatchFileUploadCsp")
-    }
-  }
-
   private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {
 
     <FileUploadResponse xmlns="hmrc:batchfileupload">
@@ -128,8 +118,8 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
             <href>{payload.uploadRequest.href}</href>
             <fields>
               {payload.uploadRequest.fields.map(field =>
-              {<a/>.copy(label = field._1, child = Text(field._2))}
-              )}
+            {<a/>.copy(label = field._1, child = Text(field._2))}
+            )}
             </fields>
           </uploadRequest>
         </File>
@@ -138,16 +128,26 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
     </FileUploadResponse>
   }
 
-  private def futureApiSubFieldsId[A](c: ClientId)
-                                     (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
-                                      hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
-    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, validatedRequest.requestedApiVersion)) map {
-      response: ApiSubscriptionFieldsResponse =>
-        Right(SubscriptionFieldsId(response.fieldsId))
-    }).recover {
-      case NonFatal(e) =>
-        logger.error(s"Subscriptions fields lookup call failed: ${e.getMessage}", e)
-        Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+  private def failFastSequence[A,B](iter: Iterable[A])(fn: A => Future[B]): Future[Seq[B]] =
+    iter.foldLeft(Future(Seq.empty[B])) {
+      (previousFuture, next) =>
+        for {
+          previousResults <- previousFuture
+          next <- fn(next)
+        } yield previousResults :+ next
+    }
+
+  private def backendCall[A](upscanInitiateRequest: UpscanInitiateRequest)
+                              (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
+    batchUpscanInitiateConnector.send(
+      preparePayload(upscanInitiateRequest.subscriptionFieldsId, upscanInitiateRequest.documentType), validatedRequest.requestedApiVersion)
+  }
+
+  private def extractEori(authorisedAs: AuthorisedAs): Eori = {
+    authorisedAs match {
+      case nonCsp: NonCsp => nonCsp.eori
+      case batchFileUploadCsp: BatchFileUploadCsp => batchFileUploadCsp.eori
+      case _: Csp => throw new IllegalStateException("CSP route must be via BatchFileUploadCsp")
     }
   }
 

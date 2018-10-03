@@ -22,9 +22,9 @@ import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{BatchFileUploadPayloadValidationAction, BatchFileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
-import uk.gov.hmrc.customs.declaration.model.{DocumentationType, _}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.clientId
 import util.TestData.{conversationId, nonCspRetrievalValues}

@@ -61,7 +61,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       NodeSeq.Empty,
       FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
       DeclarationId("decId123"),
-      DocumentType("docType456")
+      DocumentationType("docType456")
     )
 
     val upscanInitiatePayload = UpscanInitiatePayload("http://upscan-callback.url/uploaded-file-upscan-notifications/decId/decId123/eori/123/documentationType/docType456/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")

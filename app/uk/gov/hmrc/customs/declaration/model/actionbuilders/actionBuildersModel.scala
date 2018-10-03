@@ -100,7 +100,7 @@ object ActionBuilderModelHelper {
   implicit class ValidatedPayloadRequestOps[A](val vpr: ValidatedPayloadRequest[A]) extends AnyVal {
 
     def toValidatedUploadPayloadRequest(declarationId: DeclarationId,
-                                        documentationType: DocumentType): ValidatedUploadPayloadRequest[A] = ValidatedUploadPayloadRequest(
+                                        documentationType: DocumentationType): ValidatedUploadPayloadRequest[A] = ValidatedUploadPayloadRequest(
       vpr.conversationId,
       vpr.analyticsValues,
       vpr.requestedApiVersion,
@@ -150,7 +150,7 @@ trait HasXmlBody {
 
 trait HasFileUploadProperties {
   val declarationId: DeclarationId
-  val documentationType: DocumentType
+  val documentationType: DocumentationType
 }
 
 case class BatchFileUploadRequest(declarationId: DeclarationId, fileGroupSize: FileGroupSize, files: Seq[BatchFileUploadFile])
@@ -275,7 +275,7 @@ case class ValidatedUploadPayloadRequest[A](
   xmlBody: NodeSeq,
   request: Request[A],
   declarationId: DeclarationId,
-  documentationType: DocumentType
+  documentationType: DocumentationType
 ) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
 
 case class ValidatedBatchFileUploadPayloadRequest[A](

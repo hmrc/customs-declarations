@@ -62,7 +62,7 @@ class BatchFileUploadPayloadValidationComposedActionSpec extends UnitSpec with M
 
       when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val result = await(action.refine(testAr))(Duration.Inf)
+      val result = await(action.refine(testAr))
       val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileGroupSize exceeds {fileUpload.fileGroupSize} limit")).XmlResult)
 
       result shouldBe expected

@@ -34,7 +34,7 @@ case class FileTransmissionFile(
   mimeType: String,
   checkSum: String,
   location: URL,
-  sequenceNumber: SequenceNumber,
+  sequenceNumber: FileSequenceNo,
   size: Int = 1
 )
 object FileTransmissionFile {

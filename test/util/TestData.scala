@@ -93,9 +93,8 @@ object TestData {
     NonCsp(Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    DeclarationId("decId123"),
-    FileGroupSize(2),
-    List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("docType1")), BatchFileUploadProperties(SequenceNumber(2), DocumentType("docType2")))
+    BatchFileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
+    Seq(BatchFileUploadFile(FileSequenceNo(1), DocumentType("docType1")), BatchFileUploadFile(FileSequenceNo(2), DocumentType("docType2"))))
   )
 
   val ValidatedBatchFileUploadPayloadRequestWithFourFiles = ValidatedBatchFileUploadPayloadRequest(
@@ -106,12 +105,13 @@ object TestData {
     NonCsp(Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    DeclarationId("decId123"),
-    FileGroupSize(4),
-    List(BatchFileUploadProperties(SequenceNumber(1), DocumentType("docType1")),
-      BatchFileUploadProperties(SequenceNumber(2), DocumentType("docType2")),
-      BatchFileUploadProperties(SequenceNumber(3), DocumentType("docType3")),
-      BatchFileUploadProperties(SequenceNumber(4), DocumentType("docType4")))
+    BatchFileUploadRequest(
+      DeclarationId("decId123"),
+      FileGroupSize(4),
+      Seq(BatchFileUploadFile(FileSequenceNo(1), DocumentType("docType1")),
+        BatchFileUploadFile(FileSequenceNo(2), DocumentType("docType2")),
+        BatchFileUploadFile(FileSequenceNo(3), DocumentType("docType3")),
+        BatchFileUploadFile(FileSequenceNo(4), DocumentType("docType4"))))
   )
 
   val nrsInternalIdValue = "internalId"
@@ -322,11 +322,11 @@ object TestData {
   val CallbackFieldsThree = CallbackFields("name3", "application/xml", "checksum3")
   val CallbackFieldsUpdated = CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM")
   val BatchFileOne = BatchFile(reference = FileReferenceOne, Some(CallbackFieldsOne),
-    location = new URL("https://a.b.com"), sequenceNumber = SequenceNumber(1), size = 1, documentType = DocumentType("Document Type 1"))
+    location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(1), size = 1, documentType = DocumentType("Document Type 1"))
   val BatchFileTwo = BatchFile(reference = FileReferenceTwo, Some(CallbackFieldsTwo),
-    location = new URL("https://a.b.com"), sequenceNumber = SequenceNumber(2), size = 1, documentType = DocumentType("Document Type 2"))
+    location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(2), size = 1, documentType = DocumentType("Document Type 2"))
   val BatchFileThree = BatchFile(reference = FileReferenceThree, Some(CallbackFieldsThree),
-    location = new URL("https://a.b.com"), sequenceNumber = SequenceNumber(3), size = 1, documentType = DocumentType("Document Type 3"))
+    location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(3), size = 1, documentType = DocumentType("Document Type 3"))
   val BatchFileMetadataWithFileOne = BatchFileUploadMetadata(DeclarationId("1"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdOne, fileCount = 1, Seq(
     BatchFileOne
   ))

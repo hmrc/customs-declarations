@@ -42,7 +42,7 @@ class BatchFileUploadPayloadValidationComposedActionSpec extends UnitSpec with M
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockBatchFileUploadPayloadValidationAction: BatchFileUploadPayloadValidationAction = mock[BatchFileUploadPayloadValidationAction]
     val mockDeclarationsConfigService = mock[DeclarationsConfigService]
-    when(mockDeclarationsConfigService.batchFileUploadConfig).thenReturn(BatchFileUploadConfig("callback.url", 3))
+    when(mockDeclarationsConfigService.batchFileUploadConfig).thenReturn(BatchFileUploadConfig("callback.url", 3, "fileTransmissionCallbackUrl"))
     val action: BatchFileUploadPayloadValidationComposedAction = new BatchFileUploadPayloadValidationComposedAction(mockBatchFileUploadPayloadValidationAction, mockLogger, mockDeclarationsConfigService)
   }
 
@@ -54,7 +54,7 @@ class BatchFileUploadPayloadValidationComposedActionSpec extends UnitSpec with M
       val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.Fileupload,
           VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nonCspRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
-      when(mockDeclarationsConfigService.batchFileUploadConfig).thenReturn(BatchFileUploadConfig("callback.url", 1))
+      when(mockDeclarationsConfigService.batchFileUploadConfig).thenReturn(BatchFileUploadConfig("callback.url", 1, "fileTransmissionCallbackUrl"))
       when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
       val result = await(action.refine(testAr))

@@ -31,6 +31,7 @@ object CustomsDeclarationsExternalServicesConfig {
   val GoogleAnalyticsClientId = "ga-client-id"
   val GoogleAnalyticsEventValue = "ga-event-value"
   val UpscanInitiateContext = "/upscan/initiate"
+  val FileTransmissionContext = "/file/transmission"
   val NrsServiceContext = "/submission"
   val CustomsNotificationAuthHeaderValue = "some-basic-auth"
 }

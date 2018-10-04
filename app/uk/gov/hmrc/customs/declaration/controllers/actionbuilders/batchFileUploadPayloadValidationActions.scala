@@ -50,7 +50,7 @@ class BatchFileUploadPayloadValidationComposedAction @Inject()(val batchFileUplo
   private val filesLabel = "Files"
   private val fileLabel = "File"
 
-  private val errorMaxFileGroupSizeMsg = s"$fileGroupSizeLabel exceeds {fileUpload.fileGroupSize} limit"
+  private val errorMaxFileGroupSizeMsg = s"$fileGroupSizeLabel exceeds ${declarationsConfigService.batchFileUploadConfig.fileGroupSizeMaximum} limit"
   private val errorFileGroupSizeMsg = s"$fileGroupSizeLabel does not match number of $fileLabel elements"
   private val errorMaxFileSequenceNoMsg = s"$fileSequenceNoLabel must not be greater than or equal to $fileGroupSizeLabel"
   private val errorDuplicateFileSequenceNoMsg = s"$fileSequenceNoLabel contains duplicates"
@@ -73,22 +73,22 @@ class BatchFileUploadPayloadValidationComposedAction @Inject()(val batchFileUplo
             val xml = validatedBatchFilePayloadRequest.xmlBody
 
             val declarationId = DeclarationId((xml \ declarationIdLabel).text)
-            val fileGroupSize = FileGroupSize((xml \ fileGroupSizeLabel).text.toInt)
+            val fileGroupSize = FileGroupSize((xml \ fileGroupSizeLabel).text.trim.toInt)
 
             val files: Seq[BatchFileUploadFile] = (xml \ filesLabel \ "_").theSeq.collect {
               case file =>
-                val sequenceNumber = FileSequenceNo((file \ fileSequenceNoLabel).text.toInt)
+                val fileSequenceNumber = FileSequenceNo((file \ fileSequenceNoLabel).text.trim.toInt)
                 val documentType = DocumentType((file \ documentTypeLabel).text)
-                BatchFileUploadFile(sequenceNumber, documentType)
+                BatchFileUploadFile(fileSequenceNumber, documentType)
               }
 
             val batchFileUpload = BatchFileUploadRequest(declarationId, fileGroupSize, files.sortWith(_.fileSequenceNo.value < _.fileSequenceNo.value))
 
             additionalValidation(batchFileUpload) match {
-              case Left(errorResponse) =>
-                Left(errorResponse.XmlResult)
               case Right(_) =>
                 Right(validatedBatchFilePayloadRequest.toValidatedBatchFileUploadPayloadRequest(batchFileUpload))
+              case Left(errorResponse) =>
+                Left(errorResponse.XmlResult)
             }
           case Left(result) => Left(result)
         }

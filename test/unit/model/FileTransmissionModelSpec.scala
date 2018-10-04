@@ -58,7 +58,7 @@ class FileTransmissionModelSpec extends UnitSpec {
   private val batch = FileTransmissionBatch(BatchIdOne, 2)
   private val callBackUrl = new URL("https:/foo.com/callback")
   private val location = new URL("https:/foo.com/location")
-  private val file = FileTransmissionFile(FileReferenceOne, name = "someFileN.ame", mimeType = "application/pdf", checkSum = "asdrfgvbhujk13579", location = location, SequenceNumber(1))
+  private val file = FileTransmissionFile(FileReferenceOne, name = "someFileN.ame", mimeType = "application/pdf", checkSum = "asdrfgvbhujk13579", location = location, FileSequenceNo(1))
   private val interface = FileTransmissionInterface("interfaceName name", "1.0")
   private val properties = Seq("p1" -> "v1", "p2" -> "v2").map(t => FileTransmissionProperty(t._1, t._2))
   private val fileTransmission = FileTransmission(batch, callBackUrl, file, interface, properties)

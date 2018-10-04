@@ -279,12 +279,12 @@ case class ValidatedUploadPayloadRequest[A](
 ) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
 
 case class ValidatedBatchFileUploadPayloadRequest[A](
-                                                      conversationId: ConversationId,
-                                                      analyticsValues: GoogleAnalyticsValues,
-                                                      requestedApiVersion: ApiVersion,
-                                                      clientId: ClientId,
-                                                      authorisedAs: AuthorisedAs,
-                                                      xmlBody: NodeSeq,
-                                                      request: Request[A],
-                                                      batchFileUploadRequest: BatchFileUploadRequest
+  conversationId: ConversationId,
+  analyticsValues: GoogleAnalyticsValues,
+  requestedApiVersion: ApiVersion,
+  clientId: ClientId,
+  authorisedAs: AuthorisedAs,
+  xmlBody: NodeSeq,
+  request: Request[A],
+  batchFileUploadRequest: BatchFileUploadRequest
 ) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasBatchFileUploadProperties

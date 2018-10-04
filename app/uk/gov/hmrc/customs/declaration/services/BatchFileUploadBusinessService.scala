@@ -98,7 +98,7 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
     //TODO ensure/check that ordering of uploadProperties matches batchFiles
     val batchFiles = fileDetails.zipWithIndex.map { case (fileDetail, index) =>
       BatchFile(FileReference(UUID.fromString(fileDetail.reference)), None, new URL(fileDetail.uploadRequest.href),
-        SequenceNumber(request.batchFileUploadRequest.files(index).fileSequenceNo.value), 1, request.batchFileUploadRequest.files(index).documentType)
+        request.batchFileUploadRequest.files(index).fileSequenceNo, 1, request.batchFileUploadRequest.files(index).documentType)
     }
 
     val metadata = BatchFileUploadMetadata(request.batchFileUploadRequest.declarationId, extractEori(request.authorisedAs), sfId,

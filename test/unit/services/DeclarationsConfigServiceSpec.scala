@@ -51,6 +51,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |nrs.enabled=true
       |nrs.apikey="nrs-api-key"
       |nrs.waittime.millis=300
+      |microservice.services.file-transmission.host=some-host3
+      |microservice.services.file-transmission.port=1113
+      |microservice.services.file-transmission.context=/file-transmission
     """.stripMargin)
 
   private val emptyAppConfig: Config = ConfigFactory.parseString("")
@@ -73,6 +76,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange shouldBe 5
       configService.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis shouldBe 1000
       configService.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis shouldBe 1000
+      configService.batchFileUploadConfig.fileTransmissionBaseUrl shouldBe "http://some-host3:1113/file-transmission"
     }
 
     "throw an exception when configuration is invalid, that contains AGGREGATED error messages" in {
@@ -97,7 +101,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'nrs.apikey'
           |Could not find config key 'nrs.waittime.millis'
           |Could not find config key 'upscan-callback.url'
-          |Could not find config key 'fileUpload.fileGroupSize.maximum'""".stripMargin
+          |Could not find config key 'fileUpload.fileGroupSize.maximum'
+          |Could not find config file-transmission.host
+          |Service configuration not found for key: file-transmission.context""".stripMargin
 
       val caught = intercept[IllegalStateException](customsConfigService(emptyServicesConfiguration))
       caught.getMessage shouldBe expectedErrorMessage

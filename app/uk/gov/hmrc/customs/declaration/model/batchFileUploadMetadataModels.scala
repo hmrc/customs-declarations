@@ -71,7 +71,7 @@ case class BatchFile(
   reference: FileReference, // can be used as UNIQUE KEY, upscan-initiate
   maybeCallbackFields: Option[CallbackFields], // upscan-notify
   location: URL, // upscan-initiate
-  sequenceNumber: SequenceNumber, // derived from user request
+  sequenceNumber: FileSequenceNo, // derived from user request
   size: Int, // assumption - it appears to be mandatory but is ignored
   documentType: DocumentType // user request
 )

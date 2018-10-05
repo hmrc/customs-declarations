@@ -30,6 +30,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val root = configValidationNel.root
   private val customsNotificationsService = configValidationNel.service("customs-notification")
   private val apiSubscriptionFieldsService = configValidationNel.service("api-subscription-fields")
+  private val fileTransmissionService = configValidationNel.service("file-transmission")
 
   private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
@@ -53,6 +54,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
 
   private val upscanCallbackUrl = root.string("upscan-callback.url")
   private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
+  private val fileTransmissionUrl = fileTransmissionService.serviceUrl
 
   private val validatedDeclarationsConfig: ValidationNel[String, DeclarationsConfig] = (
     apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel |@| declarationStatusRequestDaysLimit
@@ -71,7 +73,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
     ) (NrsConfig.apply)
 
   private val validatedBatchFileUploadConfig: ValidationNel[String, BatchFileUploadConfig] = (
-    upscanCallbackUrl |@| fileGroupSizeMaximum
+    upscanCallbackUrl |@| fileGroupSizeMaximum |@| fileTransmissionUrl
   ) (BatchFileUploadConfig.apply)
 
   private val customsConfigHolder =

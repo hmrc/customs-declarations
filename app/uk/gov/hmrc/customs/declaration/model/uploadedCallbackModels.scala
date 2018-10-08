@@ -71,6 +71,16 @@ case class UploadedReadyCallbackBody(
 object UploadedReadyCallbackBody {
   implicit val urlFormat = HttpUrlFormat
   implicit val readsReadyCallback: Reads[UploadedReadyCallbackBody] = Json.reads[UploadedReadyCallbackBody]
+
+  def parse(json: JsValue)(implicit reads: Reads[UploadedCallbackDecider]): JsResult[UploadedCallbackBody] = {
+    json.validate[UploadedCallbackDecider] match {
+      case JsSuccess(decider, _) => decider.fileStatus match {
+        case ReadyFileStatus => json.validate[UploadedReadyCallbackBody]
+        case FailedFileStatus => json.validate[UploadedFailedCallbackBody]
+      }
+      case error: JsError => error
+    }
+  }
 }
 
 case class UploadedFailedCallbackBody(
@@ -81,14 +91,4 @@ case class UploadedFailedCallbackBody(
 
 object UploadedFailedCallbackBody {
   implicit val readsFailedCallback: Reads[UploadedFailedCallbackBody] = Json.reads[UploadedFailedCallbackBody]
-
-  def parse(json: JsValue): JsResult[UploadedCallbackBody] = {
-    json.validate[UploadedCallbackDecider] match {
-      case JsSuccess(decider, _) => decider.fileStatus match {
-        case ReadyFileStatus => json.validate[UploadedReadyCallbackBody]
-        case FailedFileStatus => json.validate[UploadedFailedCallbackBody]
-      }
-      case error: JsError => error
-    }
-  }
 }

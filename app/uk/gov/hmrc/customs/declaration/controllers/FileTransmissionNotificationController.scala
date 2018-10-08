@@ -22,17 +22,16 @@ import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent, Results}
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers.FileTransmissionStatus.FileTransmissionStatus
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.{BatchId, FileReference}
 import uk.gov.hmrc.customs.declaration.services.FileTransmissionNotificationService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object FileTransmissionStatus extends Enumeration {
   type FileTransmissionStatus = Value
@@ -47,7 +46,7 @@ case class FileTransmissionNotification(fileReference: FileReference,
                                         errorDetails: Option[String])
 object FileTransmissionNotification {
 
-  implicit val errorDetailsReads: Reads[Option[String]] = (JsPath \\ "errorDetails").readNullable[String].filter(ValidationError("Outcome is FAILURE so errorDetails are required"))(_.isDefined)
+//  implicit val errorDetailsReads: Reads[String] = (JsPath \\ "errorDetails").readNullable[String].filter(ValidationError("Outcome is FAILURE so errorDetails are required"))(_.isDefined)
 
   implicit val fileTransmissionNotificationReads: Reads[FileTransmissionNotification] = (
     (JsPath \ "fileReference").read[FileReference] and
@@ -55,48 +54,42 @@ object FileTransmissionNotification {
     (JsPath \ "outcome").read[FileTransmissionStatus] and
 
       (JsPath \ "outcome").read[FileTransmissionStatus].flatMap {
-        case FileTransmissionStatus.SUCCESS => {
+        case FileTransmissionStatus.SUCCESS =>
           new Reads[Option[String]] {
             def reads(js: JsValue) = JsSuccess(None)
           }
-        }
-//        case FailureFileTransmissionStatus => {
-//          new Reads[Option[String]] {
-//            def reads(js: JsValue) = {
-//              js.validateOpt(errorDetailsReads)
-//            }
-//          }
-//        }
+        case FileTransmissionStatus.FAILURE =>
+          new Reads[Option[String]] {
+            def reads(js: JsValue) = {
+              js.validate((JsPath \\ "errorDetails").readNullable[String].filter(ValidationError("Outcome is FAILURE so errorDetails are required"))(_.isDefined))
+            }
+          }
       }
     ) (FileTransmissionNotification.apply _)
 }
 
 class FileTransmissionNotificationController @Inject() (notificationService: FileTransmissionNotificationService,
-                                                        declarationsLogger: DeclarationsLogger) extends BaseController {
+                                                        cdsLogger: CdsLogger) extends BaseController {
 
   def post(clientSubscriptionId: String): Action[AnyContent] = Action.async {
     request =>
 
       request.body.asJson.fold(
         {
-          declarationsLogger.errorWithoutRequestContext(s"Malformed JSON received. Body: ${request.body.asText} headers: ${request.headers}")
+          cdsLogger.error(s"Malformed JSON received. Body: ${request.body.asText} headers: ${request.headers}")
           Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)
         }
       ) { js =>
         js.validate[FileTransmissionNotification] match {
-          case n: JsSuccess[FileTransmissionNotification] => {
-            declarationsLogger.debugWithoutRequestContext(s"Valid JSON request received. Body=$js headers=${request.headers}")
-            notificationService.sendMessage(n.value, clientSubscriptionId).recover {
-              case e: Throwable =>
-                declarationsLogger.errorWithoutRequestContext(s"[conversationId=${n.value.fileReference.toString}][clientSubscriptionId=$clientSubscriptionId] File Transmission notification request to Customs Notification failed due to ${e.getMessage}")
-                Future.successful(ErrorResponse.ErrorInternalServerError.JsonResult.withHeaders((CustomHeaderNames.XConversationIdHeaderName, n.value.fileReference.toString)))
+          case n: JsSuccess[FileTransmissionNotification] =>
+            cdsLogger.debug(s"Valid JSON request received. Body=$js headers=${request.headers}")
+            notificationService.sendMessage(n.value, clientSubscriptionId).map {
+              case Right(_) => NoContent
+              case Left(errorResult) => errorResult
             }
-            Future.successful(Results.NoContent)
-          }
-          case _: JsError => {
-            declarationsLogger.errorWithoutRequestContext(s"Invalid JSON received. Body: ${request.body.asText} headers: ${request.headers}")
+          case _: JsError =>
+            cdsLogger.error(s"Invalid JSON received. Body: ${request.body.asText} headers: ${request.headers}")
             Future.successful(errorBadRequest(errorCode = "BAD_REQUEST", errorMessage = "Invalid file upload outcome").JsonResult)
-          }
         }
       }
   }

@@ -18,6 +18,7 @@ package util
 
 import java.net.URL
 
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.customs.declaration.model._
 import util.TestData.{BatchIdOne, FileReferenceOne}
 
@@ -58,4 +59,26 @@ object FileTransmissionTestData {
                                |    "value" : "v2"
                                |  } ]
                                |}""".stripMargin
+
+  val FileTransmissionSuccessNotificationPayload = Json.parse(
+    s"""
+       |{
+       |  "fileReference":"${FileReferenceOne.toString}",
+       |  "batchId":"${BatchIdOne.toString}",
+       |  "outcome":"SUCCESS"
+       |}
+    """.stripMargin).as[JsObject]
+
+  val FileTransmissionFailureNotificationPayload = Json.parse(
+    s"""
+       |{
+       |  "fileReference":"${FileReferenceOne.toString}",
+       |  "batchId":"${BatchIdOne.toString}",
+       |  "outcome":"FAILURE",
+       |  "errorDetails":"Some error details text"
+       |}
+    """.stripMargin).as[JsObject]
+
+  val InternalErrorResponseJson = """{"code":"INTERNAL_SERVER_ERROR","message":"Internal server error"}"""
+
 }

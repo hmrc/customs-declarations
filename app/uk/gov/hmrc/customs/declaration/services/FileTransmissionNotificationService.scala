@@ -19,10 +19,13 @@ package uk.gov.hmrc.customs.declaration.services
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
+import play.api.mvc.Result
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.FileTransmissionCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.controllers.{FileTransmissionNotification, FileTransmissionStatus}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
@@ -43,12 +46,17 @@ object FileTransmissionCustomsNotification {
 
 @Singleton
 class FileTransmissionNotificationService @Inject() (notificationConnector: FileTransmissionCustomsNotificationConnector,
-                                                     declarationsLogger: CdsLogger) {
+                                                     cdsLogger: CdsLogger) {
 
-  def sendMessage(fileTransmissionNotification: FileTransmissionNotification, clientSubscriptionId: String): Future[Unit] = {
+  def sendMessage(fileTransmissionNotification: FileTransmissionNotification, clientSubscriptionId: String): Future[Either[Result, Unit]] = {
 
     notificationConnector.send(FileTransmissionCustomsNotification(fileTransmissionNotification, clientSubscriptionId)
       (uploadedFileTransmissionSuccessXML, uploadedFileTransmissionFailureXML))
+    Future.successful(Right(()))
+  }.recover {
+    case e: Throwable =>
+      cdsLogger.error(s"[conversationId=${fileTransmissionNotification.fileReference.toString}][clientSubscriptionId=$clientSubscriptionId] file transmission notification service request to Customs Notification failed.", e)
+      Left(ErrorResponse.ErrorInternalServerError.JsonResult)
   }
 
   private def uploadedFileTransmissionSuccessXML: FileTransmissionNotification => NodeSeq = fileTransmissionNotification =>

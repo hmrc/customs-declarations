@@ -102,7 +102,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
 
   private implicit val toXml = new FileTransmissionToCallBackToXmlNotification()
 
-  "BatchUploadFileNotificationService" should {
+  "BatchFileUploadNotificationService" should {
     "send SUCCESS notification to the customs notification service" in new SetUp {
       when(mockNotificationConnector.send(any[BatchFileUploadCustomsNotification])).thenReturn(Future.successful(()))
 

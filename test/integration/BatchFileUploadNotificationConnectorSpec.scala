@@ -22,24 +22,24 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
-import uk.gov.hmrc.customs.declaration.connectors.BatchFileCustomsNotificationConnector
-import uk.gov.hmrc.customs.declaration.services.BatchFileCustomsNotification
+import uk.gov.hmrc.customs.declaration.connectors.BatchFileUploadCustomsNotificationConnector
+import uk.gov.hmrc.customs.declaration.services.BatchFileUploadCustomsNotification
 import uk.gov.hmrc.http._
 import util.ExternalServicesConfig.{Host, Port}
 import util.TestData._
 import util.externalservices.CustomsNotificationService
 import util.{ApiSubscriptionFieldsTestData, CustomsDeclarationsExternalServicesConfig, TestData}
 
-class BatchFileNotificationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
+class BatchFileUploadNotificationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with CustomsNotificationService {
 
-  private lazy val connector = app.injector.instanceOf[BatchFileCustomsNotificationConnector]
+  private lazy val connector = app.injector.instanceOf[BatchFileUploadCustomsNotificationConnector]
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val xml = <foo>bar</foo>
   private val notification =
-    BatchFileCustomsNotification(ApiSubscriptionFieldsTestData.subscriptionFieldsId, TestData.conversationId.uuid, xml)
+    BatchFileUploadCustomsNotification(ApiSubscriptionFieldsTestData.subscriptionFieldsId, TestData.conversationId.uuid, xml)
 
   override protected def beforeAll() {
     startMockServer()
@@ -64,7 +64,7 @@ class BatchFileNotificationConnectorSpec extends IntegrationTestSpec with GuiceO
       "microservice.services.customs-notification.bearer-token" -> CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
     )).build()
 
-  "BatchFileCustomsNotificationConnector" should {
+  "BatchFileUploadCustomsNotificationConnector" should {
 
     "make a correct request" in {
       notificationServiceIsRunning()

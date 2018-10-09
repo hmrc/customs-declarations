@@ -20,7 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.services.{BatchFileCustomsNotification, DeclarationsConfigService}
+import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadCustomsNotification, DeclarationsConfigService}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -28,14 +28,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class BatchFileCustomsNotificationConnector @Inject()(http: HttpClient,
-                                                      logger: CdsLogger,
-                                                      config: DeclarationsConfigService) {
+class BatchFileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
+                                                            logger: CdsLogger,
+                                                            config: DeclarationsConfigService) {
 
   private implicit val hc = HeaderCarrier()
   private val XMLHeader = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>"""
 
-  def send(notification: BatchFileCustomsNotification): Future[Unit] = {
+  def send(notification: BatchFileUploadCustomsNotification): Future[Unit] = {
 
     val headers: Map[String, String] = Map(
       "X-CDS-Client-ID" -> notification.clientSubscriptionId.toString,
@@ -55,7 +55,7 @@ class BatchFileCustomsNotificationConnector @Inject()(http: HttpClient,
     }).recoverWith {
       case httpError: HttpException => Future.failed(new RuntimeException(httpError))
       case e: Throwable =>
-        logger.error(s"Call to customs notification failed.")
+        logger.error(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: Call to customs notification failed. url=${config.declarationsConfig.customsNotificationBaseBaseUrl}")
         Future.failed(e)
     }
 

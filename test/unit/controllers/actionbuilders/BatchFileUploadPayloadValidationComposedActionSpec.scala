@@ -73,7 +73,7 @@ class BatchFileUploadPayloadValidationComposedActionSpec extends UnitSpec with M
 
       val result = await(action.refine(testAr))
 
-      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileSequenceNo must not be greater than or equal to FileGroupSize")).XmlResult)
+      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileSequenceNo must not be greater than FileGroupSize")).XmlResult)
       result shouldBe expected
     }
 

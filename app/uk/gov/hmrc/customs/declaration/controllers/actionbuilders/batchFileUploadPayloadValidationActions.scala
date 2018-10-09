@@ -52,7 +52,7 @@ class BatchFileUploadPayloadValidationComposedAction @Inject()(val batchFileUplo
 
   private val errorMaxFileGroupSizeMsg = s"$fileGroupSizeLabel exceeds ${declarationsConfigService.batchFileUploadConfig.fileGroupSizeMaximum} limit"
   private val errorFileGroupSizeMsg = s"$fileGroupSizeLabel does not match number of $fileLabel elements"
-  private val errorMaxFileSequenceNoMsg = s"$fileSequenceNoLabel must not be greater than or equal to $fileGroupSizeLabel"
+  private val errorMaxFileSequenceNoMsg = s"$fileSequenceNoLabel must not be greater than $fileGroupSizeLabel"
   private val errorDuplicateFileSequenceNoMsg = s"$fileSequenceNoLabel contains duplicates"
   private val errorFileSequenceNoLessThanOneMsg = s"$fileSequenceNoLabel must start from 1"
 

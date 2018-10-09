@@ -21,6 +21,7 @@ import java.time.Instant
 
 import util.TestData
 import play.api.libs.json._
+import uk.gov.hmrc.customs.declaration.model.UploadedReadyCallbackBody._
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -65,34 +66,33 @@ class UploadedCallbackBodySpec extends UnitSpec {
 
   "UploadedCallbackBody model" can {
     "In Happy Path" should {
-      "conditionally de-serialise callback body as UploadedReadyCallbackBody if fileStatus is READY" in {
-        val JsSuccess(actual, _) = UploadedFailedCallbackBody.parse(Json.parse(failedJson))
-
-        actual shouldBe failedCallbackBody
-      }
-
       "conditionally de-serialisation callback body as UploadedFailedCallbackBody if fileStatus is READY" in {
-        val JsSuccess(actual, _) = UploadedFailedCallbackBody.parse(Json.parse(readyJson))
+        val JsSuccess(actual, _) = parse(Json.parse(readyJson))
 
         actual shouldBe readyCallbackBody
+      }
+
+      "conditionally de-serialise callback body as UploadedReadyCallbackBody if fileStatus is FAILED" in {
+        val JsSuccess(actual, _) = parse(Json.parse(failedJson))
+
+        actual shouldBe failedCallbackBody
       }
     }
     "In Un-Happy Path" should {
       "return JsError when fileStatus is not READY or FAILED" in {
-        val JsError(list) = UploadedFailedCallbackBody.parse(Json.parse(failedJsonWithInvalidFileStatus))
+        val JsError(list) = parse(Json.parse(failedJsonWithInvalidFileStatus))
 
         val (path, _) = list.head
         path.toString shouldBe "/fileStatus"
       }
 
       "return JsError when payload is invalid" in {
-        val JsError(list) = UploadedFailedCallbackBody.parse(Json.parse("""{"foo": "bar"}"""))
+        val JsError(list) = parse(Json.parse("""{"foo": "bar"}"""))
 
         val (path, _) = list.head
         path.toString shouldBe "/fileStatus"
       }
     }
   }
-
 
 }

@@ -21,18 +21,18 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.play.test.UnitSpec
 import util.FileTransmissionTestData._
 
-class FileTransmissionNotificationCallbackBodySpec extends UnitSpec {
+class FileTransmissionNotificationSpec extends UnitSpec {
 
-  "FileTransmissionCallbackBody model" can {
+  "FileTransmissionNotification model" can {
     "In happy path" should {
-      "conditionally deserialize callback body as FileTransmissionSuccessCallbackBody if outcome is SUCCESS" in {
+      "conditionally deserialize callback body as FileTransmissionSuccessNotification if outcome is SUCCESS" in {
         val JsSuccess(actual, _) = FileTransmissionCallbackDecider.parse(Json.parse(FileTransmissionSuccessNotificationPayload))
 
         actual shouldBe SuccessNotification
       }
 
-      "conditionally deserialize callback body as FileTransmissionFailureCallbackBody if outcome is FAILURE" in {
-        val JsSuccess(actual, _) = FileTransmissionCallbackDecider.parse(Json.parse(FileTransmissionSuccessNotificationPayload))
+      "conditionally deserialize callback body as FileTransmissionFailureNotification if outcome is FAILURE" in {
+        val JsSuccess(actual, _) = FileTransmissionCallbackDecider.parse(Json.parse(FileTransmissionFailureNotificationPayload))
 
         actual shouldBe FailureNotification
       }

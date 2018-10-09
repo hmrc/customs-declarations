@@ -31,8 +31,8 @@ object FileTransmissionTestData {
   val FileTransmissionProperties = Seq("p1" -> "v1", "p2" -> "v2").map(t => FileTransmissionProperty(name = t._1, value = t._2))
   val FileTransmissionRequest = FileTransmission(FileTransmissionBatchOne, FileTransmissionCallBackUrl, FileTransmissionFileOne, FileTransmissionInterfaceOne, FileTransmissionProperties)
 
-  val SuccessNotification = FileTransmissionSuccessNotification(FileReferenceOne, BatchIdOne, FileTransmissionSuccessOutcome, None)
-  val FailureNotification = FileTransmissionFailureNotification(FileReferenceOne, BatchIdOne, FileTransmissionFailureOutcome, Some("some error text"))
+  val SuccessNotification = FileTransmissionSuccessNotification(FileReferenceOne, BatchIdOne, FileTransmissionSuccessOutcome)
+  val FailureNotification = FileTransmissionFailureNotification(FileReferenceOne, BatchIdOne, FileTransmissionFailureOutcome, Some("Some error text"))
 
   val FileTransmissionRequestJsonString = """{
                                |  "batch" : {
@@ -75,7 +75,7 @@ object FileTransmissionTestData {
        |  "fileReference":"${FileReferenceOne.toString}",
        |  "batchId":"${BatchIdOne.toString}",
        |  "outcome":"FAILURE",
-       |  "errorDetails":"Some error details text"
+       |  "errorDetails":"Some error text"
        |}
     """.stripMargin
 
@@ -88,6 +88,26 @@ object FileTransmissionTestData {
        |}
     """.stripMargin
 
+  val FileTransmissionSuccessCustomsNotificationXml =
+    <Root>
+        <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
+        <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
+        <Outcome>SUCCESS</Outcome>
+        <Details>Thank you for submitting your documents. Typical clearance times are 2 hours for air and 3 hours for maritime declarations. During busy periods wait times may be longer.</Details>
+      </Root>
+
+  val FileTransmissionFailureCustomsNotificationXml =
+    <Root>
+        <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
+        <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
+        <Outcome>FAILURE</Outcome>
+        <Details>A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.</Details>
+      </Root>
+
+  val invalidJson = """{"this" is not valid json"""
+
   val InternalErrorResponseJson = """{"code":"INTERNAL_SERVER_ERROR","message":"Internal server error"}"""
+  val BadRequestErrorResponseInvalidOutcome = """{"code":"BAD_REQUEST","message":"Invalid file upload outcome"}"""
+  val BadRequestErrorResponseInvalidJson = """{"code":"BAD_REQUEST","message":"Invalid JSON payload"}"""
 
 }

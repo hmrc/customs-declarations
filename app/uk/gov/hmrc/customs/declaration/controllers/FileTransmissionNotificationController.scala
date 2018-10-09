@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.controllers
 
+import java.util.UUID
 import javax.inject.Inject
 
 import play.api.libs.json._
@@ -23,15 +24,16 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.model.FileTransmissionNotification
-import uk.gov.hmrc.customs.declaration.services.{BatchFileNotificationService, FileTransmissionCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationService, FileTransmissionFailureCallbackToXmlNotification, FileTransmissionSuccessCallbackToXmlNotification}
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class FileTransmissionNotificationController @Inject() (fileTransmissionCallBackToXmlNotification: FileTransmissionCallbackToXmlNotification,
-                                                        notificationService: BatchFileNotificationService,
+class FileTransmissionNotificationController @Inject() (successToXmlNotification: FileTransmissionSuccessCallbackToXmlNotification,
+                                                        failureToXmlNotification: FileTransmissionFailureCallbackToXmlNotification,
+                                                        notificationService: BatchFileUploadNotificationService,
                                                         cdsLogger: CdsLogger) extends BaseController {
 
   def post(clientSubscriptionId: String): Action[AnyContent] = Action.async {
@@ -43,20 +45,35 @@ class FileTransmissionNotificationController @Inject() (fileTransmissionCallBack
           Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)
         }
       ) { js =>
-        js.validate[FileTransmissionNotification] match {
-          case n: JsSuccess[FileTransmissionNotification] =>
-            cdsLogger.debug(s"Valid JSON request received. Body=$js headers=${request.headers}")
-            notificationService.sendMessage(n.value, clientSubscriptionId)(fileTransmissionCallBackToXmlNotification).map{ _ =>
-              NoContent //convoId?
-            }.recover {
-              case e: Throwable =>
-                cdsLogger.error(s"[conversationId=${n.value.reference.toString}][clientSubscriptionId=$clientSubscriptionId] file transmission notification service request to customs notification failed.", e)
-                ErrorResponse.ErrorInternalServerError.JsonResult //convoId?
-            }
+        FileTransmissionCallbackDecider.parse(js) match {
+          case JsSuccess(callbackBody, _) => callbackBody match {
+            case success: FileTransmissionSuccessNotification =>
+              cdsLogger.debug(s"Valid JSON success request received. Body=$js headers=${request.headers}")
+              notificationService.sendMessage[FileTransmissionSuccessNotification](success, success.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(successToXmlNotification).map { _ =>
+                NoContent
+              }.recover {
+                case e: Throwable =>
+                  handleException(e, success, clientSubscriptionId)
+              }
+            case failure: FileTransmissionFailureNotification =>
+              cdsLogger.debug(s"Valid JSON failure request received. Body=$js headers=${request.headers}")
+              notificationService.sendMessage[FileTransmissionFailureNotification](failure, failure.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(failureToXmlNotification).map { _ =>
+                NoContent
+              }.recover {
+                case e: Throwable =>
+                  handleException(e, failure, clientSubscriptionId)
+              }
+          }
           case _: JsError =>
             cdsLogger.error(s"Invalid JSON received. Body: ${request.body.asText} headers: ${request.headers}")
             Future.successful(errorBadRequest(errorCode = "BAD_REQUEST", errorMessage = "Invalid file upload outcome").JsonResult)
         }
       }
   }
+
+  private def handleException(e: Throwable, notification: FileTransmissionNotification, clientSubscriptionId: String) = {
+    cdsLogger.error(s"[conversationId=${notification.fileReference.toString}][clientSubscriptionId=$clientSubscriptionId] file transmission notification service request to customs notification failed.", e)
+    ErrorResponse.ErrorInternalServerError.JsonResult
+  }
+
 }

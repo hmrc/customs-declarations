@@ -30,12 +30,12 @@ import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsValues, NrsConfig}
+import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StandardDeclarationSubmissionService, UniqueIdsService, XmlValidationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
-import util.{AuthConnectorStubbing, TestData}
+import util.AuthConnectorStubbing
 import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._

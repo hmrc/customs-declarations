@@ -18,57 +18,20 @@ package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.Inject
 
-import play.api.data.validation.ValidationError
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Reads._
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.controllers.FileTransmissionStatus.FileTransmissionStatus
-import uk.gov.hmrc.customs.declaration.model.{BatchId, FileReference}
-import uk.gov.hmrc.customs.declaration.services.FileTransmissionNotificationService
+import uk.gov.hmrc.customs.declaration.model.FileTransmissionNotification
+import uk.gov.hmrc.customs.declaration.services.{BatchFileNotificationService, FileTransmissionCallbackToXmlNotification}
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object FileTransmissionStatus extends Enumeration {
-  type FileTransmissionStatus = Value
-  val SUCCESS, FAILURE = Value
-
-  implicit val fileTransmissionStatusReads = Reads.enumNameReads(FileTransmissionStatus)
-}
-
-case class FileTransmissionNotification(fileReference: FileReference,
-                                        batchId: BatchId,
-                                        fileTransmissionStatus: FileTransmissionStatus,
-                                        errorDetails: Option[String])
-object FileTransmissionNotification {
-
-//  implicit val errorDetailsReads: Reads[String] = (JsPath \\ "errorDetails").readNullable[String].filter(ValidationError("Outcome is FAILURE so errorDetails are required"))(_.isDefined)
-
-  implicit val fileTransmissionNotificationReads: Reads[FileTransmissionNotification] = (
-    (JsPath \ "fileReference").read[FileReference] and
-    (JsPath \ "batchId").read[BatchId] and
-    (JsPath \ "outcome").read[FileTransmissionStatus] and
-
-      (JsPath \ "outcome").read[FileTransmissionStatus].flatMap {
-        case FileTransmissionStatus.SUCCESS =>
-          new Reads[Option[String]] {
-            def reads(js: JsValue) = JsSuccess(None)
-          }
-        case FileTransmissionStatus.FAILURE =>
-          new Reads[Option[String]] {
-            def reads(js: JsValue) = {
-              js.validate((JsPath \\ "errorDetails").readNullable[String].filter(ValidationError("Outcome is FAILURE so errorDetails are required"))(_.isDefined))
-            }
-          }
-      }
-    ) (FileTransmissionNotification.apply _)
-}
-
-class FileTransmissionNotificationController @Inject() (notificationService: FileTransmissionNotificationService,
+class FileTransmissionNotificationController @Inject() (fileTransmissionCallBackToXmlNotification: FileTransmissionCallbackToXmlNotification,
+                                                        notificationService: BatchFileNotificationService,
                                                         cdsLogger: CdsLogger) extends BaseController {
 
   def post(clientSubscriptionId: String): Action[AnyContent] = Action.async {
@@ -83,9 +46,12 @@ class FileTransmissionNotificationController @Inject() (notificationService: Fil
         js.validate[FileTransmissionNotification] match {
           case n: JsSuccess[FileTransmissionNotification] =>
             cdsLogger.debug(s"Valid JSON request received. Body=$js headers=${request.headers}")
-            notificationService.sendMessage(n.value, clientSubscriptionId).map {
-              case Right(_) => NoContent
-              case Left(errorResult) => errorResult
+            notificationService.sendMessage(n.value, clientSubscriptionId)(fileTransmissionCallBackToXmlNotification).map{ _ =>
+              NoContent //convoId?
+            }.recover {
+              case e: Throwable =>
+                cdsLogger.error(s"[conversationId=${n.value.reference.toString}][clientSubscriptionId=$clientSubscriptionId] file transmission notification service request to customs notification failed.", e)
+                ErrorResponse.ErrorInternalServerError.JsonResult //convoId?
             }
           case _: JsError =>
             cdsLogger.error(s"Invalid JSON received. Body: ${request.body.asText} headers: ${request.headers}")

@@ -28,9 +28,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class FileTransmissionCustomsNotificationConnector @Inject()(http: HttpClient,
-                                                             logger: CdsLogger,
-                                                             config: DeclarationsConfigService) {
+class BatchFileNotificationConnector @Inject()(http: HttpClient,
+                                               logger: CdsLogger,
+                                               config: DeclarationsConfigService) {
 
   private implicit val hc = HeaderCarrier()
   private val XMLHeader = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>"""

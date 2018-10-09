@@ -18,7 +18,6 @@ package util
 
 import java.net.URL
 
-import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.customs.declaration.model._
 import util.TestData.{BatchIdOne, FileReferenceOne}
 
@@ -31,6 +30,9 @@ object FileTransmissionTestData {
   val FileTransmissionInterfaceOne = FileTransmissionInterface("interfaceName name", "1.0")
   val FileTransmissionProperties = Seq("p1" -> "v1", "p2" -> "v2").map(t => FileTransmissionProperty(name = t._1, value = t._2))
   val FileTransmissionRequest = FileTransmission(FileTransmissionBatchOne, FileTransmissionCallBackUrl, FileTransmissionFileOne, FileTransmissionInterfaceOne, FileTransmissionProperties)
+
+  val SuccessNotification = FileTransmissionSuccessNotification(FileReferenceOne, BatchIdOne, FileTransmissionSuccessOutcome, None)
+  val FailureNotification = FileTransmissionFailureNotification(FileReferenceOne, BatchIdOne, FileTransmissionFailureOutcome, Some("some error text"))
 
   val FileTransmissionRequestJsonString = """{
                                |  "batch" : {
@@ -60,24 +62,31 @@ object FileTransmissionTestData {
                                |  } ]
                                |}""".stripMargin
 
-  val FileTransmissionSuccessNotificationPayload = Json.parse(
-    s"""
+  val FileTransmissionSuccessNotificationPayload = s"""
        |{
        |  "fileReference":"${FileReferenceOne.toString}",
        |  "batchId":"${BatchIdOne.toString}",
        |  "outcome":"SUCCESS"
        |}
-    """.stripMargin).as[JsObject]
+    """.stripMargin
 
-  val FileTransmissionFailureNotificationPayload = Json.parse(
-    s"""
+  val FileTransmissionFailureNotificationPayload = s"""
        |{
        |  "fileReference":"${FileReferenceOne.toString}",
        |  "batchId":"${BatchIdOne.toString}",
        |  "outcome":"FAILURE",
        |  "errorDetails":"Some error details text"
        |}
-    """.stripMargin).as[JsObject]
+    """.stripMargin
+
+  val invalidFileTransmissionNotificationPayload = s"""
+       |{
+       |  "fileReference":"${FileReferenceOne.toString}",
+       |  "batchId":"${BatchIdOne.toString}",
+       |  "outcome":"INVALID-OUTCOME",
+       |  "errorDetails":"Some error details text"
+       |}
+    """.stripMargin
 
   val InternalErrorResponseJson = """{"code":"INTERNAL_SERVER_ERROR","message":"Internal server error"}"""
 

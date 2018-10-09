@@ -18,7 +18,9 @@ package uk.gov.hmrc.customs.declaration.model
 
 import java.net.URL
 
-import play.api.libs.json.Json
+import play.api.libs.json._
+
+import scala.xml.NodeSeq
 
 case class FileTransmissionBatch(
   id: BatchId,
@@ -65,4 +67,85 @@ case class FileTransmission(
 object FileTransmission {
   implicit val urlFormat = HttpUrlFormat
   implicit val writes = Json.writes[FileTransmission]
+}
+
+sealed trait FileTransmissionOutcome {
+  val outcome: String
+}
+case object FileTransmissionSuccessOutcome extends FileTransmissionOutcome {
+  override val outcome: String = "SUCCESS"
+}
+case object FileTransmissionFailureOutcome extends FileTransmissionOutcome {
+  override val outcome: String = "FAILURE"
+}
+
+object FileTransmissionOutcome {
+  implicit val readsFileTransmissionOutcome: Reads[FileTransmissionOutcome] = new Reads[FileTransmissionOutcome] {
+    override def reads(json: JsValue): JsResult[FileTransmissionOutcome] = json match {
+      case JsString(FileTransmissionSuccessOutcome.outcome) => JsSuccess(FileTransmissionSuccessOutcome)
+      case JsString(FileTransmissionFailureOutcome.outcome) => JsSuccess(FileTransmissionFailureOutcome)
+      case _ => JsError(s"Invalid FileTransmissionOutcome $json")
+    }
+  }
+}
+
+//case class FileTransmissionNotification(fileReference: FileReference,
+//                                        batchId: BatchId,
+//                                        outcome: FileTransmissionOutcome,
+//                                        errorDetails: Option[String]) extends CallbackResponse {
+//  override def reference: FileReference = fileReference
+//}
+//
+//object FileTransmissionNotification {
+//  implicit val readsFileTransmissionNotification: Reads[FileTransmissionNotification] = Json.reads[FileTransmissionNotification]
+//}
+
+sealed trait FileTransmissionNotification extends CallbackResponse {
+  val reference: FileReference
+  val batchId: BatchId
+  val outcome: FileTransmissionOutcome
+  val errorDetails: Option[String]
+}
+
+trait CallbackToXmlNotification[A <: CallbackResponse] {
+  def toXml(callbackResponse: A): NodeSeq
+}
+
+trait CallbackResponse {
+  def reference: FileReference
+}
+
+case class FileTransmissionCallbackDecider(outcome: FileTransmissionOutcome)
+
+object FileTransmissionCallbackDecider {
+  implicit val reads = Json.reads[FileTransmissionCallbackDecider]
+  def parse(json: JsValue): JsResult[CallbackResponse] = {
+    json.validate[FileTransmissionCallbackDecider] match {
+      case JsSuccess(decider, _) => decider.outcome match {
+        case FileTransmissionSuccessOutcome => json.validate[FileTransmissionSuccessNotification]
+        case FileTransmissionFailureOutcome => json.validate[FileTransmissionSuccessNotification]
+      }
+      case error: JsError => error
+    }
+  }
+}
+
+case class FileTransmissionSuccessNotification(reference: FileReference,
+                                               batchId: BatchId,
+                                               outcome: FileTransmissionOutcome = FileTransmissionSuccessOutcome,
+                                               errorDetails: Option[String]
+                                    ) extends FileTransmissionNotification
+
+object FileTransmissionSuccessNotification {
+  implicit val readsSuccessCallback: Reads[FileTransmissionSuccessNotification] = Json.reads[FileTransmissionSuccessNotification]
+}
+
+case class FileTransmissionFailureNotification(override val reference: FileReference,
+                                               batchId: BatchId,
+                                               outcome: FileTransmissionOutcome = FileTransmissionFailureOutcome,
+                                               errorDetails: Option[String]
+                                     ) extends FileTransmissionNotification
+
+object FileTransmissionFailureNotification {
+  implicit val readsFailureCallback: Reads[FileTransmissionFailureNotification] = Json.reads[FileTransmissionFailureNotification]
 }

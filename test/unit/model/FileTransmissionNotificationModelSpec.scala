@@ -21,7 +21,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.play.test.UnitSpec
 import util.FileTransmissionTestData._
 
-class FileTransmissionNotificationSpec extends UnitSpec {
+class FileTransmissionNotificationModelSpec extends UnitSpec {
 
   "FileTransmissionNotification model" can {
     "In happy path" should {
@@ -39,7 +39,7 @@ class FileTransmissionNotificationSpec extends UnitSpec {
     }
 
     "In unhappy path" should {
-      "return JsError when fileStatus is not READY or FAILED" in {
+      "return JsError when fileStatus is not SUCCESS or FAILURE" in {
         val JsError(list) = FileTransmissionCallbackDecider.parse(Json.parse(invalidFileTransmissionNotificationPayload))
 
         val (path, _) = list.head

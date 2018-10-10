@@ -174,10 +174,20 @@ object TestData {
   val cspRetrievalValues = CspRetrievalData(Some(nrsInternalIdValue),
     Some(nrsExternalIdValue),
     Some(nrsAgentCodeValue),
+    nrsCredentials,
     nrsConfidenceLevel,
     Some(nrsNinoValue),
     Some(nrsSaUtrValue),
+    nrsNameValue,
+    nrsDateOfBirth,
+    nrsEmailValue,
+    nrsAgentInformationValue,
+    nrsGroupIdentifierValue,
+    nrsCredentialRole,
     Some(nrsMdtpInformation),
+    nrsItmpName,
+    nrsDateOfBirth,
+    nrsItmpAddress,
     nrsAffinityGroup,
     nrsCredentialStrength,
     nrsLoginTimes)
@@ -187,8 +197,10 @@ object TestData {
     Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
     Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
 
-    val cspRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.confidenceLevel and
-    Retrievals.nino and Retrievals.saUtr and Retrievals.mdtpInformation and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
+  val cspRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
+    Retrievals.nino and Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
+    Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
+    Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
 
   val nrsReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
     ,Some(nrsExternalIdValue)),
@@ -211,13 +223,23 @@ object TestData {
     nrsCredentialStrength),
     nrsLoginTimes)
 
-  val cspReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
+  val cspReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
     ,Some(nrsExternalIdValue)),
     Some(nrsAgentCodeValue)),
+    nrsCredentials),
     nrsConfidenceLevel),
     Some(nrsNinoValue)),
     Some(nrsSaUtrValue)),
+    nrsNameValue),
+    nrsDateOfBirth),
+    nrsEmailValue),
+    nrsAgentInformationValue),
+    nrsGroupIdentifierValue),
+    nrsCredentialRole),
     Some(nrsMdtpInformation)),
+    nrsItmpName),
+    nrsDateOfBirth),
+    nrsItmpAddress),
     nrsAffinityGroup),
     nrsCredentialStrength),
     nrsLoginTimes)

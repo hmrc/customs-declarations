@@ -91,9 +91,11 @@ class BatchFileUploadAuthAction @Inject()(override val authConnector: AuthConnec
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
-      case internalId ~ externalId ~ agentCode ~ confidenceLevel ~ nino ~ saUtr ~ mdtpInformation ~ affinityGroup ~ credentialStrength ~ loginTimes =>
-        val retrievalData = CspRetrievalData(internalId, externalId, agentCode, confidenceLevel, nino, saUtr,
-          mdtpInformation, affinityGroup, credentialStrength, loginTimes)
+      case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
+        credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes =>
+        val retrievalData = CspRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
+          name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
+          itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
         Future.successful {
           eitherMaybeBadgeIdentifierEoriPair.right.map(maybePair => Some((maybePair.get, Some(retrievalData))))
         }

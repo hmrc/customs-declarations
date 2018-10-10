@@ -53,10 +53,9 @@ trait AuthConnectorStubbing extends UnitSpec with MockitoSugar {
       .thenReturn(Future.failed(authException))
   }
 
-  type NonCspDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes
-  type CspDataType = Option[String] ~ Option[String] ~ Option[String] ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Option[MdtpInformation] ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes
-  type CspRetrievalDataType = Retrieval[CspDataType]
-  type NrsRetrievalDataTypeWithEnrolments = Retrieval[NonCspDataType ~ Enrolments]
+  type NrsDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes
+  type CspRetrievalDataType = Retrieval[NrsDataType]
+  type NrsRetrievalDataTypeWithEnrolments = Retrieval[NrsDataType ~ Enrolments]
 
 
   def authoriseNonCsp(maybeEori: Option[Eori]): Unit = {
@@ -85,16 +84,16 @@ trait AuthConnectorStubbing extends UnitSpec with MockitoSugar {
   }
 
 
-  def verifyCspAuthorisationCalled(numberOfTimes: Int): Future[CspDataType] = {
+  def verifyCspAuthorisationCalled(numberOfTimes: Int): Future[NrsDataType] = {
     verify(mockAuthConnector, times(numberOfTimes))
       .authorise(ameq(cspAuthPredicate), ameq(cspRetrievalData))(any[HeaderCarrier], any[ExecutionContext])
   }
 
-  def verifyNonCspAuthorisationCalled(numberOfTimes: Int): Future[NonCspDataType ~ Enrolments] = {
+  def verifyNonCspAuthorisationCalled(numberOfTimes: Int): Future[NrsDataType ~ Enrolments] = {
     verify(mockAuthConnector, times(numberOfTimes))
       .authorise(ameq(nonCspAuthPredicate), ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext])
   }
 
-  def verifyNonCspAuthorisationNotCalled: Future[NonCspDataType ~ Enrolments] = verifyNonCspAuthorisationCalled(0)
+  def verifyNonCspAuthorisationNotCalled: Future[NrsDataType ~ Enrolments] = verifyNonCspAuthorisationCalled(0)
 
 }

@@ -50,10 +50,20 @@ sealed trait RetrievalData
 case class CspRetrievalData(internalId: Option[String],
                             externalId: Option[String],
                             agentCode: Option[String],
+                            credentials: Credentials,
                             confidenceLevel: ConfidenceLevel,
                             nino: Option[String],
                             saUtr: Option[String],
+                            name: Name,
+                            dateOfBirth: Option[LocalDate],
+                            email: Option[String],
+                            agentInformation: AgentInformation,
+                            groupIdentifier: Option[String],
+                            credentialRole: Option[CredentialRole],
                             mdtpInformation: Option[MdtpInformation],
+                            itmpName: ItmpName,
+                            itmpDateOfBirth: Option[LocalDate],
+                            itmpAddress: ItmpAddress,
                             affinityGroup: Option[AffinityGroup],
                             credentialStrength: Option[String],
                             loginTimes: LoginTimes) extends RetrievalData
@@ -79,9 +89,14 @@ case class NonCspRetrievalData(internalId: Option[String],
                                credentialStrength: Option[String],
                                loginTimes: LoginTimes) extends RetrievalData
 object CspRetrievalData {
+  implicit val credentialsFormat = Json.format[Credentials]
+  implicit val nameFormat = Json.format[Name]
+  implicit val agentInformationFormat = Json.format[AgentInformation]
   implicit val mdtpInformationFormat = Json.format[MdtpInformation]
+  implicit val itmpNameFormat = Json.format[ItmpName]
+  implicit val itmpAddressFormat = Json.format[ItmpAddress]
   implicit val loginTimesFormat = Json.format[LoginTimes]
-  implicit val cspRetrievalData = Json.format[CspRetrievalData]
+  implicit val nonCspRetrievalData = Json.format[CspRetrievalData]
 }
 
 object NonCspRetrievalData {

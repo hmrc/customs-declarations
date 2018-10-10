@@ -111,6 +111,7 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend, successfulConnectorSend, failedConnectorSend, successfulConnectorSend)
 
       val result = send(TestData.ValidatedBatchFileUploadPayloadRequestWithFourFiles).left.get
+      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
 
       verify(mockBatchUpscanInitiateConnector, times(3)).send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedBatchFileUploadPayloadRequest[_]])
     }

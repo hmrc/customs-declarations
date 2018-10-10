@@ -18,7 +18,7 @@ package uk.gov.hmrc.customs.declaration.model
 
 import java.net.URL
 
-import play.api.libs.json.Json
+import play.api.libs.json._
 
 case class FileTransmissionBatch(
   id: BatchId,
@@ -65,4 +65,64 @@ case class FileTransmission(
 object FileTransmission {
   implicit val urlFormat = HttpUrlFormat
   implicit val writes = Json.writes[FileTransmission]
+}
+
+sealed trait FileTransmissionOutcome {
+  val outcome: String
+}
+case object FileTransmissionSuccessOutcome extends FileTransmissionOutcome {
+  override val outcome: String = "SUCCESS"
+}
+case object FileTransmissionFailureOutcome extends FileTransmissionOutcome {
+  override val outcome: String = "FAILURE"
+}
+
+object FileTransmissionOutcome {
+  implicit val readsFileTransmissionOutcome: Reads[FileTransmissionOutcome] = new Reads[FileTransmissionOutcome] {
+    override def reads(json: JsValue): JsResult[FileTransmissionOutcome] = json match {
+      case JsString(FileTransmissionSuccessOutcome.outcome) => JsSuccess(FileTransmissionSuccessOutcome)
+      case JsString(FileTransmissionFailureOutcome.outcome) => JsSuccess(FileTransmissionFailureOutcome)
+      case _ => JsError(s"Invalid FileTransmissionOutcome $json")
+    }
+  }
+}
+
+sealed trait FileTransmissionNotification {
+  val fileReference: FileReference
+  val batchId: BatchId
+  val outcome: FileTransmissionOutcome
+}
+
+case class FileTransmissionSuccessNotification(fileReference: FileReference,
+                                               batchId: BatchId,
+                                               outcome: FileTransmissionOutcome = FileTransmissionSuccessOutcome
+                                    ) extends FileTransmissionNotification
+
+object FileTransmissionSuccessNotification {
+  implicit val readsSuccessCallback: Reads[FileTransmissionSuccessNotification] = Json.reads[FileTransmissionSuccessNotification]
+}
+
+case class FileTransmissionFailureNotification(fileReference: FileReference,
+                                               batchId: BatchId,
+                                               outcome: FileTransmissionOutcome = FileTransmissionFailureOutcome,
+                                               errorDetails: String
+                                     ) extends FileTransmissionNotification
+
+object FileTransmissionFailureNotification {
+  implicit val readsFailureCallback: Reads[FileTransmissionFailureNotification] = Json.reads[FileTransmissionFailureNotification]
+}
+
+case class FileTransmissionCallbackDecider(outcome: FileTransmissionOutcome)
+
+object FileTransmissionCallbackDecider {
+  implicit val reads = Json.reads[FileTransmissionCallbackDecider]
+  def parse(json: JsValue): JsResult[FileTransmissionNotification] = {
+    json.validate[FileTransmissionCallbackDecider] match {
+      case JsSuccess(decider, _) => decider.outcome match {
+        case FileTransmissionSuccessOutcome => json.validate[FileTransmissionSuccessNotification]
+        case FileTransmissionFailureOutcome => json.validate[FileTransmissionFailureNotification]
+      }
+      case error: JsError => error
+    }
+  }
 }

@@ -79,7 +79,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
   }
 
   // Example  CallBackToXmlNotification implementation for file transmission response
-  class FileTransmissionToCallBackToXmlNotification extends CallBackToXmlNotification[ExampleFileTransmissionNotification] {
+  class FileTransmissionToCallbackToXmlNotification extends CallbackToXmlNotification[ExampleFileTransmissionNotification] {
     override def toXml(callbackResponse: ExampleFileTransmissionNotification): NodeSeq = {
       val (status, details) =
         if (callbackResponse.fileTransmissionStatus == ExampleFileTransmissionStatus.SUCCESS) {
@@ -100,7 +100,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
   private val successCallbackPayload = ExampleFileTransmissionNotification(FileReferenceOne, BatchIdOne, ExampleFileTransmissionStatus.SUCCESS, None)
   private val failureCallbackPayload = ExampleFileTransmissionNotification(FileReferenceOne, BatchIdOne, ExampleFileTransmissionStatus.FAILURE, None)
 
-  private implicit val toXml = new FileTransmissionToCallBackToXmlNotification()
+  private implicit val toXml = new FileTransmissionToCallbackToXmlNotification()
 
   "BatchFileUploadNotificationService" should {
     "send SUCCESS notification to the customs notification service" in new SetUp {

@@ -28,22 +28,21 @@ import scala.xml.NodeSeq
 
 case class BatchFileUploadCustomsNotification(clientSubscriptionId: SubscriptionFieldsId, conversationId: UUID, payload: NodeSeq)
 
-
-trait CallBackToXmlNotification[A] {
+trait CallbackToXmlNotification[A] {
   def toXml(callbackResponse: A): NodeSeq
 }
 
-/*
-generic notification sending service for both upscan-notify and file-transmission callback endpoints
+/**
+  Generic notification sending service for both upscan-notify and file-transmission callback endpoints
 */
 @Singleton
 class BatchFileUploadNotificationService @Inject()(notificationConnector: BatchFileUploadCustomsNotificationConnector,
                                                    logger: CdsLogger) {
 
-  def sendMessage[T](callBackResponse: T, fileReference: FileReference, clientSubscriptionId: SubscriptionFieldsId)(implicit callbackToXml: CallBackToXmlNotification[T]): Future[Unit] = {
+  def sendMessage[T](callbackResponse: T, fileReference: FileReference, clientSubscriptionId: SubscriptionFieldsId)(implicit callbackToXml: CallbackToXmlNotification[T]): Future[Unit] = {
 
     val notification = BatchFileUploadCustomsNotification(
-      clientSubscriptionId, fileReference.value, callbackToXml.toXml(callBackResponse)
+      clientSubscriptionId, fileReference.value, callbackToXml.toXml(callbackResponse)
     )
     notificationConnector.send(notification)
   }

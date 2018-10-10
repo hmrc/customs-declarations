@@ -18,18 +18,18 @@ package unit.services
 
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.customs.declaration.services.{FileTransmissionFailureCallbackToXmlNotification, FileTransmissionSuccessCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.services.FileTransmissionCallbackToXmlNotification
 import util.FileTransmissionTestData._
 
 class FileTransmissionCallbackToXmlNotificationSpec extends PlaySpec with MockitoSugar {
 
   "FileTransmissionSuccessCallbackToXmlNotification" should {
     "correctly convert success payload to xml" in {
-        new FileTransmissionSuccessCallbackToXmlNotification().toXml(SuccessNotification) mustBe FileTransmissionSuccessCustomsNotificationXml
+        new FileTransmissionCallbackToXmlNotification().toXml(SuccessNotification) mustBe FileTransmissionSuccessCustomsNotificationXml
     }
 
     "correctly convert failure payload to xml" in {
-        new FileTransmissionFailureCallbackToXmlNotification().toXml(FailureNotification) mustBe FileTransmissionFailureCustomsNotificationXml
+        new FileTransmissionCallbackToXmlNotification().toXml(FailureNotification) mustBe FileTransmissionFailureCustomsNotificationXml
     }
   }
 

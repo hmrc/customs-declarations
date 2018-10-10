@@ -32,7 +32,7 @@ object FileTransmissionTestData {
   val FileTransmissionRequest = FileTransmission(FileTransmissionBatchOne, FileTransmissionCallBackUrl, FileTransmissionFileOne, FileTransmissionInterfaceOne, FileTransmissionProperties)
 
   val SuccessNotification = FileTransmissionSuccessNotification(FileReferenceOne, BatchIdOne, FileTransmissionSuccessOutcome)
-  val FailureNotification = FileTransmissionFailureNotification(FileReferenceOne, BatchIdOne, FileTransmissionFailureOutcome, Some("Some error text"))
+  val FailureNotification = FileTransmissionFailureNotification(FileReferenceOne, BatchIdOne, FileTransmissionFailureOutcome, "error text")
 
   val FileTransmissionRequestJsonString = """{
                                |  "batch" : {
@@ -64,25 +64,25 @@ object FileTransmissionTestData {
 
   val FileTransmissionSuccessNotificationPayload = s"""
        |{
-       |  "fileReference":"${FileReferenceOne.toString}",
-       |  "batchId":"${BatchIdOne.toString}",
+       |  "fileReference":"31400000-8ce0-11bd-b23e-10b96e4ef00f",
+       |  "batchId":"48400000-8cf0-11bd-b23e-10b96e4ef001",
        |  "outcome":"SUCCESS"
        |}
     """.stripMargin
 
   val FileTransmissionFailureNotificationPayload = s"""
        |{
-       |  "fileReference":"${FileReferenceOne.toString}",
-       |  "batchId":"${BatchIdOne.toString}",
+       |  "fileReference":"31400000-8ce0-11bd-b23e-10b96e4ef00f",
+       |  "batchId":"48400000-8cf0-11bd-b23e-10b96e4ef001",
        |  "outcome":"FAILURE",
-       |  "errorDetails":"Some error text"
+       |  "errorDetails":"error text"
        |}
     """.stripMargin
 
-  val invalidFileTransmissionNotificationPayload = s"""
+  val InvalidFileTransmissionNotificationPayload = s"""
        |{
-       |  "fileReference":"${FileReferenceOne.toString}",
-       |  "batchId":"${BatchIdOne.toString}",
+       |  "fileReference":"31400000-8ce0-11bd-b23e-10b96e4ef00f",
+       |  "batchId":"48400000-8cf0-11bd-b23e-10b96e4ef001",
        |  "outcome":"INVALID-OUTCOME",
        |  "errorDetails":"Some error details text"
        |}

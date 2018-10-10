@@ -40,7 +40,7 @@ class FileTransmissionNotificationModelSpec extends UnitSpec {
 
     "In unhappy path" should {
       "return JsError when fileStatus is not SUCCESS or FAILURE" in {
-        val JsError(list) = FileTransmissionCallbackDecider.parse(Json.parse(invalidFileTransmissionNotificationPayload))
+        val JsError(list) = FileTransmissionCallbackDecider.parse(Json.parse(InvalidFileTransmissionNotificationPayload))
 
         val (path, _) = list.head
         path.toString shouldBe "/outcome"

@@ -16,7 +16,7 @@
 
 package unit.controllers
 
-import org.mockito.ArgumentMatchers.{eq => meq, _}
+import org.mockito.ArgumentMatchers.{eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play._
@@ -26,7 +26,8 @@ import play.api.test.Helpers._
 import play.api.test._
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers._
-import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationService, FileTransmissionFailureCallbackToXmlNotification, FileTransmissionSuccessCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.model.FileTransmissionNotification
+import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationService, FileTransmissionCallbackToXmlNotification}
 import util.ApiSubscriptionFieldsTestData.{subscriptionFieldsId, subscriptionFieldsIdString}
 import util.FileTransmissionTestData._
 import util.MockitoPassByNameHelper.PassByNameVerifier
@@ -42,37 +43,35 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
   trait SetUp {
 
     val mockService = mock[BatchFileUploadNotificationService]
-    implicit val successToXmlNotification = mock[FileTransmissionSuccessCallbackToXmlNotification]
-    implicit val failureToXmlNotification = mock[FileTransmissionFailureCallbackToXmlNotification]
+    implicit val callbackToXmlNotification = mock[FileTransmissionCallbackToXmlNotification]
 
-    val controller = new FileTransmissionNotificationController(successToXmlNotification, failureToXmlNotification,
-      mockService, mockCdsLogger)
+    val controller = new FileTransmissionNotificationController(callbackToXmlNotification, mockService, mockCdsLogger)
   }
 
   "file transmission notification controller" should {
 
     "return 204 when a valid SUCCESS request is received" in new SetUp {
-      when(mockService.sendMessage(SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(successToXmlNotification)).thenReturn(Future.successful(()))
+      when(mockService.sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)).thenReturn(Future.successful(()))
 
       val result = controller.post(subscriptionFieldsIdString)(fakeRequestWith(Json.parse(FileTransmissionSuccessNotificationPayload)))
 
       status(result) mustBe NO_CONTENT
       contentAsString(result) mustBe empty
-      verify(mockService).sendMessage(SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)
+      verify(mockService).sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)
     }
 
     "return 204 when a valid FAILURE request is received" in new SetUp {
-      when(mockService.sendMessage(FailureNotification, FailureNotification.fileReference, subscriptionFieldsId)(failureToXmlNotification)).thenReturn(Future.successful(()))
+      when(mockService.sendMessage[FileTransmissionNotification](FailureNotification, FailureNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)).thenReturn(Future.successful(()))
 
       val result = controller.post(subscriptionFieldsIdString)(fakeRequestWith(Json.parse(FileTransmissionFailureNotificationPayload)))
 
       status(result) mustBe NO_CONTENT
       contentAsString(result) mustBe empty
-      verify(mockService).sendMessage(FailureNotification, FailureNotification.fileReference, subscriptionFieldsId)
+      verify(mockService).sendMessage[FileTransmissionNotification](FailureNotification, FailureNotification.fileReference, subscriptionFieldsId)
     }
 
     "return 400 when a invalid request is received" in new SetUp {
-      val result = controller.post(subscriptionFieldsIdString)(fakeRequestWith(Json.parse(invalidFileTransmissionNotificationPayload)))
+      val result = controller.post(subscriptionFieldsIdString)(fakeRequestWith(Json.parse(InvalidFileTransmissionNotificationPayload)))
 
       status(result) mustBe BAD_REQUEST
 
@@ -93,13 +92,13 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
     }
 
     "return 500 when call to Custom Notification services fails" in new SetUp {
-      when(mockService.sendMessage(SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)).thenReturn(Future.failed(TestData.emulatedServiceFailure))
+      when(mockService.sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)).thenReturn(Future.failed(TestData.emulatedServiceFailure))
 
       val result = controller.post(subscriptionFieldsIdString)(fakeRequestWith(Json.parse(FileTransmissionSuccessNotificationPayload)))
 
       status(result) mustBe INTERNAL_SERVER_ERROR
       contentAsString(result) mustBe InternalErrorResponseJson
-      verify(mockService).sendMessage(SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)
+      verify(mockService).sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)
     }
 
   }

@@ -25,14 +25,13 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationService, FileTransmissionFailureCallbackToXmlNotification, FileTransmissionSuccessCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationService, FileTransmissionCallbackToXmlNotification}
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class FileTransmissionNotificationController @Inject() (successToXmlNotification: FileTransmissionSuccessCallbackToXmlNotification,
-                                                        failureToXmlNotification: FileTransmissionFailureCallbackToXmlNotification,
+class FileTransmissionNotificationController @Inject() (callbackToXmlNotification: FileTransmissionCallbackToXmlNotification,
                                                         notificationService: BatchFileUploadNotificationService,
                                                         cdsLogger: CdsLogger) extends BaseController {
 
@@ -49,7 +48,7 @@ class FileTransmissionNotificationController @Inject() (successToXmlNotification
           case JsSuccess(callbackBody, _) => callbackBody match {
             case success: FileTransmissionSuccessNotification =>
               cdsLogger.debug(s"Valid JSON success request received. Body=$js headers=${request.headers}")
-              notificationService.sendMessage[FileTransmissionSuccessNotification](success, success.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(successToXmlNotification).map { _ =>
+              notificationService.sendMessage[FileTransmissionNotification](success, success.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(callbackToXmlNotification).map { _ =>
                 NoContent
               }.recover {
                 case e: Throwable =>
@@ -57,7 +56,7 @@ class FileTransmissionNotificationController @Inject() (successToXmlNotification
               }
             case failure: FileTransmissionFailureNotification =>
               cdsLogger.debug(s"Valid JSON failure request received. Body=$js headers=${request.headers}")
-              notificationService.sendMessage[FileTransmissionFailureNotification](failure, failure.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(failureToXmlNotification).map { _ =>
+              notificationService.sendMessage[FileTransmissionNotification](failure, failure.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(callbackToXmlNotification).map { _ =>
                 NoContent
               }.recover {
                 case e: Throwable =>

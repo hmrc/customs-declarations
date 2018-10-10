@@ -105,7 +105,7 @@ object FileTransmissionSuccessNotification {
 case class FileTransmissionFailureNotification(fileReference: FileReference,
                                                batchId: BatchId,
                                                outcome: FileTransmissionOutcome = FileTransmissionFailureOutcome,
-                                               errorDetails: Option[String]
+                                               errorDetails: String
                                      ) extends FileTransmissionNotification
 
 object FileTransmissionFailureNotification {

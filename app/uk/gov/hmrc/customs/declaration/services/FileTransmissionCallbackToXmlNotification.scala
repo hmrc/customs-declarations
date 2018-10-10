@@ -18,33 +18,29 @@ package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.Singleton
 
-import uk.gov.hmrc.customs.declaration.model.{FileTransmissionFailureNotification, FileTransmissionSuccessNotification}
+import uk.gov.hmrc.customs.declaration.model.{FileTransmissionNotification, FileTransmissionSuccessOutcome}
 
 import scala.xml.NodeSeq
 
 @Singleton
-class FileTransmissionSuccessCallbackToXmlNotification extends CallbackToXmlNotification[FileTransmissionSuccessNotification] {
-  override def toXml(callbackResponse: FileTransmissionSuccessNotification): NodeSeq = {
+class FileTransmissionCallbackToXmlNotification extends CallbackToXmlNotification[FileTransmissionNotification] {
+
+  override def toXml(callbackResponse: FileTransmissionNotification): NodeSeq = {
+    if (callbackResponse.outcome == FileTransmissionSuccessOutcome) {
       <Root>
         <FileReference>{callbackResponse.fileReference.toString}</FileReference>
         <BatchId>{callbackResponse.batchId.toString}</BatchId>
         <Outcome>SUCCESS</Outcome>
         <Details>Thank you for submitting your documents. Typical clearance times are 2 hours for air and 3 hours for maritime declarations. During busy periods wait times may be longer.</Details>
       </Root>
-  }
-}
-
-@Singleton
-class FileTransmissionFailureCallbackToXmlNotification extends CallbackToXmlNotification[FileTransmissionFailureNotification] {
-  override def toXml(callbackResponse: FileTransmissionFailureNotification): NodeSeq = {
+    } else {
       <Root>
         <FileReference>{callbackResponse.fileReference.toString}</FileReference>
         <BatchId>{callbackResponse.batchId.toString}</BatchId>
         <Outcome>FAILURE</Outcome>
         <Details>A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.</Details>
       </Root>
+
+    }
   }
 }
-
-
-

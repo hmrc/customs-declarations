@@ -76,7 +76,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         authoriseCsp()
 
         private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(badgeIdentifier, Some(cspRetrievalValues)))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues)))
         verifyNonCspAuthorisationNotCalled
       }
 
@@ -217,7 +217,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
         private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
 
-        actual shouldBe Right(TestValidatedHeadersRequestNoBadge.toNonCspAuthorisedRequest(declarantEori, Some(nonCspRetrievalValues)))
+        actual shouldBe Right(TestValidatedHeadersRequestNoBadge.toNonCspAuthorisedRequest(declarantEori, Some(nrsRetrievalValues)))
         verifyCspAuthorisationCalled(1)
       }
 

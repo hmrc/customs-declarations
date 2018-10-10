@@ -36,7 +36,7 @@ trait AuthService {
 
   private val cspAuthorisationPredicate = Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)
   private val nonCspAuthorisationPredicate = Enrolment(customsEnrolmentName) and AuthProviders(GovernmentGateway)
-  private val cspRetrieval = TestData.cspRetrievalData
+  private val cspRetrieval = TestData.nrsRetrievalData
   private val nonCspRetrieval = TestData.nrsRetrievalData and Retrievals.authorisedEnrolments
 
   private def bearerTokenMatcher(bearerToken: String)= equalTo("Bearer " + bearerToken)

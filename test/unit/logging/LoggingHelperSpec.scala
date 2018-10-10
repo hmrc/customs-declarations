@@ -56,7 +56,7 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
     }
 
     "testFormatInfo with authorisation" in {
-      LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, Some(cspRetrievalValues))) shouldBe expectedMessage("Info message", "[authorisedAs=Csp(BADGEID123)]")
+      LoggingHelper.formatInfo("Info message", validatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues))) shouldBe expectedMessage("Info message", "[authorisedAs=Csp(BADGEID123)]")
     }
 
     "testFormatError" in {

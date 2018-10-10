@@ -80,7 +80,7 @@ class BatchFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
         authoriseCsp()
 
         private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toBatchFileUploadCspAuthorisedRequest(badgeIdentifier, declarantEori, Some(cspRetrievalValues)))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toBatchFileUploadCspAuthorisedRequest(badgeIdentifier, declarantEori, Some(nrsRetrievalValues)))
         verifyNonCspAuthorisationNotCalled
       }
 

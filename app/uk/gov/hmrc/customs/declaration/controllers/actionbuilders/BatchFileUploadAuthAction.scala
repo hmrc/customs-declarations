@@ -63,14 +63,14 @@ class BatchFileUploadAuthAction @Inject()(override val authConnector: AuthConnec
           }
         } {pair =>
           Future.successful(Right(vhr.toBatchFileUploadCspAuthorisedRequest(pair._1.asInstanceOf[BadgeIdentifierEoriPair].badgeIdentifier,
-            pair._1.asInstanceOf[BadgeIdentifierEoriPair].eori, pair._2.asInstanceOf[Option[CspRetrievalData]])))
+            pair._1.asInstanceOf[BadgeIdentifierEoriPair].eori, pair._2.asInstanceOf[Option[NrsRetrievalData]])))
         }
       case Left(result) =>
         Future.successful(Left(result))
     }
   }
 
-  protected def futureAuthoriseAsBatchFileUploadCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[(BadgeIdentifierEoriPair, Option[RetrievalData])]]] = {
+  protected def futureAuthoriseAsBatchFileUploadCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[(BadgeIdentifierEoriPair, Option[NrsRetrievalData])]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
@@ -87,13 +87,13 @@ class BatchFileUploadAuthAction @Inject()(override val authConnector: AuthConnec
     }
   }
 
-  protected def futureAuthoriseAsBatchFileUploadCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[(BadgeIdentifierEoriPair, Option[RetrievalData])]]] = {
+  protected def futureAuthoriseAsBatchFileUploadCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[Result, Option[(BadgeIdentifierEoriPair, Option[NrsRetrievalData])]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
       case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
         credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes =>
-        val retrievalData = CspRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
+        val retrievalData = NrsRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
           name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
           itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
         Future.successful {

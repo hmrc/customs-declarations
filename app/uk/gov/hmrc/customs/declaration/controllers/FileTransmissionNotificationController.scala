@@ -46,21 +46,13 @@ class FileTransmissionNotificationController @Inject() (callbackToXmlNotificatio
       ) { js =>
         FileTransmissionCallbackDecider.parse(js) match {
           case JsSuccess(callbackBody, _) => callbackBody match {
-            case success: FileTransmissionSuccessNotification =>
+            case notification: FileTransmissionNotification =>
               cdsLogger.debug(s"Valid JSON success request received. Body=$js headers=${request.headers}")
-              notificationService.sendMessage[FileTransmissionNotification](success, success.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(callbackToXmlNotification).map { _ =>
+              notificationService.sendMessage[FileTransmissionNotification](notification, notification.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(callbackToXmlNotification).map { _ =>
                 NoContent
               }.recover {
                 case e: Throwable =>
-                  handleException(e, success, clientSubscriptionId)
-              }
-            case failure: FileTransmissionFailureNotification =>
-              cdsLogger.debug(s"Valid JSON failure request received. Body=$js headers=${request.headers}")
-              notificationService.sendMessage[FileTransmissionNotification](failure, failure.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(callbackToXmlNotification).map { _ =>
-                NoContent
-              }.recover {
-                case e: Throwable =>
-                  handleException(e, failure, clientSubscriptionId)
+                  handleException(e, notification, clientSubscriptionId)
               }
           }
           case _: JsError =>

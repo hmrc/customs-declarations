@@ -154,7 +154,18 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId,
                                 documentType: DocumentType)
                                (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
-    val upscanInitiatePayload = UpscanInitiatePayload(s"${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/decId/${validatedRequest.batchFileUploadRequest.declarationId.value}/eori/${validatedRequest.authorisedAs.asInstanceOf[NonCsp].eori.value}/documentationType/${documentType.value}/clientSubscriptionId/${subscriptionFieldsId.value}")
+
+    val eori = validatedRequest.authorisedAs match {
+      case nonCsp: NonCsp => nonCsp.eori
+      case batchFileUploadCsp: BatchFileUploadCsp => batchFileUploadCsp.eori
+      case _ : Csp => throw new IllegalStateException("Unauthorised access to service")
+    }
+
+    val upscanInitiatePayload = UpscanInitiatePayload(s"""${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/
+      |decId/${validatedRequest.batchFileUploadRequest.declarationId.value}/
+      |eori/${eori.value}/
+      |documentationType/${documentType.value}/
+      |clientSubscriptionId/${subscriptionFieldsId.value}""".stripMargin.replaceAll(System.getProperty("line.separator"), ""))
     logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
     upscanInitiatePayload
   }

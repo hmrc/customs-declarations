@@ -29,7 +29,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestData.{EmulatedServiceFailure, emulatedServiceFailure, ValidatedBatchFileUploadPayloadRequestWithTwoFiles}
+import util.TestData.{EmulatedServiceFailure, emulatedServiceFailure, ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -49,7 +49,7 @@ class BatchUpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with B
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
   private val upscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com")
 
-  implicit val jsonRequest = ValidatedBatchFileUploadPayloadRequestWithTwoFiles
+  implicit val jsonRequest = ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles
 
   override protected def beforeEach() {
     reset(mockWsPost, mockLogger, mockServiceConfigProvider)

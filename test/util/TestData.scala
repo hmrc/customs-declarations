@@ -85,12 +85,24 @@ object TestData {
   val declarantEori = Eori(declarantEoriValue)
   val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
 
-  val ValidatedBatchFileUploadPayloadRequestWithTwoFiles = ValidatedBatchFileUploadPayloadRequest(
+  val ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles = ValidatedBatchFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.Fileupload,
     VersionTwo,
     ClientId("ABC"),
     NonCsp(Eori("123"), None),
+    NodeSeq.Empty,
+    FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
+    BatchFileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
+    Seq(BatchFileUploadFile(FileSequenceNo(1), DocumentType("docType1")), BatchFileUploadFile(FileSequenceNo(2), DocumentType("docType2"))))
+  )
+
+  val ValidatedBatchFileUploadPayloadRequestForCspWithTwoFiles = ValidatedBatchFileUploadPayloadRequest(
+    ConversationId(UUID.randomUUID()),
+    GoogleAnalyticsValues.Fileupload,
+    VersionTwo,
+    ClientId("ABC"),
+    BatchFileUploadCsp(badgeIdentifier, Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     BatchFileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),

@@ -1,8 +1,5 @@
 # Customs Declarations
 
-
-[![Build Status](https://travis-ci.org/hmrc/customs-declarations.svg?branch=master)](https://travis-ci.org/hmrc/customs-declarations) [ ![Download](https://api.bintray.com/packages/hmrc/releases/customs-declarations/images/download.svg) ](https://bintray.com/hmrc/releases/customs-declarations/_latestVersion)
-
 This service offers a general interface for custom declarations, where those declarations are represented using the full DMS implementation of the WCO declarations XML.
 
 This is as apposed to the, as yet undefined, operation specific customs services which will accept requests with more restricted operation specific payloads.

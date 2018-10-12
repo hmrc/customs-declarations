@@ -129,7 +129,6 @@ trait DeclarationService {
     }
   }
 
-  //TODO: Service should not return a Result, it is controller's job to return the result in a format that the caller accept
   private def futureApiSubFieldsId[A](c: ClientId)
                                      (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {

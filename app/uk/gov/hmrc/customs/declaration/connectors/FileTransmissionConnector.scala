@@ -20,7 +20,7 @@ import com.google.inject._
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes.JSON
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiVersion, FileTransmission}
+import uk.gov.hmrc.customs.declaration.model.FileTransmission
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -37,7 +37,7 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON, USER_AGENT -> "customs-declarations")
   )
 
-  def send[A](request: FileTransmission, apiVersion: ApiVersion): Future[Unit] = {
+  def send[A](request: FileTransmission): Future[Unit] = {
     post(request, config.batchFileUploadConfig.fileTransmissionBaseUrl)
   }
 

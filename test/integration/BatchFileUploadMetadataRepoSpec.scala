@@ -116,7 +116,7 @@ class BatchFileUploadMetadataRepoSpec extends UnitSpec
       maybeActual shouldBe Some(expectedRecord)
       await(repository.fetch(BatchFileOne.reference)) shouldBe Some(expectedRecord)
       await(repository.fetch(BatchFileTwo.reference)) shouldBe Some(BatchFileMetadataWithFileTwo)
-      logVerifier("debug", "updating batch file upload metatdata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f with callbackField=CallbackFields(UPDATED_NAME,UPDATED_MIMETYPE,UPDATED_CHECKSUM)")
+      logVerifier("debug", "updating batch file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f with callbackField=CallbackFields(UPDATED_NAME,UPDATED_MIMETYPE,UPDATED_CHECKSUM)")
     }
 
     "not update checksum, when searching by reference fails" in {
@@ -140,8 +140,8 @@ class BatchFileUploadMetadataRepoSpec extends UnitSpec
       val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
 
       maybeFoundRecordTwo shouldBe Some(BatchFileMetadataWithFileTwo)
-      logVerifier("debug", "fetching batch file upload metatdata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f")
-      logVerifier("debug", "fetching batch file upload metatdata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f")
+      logVerifier("debug", "fetching batch file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f")
+      logVerifier("debug", "fetching batch file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f")
     }
 
     "return None when fetch by file reference is un-successful" in {

@@ -53,6 +53,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val nrsWaitTimeMillis = root.int("nrs.waittime.millis")
 
   private val upscanCallbackUrl = root.string("upscan-callback.url")
+  private val batchFileUploadUpscanCallbackUrl = root.string("batch-file-upload-upscan-callback.url")
   private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
   private val fileTransmissionUrl = fileTransmissionService.serviceUrl
 
@@ -73,7 +74,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
     ) (NrsConfig.apply)
 
   private val validatedBatchFileUploadConfig: ValidationNel[String, BatchFileUploadConfig] = (
-    upscanCallbackUrl |@| fileGroupSizeMaximum |@| fileTransmissionUrl
+    upscanCallbackUrl |@| batchFileUploadUpscanCallbackUrl |@| fileGroupSizeMaximum |@| fileTransmissionUrl
   ) (BatchFileUploadConfig.apply)
 
   private val customsConfigHolder =

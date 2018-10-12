@@ -70,29 +70,24 @@ class AuthAction @Inject()(
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
   protected lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
-  type NonCspDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~
+  type NrsRetrievalDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~
                         Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
                         Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~
                         Option[AffinityGroup] ~ Option[String] ~ LoginTimes
 
-  type CspDataType = Option[String] ~ Option[String] ~ Option[String] ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~
-                     Option[MdtpInformation] ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes
+  type CspRetrievalDataType = Retrieval[NrsRetrievalDataType]
+  type NonCspRetrievalDataType = Retrieval[NrsRetrievalDataType ~ Enrolments]
 
-  type CspRetrievalDataType = Retrieval[CspDataType]
-  type NonCspRetrievalDataType = Retrieval[NonCspDataType ~ Enrolments]
+  protected val cspRetrievals: CspRetrievalDataType =
+    Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
+    Retrievals.credentials and Retrievals.confidenceLevel and Retrievals.nino and
+    Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
+    Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and
+    Retrievals.credentialRole and Retrievals.mdtpInformation and Retrievals.itmpName and
+    Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and
+    Retrievals.credentialStrength and Retrievals.loginTimes
 
-  protected val cspRetrievals: CspRetrievalDataType = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
-                                                    Retrievals.confidenceLevel and Retrievals.nino and Retrievals.saUtr and
-                                                    Retrievals.mdtpInformation and Retrievals.affinityGroup and
-                                                    Retrievals.credentialStrength and Retrievals.loginTimes
-
-  protected val nonCspRetrievals: NonCspRetrievalDataType = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
-                                                          Retrievals.credentials and Retrievals.confidenceLevel and Retrievals.nino and
-                                                          Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
-                                                          Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and
-                                                          Retrievals.credentialRole and Retrievals.mdtpInformation and Retrievals.itmpName and
-                                                          Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and
-                                                          Retrievals.credentialStrength and Retrievals.loginTimes and Retrievals.authorisedEnrolments
+  protected val nonCspRetrievals: NonCspRetrievalDataType = cspRetrievals and Retrievals.authorisedEnrolments
 
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val implicitVhr: ValidatedHeadersRequest[A] = vhr
@@ -109,7 +104,7 @@ class AuthAction @Inject()(
             case Right(a) => Right(a)
           }
         }{ badgeIdNrsPayload =>
-          Future.successful(Right(vhr.toCspAuthorisedRequest(badgeIdNrsPayload._1, badgeIdNrsPayload._2.asInstanceOf[Option[CspRetrievalData]])))
+          Future.successful(Right(vhr.toCspAuthorisedRequest(badgeIdNrsPayload._1, badgeIdNrsPayload._2.asInstanceOf[Option[NrsRetrievalData]])))
         }
       case Left(result) =>
         Future.successful(Left(result.XmlResult.withConversationId))
@@ -120,20 +115,22 @@ class AuthAction @Inject()(
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
   // Right(None) if not authorised as CSP
-  private def futureAuthoriseAsCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])]]] = {
+  private def futureAuthoriseAsCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[NrsRetrievalData])]]] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
       authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
-      case internalId ~ externalId ~ agentCode ~ confidenceLevel ~ nino ~ saUtr ~ mdtpInformation ~ affinityGroup ~ credentialStrength ~ loginTimes =>
+      case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
+        credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes =>
         Future.successful {
-          maybeBadgeIdentifier.fold[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])]]]{
+          maybeBadgeIdentifier.fold[Either[ErrorResponse, Option[(BadgeIdentifier, Option[NrsRetrievalData])]]]{
             logger.error("badge identifier invalid or not present for CSP")
             googleAnalyticsConnector.failure(errorResponseBadgeIdentifierHeaderMissing.message)
             Left(errorResponseBadgeIdentifierHeaderMissing)
           }{ badgeId =>
 
-            val retrievalData = CspRetrievalData(internalId, externalId, agentCode, confidenceLevel, nino, saUtr,
-              mdtpInformation,affinityGroup, credentialStrength, loginTimes)
+            val retrievalData = NrsRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
+              name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
+              itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
 
             logger.debug("Authorising as CSP")
             Right(Some((badgeId, Some(retrievalData))))
@@ -162,9 +159,9 @@ class AuthAction @Inject()(
 
     authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
       case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
-        credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes ~ allEnrolments =>
+        credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes ~ authorisedEnrolments =>
 
-        val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(allEnrolments, hc.authorization)
+        val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(authorisedEnrolments, hc.authorization)
 
         logger.debug(s"EORI from Customs enrolment for non-CSP request: $maybeEori")
         maybeEori.fold[Future[Either[ErrorResponse, AuthorisedRequest[A]]]]{
@@ -173,7 +170,7 @@ class AuthAction @Inject()(
         }{ eori =>
           logger.debug("Authorising as non-CSP")
 
-          val retrievalData = NonCspRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
+          val retrievalData = NrsRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
             name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
             itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
 
@@ -194,12 +191,12 @@ class AuthAction @Inject()(
   // this enables calling function to not worry about recover blocks
   // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
   // Right(None) if not authorised as CSP
-  private def futureAuthoriseAsCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])] ] ] = {
+  private def futureAuthoriseAsCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[NrsRetrievalData])] ] ] = {
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
     authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
       Future.successful{
-        maybeBadgeIdentifier.fold[Either[ErrorResponse, Option[(BadgeIdentifier, Option[RetrievalData])] ] ]{
+        maybeBadgeIdentifier.fold[Either[ErrorResponse, Option[(BadgeIdentifier, Option[NrsRetrievalData])] ] ]{
           logger.error("badge identifier invalid or not present for CSP")
           googleAnalyticsConnector.failure(errorResponseBadgeIdentifierHeaderMissing.message)
           Left(errorResponseBadgeIdentifierHeaderMissing)

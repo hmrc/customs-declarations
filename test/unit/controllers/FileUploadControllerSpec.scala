@@ -118,7 +118,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       }
 
       when(mockXmlValidationService.validate(ValidFileUploadXml)).thenReturn(Future.successful(()))
-      when(mockAuthConnector.authorise(ameq(Enrolment(apiScope) and AuthProviders(PrivilegedApplication)), ameq(cspRetrievalData))(any[HeaderCarrier], any[ExecutionContext]))
+      when(mockAuthConnector.authorise(ameq(Enrolment(apiScope) and AuthProviders(PrivilegedApplication)), ameq(nrsRetrievalData))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Future.failed(new InsufficientEnrolments))
 
       when(mockAuthConnector.authorise(any, ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))

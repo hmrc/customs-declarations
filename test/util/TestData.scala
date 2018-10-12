@@ -162,34 +162,23 @@ object TestData {
 
   val nrsLoginTimes = LoginTimes(currentLoginTime, Some(previousLoginTime))
 
-  val nonCspRetrievalValues = NonCspRetrievalData(Some(nrsInternalIdValue),
-                                            Some(nrsExternalIdValue),
-                                            Some(nrsAgentCodeValue),
-                                            nrsCredentials,
-                                            nrsConfidenceLevel,
-                                            Some(nrsNinoValue),
-                                            Some(nrsSaUtrValue),
-                                            nrsNameValue,
-                                            nrsDateOfBirth,
-                                            nrsEmailValue,
-                                            nrsAgentInformationValue,
-                                            nrsGroupIdentifierValue,
-                                            nrsCredentialRole,
-                                            Some(nrsMdtpInformation),
-                                            nrsItmpName,
-                                            nrsDateOfBirth,
-                                            nrsItmpAddress,
-                                            nrsAffinityGroup,
-                                            nrsCredentialStrength,
-                                            nrsLoginTimes)
-
-  val cspRetrievalValues = CspRetrievalData(Some(nrsInternalIdValue),
+  val nrsRetrievalValues = NrsRetrievalData(Some(nrsInternalIdValue),
     Some(nrsExternalIdValue),
     Some(nrsAgentCodeValue),
+    nrsCredentials,
     nrsConfidenceLevel,
     Some(nrsNinoValue),
     Some(nrsSaUtrValue),
+    nrsNameValue,
+    nrsDateOfBirth,
+    nrsEmailValue,
+    nrsAgentInformationValue,
+    nrsGroupIdentifierValue,
+    nrsCredentialRole,
     Some(nrsMdtpInformation),
+    nrsItmpName,
+    nrsDateOfBirth,
+    nrsItmpAddress,
     nrsAffinityGroup,
     nrsCredentialStrength,
     nrsLoginTimes)
@@ -198,9 +187,6 @@ object TestData {
     Retrievals.nino and Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
     Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
     Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
-
-    val cspRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.confidenceLevel and
-    Retrievals.nino and Retrievals.saUtr and Retrievals.mdtpInformation and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
 
   val nrsReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
     ,Some(nrsExternalIdValue)),
@@ -223,28 +209,17 @@ object TestData {
     nrsCredentialStrength),
     nrsLoginTimes)
 
-  val cspReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
-    ,Some(nrsExternalIdValue)),
-    Some(nrsAgentCodeValue)),
-    nrsConfidenceLevel),
-    Some(nrsNinoValue)),
-    Some(nrsSaUtrValue)),
-    Some(nrsMdtpInformation)),
-    nrsAffinityGroup),
-    nrsCredentialStrength),
-    nrsLoginTimes)
-
   val cspNrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, cspRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
+    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
 
 
   val nrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nonCspRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
+    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
 
   val cspNrsMetadataMultipleHeaderValues = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, cspRetrievalValues, "bearer-token", Json.parse("""{"Accept":"ABC,DEF","Authorization":"bearer-token"}"""),
+    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Accept":"ABC,DEF","Authorization":"bearer-token"}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
 
   val nrsPayload = new NrsPayload("QW55Q29udGVudEFzWG1sKDxmb28+YmFyPC9mb28+KQ==", nrsMetadata)
@@ -314,14 +289,14 @@ object TestData {
 
   val TestValidatedHeadersRequestWithGoogleAnalyticsEndpointDisabled: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithGoogleAnalyticsEndpointDisabled.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestValidatedHeadersRequestMultipleHeaderValues: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestMultipleHeaderValues.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestCspAuthorisedRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, Some(cspRetrievalValues))
+  val TestCspAuthorisedRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues))
   val TestValidatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestValidatedHeadersRequestWithBadgeIdAndNoEori: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithBadgeIdAndNoEori.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestValidatedHeadersRequestWithEoriAndNoBadgeId: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithEoriAndNoBadgeId.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, Some(cspRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
-  val TestCspValidatedPayloadRequestWithGoogleAnalyticsEndpointDisabled: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequestWithGoogleAnalyticsEndpointDisabled.toCspAuthorisedRequest(badgeIdentifier, Some(cspRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
-  val TestCspValidatedPayloadRequestMultipleHeaderValues: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequestMultipleHeaderValues.toCspAuthorisedRequest(badgeIdentifier, Some(cspRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
-  val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori, Some(nonCspRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestCspValidatedPayloadRequestWithGoogleAnalyticsEndpointDisabled: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequestWithGoogleAnalyticsEndpointDisabled.toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestCspValidatedPayloadRequestMultipleHeaderValues: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequestMultipleHeaderValues.toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori, Some(nrsRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 
   val BatchIdOne = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef001"))
   val BatchIdTwo = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef002"))

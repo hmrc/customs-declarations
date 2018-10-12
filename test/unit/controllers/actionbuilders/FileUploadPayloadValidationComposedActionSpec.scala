@@ -46,7 +46,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
 
   "FileUploadPayloadValidationComposedAction" should  {
     "return 403 response when authorised as CSP" in new SetUp {
-      val authorisedCspRequest: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.Fileupload, VersionTwo, clientId, Csp(BadgeIdentifier("CSP1"), Some(cspRetrievalValues)), mock[Request[AnyContent]])
+      val authorisedCspRequest: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.Fileupload, VersionTwo, clientId, Csp(BadgeIdentifier("CSP1"), Some(nrsRetrievalValues)), mock[Request[AnyContent]])
 
       val actualResult: Either[Result, ValidatedUploadPayloadRequest[AnyContent]] = await(fileUploadPayloadValidationComposedAction.refine(authorisedCspRequest))
 
@@ -54,7 +54,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
     }
 
     "return an error when validation fails" in new SetUp {
-      val authorisedNonCspRequest: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.Fileupload, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nonCspRetrievalValues)), mock[Request[AnyContent]])
+      val authorisedNonCspRequest: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.Fileupload, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), mock[Request[AnyContent]])
       val mockResult: Result = mock[Result]
 
       when(mockFileUploadPayloadValidationAction.refine(authorisedNonCspRequest)).thenReturn(Future.successful(Left(mockResult)))
@@ -64,7 +64,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
 
     "return success when there are no errors" in new SetUp {
       val testUpscanInitiatePayload: NodeSeq = <upscanInitiate><declarationID>dec123</declarationID><documentationType>docType123</documentationType></upscanInitiate>
-      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.Fileupload, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nonCspRetrievalValues)), FakeRequest("GET", "/").withXmlBody(testUpscanInitiatePayload))
+      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.Fileupload, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(testUpscanInitiatePayload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(testUpscanInitiatePayload)
 
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))

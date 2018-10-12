@@ -36,7 +36,7 @@ trait AuthService {
 
   private val cspAuthorisationPredicate = Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)
   private val nonCspAuthorisationPredicate = Enrolment(customsEnrolmentName) and AuthProviders(GovernmentGateway)
-  private val cspRetrieval = TestData.cspRetrievalData
+  private val cspRetrieval = TestData.nrsRetrievalData
   private val nonCspRetrieval = TestData.nrsRetrievalData and Retrievals.authorisedEnrolments
 
   private def bearerTokenMatcher(bearerToken: String)= equalTo("Bearer " + bearerToken)
@@ -65,19 +65,19 @@ trait AuthService {
           .withStatus(Status.OK)
           .withBody(
             """{
-              |  "internalId":"Int-d67e2592-e560-4766-9e2a-bd2e107ab50a",
-              |  "externalId":"Ext-9cf74a8d-64eb-4ec1-83c1-e432ffa4aa65",
-              |  "agentCode":"123456789",
-              |  "confidenceLevel":50,
-              |  "mdtpInformation": {
-              |    "deviceId":"device-identifier-1234",
-              |    "sessionId":"session-id-12345"
+              |  "credentials": {
+              |    "providerId": "",
+              |    "providerType": ""
               |  },
-              |  "affinityGroup":"Individual",
-              |  "credentialStrength":"strong",
+              |  "confidenceLevel": 500,
+              |  "name": {},
+              |  "agentInformation": {},
+              |  "itmpName": {},
+              |  "itmpAddress": {},
+              |  "credentialStrength": "none",
               |  "loginTimes": {
-              |    "currentLogin":"2018-04-23T09:26:45.069Z",
-              |    "previousLogin":"2018-04-05T13:59:54.082Z"
+              |    "currentLogin": "2018-10-09T13:42:56.965Z",
+              |    "previousLogin": null
               |  }
               |}""".stripMargin)
       )
@@ -125,26 +125,26 @@ trait AuthService {
                |    "providerId": "a-cred-id",
                |    "providerType": "GovernmentGateway"
                |  },
-               |  "confidenceLevel":50,
-               |    "name": {
+               |  "confidenceLevel": 50,
+               |  "name": {
                |    "name": "TestUser"
                |  },
                |  "email": "",
-               |  "agentInformation":{},
-               |  "groupIdentifier": "testGroupId-e2cc8c50-c38f-4014-8265-4e3b35db814d",
+               |  "agentInformation": {},
+               |  "groupIdentifier": "testGroupId-af271a17-319f-4d3a-82bc-961f7980d58b",
                |  "mdtpInformation": {
                |    "deviceId": "device-identifier-1234",
-               |    "sessionId":"session-id-12345"
+               |    "sessionId": "session-id-12345"
                |  },
-               |  "affinityGroup":"Individual",
-               |  "credentialStrength":"strong",
+               |  "itmpName": {},
+               |  "itmpAddress": {},
+               |  "affinityGroup": "Individual",
+               |  "credentialStrength": "strong",
+               |  "authorisedEnrolments": [ ${enrolmentRetrievalJson(customsEnrolmentName, "EORINumber", eori.value)} ],
                |  "loginTimes": {
                |    "currentLogin": "2018-04-23T09:26:45.069Z",
-               |    "previousLogin":"2018-04-05T13:59:54.082Z"
-               |  },
-               |  "authorisedEnrolments": [ ${enrolmentRetrievalJson(customsEnrolmentName, "EORINumber", eori.value)} ],
-               |  "itmpAddress": {},
-               |  "itmpName": {}
+               |    "previousLogin": "2018-04-05T13:59:54.082Z"
+               |  }
                |}""".stripMargin
           )
       )

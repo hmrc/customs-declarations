@@ -62,7 +62,7 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
     GoogleAnalyticsValues.Submit,
     VersionTwo,
     ClientId("ABC"),
-    NonCsp(Eori("123"), Some(TestData.nonCspRetrievalValues)),
+    NonCsp(Eori("123"), Some(TestData.nrsRetrievalValues)),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request"))
   )

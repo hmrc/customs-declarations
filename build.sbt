@@ -48,6 +48,7 @@ lazy val microservice = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
   .enablePlugins(SbtDistributablesPlugin)
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
+  .enablePlugins(SbtArtifactory)
   .configs(testConfig: _*)
   .settings(
     commonSettings,
@@ -60,6 +61,7 @@ lazy val microservice = (project in file("."))
     scoverageSettings,
     allResolvers
   )
+  .settings(majorVersion := 0)
 
 def onPackageName(rootPackage: String): String => Boolean = {
   testName => testName startsWith rootPackage

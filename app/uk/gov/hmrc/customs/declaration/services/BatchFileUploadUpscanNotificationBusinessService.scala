@@ -70,19 +70,19 @@ class BatchFileUploadUpscanNotificationBusinessService @Inject()(repo: BatchFile
     )
   }
 
-  private def maybeFileTransmissionFile(fileReference: FileReference, md: BatchFileUploadMetadata): Option[(BatchFile, FileTransmissionFile)] = {
+  private def maybeFileTransmissionFile(fileReference: FileReference, metadata: BatchFileUploadMetadata): Option[(BatchFile, FileTransmissionFile)] = {
     for {
-      bf <- md.files.find(bf => bf.reference == fileReference)
-      cb <- bf.maybeCallbackFields
+      batchFile <- metadata.files.find(bf => bf.reference == fileReference)
+      cbFields <- batchFile.maybeCallbackFields
     } yield (
-      bf,
+      batchFile,
       FileTransmissionFile(
-        bf.reference,
-        cb.name,
-        cb.mimeType,
-        cb.checksum,
-        bf.location,
-        bf.sequenceNumber
+        batchFile.reference,
+        cbFields.name,
+        cbFields.mimeType,
+        cbFields.checksum,
+        batchFile.location,
+        batchFile.sequenceNumber
       )
     )
   }

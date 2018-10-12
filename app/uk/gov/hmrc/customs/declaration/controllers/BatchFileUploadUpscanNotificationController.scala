@@ -41,18 +41,16 @@ class BatchFileUploadUpscanNotificationController @Inject()(notificationService:
 
     val clientSubscriptionId = SubscriptionFieldsId(UUID.fromString(clientSubscriptionIdString))
     request.body.asJson
-      .fold(
-        {
+      .fold{
           cdsLogger.error(s"Malformed JSON received. Body: ${request.body.asText} headers: ${request.headers}")
           Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)
-        }
-      ) { js =>
+      }{js =>
         UploadedReadyCallbackBody.parse(js) match {
           case JsSuccess(callbackBody, _) =>
             implicit val conversationId = conversationIdForLogging(callbackBody.reference.value)
             callbackBody match {
               case ready: UploadedReadyCallbackBody =>
-                cdsLogger.debug(s"Valid JSON request received. Body: $js headers: ${request.headers}")
+                cdsLogger.debug(s"Valid JSON request received with READY status. Body: $js headers: ${request.headers}")
                 businessService.persistAndCallFileTransmission(ready).map{_ =>
                     Results.NoContent
                 }.recover{
@@ -61,6 +59,7 @@ class BatchFileUploadUpscanNotificationController @Inject()(notificationService:
                     internalServerErrorResult(e)
                 }
               case failed: UploadedFailedCallbackBody =>
+                cdsLogger.debug(s"Valid JSON request received with FAILED status. Body: $js headers: ${request.headers}")
                 notificationService.sendMessage[UploadedFailedCallbackBody](
                   failed,
                   failed.reference,

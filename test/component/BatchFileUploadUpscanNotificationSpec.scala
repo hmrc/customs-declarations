@@ -150,7 +150,7 @@ class BatchFileUploadUpscanNotificationSpec extends ComponentTestSpec with Expec
       Then("Declaration Service returns 500")
       status(result) shouldBe 500
 
-      And("the response body is empty")
+      And("the response body is internal error Json")
       contentAsString(result) shouldBe UpscanNotificationInternalServerErrorJson
     }
   }

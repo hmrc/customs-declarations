@@ -78,7 +78,7 @@ class BatchFileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvide
   }
 
   override def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]] = {
-    logger.debug(s"fetching batch file upload metatdata with file reference: $reference")
+    logger.debug(s"fetching batch file upload metadata with file reference: $reference")
 
     val selector = Json.obj("files.reference" -> reference)
     collection.find(selector).one[BatchFileUploadMetadata]
@@ -93,7 +93,7 @@ class BatchFileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvide
   }
 
   def update(reference: FileReference, cf: CallbackFields)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]] = {
-    logger.debug(s"updating batch file upload metatdata with file reference: $reference with callbackField=$cf")
+    logger.debug(s"updating batch file upload metadata with file reference: $reference with callbackField=$cf")
 
     val selector = Json.obj("files.reference" -> reference.toString)
     val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum)))

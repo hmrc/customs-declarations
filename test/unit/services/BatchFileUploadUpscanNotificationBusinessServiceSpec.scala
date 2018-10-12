@@ -73,7 +73,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
   }
 
   "BatchFileUploadUpscanNotificationBusinessService" should {
-    "update metatdata and call file transmission service" in new SetUp {
+    "update metadata and call file transmission service" in new SetUp {
       when(mockRepo.update(FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFilesOneAndThree)))
       when(mockConnector.send(any[FileTransmission])).thenReturn(Future.successful(()))
 
@@ -87,7 +87,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
       verify(mockConnector).send(ameq(fileTransmissionRequest))
     }
 
-    "return failed future when no metatdata record found for file reference" in new SetUp {
+    "return failed future when no metadata record found for file reference" in new SetUp {
       when(mockRepo.update(FileReferenceOne, callbackFields)).thenReturn(Future.successful(None))
 
       val error = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(readyCallbackBody)))
@@ -100,7 +100,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
       verifyZeroInteractions(mockConnector)
     }
 
-    "return failed future when file reference not found in returned metatdata" in new SetUp {
+    "return failed future when file reference not found in returned metadata" in new SetUp {
       when(mockRepo.update(FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFileTwo)))
 
       val error = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(readyCallbackBody)))

@@ -78,7 +78,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
     }
   }
 
-  // Example  CallBackToXmlNotification implementation for file transmission response
+  // Example  CallbackToXmlNotification implementation for file transmission response
   class FileTransmissionToCallbackToXmlNotification extends CallbackToXmlNotification[ExampleFileTransmissionNotification] {
     override def toXml(callbackResponse: ExampleFileTransmissionNotification): NodeSeq = {
       val (status, details) =

@@ -78,7 +78,7 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
     implicit val jsonRequest = ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles
 
-    val upscanInitiatePayload = UpscanInitiatePayload("http://upscan-callback.url/uploaded-file-upscan-notifications/decId/decId123/eori/123/documentationType/docType1/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
+    val upscanInitiatePayload = UpscanInitiatePayload("http://batch-file-upload-upscan-callback.url/uploaded-batch-file-upscan-notifications/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
     val upscanInitiateResponsePayload1 = UpscanInitiateResponsePayload(FileReferenceOne.value.toString, UpscanInitiateUploadRequest("https://a.b.com", Map(("label1","value1"), ("label2","value2"))))
     val upscanInitiateResponsePayload2 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", Map(("labelx","valuey"))))
 
@@ -86,7 +86,7 @@ class BatchFileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       await(service.send(vupr, hc))
     }
 
-    when(mockBatchFileUploadConfig.upscanCallbackUrl).thenReturn("http://upscan-callback.url")
+    when(mockBatchFileUploadConfig.batchFileUploadCallbackUrl).thenReturn("http://batch-file-upload-upscan-callback.url")
     when(mockConfiguration.batchFileUploadConfig).thenReturn(mockBatchFileUploadConfig)
     when(mockUuidService.uuid()).thenReturn(any[UUID])
     when(mockBatchFileUploadMetadataRepo.create(any[BatchFileUploadMetadata])).thenReturn(Future.successful(true))

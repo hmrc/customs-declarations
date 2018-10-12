@@ -37,7 +37,7 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON, USER_AGENT -> "customs-declarations")
   )
 
-  def send[A](request: FileTransmission, apiVersion: ApiVersion): Future[Unit] = {
+  def send[A](request: FileTransmission): Future[Unit] = {
     post(request, config.batchFileUploadConfig.fileTransmissionBaseUrl)
   }
 

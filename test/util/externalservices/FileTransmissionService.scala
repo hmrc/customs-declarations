@@ -23,6 +23,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.model.FileTransmission
 import util.CustomsDeclarationsExternalServicesConfig._
 import util.WireMockRunner
+import scala.collection.JavaConverters._
 
 trait FileTransmissionService extends WireMockRunner {
   private val urlMatchingRequestPath = urlMatching(FileTransmissionContext)
@@ -35,6 +36,13 @@ trait FileTransmissionService extends WireMockRunner {
     willReturn(
       aResponse()
         .withStatus(status)))
+
+  def aRequestWasMadeToFileTransmissionService(): (Map[String, String], String) = {
+    verify(1, postRequestedFor(urlMatchingRequestPath))
+    val req = findAll(postRequestedFor(urlMatchingRequestPath)).get(0)
+    val keys: List[String] = List.concat(req.getHeaders.keys().asScala)
+    (Map(keys map { s => (s, req.getHeader(s)) }: _*), req.getBodyAsString)
+  }
 
   def verifyFileTransmissionServiceWasCalledWith(request: FileTransmission) {
     verify(

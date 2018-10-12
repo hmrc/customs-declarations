@@ -94,7 +94,10 @@ trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppP
     "microservice.services.customs-notification.host" -> ExternalServicesConfig.Host,
     "microservice.services.customs-notification.port" -> ExternalServicesConfig.Port,
     "microservice.services.customs-notification.context" -> "/customs-notification/notify",
-    "microservice.services.customs-notification.bearer-token" -> CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
+    "microservice.services.customs-notification.bearer-token" -> CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue,
+    "microservice.services.file-transmission.host" -> ExternalServicesConfig.Host,
+    "microservice.services.file-transmission.port" -> ExternalServicesConfig.Port,
+    "microservice.services.file-transmission.context" -> CustomsDeclarationsExternalServicesConfig.FileTransmissionContext
   )).build()
 
   protected def string2xml(s: String): Node = {

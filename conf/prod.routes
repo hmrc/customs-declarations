@@ -5,13 +5,17 @@ POST        /                             @uk.gov.hmrc.customs.declaration.contr
 
 POST        /cancellation-requests        @uk.gov.hmrc.customs.declaration.controllers.CancelDeclarationController.post()
 
+# this is a deprecated endpoint and will be replaced by /batch-file-upload
 POST        /file-upload                  @uk.gov.hmrc.customs.declaration.controllers.FileUploadController.post()
 
 POST        /batch-file-upload            @uk.gov.hmrc.customs.declaration.controllers.BatchFileUploadController.post()
 
 GET         /admin/metrics                @com.kenshoo.play.metrics.MetricsController.metrics
 
+# this is a deprecated endpoint and will be replaced by /uploaded-batch-file-upscan-notifications
 POST        /uploaded-file-upscan-notifications/decId/:decId/eori/:eori/documentationType/:docType/clientSubscriptionId/:clientSubscriptionId @uk.gov.hmrc.customs.declaration.controllers.UpscanNotificationController.post(decId,eori,docType,clientSubscriptionId)
+
+POST        /uploaded-batch-file-upscan-notifications/clientSubscriptionId/:clientSubscriptionId     @uk.gov.hmrc.customs.declaration.controllers.BatchFileUploadUpscanNotificationController.post(clientSubscriptionId)
 
 POST        /file-transmission-notify/clientSubscriptionId/:clientSubscriptionId     @uk.gov.hmrc.customs.declaration.controllers.FileTransmissionNotificationController.post(clientSubscriptionId)
 

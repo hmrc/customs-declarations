@@ -99,6 +99,6 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
   }
 
   private def sendValidRequest() = {
-    connector.send(FileTransmissionRequest, VersionOne)
+    connector.send(FileTransmissionRequest)
   }
 }

@@ -140,7 +140,7 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
   private def backendCall[A](upscanInitiateRequest: UpscanInitiateRequest)
                               (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
     batchUpscanInitiateConnector.send(
-      preparePayload(upscanInitiateRequest.subscriptionFieldsId, upscanInitiateRequest.documentType), validatedRequest.requestedApiVersion)
+      preparePayload(upscanInitiateRequest.subscriptionFieldsId), validatedRequest.requestedApiVersion)
   }
 
   private def extractEori(authorisedAs: AuthorisedAs): Eori = {
@@ -151,21 +151,11 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
     }
   }
 
-  private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId,
-                                documentType: DocumentType)
+  private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId)
                                (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
 
-    val eori = validatedRequest.authorisedAs match {
-      case nonCsp: NonCsp => nonCsp.eori
-      case batchFileUploadCsp: BatchFileUploadCsp => batchFileUploadCsp.eori
-      case _ : Csp => throw new IllegalStateException("Unauthorised access to service")
-    }
-
-    val upscanInitiatePayload = UpscanInitiatePayload(s"""${config.batchFileUploadConfig.upscanCallbackUrl}/uploaded-file-upscan-notifications/
-      |decId/${validatedRequest.batchFileUploadRequest.declarationId.value}/
-      |eori/${eori.value}/
-      |documentationType/${documentType.value}/
-      |clientSubscriptionId/${subscriptionFieldsId.value}""".stripMargin.replaceAll(System.getProperty("line.separator"), ""))
+    val upscanInitiatePayload = UpscanInitiatePayload(
+      s"""${config.batchFileUploadConfig.batchFileUploadCallbackUrl}/uploaded-batch-file-upscan-notifications/clientSubscriptionId/${subscriptionFieldsId.value}""".stripMargin)
     logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
     upscanInitiatePayload
   }

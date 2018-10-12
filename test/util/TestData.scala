@@ -314,14 +314,18 @@ object TestData {
     location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(2), size = 1, documentType = DocumentType("Document Type 2"))
   val BatchFileThree = BatchFile(reference = FileReferenceThree, Some(CallbackFieldsThree),
     location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(3), size = 1, documentType = DocumentType("Document Type 3"))
+  val BatchFileOneNoCallbackFields = BatchFileOne.copy(maybeCallbackFields = None)
   val BatchFileMetadataWithFileOne = BatchFileUploadMetadata(DeclarationId("1"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdOne, fileCount = 1, Seq(
     BatchFileOne
   ))
   val BatchFileMetadataWithFileTwo = BatchFileUploadMetadata(DeclarationId("2"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdTwo, fileCount = 1, Seq(
     BatchFileTwo
   ))
-  val BatchFileMetadataWithFilesOneAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdThree, fileCount = 1, Seq(
+  val BatchFileMetadataWithFilesOneAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdThree, fileCount = 2, Seq(
     BatchFileOne, BatchFileThree
+  ))
+  val BatchFileMetadataWithFileOneWithNoCallbackFieldsAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdOne, fileCount = 2, Seq(
+    BatchFileOneNoCallbackFields, BatchFileThree
   ))
 
 }

@@ -25,9 +25,9 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsValue
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent}
+import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, _}
-import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers.BatchFileUploadUpscanNotificationController
 import uk.gov.hmrc.customs.declaration.model._
@@ -41,7 +41,7 @@ import scala.concurrent.Future
 
 class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {
 
-  trait Setup {
+  trait SetUp {
     val mockNotificationService = mock[BatchFileUploadNotificationService]
     val mockToXmlNotification = mock[UpscanNotificationCallbackToXmlNotification]
     val mockErrorToXmlNotification = mock[InternalErrorXmlNotification]
@@ -54,6 +54,7 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
       mockBusinessService,
       mockCdsLogger)
     val post: Action[AnyContent] = controller.post(ApiSubscriptionFieldsTestData.subscriptionFieldsId.toString)
+    val postWithInvalidCsid: Action[AnyContent] = controller.post("invalid-csid")
 
     def whenNotificationService(callbackBody: UploadedCallbackBody,
                                 fileReference: FileReference = FileReferenceOne,
@@ -86,12 +87,12 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
   }
 
   "BatchFileUploadUpscanNotificationController on Happy Path" should {
-    "on receipt of READY callback call business service and return 204 with empty body" in new Setup {
+    "on receipt of READY callback call business service and return 204 with empty body" in new SetUp {
       when(mockBusinessService.persistAndCallFileTransmission(ameq(ReadyCallbackBody))(any[HasConversationId])).thenReturn(Future.successful(()))
 
-      private val result: Future[Result] = post(fakeRequestWith(readyJson()))
+      private val result = post(fakeRequestWith(readyJson()))
 
-      Helpers.status(result) mustBe NO_CONTENT
+      status(result) mustBe NO_CONTENT
       contentAsString(result) mustBe empty
       eventually {
         verifyZeroInteractions(mockNotificationService)
@@ -102,12 +103,12 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
   }
 
   "BatchFileUploadUpscanNotificationController on Unhappy Path" should {
-    "on receipt of FAILURE callback send notification and return 204 with empty body" in new Setup {
+    "on receipt of FAILURE callback send notification and return 204 with empty body" in new SetUp {
       whenNotificationService(FailedCallbackBody)
 
       private val result = post(fakeRequestWith(FailedJson))
 
-      Helpers.status(result) mustBe NO_CONTENT
+      status(result) mustBe NO_CONTENT
       contentAsString(result) mustBe empty
       eventually {
         verifyFailureNotificationSent(FailedCallbackBody)
@@ -116,12 +117,12 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
       }
     }
 
-    "on receipt of FAILURE callback return 500 with standard error message when call to customs notification throws an exception" in new Setup {
+    "on receipt of FAILURE callback return 500 with standard error message when call to customs notification throws an exception" in new SetUp {
       whenNotificationService(FailedCallbackBody, result = Future.failed(emulatedServiceFailure))
 
       private val result = post(fakeRequestWith(FailedJson))
 
-      Helpers.status(result) mustBe INTERNAL_SERVER_ERROR
+      status(result) mustBe INTERNAL_SERVER_ERROR
       contentAsString(result) mustBe UpscanNotificationInternalServerErrorJson
       eventually {
         verifyFailureNotificationSent(FailedCallbackBody)
@@ -130,13 +131,13 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
       }
     }
 
-    "on receipt of READY callback return 500 with standard error message when business service throw an exception" in new Setup {
+    "on receipt of READY callback return 500 with standard error message when business service throw an exception" in new SetUp {
       when(mockBusinessService.persistAndCallFileTransmission(ameq(ReadyCallbackBody))(any[HasConversationId]))
         .thenReturn(Future.failed(emulatedServiceFailure))
 
       private val result = post(fakeRequestWith(readyJson()))
 
-      Helpers.status(result) mustBe INTERNAL_SERVER_ERROR
+      status(result) mustBe INTERNAL_SERVER_ERROR
       contentAsString(result) mustBe UpscanNotificationInternalServerErrorJson
       eventually {
         verify(mockBusinessService).persistAndCallFileTransmission(ameq(ReadyCallbackBody))(any[HasConversationId])
@@ -145,11 +146,24 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
       }
     }
 
-    "return 400 when callback payload is invalid" in new Setup {
+    "return 400 when clientSubscriptionId is invalid" in new SetUp {
+      private val result = postWithInvalidCsid(fakeRequestWith(readyJson()))
+
+      status(result) mustBe BAD_REQUEST
+      contentAsString(result) mustBe UpscanNotifyClientSubscriptionIdErrorJson
+      eventually {
+        verifyZeroInteractions(mockNotificationService)
+        verifyZeroInteractions(mockBusinessService)
+        verifyZeroInteractions(mockErrorToXmlNotification)
+        verifyZeroInteractions(mockToXmlNotification)
+      }
+    }
+
+    "return 400 when callback payload is invalid" in new SetUp {
 
       private val result = post(fakeRequestWith(FailedJsonWithInvalidFileStatus))
 
-      Helpers.status(result) mustBe BAD_REQUEST
+      status(result) mustBe BAD_REQUEST
       contentAsString(result) mustBe UpscanNotificationBadRequestJson
       eventually {
         verifyZeroInteractions(mockNotificationService)
@@ -166,5 +180,4 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
   private implicit val hasConversationId = new HasConversationId {
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
-
 }

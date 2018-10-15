@@ -67,6 +67,7 @@ object UpscanNotifyTestData {
 
   val UpscanNotificationInternalServerErrorJson = """{"code":"INTERNAL_SERVER_ERROR","message":"Internal server error"}"""
   val UpscanNotificationBadRequestJson = """{"code":"BAD_REQUEST","message":"Invalid upscan notification"}"""
+  val UpscanNotifyClientSubscriptionIdErrorJson = """{"code":"BAD_REQUEST","message":"Invalid clientSubscriptionId"}"""
 
   val UpscanNotificationFailedCustomsNotificationXml =
     <root>

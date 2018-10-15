@@ -91,6 +91,15 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
         .verify()
     }
 
+    "return 400 when clientSubscriptionId is invalid" in new SetUp {
+      val result = controller.post("invalid-csid")(fakeRequestWith(Json.parse(FileTransmissionSuccessNotificationPayload)))
+
+      status(result) mustBe BAD_REQUEST
+      contentAsString(result) mustBe FileTransmissionClientSubscriptionIdErrorJson
+      verifyZeroInteractions(mockService)
+      verifyZeroInteractions(callbackToXmlNotification)
+    }
+
     "return 500 when call to Custom Notification services fails" in new SetUp {
       when(mockService.sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)).thenReturn(Future.failed(TestData.emulatedServiceFailure))
 

@@ -30,14 +30,18 @@ import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 
 class FileTransmissionNotificationController @Inject() (callbackToXmlNotification: FileTransmissionCallbackToXmlNotification,
                                                         notificationService: BatchFileUploadNotificationService,
                                                         cdsLogger: CdsLogger) extends BaseController {
 
-  def post(clientSubscriptionId: String): Action[AnyContent] = Action.async {
+  def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async {
     request =>
 
+    Try(UUID.fromString(clientSubscriptionIdString)) match {
+      case Success(csid) =>
+      val clientSubscriptionId = SubscriptionFieldsId(csid)
       request.body.asJson.fold(
         {
           cdsLogger.error(s"Malformed JSON received. Body: ${request.body.asText} headers: ${request.headers}")
@@ -48,7 +52,7 @@ class FileTransmissionNotificationController @Inject() (callbackToXmlNotificatio
           case JsSuccess(callbackBody, _) => callbackBody match {
             case notification: FileTransmissionNotification =>
               cdsLogger.debug(s"Valid JSON success request received. Body=$js headers=${request.headers}")
-              notificationService.sendMessage[FileTransmissionNotification](notification, notification.fileReference, SubscriptionFieldsId(UUID.fromString(clientSubscriptionId)))(callbackToXmlNotification).map { _ =>
+              notificationService.sendMessage[FileTransmissionNotification](notification, notification.fileReference, clientSubscriptionId)(callbackToXmlNotification).map { _ =>
                 NoContent
               }.recover {
                 case e: Throwable =>
@@ -57,13 +61,17 @@ class FileTransmissionNotificationController @Inject() (callbackToXmlNotificatio
           }
           case _: JsError =>
             cdsLogger.error(s"Invalid JSON received. Body: ${request.body.asText} headers: ${request.headers}")
-            Future.successful(errorBadRequest(errorCode = "BAD_REQUEST", errorMessage = "Invalid file upload outcome").JsonResult)
+            Future.successful(errorBadRequest(errorMessage = "Invalid file upload outcome").JsonResult)
         }
       }
+      case Failure(e) =>
+        cdsLogger.error("Invalid clientSubscriptionId", e)
+        Future.successful(errorBadRequest(errorMessage = "Invalid clientSubscriptionId").JsonResult)
+    }
   }
 
-  private def handleException(e: Throwable, notification: FileTransmissionNotification, clientSubscriptionId: String) = {
-    cdsLogger.error(s"[conversationId=${notification.fileReference.toString}][clientSubscriptionId=$clientSubscriptionId] file transmission notification service request to customs notification failed.", e)
+  private def handleException(e: Throwable, notification: FileTransmissionNotification, clientSubscriptionId: SubscriptionFieldsId) = {
+    cdsLogger.error(s"[conversationId=${notification.fileReference.toString}][clientSubscriptionId=${clientSubscriptionId.toString}] file transmission notification service request to customs notification failed.", e)
     ErrorResponse.ErrorInternalServerError.JsonResult
   }
 

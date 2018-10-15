@@ -109,5 +109,6 @@ object FileTransmissionTestData {
   val InternalErrorResponseJson = """{"code":"INTERNAL_SERVER_ERROR","message":"Internal server error"}"""
   val BadRequestErrorResponseInvalidOutcome = """{"code":"BAD_REQUEST","message":"Invalid file upload outcome"}"""
   val BadRequestErrorResponseInvalidJson = """{"code":"BAD_REQUEST","message":"Invalid JSON payload"}"""
+  val FileTransmissionClientSubscriptionIdErrorJson = """{"code":"BAD_REQUEST","message":"Invalid clientSubscriptionId"}"""
 
 }

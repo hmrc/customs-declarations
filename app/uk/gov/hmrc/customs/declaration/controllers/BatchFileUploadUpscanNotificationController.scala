@@ -78,7 +78,9 @@ class BatchFileUploadUpscanNotificationController @Inject()(notificationService:
                 Future.successful(errorBadRequest(errorMessage = "Invalid upscan notification").JsonResult)
             }
           }
-      case Failure(_) => Future.successful(errorBadRequest(errorMessage = "Invalid clientSubscriptionId").JsonResult)
+      case Failure(e) =>
+        cdsLogger.error("Invalid clientSubscriptionId", e)
+        Future.successful(errorBadRequest(errorMessage = "Invalid clientSubscriptionId").JsonResult)
     }
   }
 

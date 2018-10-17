@@ -68,8 +68,9 @@ class AmendDeclarationController @Inject()(
  common: Common,
  businessService: StandardDeclarationSubmissionService,
  payloadValidationAction: AmendPayloadValidationAction,
- analyticsValuesAction: DeclarationAmendValuesAction
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, None)
+ analyticsValuesAction: DeclarationAmendValuesAction,
+ googleAnalyticsConnector: GoogleAnalyticsConnector
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector))
 
 @Singleton
 class ArrivalNotificationDeclarationController @Inject()(
@@ -112,7 +113,7 @@ extends BaseController {
 
         businessService.send map {
           case Right(maybeNrSubmissionId) =>
-            logger.info(s"Declaration request processed successfully")
+            logger.info("Declaration request processed successfully")
             maybeGoogleAnalyticsConnector.map(conn => conn.success)
             maybeNrSubmissionId match {
               case Some(nrSubmissionId) => Accepted.as(MimeTypes.XML).withConversationId.withNrSubmissionId(nrSubmissionId)

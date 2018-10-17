@@ -103,8 +103,8 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
       And("v2 config was used")
       eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext))))
 
-      And("GA call wasn't made")
-      eventually(verifyGoogleAnalyticsServiceWasNotCalled())
+      And("GA call was made")
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
@@ -135,10 +135,9 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
       And("v3 config was used")
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV3ServiceContext)))
 
-      And("GA call wasn't made")
-      verifyGoogleAnalyticsServiceWasNotCalled
+      And("GA call was made")
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
-
   }
 
   feature("Declaration API handles amendment of submission errors from CSPs as expected") {
@@ -162,8 +161,8 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
 
-      And("GA call wasn't made")
-      eventually(verifyGoogleAnalyticsServiceWasNotCalled())
+      And("GA call was made")
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }

@@ -26,7 +26,7 @@ object FileTransmissionTestData {
   val FileTransmissionBatchOne = FileTransmissionBatch(BatchIdOne, 2)
   val FileTransmissionCallBackUrl = new URL("https:/foo.com/callback")
   val FileTransmissionLocation = new URL("https:/foo.com/location")
-  val FileTransmissionFileOne = FileTransmissionFile(FileReferenceOne, name = "someFileN.ame", mimeType = "application/pdf", checkSum = "asdrfgvbhujk13579", location = FileTransmissionLocation, FileSequenceNo(1))
+  val FileTransmissionFileOne = FileTransmissionFile(FileReferenceOne, name = "someFileN.ame", mimeType = "application/pdf", checksum = "asdrfgvbhujk13579", location = FileTransmissionLocation, FileSequenceNo(1))
   val FileTransmissionInterfaceOne = FileTransmissionInterface("interfaceName name", "1.0")
   val FileTransmissionProperties = Seq("p1" -> "v1", "p2" -> "v2").map(t => FileTransmissionProperty(name = t._1, value = t._2))
   val FileTransmissionRequest = FileTransmission(FileTransmissionBatchOne, FileTransmissionCallBackUrl, FileTransmissionFileOne, FileTransmissionInterfaceOne, FileTransmissionProperties)
@@ -44,7 +44,7 @@ object FileTransmissionTestData {
                                |    "reference" : "31400000-8ce0-11bd-b23e-10b96e4ef00f",
                                |    "name" : "someFileN.ame",
                                |    "mimeType" : "application/pdf",
-                               |    "checkSum" : "asdrfgvbhujk13579",
+                               |    "checksum" : "asdrfgvbhujk13579",
                                |    "location" : "https:/foo.com/location",
                                |    "sequenceNumber" : 1,
                                |    "size" : 1

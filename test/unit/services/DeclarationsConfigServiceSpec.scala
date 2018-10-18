@@ -48,6 +48,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |declarationStatus.requestDaysLimit=60
       |upscan-callback.url="http://upscan-callback.url"
       |batch-file-upload-upscan-callback.url="http://batch-file-upload-upscan-callback.url"
+      |file-transmission-callback.url="http://some-host3:1113/file-transmission"
       |fileUpload.fileGroupSize.maximum=10
       |nrs.enabled=true
       |nrs.apikey="nrs-api-key"
@@ -77,7 +78,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange shouldBe 5
       configService.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis shouldBe 1000
       configService.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis shouldBe 1000
-      configService.batchFileUploadConfig.fileTransmissionBaseUrl shouldBe "http://some-host3:1113/file-transmission"
+      configService.batchFileUploadConfig.fileTransmissionCallbackUrl shouldBe "http://some-host3:1113/file-transmission"
       configService.batchFileUploadConfig.batchFileUploadCallbackUrl shouldBe "http://batch-file-upload-upscan-callback.url"
     }
 
@@ -105,6 +106,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'upscan-callback.url'
           |Could not find config key 'batch-file-upload-upscan-callback.url'
           |Could not find config key 'fileUpload.fileGroupSize.maximum'
+          |Could not find config key 'file-transmission-callback.url'
           |Could not find config file-transmission.host
           |Service configuration not found for key: file-transmission.context""".stripMargin
 

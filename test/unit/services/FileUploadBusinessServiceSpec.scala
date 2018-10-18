@@ -64,7 +64,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       DocumentationType("docType456")
     )
 
-    val upscanInitiatePayload = UpscanInitiatePayload("http://upscan-callback.url/uploaded-file-upscan-notifications/decId/decId123/eori/123/documentationType/docType456/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
+
+    val upscanInitiatePayload = UpscanInitiatePayload(s"http://upscan-callback.url/uploaded-file-upscan-notifications/decId/decId123/eori/123/documentationType/docType456/clientSubscriptionId/$clientSubscriptionIdString")
 
     protected def send(vupr: ValidatedUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, UpscanInitiateResponsePayload] = {
       await(service.send(vupr, hc))

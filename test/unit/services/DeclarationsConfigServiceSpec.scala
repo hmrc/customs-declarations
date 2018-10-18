@@ -77,7 +77,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange shouldBe 5
       configService.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis shouldBe 1000
       configService.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis shouldBe 1000
-      configService.batchFileUploadConfig.fileTransmissionBaseUrl shouldBe "http://some-host3:1113/file-transmission"
+      configService.batchFileUploadConfig.fileTransmissionCallbackUrl shouldBe "http://some-host3:1113/file-transmission"
       configService.batchFileUploadConfig.batchFileUploadCallbackUrl shouldBe "http://batch-file-upload-upscan-callback.url"
     }
 

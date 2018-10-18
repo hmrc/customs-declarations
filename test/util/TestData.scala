@@ -66,6 +66,8 @@ object TestData {
   val subscriptionFieldsIdString: String = "b82f31c6-2239-4253-b6f5-ed75e37ab7a5"
   val subscriptionFieldsIdUuid: UUID = fromString("b82f31c6-2239-4253-b6f5-ed75e37ab7a5")
 
+  val clientSubscriptionIdString: String = "327d9145-4965-4d28-a2c5-39dedee50334"
+
   val nrSubmissionIdValue = "902b0150-aa9a-4046-bf27-85889f128c2a"
   val nrSubmissionIdValueUuid: UUID = fromString(nrSubmissionIdValue)
   val nrSubmissionId = NrSubmissionId(nrSubmissionIdValueUuid)

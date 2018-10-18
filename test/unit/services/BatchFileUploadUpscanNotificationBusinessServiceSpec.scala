@@ -46,7 +46,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
   private val mdFileOne = BatchFileMetadataWithFilesOneAndThree.files.head
   private val mdFileOneCallback = mdFileOne.maybeCallbackFields.get
   private val fileTransmissionBatchOne = FileTransmissionBatch(md.batchId, md.fileCount)
-  private val callbackUrl = "http://file_transmission_callback_url"
+  private val fileTransmissionCallbackUrl = "http://file_transmission_callback_url/clientSubscriptionId/"
   private val fileTransmissionServiceURL = "http://file_transmission_service_url"
   private val fileTransmissionLocation = mdFileOne.location
   private val fileTransmissionFileOne = FileTransmissionFile(mdFileOne.reference, mdFileOneCallback.name, mdFileOneCallback.mimeType, mdFileOneCallback.checksum, location = fileTransmissionLocation, mdFileOne.sequenceNumber)
@@ -56,12 +56,12 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     FileTransmissionProperty("Eori", md.eori.toString),
     FileTransmissionProperty("ContentType", mdFileOne.documentType.toString)
   )
-  private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(callbackUrl), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)
+  private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(fileTransmissionCallbackUrl + clientSubscriptionIdString), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)
   private implicit val implicitHasConversationId = new HasConversationId {
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
   private val fileGroupSizeMaximum = 5
-  private val batchFileUploadConfig = BatchFileUploadConfig("UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, callbackUrl, fileTransmissionServiceURL)
+  private val batchFileUploadConfig = BatchFileUploadConfig("UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionServiceURL)
 
   trait SetUp {
     val mockRepo = mock[BatchFileUploadMetadataRepo]

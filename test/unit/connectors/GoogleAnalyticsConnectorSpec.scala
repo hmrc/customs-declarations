@@ -28,14 +28,15 @@ import play.api.mvc.AnyContentAsXml
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
-import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsConfig, GoogleAnalyticsRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, HasConversationId, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsConfig, GoogleAnalyticsRequest, GoogleAnalyticsValues}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData
+import util.TestData.{TestFakeRequest, conversationId}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -116,7 +117,6 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
       await(connector.send(eventName, eventLabel))
 
       verifyZeroInteractions(mockHttpClient)
-
     }
 
     "not POST valid headers" in {
@@ -131,22 +131,15 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
 
   "GoogleAnalyticsSenderConnector when disabled by endpoint" should {
 
-    "not POST valid payload" in {
+    "not POST payload" in {
+      implicit val vpr = AnalyticsValuesAndConversationIdRequest(conversationId, mock[GoogleAnalyticsValues], TestFakeRequest)
+      when(vpr.analyticsValues.enabled).thenReturn(false)
 
-      implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequestWithGoogleAnalyticsEndpointDisabled
-      await(connector.send(eventName, eventLabel))
-
-      verifyZeroInteractions(mockHttpClient)
-
-    }
-
-    "not POST valid headers" in {
-
-      implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequestWithGoogleAnalyticsEndpointDisabled
       await(connector.send(eventName, eventLabel))
 
       verifyZeroInteractions(mockHttpClient)
     }
 
   }
+
 }

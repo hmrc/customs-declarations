@@ -54,7 +54,7 @@ class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionX
 class ClearancePayloadValidationAction @Inject() (xmlValidationService: ClearanceXmlValidationService, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends PayloadValidationAction(xmlValidationService, logger, Some(googleAnalyticsConnector))
 
 @Singleton
-class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger, None)
+class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends PayloadValidationAction(xmlValidationService, logger, Some(googleAnalyticsConnector))
 
 @Singleton
 class ArrivalNotificationPayloadValidationAction @Inject() (xmlValidationService: ArrivalNotificationXmlValidationService, logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector) extends PayloadValidationAction(xmlValidationService, logger, Some(googleAnalyticsConnector))

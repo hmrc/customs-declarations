@@ -63,7 +63,7 @@ class BatchFileUploadUpscanNotificationBusinessService @Inject()(repo: BatchFile
       (bf, ftf) <- maybeFileTransmissionFile(fileReference, md)
     } yield FileTransmission(
       FileTransmissionBatch(md.batchId, md.fileCount),
-      new URL(config.batchFileUploadConfig.fileTransmissionCallbackUrl + md.csId),
+      new URL(s"${config.batchFileUploadConfig.fileTransmissionCallbackUrl}${md.csId}"),
       ftf,
       FileTransmissionInterface("DEC64", "1.0.0"),
       Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString, "ContentType" -> bf.documentType.toString).map(t => FileTransmissionProperty(name = t._1, value = t._2))

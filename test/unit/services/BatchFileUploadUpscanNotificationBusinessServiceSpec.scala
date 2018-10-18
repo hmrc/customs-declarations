@@ -47,6 +47,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
   private val mdFileOneCallback = mdFileOne.maybeCallbackFields.get
   private val fileTransmissionBatchOne = FileTransmissionBatch(md.batchId, md.fileCount)
   private val callbackUrl = "http://file_transmission_callback_url"
+  private val fileTransmissionServiceURL = "http://file_transmission_service_url"
   private val fileTransmissionLocation = mdFileOne.location
   private val fileTransmissionFileOne = FileTransmissionFile(mdFileOne.reference, mdFileOneCallback.name, mdFileOneCallback.mimeType, mdFileOneCallback.checksum, location = fileTransmissionLocation, mdFileOne.sequenceNumber)
   private val fileTransmissionInterfaceOne = FileTransmissionInterface("DEC64", "1.0.0")
@@ -60,7 +61,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
   private val fileGroupSizeMaximum = 5
-  private val batchFileUploadConfig = BatchFileUploadConfig("UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, callbackUrl)
+  private val batchFileUploadConfig = BatchFileUploadConfig("UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, callbackUrl, fileTransmissionServiceURL)
 
   trait SetUp {
     val mockRepo = mock[BatchFileUploadMetadataRepo]

@@ -161,12 +161,12 @@ class BatchFileUploadUpscanNotificationSpec extends ComponentTestSpec with Expec
       |    "id": "48400000-8cf0-11bd-b23e-10b96e4ef001",
       |    "fileCount": 2
       |  },
-      |  "callbackUrl": "http://localhost:11111/file/transmission",
+      |  "callbackUrl": "http://localhost:9000/file-transmission-notify/",
       |  "file": {
       |    "reference": "31400000-8ce0-11bd-b23e-10b96e4ef00f",
       |    "name": "test.pdf",
       |    "mimeType": "application/pdf",
-      |    "checkSum": "1a2b3c4d5e",
+      |    "checksum": "1a2b3c4d5e",
       |    "location": "https://a.b.com",
       |    "sequenceNumber": 1,
       |    "size": 1

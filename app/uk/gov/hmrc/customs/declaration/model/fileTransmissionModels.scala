@@ -32,7 +32,7 @@ case class FileTransmissionFile(
   reference: FileReference,
   name: String,
   mimeType: String,
-  checkSum: String,
+  checksum: String,
   location: URL,
   sequenceNumber: FileSequenceNo,
   size: Int = 1

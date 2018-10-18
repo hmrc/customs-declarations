@@ -63,7 +63,7 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
     "be wired into AmendDeclarationController" in {
       val action = amendController.payloadValidationAction
 
-      action.getClass.getSimpleName shouldBe new AmendPayloadValidationAction(mockAmendXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
+      action.getClass.getSimpleName shouldBe new AmendPayloadValidationAction(mockAmendXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsConnector).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.submit"
     }
     "be wired into ArrivalNotificationDeclarationController" in {

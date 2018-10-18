@@ -111,7 +111,6 @@ object GoogleAnalyticsValues {
     override val failure: String = "declarationFileUploadFailure"
   }
 
-  //TODO do these values need to change?
   val BatchFileUpload = new GoogleAnalyticsValues {
     override val success: String = "declarationFileUploadSuccess"
     override val failure: String = "declarationFileUploadFailure"
@@ -123,9 +122,8 @@ object GoogleAnalyticsValues {
   }
 
   val Amend = new GoogleAnalyticsValues {
-    override val enabled: Boolean = false
-    override lazy val success: String = ""
-    override lazy val failure: String = ""
+    override lazy val success: String = "declarationAmendSuccess"
+    override lazy val failure: String = "declarationAmendFailure"
   }
 
   val ArrivalNotification = new GoogleAnalyticsValues {

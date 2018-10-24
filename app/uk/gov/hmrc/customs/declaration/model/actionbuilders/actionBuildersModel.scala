@@ -55,11 +55,9 @@ object ActionBuilderModelHelper {
     )
   }
 
-  implicit class ValidatedHeadersRequestOps[A](val vhr: ValidatedHeadersRequest[A]) extends AnyVal {
+  implicit class ValidatedHeadersRequestOps[A](val vhr: ValidatedHeadersRequest[A]) {
 
-    def toCspAuthorisedRequest(badgeId: BadgeIdentifier, retrievalData: Option[NrsRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(Csp(badgeId, retrievalData))
-
-    def toBatchFileUploadCspAuthorisedRequest(badgeId: BadgeIdentifier, eori: Eori, retrievalData: Option[NrsRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(BatchFileUploadCsp(badgeId, eori, retrievalData))
+    def toCspAuthorisedRequest(a: AuthorisedAsCsp): AuthorisedRequest[A] = toAuthorisedRequest(a)
 
     def toNonCspAuthorisedRequest(eori: Eori, retrievalData: Option[NrsRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori, retrievalData))
 
@@ -75,7 +73,7 @@ object ActionBuilderModelHelper {
 
   implicit class ValidatedHeadersStatusRequestOps[A](val vhsr: ValidatedHeadersStatusRequest[A]) extends AnyVal {
 
-    def toAuthorisedStatusRequest(): AuthorisedStatusRequest[A] = AuthorisedStatusRequest(
+    def toAuthorisedStatusRequest: AuthorisedStatusRequest[A] = AuthorisedStatusRequest(
       vhsr.conversationId,
       vhsr.analyticsValues,
       vhsr.requestedApiVersion,

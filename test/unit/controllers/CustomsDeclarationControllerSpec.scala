@@ -32,7 +32,7 @@ import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationCo
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, ValidatedPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StandardDeclarationSubmissionService, UniqueIdsService, XmlValidationService}
+import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.AuthConnectorStubbing
@@ -64,7 +64,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService
     }
 
-    protected val stubAuthAction: AuthAction = new AuthAction(mockAuthConnector, mockDeclarationsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockDeclarationsLogger)
+    protected val stubAuthAction: AuthAction = new AuthAction(customsAuthService, mockDeclarationsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
     protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger, Some(mockGoogleAnalyticsConnector)) {}
 

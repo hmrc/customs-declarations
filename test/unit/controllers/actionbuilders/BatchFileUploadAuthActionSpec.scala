@@ -23,10 +23,10 @@ import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XEoriIdentifierHeaderName}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.BatchFileUploadAuthAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
-import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
+import uk.gov.hmrc.customs.declaration.model.{BatchFileUploadCsp, GoogleAnalyticsValues}
+import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
@@ -58,18 +58,20 @@ class BatchFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
     AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
 
   trait SetUp {
-    val mockExportsLogger: DeclarationsLogger = mock[DeclarationsLogger]
+    val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
   }
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
-    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
+    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(customsAuthService, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
   trait NrsDisabled extends AuthConnectorNrsDisabledStubbing with SetUp {
-    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
+    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(customsAuthService, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
   }
 
@@ -80,7 +82,7 @@ class BatchFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
         authoriseCsp()
 
         private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toBatchFileUploadCspAuthorisedRequest(badgeIdentifier, declarantEori, Some(nrsRetrievalValues)))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(BatchFileUploadCsp(badgeIdentifier, declarantEori, Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
       }
 
@@ -210,7 +212,7 @@ class BatchFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
         authoriseCsp()
 
         private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toBatchFileUploadCspAuthorisedRequest(badgeIdentifier, declarantEori, None))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(BatchFileUploadCsp(badgeIdentifier, declarantEori, None)))
         verifyNonCspAuthorisationNotCalled
       }
 

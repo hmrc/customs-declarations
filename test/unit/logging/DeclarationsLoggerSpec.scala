@@ -21,7 +21,7 @@ import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
+import uk.gov.hmrc.customs.declaration.model.{Csp, GoogleAnalyticsValues}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, AuthorisedRequest}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -36,7 +36,7 @@ class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
     implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, FakeRequest()
       .withXmlBody(TestXmlPayload).withHeaders("Content-Type" -> "Some-Content-Type"))
       .toValidatedHeadersRequest(TestExtractedHeaders)
-      .toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues))
+      .toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues)))
   }
 
   "DeclarationsLogger" should {

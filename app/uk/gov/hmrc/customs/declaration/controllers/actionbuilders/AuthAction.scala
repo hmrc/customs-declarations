@@ -17,36 +17,29 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.LocalDate
-import play.api.http.Status
-import play.api.http.Status.UNAUTHORIZED
 import play.api.mvc.{ActionRefiner, RequestHeader, Result}
-import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~, _}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode, errorBadRequest}
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedHeadersRequest}
-import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
+import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Left
-import scala.util.control.NonFatal
+
 
 /** Action builder that attempts to authorise request as a CSP or else NON CSP
   * <ul>
   * <li/>INPUT - `ValidatedHeadersRequest`
   * <li/>OUTPUT - `AuthorisedRequest` - authorised will be `AuthorisedAs.Csp` or `AuthorisedAs.NonCsp`
-  * <li/>ERROR -
+  * <li/>ERROR -]
   * <ul>
   * <li/>401 if authorised as CSP but badge identifier not present for CSP
   * <li/>401 if authorised as NON CSP but enrolments does not contain an EORI.
@@ -57,199 +50,66 @@ import scala.util.control.NonFatal
   */
 @Singleton
 class AuthAction @Inject()(
-  override val authConnector: AuthConnector,
-  logger: DeclarationsLogger,
-  googleAnalyticsConnector: GoogleAnalyticsConnector,
-  declarationConfigService: DeclarationsConfigService
-) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] with AuthorisedFunctions {
+                            customsAuthService: CustomsAuthService,
+                            logger: DeclarationsLogger,
+                            googleAnalyticsConnector: GoogleAnalyticsConnector,
+                            declarationConfigService: DeclarationsConfigService
+) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
-  private val errorResponseUnauthorisedGeneral =
-    ErrorResponse(Status.UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
-  protected val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"${CustomHeaderNames.XBadgeIdentifierHeaderName} header is missing or invalid")
-  private lazy val errorResponseEoriNotFoundInCustomsEnrolment =
-    ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")
-  protected lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
-
-  type NrsRetrievalDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~
-                        Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
-                        Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~
-                        Option[AffinityGroup] ~ Option[String] ~ LoginTimes
-
-  type CspRetrievalDataType = Retrieval[NrsRetrievalDataType]
-  type NonCspRetrievalDataType = Retrieval[NrsRetrievalDataType ~ Enrolments]
-
-  protected val cspRetrievals: CspRetrievalDataType =
-    Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
-    Retrievals.credentials and Retrievals.confidenceLevel and Retrievals.nino and
-    Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
-    Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and
-    Retrievals.credentialRole and Retrievals.mdtpInformation and Retrievals.itmpName and
-    Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and
-    Retrievals.credentialStrength and Retrievals.loginTimes
-
-  protected val nonCspRetrievals: NonCspRetrievalDataType = cspRetrievals and Retrievals.authorisedEnrolments
+  private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"${CustomHeaderNames.XBadgeIdentifierHeaderName} header is missing or invalid")
+  private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val implicitVhr: ValidatedHeadersRequest[A] = vhr
+    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
-    def futureAuthoriseAsCsp = if (declarationConfigService.nrsConfig.nrsEnabled) futureAuthoriseAsCspNrsEnabled else futureAuthoriseAsCspNrsDisabled
-    def authoriseAsNonCsp = if (declarationConfigService.nrsConfig.nrsEnabled) authoriseAsNonCspNrsEnabled else authoriseAsNonCspNrsDisabled
+    val withNrs = declarationConfigService.nrsConfig.nrsEnabled
 
-    futureAuthoriseAsCsp.flatMap{
-      case Right(maybeAuthorisedAsCspWithBadgeIdentifier) =>
-        maybeAuthorisedAsCspWithBadgeIdentifier.fold{
-          authoriseAsNonCsp.map[Either[Result, AuthorisedRequest[A]]] {
+    authAsCspWithMandatoryAuthHeaders(withNrs).flatMap{
+      case Right(maybeAuthorisedAsCspWithBadgeIdentifierAndNrsData) =>
+        maybeAuthorisedAsCspWithBadgeIdentifierAndNrsData.fold{
+          customsAuthService.authAsNonCsp(withNrs).map[Either[Result, AuthorisedRequest[A]]]{
             case Left(errorResponse) =>
               Left(errorResponse.XmlResult.withConversationId)
-            case Right(a) => Right(a)
+            case Right(nonCspData) =>
+              Right(vhr.toNonCspAuthorisedRequest(nonCspData.eori, nonCspData.retrievalData))
           }
-        }{ badgeIdNrsPayload =>
-          Future.successful(Right(vhr.toCspAuthorisedRequest(badgeIdNrsPayload._1, badgeIdNrsPayload._2.asInstanceOf[Option[NrsRetrievalData]])))
+        }{ cspData =>
+          Future.successful(Right(vhr.toCspAuthorisedRequest(cspData)))
         }
       case Left(result) =>
         Future.successful(Left(result.XmlResult.withConversationId))
     }
   }
 
-  // pure function that tames exceptions throw by HMRC auth api into an Either
-  // this enables calling function to not worry about recover blocks
-  // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
-  // Right(None) if not authorised as CSP
-  private def futureAuthoriseAsCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[NrsRetrievalData])]]] = {
-    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
-
-      authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
-      case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
-        credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes =>
-        Future.successful {
-          maybeBadgeIdentifier.fold[Either[ErrorResponse, Option[(BadgeIdentifier, Option[NrsRetrievalData])]]]{
-            logger.error("badge identifier invalid or not present for CSP")
-            googleAnalyticsConnector.failure(errorResponseBadgeIdentifierHeaderMissing.message)
-            Left(errorResponseBadgeIdentifierHeaderMissing)
-          }{ badgeId =>
-
-            val retrievalData = NrsRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
-              name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
-              itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
-
-            logger.debug("Authorising as CSP")
-            Right(Some((badgeId, Some(retrievalData))))
-          }
-        }
-    }.recover{
-      case NonFatal(_: AuthorisationException) =>
-        logger.debug("Not authorised as CSP")
-        Right(None)
-      case NonFatal(e) =>
-        logger.error("Error authorising CSP", e)
-        Left(ErrorInternalServerError)
-    }
-  }
-
-  private def maybeBadgeIdentifier[A](implicit vhr: ValidatedHeadersRequest[A]): Option[BadgeIdentifier] = {
+  protected def maybeBadgeIdentifier[A](implicit vhr: ValidatedHeadersRequest[A]): Either[ErrorResponse, BadgeIdentifier] = {
     val maybeBadgeId: Option[String] = vhr.request.headers.toSimpleMap.get(CustomHeaderNames.XBadgeIdentifierHeaderName)
-    maybeBadgeId.filter(xBadgeIdentifierRegex.findFirstIn(_).nonEmpty).map(BadgeIdentifier)
+    maybeBadgeId.filter(xBadgeIdentifierRegex.findFirstIn(_).nonEmpty).map(BadgeIdentifier).toRight[ErrorResponse]{
+      logger.error("badge identifier invalid or not present for CSP")
+      googleAnalyticsConnector.failure(errorResponseBadgeIdentifierHeaderMissing.message)
+      errorResponseBadgeIdentifierHeaderMissing
+    }
   }
 
-  // pure function that tames exceptions throw by HMRC auth api into an Either
-  // this enables calling function to not worry about recover blocks
-  // returns a Future of Left(Result) on error or a Right(AuthorisedRequest) on success
-  protected def authoriseAsNonCspNrsEnabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, AuthorisedRequest[A]]] = {
-    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
+  protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: ValidatedHeadersRequest[A]): Either[ErrorResponse, AuthorisedAsCsp] = {
 
-    authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
-      case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
-        credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes ~ authorisedEnrolments =>
+    maybeBadgeIdentifier.right.map(badgeId => Csp(badgeId, maybeNrsRetrievalData))
+  }
 
-        val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(authorisedEnrolments, hc.authorization)
+  private def authAsCspWithMandatoryAuthHeaders[A](withNrs: Boolean)(implicit vhr: ValidatedHeadersRequest[A], hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {
 
-        logger.debug(s"EORI from Customs enrolment for non-CSP request: $maybeEori")
-        maybeEori.fold[Future[Either[ErrorResponse, AuthorisedRequest[A]]]]{
-          googleAnalyticsConnector.failure(errorResponseEoriNotFoundInCustomsEnrolment.message)
-          Future.successful(Left(errorResponseEoriNotFoundInCustomsEnrolment))
-        }{ eori =>
-          logger.debug("Authorising as non-CSP")
-
-          val retrievalData = NrsRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
-            name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
-            itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
-
-          Future.successful(Right(vhr.toNonCspAuthorisedRequest(eori, Some(retrievalData))))
+    val eventualAuthWithBadgeId: Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = customsAuthService.authAsCsp(withNrs).map{
+      case Right((isCsp, maybeNrsRetrievalData)) =>
+        if (isCsp) {
+          eitherCspAuthData(maybeNrsRetrievalData).right.map(authAsCsp => Some(authAsCsp))
+        } else {
+          Right(None)
         }
-    }.recover{
-      case NonFatal(_: AuthorisationException) =>
-        googleAnalyticsConnector.failure(errorResponseUnauthorisedGeneral.message)
-        Left(errorResponseUnauthorisedGeneral)
-      case NonFatal(e) =>
-        logger.error("Error authorising non-CSP", e)
-        Left(ErrorInternalServerError)
+      case Left(errorResponse) =>
+        Left(errorResponse)
     }
+
+    eventualAuthWithBadgeId
   }
 
-
-  // pure function that tames exceptions throw by HMRC auth api into an Either
-  // this enables calling function to not worry about recover blocks
-  // returns a Future of Left(Result) on error or a Right(Some(BadgeIdentifier)) on success or
-  // Right(None) if not authorised as CSP
-  private def futureAuthoriseAsCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, Option[(BadgeIdentifier, Option[NrsRetrievalData])] ] ] = {
-    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
-
-    authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
-      Future.successful{
-        maybeBadgeIdentifier.fold[Either[ErrorResponse, Option[(BadgeIdentifier, Option[NrsRetrievalData])] ] ]{
-          logger.error("badge identifier invalid or not present for CSP")
-          googleAnalyticsConnector.failure(errorResponseBadgeIdentifierHeaderMissing.message)
-          Left(errorResponseBadgeIdentifierHeaderMissing)
-        }{ badgeId =>
-          logger.debug("Authorising as CSP")
-          Right(Some((badgeId, None)))
-        }
-      }
-    }.recover{
-      case NonFatal(_: AuthorisationException) =>
-        logger.debug("Not authorised as CSP")
-        Right(None)
-      case NonFatal(e) =>
-        logger.error("Error authorising CSP", e)
-        Left(ErrorInternalServerError)
-    }
-  }
-
-  // pure function that tames exceptions throw by HMRC auth api into an Either
-  // this enables calling function to not worry about recover blocks
-  // returns a Future of Left(Result) on error or a Right(AuthorisedRequest) on success
-  protected def authoriseAsNonCspNrsDisabled[A](implicit vhr: ValidatedHeadersRequest[A]): Future[Either[ErrorResponse, AuthorisedRequest[A]]] = {
-    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
-
-    authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(Retrievals.authorisedEnrolments) {
-      enrolments =>
-        val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(enrolments, hc.authorization)
-        logger.debug(s"EORI from Customs enrolment for non-CSP request: $maybeEori")
-        maybeEori.fold[Future[Either[ErrorResponse, AuthorisedRequest[A]]]]{
-          googleAnalyticsConnector.failure(errorResponseEoriNotFoundInCustomsEnrolment.message)
-          Future.successful(Left(errorResponseEoriNotFoundInCustomsEnrolment))
-        }{ eori =>
-          logger.debug("Authorising as non-CSP")
-          Future.successful(Right(vhr.toNonCspAuthorisedRequest(eori, None)))
-        }
-    }.recover{
-      case NonFatal(_: AuthorisationException) =>
-        googleAnalyticsConnector.failure(errorResponseUnauthorisedGeneral.message)
-        Left(errorResponseUnauthorisedGeneral)
-      case NonFatal(e) =>
-        logger.error("Error authorising non-CSP", e)
-        Left(ErrorInternalServerError)
-    }
-  }
-
-  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: ValidatedHeadersRequest[A], hc: HeaderCarrier): Option[Eori] = {
-    val maybeCustomsEnrolment = enrolments.getEnrolment("HMRC-CUS-ORG")
-    if (maybeCustomsEnrolment.isEmpty) {
-      logger.warn(s"Customs enrolment HMRC-CUS-ORG not retrieved for authorised non-CSP call")
-    }
-    for {
-    customsEnrolment <- maybeCustomsEnrolment
-      eoriIdentifier <- customsEnrolment.getIdentifier("EORINumber")
-    } yield Eori(eoriIdentifier.value)
-  }
 }

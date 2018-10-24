@@ -42,6 +42,8 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
                                    googleAnalyticsConnector: GoogleAnalyticsConnector,
                                    logger: DeclarationsLogger) extends AuthorisedFunctions {
 
+  private val hmrcCustomsEnrolment = "HMRC-CUS-ORG"
+
   private type NrsRetrievalDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~
     Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
     Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~
@@ -106,12 +108,12 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   }
 
   /*
-  Wrapper around HMRC authentication library authorised function for NON CSP authentication
-  */
+    Wrapper around HMRC authentication library authorised function for NON CSP authentication
+    */
   def authAsNonCsp[A](withNrs: Boolean)(implicit vhr: ValidatedHeadersRequest[A], hc: HeaderCarrier): Future[Either[ErrorResponse, NonCsp]] = {
     val eventualAuth: Future[(Enrolments, Option[NrsRetrievalData])] =
       if (withNrs) {
-        authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
+        authorised(Enrolment(hmrcCustomsEnrolment) and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
           case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
             credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes ~ authorisedEnrolments =>
 
@@ -122,7 +124,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
             Future.successful((authorisedEnrolments, Some(retrievalData)))
         }
       } else {
-        authorised(Enrolment("HMRC-CUS-ORG") and AuthProviders(GovernmentGateway)).retrieve(Retrievals.authorisedEnrolments) {
+        authorised(Enrolment(hmrcCustomsEnrolment) and AuthProviders(GovernmentGateway)).retrieve(Retrievals.authorisedEnrolments) {
           enrolments =>
             Future.successful((enrolments, None))
         }
@@ -151,9 +153,9 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   }
 
   private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: ValidatedHeadersRequest[A], hc: HeaderCarrier): Option[Eori] = {
-    val maybeCustomsEnrolment = enrolments.getEnrolment("HMRC-CUS-ORG")
+    val maybeCustomsEnrolment = enrolments.getEnrolment(hmrcCustomsEnrolment)
     if (maybeCustomsEnrolment.isEmpty) {
-      logger.warn(s"Customs enrolment HMRC-CUS-ORG not retrieved for authorised non-CSP call")
+      logger.warn(s"Customs enrolment $hmrcCustomsEnrolment not retrieved for authorised non-CSP call")
     }
     for {
       customsEnrolment <- maybeCustomsEnrolment

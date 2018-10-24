@@ -21,7 +21,7 @@ import play.api.mvc.{ActionRefiner, RequestHeader, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -39,7 +39,7 @@ import scala.util.Left
   * <ul>
   * <li/>INPUT - `ValidatedHeadersRequest`
   * <li/>OUTPUT - `AuthorisedRequest` - authorised will be `AuthorisedAs.Csp` or `AuthorisedAs.NonCsp`
-  * <li/>ERROR -]
+  * <li/>ERROR -
   * <ul>
   * <li/>401 if authorised as CSP but badge identifier not present for CSP
   * <li/>401 if authorised as NON CSP but enrolments does not contain an EORI.
@@ -56,7 +56,7 @@ class AuthAction @Inject()(
                             declarationConfigService: DeclarationsConfigService
 ) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
-  private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"${CustomHeaderNames.XBadgeIdentifierHeaderName} header is missing or invalid")
+  private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"$XBadgeIdentifierHeaderName header is missing or invalid")
   private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
@@ -82,10 +82,10 @@ class AuthAction @Inject()(
     }
   }
 
-  protected def maybeBadgeIdentifier[A](implicit vhr: ValidatedHeadersRequest[A]): Either[ErrorResponse, BadgeIdentifier] = {
-    val maybeBadgeId: Option[String] = vhr.request.headers.toSimpleMap.get(CustomHeaderNames.XBadgeIdentifierHeaderName)
+  protected def eitherBadgeIdentifier[A](implicit vhr: ValidatedHeadersRequest[A]): Either[ErrorResponse, BadgeIdentifier] = {
+    val maybeBadgeId: Option[String] = vhr.request.headers.toSimpleMap.get(XBadgeIdentifierHeaderName)
     maybeBadgeId.filter(xBadgeIdentifierRegex.findFirstIn(_).nonEmpty).map(BadgeIdentifier).toRight[ErrorResponse]{
-      logger.error("badge identifier invalid or not present for CSP")
+      logger.error(s"$XBadgeIdentifierHeaderName invalid or not present for CSP")
       googleAnalyticsConnector.failure(errorResponseBadgeIdentifierHeaderMissing.message)
       errorResponseBadgeIdentifierHeaderMissing
     }
@@ -93,7 +93,7 @@ class AuthAction @Inject()(
 
   protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: ValidatedHeadersRequest[A]): Either[ErrorResponse, AuthorisedAsCsp] = {
 
-    maybeBadgeIdentifier.right.map(badgeId => Csp(badgeId, maybeNrsRetrievalData))
+    eitherBadgeIdentifier.right.map(badgeId => Csp(badgeId, maybeNrsRetrievalData))
   }
 
   private def authAsCspWithMandatoryAuthHeaders[A](withNrs: Boolean)(implicit vhr: ValidatedHeadersRequest[A], hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {

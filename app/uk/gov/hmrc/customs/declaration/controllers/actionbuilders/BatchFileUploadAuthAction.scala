@@ -38,7 +38,7 @@ class BatchFileUploadAuthAction @Inject()(customsAuthService: CustomsAuthService
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: ValidatedHeadersRequest[A]): Either[ErrorResponse, AuthorisedAsCsp] = {
     for {
-      badgeId <- maybeBadgeIdentifier.right
+      badgeId <- eitherBadgeIdentifier.right
       eori <- maybeEori.right
     } yield BatchFileUploadCsp(badgeId, eori, maybeNrsRetrievalData)
   }

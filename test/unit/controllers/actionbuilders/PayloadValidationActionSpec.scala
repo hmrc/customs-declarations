@@ -40,12 +40,11 @@ import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseConten
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.PayloadValidationAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.{Csp, GoogleAnalyticsValues}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestData
 import util.TestData._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -88,7 +87,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       private val errorMessage = "Request body does not contain a well-formed XML document."
       private val errorNotWellFormed = ErrorResponse.errorBadRequest(errorMessage).XmlResult.withConversationId
       private val authorisedRequestWithNonWellFormedXml = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, FakeRequest().withTextBody("<foo><foo>"))
-        .toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues))
+        .toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues)))
 
       private val actual = await(payloadValidationAction.refine(authorisedRequestWithNonWellFormedXml))
 

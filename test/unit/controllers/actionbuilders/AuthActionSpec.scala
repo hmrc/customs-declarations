@@ -26,13 +26,13 @@ import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsValues, NrsConfig}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
-import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
+import uk.gov.hmrc.customs.declaration.model.{Csp, GoogleAnalyticsValues}
+import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
-import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders, TestData}
+import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
 
 class AuthActionSpec extends UnitSpec with MockitoSugar {
 
@@ -55,18 +55,20 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
     AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeId(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
 
   trait SetUp {
-    val mockExportsLogger: DeclarationsLogger = mock[DeclarationsLogger]
+    val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
   }
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
-    val authAction: AuthAction = new AuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
+    val authAction: AuthAction = new AuthAction(customsAuthService, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
   trait NrsDisabled extends AuthConnectorNrsDisabledStubbing with SetUp {
-    val authAction: AuthAction = new AuthAction(mockAuthConnector, mockExportsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
+    val authAction: AuthAction = new AuthAction(customsAuthService, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
   }
 
@@ -76,7 +78,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         authoriseCsp()
 
         private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(badgeIdentifier, Some(nrsRetrievalValues)))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
       }
 
@@ -146,7 +148,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         authoriseCsp()
 
         private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(badgeIdentifier, None))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(Csp(badgeIdentifier, None)))
         verifyNonCspAuthorisationNotCalled
       }
 

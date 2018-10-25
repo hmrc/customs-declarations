@@ -18,38 +18,32 @@ package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, HasRequest}
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 
 @Singleton
 class BatchFileUploadAuthAction @Inject()(customsAuthService: CustomsAuthService,
+                                          headerValidator: HeaderValidator,
                                           logger: DeclarationsLogger,
                                           googleAnalyticsConnector: GoogleAnalyticsConnector,
                                           declarationConfigService: DeclarationsConfigService)
-  extends AuthAction(customsAuthService, logger, googleAnalyticsConnector, declarationConfigService) {
+  extends AuthAction(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService) {
 
-  private lazy val xEoriIdentifierRegex = "^[0-9A-Za-z]{1,17}$".r
-  private val errorResponseEoriIdentifierHeaderMissing = errorBadRequest(s"$XEoriIdentifierHeaderName header is missing or invalid")
-
-  override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: ValidatedHeadersRequest[A]): Either[ErrorResponse, AuthorisedAsCsp] = {
+  override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, AuthorisedAsCsp] = {
     for {
       badgeId <- eitherBadgeIdentifier.right
-      eori <- maybeEori.right
+      eori <- eitherEori.right
     } yield BatchFileUploadCsp(badgeId, eori, maybeNrsRetrievalData)
   }
 
-  private def maybeEori[A](implicit vhr: ValidatedHeadersRequest[A]): Either[ErrorResponse, Eori] = {
-    val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(XEoriIdentifierHeaderName)
-
-    maybeEori.filter(xEoriIdentifierRegex.findFirstIn(_).nonEmpty).map(s => Eori(s)).toRight{
-      logger.error(s"EORI identifier invalid or not present for CSP ($maybeEori)")
-      googleAnalyticsConnector.failure(errorResponseEoriIdentifierHeaderMissing.message)
-      errorResponseEoriIdentifierHeaderMissing
+  private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, Eori] = {
+    headerValidator.eitherEori(XEoriIdentifierHeaderName).left.map{errorResponse =>
+      googleAnalyticsConnector.failure(errorResponse.message)
+      errorResponse
     }
   }
 

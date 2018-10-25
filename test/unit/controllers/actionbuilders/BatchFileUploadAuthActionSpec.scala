@@ -21,7 +21,7 @@ import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XEoriIdentifierHeaderName}
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.BatchFileUploadAuthAction
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{BatchFileUploadAuthAction, HeaderValidator}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
@@ -65,20 +65,22 @@ class BatchFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
-    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(customsAuthService, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val headerValidator = new HeaderValidator(mockLogger)
+    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(customsAuthService, headerValidator, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
   trait NrsDisabled extends AuthConnectorNrsDisabledStubbing with SetUp {
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
-    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(customsAuthService, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val headerValidator = new HeaderValidator(mockLogger)
+    val batchFileUploadAuthAction = new BatchFileUploadAuthAction(customsAuthService, headerValidator, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
   }
 
   "AuthAction Builder " can {
 
     "as CSP when NRS is enabled" should {
-      "authorise as CSP when authorised by auth API and badge identifier exists" in new NrsEnabled {
+      "authorise as CSP when authorised by auth API and both badge identifier and eori exists" in new NrsEnabled {
         authoriseCsp()
 
         private val actual = await(batchFileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))

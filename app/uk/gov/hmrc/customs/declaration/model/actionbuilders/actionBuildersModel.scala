@@ -125,6 +125,10 @@ object ActionBuilderModelHelper {
 
 }
 
+trait HasRequest[A] {
+  val request: Request[A]
+}
+
 trait HasConversationId {
   val conversationId: ConversationId
 }
@@ -211,7 +215,7 @@ case class ValidatedHeadersRequest[A](
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders
+) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with HasAnalyticsValues with ExtractedHeaders
 
 // Specifically for status endpoint
 case class ValidatedHeadersStatusRequest[A](
@@ -221,7 +225,7 @@ case class ValidatedHeadersStatusRequest[A](
  badgeIdentifier: BadgeIdentifier,
  clientId: ClientId,
  request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with HasBadgeIdentifier with ExtractedStatusHeaders
+) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with HasAnalyticsValues with HasBadgeIdentifier with ExtractedStatusHeaders
 
 // Available after Authorise action builder
 case class AuthorisedRequest[A](

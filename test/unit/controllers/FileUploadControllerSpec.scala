@@ -85,7 +85,8 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
     val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
     val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
-    val stubAuthAction = new AuthAction(customsAuthService, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    val headerValidator = new HeaderValidator(mockLogger)
+    val stubAuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger, mockGoogleAnalyticsConnector)
     val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
 

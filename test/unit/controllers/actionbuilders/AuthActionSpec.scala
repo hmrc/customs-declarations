@@ -24,7 +24,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthAction
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthAction, HeaderValidator}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
@@ -62,13 +62,15 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
-    val authAction: AuthAction = new AuthAction(customsAuthService, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val headerValidator = new HeaderValidator(mockLogger)
+    val authAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
   trait NrsDisabled extends AuthConnectorNrsDisabledStubbing with SetUp {
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
-    val authAction: AuthAction = new AuthAction(customsAuthService, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val headerValidator = new HeaderValidator(mockLogger)
+    val authAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
   }
 

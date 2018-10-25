@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
 import play.api.mvc.Headers
@@ -26,7 +25,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ExtractedHeaders, ExtractedHeadersImpl}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 
 @Singleton
 class HeaderValidator @Inject()(logger: DeclarationsLogger) {
@@ -39,6 +38,11 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   private lazy val validContentTypeHeaders = Seq(MimeTypes.XML, MimeTypes.XML + ";charset=utf-8", MimeTypes.XML + "; charset=utf-8")
   private lazy val xClientIdRegex = "^\\S+$".r
 
+  private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"$XBadgeIdentifierHeaderName header is missing or invalid")
+  private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
+
+  private lazy val xEoriIdentifierRegex = "^[0-9A-Za-z]{1,17}$".r
+  private def errorResponseEoriIdentifierHeaderMissing(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is missing or invalid")
 
   def validateHeaders[A](implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeaders] = {
     implicit val headers: Headers = conversationIdRequest.headers
@@ -80,6 +84,23 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }{
       v =>
         if (rule(v)) Right(v) else leftWithLogContainingValue(headerName, v)
+    }
+  }
+
+  def eitherBadgeIdentifier[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, BadgeIdentifier] = {
+    val maybeBadgeId: Option[String] = vhr.request.headers.toSimpleMap.get(XBadgeIdentifierHeaderName)
+    maybeBadgeId.filter(xBadgeIdentifierRegex.findFirstIn(_).nonEmpty).map(BadgeIdentifier).toRight[ErrorResponse]{
+      logger.error(s"$XBadgeIdentifierHeaderName invalid or not present for CSP")
+      errorResponseBadgeIdentifierHeaderMissing
+    }
+  }
+
+  def eitherEori[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
+    val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
+
+    maybeEori.filter(xEoriIdentifierRegex.findFirstIn(_).nonEmpty).map(s => Eori(s)).toRight{
+      logger.error(s"EORI identifier invalid or not present for CSP ($maybeEori)")
+      errorResponseEoriIdentifierHeaderMissing(eoriHeaderName)
     }
   }
 

@@ -27,7 +27,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode}
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId}
 import uk.gov.hmrc.customs.declaration.model.{Eori, NonCsp, NrsRetrievalData}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
@@ -74,9 +74,9 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   /*
   Wrapper around HMRC authentication library authorised function for CSP authentication
   */
-  def authAsCsp[A](withNrs: Boolean)(implicit vhr: ValidatedHeadersRequest[A], hc: HeaderCarrier): Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] = {
+  def authAsCsp(isNrs: Boolean)(implicit vhr: HasConversationId with HasAnalyticsValues, hc: HeaderCarrier): Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] = {
     val eventualAuth: Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] =
-      if (withNrs) {
+      if (isNrs) {
         authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
           case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
             credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes =>
@@ -110,9 +110,9 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   /*
     Wrapper around HMRC authentication library authorised function for NON CSP authentication
     */
-  def authAsNonCsp[A](withNrs: Boolean)(implicit vhr: ValidatedHeadersRequest[A], hc: HeaderCarrier): Future[Either[ErrorResponse, NonCsp]] = {
+  def authAsNonCsp(isNrs: Boolean)(implicit vhr: HasConversationId with HasAnalyticsValues, hc: HeaderCarrier): Future[Either[ErrorResponse, NonCsp]] = {
     val eventualAuth: Future[(Enrolments, Option[NrsRetrievalData])] =
-      if (withNrs) {
+      if (isNrs) {
         authorised(Enrolment(hmrcCustomsEnrolment) and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
           case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
             credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes ~ authorisedEnrolments =>
@@ -152,7 +152,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
     }
   }
 
-  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: ValidatedHeadersRequest[A], hc: HeaderCarrier): Option[Eori] = {
+  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: HasConversationId with HasAnalyticsValues, hc: HeaderCarrier): Option[Eori] = {
     val maybeCustomsEnrolment = enrolments.getEnrolment(hmrcCustomsEnrolment)
     if (maybeCustomsEnrolment.isEmpty) {
       logger.warn(s"Customs enrolment $hmrcCustomsEnrolment not retrieved for authorised non-CSP call")

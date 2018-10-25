@@ -49,7 +49,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
   trait SetUp extends AuthConnectorStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-    protected val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
+    protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]
     protected val mockBusinessService: StandardDeclarationSubmissionService = mock[StandardDeclarationSubmissionService]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
@@ -59,17 +59,18 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
     protected val endpointAction = new EndpointAction {
-      override val logger: DeclarationsLogger = mockDeclarationsLogger
+      override val logger: DeclarationsLogger = mockLogger
       override val googleAnalyticsValues: GoogleAnalyticsValues = GoogleAnalyticsValues.Submit
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService
     }
 
-    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockDeclarationsLogger)
-    protected val stubAuthAction: AuthAction = new AuthAction(customsAuthService, mockDeclarationsLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
-    protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
-    protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockDeclarationsLogger, Some(mockGoogleAnalyticsConnector)) {}
+    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
+    protected val headerValidator = new HeaderValidator(mockLogger)
+    protected val stubAuthAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger, mockGoogleAnalyticsConnector)
+    protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockLogger, Some(mockGoogleAnalyticsConnector)) {}
 
-    protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockDeclarationsLogger)
+    protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
 
     protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, Some(mockGoogleAnalyticsConnector)) {}
 

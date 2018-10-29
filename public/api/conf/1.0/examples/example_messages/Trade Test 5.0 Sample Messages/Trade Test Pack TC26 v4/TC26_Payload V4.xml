@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase id="5d60daf4-de42-441b-aa05-5355701a8eec" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="USETHISTESTCASE" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword="" xmlns:con="http://eviware.com/soapui/config"><con:description>Supplementary Declaration 'Type Z' exceeds Guarantee Limit balance.
+
+</con:description><con:settings><con:setting id="e63ef7a9-da18-4c6c-9ece-2129a9f48ef9fileName">Persist_Trader_Individual_All_Optional</con:setting></con:settings><con:testStep type="request" name="Request1" id="81ef9375-3b5a-41a8-bb75-bfdcb43288ee"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>execute_bind</con:interface><con:operation>persist</con:operation><con:request name="Request1" id="31c98bc2-9401-4c56-a91e-e87f63fe8678" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="SOAPAction" value="http://www.hmrc.gov.uk/bolt/securingPayment/service/v1/createDutyDeferment" xmlns="http://eviware.com/soapui/config"/></con:setting><con:setting id="com.eviware.soapui.impl.support.AbstractHttpRequest@follow-redirects">true</con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://10.179.101.200:8030/bolt/securingpaymentservice</con:endpoint><con:request><![CDATA[<md:MetaData
+      xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+      xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+      xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+      xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+    >
+      <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+      <md:WCOTypeName>DEC</md:WCOTypeName>
+      <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>     
+      <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+      <md:AgencyAssignedCustomizationCode>ABCD</md:AgencyAssignedCustomizationCode>
+      <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+      <Declaration
+        xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+        xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+        xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+        xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+        xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+      >
+             <AcceptanceDateTime>
+          <p1:DateTimeString formatCode="304">20180918010000+01</p1:DateTimeString>
+        </AcceptanceDateTime>
+        <FunctionCode>9</FunctionCode>
+        <!-- Message Function Code: Original to be inserted -->
+        <FunctionalReferenceID>TC260100</FunctionalReferenceID>
+        <!-- DE 2/5 LRN / Traders Own Reference - AN..22 we should suggest a format 
+          to make it unique ? -->
+        <IssueDateTime>
+          <p1:DateTimeString formatCode="304">20180918010000+01</p1:DateTimeString>
+          <!-- 12/05/2017 10:30.30 Date/time of authentication by the declarant or 
+            declarant's representative -->
+        </IssueDateTime>
+        <TypeCode>IMZ</TypeCode>
+        <!-- DE1/1, DE1/2: Declaration Type -->
+        <GoodsItemQuantity>1</GoodsItemQuantity>
+        <!-- DE 1/9: Not official in EUCDM but requested anyway -->
+        <!-- <InvoiceAmount currencyID="GBP">0</InvoiceAmount> DE4/10 & DE4/11: Total 
+          of all invoiced items in the Declaration. Cannot have just the currency; must include 
+          a value as this is part of a valid schema. Box 22 Removed as all amounts will have 
+          currency as attributes -->
+        <DeclarationOfficeID>GBLBA001</DeclarationOfficeID>
+        <!-- DeclarationOfficeID - Temporarily needed -->
+        <TotalPackageQuantity>55</TotalPackageQuantity>
+        <!-- DE 6/18: Total packages Box 6 -->
+        <!-- <Submitter> <ID>HEADER-EORI-HERE</ID> </Submitter> -->
+        <!-- Process rule - When an Import agent submits this sort of declaration 
+          then DMS must take his EORI number from the submitted declaration envelope and populate 
+          into the submitter field. -->
+        <AdditionalDocument>
+          <CategoryCode>1</CategoryCode>
+          <!--DE 2/3: Item level Document Category code Box 44 -->
+          <ID>5645786</ID>
+          <!--DE 2/3: Document Reference - Deferment decision no. Suggest DAN Box 
+            44. -->
+          <TypeCode>DAN</TypeCode>
+          <!--DE 2/3: Item level Document Type code Box 44 -->
+        </AdditionalDocument>
+        <!-- DE 2/6: Deferment Account No. - see also DE 8/3 -->
+      <Agent>
+        <Name>Adam Shift</Name>
+        <ID>GB33411501001</ID>
+        <FunctionCode>2</FunctionCode>
+        <Address>
+          <CityName>New York</CityName>
+          <CountryCode>US</CountryCode>
+          <Line>1 Bags Avenue</Line>
+          <PostcodeID>NY1 234</PostcodeID>
+        </Address>
+      </Agent>
+        <AuthorisationHolder>
+          <ID>GB23411501120</ID>
+          <CategoryCode>EIR</CategoryCode>
+        </AuthorisationHolder>
+        <AuthorisationHolder>
+          <ID>GB23411501120</ID>
+          <CategoryCode>AEOC</CategoryCode>
+        </AuthorisationHolder>
+        <AuthorisationHolder>
+          <ID>GB23411501120</ID>
+          <CategoryCode>DPO</CategoryCode>
+        </AuthorisationHolder>
+        <AuthorisationHolder>
+          <ID>GB23411501120</ID>
+          <CategoryCode>CWP</CategoryCode>
+        </AuthorisationHolder>
+		<AuthorisationHolder>
+          <ID>GB23411501120</ID>
+          <CategoryCode>CGU</CategoryCode>
+        </AuthorisationHolder>
+        <!-- DE 3/39: Holder of the authorisation Id - should be the same id as DE 
+          3/16 (Importer) -->
+        <BorderTransportMeans>
+          <RegistrationNationalityCode>US</RegistrationNationalityCode>
+          <!-- DE 7/15: Nationality of active means of transport crossing the border 
+            Box 21(2) -->
+          <ModeCode>1</ModeCode>
+          <!-- DE 7/4: Mode of Transport at the Border - 1 = Maritime Box 25 -->
+        </BorderTransportMeans>
+        <Declarant>
+          <ID>GB33411501001</ID>
+          <!-- DE 3/18: Declarant unique Id (EORI) - same as Importer Id (3/16) Box 
+            14 -->
+        </Declarant>
+ 	   <Exporter>
+          <Name>Eoin Mccullough</Name>
+          <Address>
+            <CityName>Chicago</CityName>
+            <CountryCode>US</CountryCode>
+            <Line>10 Irwin Street</Line>
+            <PostcodeID>H81 4RG</PostcodeID>
+          </Address>
+        </Exporter> 
+        <GoodsShipment>
+          <TransactionNatureCode>1</TransactionNatureCode>
+          <!-- DE 8/5: Nature of transaction Box 24 -->
+          <!-- DE 3/37: Additional Supply Chain Actor - leave blank. -->
+          <!-- DE 3/27:Buyer Id not needed at this level for this situation. -->
+          <Consignment>
+            <ContainerCode>1</ContainerCode>
+            <!-- DE 7/2 Values 0 or 1 (if transported in a container) Box 19/31 -->
+            <ArrivalTransportMeans>
+              <ID>12345</ID>
+              <!-- DE 7/9: Identity of means of transport on arrival number Box 18(1) -->
+              <IdentificationTypeCode>10</IdentificationTypeCode>
+              <!-- DE 7/9: Identification of means of transport on arrival 10=IMO 
+                ship identification number Box 18(1) -->
+              <ModeCode>3</ModeCode>
+              <!-- DE 7/5: Inland mode of transport - 3 = Road Box 26 -->
+            </ArrivalTransportMeans>
+            <GoodsLocation>
+              <ID>CW5645786</ID>
+              <TypeCode>B</TypeCode>
+              <!-- DE 5/23: Type of location B= Authorised place number Box 44 -->
+              <Address>
+                <TypeCode>Y</TypeCode>
+                <!-- DE 5/23: Type of location Qualifier Y= Authorisation Box 44 -->
+                <CountryCode>GB</CountryCode>
+              </Address>
+            </GoodsLocation>
+            <!-- DE 5/23: Location of Goods (Not needed for a Supp Dec warehouse 
+              removal?) Box 30 -->
+            <TransportEquipment>
+              <SequenceNumeric>1</SequenceNumeric>
+              <ID>DM1234</ID>
+            </TransportEquipment>
+            <!-- DE 7/10: Container identification number Box 31 -->
+          </Consignment>
+          <!-- DE 4/8: HMRC do not put this data at header level -->
+          <!-- DE 3/40: Additional Fiscal References - not needed for Requested Procedure 
+            40 -->
+          <ExportCountry>
+            <ID>US</ID>
+            <!-- DE 5/14: Dispatch Country Box 15a -->
+          </ExportCountry>
+          <GovernmentAgencyGoodsItem>
+            <SequenceNumeric>1</SequenceNumeric>
+            <!-- DE 1/6: Each item must have a different sequential number Box 32 -->
+            <!-- DE 8/6: Statistical Value Box 46 -->
+            <AdditionalDocument>
+              <CategoryCode>C</CategoryCode>
+              <ID>GBEIRGB23411501120</ID>
+              <Name>Commercial Policy</Name>
+              <TypeCode>514</TypeCode>
+            </AdditionalDocument>
+            <AdditionalDocument>
+              <CategoryCode>C</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>GBAEOCGB23411501120</ID>
+              <!-- DE 2/3: Document Reference - AEO Decision number; if no codes 
+                currently in place suggest EORI Box 44. -->
+              <TypeCode>501</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+            </AdditionalDocument>
+            <AdditionalDocument>
+              <CategoryCode>C</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>GBDPO1DAN5645786</ID>
+              <!-- DE 2/3: Document Reference - Deferment decision no. Suggest DAN 
+                Box 44. -->
+              <TypeCode>506</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+            </AdditionalDocument>
+            <AdditionalDocument>
+              <CategoryCode>C</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>GBCWPU5645786GB</ID>
+              <!-- DE 2/3: Document Reference - CW authorisation number; if no coding 
+                devised, suggest CW ID (ex box.47 codes Box 44. -->
+              <TypeCode>517</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+            </AdditionalDocument>
+			<AdditionalDocument>
+              <CategoryCode>5</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>Guaranteenotrequired-CCC</ID>
+              <!-- DE 2/3: Document Reference - CW authorisation number; if no coding 
+                devised, suggest CW ID (ex box.47 codes Box 44. -->
+              <TypeCode>05N</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+            </AdditionalDocument>
+            <AdditionalDocument>
+              <CategoryCode>N</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>12345/18.09.2018</ID>
+              <!-- DE 2/3: Document Reference - Invoice exists as a supporting document 
+                indicating the transaction value (Code: invoice no/invoice date) Box 44. -->
+              <!-- <Name>Commercial Policy</Name> -->
+              <TypeCode>935</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+              <LPCOExemptionCode>AC</LPCOExemptionCode>
+              <!-- New item to take the old Document Status (ITEM-DOC-STATUS). In 
+                this case AE = Anti-Dumping Duty Box 44. -->
+            </AdditionalDocument>
+            <AdditionalDocument>
+              <CategoryCode>Y</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>GBAEOC03000/15</ID>
+              <!-- DE 2/3: Document Reference - AEO Importer Cert No. Box 44. -->
+              <TypeCode>023</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+            </AdditionalDocument>
+            <AdditionalDocument>
+              <CategoryCode>Y</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>GBAEOC03000/15</ID>
+              <!-- DE 2/3: Document Reference - AEO Declarant Cert No. Box 44. -->
+              <TypeCode>024</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+            </AdditionalDocument>
+            <AdditionalDocument>
+              <CategoryCode>Y</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>GBAEOC03000/15</ID>
+              <!-- DE 2/3: Document Reference - WHSE Keeper AEO Cert. No. Box 44. -->
+              <TypeCode>027</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+            </AdditionalDocument>
+             <AdditionalDocument>
+              <CategoryCode>9</CategoryCode>
+              <ID>GBAEOCGB23411501120</ID>
+              <TypeCode>120</TypeCode>
+              <LPCOExemptionCode>XB</LPCOExemptionCode>
+            </AdditionalDocument>
+             <AdditionalDocument>
+              <CategoryCode>Y</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>GBAEOC03000/15</ID>
+              <!-- DE 2/3: Document Reference - WHSE Keeper AEO Cert. No. Box 44. -->
+              <TypeCode>929</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+              <LPCOExemptionCode>XX</LPCOExemptionCode>
+            </AdditionalDocument>
+            <AdditionalDocument>
+              <CategoryCode>C</CategoryCode>
+              <!-- DE 2/3: Item level Document Category code Box 44 -->
+              <ID>GBAEOC03000/15</ID>
+              <!-- DE 2/3: Document Reference - WHSE Keeper AEO Cert. No. Box 44. -->
+              <TypeCode>644</TypeCode>
+              <!-- DE 2/3: Item level Document Type code Box 44 -->
+              <LPCOExemptionCode>XX</LPCOExemptionCode>
+            </AdditionalDocument>
+            <!-- DE 2/2: Additional Information Statement Code 00500 = Relationship 
+              between Importer and Declarant / According to EUCDM v2 not allowed at Header Level! -->
+            <Commodity>
+              <Description>Cocoa Butter-SDK123457</Description>
+              <!-- DE 6/8: Description of goods Box 31 -->
+              <Classification>
+                <ID>18040000</ID>
+                <!-- DE 6/14 & DE 6/15: TARIC commodity code Box 33 -->
+                <IdentificationTypeCode>TSP</IdentificationTypeCode>
+                <!-- Used by DMS to identify the type of Classification Id - standard 
+                  Comm Code will be TSP However SRZ until Drop 2 -->
+              </Classification>
+              <Classification>
+                <ID>00</ID>
+                <IdentificationTypeCode>TRC</IdentificationTypeCode>
+              </Classification>
+              <Classification>
+                <ID>VATZ</ID>
+                <!-- DE 6/14 & DE 6/15: TARIC commodity code Box 33 -->
+                <IdentificationTypeCode>GN</IdentificationTypeCode>
+              </Classification>
+              <Classification>
+                <ID>2500</ID>
+                <IdentificationTypeCode>TRA</IdentificationTypeCode>
+              </Classification>
+              <DutyTaxFee>
+                <DutyRegimeCode>100</DutyRegimeCode>
+                <!-- DE 4/17: Preference 100 = Tariff arrangement erga omnes, no 
+                  preference claimed Box 36 -->
+                <!-- DE 8/1: Quota order number Box 39. Should be blank in this situation -->
+				<!-- DE 4/3: Calculation of taxes - tax line 1 -->
+                <Payment>
+                  <MethodCode>E</MethodCode>
+                  <!-- DE 4/8: Method of Payment code CHIEF value is F for Deferred 
+                    payment but UCC is E -->
+                </Payment>
+              </DutyTaxFee>
+              <GoodsMeasure>
+                <GrossMassMeasure>15</GrossMassMeasure>
+                <!-- DE 6/5: Gross Mass. unitCode specifies the default Kilgrams 
+                  as specified by UCC Box 35 -->
+                <NetNetWeightMeasure>10</NetNetWeightMeasure>
+                <!-- DE 6/1: Item Net Mass. unitCode specifies the default Kilograms 
+                  as specified by UCC Box 38 -->
+               <TariffQuantity>10</TariffQuantity>
+                <!-- ~ <TariffQuantity> DE 6/2: Item supplementary units Box 41. 
+                  Cannot be 'blank' or empty. Must be removed from the dec entirely to validate. -->
+              </GoodsMeasure>
+              <InvoiceLine>
+                <ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
+                <!-- DE 4/14: Item Price/Amount Box 42 -->
+              </InvoiceLine>
+            </Commodity>
+            <!-- DE 3/2: Consignor at item level: unnecessary in this instance Box 
+              2 -->
+            <!-- DE 3/40: Additional Fiscal References at item level. Not needed 
+              for Requested Procedure 40. -->
+            <CustomsValuation>
+              <MethodCode>1</MethodCode>
+              <!-- DE 4/16: Valuation Method 1=Transaction value of the imported 
+                goods -->
+            </CustomsValuation>
+            <Destination>
+              <CountryCode>GB</CountryCode>
+            </Destination>
+			<!-- DE 5/8 Country of destination code -->
+            <GovernmentProcedure>
+              <!-- DE 1/10 CPC / Requested Procedure/Previous Procedure Box 37(1): 
+                Release into free circulation from a warehouse -->
+              <CurrentCode>40</CurrentCode>
+              <PreviousCode>71</PreviousCode>
+            </GovernmentProcedure>
+            <GovernmentProcedure>
+              <!-- DE 1/11 Additional Procedure Box 37(2): No additional proc code 
+                required. -->
+              <CurrentCode>000</CurrentCode>
+            </GovernmentProcedure>
+            <Origin>
+              <CountryCode>AE</CountryCode>
+              <TypeCode>1</TypeCode>
+              <!-- TypeCode specifies whether the Country of Origin is preferential 
+                or not 1 = Non-preferential -->
+            </Origin>
+            <!-- DE 5/15 + 5/16: Country of origin code Box 34b -->
+            <Packaging>
+              <SequenceNumeric>1</SequenceNumeric>
+              <!-- This is a mandatory element -->
+              <MarksNumbersID>TESTTEST</MarksNumbersID>
+              <!-- DE 6/11: Shipping Marks Box 31 -->
+              <!-- DE 6/10: Package count Box 31 -->
+              <QuantityQuantity>55</QuantityQuantity>
+              <TypeCode>PK</TypeCode>
+              <!-- DE 6/9: Kind of package PK = Package Box 31 -->
+            </Packaging>
+            <PreviousDocument>
+              <CategoryCode>Y</CategoryCode>
+              <!-- Only Temporary -->
+              <ID>201809187GB025115132109-12345</ID>
+              <!-- DE 2/1: Doc Reference - date of entry in the declarants records 
+                YYYYMMDD Box 40 -->
+              <TypeCode>CLE</TypeCode>
+              <!-- DE 2/1: Doc Type CLE = Reference/date of entry of the goods in 
+                the records Box 40 -->
+              <LineNumeric>1</LineNumeric>
+              <!-- DE 2/1: Goods Item Identifier. The number of the item on that 
+                previous declaration. If the tag is added then it needs to have a value i.e. cannot 
+                be empty or null - have inputted zero to ensure schema validity but it needs to have 
+                a proper value for test. -->
+            </PreviousDocument>
+            <!-- DE 2/1: Previous Doc at Item Level -->
+            <!-- DE 3/24 - 3/25: Only needed where different from Exporter details -->
+            <!-- <UCR> ~ Unique Consignment Ref Id at item level - Could be used 
+              to store DUCR? This Gap needs resolution. ~ AN..35 DE 2/4: Equivalent to TDR-OWN-REF-ENT 
+              in EDIFACT Box 7 - would allow traders to refer to items using their own code </UCR> -->
+			  <ValuationAdjustment>
+              <AdditionCode>0000</AdditionCode>
+              <!-- DE 4/13: Valuation indicators; equates to the statement that they 
+                comply with all conditions to use method 1 for valuation Box 45 -->
+            </ValuationAdjustment>
+          </GovernmentAgencyGoodsItem>
+          <Importer>
+            <ID>GB23411501120</ID>
+            <!-- DE 3/16: The same Consignee must not be entered at both header and 
+              item level Box 8 -->
+          </Importer>
+          <!-- DE 3/24 - 3/25: Not needed where the Seller has the same details as 
+            the Exporter -->
+          <TradeTerms>
+            <ConditionCode>CIF</ConditionCode>
+            <!-- DE 4/1: Delivery terms - INCOTERM Code - CIF = Cost, Insurance & 
+              Freight Box 20 -->
+            <LocationID>GBTIL</LocationID>
+            <!-- DE 4/1: Delivery terms - LOCODE in this case Tilbury -->
+          </TradeTerms>
+          <!-- DE 4/1: Delivery terms Box 20 - Not sure that LocationName should 
+            be used like this (appears to be against the EUCDM instructions) -->
+          <UCR>
+            <!-- Unique Consignment Ref Id at header level - Could be used for DUCR? -->
+            <TraderAssignedReferenceID>7GB025115132109-12345</TraderAssignedReferenceID>
+            <!-- ~ DE 2/4: Equivalent to TDR-OWN-REF-ENT in EDIFACT Box 7 - would 
+              allow traders to refer to items using their own code -->
+          </UCR>
+          <Warehouse>
+            <!-- DE 2/7: Premise Id / Id of warehouse Box 49 -->
+            <ID>1234567GB</ID>
+            <!-- Warehouse Type is a separate data item so shouldn't be included 
+              in the Id -->
+            <TypeCode>U</TypeCode>
+            <!-- U = Private Warehouse -->
+          </Warehouse>
+        </GoodsShipment>
+        <ObligationGuarantee>
+          <ID>Guaranteenotrequired</ID>
+          <!-- DE 8/3: Guarantee - used in this case for Deferment Account number(s) 
+            Box 48 -->
+          <SecurityDetailsCode>0</SecurityDetailsCode>
+          <!-- DE 8/2: Gurantee Type - will need to know what DMS will regard as 
+            Deferment -->
+        </ObligationGuarantee>
+        <SupervisingOffice>
+          <ID>GBLBA001</ID>
+        </SupervisingOffice>
+        <!-- DE 5/27: Supervising Customs office - Country code followed by supervising 
+          office code {UN LOCODE (LBA = Leeds) then alphanumeric subdivision suggest: '001'} 
+          Box 44 -->
+      </Declaration>
+    </md:MetaData>  ]]></con:request><con:assertion type="SOAP Response" id="a1406e33-00cf-4e5a-9a48-e5c0d0b6c7d9"/><con:assertion type="Valid HTTP Status Codes" id="e5af37f1-5ed3-4108-b4db-16c9ef827bd1" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:credentials><con:domain/><con:selectedAuthProfile>No Authorization</con:selectedAuthProfile><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties><con:property><con:name>Content-Type: text/xml;charset</con:name><con:value>UTF-8</con:value></con:property><con:property><con:name>&lt;soapenv:Envelope xmlns:soapenv</con:name><con:value>"http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.hmrc.gov.uk/bolt/securingPayment/schema/v1"></con:value></con:property><con:property><con:name>&lt;auth:requestHeader xmlns:auth</con:name><con:value>"http://www.hmrc.gov.uk/bolt/securingPayment/header/v1"></con:value></con:property><con:property><con:name>SOAPAction</con:name><con:value>"http://www.hmrc.gov.uk/bolt/securingPayment/service/v1/createDutyDeferment"</con:value></con:property></con:properties><con:reportParameters/><con:breakPoints><con:testStepId>3b01b4ff-a66d-4d9b-8a36-5325e7896b9f</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints><con:breakPoints><con:testStepId>21ed32db-406c-4f4d-8dbe-a509dd49e9df</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints><con:breakPoints><con:testStepId>e564ea69-42f6-4fcd-94ee-44ea68ce31f9</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints><con:breakPoints><con:testStepId>253ff433-9dd0-4972-aa28-565582de1b8d</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints><con:breakPoints><con:testStepId>bc66d49b-253e-4905-9418-43c0980cb3f3</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints></con:testCase>

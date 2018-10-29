@@ -30,6 +30,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.repo.BatchFileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadUpscanNotificationBusinessService, DeclarationsConfigService}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.ApiSubscriptionFieldsTestData
 import util.TestData._
 
 import scala.concurrent.Future
@@ -75,13 +76,14 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
 
   "BatchFileUploadUpscanNotificationBusinessService" should {
     "update metadata and call file transmission service" in new SetUp {
-      when(mockRepo.update(FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFilesOneAndThree)))
+      when(mockRepo.update(ApiSubscriptionFieldsTestData.subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFilesOneAndThree)))
       when(mockConnector.send(any[FileTransmission])).thenReturn(Future.successful(()))
 
-      val actual = await(service.persistAndCallFileTransmission(readyCallbackBody))
+      val actual = await(service.persistAndCallFileTransmission(ApiSubscriptionFieldsTestData.subscriptionFieldsId, readyCallbackBody))
 
       actual shouldBe (())
       verify(mockRepo).update(
+        ameq[UUID](ApiSubscriptionFieldsTestData.subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId],
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
@@ -89,12 +91,13 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     }
 
     "return failed future when no metadata record found for file reference" in new SetUp {
-      when(mockRepo.update(FileReferenceOne, callbackFields)).thenReturn(Future.successful(None))
+      when(mockRepo.update(ApiSubscriptionFieldsTestData.subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(None))
 
-      val error = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(readyCallbackBody)))
+      val error = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(ApiSubscriptionFieldsTestData.subscriptionFieldsId, readyCallbackBody)))
 
       error.getMessage shouldBe s"database error - can't find record with file reference ${FileReferenceOne.value.toString}"
       verify(mockRepo).update(
+        ameq[UUID](ApiSubscriptionFieldsTestData.subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId],
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
@@ -102,12 +105,13 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     }
 
     "return failed future when file reference not found in returned metadata" in new SetUp {
-      when(mockRepo.update(FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFileTwo)))
+      when(mockRepo.update(ApiSubscriptionFieldsTestData.subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFileTwo)))
 
-      val error = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(readyCallbackBody)))
+      val error = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(ApiSubscriptionFieldsTestData.subscriptionFieldsId, readyCallbackBody)))
 
       error.getMessage shouldBe s"database error - can't find file with file reference ${FileReferenceOne.value.toString}"
       verify(mockRepo).update(
+        ameq[UUID](ApiSubscriptionFieldsTestData.subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId],
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
@@ -115,12 +119,13 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     }
 
     "propagate exception encountered in repo" in new SetUp {
-      when(mockRepo.update(FileReferenceOne, callbackFields)).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockRepo.update(ApiSubscriptionFieldsTestData.subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.failed(emulatedServiceFailure))
 
-      val error = intercept[EmulatedServiceFailure](await(service.persistAndCallFileTransmission(readyCallbackBody)))
+      val error = intercept[EmulatedServiceFailure](await(service.persistAndCallFileTransmission(ApiSubscriptionFieldsTestData.subscriptionFieldsId, readyCallbackBody)))
 
       error shouldBe emulatedServiceFailure
       verify(mockRepo).update(
+        ameq[UUID](ApiSubscriptionFieldsTestData.subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId],
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
@@ -128,14 +133,12 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     }
 
     "propagate exception encountered in connector" in new SetUp {
-      when(mockRepo.update(FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFilesOneAndThree)))
+      when(mockRepo.update(ApiSubscriptionFieldsTestData.subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFilesOneAndThree)))
       when(mockConnector.send(any[FileTransmission])).thenReturn(Future.failed(emulatedServiceFailure))
 
-      val error = intercept[EmulatedServiceFailure](await(service.persistAndCallFileTransmission(readyCallbackBody)))
+      val error = intercept[EmulatedServiceFailure](await(service.persistAndCallFileTransmission(ApiSubscriptionFieldsTestData.subscriptionFieldsId, readyCallbackBody)))
 
       error shouldBe emulatedServiceFailure
     }
-
   }
-
 }

@@ -54,7 +54,7 @@ class BatchFileUploadUpscanNotificationController @Inject()(notificationService:
                 callbackBody match {
                   case ready: UploadedReadyCallbackBody =>
                     cdsLogger.debug(s"Valid JSON request received with READY status. Body: $js headers: ${request.headers}")
-                    businessService.persistAndCallFileTransmission(ready).map{_ =>
+                    businessService.persistAndCallFileTransmission(clientSubscriptionId, ready).map{_ =>
                         Results.NoContent
                     }.recover{
                       case e: Throwable =>

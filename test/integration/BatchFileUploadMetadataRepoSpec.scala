@@ -31,6 +31,7 @@ import uk.gov.hmrc.customs.declaration.repo.{BatchFileUploadMetadataMongoRepo, B
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.MongoSpecSupport
 import uk.gov.hmrc.play.test.UnitSpec
+import util.ApiSubscriptionFieldsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.{BatchFileMetadataWithFileOne, _}
 
@@ -111,7 +112,7 @@ class BatchFileUploadMetadataRepoSpec extends UnitSpec
       val updatedFileOne = BatchFileOne.copy(maybeCallbackFields = Some(CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM")))
       val expectedRecord = BatchFileMetadataWithFilesOneAndThree.copy(files = Seq(updatedFileOne, BatchFileThree))
 
-      val maybeActual = await(repository.update(FileReferenceOne, CallbackFieldsUpdated))
+      val maybeActual = await(repository.update(ApiSubscriptionFieldsTestData.subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
 
       maybeActual shouldBe Some(expectedRecord)
       await(repository.fetch(BatchFileOne.reference)) shouldBe Some(expectedRecord)
@@ -124,7 +125,7 @@ class BatchFileUploadMetadataRepoSpec extends UnitSpec
       val updatedFileOne = BatchFileOne.copy(maybeCallbackFields = Some(CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM")))
       val expected = BatchFileMetadataWithFileOne.copy(files = Seq(updatedFileOne))
 
-      val maybeActual = await(repository.update(FileReferenceOne, CallbackFieldsUpdated))
+      val maybeActual = await(repository.update(ApiSubscriptionFieldsTestData.subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
 
       maybeActual shouldBe None
     }

@@ -36,6 +36,7 @@ import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationServ
 import util.ApiSubscriptionFieldsTestData
 import util.TestData._
 import util.UpscanNotifyTestData._
+import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 import scala.concurrent.Future
 
@@ -53,24 +54,24 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
       mockErrorToXmlNotification,
       mockBusinessService,
       mockCdsLogger)
-    val post: Action[AnyContent] = controller.post(ApiSubscriptionFieldsTestData.subscriptionFieldsId.toString)
+    val post: Action[AnyContent] = controller.post(subscriptionFieldsId.toString)
     val postWithInvalidCsid: Action[AnyContent] = controller.post("invalid-csid")
 
     def whenNotificationService(callbackBody: UploadedCallbackBody,
                                 fileReference: FileReference = FileReferenceOne,
-                                csid: SubscriptionFieldsId = ApiSubscriptionFieldsTestData.subscriptionFieldsId,
+                                csid: SubscriptionFieldsId = subscriptionFieldsId,
                                 result: Future[Unit] = Future.successful(())): OngoingStubbing[Future[Unit]] = {
       when(mockNotificationService.sendMessage(
         ameq(FailedCallbackBody),
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
-        ameq[UUID](ApiSubscriptionFieldsTestData.subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId])
+        ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId])
       (ameq(mockToXmlNotification))
       ).thenReturn(result)
     }
 
     def verifyFailureNotificationSent(callbackBody: UploadedFailedCallbackBody,
                                       fileReference: FileReference = FileReferenceOne,
-                                      csid: SubscriptionFieldsId = ApiSubscriptionFieldsTestData.subscriptionFieldsId): Future[Unit] = {
+                                      csid: SubscriptionFieldsId = subscriptionFieldsId): Future[Unit] = {
       verify(mockNotificationService).sendMessage(
         ameq(callbackBody),
         ameq[UUID](fileReference.value).asInstanceOf[FileReference],
@@ -78,7 +79,7 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
     }
 
     def verifyErrorNotificationSent(fileReference: FileReference = FileReferenceOne,
-                                    csid: SubscriptionFieldsId = ApiSubscriptionFieldsTestData.subscriptionFieldsId): Future[Unit] = {
+                                    csid: SubscriptionFieldsId = subscriptionFieldsId): Future[Unit] = {
       verify(mockNotificationService).sendMessage(
         ameq(fileReference),
         ameq[UUID](fileReference.value).asInstanceOf[FileReference],
@@ -88,7 +89,7 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
 
   "BatchFileUploadUpscanNotificationController on Happy Path" should {
     "on receipt of READY callback call business service and return 204 with empty body" in new SetUp {
-      when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](ApiSubscriptionFieldsTestData.subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])).thenReturn(Future.successful(()))
+      when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])).thenReturn(Future.successful(()))
 
       private val result = post(fakeRequestWith(readyJson()))
 
@@ -96,7 +97,7 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
       contentAsString(result) mustBe empty
       eventually {
         verifyZeroInteractions(mockNotificationService)
-        verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](ApiSubscriptionFieldsTestData.subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
+        verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
         verifyZeroInteractions(mockErrorToXmlNotification)
       }
     }
@@ -132,7 +133,7 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
     }
 
     "on receipt of READY callback return 500 with standard error message when business service throw an exception" in new SetUp {
-      when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](ApiSubscriptionFieldsTestData.subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId]))
+      when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId]))
         .thenReturn(Future.failed(emulatedServiceFailure))
 
       private val result = post(fakeRequestWith(readyJson()))
@@ -140,7 +141,7 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
       status(result) mustBe INTERNAL_SERVER_ERROR
       contentAsString(result) mustBe UpscanNotificationInternalServerErrorJson
       eventually {
-        verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](ApiSubscriptionFieldsTestData.subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
+        verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
         verifyErrorNotificationSent()
         verifyZeroInteractions(mockToXmlNotification)
       }

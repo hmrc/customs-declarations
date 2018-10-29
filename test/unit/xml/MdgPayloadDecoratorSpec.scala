@@ -22,6 +22,7 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData
 import util.TestData._
+import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 import scala.xml.NodeSeq
 
@@ -29,7 +30,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
   private val xml: NodeSeq = <node1></node1>
 
-  private val clientId = ApiSubscriptionFieldsTestData.subscriptionFieldsId
+  private val clientId = subscriptionFieldsId
 
   private val year = 2017
   private val monthOfYear = 6

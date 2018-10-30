@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 import unit.services.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData
 import util.TestData._
+import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -72,7 +73,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
       val captor: ArgumentCaptor[BatchFileUploadCustomsNotification] = ArgumentCaptor.forClass(classOf[BatchFileUploadCustomsNotification])
       verify(mockNotificationConnector).send(captor.capture())
       val actual: BatchFileUploadCustomsNotification = captor.getValue
-      actual.clientSubscriptionId shouldBe ApiSubscriptionFieldsTestData.subscriptionFieldsId
+      actual.clientSubscriptionId shouldBe subscriptionFieldsId
       actual.conversationId shouldBe FileReferenceOne.value
       string2xml(actual.payload.toString) shouldBe string2xml(xml.toString)
     }
@@ -106,7 +107,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
     "send SUCCESS notification to the customs notification service" in new SetUp {
       when(mockNotificationConnector.send(any[BatchFileUploadCustomsNotification])).thenReturn(Future.successful(()))
 
-      await(service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, ApiSubscriptionFieldsTestData.subscriptionFieldsId))
+      await(service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId))
 
       verifyNotificationConnectorCalledWithXml(expectedSuccessXml)
     }
@@ -114,7 +115,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
     "send FAILURE notification to the customs notification service" in new SetUp {
       when(mockNotificationConnector.send(any[BatchFileUploadCustomsNotification])).thenReturn(Future.successful(()))
 
-      await(service.sendMessage(failureCallbackPayload, successCallbackPayload.fileReference, ApiSubscriptionFieldsTestData.subscriptionFieldsId))
+      await(service.sendMessage(failureCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId))
 
       verifyNotificationConnectorCalledWithXml(expectedFailureXml)
     }

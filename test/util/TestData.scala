@@ -42,6 +42,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedBatchFileU
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 import unit.logging.StubDeclarationsLogger
 import util.TestData.declarantEori
+import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 import scala.xml.{Elem, NodeSeq}
 
@@ -313,16 +314,16 @@ object TestData {
   val BatchFileThree = BatchFile(reference = FileReferenceThree, Some(CallbackFieldsThree),
     location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(3), size = 1, documentType = DocumentType("Document Type 3"))
   val BatchFileOneNoCallbackFields = BatchFileOne.copy(maybeCallbackFields = None)
-  val BatchFileMetadataWithFileOne = BatchFileUploadMetadata(DeclarationId("1"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdOne, fileCount = 1, Seq(
+  val BatchFileMetadataWithFileOne = BatchFileUploadMetadata(DeclarationId("1"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 1, Seq(
     BatchFileOne
   ))
-  val BatchFileMetadataWithFileTwo = BatchFileUploadMetadata(DeclarationId("2"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdTwo, fileCount = 1, Seq(
+  val BatchFileMetadataWithFileTwo = BatchFileUploadMetadata(DeclarationId("2"), Eori("123"), csId = subscriptionFieldsId, BatchIdTwo, fileCount = 1, Seq(
     BatchFileTwo
   ))
-  val BatchFileMetadataWithFilesOneAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdThree, fileCount = 2, Seq(
+  val BatchFileMetadataWithFilesOneAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdThree, fileCount = 2, Seq(
     BatchFileOne, BatchFileThree
   ))
-  val BatchFileMetadataWithFileOneWithNoCallbackFieldsAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = ApiSubscriptionFieldsTestData.subscriptionFieldsId, BatchIdOne, fileCount = 2, Seq(
+  val BatchFileMetadataWithFileOneWithNoCallbackFieldsAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 2, Seq(
     BatchFileOneNoCallbackFields, BatchFileThree
   ))
 

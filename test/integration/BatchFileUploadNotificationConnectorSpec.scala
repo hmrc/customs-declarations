@@ -29,6 +29,7 @@ import util.ExternalServicesConfig.{Host, Port}
 import util.TestData._
 import util.externalservices.CustomsNotificationService
 import util.{ApiSubscriptionFieldsTestData, CustomsDeclarationsExternalServicesConfig, TestData}
+import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 class BatchFileUploadNotificationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with CustomsNotificationService {
@@ -39,7 +40,7 @@ class BatchFileUploadNotificationConnectorSpec extends IntegrationTestSpec with 
 
   private val xml = <foo>bar</foo>
   private val notification =
-    BatchFileUploadCustomsNotification(ApiSubscriptionFieldsTestData.subscriptionFieldsId, TestData.conversationId.uuid, xml)
+    BatchFileUploadCustomsNotification(subscriptionFieldsId, TestData.conversationId.uuid, xml)
 
   override protected def beforeAll() {
     startMockServer()

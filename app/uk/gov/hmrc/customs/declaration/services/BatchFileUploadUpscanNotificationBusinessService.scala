@@ -34,8 +34,9 @@ class BatchFileUploadUpscanNotificationBusinessService @Inject()(repo: BatchFile
                                                                  config: DeclarationsConfigService,
                                                                  logger: DeclarationsLogger) {
 
-  def persistAndCallFileTransmission(ready: UploadedReadyCallbackBody)(implicit r: HasConversationId): Future[Unit] = {
+  def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(implicit r: HasConversationId): Future[Unit] = {
     repo.update(
+      csId,
       ready.reference,
       CallbackFields(ready.uploadDetails.fileName, ready.uploadDetails.fileMimeType, ready.uploadDetails.checksum)
     ).flatMap{

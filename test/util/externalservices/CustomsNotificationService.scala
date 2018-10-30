@@ -20,6 +20,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.{post, _}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers._
 import util.{ApiSubscriptionFieldsTestData, TestData, WireMockRunner}
+import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 import scala.collection.JavaConverters._
 
@@ -50,7 +51,7 @@ trait CustomsNotificationService extends WireMockRunner {
     verify(
       1,
       postRequestedFor(notifyPath)
-        .withHeader("X-CDS-Client-ID", equalTo(ApiSubscriptionFieldsTestData.subscriptionFieldsId.toString))
+        .withHeader("X-CDS-Client-ID", equalTo(subscriptionFieldsId.toString))
         .withHeader("X-Conversation-ID", equalTo(TestData.conversationId.toString))
         .withHeader(CONTENT_TYPE, equalTo("application/xml; charset=UTF-8"))
         .withHeader(ACCEPT, equalTo("application/xml"))

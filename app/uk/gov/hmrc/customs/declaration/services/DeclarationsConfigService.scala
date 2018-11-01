@@ -16,21 +16,19 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
+import cats.implicits._
 import javax.inject.{Inject, Singleton}
-import scalaz.ValidationNel
-import scalaz.syntax.apply._
-import scalaz.syntax.traverse._
-import uk.gov.hmrc.customs.api.common.config.ConfigValidationNelAdaptor
+import uk.gov.hmrc.customs.api.common.config.{ConfigValidatedNelAdaptor, CustomsValidatedNel}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 
 @Singleton
-class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationNelAdaptor, logger: DeclarationsLogger) {
+class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNelAdaptor, logger: DeclarationsLogger) {
 
-  private val root = configValidationNel.root
-  private val customsNotificationsService = configValidationNel.service("customs-notification")
-  private val apiSubscriptionFieldsService = configValidationNel.service("api-subscription-fields")
-  private val fileTransmissionService = configValidationNel.service("file-transmission")
+  private val root = configValidatedNel.root
+  private val customsNotificationsService = configValidatedNel.service("customs-notification")
+  private val apiSubscriptionFieldsService = configValidatedNel.service("api-subscription-fields")
+  private val fileTransmissionService = configValidatedNel.service("file-transmission")
 
   private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
@@ -43,7 +41,7 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
 
   private val gaEnabled = root.boolean("googleAnalytics.enabled")
-  private val gaServiceUrl = configValidationNel.service("google-analytics-sender").serviceUrl
+  private val gaServiceUrl = configValidatedNel.service("google-analytics-sender").serviceUrl
   private val gaTrackingId = root.string("googleAnalytics.trackingId")
   private val gaClientId = root.string("googleAnalytics.clientId")
   private val gaEventValue = root.string("googleAnalytics.eventValue")
@@ -58,41 +56,41 @@ class DeclarationsConfigService @Inject()(configValidationNel: ConfigValidationN
   private val fileTransmissionUrl = fileTransmissionService.serviceUrl
   private val fileTransmissionCallbackUrl =  root.string("file-transmission-callback.url")
 
-  private val validatedDeclarationsConfig: ValidationNel[String, DeclarationsConfig] = (
-    apiSubscriptionFieldsServiceUrlNel |@| customsNotificationsServiceUrlNel |@| bearerTokenNel |@| declarationStatusRequestDaysLimit
-    ) (DeclarationsConfig.apply)
+  private val validatedDeclarationsConfig: CustomsValidatedNel[DeclarationsConfig] = (
+    apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, bearerTokenNel, declarationStatusRequestDaysLimit
+    ) mapN DeclarationsConfig
 
-  private val validatedDeclarationsCircuitBreakerConfig: ValidationNel[String, DeclarationsCircuitBreakerConfig] = (
-    numberOfCallsToTriggerStateChangeNel |@| unavailablePeriodDurationInMillisNel |@| unstablePeriodDurationInMillisNel
-    ) (DeclarationsCircuitBreakerConfig.apply)
+  private val validatedDeclarationsCircuitBreakerConfig: CustomsValidatedNel[DeclarationsCircuitBreakerConfig] = (
+    numberOfCallsToTriggerStateChangeNel, unavailablePeriodDurationInMillisNel, unstablePeriodDurationInMillisNel
+    ) mapN DeclarationsCircuitBreakerConfig
 
-  val validatedGoogleAnalyticsSenderConfig: ValidationNel[String, GoogleAnalyticsConfig] = (
-    gaEnabled |@| gaServiceUrl |@| gaTrackingId |@| gaClientId |@| gaEventValue
-    ) (GoogleAnalyticsConfig.apply)
+  val validatedGoogleAnalyticsSenderConfig: CustomsValidatedNel[GoogleAnalyticsConfig] = (
+    gaEnabled, gaServiceUrl, gaTrackingId, gaClientId, gaEventValue
+    ) mapN GoogleAnalyticsConfig
 
-  private val validatedNrsConfig: ValidationNel[String, NrsConfig] = (
-    nrsEnabled |@| nrsApiKey |@| nrsWaitTimeMillis
-    ) (NrsConfig.apply)
+  private val validatedNrsConfig: CustomsValidatedNel[NrsConfig] = (
+    nrsEnabled, nrsApiKey, nrsWaitTimeMillis
+    ) mapN NrsConfig
 
-  private val validatedBatchFileUploadConfig: ValidationNel[String, BatchFileUploadConfig] = (
-    upscanCallbackUrl |@| batchFileUploadUpscanCallbackUrl |@| fileGroupSizeMaximum |@| fileTransmissionCallbackUrl |@| fileTransmissionUrl
-  ) (BatchFileUploadConfig.apply)
+  private val validatedBatchFileUploadConfig: CustomsValidatedNel[BatchFileUploadConfig] = (
+    upscanCallbackUrl, batchFileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
+  ) mapN BatchFileUploadConfig
 
   private val customsConfigHolder =
-    (validatedDeclarationsConfig |@|
-      validatedDeclarationsCircuitBreakerConfig |@|
-      validatedGoogleAnalyticsSenderConfig |@|
-      validatedNrsConfig |@|
+    (validatedDeclarationsConfig,
+      validatedDeclarationsCircuitBreakerConfig,
+      validatedGoogleAnalyticsSenderConfig,
+      validatedNrsConfig,
       validatedBatchFileUploadConfig
-      ) (CustomsConfigHolder.apply) fold(
-      fail = { nel =>
-        // error case exposes nel (a NotEmptyList)
-        val errorMsg = nel.toList.mkString("\n", "\n", "")
-        logger.errorWithoutRequestContext(errorMsg)
-        throw new IllegalStateException(errorMsg)
-      },
-      succ = identity
-    )
+      ) mapN CustomsConfigHolder fold(
+        fe = { nel =>
+          // error case exposes nel (a NotEmptyList)
+          val errorMsg = nel.toList.mkString("\n", "\n", "")
+          logger.errorWithoutRequestContext(errorMsg)
+          throw new IllegalStateException(errorMsg)
+        },
+        fa = identity
+      )
 
   val declarationsConfig: DeclarationsConfig = customsConfigHolder.declarationsConfig
 

@@ -19,7 +19,7 @@ package unit.services
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.mockito.MockitoSugar
 import play.api.{Configuration, Environment, Mode}
-import uk.gov.hmrc.customs.api.common.config.{ConfigValidationNelAdaptor, ServicesConfig}
+import uk.gov.hmrc.customs.api.common.config.{ConfigValidatedNelAdaptor, ServicesConfig}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.play.test.UnitSpec
@@ -66,7 +66,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
   private val mockLogger = mock[DeclarationsLogger]
 
   private def customsConfigService(conf: Configuration) =
-    new DeclarationsConfigService(new ConfigValidationNelAdaptor(testServicesConfig(conf), conf), mockLogger)
+    new DeclarationsConfigService(new ConfigValidatedNelAdaptor(testServicesConfig(conf), conf), mockLogger)
 
   "CustomsConfigService" should {
     "return config as object model when configuration is valid" in {

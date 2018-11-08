@@ -13,6 +13,8 @@ The objective of the General Customs Service - Declaration POST API is as below:
 
 It is assumed that the underlying DMS process is asynchronous, and that the only response to the declarant from this API is to indicate the success (or otherwise) of the validation and submission to CDS WSO2 for onward processing by DMS.
 
+## Useful CURL commands for local testing
+[link to curl commands](docs/curl-commands.md)
 # Custom SBT Task for generating ZIP file containing schemas and example messages
 There is an SBT task `zipWcoXsds` that generates a ZIP file containing schemas and example messages for each version under `/public/api/conf`
 during the packaging phase (so are not generated during normal development). These ZIP files are referenced by the RAML. 

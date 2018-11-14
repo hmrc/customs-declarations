@@ -35,6 +35,7 @@ package unit.controllers
 import java.util.UUID
 
 import akka.stream.Materializer
+import com.kenshoo.play.metrics.Metrics
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
@@ -74,6 +75,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
     val mockCdsLogger: CdsLogger = mock[CdsLogger]
     val mockLogger: DeclarationsLogger = new DeclarationsLogger(mockCdsLogger)
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockMetrics: Metrics = mock[Metrics]
 
     protected val endpointAction = new EndpointAction {
       override val logger: DeclarationsLogger = mockLogger
@@ -88,7 +90,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
     val headerValidator = new HeaderValidator(mockLogger)
     val stubAuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
     val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger, mockGoogleAnalyticsConnector)
-    val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
+    val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger, mockMetrics)
 
     val fileUploadPayloadValidationAction = new FileUploadPayloadValidationAction(mockXmlValidationService, mockLogger, mockGoogleAnalyticsConnector)
     val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, mockLogger)

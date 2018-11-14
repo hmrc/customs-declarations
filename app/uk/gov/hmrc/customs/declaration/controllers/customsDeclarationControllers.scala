@@ -17,11 +17,14 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
+
+import com.kenshoo.play.metrics.Metrics
 import play.api.http.MimeTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.metrics.HasMetrics
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.{CancellationDeclarationSubmissionService, DeclarationService, StandardDeclarationSubmissionService}
@@ -33,8 +36,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class Common @Inject() (
   val authAction: AuthAction,
   val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
-  val logger: DeclarationsLogger
-)
+  val logger: DeclarationsLogger,
+  val metrics: Metrics
+) extends HasMetrics
 
 @Singleton
 class SubmitDeclarationController @Inject()(
@@ -106,21 +110,25 @@ extends BaseController {
     )
     .async(bodyParser = xmlOrEmptyBody) {
 
-      implicit vpr: ValidatedPayloadRequest[AnyContent] =>
-        val logger = common.logger
+      common.withMetricsTimer("declaration") { t =>
+        implicit vpr: ValidatedPayloadRequest[AnyContent] =>
+          val logger = common.logger
 
-        logger.debug(s"Request received. Payload = ${vpr.body.toString} headers = ${vpr.headers.headers}")
+          logger.debug(s"Request received. Payload = ${vpr.body.toString} headers = ${vpr.headers.headers}")
 
-        businessService.send map {
-          case Right(maybeNrSubmissionId) =>
-            logger.info("Declaration request processed successfully")
-            maybeGoogleAnalyticsConnector.map(conn => conn.success)
-            maybeNrSubmissionId match {
-              case Some(nrSubmissionId) => Accepted.as(MimeTypes.XML).withConversationId.withNrSubmissionId(nrSubmissionId)
-              case None => Accepted.as(MimeTypes.XML).withConversationId
-            }
-          case Left(errorResult) =>
-            errorResult
-        }
+          businessService.send map {
+            case Right(maybeNrSubmissionId) =>
+              logger.info("Declaration request processed successfully")
+              maybeGoogleAnalyticsConnector.map(conn => conn.success)
+              t.completeTimerAndIncrementSuccessCounter()
+              maybeNrSubmissionId match {
+                case Some(nrSubmissionId) => Accepted.as(MimeTypes.XML).withConversationId.withNrSubmissionId(nrSubmissionId)
+                case None => Accepted.as(MimeTypes.XML).withConversationId
+              }
+            case Left(errorResult) =>
+              t.completeTimerAndIncrementFailedCounter()
+              errorResult
+          }
+      }
     }
 }

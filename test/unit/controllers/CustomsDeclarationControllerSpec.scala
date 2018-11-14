@@ -16,6 +16,8 @@
 
 package unit.controllers
 
+import com.codahale.metrics.Timer
+import com.kenshoo.play.metrics.Metrics
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
@@ -57,6 +59,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
+    protected val mockMetrics: Metrics = mock[Metrics]
+    protected val mockTimer = mock[Timer.Context]
 
     protected val endpointAction = new EndpointAction {
       override val logger: DeclarationsLogger = mockLogger
@@ -70,7 +74,10 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger, mockGoogleAnalyticsConnector)
     protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockLogger, Some(mockGoogleAnalyticsConnector)) {}
 
-    protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
+    protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger, mockMetrics) {
+      override val metricsOperator: MetricsOperator = mock[MetricsOperator]
+      when(metricsOperator.startTimer(any())) thenReturn mockTimer
+    }
 
     protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, Some(mockGoogleAnalyticsConnector)) {}
 

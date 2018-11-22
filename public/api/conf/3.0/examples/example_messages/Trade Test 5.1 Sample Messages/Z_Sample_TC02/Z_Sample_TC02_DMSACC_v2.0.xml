@@ -1,0 +1,53 @@
+[conversationId=ba77c01d-bd84-44e9-a816-ce2439c69695] Successful POST to external service https://postman-echo.com/post and received response status=200 and 
+payload= {"args":{},"data":"
+<_2:MetaData xmlns:_2=\"urn:wco:datamodel:WCO:DocumentMetaData-DMS:2\">
+<_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode>
+<_2:WCOTypeName>RES</_2:WCOTypeName>
+<_2:ResponsibleCountryCode/>
+<_2:ResponsibleAgencyName/>
+<_2:AgencyAssignedCustomizationCode/>
+<_2:AgencyAssignedCustomizationVersionCode/>
+<_2_1:Response xmlns:_2_1=\"urn:wco:datamodel:WCO:RES-DMS:2\">\n      
+<_2_1:FunctionCode>01</_2_1:FunctionCode>\n      
+<_2_1:FunctionalReferenceID>a15b6ea9b70b4653bbc44934985519a4</_2_1:FunctionalReferenceID>\n      
+<_2_1:IssueDateTime>\n        
+<_2_2:DateTimeString formatCode=\"304\" xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20181112162006Z</_2_2:DateTimeString>\n      
+</_2_1:IssueDateTime>\n      
+<_2_1:AdditionalInformation>\n        
+<_2_1:StatementCode>smartErrorMsg</_2_1:StatementCode>\n        
+<_2_1:StatementDescription>Value per kilo appears too high for this commodity</_2_1:StatementDescription>\n        
+<_2_1:StatementTypeCode>1</_2_1:StatementTypeCode>\n        
+<_2_1:Pointer>\n          
+<_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>\n          
+<_2_1:DocumentSectionCode>07B</_2_1:DocumentSectionCode>\n       
+</_2_1:Pointer>\n        
+<_2_1:Pointer>\n          
+<_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>\n          
+<_2_1:DocumentSectionCode>53A</_2_1:DocumentSectionCode>\n        
+</_2_1:Pointer>\n      
+</_2_1:AdditionalInformation>\n      
+<_2_1:Error>\n        
+<_2_1:Description>Value per kilo appears too high for this commodity</_2_1:Description>\n        
+<_2_1:ValidationCode>DMS13000</_2_1:ValidationCode>\n        
+<_2_1:Pointer>\n          
+<_2_1:DocumentSectionCode>42A</_2_1:DocumentSectionCode>\n        
+</_2_1:Pointer>\n        
+<_2_1:Pointer>\n          
+<_2_1:DocumentSectionCode>67A</_2_1:DocumentSectionCode>\n        
+</_2_1:Pointer>\n        
+<_2_1:Pointer>\n          
+<_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>\n          
+<_2_1:DocumentSectionCode>68A</_2_1:DocumentSectionCode>\n        
+</_2_1:Pointer>\n      
+</_2_1:Error>\n      
+<_2_1:Declaration>\n        
+<_2_1:AcceptanceDateTime>\n          
+<_2_2:DateTimeString formatCode=\"304\" xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20180918010000+01</_2_2:DateTimeString>\n        
+</_2_1:AcceptanceDateTime>\n        
+<_2_1:FunctionalReferenceID>TC27_15CENTS</_2_1:FunctionalReferenceID>\n        
+<_2_1:ID>18GBCJ2PDRZ8YX8PR5</_2_1:ID>\n        
+<_2_1:VersionID>1</_2_1:VersionID>\n      
+</_2_1:Declaration>\n   
+</_2_1:Response>
+</_2:MetaData>","files":{},"form":{},"headers":{"x-forwarded-proto":"https","host":"postman-echo.com","content-length":"2403","accept":"*/*","authorization":"Basic qwerty12345qwerty12345","content-type":"application/xml","user-agent":"Customs Declaration Service","x-badge-identifier":"CNSEFT","x-conversation-id":"ba77c01d-bd84-44e9-a816-ce2439c69695","x-forwarded-port":"443"},"json":null,"url":"https://postman-echo.com/post"}
+headers=List((Content-Type,application/xml), (Authorization,Basic qwerty12345qwerty12345), (User-Agent,Customs Declaration Service), (X-Conversation-ID,ba77c01d-bd84-44e9-a816-ce2439c69695), (X-Badge-Identifier,CNSEFT))

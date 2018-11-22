@@ -1,0 +1,72 @@
+[conversationId=8554529f-ddea-43cd-9af4-a5a14acae265] Successful POST to external service https://postman-echo.com/post and received response status=200 and 
+payload= {"args":{},"data":"
+<_2:MetaData xmlns:_2=\"urn:wco:datamodel:WCO:DocumentMetaData-DMS:2\">
+<_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode>
+<_2:WCOTypeName>RES</_2:WCOTypeName>
+<_2:ResponsibleCountryCode/>
+<_2:ResponsibleAgencyName/>
+<_2:AgencyAssignedCustomizationCode/>
+<_2:AgencyAssignedCustomizationVersionCode/>
+<_2_1:Response xmlns:_2_1=\"urn:wco:datamodel:WCO:RES-DMS:2\">\n      
+<_2_1:FunctionCode>13</_2_1:FunctionCode>\n      
+<_2_1:FunctionalReferenceID>80ebb7bcd5b14b5486dea054ad2fdf5f</_2_1:FunctionalReferenceID>\n      
+<_2_1:IssueDateTime>\n        
+<_2_2:DateTimeString formatCode=\"304\" xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20181112153317Z</_2_2:DateTimeString>\n      
+</_2_1:IssueDateTime>\n      
+<_2_1:Bank>\n        
+<_2_1:ReferenceID>CITIGB2LLON</_2_1:ReferenceID>\n        
+<_2_1:ID>GB25CITI08320011963155</_2_1:ID>\n      
+</_2_1:Bank>\n      
+<_2_1:Status>\n        
+<_2_1:NameCode>4</_2_1:NameCode>\n      
+</_2_1:Status>\n      
+<_2_1:Declaration>\n        
+<_2_1:FunctionalReferenceID>TestCase39C</_2_1:FunctionalReferenceID>\n        
+<_2_1:ID>18GBCJ112AU8VFGVR8</_2_1:ID>\n        
+<_2_1:VersionID>1</_2_1:VersionID>\n        
+<_2_1:GoodsShipment>\n          
+<_2_1:GovernmentAgencyGoodsItem>\n            
+<_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>\n            
+<_2_1:Commodity>\n              
+<_2_1:DutyTaxFee>\n                
+<_2_1:DeductAmount>0.00</_2_1:DeductAmount>\n                
+<_2_1:DutyRegimeCode>100</_2_1:DutyRegimeCode>\n                
+<_2_1:TaxRateNumeric>7.70</_2_1:TaxRateNumeric>\n                
+<_2_1:TypeCode>A00</_2_1:TypeCode>\n                
+<_2_1:Payment>\n                  
+<_2_1:TaxAssessedAmount>78.54</_2_1:TaxAssessedAmount>\n                  
+<_2_1:PaymentAmount>78.54</_2_1:PaymentAmount>\n                
+</_2_1:Payment>\n              
+</_2_1:DutyTaxFee>\n              
+<_2_1:DutyTaxFee>\n                
+<_2_1:DeductAmount>0.00</_2_1:DeductAmount>\n                
+<_2_1:DutyRegimeCode>100</_2_1:DutyRegimeCode>\n                
+<_2_1:TaxRateNumeric>0.00</_2_1:TaxRateNumeric>\n                
+<_2_1:TypeCode>B00</_2_1:TypeCode>\n                
+<_2_1:Payment>\n                  
+<_2_1:TaxAssessedAmount>0.00</_2_1:TaxAssessedAmount>\n                  
+<_2_1:PaymentAmount>0.00</_2_1:PaymentAmount>\n                
+</_2_1:Payment>\n              
+</_2_1:DutyTaxFee>\n            
+</_2_1:Commodity>\n          
+</_2_1:GovernmentAgencyGoodsItem>\n        
+</_2_1:GoodsShipment>\n      
+</_2_1:Declaration>\n    
+</_2_1:Response><_2_1:Response xmlns:_2_1=\"urn:wco:datamodel:WCO:RES-DMS:2\">\n      
+<_2_1:FunctionCode>09</_2_1:FunctionCode>\n      
+<_2_1:FunctionalReferenceID>b79fcc6989744fc5b639d5f9b646a4d5</_2_1:FunctionalReferenceID>\n      
+<_2_1:IssueDateTime>\n        
+<_2_2:DateTimeString formatCode=\"304\" xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20181112153318Z</_2_2:DateTimeString>\n      
+</_2_1:IssueDateTime>\n      
+<_2_1:AdditionalInformation>\n        
+<_2_1:StatementCode>A2</_2_1:StatementCode>\n        
+<_2_1:StatementTypeCode>AFB</_2_1:StatementTypeCode>\n      
+</_2_1:AdditionalInformation>\n      
+<_2_1:Declaration>\n        
+<_2_1:FunctionalReferenceID>TestCase39C</_2_1:FunctionalReferenceID>\n        
+<_2_1:ID>18GBCJ112AU8VFGVR8</_2_1:ID>\n        
+<_2_1:VersionID>1</_2_1:VersionID>\n      
+</_2_1:Declaration>\n    
+</_2_1:Response>
+</_2:MetaData>","files":{},"form":{},"headers":{"x-forwarded-proto":"https","host":"postman-echo.com","content-length":"3263","accept":"*/*","authorization":"Basic qwerty12345qwerty12345","content-type":"application/xml","user-agent":"Customs Declaration Service","x-badge-identifier":"CNSEFT","x-conversation-id":"8554529f-ddea-43cd-9af4-a5a14acae265","x-forwarded-port":"443"},"json":null,"url":"https://postman-echo.com/post"}
+headers=List((Content-Type,application/xml), (Authorization,Basic qwerty12345qwerty12345), (User-Agent,Customs Declaration Service), (X-Conversation-ID,8554529f-ddea-43cd-9af4-a5a14acae265), (X-Badge-Identifier,CNSEFT))

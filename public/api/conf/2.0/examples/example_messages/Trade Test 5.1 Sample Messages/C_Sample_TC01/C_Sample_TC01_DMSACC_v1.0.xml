@@ -1,0 +1,26 @@
+[conversationId=553ece75-5a03-4459-a158-86fb940dbe5b] Successful POST to external service https://postman-echo.com/post and received response status=200 and 
+payload= {"args":{},"data":"
+<_2:MetaData xmlns:_2=\"urn:wco:datamodel:WCO:DocumentMetaData-DMS:2\">
+<_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode>
+<_2:WCOTypeName>RES</_2:WCOTypeName>
+<_2:ResponsibleCountryCode/>
+<_2:ResponsibleAgencyName/>
+<_2:AgencyAssignedCustomizationCode/>
+<_2:AgencyAssignedCustomizationVersionCode/>
+<_2_1:Response xmlns:_2_1=\"urn:wco:datamodel:WCO:RES-DMS:2\">\n     
+<_2_1:FunctionCode>01</_2_1:FunctionCode>\n      
+<_2_1:FunctionalReferenceID>8a66466dc9b048f7bb981dcdb2dd6605</_2_1:FunctionalReferenceID>\n      
+<_2_1:IssueDateTime>\n        
+<_2_2:DateTimeString formatCode=\"304\" xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20181109125313Z</_2_2:DateTimeString>\n      
+</_2_1:IssueDateTime>\n      
+<_2_1:Declaration>\n        
+<_2_1:AcceptanceDateTime>\n          
+<_2_2:DateTimeString formatCode=\"304\" xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20181031000000Z</_2_2:DateTimeString>\n        
+</_2_1:AcceptanceDateTime>\n        
+<_2_1:FunctionalReferenceID>TT5_FD24</_2_1:FunctionalReferenceID>\n        
+<_2_1:ID>18GBCEL01H081FGVR8</_2_1:ID>\n        
+<_2_1:VersionID>1</_2_1:VersionID>\n      
+</_2_1:Declaration>\n    
+</_2_1:Response>
+</_2:MetaData>","files":{},"form":{},"headers":{"x-forwarded-proto":"https","host":"postman-echo.com","content-length":"1154","accept":"*/*","authorization":"Basic qwerty12345qwerty12345","content-type":"application/xml","user-agent":"Customs Declaration Service","x-badge-identifier":"CNSEFT","x-conversation-id":"553ece75-5a03-4459-a158-86fb940dbe5b","x-forwarded-port":"443"},"json":null,"url":"https://postman-echo.com/post"}
+headers=List((Content-Type,application/xml), (Authorization,Basic qwerty12345qwerty12345), (User-Agent,Customs Declaration Service), (X-Conversation-ID,553ece75-5a03-4459-a158-86fb940dbe5b), (X-Badge-Identifier,CNSEFT))

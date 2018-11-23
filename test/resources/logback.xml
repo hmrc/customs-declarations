@@ -8,6 +8,11 @@
         </encoder>
     </appender>
 
+    <appender name="FILE_JSON" class="ch.qos.logback.core.FileAppender">
+        <file>logs/customs-declarations-json.log</file>
+        <encoder class="uk.gov.hmrc.play.logging.JsonEncoder"/>
+    </appender>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%date{ISO8601} level=[%level] logger=[%logger] thread=[%thread] rid=[%X{X-Request-ID}] user=[%X{Authorization}] message=[%message] %replace(exception=[%xException]){'^exception=\[\]$',''}%n</pattern>
@@ -56,6 +61,7 @@
 
     <root level="DEBUG">
         <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE_JSON"/>
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

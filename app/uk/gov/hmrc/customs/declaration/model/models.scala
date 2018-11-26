@@ -84,6 +84,10 @@ case class ClientId(value: String) extends AnyVal {
 case class ConversationId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
 }
+object ConversationId {
+  implicit val writer = Writes[ConversationId] { x => JsString(x.uuid.toString) }
+  implicit val reader = Reads.of[UUID].map(new ConversationId(_))
+}
 
 case class Mrn(value: String) extends AnyVal {
   override def toString: String = value.toString

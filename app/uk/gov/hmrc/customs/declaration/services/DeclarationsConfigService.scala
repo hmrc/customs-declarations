@@ -29,6 +29,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val customsNotificationsService = configValidatedNel.service("customs-notification")
   private val apiSubscriptionFieldsService = configValidatedNel.service("api-subscription-fields")
   private val fileTransmissionService = configValidatedNel.service("file-transmission")
+  private val customsDeclarationsMetricsService = configValidatedNel.service("customs-declarations-metrics")
 
   private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
@@ -39,6 +40,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val bearerTokenNel = customsNotificationsService.string("bearer-token")
   private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
+  private val customsDeclarationsMetricsServiceUrlNel = customsDeclarationsMetricsService.serviceUrl
 
   private val gaEnabled = root.boolean("googleAnalytics.enabled")
   private val gaServiceUrl = configValidatedNel.service("google-analytics-sender").serviceUrl
@@ -57,7 +59,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val fileTransmissionCallbackUrl =  root.string("file-transmission-callback.url")
 
   private val validatedDeclarationsConfig: CustomsValidatedNel[DeclarationsConfig] = (
-    apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, bearerTokenNel, declarationStatusRequestDaysLimit
+    apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, customsDeclarationsMetricsServiceUrlNel, bearerTokenNel, declarationStatusRequestDaysLimit
     ) mapN DeclarationsConfig
 
   private val validatedDeclarationsCircuitBreakerConfig: CustomsValidatedNel[DeclarationsCircuitBreakerConfig] = (

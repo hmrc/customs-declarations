@@ -28,6 +28,6 @@ object CustomsDeclarationsMetricsTestData {
   val EventEnd: ZonedDateTime = EventStart.plusSeconds(2)
 
   val ValidCustomsDeclarationsMetricsRequest: CustomsDeclarationsMetricsRequest =
-    CustomsDeclarationsMetricsRequest("DECLARATIONS", TestData.conversationId, EventStart, EventEnd)
+    CustomsDeclarationsMetricsRequest("DECLARATION", TestData.conversationId, EventStart, EventEnd)
 
 }

@@ -74,7 +74,7 @@ abstract class PayloadValidationAction(val xmlValidationService: XmlValidationSe
     lazy val errorMessage = "Request body does not contain a well-formed XML document."
     lazy val errorNotWellFormed = ErrorResponse.errorBadRequest(errorMessage).XmlResult.withConversationId
 
-    def validate(xml: NodeSeq): Future[Either[Result, ValidatedPayloadRequest[A]] with Product with Serializable] =
+    def validate(xml: NodeSeq): Future[Either[Result, ValidatedPayloadRequest[A]]] =
       xmlValidationService.validate(xml).map{ _ =>
         logger.debug("XML payload validated.")
         Right(ar.toValidatedPayloadRequest(xml))

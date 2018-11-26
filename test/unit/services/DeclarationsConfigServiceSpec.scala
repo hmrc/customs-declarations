@@ -35,6 +35,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.customs-notification.port=1112
       |microservice.services.customs-notification.bearer-token=some-token
       |microservice.services.customs-notification.context=/some-context2
+      |microservice.services.customs-declarations-metrics.host=some-host3
+      |microservice.services.customs-declarations-metrics.port=1113
+      |microservice.services.customs-declarations-metrics.context=/some-context3
       |microservice.services.google-analytics-sender.host=some-host3
       |microservice.services.google-analytics-sender.port=1113
       |microservice.services.google-analytics-sender.context=/some-context3
@@ -74,6 +77,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
 
       configService.declarationsConfig.apiSubscriptionFieldsBaseUrl shouldBe "http://some-host:1111/some-context"
       configService.declarationsConfig.customsNotificationBaseBaseUrl shouldBe "http://some-host2:1112/some-context2"
+      configService.declarationsConfig.customsDeclarationsMetricsBaseBaseUrl shouldBe "http://some-host3:1113/some-context3"
       configService.declarationsConfig.customsNotificationBearerToken shouldBe "some-token"
       configService.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange shouldBe 5
       configService.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis shouldBe 1000
@@ -89,6 +93,8 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: api-subscription-fields.context
           |Could not find config customs-notification.host
           |Service configuration not found for key: customs-notification.context
+          |Could not find config customs-declarations-metrics.host
+          |Service configuration not found for key: customs-declarations-metrics.context
           |Service configuration not found for key: customs-notification.bearer-token
           |Could not find config key 'declarationStatus.requestDaysLimit'
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'

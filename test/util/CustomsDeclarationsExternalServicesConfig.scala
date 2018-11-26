@@ -27,6 +27,7 @@ object CustomsDeclarationsExternalServicesConfig {
   val MdgStatusDeclarationServiceContextV3 = "/mdgStatusDecService3/submit3"
   val ApiSubscriptionFieldsContext = "/api-subscription-fields/field"
   val GoogleAnalyticsContext = "/send-google-analytics"
+  val CustomsDeclarationsMetricsContext = "/log-times"
   val GoogleAnalyticsTrackingId = "ga-tracking-id"
   val GoogleAnalyticsClientId = "ga-client-id"
   val GoogleAnalyticsEventValue = "ga-event-value"

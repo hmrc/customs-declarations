@@ -22,14 +22,15 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.Writes
-import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
+import uk.gov.hmrc.customs.api.common.config.ServiceConfig
 import uk.gov.hmrc.customs.declaration.connectors.BatchUpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestData.{EmulatedServiceFailure, emulatedServiceFailure, ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles}
+import util.TestData.{EmulatedServiceFailure, ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles, batchFileUploadConfig, emulatedServiceFailure}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,9 +38,9 @@ class BatchUpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with B
 
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]
-  private val mockServiceConfigProvider = mock[ServiceConfigProvider]
+  private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
 
-  private val connector = new BatchUpscanInitiateConnector(mockWsPost, mockLogger, mockServiceConfigProvider)
+  private val connector = new BatchUpscanInitiateConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
 
   private val v1Config = ServiceConfig("v1-url", Some("v1-bearer-token"), "v1-default")
   private val v2Config = ServiceConfig("v2-url", Some("v2-bearer-token"), "v2-default")
@@ -52,9 +53,8 @@ class BatchUpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with B
   implicit val jsonRequest = ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles
 
   override protected def beforeEach() {
-    reset(mockWsPost, mockLogger, mockServiceConfigProvider)
-    when(mockServiceConfigProvider.getConfig("upscan-initiate")).thenReturn(v1Config)
-    when(mockServiceConfigProvider.getConfig("v2.upscan-initiate")).thenReturn(v2Config)
+    reset(mockWsPost, mockLogger)
+    when(mockDeclarationsConfigService.batchFileUploadConfig).thenReturn(batchFileUploadConfig)
   }
 
   "UpscanInitiateConnector" can {
@@ -66,7 +66,7 @@ class BatchUpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with B
 
         awaitRequest
 
-        verify(mockWsPost).POST(ameq(v2Config.url), any[UpscanInitiatePayload], any[SeqOfHeader])(
+        verify(mockWsPost).POST(ameq("upscan-initiate.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
           any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
@@ -77,14 +77,6 @@ class BatchUpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with B
 
         verify(mockWsPost).POST(anyString, ameq(upscanInitiatePayload), any[SeqOfHeader])(
           any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
-      }
-
-      "prefix the config key with the prefix if passed" in {
-        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
-
-        await(connector.send(upscanInitiatePayload, VersionTwo))
-
-        verify(mockServiceConfigProvider).getConfig("v2.upscan-initiate")
       }
     }
 
@@ -105,17 +97,6 @@ class BatchUpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with B
           awaitRequest
         }
         caught.getCause shouldBe httpException
-      }
-    }
-
-    "when configuration is absent" should {
-      "throw an exception when no config is found for given api and version combination" in {
-        when(mockServiceConfigProvider.getConfig("v2.upscan-initiate")).thenReturn(null)
-
-        val caught = intercept[IllegalArgumentException] {
-          awaitRequest
-        }
-        caught.getMessage shouldBe "config not found"
       }
     }
   }

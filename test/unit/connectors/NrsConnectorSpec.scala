@@ -26,7 +26,6 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc.AnyContentAsJson
 import play.api.test.FakeRequest
-import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -37,7 +36,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData
-import util.TestData.nrsConfigEnabled
+import util.TestData.{batchFileUploadConfig, nrsConfigEnabled}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -46,12 +45,8 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
 
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]
-  private val mockServiceConfigProvider = mock[ServiceConfigProvider]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
-  private val connector = new NrsConnector(mockWsPost, mockLogger, mockServiceConfigProvider, mockDeclarationsConfigService)
-
-  private val v1Config = ServiceConfig("v1-url", None, "v1-default")
-  private val v2Config = ServiceConfig("v2-url", None, "v2-default")
+  private val connector = new NrsConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -69,9 +64,8 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
 
   override protected def beforeEach() {
-    reset(mockWsPost, mockLogger, mockServiceConfigProvider)
-    when(mockServiceConfigProvider.getConfig("nrs-service")).thenReturn(v1Config)
-    when(mockServiceConfigProvider.getConfig("v2.nrs-service")).thenReturn(v2Config)
+    reset(mockWsPost, mockLogger)
+    when(mockDeclarationsConfigService.batchFileUploadConfig).thenReturn(batchFileUploadConfig)
     when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
@@ -84,7 +78,7 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
 
         awaitRequest
 
-        verify(mockWsPost).POST(ameq(v2Config.url), any[UpscanInitiatePayload], any[SeqOfHeader])(
+        verify(mockWsPost).POST(ameq(nrsConfigEnabled.nrsUrl), any[UpscanInitiatePayload], any[SeqOfHeader])(
           any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
@@ -95,14 +89,6 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
 
         verify(mockWsPost).POST(anyString, ameq(TestData.nrsPayload), any[SeqOfHeader])(
           any[Writes[NrsPayload]], any[HttpReads[NrSubmissionId]](), any[HeaderCarrier](), any[ExecutionContext])
-      }
-
-      "prefix the config key with the prefix if passed" in {
-        returnResponseForRequest(Future.successful(TestData.nrSubmissionId))
-
-        await(connector.send(TestData.nrsPayload, VersionTwo))
-
-        verify(mockServiceConfigProvider).getConfig("v2.nrs-service")
       }
     }
 
@@ -123,17 +109,6 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
           awaitRequest
         }
         caught.getCause shouldBe httpException
-      }
-    }
-
-    "when configuration is absent" should {
-      "throw an exception when no config is found for given api and version combination" in {
-        when(mockServiceConfigProvider.getConfig("v2.nrs-service")).thenReturn(null)
-
-        val caught = intercept[IllegalArgumentException] {
-          awaitRequest
-        }
-        caught.getMessage shouldBe "config not found"
       }
     }
   }

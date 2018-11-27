@@ -32,15 +32,12 @@ import scala.concurrent.Future
 @Singleton
 class NrsConnector @Inject()(http: HttpClient,
                              logger: DeclarationsLogger,
-                             serviceConfigProvider: ServiceConfigProvider,
                              declarationConfigService: DeclarationsConfigService) {
 
-  private val configKey = "nrs-service"
   private val XApiKey = "X-API-Key"
 
   def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[NrSubmissionId] = {
-    val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
-    post(nrsPayload, config.url)
+    post(nrsPayload, declarationConfigService.nrsConfig.nrsUrl)
   }
 
   private def post[A](payload: NrsPayload, url: String)(implicit vupr: ValidatedPayloadRequest[A]) = {

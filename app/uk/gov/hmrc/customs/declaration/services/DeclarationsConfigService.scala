@@ -26,6 +26,8 @@ import uk.gov.hmrc.customs.declaration.model._
 class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNelAdaptor, logger: DeclarationsLogger) {
 
   private val root = configValidatedNel.root
+  private val nrsService = configValidatedNel.service("nrs")
+  private val upscanService = configValidatedNel.service("upscan")
   private val customsNotificationsService = configValidatedNel.service("customs-notification")
   private val apiSubscriptionFieldsService = configValidatedNel.service("api-subscription-fields")
   private val fileTransmissionService = configValidatedNel.service("file-transmission")
@@ -51,7 +53,9 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val nrsEnabled = root.boolean("nrs.enabled")
   private val nrsApiKey = root.string("nrs.apikey")
   private val nrsWaitTimeMillis = root.int("nrs.waittime.millis")
+  private val nrsUrl = nrsService.serviceUrl
 
+  private val upscanInitiateUrl = upscanService.serviceUrl
   private val upscanCallbackUrl = root.string("upscan-callback.url")
   private val batchFileUploadUpscanCallbackUrl = root.string("batch-file-upload-upscan-callback.url")
   private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
@@ -71,11 +75,11 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     ) mapN GoogleAnalyticsConfig
 
   private val validatedNrsConfig: CustomsValidatedNel[NrsConfig] = (
-    nrsEnabled, nrsApiKey, nrsWaitTimeMillis
+    nrsEnabled, nrsApiKey, nrsWaitTimeMillis, nrsUrl
     ) mapN NrsConfig
 
   private val validatedBatchFileUploadConfig: CustomsValidatedNel[BatchFileUploadConfig] = (
-    upscanCallbackUrl, batchFileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
+    upscanInitiateUrl, upscanCallbackUrl, batchFileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
   ) mapN BatchFileUploadConfig
 
   private val customsConfigHolder =

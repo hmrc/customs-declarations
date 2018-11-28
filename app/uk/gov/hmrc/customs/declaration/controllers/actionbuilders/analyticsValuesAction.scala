@@ -22,7 +22,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
-import uk.gov.hmrc.customs.declaration.services.UniqueIdsService
+import uk.gov.hmrc.customs.declaration.services.{DateTimeService, UniqueIdsService}
 
 import scala.concurrent.Future
 
@@ -31,10 +31,11 @@ abstract class EndpointAction() extends ActionTransformer[Request, AnalyticsValu
   val logger: DeclarationsLogger
   val googleAnalyticsValues: GoogleAnalyticsValues
   val correlationIdService: UniqueIdsService
+  val timeService: DateTimeService
 
   override def transform[A](request: Request[A]): Future[AnalyticsValuesAndConversationIdRequest[A]] = {
 
-    val r = AnalyticsValuesAndConversationIdRequest(correlationIdService.conversation, googleAnalyticsValues, request)
+    val r = AnalyticsValuesAndConversationIdRequest(correlationIdService.conversation, googleAnalyticsValues, timeService.zonedDateTimeUtc, request)
     logger.debugFull("In AnalyticsValuesAction.")(r)
 
     Future.successful(r)
@@ -42,41 +43,41 @@ abstract class EndpointAction() extends ActionTransformer[Request, AnalyticsValu
 }
 
 @Singleton
-class FileUploadAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+class FileUploadAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = Fileupload
 }
 
 @Singleton
-class BatchFileUploadAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+class BatchFileUploadAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = BatchFileUpload //TODO can existing `Fileupload` values be used?
 }
 
 @Singleton
-class DeclarationSubmitAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+class DeclarationSubmitAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = Submit
 }
 
 @Singleton
-class DeclarationClearanceAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+class DeclarationClearanceAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = Clearance
 }
 
 @Singleton
-class DeclarationCancellationAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+class DeclarationCancellationAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = Cancel
 }
 
 @Singleton
-class DeclarationAmendValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+class DeclarationAmendValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = Amend
 }
 
 @Singleton
-class DeclarationArrivalNotificationValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+class DeclarationArrivalNotificationValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = ArrivalNotification
 }
 
 @Singleton
-class DeclarationStatusValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService) extends EndpointAction {
+class DeclarationStatusValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
   override val googleAnalyticsValues: GoogleAnalyticsValues = DeclarationStatus
 }

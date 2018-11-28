@@ -68,6 +68,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
       override val logger: DeclarationsLogger = mockDeclarationsLogger
       override val googleAnalyticsValues: GoogleAnalyticsValues = GoogleAnalyticsValues.Submit
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService
+      override val timeService: DateTimeService = mockDateTimeService
     }
 
     protected val mockStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
@@ -77,7 +78,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
     protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
-    protected val stubDeclarationStatusValuesAction = new DeclarationStatusValuesAction(mockDeclarationsLogger, stubUniqueIdsService)
+    protected val stubDeclarationStatusValuesAction = new DeclarationStatusValuesAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(
       stubValidateAndExtractHeadersStatusAction,

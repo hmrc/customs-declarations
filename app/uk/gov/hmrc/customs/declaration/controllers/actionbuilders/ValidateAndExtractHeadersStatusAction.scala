@@ -45,7 +45,7 @@ class ValidateAndExtractHeadersStatusAction @Inject()(validator: HeaderStatusVal
         if (code >= Status.BAD_REQUEST && code < Status.INTERNAL_SERVER_ERROR) googleAnalyticsConnector.failure(result.message)
         Left(result.XmlResult.withConversationId)
       case Right(extracted) =>
-        val vhr = ValidatedHeadersStatusRequest(cr.conversationId, cr.analyticsValues, extracted.requestedApiVersion,extracted.badgeIdentifier, extracted.clientId, cr.request)
+        val vhr = ValidatedHeadersStatusRequest(cr.conversationId, cr.analyticsValues, cr.start, extracted.requestedApiVersion,extracted.badgeIdentifier, extracted.clientId, cr.request)
         Right(vhr)
     }
   }

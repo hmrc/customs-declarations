@@ -33,6 +33,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPaylo
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
+import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -56,6 +57,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
   private implicit val jsonRequest = ValidatedUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.Fileupload,
+    EventStart,
     VersionTwo,
     ClientId("ABC"),
     NonCsp(Eori("123"), None),

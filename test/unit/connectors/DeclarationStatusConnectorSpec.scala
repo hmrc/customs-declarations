@@ -34,6 +34,7 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
+import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
 import util.{ApiSubscriptionFieldsTestData, StatusTestXMLData, TestData}
 
@@ -55,11 +56,12 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private val v3Config = ServiceConfig("v3-url", Some("v3-bearer"), "v3-default")
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val asr = AuthorisedStatusRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, mock[Request[AnyContent]])
+  private implicit val asr = AuthorisedStatusRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, EventStart, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, mock[Request[AnyContent]])
 
   private implicit val jsonRequest: ValidatedPayloadRequest[AnyContentAsJson] =  ValidatedPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.Submit,
+    EventStart,
     VersionTwo,
     ClientId("ABC"),
     NonCsp(Eori("123"), Some(TestData.nrsRetrievalValues)),

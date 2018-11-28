@@ -79,10 +79,12 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
       override val logger: DeclarationsLogger = mockLogger
       override val googleAnalyticsValues: GoogleAnalyticsValues = GoogleAnalyticsValues.Submit
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService
+      override val timeService: DateTimeService = mockDateTimeService
     }
 
     val mockFileUploadBusinessService: FileUploadBusinessService = mock[FileUploadBusinessService]
     val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
+    val mockDateTimeService: DateTimeService = mock[DateTimeService]
     val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
     val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
     val headerValidator = new HeaderValidator(mockLogger)
@@ -93,7 +95,7 @@ class FileUploadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneA
     val fileUploadPayloadValidationAction = new FileUploadPayloadValidationAction(mockXmlValidationService, mockLogger, mockGoogleAnalyticsConnector)
     val fileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(fileUploadPayloadValidationAction, mockLogger)
     val fileUploadController = new FileUploadController(common, mockFileUploadBusinessService, fileUploadPayloadValidationComposedAction,
-      new FileUploadAnalyticsValuesAction(mockLogger, stubUniqueIdsService), mockGoogleAnalyticsConnector)
+      new FileUploadAnalyticsValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService), mockGoogleAnalyticsConnector)
 
     val upscanInitiateUploadRequest: UpscanInitiateUploadRequest = UpscanInitiateUploadRequest("http://some.url.com", Map("a" -> "b"))
 

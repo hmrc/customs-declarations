@@ -16,6 +16,7 @@
 
 package unit.controllers
 
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
@@ -26,16 +27,17 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
+import uk.gov.hmrc.customs.declaration.connectors.{CustomsDeclarationsMetricsConnector, GoogleAnalyticsConnector}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.{CustomsDeclarationsMetricsRequest, GoogleAnalyticsValues}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.AuthConnectorStubbing
+import util.CustomsDeclarationsMetricsTestData._
 import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._
@@ -55,6 +57,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
     protected val mockResult: Result = mock[Result]
     protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
+    protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
+    protected val mockMetricsConnector: CustomsDeclarationsMetricsConnector = mock[CustomsDeclarationsMetricsConnector]
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
@@ -62,6 +66,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       override val logger: DeclarationsLogger = mockLogger
       override val googleAnalyticsValues: GoogleAnalyticsValues = GoogleAnalyticsValues.Submit
       override val correlationIdService: UniqueIdsService = stubUniqueIdsService
+      override val timeService: DateTimeService = mockDateTimeService
     }
 
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
@@ -72,7 +77,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
     protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
 
-    protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, Some(mockGoogleAnalyticsConnector)) {}
+    protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, Some(mockGoogleAnalyticsConnector), Some(mockMetricsConnector)) {}
+    protected val controllerWithoutMetrics: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, Some(mockGoogleAnalyticsConnector), None) {}
 
     protected def awaitSubmit(request: Request[AnyContent]): Result = {
       await(controller.post().apply(request))
@@ -80,6 +86,15 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
     protected def submit(request: Request[AnyContent]): Future[Result] = {
       controller.post().apply(request)
+    }
+
+    protected def verifyMetrics = {
+      val captor: ArgumentCaptor[CustomsDeclarationsMetricsRequest] = ArgumentCaptor.forClass(classOf[CustomsDeclarationsMetricsRequest])
+      verify(mockMetricsConnector).post(captor.capture())
+      captor.getValue.eventType shouldBe "DECLARATION"
+      captor.getValue.conversationId shouldBe conversationId
+      captor.getValue.eventStart shouldBe EventStart
+      captor.getValue.eventEnd shouldBe EventEnd
     }
 
     when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(Future.successful(()))
@@ -114,7 +129,26 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       verifyNonCspAuthorisationCalled(numberOfTimes = 1)
     }
 
-    "respond with status 202 and conversationId in header for a processed valid CSP request" in new SetUp() {
+    "log Metrics when configured" in new SetUp() {
+      authoriseCsp()
+      when(mockDateTimeService.zonedDateTimeUtc).thenReturn(EventStart, EventEnd)
+
+      val result: Future[Result] = submit(ValidSubmissionV2Request)
+
+      status(result) shouldBe ACCEPTED
+      verifyMetrics
+    }
+
+    "NOT log Metrics when not configured" in new SetUp() {
+      authoriseCsp()
+
+      val result: Future[Result] = controllerWithoutMetrics.post().apply(ValidSubmissionV2Request)
+
+      status(result) shouldBe ACCEPTED
+      verifyZeroInteractions(mockMetricsConnector)
+    }
+
+    "respond with status 202 and conversationId in header and log google analytics for a processed valid CSP request" in new SetUp() {
       authoriseCsp()
 
       val result: Future[Result] = submit(ValidSubmissionV2Request)
@@ -152,7 +186,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       verifyZeroInteractions(mockXmlValidationService)
     }
 
-    "respond with status 202 and conversationId in header for a processed valid non-CSP request" in new SetUp() {
+    "respond with status 202 and conversationId in header and log google analytics for a processed valid non-CSP request" in new SetUp() {
       authoriseNonCsp(Some(declarantEori))
 
       val result: Future[Result] = submit(ValidSubmissionV2Request)
@@ -220,4 +254,5 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       verifyZeroInteractions(mockGoogleAnalyticsConnector)
     }
   }
+
 }

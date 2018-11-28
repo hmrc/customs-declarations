@@ -45,6 +45,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.model.{Csp, GoogleAnalyticsValues}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import uk.gov.hmrc.play.test.UnitSpec
+import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -86,7 +87,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
     "return 400 error response when XML validation fails (and send GA request)" in new SetUp {
       private val errorMessage = "Request body does not contain a well-formed XML document."
       private val errorNotWellFormed = ErrorResponse.errorBadRequest(errorMessage).XmlResult.withConversationId
-      private val authorisedRequestWithNonWellFormedXml = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, FakeRequest().withTextBody("<foo><foo>"))
+      private val authorisedRequestWithNonWellFormedXml = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, FakeRequest().withTextBody("<foo><foo>"))
         .toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues)))
 
       private val actual = await(payloadValidationAction.refine(authorisedRequestWithNonWellFormedXml))

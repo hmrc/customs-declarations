@@ -30,6 +30,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedStatusRequest
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
+import util.CustomsDeclarationsMetricsTestData._
 import util.ExternalServicesConfig.{AuthToken, Host, Port}
 import util.TestData._
 import util._
@@ -46,7 +47,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   private val incomingAuthToken = s"Bearer ${ExternalServicesConfig.AuthToken}"
   private val numberOfCallsToTriggerStateChange = 5
   private val unavailablePeriodDurationInMillis = 1000
-  private implicit val asr: AuthorisedStatusRequest[AnyContent] = AuthorisedStatusRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, mock[Request[AnyContent]])
+  private implicit val asr: AuthorisedStatusRequest[AnyContent] = AuthorisedStatusRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, EventStart, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, mock[Request[AnyContent]])
   private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
 
   override protected def beforeAll() {

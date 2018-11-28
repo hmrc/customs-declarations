@@ -27,6 +27,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ExtractedHeaders, ExtractedStatusHeadersImpl}
 import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsValues, VersionThree, VersionTwo}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ValidHeadersV2, _}
 import util.TestData.badgeIdentifier
 import util.{ApiSubscriptionFieldsTestData, TestData}
@@ -70,5 +71,5 @@ class HeaderStatusValidatorSpec extends UnitSpec with TableDrivenPropertyChecks 
   }
 
   private def analyticsValuesAndConversationIdRequest(requestMap: Map[String, String]): AnalyticsValuesAndConversationIdRequest[_] =
-    AnalyticsValuesAndConversationIdRequest(TestData.conversationId, GoogleAnalyticsValues.Submit, FakeRequest().withHeaders(requestMap.toSeq: _*))
+    AnalyticsValuesAndConversationIdRequest(TestData.conversationId, GoogleAnalyticsValues.Submit, EventStart, FakeRequest().withHeaders(requestMap.toSeq: _*))
 }

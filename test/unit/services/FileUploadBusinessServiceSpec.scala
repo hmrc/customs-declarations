@@ -33,6 +33,7 @@ import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, File
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
+import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
 
 import scala.concurrent.Future
@@ -55,6 +56,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     private implicit val jsonRequest = ValidatedUploadPayloadRequest(
       ConversationId(UUID.randomUUID()),
       GoogleAnalyticsValues.Fileupload,
+      EventStart,
       VersionTwo,
       ClientId("ABC"),
       NonCsp(Eori("123"), None),

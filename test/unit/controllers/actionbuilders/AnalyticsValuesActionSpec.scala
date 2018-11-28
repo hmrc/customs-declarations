@@ -20,6 +20,7 @@ import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
+import uk.gov.hmrc.customs.declaration.services.DateTimeService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
 
@@ -27,18 +28,19 @@ class AnalyticsValuesActionSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
+    val mockDateTimeService: DateTimeService = mock[DateTimeService]
   }
 
   "AnalyticsValuesAction" can {
     "for Google Analytics" should {
       "should have the correct values setup against them" in new SetUp {
-        new FileUploadAnalyticsValuesAction(mockLogger, stubUniqueIdsService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Fileupload
-        new DeclarationSubmitAnalyticsValuesAction(mockLogger, stubUniqueIdsService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Submit
-        new DeclarationClearanceAnalyticsValuesAction(mockLogger, stubUniqueIdsService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Clearance
-        new DeclarationCancellationAnalyticsValuesAction(mockLogger, stubUniqueIdsService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Cancel
-        new DeclarationAmendValuesAction(mockLogger, stubUniqueIdsService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Amend
-        new DeclarationArrivalNotificationValuesAction(mockLogger, stubUniqueIdsService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.ArrivalNotification
-        new DeclarationStatusValuesAction(mockLogger, stubUniqueIdsService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.DeclarationStatus
+        new FileUploadAnalyticsValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Fileupload
+        new DeclarationSubmitAnalyticsValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Submit
+        new DeclarationClearanceAnalyticsValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Clearance
+        new DeclarationCancellationAnalyticsValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Cancel
+        new DeclarationAmendValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Amend
+        new DeclarationArrivalNotificationValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.ArrivalNotification
+        new DeclarationStatusValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.DeclarationStatus
       }
     }
   }

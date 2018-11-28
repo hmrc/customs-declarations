@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.model.actionbuilders
 
+import java.time.ZonedDateTime
+
 import play.api.mvc.{Request, Result, WrappedRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.model.{AuthorisedAs, _}
@@ -40,6 +42,7 @@ object ActionBuilderModelHelper {
     def toValidatedHeadersRequest(eh: ExtractedHeaders): ValidatedHeadersRequest[A] = ValidatedHeadersRequest(
       cir.conversationId,
       cir.analyticsValues,
+      cir.start,
       eh.requestedApiVersion,
       eh.clientId,
       cir.request
@@ -48,6 +51,7 @@ object ActionBuilderModelHelper {
     def toValidatedHeadersStatusRequest(eh: ExtractedStatusHeaders): ValidatedHeadersStatusRequest[A] = ValidatedHeadersStatusRequest(
       cir.conversationId,
       cir.analyticsValues,
+      cir.start,
       eh.requestedApiVersion,
       eh.badgeIdentifier,
       eh.clientId,
@@ -64,6 +68,7 @@ object ActionBuilderModelHelper {
     def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
       vhr.conversationId,
       vhr.analyticsValues,
+      vhr.start,
       vhr.requestedApiVersion,
       vhr.clientId,
       authorisedAs,
@@ -76,6 +81,7 @@ object ActionBuilderModelHelper {
     def toAuthorisedStatusRequest: AuthorisedStatusRequest[A] = AuthorisedStatusRequest(
       vhsr.conversationId,
       vhsr.analyticsValues,
+      vhsr.start,
       vhsr.requestedApiVersion,
       vhsr.badgeIdentifier,
       vhsr.clientId,
@@ -87,6 +93,7 @@ object ActionBuilderModelHelper {
     def toValidatedPayloadRequest(xmlBody: NodeSeq): ValidatedPayloadRequest[A] = ValidatedPayloadRequest(
       ar.conversationId,
       ar.analyticsValues,
+      ar.start,
       ar.requestedApiVersion,
       ar.clientId,
       ar.authorisedAs,
@@ -101,6 +108,7 @@ object ActionBuilderModelHelper {
                                         documentationType: DocumentationType): ValidatedUploadPayloadRequest[A] = ValidatedUploadPayloadRequest(
       vpr.conversationId,
       vpr.analyticsValues,
+      vpr.start,
       vpr.requestedApiVersion,
       vpr.clientId,
       vpr.authorisedAs,
@@ -114,6 +122,7 @@ object ActionBuilderModelHelper {
       ValidatedBatchFileUploadPayloadRequest(
         vpr.conversationId,
         vpr.analyticsValues,
+        vpr.start,
         vpr.requestedApiVersion,
         vpr.clientId,
         vpr.authorisedAs,
@@ -205,6 +214,7 @@ case class ExtractedStatusHeadersImpl(
 case class AnalyticsValuesAndConversationIdRequest[A](
  conversationId: ConversationId,
  analyticsValues: GoogleAnalyticsValues,
+ start: ZonedDateTime,
  request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues
 
@@ -212,6 +222,7 @@ case class AnalyticsValuesAndConversationIdRequest[A](
 case class ValidatedHeadersRequest[A](
   conversationId: ConversationId,
   analyticsValues: GoogleAnalyticsValues,
+  start: ZonedDateTime,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   request: Request[A]
@@ -221,6 +232,7 @@ case class ValidatedHeadersRequest[A](
 case class ValidatedHeadersStatusRequest[A](
  conversationId: ConversationId,
  analyticsValues: GoogleAnalyticsValues,
+ start: ZonedDateTime,
  requestedApiVersion: ApiVersion,
  badgeIdentifier: BadgeIdentifier,
  clientId: ClientId,
@@ -231,6 +243,7 @@ case class ValidatedHeadersStatusRequest[A](
 case class AuthorisedRequest[A](
   conversationId: ConversationId,
   analyticsValues: GoogleAnalyticsValues,
+  start: ZonedDateTime,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
@@ -241,6 +254,7 @@ case class AuthorisedRequest[A](
 case class AuthorisedStatusRequest[A](
  conversationId: ConversationId,
  analyticsValues: GoogleAnalyticsValues,
+ start: ZonedDateTime,
  requestedApiVersion: ApiVersion,
  badgeIdentifier: BadgeIdentifier,
  clientId: ClientId,
@@ -251,6 +265,7 @@ case class AuthorisedStatusRequest[A](
 abstract class GenericValidatedPayloadRequest[A](
  conversationId: ConversationId,
  analyticsValues: GoogleAnalyticsValues,
+ start: ZonedDateTime,
  requestedApiVersion: ApiVersion,
  clientId: ClientId,
  authorisedAs: AuthorisedAs,
@@ -261,16 +276,18 @@ abstract class GenericValidatedPayloadRequest[A](
 case class ValidatedPayloadRequest[A](
   conversationId: ConversationId,
   analyticsValues: GoogleAnalyticsValues,
+  start: ZonedDateTime,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
   xmlBody: NodeSeq,
   request: Request[A]
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
 
 case class ValidatedUploadPayloadRequest[A](
   conversationId: ConversationId,
   analyticsValues: GoogleAnalyticsValues,
+  start: ZonedDateTime,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
@@ -278,15 +295,16 @@ case class ValidatedUploadPayloadRequest[A](
   request: Request[A],
   declarationId: DeclarationId,
   documentationType: DocumentationType
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
 
 case class ValidatedBatchFileUploadPayloadRequest[A](
   conversationId: ConversationId,
   analyticsValues: GoogleAnalyticsValues,
+  start: ZonedDateTime,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
   xmlBody: NodeSeq,
   request: Request[A],
   batchFileUploadRequest: BatchFileUploadRequest
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasBatchFileUploadProperties
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasBatchFileUploadProperties

@@ -43,6 +43,7 @@ import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 import unit.logging.StubDeclarationsLogger
 import util.TestData.declarantEori
 import ApiSubscriptionFieldsTestData.subscriptionFieldsId
+import util.CustomsDeclarationsMetricsTestData.EventStart
 
 import scala.xml.{Elem, NodeSeq}
 
@@ -91,6 +92,7 @@ object TestData {
   val ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles = ValidatedBatchFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.Fileupload,
+    EventStart,
     VersionTwo,
     ClientId("ABC"),
     NonCsp(Eori("123"), None),
@@ -103,6 +105,7 @@ object TestData {
   val ValidatedBatchFileUploadPayloadRequestForCspWithTwoFiles = ValidatedBatchFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.Fileupload,
+    EventStart,
     VersionTwo,
     ClientId("ABC"),
     BatchFileUploadCsp(badgeIdentifier, Eori("123"), None),
@@ -115,6 +118,7 @@ object TestData {
   val ValidatedBatchFileUploadPayloadRequestWithFourFiles = ValidatedBatchFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.Fileupload,
+    EventStart,
     VersionTwo,
     ClientId("ABC"),
     NonCsp(Eori("123"), None),
@@ -276,15 +280,15 @@ object TestData {
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString, RequestHeaders.X_EORI_IDENTIFIER_NAME -> eoriString)
 
   // For Status endpoint
-  val TestConversationIdStatusRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, TestFakeRequest)
+  val TestConversationIdStatusRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, EventStart, TestFakeRequest)
   val TestExtractedStatusHeaders = ExtractedStatusHeadersImpl(VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
   val TestValidatedHeadersStatusRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestConversationIdStatusRequest.toValidatedHeadersStatusRequest(TestExtractedStatusHeaders)
   val TestAuthorisedStatusRequest: AuthorisedStatusRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest.toAuthorisedStatusRequest
 
-  val TestConversationIdRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, TestFakeRequest)
-  val TestConversationIdRequestWithBadgeIdAndNoEori = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, TestFakeRequestWithBadgeIdAndNoEori)
-  val TestConversationIdRequestWithEoriAndNoBadgeId = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, TestFakeRequestWithEoriAndNoBadgeId)
-  val TestConversationIdRequestMultipleHeaderValues = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, TestFakeRequestMultipleHeaderValues)
+  val TestConversationIdRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, TestFakeRequest)
+  val TestConversationIdRequestWithBadgeIdAndNoEori = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, TestFakeRequestWithBadgeIdAndNoEori)
+  val TestConversationIdRequestWithEoriAndNoBadgeId = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, TestFakeRequestWithEoriAndNoBadgeId)
+  val TestConversationIdRequestMultipleHeaderValues = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, TestFakeRequestMultipleHeaderValues)
   val TestExtractedHeaders = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
   val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
 

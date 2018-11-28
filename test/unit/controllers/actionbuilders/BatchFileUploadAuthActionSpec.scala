@@ -28,6 +28,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndCo
 import uk.gov.hmrc.customs.declaration.model.{BatchFileUploadCsp, GoogleAnalyticsValues}
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
 
@@ -39,23 +40,23 @@ class BatchFileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
     errorBadRequest(s"$XEoriIdentifierHeaderName header is missing or invalid")
 
   private lazy val validatedHeadersRequestWithValidBadgeIdEoriPair =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair()).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair()).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdEoriPair =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair(eoriString = "", badgeIdString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "", badgeIdString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithValidBadgeIdAndEmptyEori =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair(eoriString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithValidBadgeIdAndEoriTooLong =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair(eoriString = "INVALID_EORI_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "INVALID_EORI_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidEoriInvalidChars =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair(eoriString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdTooLong =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "INVALID_BADGE_IDENTIFIER_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "INVALID_BADGE_IDENTIFIER_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdLowerCase =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdTooShort =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdInvalidChars =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
+    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
 
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]

@@ -49,7 +49,7 @@ class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator,
           if (is4xx(result.httpStatusCode)) googleAnalyticsConnector.failure(result.message)
           Left(result.XmlResult.withConversationId)
         case Right(extracted) =>
-          val vhr = ValidatedHeadersRequest(cr.conversationId, cr.analyticsValues, extracted.requestedApiVersion, extracted.clientId, cr.request)
+          val vhr = ValidatedHeadersRequest(cr.conversationId, cr.analyticsValues, cr.start, extracted.requestedApiVersion, extracted.clientId, cr.request)
           Right(vhr)
       }
     }

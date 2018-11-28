@@ -18,7 +18,7 @@ package integration
 
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
+import uk.gov.hmrc.customs.declaration.connectors.{CustomsDeclarationsMetricsConnector, GoogleAnalyticsConnector}
 import uk.gov.hmrc.customs.declaration.controllers._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -32,6 +32,7 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
   private lazy val mockAmendXmlValidationService = mock[AmendXmlValidationService]
   private lazy val mockArrivalNotificationXmlValidationService = mock[ArrivalNotificationXmlValidationService]
   private lazy val mockFileUploadXmlValidationService = mock[FileUploadXmlValidationService]
+  private lazy val mockBatchFileUploadXmlValidationService = mock[BatchFileUploadXmlValidationService]
   private lazy val mockDeclarationsLogger = mock[DeclarationsLogger]
   private lazy val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
   private lazy val clearanceController = app.injector.instanceOf[ClearanceDeclarationController]
@@ -40,8 +41,10 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
   private lazy val submitController = app.injector.instanceOf[SubmitDeclarationController]
   private lazy val cancelController = app.injector.instanceOf[CancelDeclarationController]
   private lazy val fileUploadController = app.injector.instanceOf[FileUploadController]
+  private lazy val batchFileUploadController = app.injector.instanceOf[BatchFileUploadController]
+  private lazy val metricsConnector = app.injector.instanceOf[CustomsDeclarationsMetricsConnector]
 
-  "The correct XmlValidationAction"  should {
+  "The correct XmlValidationAction" should {
     "be wired into SubmitDeclarationController" in {
       val action = submitController.payloadValidationAction
 
@@ -77,6 +80,30 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
 
       action.getClass.getSimpleName shouldBe new FileUploadPayloadValidationAction(mockFileUploadXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsConnector).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.fileupload"
+    }
+    "be wired into BatchFileUploadController" in {
+      val action = batchFileUploadController.batchFileUploadPayloadValidationComposedAction.batchFileUploadPayloadValidationAction
+
+      action.getClass.getSimpleName shouldBe new BatchFileUploadPayloadValidationAction(mockBatchFileUploadXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsConnector).getClass.getSimpleName
+      action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.batchfileupload"
+    }
+  }
+
+  "Metrics logging" should {
+    "be enabled for SubmitDeclarationController" in {
+      submitController.maybeMetricsConnector shouldBe Some(metricsConnector)
+    }
+    "be disabled for CancelDeclarationController" in {
+      cancelController.maybeMetricsConnector shouldBe None
+    }
+    "be disabled for ClearanceDeclarationController" in {
+      clearanceController.maybeMetricsConnector shouldBe None
+    }
+    "be disabled for AmendDeclarationController" in {
+      amendController.maybeMetricsConnector shouldBe None
+    }
+    "be disabled for ArrivalNotificationDeclarationController" in {
+      arrivalNotificationController.maybeMetricsConnector shouldBe None
     }
   }
 

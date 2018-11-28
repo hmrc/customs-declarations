@@ -25,6 +25,7 @@ import uk.gov.hmrc.customs.declaration.model.{Csp, GoogleAnalyticsValues}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, AuthorisedRequest}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
@@ -33,7 +34,7 @@ class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
   trait SetUp {
     val mockCdsLogger: CdsLogger = mock[CdsLogger]
     val logger = new DeclarationsLogger(mockCdsLogger)
-    implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, FakeRequest()
+    implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, FakeRequest()
       .withXmlBody(TestXmlPayload).withHeaders("Content-Type" -> "Some-Content-Type"))
       .toValidatedHeadersRequest(TestExtractedHeaders)
       .toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues)))

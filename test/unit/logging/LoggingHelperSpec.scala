@@ -26,6 +26,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.customs.declaration.model.{ClientId, Csp, GoogleAnalyticsValues, VersionOne}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
 
 class LoggingHelperSpec extends UnitSpec with MockitoSugar {
@@ -38,6 +39,7 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
     AnalyticsValuesAndConversationIdRequest(
       conversationId,
       GoogleAnalyticsValues.Submit,
+      EventStart,
       FakeRequest().withHeaders(
         CONTENT_TYPE -> "A",
         ACCEPT -> "B",
@@ -46,7 +48,7 @@ class LoggingHelperSpec extends UnitSpec with MockitoSugar {
         "IGNORE" -> "IGNORE"
       )
     )
-  private val validatedHeadersRequest = ValidatedHeadersRequest(conversationId, GoogleAnalyticsValues.Submit, VersionOne, ClientId("some-client-id"), requestMock)
+  private val validatedHeadersRequest = ValidatedHeadersRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, VersionOne, ClientId("some-client-id"), requestMock)
 
   "LoggingHelper" should {
 

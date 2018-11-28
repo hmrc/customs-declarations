@@ -38,6 +38,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
   with ApiSubscriptionFieldsService
   with AuthService
   with GoogleAnalyticsService
+  with CustomsDeclarationsMetricsService
   with NrsService {
 
   private val endpoint = "/"
@@ -107,6 +108,9 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       And("GA call was made")
       eventually(verifyGoogleAnalyticsServiceWasCalled())
 
+      And("Metrics logging call was made")
+      eventually(verifyCustomsDeclarationsMetricsServiceWasCalled())
+
       And("NRS Service call was made")
       eventually(verifyNrsServiceCalled())
 
@@ -166,6 +170,9 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("GA call was made")
       eventually(verifyGoogleAnalyticsServiceWasCalled())
+
+      And("Metrics logging call was made")
+      eventually(verifyCustomsDeclarationsMetricsServiceWasCalled())
     }
 
   }
@@ -197,7 +204,10 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV3ServiceContext)))
 
       And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled
+      eventually(verifyGoogleAnalyticsServiceWasCalled())
+
+      And("Metrics logging call was made")
+      eventually(verifyCustomsDeclarationsMetricsServiceWasCalled())
     }
 
   }

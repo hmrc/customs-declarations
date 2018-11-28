@@ -45,12 +45,12 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: HttpClient,
 
     logger.debug(s"Sending request to customs declarations metrics service. Url: $url Payload: ${request.toString}")
     http.POST[CustomsDeclarationsMetricsRequest, HttpResponse](url, request).map{ _ =>
-      logger.info(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
+      logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
       ()
     }.recoverWith {
       case httpError: HttpException => Future.failed(new RuntimeException(httpError))
       case e: Throwable =>
-        logger.error(s"Call to customs declarations metrics service failed. url=$url")
+        logger.warn(s"Call to customs declarations metrics service failed. url=$url")
         Future.failed(e)
     }
   }

@@ -19,9 +19,10 @@ package uk.gov.hmrc.customs.declaration.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.http.MimeTypes
 import play.api.mvc._
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
+import uk.gov.hmrc.customs.declaration.connectors.{CustomsDeclarationsMetricsConnector, GoogleAnalyticsConnector}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.{CancellationDeclarationSubmissionService, DeclarationService, StandardDeclarationSubmissionService}
@@ -42,8 +43,9 @@ class SubmitDeclarationController @Inject()(
   businessService: StandardDeclarationSubmissionService,
   payloadValidationAction: SubmitPayloadValidationAction,
   analyticsValuesAction: DeclarationSubmitAnalyticsValuesAction,
-  googleAnalyticsConnector: GoogleAnalyticsConnector
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector))
+  googleAnalyticsConnector: GoogleAnalyticsConnector,
+  metricsConnector: CustomsDeclarationsMetricsConnector
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector), Some(metricsConnector))
 
 @Singleton
 class CancelDeclarationController @Inject()(
@@ -86,7 +88,8 @@ abstract class CustomsDeclarationController(
   val businessService: DeclarationService,
   val payloadValidationAction: PayloadValidationAction,
   val analyticsValuesAction: EndpointAction,
-  val maybeGoogleAnalyticsConnector: Option[GoogleAnalyticsConnector]
+  val maybeGoogleAnalyticsConnector: Option[GoogleAnalyticsConnector],
+  val maybeMetricsConnector: Option[CustomsDeclarationsMetricsConnector] = None
 )
 extends BaseController {
 
@@ -115,6 +118,10 @@ extends BaseController {
           case Right(maybeNrSubmissionId) =>
             logger.info("Declaration request processed successfully")
             maybeGoogleAnalyticsConnector.map(conn => conn.success)
+            maybeMetricsConnector.map{conn =>
+              conn.post(CustomsDeclarationsMetricsRequest(
+                "DECLARATION", vpr.conversationId, vpr.start, analyticsValuesAction.timeService.zonedDateTimeUtc))
+            }
             maybeNrSubmissionId match {
               case Some(nrSubmissionId) => Accepted.as(MimeTypes.XML).withConversationId.withNrSubmissionId(nrSubmissionId)
               case None => Accepted.as(MimeTypes.XML).withConversationId
@@ -123,4 +130,5 @@ extends BaseController {
             errorResult
         }
     }
+
 }

@@ -34,6 +34,7 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
+import util.CustomsDeclarationsMetricsTestData._
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData
 import util.TestData.{TestFakeRequest, conversationId}
@@ -132,7 +133,7 @@ class GoogleAnalyticsConnectorSpec extends UnitSpec with MockitoSugar with Befor
   "GoogleAnalyticsSenderConnector when disabled by endpoint" should {
 
     "not POST payload" in {
-      implicit val vpr = AnalyticsValuesAndConversationIdRequest(conversationId, mock[GoogleAnalyticsValues], TestFakeRequest)
+      implicit val vpr = AnalyticsValuesAndConversationIdRequest(conversationId, mock[GoogleAnalyticsValues], EventStart, TestFakeRequest)
       when(vpr.analyticsValues.enabled).thenReturn(false)
 
       await(connector.send(eventName, eventLabel))

@@ -22,7 +22,6 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.Writes
-import uk.gov.hmrc.customs.api.common.config.ServiceConfig
 import uk.gov.hmrc.customs.declaration.connectors.BatchUpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -41,9 +40,6 @@ class BatchUpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with B
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
 
   private val connector = new BatchUpscanInitiateConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
-
-  private val v1Config = ServiceConfig("v1-url", Some("v1-bearer-token"), "v1-default")
-  private val v2Config = ServiceConfig("v2-url", Some("v2-bearer-token"), "v2-default")
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 

@@ -59,9 +59,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.nrs.host="nrs.url"
       |microservice.services.nrs.port=11114
       |microservice.services.nrs.context=/submission
-      |microservice.services.upscan.host="upscan-initiate.url"
-      |microservice.services.upscan.port=11115
-      |microservice.services.upscan.context=/upscan/initiate
+      |microservice.services.upscan-initiate.host="upscan-initiate.url"
+      |microservice.services.upscan-initiate.port=11115
+      |microservice.services.upscan-initiate.context=/upscan/initiate
       |microservice.services.file-transmission.host=some-host3
       |microservice.services.file-transmission.port=1113
       |microservice.services.file-transmission.context=/file-transmission
@@ -120,8 +120,8 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'nrs.waittime.millis'
           |Could not find config nrs.host
           |Service configuration not found for key: nrs.context
-          |Could not find config upscan.host
-          |Service configuration not found for key: upscan.context
+          |Could not find config upscan-initiate.host
+          |Service configuration not found for key: upscan-initiate.context
           |Could not find config key 'upscan-callback.url'
           |Could not find config key 'batch-file-upload-upscan-callback.url'
           |Could not find config key 'fileUpload.fileGroupSize.maximum'

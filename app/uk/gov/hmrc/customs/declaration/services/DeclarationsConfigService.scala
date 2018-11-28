@@ -27,7 +27,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   private val root = configValidatedNel.root
   private val nrsService = configValidatedNel.service("nrs")
-  private val upscanService = configValidatedNel.service("upscan")
+  private val upscanService = configValidatedNel.service("upscan-initiate")
   private val customsNotificationsService = configValidatedNel.service("customs-notification")
   private val apiSubscriptionFieldsService = configValidatedNel.service("api-subscription-fields")
   private val fileTransmissionService = configValidatedNel.service("file-transmission")

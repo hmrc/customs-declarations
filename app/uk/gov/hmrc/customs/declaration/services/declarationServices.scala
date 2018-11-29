@@ -113,7 +113,7 @@ trait DeclarationService {
             Left(result.withNrSubmissionId(nrSubmissionId))
           }).recover {
             case _: TimeoutException =>
-              logger.warn(s"NRS wait time exceeded")
+              logger.warn("NRS wait time exceeded")
               Right(None)
             case throwable =>
               logger.warn(s"NRS call failed: $throwable")
@@ -126,7 +126,7 @@ trait DeclarationService {
             Right(Some(nrSubmissionId))
           }).recover {
             case _: TimeoutException =>
-              logger.warn(s"NRS wait time exceeded")
+              logger.warn("NRS wait time exceeded")
               Right(None)
             case throwable =>
               logger.warn(s"NRS call failed: $throwable")

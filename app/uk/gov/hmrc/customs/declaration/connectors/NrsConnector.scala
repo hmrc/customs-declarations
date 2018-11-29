@@ -47,7 +47,7 @@ class NrsConnector @Inject()(http: HttpClient,
 
     http.POST[NrsPayload, NrSubmissionId](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
       .map { res =>
-        logger.debug(s"Response received from nrs service $res")
+        logger.debug(s"Response received from nrs service submission id: $res")
         res
       }
       .recoverWith {

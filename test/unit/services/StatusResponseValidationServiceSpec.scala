@@ -40,7 +40,7 @@ class StatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
   private val statusRequestDaysOutsideLimit: Int = statusRequestDaysLimit + 2
   private val statusRequestDaysInsideLimit: Int = statusRequestDaysLimit - 2
 
-  private val invalidDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${statusRequestDaysLimit} days old")
+  private val invalidDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than $statusRequestDaysLimit days old")
   private val invalidOrMissingBadgeIdentifiersErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid")
 
   trait SetUp {

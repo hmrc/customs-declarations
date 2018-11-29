@@ -62,13 +62,19 @@ class BatchFileUploadUpscanNotificationBusinessService @Inject()(repo: BatchFile
   private def maybeFileTransmission(fileReference: FileReference, md: BatchFileUploadMetadata): Option[FileTransmission] = {
     for {
       (bf, ftf) <- maybeFileTransmissionFile(fileReference, md)
-    } yield FileTransmission(
-      FileTransmissionBatch(md.batchId, md.fileCount),
-      new URL(s"${config.batchFileUploadConfig.fileTransmissionCallbackUrl}${md.csId}"),
-      ftf,
-      FileTransmissionInterface("DEC64", "1.0.0"),
-      Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString, "ContentType" -> bf.documentType.toString).map(t => FileTransmissionProperty(name = t._1, value = t._2))
+    } yield
+      FileTransmission(FileTransmissionBatch(md.batchId, md.fileCount),
+        new URL(s"${config.batchFileUploadConfig.fileTransmissionCallbackUrl}${md.csId}"),
+        ftf,
+        FileTransmissionInterface("DEC64", "1.0.0"),
+        extractFileProperties(md, bf)
     )
+  }
+
+  private def extractFileProperties(md: BatchFileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {
+    val fileProperties = Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString)
+      .map(t => FileTransmissionProperty(name = t._1, value = t._2))
+    if (bf.documentType.isDefined) fileProperties :+ FileTransmissionProperty("ContentType", bf.documentType.get.toString) else fileProperties
   }
 
   private def maybeFileTransmissionFile(fileReference: FileReference, metadata: BatchFileUploadMetadata): Option[(BatchFile, FileTransmissionFile)] = {

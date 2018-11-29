@@ -79,7 +79,7 @@ class BatchFileUploadPayloadValidationComposedAction @Inject()(val batchFileUplo
               case file =>
                 val fileSequenceNumber = FileSequenceNo((file \ fileSequenceNoLabel).text.trim.toInt)
                 val documentType = DocumentType((file \ documentTypeLabel).text)
-                BatchFileUploadFile(fileSequenceNumber, documentType)
+                BatchFileUploadFile(fileSequenceNumber, Some(documentType))
               }
 
             val batchFileUpload = BatchFileUploadRequest(declarationId, fileGroupSize, files.sortWith(_.fileSequenceNo.value < _.fileSequenceNo.value))

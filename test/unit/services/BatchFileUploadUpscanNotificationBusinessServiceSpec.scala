@@ -55,7 +55,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
   private val fileTransmissionProperties = Seq(
     FileTransmissionProperty("DeclarationId", md.declarationId.toString),
     FileTransmissionProperty("Eori", md.eori.toString),
-    FileTransmissionProperty("ContentType", mdFileOne.documentType.toString)
+    FileTransmissionProperty("ContentType", mdFileOne.documentType.get.toString)
   )
   private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(fileTransmissionCallbackUrl + clientSubscriptionIdString), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)
   private implicit val implicitHasConversationId = new HasConversationId {

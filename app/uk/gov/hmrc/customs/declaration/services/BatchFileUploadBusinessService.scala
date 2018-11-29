@@ -45,7 +45,7 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
                                                config: DeclarationsConfigService) {
 
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
-  private case class UpscanInitiateRequest(subscriptionFieldsId: SubscriptionFieldsId, documentType: DocumentType)
+  private case class UpscanInitiateRequest(subscriptionFieldsId: SubscriptionFieldsId, documentType: Option[DocumentType])
 
   def send[A](implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
               hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {

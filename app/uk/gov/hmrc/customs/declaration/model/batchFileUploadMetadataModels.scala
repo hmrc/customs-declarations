@@ -73,7 +73,7 @@ case class BatchFile(
   location: URL, // upscan-initiate
   sequenceNumber: FileSequenceNo, // derived from user request
   size: Int, // assumption - it appears to be mandatory but is ignored
-  documentType: DocumentType // user request
+  documentType: Option[DocumentType] // user request
 )
 object BatchFile {
   implicit val urlFormat = HttpUrlFormat

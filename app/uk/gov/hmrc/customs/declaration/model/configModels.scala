@@ -22,7 +22,7 @@ case class DeclarationsConfig(apiSubscriptionFieldsBaseUrl: String,
                               customsNotificationBearerToken: String,
                               declarationStatusRequestDaysLimit: Int)
 
-case class NrsConfig(nrsEnabled: Boolean, nrsApiKey: String, nrsWaitTimeMillis: Int)
+case class NrsConfig(nrsEnabled: Boolean, nrsApiKey: String, nrsWaitTimeMillis: Int, nrsUrl: String)
 
 case class DeclarationsCircuitBreakerConfig(numberOfCallsToTriggerStateChange: Int,
                                             unavailablePeriodDurationInMillis: Int,
@@ -34,9 +34,9 @@ case class GoogleAnalyticsConfig(enabled: Boolean,
                                  clientId: String,
                                  eventValue: String)
 
-case class BatchFileUploadConfig(upscanCallbackUrl: String,
+case class BatchFileUploadConfig(upscanInitiateUrl: String,
+                                 upscanCallbackUrl: String,
                                  batchFileUploadCallbackUrl: String,
                                  fileGroupSizeMaximum: Int,
                                  fileTransmissionCallbackUrl: String,
-                                 fileTransmissionBaseUrl: String
-                                )
+                                 fileTransmissionBaseUrl: String)

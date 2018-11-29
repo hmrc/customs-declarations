@@ -73,8 +73,10 @@ object TestData {
   val nrSubmissionIdValue = "902b0150-aa9a-4046-bf27-85889f128c2a"
   val nrSubmissionIdValueUuid: UUID = fromString(nrSubmissionIdValue)
   val nrSubmissionId = NrSubmissionId(nrSubmissionIdValueUuid)
-  val nrsConfigEnabled = NrsConfig(nrsEnabled = true, "nrs-api-key", 300)
-  val nrsConfigDisabled = NrsConfig(nrsEnabled = false, "nrs-api-key", 300)
+  val nrsConfigEnabled = NrsConfig(nrsEnabled = true, "nrs-api-key", 300, "nrs.url")
+  val nrsConfigDisabled = NrsConfig(nrsEnabled = false, "nrs-api-key", 300, "nrs.url")
+
+  val batchFileUploadConfig = BatchFileUploadConfig("upscan-initiate.url", "callback.url", "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl")
 
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"

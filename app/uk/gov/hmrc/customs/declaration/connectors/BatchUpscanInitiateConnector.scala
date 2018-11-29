@@ -17,10 +17,10 @@
 package uk.gov.hmrc.customs.declaration.connectors
 
 import com.google.inject._
-import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedBatchFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -30,13 +30,10 @@ import scala.concurrent.Future
 @Singleton
 class BatchUpscanInitiateConnector @Inject()(http: HttpClient,
                                              logger: DeclarationsLogger,
-                                             serviceConfigProvider: ServiceConfigProvider) {
-
-  private val configKey = "upscan-initiate"
+                                             config: DeclarationsConfigService) {
 
   def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
-    val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
-    post(payload, config.url)
+    post(payload, config.batchFileUploadConfig.upscanInitiateUrl)
   }
 
   private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vbfupr: ValidatedBatchFileUploadPayloadRequest[A]) = {

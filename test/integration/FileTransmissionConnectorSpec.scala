@@ -23,7 +23,6 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import uk.gov.hmrc.customs.declaration.connectors.FileTransmissionConnector
-import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.http._
 import util.CustomsDeclarationsExternalServicesConfig
 import util.ExternalServicesConfig.{Host, Port}

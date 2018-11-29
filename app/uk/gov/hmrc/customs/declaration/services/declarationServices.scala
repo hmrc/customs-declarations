@@ -18,9 +18,11 @@ package uk.gov.hmrc.customs.declaration.services
 
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit.MILLISECONDS
+import java.util.concurrent.TimeoutException
 
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
+
 import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
@@ -105,21 +107,29 @@ trait DeclarationService {
       val nrsServiceCallFutureWithTimeout = futureWithTimeout(nrsService.send(vpr, hc), Duration(declarationsConfigService.nrsConfig.nrsWaitTimeMillis, MILLISECONDS), actorSystem)
       callBackend(sfId).flatMap{
         case Left(result) =>
+          logger.debug("MDG call failed")
           nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {
-            logger.debug(s"Backend call failed. NRS returned submission id: $nrSubmissionId")
+            logger.debug(s"NRS returned submission id: $nrSubmissionId")
             Left(result.withNrSubmissionId(nrSubmissionId))
           }).recover {
-            case _ =>
-              logger.debug("Backend call failed. NRS call failed")
+            case _: TimeoutException =>
+              logger.warn("NRS wait time exceeded")
+              Right(None)
+            case throwable =>
+              logger.warn(s"NRS call failed: $throwable")
               Left(result)
           }
         case Right(_) =>
+          logger.debug("MDG call success.")
           nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {
-            logger.debug(s"Backend call success. NRS returned submission id: $nrSubmissionId")
+            logger.debug(s"NRS returned submission id: $nrSubmissionId")
             Right(Some(nrSubmissionId))
           }).recover {
-            case _ =>
-              logger.debug("Backend call success. NRS call failed")
+            case _: TimeoutException =>
+              logger.warn("NRS wait time exceeded")
+              Right(None)
+            case throwable =>
+              logger.warn(s"NRS call failed: $throwable")
               Right(None)
           }
       }

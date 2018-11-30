@@ -22,7 +22,7 @@
     <xs:complexType name="FileType">
         <xs:sequence>
             <xs:element type="NonZeroIntegerType" name="FileSequenceNo"/>
-            <xs:element type="xs:string" name="DocumentType"/>
+            <xs:element type="xs:string" name="DocumentType" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

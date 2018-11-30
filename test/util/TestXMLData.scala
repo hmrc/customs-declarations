@@ -615,7 +615,6 @@ object TestXMLData {
         </File>
         <File>
           <FileSequenceNo>{fileSequenceNo2}</FileSequenceNo>
-          <DocumentType>document type {fileSequenceNo2}</DocumentType>
         </File>
       </Files>
     </FileUploadRequest>

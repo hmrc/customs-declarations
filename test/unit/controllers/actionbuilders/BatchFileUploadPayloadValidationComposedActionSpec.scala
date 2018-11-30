@@ -132,8 +132,8 @@ class BatchFileUploadPayloadValidationComposedActionSpec extends UnitSpec with M
         BatchFileUploadRequest(DeclarationId("declarationId"),
           FileGroupSize(2),
           Seq(
-            BatchFileUploadFile(FileSequenceNo(1), DocumentType("document type 1")),
-            BatchFileUploadFile(FileSequenceNo(2), DocumentType("document type 2"))
+            BatchFileUploadFile(FileSequenceNo(1), Some(DocumentType("document type 1"))),
+            BatchFileUploadFile(FileSequenceNo(2), None)
           )
         )
       ))

@@ -96,7 +96,7 @@ class BatchFileUploadUpscanNotificationSpec extends ComponentTestSpec with Expec
       And("The User Agent header is application/json")
       requestHeaders.get(USER_AGENT) shouldBe Some("customs-declarations")
 
-      And("The request XML payload contains details of the success outcome")
+      And("The request json payload contains details of the success outcome")
       Json.parse(requestPayload) shouldBe Json.parse(expectedFileTransmissionRequest)
     }
 
@@ -186,7 +186,7 @@ class BatchFileUploadUpscanNotificationSpec extends ComponentTestSpec with Expec
       |      "value": "123"
       |    },
       |    {
-      |      "name": "ContentType",
+      |      "name": "DocumentType",
       |      "value": "Document Type 1"
       |    }
       |  ]

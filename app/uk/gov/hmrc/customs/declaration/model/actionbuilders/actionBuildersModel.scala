@@ -166,7 +166,7 @@ trait HasFileUploadProperties {
 
 case class BatchFileUploadRequest(declarationId: DeclarationId, fileGroupSize: FileGroupSize, files: Seq[BatchFileUploadFile])
 
-case class BatchFileUploadFile(fileSequenceNo: FileSequenceNo, documentType: DocumentType) {
+case class BatchFileUploadFile(fileSequenceNo: FileSequenceNo, maybeDocumentType: Option[DocumentType]) {
 
   def canEqual(a: Any): Boolean = a.isInstanceOf[BatchFileUploadFile]
 

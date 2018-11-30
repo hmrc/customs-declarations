@@ -42,12 +42,7 @@ trait CustomsDeclarationsMetricsService extends WireMockRunner {
     )
   }
 
-  def verifyCustomsDeclarationsMetricsServiceWasNotCalled() {
-    verify(0, postRequestedFor(urlMatchingRequestPath)
-    )
-  }
-
-  def verifyFileTransmissionServiceWasCalledWith(request: CustomsDeclarationsMetricsRequest) {
+  def verifyCustomsDeclarationsMetricsServiceWasCalledWith(request: CustomsDeclarationsMetricsRequest) {
     verify(
       1,
       postRequestedFor(urlMatchingRequestPath)

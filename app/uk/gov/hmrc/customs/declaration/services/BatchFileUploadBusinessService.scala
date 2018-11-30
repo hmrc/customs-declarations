@@ -45,7 +45,6 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
                                                config: DeclarationsConfigService) {
 
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
-  private case class UpscanInitiateRequest(subscriptionFieldsId: SubscriptionFieldsId, documentType: Option[DocumentType])
 
   def send[A](implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
               hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
@@ -87,8 +86,8 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
                             (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
                              hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
 
-    val upscanInitiateRequests = validatedRequest.batchFileUploadRequest.files.map { uploadProperties =>
-      UpscanInitiateRequest(subscriptionFieldsId, uploadProperties.documentType)
+    val upscanInitiateRequests = validatedRequest.batchFileUploadRequest.files.map { _ =>
+      subscriptionFieldsId
     }
     failFastSequence(upscanInitiateRequests)(i => backendCall(i))
   }
@@ -137,10 +136,10 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
         } yield previousResults :+ next
     }
 
-  private def backendCall[A](upscanInitiateRequest: UpscanInitiateRequest)
+  private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId)
                               (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
     batchUpscanInitiateConnector.send(
-      preparePayload(upscanInitiateRequest.subscriptionFieldsId), validatedRequest.requestedApiVersion)
+      preparePayload(subscriptionFieldsId), validatedRequest.requestedApiVersion)
   }
 
   private def extractEori(authorisedAs: AuthorisedAs): Eori = {

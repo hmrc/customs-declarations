@@ -74,7 +74,7 @@ class BatchFileUploadUpscanNotificationBusinessService @Inject()(repo: BatchFile
   private def extractFileProperties(md: BatchFileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {
     val fileProperties = Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString)
       .map(t => FileTransmissionProperty(name = t._1, value = t._2))
-    if (bf.documentType.isDefined) fileProperties :+ FileTransmissionProperty("ContentType", bf.documentType.get.toString) else fileProperties
+    if (bf.documentType.isDefined) fileProperties :+ FileTransmissionProperty("DocumentType", bf.documentType.get.toString) else fileProperties
   }
 
   private def maybeFileTransmissionFile(fileReference: FileReference, metadata: BatchFileUploadMetadata): Option[(BatchFile, FileTransmissionFile)] = {

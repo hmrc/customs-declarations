@@ -101,7 +101,7 @@ object TestData {
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     BatchFileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
-    Seq(BatchFileUploadFile(FileSequenceNo(1), None), BatchFileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
+    Seq(BatchFileUploadFile(FileSequenceNo(1), maybeDocumentType = None), BatchFileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
   )
 
   val ValidatedBatchFileUploadPayloadRequestForCspWithTwoFiles = ValidatedBatchFileUploadPayloadRequest(
@@ -129,7 +129,7 @@ object TestData {
     BatchFileUploadRequest(
       DeclarationId("decId123"),
       FileGroupSize(4),
-      Seq(BatchFileUploadFile(FileSequenceNo(1), None),
+      Seq(BatchFileUploadFile(FileSequenceNo(1), maybeDocumentType = None),
         BatchFileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2"))),
         BatchFileUploadFile(FileSequenceNo(3), Some(DocumentType("docType3"))),
         BatchFileUploadFile(FileSequenceNo(4), Some(DocumentType("docType4")))))

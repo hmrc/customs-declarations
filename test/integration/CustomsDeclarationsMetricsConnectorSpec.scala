@@ -70,7 +70,7 @@ with BeforeAndAfterAll with CustomsDeclarationsMetricsService {
       val response = await(sendValidRequest())
 
       response shouldBe (())
-      verifyFileTransmissionServiceWasCalledWith(ValidCustomsDeclarationsMetricsRequest)
+      verifyCustomsDeclarationsMetricsServiceWasCalledWith(ValidCustomsDeclarationsMetricsRequest)
 
     }
 

@@ -54,6 +54,7 @@ class BatchFileUploadUpscanNotificationSpec extends ComponentTestSpec with Expec
   }
 
   override protected def beforeEach() {
+    await(repo.drop)
     resetMockServer()
   }
 

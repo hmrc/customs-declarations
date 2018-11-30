@@ -62,7 +62,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
   private val fileGroupSizeMaximum = 5
-  private val batchFileUploadConfig = BatchFileUploadConfig("UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionServiceURL)
+  private val batchFileUploadConfig = BatchFileUploadConfig("UPSCAN_INITIATE_URL", "UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionServiceURL)
 
   trait SetUp {
     val mockRepo = mock[BatchFileUploadMetadataRepo]

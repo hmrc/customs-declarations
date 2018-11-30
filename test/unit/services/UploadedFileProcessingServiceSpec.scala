@@ -72,7 +72,7 @@ class UploadedFileProcessingServiceSpec extends PlaySpec with MockitoSugar with 
         </uploadDetails>
       </root>
 
-      trim(notification.payload(0)) must be (trim(expectedXML))
+      trim(notification.payload.head) must be (trim(expectedXML))
     }
 
     "call the Customs Notification connector with correct details when FileStatus is FAILED" in {
@@ -98,7 +98,7 @@ class UploadedFileProcessingServiceSpec extends PlaySpec with MockitoSugar with 
         </failureDetails>
       </root>
 
-      trim(expectedXML) must be (trim(notification.payload(0)))
+      trim(expectedXML) must be (trim(notification.payload.head))
     }
   }
 }

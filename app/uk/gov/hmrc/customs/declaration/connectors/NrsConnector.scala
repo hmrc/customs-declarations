@@ -18,7 +18,6 @@ package uk.gov.hmrc.customs.declaration.connectors
 
 import com.google.inject._
 import play.api.libs.json.Json
-import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPayload}
@@ -32,15 +31,12 @@ import scala.concurrent.Future
 @Singleton
 class NrsConnector @Inject()(http: HttpClient,
                              logger: DeclarationsLogger,
-                             serviceConfigProvider: ServiceConfigProvider,
                              declarationConfigService: DeclarationsConfigService) {
 
-  private val configKey = "nrs-service"
   private val XApiKey = "X-API-Key"
 
   def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[NrSubmissionId] = {
-    val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
-    post(nrsPayload, config.url)
+    post(nrsPayload, declarationConfigService.nrsConfig.nrsUrl)
   }
 
   private def post[A](payload: NrsPayload, url: String)(implicit vupr: ValidatedPayloadRequest[A]) = {
@@ -51,7 +47,7 @@ class NrsConnector @Inject()(http: HttpClient,
 
     http.POST[NrsPayload, NrSubmissionId](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
       .map { res =>
-        logger.debug(s"Response received from nrs service $res")
+        logger.debug(s"Response received from nrs service submission id: $res")
         res
       }
       .recoverWith {

@@ -87,7 +87,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
     "create the acceptance date" in new SetUp {
       private val response = createStatusResponseWithAllValues()
       private val node = response \\ "acceptanceDate"
-
+      node.head.text shouldBe acceptanceDateVal.toString("yyyy-MM-dd'T'HH:mm:ss'Z'")
     }
 
     "create the party identification numbers" in new SetUp {

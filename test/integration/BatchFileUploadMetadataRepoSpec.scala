@@ -123,8 +123,6 @@ class BatchFileUploadMetadataRepoSpec extends UnitSpec
 
     "not update checksum, when searching by reference fails" in {
       await(repository.create(BatchFileMetadataWithFileTwo))
-      val updatedFileOne = BatchFileOne.copy(maybeCallbackFields = Some(CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM")))
-      val expected = BatchFileMetadataWithFileOne.copy(files = Seq(updatedFileOne))
 
       val maybeActual = await(repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
 

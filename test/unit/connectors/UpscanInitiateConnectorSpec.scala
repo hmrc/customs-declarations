@@ -25,16 +25,17 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.{Json, Writes}
 import play.api.test.FakeRequest
-import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData
+import util.TestData.batchFileUploadConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -43,12 +44,9 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]
-  private val mockServiceConfigProvider = mock[ServiceConfigProvider]
+  private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
 
-  private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockServiceConfigProvider)
-
-  private val v1Config = ServiceConfig("v1-url", Some("v1-bearer-token"), "v1-default")
-  private val v2Config = ServiceConfig("v2-url", Some("v2-bearer-token"), "v2-default")
+  private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -67,9 +65,8 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
     DocumentationType("documentationType")
   )
   override protected def beforeEach() {
-    reset(mockWsPost, mockLogger, mockServiceConfigProvider)
-    when(mockServiceConfigProvider.getConfig("upscan-initiate")).thenReturn(v1Config)
-    when(mockServiceConfigProvider.getConfig("v2.upscan-initiate")).thenReturn(v2Config)
+    reset(mockWsPost, mockLogger)
+    when(mockDeclarationsConfigService.batchFileUploadConfig).thenReturn(batchFileUploadConfig)
   }
 
   "UpscanInitiateConnector" can {
@@ -81,7 +78,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
         awaitRequest
 
-        verify(mockWsPost).POST(ameq(v2Config.url), any[UpscanInitiatePayload], any[SeqOfHeader])(
+        verify(mockWsPost).POST(ameq(batchFileUploadConfig.upscanInitiateUrl), any[UpscanInitiatePayload], any[SeqOfHeader])(
           any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
@@ -92,14 +89,6 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
         verify(mockWsPost).POST(anyString, ameq(upscanInitiatePayload), any[SeqOfHeader])(
           any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
-      }
-
-      "prefix the config key with the prefix if passed" in {
-        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
-
-        await(connector.send(upscanInitiatePayload, VersionTwo))
-
-        verify(mockServiceConfigProvider).getConfig("v2.upscan-initiate")
       }
     }
 
@@ -120,17 +109,6 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
           awaitRequest
         }
         caught.getCause shouldBe httpException
-      }
-    }
-
-    "when configuration is absent" should {
-      "throw an exception when no config is found for given api and version combination" in {
-        when(mockServiceConfigProvider.getConfig("v2.upscan-initiate")).thenReturn(null)
-
-        val caught = intercept[IllegalArgumentException] {
-          awaitRequest
-        }
-        caught.getMessage shouldBe "config not found"
       }
     }
   }

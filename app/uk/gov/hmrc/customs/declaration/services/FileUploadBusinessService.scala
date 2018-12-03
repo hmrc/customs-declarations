@@ -38,7 +38,7 @@ import scala.xml.{NodeSeq, Text}
 
 @Singleton
 class FileUploadBusinessService @Inject()(batchUpscanInitiateConnector: UpscanInitiateConnector,
-                                          batchFileUploadMetadataRepo: FileUploadMetadataRepo,
+                                          fileUploadMetadataRepo: FileUploadMetadataRepo,
                                           uuidService: UuidService,
                                           logger: DeclarationsLogger,
                                           apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
@@ -103,12 +103,12 @@ class FileUploadBusinessService @Inject()(batchUpscanInitiateConnector: UpscanIn
     val metadata = FileUploadMetadata(request.fileUploadRequest.declarationId, extractEori(request.authorisedAs), sfId,
       BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, batchFiles)
 
-    batchFileUploadMetadataRepo.create(metadata)
+    fileUploadMetadataRepo.create(metadata)
   }
 
   private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {
 
-    <FileUploadResponse xmlns="hmrc:batchfileupload">
+    <FileUploadResponse xmlns="hmrc:fileupload">
       <Files>
         {payloads.map(payload =>
         <File>
@@ -145,8 +145,8 @@ class FileUploadBusinessService @Inject()(batchUpscanInitiateConnector: UpscanIn
   private def extractEori(authorisedAs: AuthorisedAs): Eori = {
     authorisedAs match {
       case nonCsp: NonCsp => nonCsp.eori
-      case batchFileUploadCsp: FileUploadCsp => batchFileUploadCsp.eori
-      case _: Csp => throw new IllegalStateException("CSP route must be via BatchFileUploadCsp")
+      case fileUploadCsp: FileUploadCsp => fileUploadCsp.eori
+      case _: Csp => throw new IllegalStateException("CSP route must be via FileUploadCsp")
     }
   }
 

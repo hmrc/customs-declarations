@@ -193,7 +193,7 @@ curl -X POST \
   -H 'X-Client-ID: {Valid Client Id}' \
   -H 'X-EORI-Identifier: {Valid EORI}' \
   -H 'cache-control: no-cache' \
-  -d '<hmrc:FileUploadRequest xmlns:hmrc="hmrc:batchfileupload">
+  -d '<hmrc:FileUploadRequest xmlns:hmrc="hmrc:fileupload">
   <hmrc:DeclarationID>123</hmrc:DeclarationID>
   <hmrc:FileGroupSize>2</hmrc:FileGroupSize>
   <hmrc:Files>

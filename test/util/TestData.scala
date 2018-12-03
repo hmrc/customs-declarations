@@ -76,7 +76,7 @@ object TestData {
   val nrsConfigEnabled = NrsConfig(nrsEnabled = true, "nrs-api-key", 300, "nrs.url")
   val nrsConfigDisabled = NrsConfig(nrsEnabled = false, "nrs-api-key", 300, "nrs.url")
 
-  val fileUploadConfig = BatchFileUploadConfig("upscan-initiate.url", "callback.url", "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl")
+  val fileUploadConfig = FileUploadConfig("upscan-initiate.url", "callback.url", "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl")
 
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
@@ -91,7 +91,7 @@ object TestData {
   val declarantEori = Eori(declarantEoriValue)
   val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
 
-  val ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
+  val ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.FileUpload,
     EventStart,
@@ -104,7 +104,7 @@ object TestData {
     Seq(FileUploadFile(FileSequenceNo(1), maybeDocumentType = None), FileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
   )
 
-  val ValidatedBatchFileUploadPayloadRequestForCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
+  val ValidatedFileUploadPayloadRequestForCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.FileUpload,
     EventStart,
@@ -117,7 +117,7 @@ object TestData {
     Seq(FileUploadFile(FileSequenceNo(1), Some(DocumentType("docType1"))), FileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
   )
 
-  val ValidatedBatchFileUploadPayloadRequestWithFourFiles = ValidatedFileUploadPayloadRequest(
+  val ValidatedFileUploadPayloadRequestWithFourFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     GoogleAnalyticsValues.FileUpload,
     EventStart,

@@ -599,7 +599,7 @@ object TestXMLData {
 
   def validFileUploadXml(fileGroupSize: Int = 2, fileSequenceNo1: Int = 1, fileSequenceNo2: Int = 2): Elem =
     <FileUploadRequest
-    xmlns="hmrc:batchfileupload"
+    xmlns="hmrc:fileupload"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <DeclarationID>declarationId</DeclarationID>
       <FileGroupSize>{fileGroupSize}</FileGroupSize>
@@ -615,7 +615,7 @@ object TestXMLData {
     </FileUploadRequest>
 
   val InvalidFileUploadXml: Elem =   <FileUploadRequest
-  xmlns="hmrc:batchfileupload"
+  xmlns="hmrc:fileupload"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <DeclarationID foo="bar" >declarationId</DeclarationID>
     <FileGroupSize>1</FileGroupSize>

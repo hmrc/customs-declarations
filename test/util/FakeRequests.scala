@@ -144,11 +144,11 @@ object FakeRequests {
 
   lazy val InvalidCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request.withXmlBody(InvalidCancellationXML)
 
-  lazy val ValidBatchFileUploadV2Request = FakeRequest()
+  lazy val ValidFileUploadV2Request = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(validFileUploadXml())
 
-  lazy val ValidBatchFileUploadV3Request = FakeRequest()
+  lazy val ValidFileUploadV3Request = FakeRequest()
     .withHeaders(ValidHeadersV3.toSeq: _*)
     .withXmlBody(validFileUploadXml())
 

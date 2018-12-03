@@ -47,7 +47,7 @@ class FileUploadMetadataSpec extends UnitSpec {
 
   private val json = Json.parse(jsonString)
 
-  "BatchFileUploadMetaData model" should {
+  "FileUploadMetaData model" should {
     "serialise to Json" in {
 
       val actualJson = Json.toJson(BatchFileMetadataWithFileOne)

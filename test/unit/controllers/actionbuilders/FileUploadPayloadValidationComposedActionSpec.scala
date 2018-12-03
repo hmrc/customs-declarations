@@ -42,10 +42,10 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
 
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    val mockBatchFileUploadPayloadValidationAction: FileUploadPayloadValidationAction = mock[FileUploadPayloadValidationAction]
+    val mockFileUploadPayloadValidationAction: FileUploadPayloadValidationAction = mock[FileUploadPayloadValidationAction]
     val mockDeclarationsConfigService = mock[DeclarationsConfigService]
     when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig)
-    val action: FileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(mockBatchFileUploadPayloadValidationAction, mockLogger, mockDeclarationsConfigService)
+    val action: FileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(mockFileUploadPayloadValidationAction, mockLogger, mockDeclarationsConfigService)
   }
 
   "FileUploadPayloadValidationComposedAction" should {
@@ -57,7 +57,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
         EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig.copy(fileGroupSizeMaximum = 1))
-      when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
+      when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
       val result = await(action.refine(testAr))
 
@@ -71,7 +71,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
       val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
         EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
-      when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
+      when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
       val result = await(action.refine(testAr))
 
@@ -85,7 +85,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
       val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
         EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
-      when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
+      when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
       val result = await(action.refine(testAr))
 
@@ -99,7 +99,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
       val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
         EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
-      when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
+      when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
       val result = await(action.refine(testAr))
 
@@ -113,7 +113,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
       val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
         EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
-      when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
+      when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
       val result = await(action.refine(testAr))
 
@@ -127,7 +127,7 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
       val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
         EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
-      when(mockBatchFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
+      when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
       val expected = Right(testVpr.toValidatedFileUploadPayloadRequest(
         FileUploadRequest(DeclarationId("declarationId"),
           FileGroupSize(2),

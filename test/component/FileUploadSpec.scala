@@ -64,7 +64,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     scenario("Response status 200 when user submits correct request") {
       Given("the API is available")
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
-      val request = ValidBatchFileUploadV2Request.fromNonCsp.postTo(endpoint)
+      val request = ValidFileUploadV2Request.fromNonCsp.postTo(endpoint)
       setupWiremockExpectations()
 
       When("a POST request with data is sent to the API")
@@ -81,7 +81,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
 
     scenario("An unauthorised CSP is not allowed to submit a file upload request with v2.0 accept header") {
       Given("A CSP wants to submit a valid file upload")
-      val request: FakeRequest[AnyContentAsXml] = ValidBatchFileUploadV2Request.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request.fromCsp.postTo(endpoint)
 
       And("the CSP is unauthorised with its privileged application")
       authServiceUnauthorisesScopeForCSP()
@@ -102,7 +102,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
 
     scenario("An unauthorised CSP is not allowed to submit a file upload request with v3.0 accept header") {
       Given("A CSP wants to submit a valid file upload")
-      val request: FakeRequest[AnyContentAsXml] = ValidBatchFileUploadV3Request.fromCsp.postTo(endpoint)
+      val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV3Request.fromCsp.postTo(endpoint)
 
       setupGoogleAnalyticsServiceToReturn(ACCEPTED)
 

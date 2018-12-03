@@ -48,7 +48,7 @@ case class ExampleFileTransmissionNotification(fileReference: FileReference,
                                                fileTransmissionStatus: ExampleFileTransmissionStatus,
                                                errorDetails: Option[String])
 
-class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
+class FileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
     val mockNotificationConnector = mock[FileUploadCustomsNotificationConnector]
@@ -103,7 +103,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
 
   private implicit val toXml = new FileTransmissionToCallbackToXmlNotification()
 
-  "BatchFileUploadNotificationService" should {
+  "FileUploadNotificationService" should {
     "send SUCCESS notification to the customs notification service" in new SetUp {
       when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
 

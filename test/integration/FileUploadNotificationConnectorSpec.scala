@@ -65,7 +65,7 @@ class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with Guice
       "microservice.services.customs-notification.bearer-token" -> CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
     )).build()
 
-  "BatchFileUploadCustomsNotificationConnector" should {
+  "FileUploadCustomsNotificationConnector" should {
 
     "make a correct request" in {
       notificationServiceIsRunning()

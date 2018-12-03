@@ -42,17 +42,17 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   trait SetUp {
-    protected val mockBatchFileUploadMetadataRepo: FileUploadMetadataRepo = mock[FileUploadMetadataRepo]
+    protected val mockFileUploadMetadataRepo: FileUploadMetadataRepo = mock[FileUploadMetadataRepo]
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockBatchUpscanInitiateConnector: UpscanInitiateConnector = mock[UpscanInitiateConnector]
     protected val mockUpscanInitiateResponsePayload: UpscanInitiateResponsePayload = mock[UpscanInitiateResponsePayload]
-    protected val mockBatchFileUploadConfig = mock[BatchFileUploadConfig]
+    protected val mockFileUploadConfig = mock[FileUploadConfig]
     protected val mockConfiguration = mock[DeclarationsConfigService]
     protected val mockUuidService = mock[UuidService]
 
     protected lazy val service = new FileUploadBusinessService(mockBatchUpscanInitiateConnector,
-      mockBatchFileUploadMetadataRepo, mockUuidService, mockLogger, mockApiSubscriptionFieldsConnector, mockConfiguration)
+      mockFileUploadMetadataRepo, mockUuidService, mockLogger, mockApiSubscriptionFieldsConnector, mockConfiguration)
 
     val xmlResponse = <FileUploadResponse>
       <Files>
@@ -76,7 +76,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       </Files>
     </FileUploadResponse>
 
-    implicit val jsonRequest = ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles
+    implicit val jsonRequest = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 
     val upscanInitiatePayload = UpscanInitiatePayload("http://file-upload-upscan-callback.url/uploaded-file-upscan-notifications/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
     val upscanInitiateResponsePayload1 = UpscanInitiateResponsePayload(FileReferenceOne.value.toString, UpscanInitiateUploadRequest("https://a.b.com", Map(("label1","value1"), ("label2","value2"))))
@@ -86,13 +86,13 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       await(service.send(vupr, hc))
     }
 
-    when(mockBatchFileUploadConfig.fileUploadCallbackUrl).thenReturn("http://file-upload-upscan-callback.url")
-    when(mockConfiguration.fileUploadConfig).thenReturn(mockBatchFileUploadConfig)
+    when(mockFileUploadConfig.fileUploadCallbackUrl).thenReturn("http://file-upload-upscan-callback.url")
+    when(mockConfiguration.fileUploadConfig).thenReturn(mockFileUploadConfig)
     when(mockUuidService.uuid()).thenReturn(any[UUID])
-    when(mockBatchFileUploadMetadataRepo.create(any[FileUploadMetadata])).thenReturn(Future.successful(true))
+    when(mockFileUploadMetadataRepo.create(any[FileUploadMetadata])).thenReturn(Future.successful(true))
   }
 
-  "BatchFileUploadBusinessService" should {
+  "FileUploadBusinessService" should {
     "send payload to connector for non-CSP" in new SetUp() {
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
       when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(upscanInitiateResponsePayload1, upscanInitiateResponsePayload2)
@@ -107,10 +107,10 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
       when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(upscanInitiateResponsePayload1, upscanInitiateResponsePayload2)
 
-      val result = send(ValidatedBatchFileUploadPayloadRequestForCspWithTwoFiles).right.get
+      val result = send(ValidatedFileUploadPayloadRequestForCspWithTwoFiles).right.get
 
       result shouldBe xmlResponse
-      verify(mockBatchUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(ValidatedBatchFileUploadPayloadRequestForCspWithTwoFiles))
+      verify(mockBatchUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(ValidatedFileUploadPayloadRequestForCspWithTwoFiles))
     }
 
     "fail fast when sending payloads to connector" in new SetUp() {
@@ -120,7 +120,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
       when(mockBatchUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend, successfulConnectorSend, failedConnectorSend, successfulConnectorSend)
 
-      val result = send(ValidatedBatchFileUploadPayloadRequestWithFourFiles).left.get
+      val result = send(ValidatedFileUploadPayloadRequestWithFourFiles).left.get
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
 
       verify(mockBatchUpscanInitiateConnector, times(3)).send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])

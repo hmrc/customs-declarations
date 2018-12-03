@@ -78,16 +78,16 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     nrsEnabled, nrsApiKey, nrsWaitTimeMillis, nrsUrl
     ) mapN NrsConfig
 
-  private val validatedBatchFileUploadConfig: CustomsValidatedNel[BatchFileUploadConfig] = (
+  private val validatedFileUploadConfig: CustomsValidatedNel[FileUploadConfig] = (
     upscanInitiateUrl, upscanCallbackUrl, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
-  ) mapN BatchFileUploadConfig
+  ) mapN FileUploadConfig
 
   private val customsConfigHolder =
     (validatedDeclarationsConfig,
       validatedDeclarationsCircuitBreakerConfig,
       validatedGoogleAnalyticsSenderConfig,
       validatedNrsConfig,
-      validatedBatchFileUploadConfig
+      validatedFileUploadConfig
       ) mapN CustomsConfigHolder fold(
         fe = { nel =>
           // error case exposes nel (a NotEmptyList)
@@ -106,11 +106,11 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   val nrsConfig: NrsConfig = customsConfigHolder.validatedNrsConfig
 
-  val fileUploadConfig: BatchFileUploadConfig = customsConfigHolder.validatedBatchFileUploadConfig
+  val fileUploadConfig: FileUploadConfig = customsConfigHolder.validatedFileUploadConfig
 
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
                                          declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,
                                          validatedGoogleAnalyticsConfig: GoogleAnalyticsConfig,
                                          validatedNrsConfig: NrsConfig,
-                                         validatedBatchFileUploadConfig: BatchFileUploadConfig)
+                                         validatedFileUploadConfig: FileUploadConfig)
 }

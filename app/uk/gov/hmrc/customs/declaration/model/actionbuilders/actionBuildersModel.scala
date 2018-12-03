@@ -104,21 +104,7 @@ object ActionBuilderModelHelper {
 
   implicit class ValidatedPayloadRequestOps[A](val vpr: ValidatedPayloadRequest[A]) extends AnyVal {
 
-    def toValidatedUploadPayloadRequest(declarationId: DeclarationId,
-                                        documentationType: DocumentationType): ValidatedUploadPayloadRequest[A] = ValidatedUploadPayloadRequest(
-      vpr.conversationId,
-      vpr.analyticsValues,
-      vpr.start,
-      vpr.requestedApiVersion,
-      vpr.clientId,
-      vpr.authorisedAs,
-      vpr.xmlBody,
-      vpr.request,
-      declarationId,
-      documentationType
-    )
-
-    def toValidatedFileUploadPayloadRequest(batchFileUploadRequest: FileUploadRequest): ValidatedFileUploadPayloadRequest[A] =
+    def toValidatedFileUploadPayloadRequest(fileUploadRequest: FileUploadRequest): ValidatedFileUploadPayloadRequest[A] =
       ValidatedFileUploadPayloadRequest(
         vpr.conversationId,
         vpr.analyticsValues,
@@ -128,7 +114,7 @@ object ActionBuilderModelHelper {
         vpr.authorisedAs,
         vpr.xmlBody,
         vpr.request,
-        batchFileUploadRequest
+        fileUploadRequest
       )
   }
 
@@ -159,11 +145,6 @@ trait HasXmlBody {
   val xmlBody: NodeSeq
 }
 
-trait HasFileUploadProperties {
-  val declarationId: DeclarationId
-  val documentationType: DocumentationType
-}
-
 case class FileUploadRequest(declarationId: DeclarationId, fileGroupSize: FileGroupSize, files: Seq[FileUploadFile])
 
 case class FileUploadFile(fileSequenceNo: FileSequenceNo, maybeDocumentType: Option[DocumentType]) {
@@ -180,7 +161,7 @@ case class FileUploadFile(fileSequenceNo: FileSequenceNo, maybeDocumentType: Opt
   }
 }
 
-trait HasBatchFileUploadProperties {
+trait HasFileUploadProperties {
   val fileUploadRequest: FileUploadRequest
 }
 
@@ -284,19 +265,6 @@ case class ValidatedPayloadRequest[A](
   request: Request[A]
 ) extends GenericValidatedPayloadRequest(conversationId, analyticsValues, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
 
-case class ValidatedUploadPayloadRequest[A](
-  conversationId: ConversationId,
-  analyticsValues: GoogleAnalyticsValues,
-  start: ZonedDateTime,
-  requestedApiVersion: ApiVersion,
-  clientId: ClientId,
-  authorisedAs: AuthorisedAs,
-  xmlBody: NodeSeq,
-  request: Request[A],
-  declarationId: DeclarationId,
-  documentationType: DocumentationType
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
-
 case class ValidatedFileUploadPayloadRequest[A](
                                                  conversationId: ConversationId,
                                                  analyticsValues: GoogleAnalyticsValues,
@@ -307,4 +275,4 @@ case class ValidatedFileUploadPayloadRequest[A](
                                                  xmlBody: NodeSeq,
                                                  request: Request[A],
                                                  fileUploadRequest: FileUploadRequest
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasBatchFileUploadProperties
+) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties

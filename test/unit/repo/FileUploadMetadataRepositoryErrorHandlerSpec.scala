@@ -29,7 +29,7 @@ class FileUploadMetadataRepositoryErrorHandlerSpec extends UnitSpec with Mockito
   private val errorHandler = new FileUploadMetadataRepoErrorHandler(mockLogger)
   private implicit val implicitVHR = TestValidatedHeadersRequest
 
-  "BatchFileUploadMetadataRepositoryErrorHandler" can {
+  "FileUploadMetadataRepositoryErrorHandler" can {
 
     "handle save" should {
 

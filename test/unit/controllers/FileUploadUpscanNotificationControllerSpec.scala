@@ -89,7 +89,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
     }
   }
 
-  "BatchFileUploadUpscanNotificationController on Happy Path" should {
+  "FileUploadUpscanNotificationController on Happy Path" should {
     "on receipt of READY callback call business service and return 204 with empty body" in new SetUp {
       when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])).thenReturn(Future.successful(()))
 
@@ -105,7 +105,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
     }
   }
 
-  "BatchFileUploadUpscanNotificationController on Unhappy Path" should {
+  "FileUploadUpscanNotificationController on Unhappy Path" should {
     "on receipt of FAILURE callback send notification and return 204 with empty body" in new SetUp {
       whenNotificationService(FailedCallbackBody)
 

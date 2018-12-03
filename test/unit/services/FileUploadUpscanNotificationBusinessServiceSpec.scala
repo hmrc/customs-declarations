@@ -62,7 +62,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
   private val fileGroupSizeMaximum = 5
-  private val batchFileUploadConfig = BatchFileUploadConfig("UPSCAN_INITIATE_URL", "UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionServiceURL)
+  private val fileUploadConfig = FileUploadConfig("UPSCAN_INITIATE_URL", "UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionServiceURL)
 
   trait SetUp {
     val mockRepo = mock[FileUploadMetadataRepo]
@@ -71,10 +71,10 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     val mockLogger = mock[DeclarationsLogger]
     val service = new FileUploadUpscanNotificationBusinessService(mockRepo, mockConnector, mockConfig, mockLogger)
 
-    when(mockConfig.fileUploadConfig).thenReturn(batchFileUploadConfig)
+    when(mockConfig.fileUploadConfig).thenReturn(fileUploadConfig)
   }
 
-  "BatchFileUploadUpscanNotificationBusinessService" should {
+  "FileUploadUpscanNotificationBusinessService" should {
     "update metadata and call file transmission service" in new SetUp {
       when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
       when(mockConnector.send(any[FileTransmission])).thenReturn(Future.successful(()))

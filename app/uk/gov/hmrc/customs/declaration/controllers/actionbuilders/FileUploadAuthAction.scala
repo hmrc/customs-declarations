@@ -26,18 +26,18 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues,
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 
 @Singleton
-class BatchFileUploadAuthAction @Inject()(customsAuthService: CustomsAuthService,
-                                          headerValidator: HeaderValidator,
-                                          logger: DeclarationsLogger,
-                                          googleAnalyticsConnector: GoogleAnalyticsConnector,
-                                          declarationConfigService: DeclarationsConfigService)
+class FileUploadAuthAction @Inject()(customsAuthService: CustomsAuthService,
+                                     headerValidator: HeaderValidator,
+                                     logger: DeclarationsLogger,
+                                     googleAnalyticsConnector: GoogleAnalyticsConnector,
+                                     declarationConfigService: DeclarationsConfigService)
   extends AuthAction(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService) {
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, AuthorisedAsCsp] = {
     for {
       badgeId <- eitherBadgeIdentifier.right
       eori <- eitherEori.right
-    } yield BatchFileUploadCsp(badgeId, eori, maybeNrsRetrievalData)
+    } yield FileUploadCsp(badgeId, eori, maybeNrsRetrievalData)
   }
 
   private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, Eori] = {

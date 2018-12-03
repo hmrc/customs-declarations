@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{ACCEPT, CONTENT_TYPE, contentAsString, route, status, _}
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.repo.BatchFileUploadMetadataMongoRepo
+import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataMongoRepo
 import util.ApiSubscriptionFieldsTestData
 import util.CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
 import util.TestData._
@@ -33,7 +33,7 @@ import util.externalservices.{CustomsNotificationService, FileTransmissionServic
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.xml.Utility.trim
 
-class BatchFileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTestResponses
+class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
   with OptionValues
   with BeforeAndAfterAll
@@ -44,9 +44,9 @@ class BatchFileUploadUpscanNotificationSpec extends ComponentTestSpec with Expec
   with Eventually
   with IntegrationPatience {
 
-  private val endpoint = s"/uploaded-batch-file-upscan-notifications/clientSubscriptionId/$subscriptionFieldsIdString"
+  private val endpoint = s"/uploaded-file-upscan-notifications/clientSubscriptionId/$subscriptionFieldsIdString"
 
-  val repo = app.injector.instanceOf[BatchFileUploadMetadataMongoRepo]
+  val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]
 
   override protected def beforeAll() {
     await(repo.drop)

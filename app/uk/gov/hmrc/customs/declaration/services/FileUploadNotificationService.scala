@@ -20,13 +20,13 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.connectors.BatchFileUploadCustomsNotificationConnector
+import uk.gov.hmrc.customs.declaration.connectors.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.model.{FileReference, SubscriptionFieldsId}
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-case class BatchFileUploadCustomsNotification(clientSubscriptionId: SubscriptionFieldsId, conversationId: UUID, payload: NodeSeq)
+case class FileUploadCustomsNotification(clientSubscriptionId: SubscriptionFieldsId, conversationId: UUID, payload: NodeSeq)
 
 trait CallbackToXmlNotification[A] {
   def toXml(callbackResponse: A): NodeSeq
@@ -36,12 +36,12 @@ trait CallbackToXmlNotification[A] {
   Generic notification sending service for both upscan-notify and file-transmission callback endpoints
 */
 @Singleton
-class BatchFileUploadNotificationService @Inject()(notificationConnector: BatchFileUploadCustomsNotificationConnector,
-                                                   logger: CdsLogger) {
+class FileUploadNotificationService @Inject()(notificationConnector: FileUploadCustomsNotificationConnector,
+                                              logger: CdsLogger) {
 
   def sendMessage[T](callbackResponse: T, fileReference: FileReference, clientSubscriptionId: SubscriptionFieldsId)(implicit callbackToXml: CallbackToXmlNotification[T]): Future[Unit] = {
 
-    val notification = BatchFileUploadCustomsNotification(
+    val notification = FileUploadCustomsNotification(
       clientSubscriptionId, fileReference.value, callbackToXml.toXml(callbackResponse)
     )
     notificationConnector.send(notification)

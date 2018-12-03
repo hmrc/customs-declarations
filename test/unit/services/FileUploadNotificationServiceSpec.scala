@@ -23,7 +23,7 @@ import org.scalatest.Assertion
 import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.Reads
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.connectors.BatchFileUploadCustomsNotificationConnector
+import uk.gov.hmrc.customs.declaration.connectors.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.model.{BatchId, FileReference}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.play.test.UnitSpec
@@ -51,9 +51,9 @@ case class ExampleFileTransmissionNotification(fileReference: FileReference,
 class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
-    val mockNotificationConnector = mock[BatchFileUploadCustomsNotificationConnector]
+    val mockNotificationConnector = mock[FileUploadCustomsNotificationConnector]
     val mockDeclarationsLogger = mock[CdsLogger]
-    val service = new BatchFileUploadNotificationService(mockNotificationConnector, mockDeclarationsLogger)
+    val service = new FileUploadNotificationService(mockNotificationConnector, mockDeclarationsLogger)
     val expectedSuccessXml =
       <Root>
         <FileReference>{FileReferenceOne}</FileReference>
@@ -70,9 +70,9 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
       </Root>
 
     def verifyNotificationConnectorCalledWithXml(xml: NodeSeq): Assertion = {
-      val captor: ArgumentCaptor[BatchFileUploadCustomsNotification] = ArgumentCaptor.forClass(classOf[BatchFileUploadCustomsNotification])
+      val captor: ArgumentCaptor[FileUploadCustomsNotification] = ArgumentCaptor.forClass(classOf[FileUploadCustomsNotification])
       verify(mockNotificationConnector).send(captor.capture())
-      val actual: BatchFileUploadCustomsNotification = captor.getValue
+      val actual: FileUploadCustomsNotification = captor.getValue
       actual.clientSubscriptionId shouldBe subscriptionFieldsId
       actual.conversationId shouldBe FileReferenceOne.value
       string2xml(actual.payload.toString) shouldBe string2xml(xml.toString)
@@ -105,7 +105,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
 
   "BatchFileUploadNotificationService" should {
     "send SUCCESS notification to the customs notification service" in new SetUp {
-      when(mockNotificationConnector.send(any[BatchFileUploadCustomsNotification])).thenReturn(Future.successful(()))
+      when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
 
       await(service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId))
 
@@ -113,7 +113,7 @@ class BatchFileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar 
     }
 
     "send FAILURE notification to the customs notification service" in new SetUp {
-      when(mockNotificationConnector.send(any[BatchFileUploadCustomsNotification])).thenReturn(Future.successful(()))
+      when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
 
       await(service.sendMessage(failureCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId))
 

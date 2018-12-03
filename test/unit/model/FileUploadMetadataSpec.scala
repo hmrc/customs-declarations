@@ -21,7 +21,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData.BatchFileMetadataWithFileOne
 
-class BatchFileUploadMetadataSpec extends UnitSpec {
+class FileUploadMetadataSpec extends UnitSpec {
   private val jsonString = """{
                              |  "declarationId": "1",
                              |  "eori": "123",
@@ -57,7 +57,7 @@ class BatchFileUploadMetadataSpec extends UnitSpec {
 
     "de-serialise from Json" in {
 
-      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[BatchFileUploadMetadata]
+      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[FileUploadMetadata]
 
       actualMetaData shouldBe BatchFileMetadataWithFileOne
     }

@@ -23,16 +23,16 @@ import uk.gov.hmrc.customs.declaration.connectors.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.repo.BatchFileUploadMetadataRepo
+import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class BatchFileUploadUpscanNotificationBusinessService @Inject()(repo: BatchFileUploadMetadataRepo,
-                                                                 connector: FileTransmissionConnector,
-                                                                 config: DeclarationsConfigService,
-                                                                 logger: DeclarationsLogger) {
+class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMetadataRepo,
+                                                            connector: FileTransmissionConnector,
+                                                            config: DeclarationsConfigService,
+                                                            logger: DeclarationsLogger) {
 
   def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(implicit r: HasConversationId): Future[Unit] = {
     repo.update(
@@ -59,25 +59,25 @@ class BatchFileUploadUpscanNotificationBusinessService @Inject()(repo: BatchFile
     }
   }
 
-  private def maybeFileTransmission(fileReference: FileReference, md: BatchFileUploadMetadata): Option[FileTransmission] = {
+  private def maybeFileTransmission(fileReference: FileReference, md: FileUploadMetadata): Option[FileTransmission] = {
     for {
       (bf, ftf) <- maybeFileTransmissionFile(fileReference, md)
     } yield
       FileTransmission(FileTransmissionBatch(md.batchId, md.fileCount),
-        new URL(s"${config.batchFileUploadConfig.fileTransmissionCallbackUrl}${md.csId}"),
+        new URL(s"${config.fileUploadConfig.fileTransmissionCallbackUrl}${md.csId}"),
         ftf,
         FileTransmissionInterface("DEC64", "1.0.0"),
         extractFileProperties(md, bf)
     )
   }
 
-  private def extractFileProperties(md: BatchFileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {
+  private def extractFileProperties(md: FileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {
     val fileProperties = Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString)
       .map(t => FileTransmissionProperty(name = t._1, value = t._2))
     if (bf.documentType.isDefined) fileProperties :+ FileTransmissionProperty("DocumentType", bf.documentType.get.toString) else fileProperties
   }
 
-  private def maybeFileTransmissionFile(fileReference: FileReference, metadata: BatchFileUploadMetadata): Option[(BatchFile, FileTransmissionFile)] = {
+  private def maybeFileTransmissionFile(fileReference: FileReference, metadata: FileUploadMetadata): Option[(BatchFile, FileTransmissionFile)] = {
     for {
       batchFile <- metadata.files.find(bf => bf.reference == fileReference)
       cbFields <- batchFile.maybeCallbackFields

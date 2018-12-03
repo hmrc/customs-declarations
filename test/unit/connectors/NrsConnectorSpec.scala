@@ -36,7 +36,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData
-import util.TestData.{batchFileUploadConfig, nrsConfigEnabled}
+import util.TestData.{fileUploadConfig, nrsConfigEnabled}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
@@ -65,7 +65,7 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
 
   override protected def beforeEach() {
     reset(mockWsPost, mockLogger)
-    when(mockDeclarationsConfigService.batchFileUploadConfig).thenReturn(batchFileUploadConfig)
+    when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig)
     when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 

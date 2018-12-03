@@ -155,35 +155,6 @@ that `default` configuration is declared directly inside the `customs-declaratio
       "url": "http://currenturl/customs-declarations"
       "bearerToken": "current token"
     }
-# File Upload
-
-The purpose of this endpoint is to receive notifications from the upscan service once a file has been processed
-
-
-## Supported Endpoints
-
-### Upscan notification
-
-To notify the user once a file has been processed. A HTTP status code of 204 is returned once successful. 
-
-    POST         /uploaded-file-upscan-notifications/decId/:decId/eori/:eori/documentationType/:docType/clientSubscriptionId/:clientSubscriptionId
-
-### Example Payload
-
-    {
-        "reference" : "081945ca-952a-4df8-9fc6-2f2679abd7e4",
-        "fileStatus" : "READY",
-        "uploadDetails": {
-          "uploadTimestamp": "2018-04-24T09:30:00Z",
-          "checksum": "CHECKSUM"
-        },
-        "url" : "https://some-url"
-    }
-    
-### Curl
-
-    curl -X "POST" -H "Content-Type: application/json" -d '{ "reference" : "081945ca-952a-4df8-9fc6-2f2679abd7e4", "fileStatus" : "READY", "uploadDetails": { "uploadTimestamp": "2018-04-24T09:30:00Z", "checksum": "CHECKSUM" }, "url" : "https://some-url" }' http://localhost:9000/uploaded-file-upscan-notifications/decId/0f14013a-076b-4dc9-8e5e-45e5706b2b61/eori/054d75b4-491f-4196-873c-37714d37e9ef/documentationType/license/clientSubscriptionId/731667f7-2a2c-4f46-abd8-3245dba74546
-
 
 ### License
 

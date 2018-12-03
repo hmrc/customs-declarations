@@ -597,12 +597,7 @@ object TestXMLData {
       </v1:requestDetail>
     </v1:submitDeclarationRequest>
 
-  val ValidFileUploadXml: Elem = <upscanInitiate xmlns="hmrc:fileupload">
-    <declarationID>dec123</declarationID>
-    <documentationType>docType123</documentationType>
-  </upscanInitiate>
-
-  def validBatchFileUploadXml(fileGroupSize: Int = 2, fileSequenceNo1: Int = 1, fileSequenceNo2: Int = 2): Elem =
+  def validFileUploadXml(fileGroupSize: Int = 2, fileSequenceNo1: Int = 1, fileSequenceNo2: Int = 2): Elem =
     <FileUploadRequest
     xmlns="hmrc:batchfileupload"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -619,9 +614,17 @@ object TestXMLData {
       </Files>
     </FileUploadRequest>
 
-  val InvalidFileUploadXml: Elem = <upscanInitiate xmlns="hmrc:fileupload">
-    <declarationID foo="bar">dec123</declarationID>
-    <documentationType>docType123</documentationType>
-  </upscanInitiate>
+  val InvalidFileUploadXml: Elem =   <FileUploadRequest
+  xmlns="hmrc:batchfileupload"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <DeclarationID foo="bar" >declarationId</DeclarationID>
+    <FileGroupSize>1</FileGroupSize>
+    <Files>
+      <File>
+        <FileSequenceNo>1</FileSequenceNo>
+        <DocumentType>document type 1</DocumentType>
+      </File>
+    </Files>
+  </FileUploadRequest>
 
 }

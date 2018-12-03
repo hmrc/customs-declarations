@@ -19,14 +19,14 @@ package unit.repo
 import org.scalatest.mockito.MockitoSugar
 import reactivemongo.api.commands.{DefaultWriteResult, WriteConcernError, WriteError}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.repo.BatchFileUploadMetadataRepoErrorHandler
+import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepoErrorHandler
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData.TestValidatedHeadersRequest
 
-class BatchFileUploadMetadataRepositoryErrorHandlerSpec extends UnitSpec with MockitoSugar {
+class FileUploadMetadataRepositoryErrorHandlerSpec extends UnitSpec with MockitoSugar {
 
   private val mockLogger = mock[DeclarationsLogger]
-  private val errorHandler = new BatchFileUploadMetadataRepoErrorHandler(mockLogger)
+  private val errorHandler = new FileUploadMetadataRepoErrorHandler(mockLogger)
   private implicit val implicitVHR = TestValidatedHeadersRequest
 
   "BatchFileUploadMetadataRepositoryErrorHandler" can {

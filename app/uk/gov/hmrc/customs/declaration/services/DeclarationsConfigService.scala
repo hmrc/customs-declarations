@@ -57,7 +57,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   private val upscanInitiateUrl = upscanService.serviceUrl
   private val upscanCallbackUrl = root.string("upscan-callback.url")
-  private val batchFileUploadUpscanCallbackUrl = root.string("batch-file-upload-upscan-callback.url")
+  private val fileUploadUpscanCallbackUrl = root.string("file-upload-upscan-callback.url")
   private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
   private val fileTransmissionUrl = fileTransmissionService.serviceUrl
   private val fileTransmissionCallbackUrl =  root.string("file-transmission-callback.url")
@@ -79,7 +79,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     ) mapN NrsConfig
 
   private val validatedBatchFileUploadConfig: CustomsValidatedNel[BatchFileUploadConfig] = (
-    upscanInitiateUrl, upscanCallbackUrl, batchFileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
+    upscanInitiateUrl, upscanCallbackUrl, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
   ) mapN BatchFileUploadConfig
 
   private val customsConfigHolder =
@@ -106,7 +106,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   val nrsConfig: NrsConfig = customsConfigHolder.validatedNrsConfig
 
-  val batchFileUploadConfig: BatchFileUploadConfig = customsConfigHolder.validatedBatchFileUploadConfig
+  val fileUploadConfig: BatchFileUploadConfig = customsConfigHolder.validatedBatchFileUploadConfig
 
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
                                          declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,

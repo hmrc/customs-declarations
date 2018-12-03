@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.POST
 import util.RequestHeaders._
 import util.TestData.{ValidGoogleAnalyticsJson, cspBearerToken, nonCspBearerToken}
-import util.TestXMLData._
+import util.TestXMLData.{InvalidFileUploadXml, _}
 
 object FakeRequests {
   lazy val ValidSubmissionV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
@@ -144,41 +144,21 @@ object FakeRequests {
 
   lazy val InvalidCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request.withXmlBody(InvalidCancellationXML)
 
-  lazy val ValidFileUploadV2Request = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
-    .withXmlBody(ValidFileUploadXml)
-
-  lazy val ValidFileUploadV3Request = FakeRequest()
-    .withHeaders(ValidHeadersV3.toSeq: _*)
-    .withXmlBody(ValidFileUploadXml)
-
-  lazy val ValidFileUploadRequestWithoutBadgeId = ValidFileUploadV2Request
-    .copyFakeRequest(headers = ValidFileUploadV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME))
-
-  lazy val InvalidFileUploadRequest = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
-    .withXmlBody(InvalidFileUploadXml)
-
   lazy val ValidBatchFileUploadV2Request = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
-    .withXmlBody(validBatchFileUploadXml())
+    .withXmlBody(validFileUploadXml())
 
   lazy val ValidBatchFileUploadV3Request = FakeRequest()
     .withHeaders(ValidHeadersV3.toSeq: _*)
-    .withXmlBody(validBatchFileUploadXml())
-
-  lazy val NoAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request
-    .copyFakeRequest(headers = InvalidSubmissionRequest.headers.remove(ACCEPT))
-
-  lazy val InvalidAcceptHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request
-    .withHeaders(RequestHeaders.ACCEPT_HEADER_INVALID)
-
-  lazy val InvalidContentTypeHeaderFileUploadRequest: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request
-    .withHeaders(ACCEPT_HMRC_XML_V2_HEADER, RequestHeaders.CONTENT_TYPE_HEADER_INVALID)
+    .withXmlBody(validFileUploadXml())
 
   lazy val ValidGoogleAnalyticsRequest = FakeRequest()
     .withHeaders(RequestHeaders.ValidGoogleAnalyticsHeaders.toSeq: _*)
     .withJsonBody(ValidGoogleAnalyticsJson)
+
+  lazy val InvalidFileUploadRequest = FakeRequest()
+    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withXmlBody(InvalidFileUploadXml)
 
   lazy val ValidGoogleAnalyticsRequestAsJsValue: Request[JsValue] = ValidGoogleAnalyticsRequest.copyFakeRequest[JsValue](body = ValidGoogleAnalyticsRequest.body.json)
 

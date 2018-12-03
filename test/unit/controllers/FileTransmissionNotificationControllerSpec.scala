@@ -27,7 +27,7 @@ import play.api.test._
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers._
 import uk.gov.hmrc.customs.declaration.model.FileTransmissionNotification
-import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationService, FileTransmissionCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.services.{FileUploadNotificationService, FileTransmissionCallbackToXmlNotification}
 import util.ApiSubscriptionFieldsTestData.{subscriptionFieldsId, subscriptionFieldsIdString}
 import util.FileTransmissionTestData._
 import util.MockitoPassByNameHelper.PassByNameVerifier
@@ -42,7 +42,7 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
 
   trait SetUp {
 
-    val mockService = mock[BatchFileUploadNotificationService]
+    val mockService = mock[FileUploadNotificationService]
     implicit val callbackToXmlNotification = mock[FileTransmissionCallbackToXmlNotification]
 
     val controller = new FileTransmissionNotificationController(callbackToXmlNotification, mockService, mockCdsLogger)

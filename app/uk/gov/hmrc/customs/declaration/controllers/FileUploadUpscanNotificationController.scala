@@ -32,11 +32,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-class BatchFileUploadUpscanNotificationController @Inject()(notificationService: BatchFileUploadNotificationService,
-                                                            toXmlNotification: UpscanNotificationCallbackToXmlNotification,
-                                                            errorToXmlNotification: InternalErrorXmlNotification,
-                                                            businessService: BatchFileUploadUpscanNotificationBusinessService,
-                                                            cdsLogger: CdsLogger) extends BaseController {
+class FileUploadUpscanNotificationController @Inject()(notificationService: FileUploadNotificationService,
+                                                       toXmlNotification: UpscanNotificationCallbackToXmlNotification,
+                                                       errorToXmlNotification: InternalErrorXmlNotification,
+                                                       businessService: FileUploadUpscanNotificationBusinessService,
+                                                       cdsLogger: CdsLogger) extends BaseController {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async { implicit request =>
 

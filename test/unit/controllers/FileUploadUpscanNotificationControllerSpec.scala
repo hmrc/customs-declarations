@@ -29,31 +29,33 @@ import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, _}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.controllers.BatchFileUploadUpscanNotificationController
+import uk.gov.hmrc.customs.declaration.controllers.FileUploadUpscanNotificationController
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationService, BatchFileUploadUpscanNotificationBusinessService, InternalErrorXmlNotification, UpscanNotificationCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.services.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, InternalErrorXmlNotification, UpscanNotificationCallbackToXmlNotification}
 import util.ApiSubscriptionFieldsTestData
 import util.TestData._
 import util.UpscanNotifyTestData._
 import ApiSubscriptionFieldsTestData.subscriptionFieldsId
+import uk.gov.hmrc.customs.api.common.config.ServicesConfig
+import unit.logging.StubCdsLogger
 
 import scala.concurrent.Future
 
-class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {
+class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {
 
   trait SetUp {
-    val mockNotificationService = mock[BatchFileUploadNotificationService]
+    val mockNotificationService = mock[FileUploadNotificationService]
     val mockToXmlNotification = mock[UpscanNotificationCallbackToXmlNotification]
     val mockErrorToXmlNotification = mock[InternalErrorXmlNotification]
-    val mockBusinessService = mock[BatchFileUploadUpscanNotificationBusinessService]
+    val mockBusinessService = mock[FileUploadUpscanNotificationBusinessService]
     val mockCdsLogger = mock[CdsLogger]
-    val controller = new BatchFileUploadUpscanNotificationController(
+    val controller = new FileUploadUpscanNotificationController(
       mockNotificationService,
       mockToXmlNotification,
       mockErrorToXmlNotification,
       mockBusinessService,
-      mockCdsLogger)
+      new StubCdsLogger(mock[ServicesConfig]))
     val post: Action[AnyContent] = controller.post(subscriptionFieldsId.toString)
     val postWithInvalidCsid: Action[AnyContent] = controller.post("invalid-csid")
 

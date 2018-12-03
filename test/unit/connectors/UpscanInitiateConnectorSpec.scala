@@ -16,29 +16,22 @@
 
 package unit.connectors
 
-import java.util.UUID
-
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
-import play.api.libs.json.{Json, Writes}
-import play.api.test.FakeRequest
+import play.api.libs.json.Writes
 import uk.gov.hmrc.customs.declaration.connectors.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
-import util.CustomsDeclarationsMetricsTestData.EventStart
-import util.TestData
-import util.TestData.batchFileUploadConfig
+import util.TestData.{EmulatedServiceFailure, ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles, fileUploadConfig, emulatedServiceFailure}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.NodeSeq
 
 class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
 
@@ -52,21 +45,12 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
   private val upscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com")
-  private implicit val jsonRequest = ValidatedUploadPayloadRequest(
-    ConversationId(UUID.randomUUID()),
-    GoogleAnalyticsValues.Fileupload,
-    EventStart,
-    VersionTwo,
-    ClientId("ABC"),
-    NonCsp(Eori("123"), None),
-    NodeSeq.Empty,
-    FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    DeclarationId("declarationId"),
-    DocumentationType("documentationType")
-  )
+
+  implicit val jsonRequest = ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles
+
   override protected def beforeEach() {
     reset(mockWsPost, mockLogger)
-    when(mockDeclarationsConfigService.batchFileUploadConfig).thenReturn(batchFileUploadConfig)
+    when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig)
   }
 
   "UpscanInitiateConnector" can {
@@ -78,7 +62,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
         awaitRequest
 
-        verify(mockWsPost).POST(ameq(batchFileUploadConfig.upscanInitiateUrl), any[UpscanInitiatePayload], any[SeqOfHeader])(
+        verify(mockWsPost).POST(ameq("upscan-initiate.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
           any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
@@ -94,12 +78,12 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
     "when making an failing request" should {
       "propagate an underlying error when MDG call fails with a non-http exception" in {
-        returnResponseForRequest(Future.failed(TestData.emulatedServiceFailure))
+        returnResponseForRequest(Future.failed(emulatedServiceFailure))
 
-        val caught = intercept[TestData.EmulatedServiceFailure] {
+        val caught = intercept[EmulatedServiceFailure] {
           awaitRequest
         }
-        caught shouldBe TestData.emulatedServiceFailure
+        caught shouldBe emulatedServiceFailure
       }
 
       "wrap an underlying error when MDG call fails with an http exception" in {

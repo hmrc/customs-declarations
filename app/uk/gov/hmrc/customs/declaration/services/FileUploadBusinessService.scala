@@ -22,12 +22,12 @@ import javax.inject.{Inject, Singleton}
 
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, BatchUpscanInitiateConnector}
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, UpscanInitiateConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedBatchFileUploadPayloadRequest
-import uk.gov.hmrc.customs.declaration.repo.BatchFileUploadMetadataRepo
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
+import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -37,16 +37,16 @@ import scala.util.control.NonFatal
 import scala.xml.{NodeSeq, Text}
 
 @Singleton
-class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: BatchUpscanInitiateConnector,
-                                               batchFileUploadMetadataRepo: BatchFileUploadMetadataRepo,
-                                               uuidService: UuidService,
-                                               logger: DeclarationsLogger,
-                                               apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                               config: DeclarationsConfigService) {
+class FileUploadBusinessService @Inject()(batchUpscanInitiateConnector: UpscanInitiateConnector,
+                                          batchFileUploadMetadataRepo: FileUploadMetadataRepo,
+                                          uuidService: UuidService,
+                                          logger: DeclarationsLogger,
+                                          apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
+                                          config: DeclarationsConfigService) {
 
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
-  def send[A](implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
+  def send[A](implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
               hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
 
     futureApiSubFieldsId(validatedRequest.clientId).flatMap {
@@ -70,7 +70,7 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
   }
 
   private def futureApiSubFieldsId[A](c: ClientId)
-                                     (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
+                                     (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
                                       hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, validatedRequest.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
@@ -83,25 +83,25 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
   }
 
   private def batchBackendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
-                            (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A],
+                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
                              hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
 
-    val upscanInitiateRequests = validatedRequest.batchFileUploadRequest.files.map { _ =>
+    val upscanInitiateRequests = validatedRequest.fileUploadRequest.files.map { _ =>
       subscriptionFieldsId
     }
     failFastSequence(upscanInitiateRequests)(i => backendCall(i))
   }
 
   private def persist[A](fileDetails: Seq[UpscanInitiateResponsePayload], sfId: SubscriptionFieldsId)
-                        (implicit request: ValidatedBatchFileUploadPayloadRequest[A]): Future[Boolean] = {
+                        (implicit request: ValidatedFileUploadPayloadRequest[A]): Future[Boolean] = {
     //TODO ensure/check that ordering of uploadProperties matches batchFiles
     val batchFiles = fileDetails.zipWithIndex.map { case (fileDetail, index) =>
       BatchFile(FileReference(UUID.fromString(fileDetail.reference)), None, new URL(fileDetail.uploadRequest.href),
-        request.batchFileUploadRequest.files(index).fileSequenceNo, 1, request.batchFileUploadRequest.files(index).maybeDocumentType)
+        request.fileUploadRequest.files(index).fileSequenceNo, 1, request.fileUploadRequest.files(index).maybeDocumentType)
     }
 
-    val metadata = BatchFileUploadMetadata(request.batchFileUploadRequest.declarationId, extractEori(request.authorisedAs), sfId,
-      BatchId(uuidService.uuid()), request.batchFileUploadRequest.fileGroupSize.value, batchFiles)
+    val metadata = FileUploadMetadata(request.fileUploadRequest.declarationId, extractEori(request.authorisedAs), sfId,
+      BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, batchFiles)
 
     batchFileUploadMetadataRepo.create(metadata)
   }
@@ -137,7 +137,7 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
     }
 
   private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId)
-                              (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
+                              (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
     batchUpscanInitiateConnector.send(
       preparePayload(subscriptionFieldsId), validatedRequest.requestedApiVersion)
   }
@@ -145,16 +145,16 @@ class BatchFileUploadBusinessService @Inject()(batchUpscanInitiateConnector: Bat
   private def extractEori(authorisedAs: AuthorisedAs): Eori = {
     authorisedAs match {
       case nonCsp: NonCsp => nonCsp.eori
-      case batchFileUploadCsp: BatchFileUploadCsp => batchFileUploadCsp.eori
+      case batchFileUploadCsp: FileUploadCsp => batchFileUploadCsp.eori
       case _: Csp => throw new IllegalStateException("CSP route must be via BatchFileUploadCsp")
     }
   }
 
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId)
-                               (implicit validatedRequest: ValidatedBatchFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
+                               (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
 
     val upscanInitiatePayload = UpscanInitiatePayload(
-      s"""${config.batchFileUploadConfig.batchFileUploadCallbackUrl}/uploaded-batch-file-upscan-notifications/clientSubscriptionId/${subscriptionFieldsId.value}""".stripMargin)
+      s"""${config.fileUploadConfig.fileUploadCallbackUrl}/uploaded-file-upscan-notifications/clientSubscriptionId/${subscriptionFieldsId.value}""".stripMargin)
     logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
     upscanInitiatePayload
   }

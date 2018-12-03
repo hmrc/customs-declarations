@@ -36,7 +36,7 @@ case class GoogleAnalyticsConfig(enabled: Boolean,
 
 case class BatchFileUploadConfig(upscanInitiateUrl: String,
                                  upscanCallbackUrl: String,
-                                 batchFileUploadCallbackUrl: String,
+                                 fileUploadCallbackUrl: String,
                                  fileGroupSizeMaximum: Int,
                                  fileTransmissionCallbackUrl: String,
                                  fileTransmissionBaseUrl: String)

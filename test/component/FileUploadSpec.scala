@@ -30,7 +30,7 @@ import util.{AuditService, TestData}
 
 import scala.concurrent.Future
 
-class BatchFileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
+class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
   with OptionValues
   with BeforeAndAfterAll
@@ -41,7 +41,7 @@ class BatchFileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
   with AuditService
   with GoogleAnalyticsService {
 
-  private val endpoint = "/batch-file-upload"
+  private val endpoint = "/file-upload"
 
   private val apiSubscriptionKeyForXClientIdV1 =
     ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
@@ -77,9 +77,9 @@ class BatchFileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     }
   }
 
-  feature("Unauthorized batch file upload API submissions are processed correctly") {
+  feature("Unauthorized file upload API submissions are processed correctly") {
 
-    scenario("An unauthorised CSP is not allowed to submit a batch file upload request with v2.0 accept header") {
+    scenario("An unauthorised CSP is not allowed to submit a file upload request with v2.0 accept header") {
       Given("A CSP wants to submit a valid file upload")
       val request: FakeRequest[AnyContentAsXml] = ValidBatchFileUploadV2Request.fromCsp.postTo(endpoint)
 
@@ -100,7 +100,7 @@ class BatchFileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       eventually(verifyAuthServiceCalledForCsp())
     }
 
-    scenario("An unauthorised CSP is not allowed to submit a batch file upload request with v3.0 accept header") {
+    scenario("An unauthorised CSP is not allowed to submit a file upload request with v3.0 accept header") {
       Given("A CSP wants to submit a valid file upload")
       val request: FakeRequest[AnyContentAsXml] = ValidBatchFileUploadV3Request.fromCsp.postTo(endpoint)
 

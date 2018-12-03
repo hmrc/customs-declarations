@@ -110,12 +110,7 @@ object GoogleAnalyticsValues {
     override val failure: String = "declarationCancellationFailure"
   }
 
-  val Fileupload = new GoogleAnalyticsValues {
-    override val success: String = "declarationFileUploadSuccess"
-    override val failure: String = "declarationFileUploadFailure"
-  }
-
-  val BatchFileUpload = new GoogleAnalyticsValues {
+  val FileUpload = new GoogleAnalyticsValues {
     override val success: String = "declarationFileUploadSuccess"
     override val failure: String = "declarationFileUploadFailure"
   }
@@ -220,7 +215,7 @@ sealed trait AuthorisedAsCsp extends AuthorisedAs {
   val retrievalData: Option[NrsRetrievalData]
 }
 case class Csp(badgeIdentifier: BadgeIdentifier, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
-case class BatchFileUploadCsp(badgeIdentifier: BadgeIdentifier, eori: Eori, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
+case class FileUploadCsp(badgeIdentifier: BadgeIdentifier, eori: Eori, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
 case class NonCsp(eori: Eori, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAs
 
 case class UpscanInitiatePayload(callbackUrl: String)

@@ -226,8 +226,6 @@ object UpscanInitiatePayload {
 
 case class AuthorisedRetrievalData(retrievalJSONBody: String)
 
-case class FileUploadPayload(declarationID: String, documentationType: String)
-
 case class UpscanInitiateResponsePayload(reference: String, uploadRequest: UpscanInitiateUploadRequest)
 
 object UpscanInitiateUploadRequest {
@@ -239,29 +237,6 @@ case class UpscanInitiateUploadRequest
   href: String,
   fields: Map[String, String]
 )
-{
-  def addChild(n: NodeSeq, newChild: NodeSeq): NodeSeq = n match {
-    case Elem(prefix, label, attribs, scope, child @ _*) =>
-      Elem(prefix, label, attribs, scope, true, child ++ newChild : _*)
-    case _ => sys.error("Can only add children to elements!")
-  }
-
-  def toXml: NodeSeq = {
-    var xmlFields: NodeSeq = <fields></fields>
-
-    fields.foreach { f =>
-      val tag = f._1
-      val content = f._2
-      xmlFields = addChild(xmlFields, <a/>.copy(label = tag, child = scala.xml.Text(content)))
-    }
-    <fileUpload>
-      <href>
-        {href}
-      </href>
-      {xmlFields}
-    </fileUpload>
-  }
-}
 
 object UpscanInitiateResponsePayload {
   implicit val format: OFormat[UpscanInitiateResponsePayload] = Json.format[UpscanInitiateResponsePayload]

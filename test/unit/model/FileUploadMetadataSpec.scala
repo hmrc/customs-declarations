@@ -19,7 +19,7 @@ package unit.model
 import play.api.libs.json.{JsSuccess, Json}
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestData.BatchFileMetadataWithFileOne
+import util.TestData.FileMetadataWithFileOne
 
 class FileUploadMetadataSpec extends UnitSpec {
   private val jsonString = """{
@@ -50,7 +50,7 @@ class FileUploadMetadataSpec extends UnitSpec {
   "FileUploadMetaData model" should {
     "serialise to Json" in {
 
-      val actualJson = Json.toJson(BatchFileMetadataWithFileOne)
+      val actualJson = Json.toJson(FileMetadataWithFileOne)
 
       actualJson shouldBe json
     }
@@ -59,7 +59,7 @@ class FileUploadMetadataSpec extends UnitSpec {
 
       val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[FileUploadMetadata]
 
-      actualMetaData shouldBe BatchFileMetadataWithFileOne
+      actualMetaData shouldBe FileMetadataWithFileOne
     }
   }
 

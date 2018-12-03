@@ -70,7 +70,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
   feature("File Transmission Notification") {
     scenario("Success request has been made to the Declaration API") {
       startFileTransmissionService()
-      await(repo.create(BatchFileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
+      await(repo.create(FileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
 
       Given("the Upscan Initiate service has been sent a valid request with this Declaration API as the callback URL")
 
@@ -102,7 +102,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
 
     scenario("Failure request has been made to the Declaration API") {
       notificationServiceIsRunning()
-      await(repo.create(BatchFileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
+      await(repo.create(FileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
 
       Given("the Upscan Initiate service has been sent a valid request with this Declaration API as the callback URL")
 
@@ -140,7 +140,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
 
     scenario("Success request has been made to the Declaration API but metadata record does not exist in the database") {
       notificationServiceIsRunning()
-      await(repo.create(BatchFileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
+      await(repo.create(FileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
 
       Given("the Upscan Initiate service has been sent a valid request with this Declaration API as the callback URL")
 

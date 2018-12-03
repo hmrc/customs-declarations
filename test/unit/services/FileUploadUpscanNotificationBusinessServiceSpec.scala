@@ -105,7 +105,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     }
 
     "return failed future when file reference not found in returned metadata" in new SetUp {
-      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFileTwo)))
+      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFileTwo)))
 
       val error = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 

@@ -37,7 +37,7 @@ import scala.util.control.NonFatal
 import scala.xml.{NodeSeq, Text}
 
 @Singleton
-class FileUploadBusinessService @Inject()(batchUpscanInitiateConnector: UpscanInitiateConnector,
+class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiateConnector,
                                           fileUploadMetadataRepo: FileUploadMetadataRepo,
                                           uuidService: UuidService,
                                           logger: DeclarationsLogger,
@@ -138,7 +138,7 @@ class FileUploadBusinessService @Inject()(batchUpscanInitiateConnector: UpscanIn
 
   private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId)
                               (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
-    batchUpscanInitiateConnector.send(
+    upscanInitiateConnector.send(
       preparePayload(subscriptionFieldsId), validatedRequest.requestedApiVersion)
   }
 

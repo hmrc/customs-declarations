@@ -9,9 +9,6 @@ POST        /file-upload                  @uk.gov.hmrc.customs.declaration.contr
 
 GET         /admin/metrics                @com.kenshoo.play.metrics.MetricsController.metrics
 
-# this is a deprecated endpoint and will be replaced by /uploaded-batch-file-upscan-notifications
-#POST        /uploaded-file-upscan-notifications/decId/:decId/eori/:eori/documentationType/:docType/clientSubscriptionId/:clientSubscriptionId @uk.gov.hmrc.customs.declaration.controllers.UpscanNotificationController.post(decId,eori,docType,clientSubscriptionId)
-
 POST        /uploaded-file-upscan-notifications/clientSubscriptionId/:clientSubscriptionId     @uk.gov.hmrc.customs.declaration.controllers.FileUploadUpscanNotificationController.post(clientSubscriptionId)
 
 POST        /file-transmission-notify/clientSubscriptionId/:clientSubscriptionId     @uk.gov.hmrc.customs.declaration.controllers.FileTransmissionNotificationController.post(clientSubscriptionId)

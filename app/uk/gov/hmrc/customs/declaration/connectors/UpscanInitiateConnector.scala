@@ -32,11 +32,11 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
                                         logger: DeclarationsLogger,
                                         config: DeclarationsConfigService) {
 
-  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vbfupr: ValidatedFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
+  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
     post(payload, config.fileUploadConfig.upscanInitiateUrl)
   }
 
-  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vbfupr: ValidatedFileUploadPayloadRequest[A]) = {
+  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]) = {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 

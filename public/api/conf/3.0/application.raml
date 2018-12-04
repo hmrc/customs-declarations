@@ -35,7 +35,7 @@ documentation:
           example: application/vnd.hmrc.3.0+xml
         Content-Type:
           description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/2.0/wco-declaration-schemas.zip).
+           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
           type: string
           required: true
           example: application/xml; charset=UTF-8
@@ -94,7 +94,7 @@ documentation:
             example: application/vnd.hmrc.3.0+xml
           Content-Type:
             description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-             Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/2.0/wco-declaration-schemas.zip).
+             Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
             type: string
             required: true
             example: application/xml; charset=UTF-8
@@ -144,16 +144,16 @@ documentation:
   /file-upload:
       post:
         displayName: Submit an upload initiate request
-        description: Obtain a signed URL to upload a file to
+        description: Obtain a signed URL to upload files to
         headers:
           Accept:
             description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
             type: string
             required: true
-            example: application/vnd.hmrc.1.0+xml
+            example: application/vnd.hmrc.3.0+xml
           Content-Type:
             description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-             Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/1.0/wco-declaration-schemas.zip).
+             Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
             type: string
             required: true
             example: application/xml; charset=UTF-8
@@ -167,23 +167,32 @@ documentation:
         securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
         body:
           application/xml:
-            type: !include schemas/wco/declaration/FileUpload.xsd
+            type: !include schemas/wco/declaration/FileUploadRequest.xsd
             example: !include examples/example_file_upload_202.xml
         responses:
           200:
             body:
               example: |
-                 <?xml version="1.0" encoding="UTF-8"?>
-                 <fileUpload>
-                   <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
-                   <X-Amz-Algorithm>AWS4-HMAC-SHA256</X-Amz-Algorithm>
-                   <X-Amz-Expiration>2018-02-09T12:35:45.297Z</X-Amz-Expiration>
-                   <X-Amz-Signature>xxxx</X-Amz-Signature>
-                   <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-                   <acl>private</acl>
-                   <X-Amz-Credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-Credential>
-                   <policy>xxxxxxxx==</policy>
-                 </fileUpload>
+                <?xml version="1.0" encoding="UTF-8"?>
+                <FileUploadResponse>
+                  <Files>
+                    <File>
+                     <reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</reference>
+                     <uploadRequest>
+                     <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
+                      <fields>
+                         <X-Amz-Algorithm>AWS4-HMAC-SHA256</X-Amz-Algorithm>
+                         <X-Amz-Expiration>2018-02-09T12:35:45.297Z</X-Amz-Expiration>
+                         <X-Amz-Signature>xxxx</X-Amz-Signature>
+                         <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+                         <acl>private</acl>
+                         <X-Amz-Credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-Credential>
+                         <policy>xxxxxxxx==</policy>
+                       </fields>
+                     </uploadRequest>
+                    </File>
+                  </Files>
+                </FileUploadResponse>
           400:
             body:
               application/xml:
@@ -225,7 +234,7 @@ documentation:
           example: application/vnd.hmrc.3.0+xml
         Content-Type:
           description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/2.0/wco-declaration-schemas.zip).
+           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
           type: string
           required: true
           example: application/xml; charset=UTF-8
@@ -284,7 +293,7 @@ documentation:
           example: application/vnd.hmrc.3.0+xml
         Content-Type:
           description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/2.0/wco-declaration-schemas.zip).
+           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
           type: string
           required: true
           example: application/xml; charset=UTF-8
@@ -343,7 +352,7 @@ documentation:
           example: application/vnd.hmrc.3.0+xml
         Content-Type:
           description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/2.0/wco-declaration-schemas.zip).
+           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
           type: string
           required: true
           example: application/xml; charset=UTF-8

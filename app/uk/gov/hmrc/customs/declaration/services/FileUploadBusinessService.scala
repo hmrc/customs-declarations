@@ -51,7 +51,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
 
     futureApiSubFieldsId(validatedRequest.clientId).flatMap {
       case Right(sfId) =>
-        batchBackendCalls(sfId).flatMap { fileDetails =>
+        backendCalls(sfId).flatMap { fileDetails =>
           persist(fileDetails, sfId).map {
             case true =>
               val responseBodyXml = serialize(fileDetails)
@@ -82,7 +82,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
   }
 
-  private def batchBackendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
+  private def backendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
                              hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
 

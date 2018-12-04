@@ -55,7 +55,7 @@ class FileUploadController @Inject()(val common: Common,
     implicit validatedRequest: ValidatedFileUploadPayloadRequest[AnyContent] =>
       val logger = common.logger
 
-      logger.debug(s"Batch file upload initiate request received. Payload=${validatedRequest.body.toString} headers=${validatedRequest.headers.headers}")
+      logger.debug(s"File upload initiate request received. Payload=${validatedRequest.body.toString} headers=${validatedRequest.headers.headers}")
 
       fileUploadBusinessService.send map {
         case Right(res) =>

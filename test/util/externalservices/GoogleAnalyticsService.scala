@@ -18,7 +18,6 @@ package util.externalservices
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.{HeaderNames, MimeTypes}
-import play.api.libs.json.JsValue
 import util.{CustomsDeclarationsExternalServicesConfig, WireMockRunner}
 
 trait GoogleAnalyticsService extends WireMockRunner {

@@ -17,7 +17,7 @@
 package util.externalservices
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import com.github.tomakehurst.wiremock.matching.{MatchResult, UrlPattern}
+import com.github.tomakehurst.wiremock.matching.UrlPattern
 import play.api.test.Helpers._
 import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig, WireMockRunner}
 

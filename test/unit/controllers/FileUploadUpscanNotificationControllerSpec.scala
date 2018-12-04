@@ -28,17 +28,16 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, _}
+import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers.FileUploadUpscanNotificationController
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.services.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, InternalErrorXmlNotification, UpscanNotificationCallbackToXmlNotification}
-import util.ApiSubscriptionFieldsTestData
+import unit.logging.StubCdsLogger
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 import util.UpscanNotifyTestData._
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
-import uk.gov.hmrc.customs.api.common.config.ServicesConfig
-import unit.logging.StubCdsLogger
 
 import scala.concurrent.Future
 

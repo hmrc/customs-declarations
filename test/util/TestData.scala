@@ -41,9 +41,9 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedFileUploadPayloadRequest, _}
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 import unit.logging.StubDeclarationsLogger
-import util.TestData.declarantEori
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.CustomsDeclarationsMetricsTestData.EventStart
+import util.TestData.declarantEori
 
 import scala.xml.{Elem, NodeSeq}
 

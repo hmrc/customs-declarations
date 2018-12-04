@@ -25,11 +25,11 @@ import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import uk.gov.hmrc.customs.declaration.connectors.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.services.FileUploadCustomsNotification
 import uk.gov.hmrc.http._
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.ExternalServicesConfig.{Host, Port}
 import util.TestData._
 import util.externalservices.CustomsNotificationService
-import util.{ApiSubscriptionFieldsTestData, CustomsDeclarationsExternalServicesConfig, TestData}
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
+import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with CustomsNotificationService {

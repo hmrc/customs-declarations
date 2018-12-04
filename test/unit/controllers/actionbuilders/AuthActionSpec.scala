@@ -33,7 +33,7 @@ import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, Declaration
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData._
 import util.TestData._
-import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, CustomsDeclarationsMetricsTestData, RequestHeaders}
+import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
 
 class AuthActionSpec extends UnitSpec with MockitoSugar {
 

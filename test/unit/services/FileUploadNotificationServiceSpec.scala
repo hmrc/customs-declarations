@@ -17,7 +17,7 @@
 package unit.services
 
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.{any, eq => ameq}
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.Assertion
 import org.scalatest.mockito.MockitoSugar
@@ -28,9 +28,8 @@ import uk.gov.hmrc.customs.declaration.model.{BatchId, FileReference}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.services.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
-import util.ApiSubscriptionFieldsTestData
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal

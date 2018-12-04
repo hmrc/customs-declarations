@@ -28,11 +28,11 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
-import uk.gov.hmrc.customs.declaration.services.{FileUploadUpscanNotificationBusinessService, DeclarationsConfigService}
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadUpscanNotificationBusinessService}
 import uk.gov.hmrc.play.test.UnitSpec
-import util.ApiSubscriptionFieldsTestData
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
+
 import scala.concurrent.Future
 
 class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with MockitoSugar {

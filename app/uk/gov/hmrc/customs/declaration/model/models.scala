@@ -23,8 +23,6 @@ import play.api.libs.json._
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
 
-import scala.xml.{Elem, NodeSeq}
-
 case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 
 case class Eori(value: String) extends AnyVal {

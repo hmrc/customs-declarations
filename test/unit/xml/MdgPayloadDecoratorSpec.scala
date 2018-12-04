@@ -20,9 +20,8 @@ import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
-import util.ApiSubscriptionFieldsTestData
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 import scala.xml.NodeSeq
 

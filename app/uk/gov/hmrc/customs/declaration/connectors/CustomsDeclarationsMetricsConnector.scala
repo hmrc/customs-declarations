@@ -17,10 +17,11 @@
 package uk.gov.hmrc.customs.declaration.connectors
 
 import javax.inject.{Inject, Singleton}
-import play.mvc.Http.HeaderNames.{ACCEPT, CONTENT_TYPE, USER_AGENT}
+
+import play.mvc.Http.HeaderNames.{ACCEPT, CONTENT_TYPE}
 import play.mvc.Http.MimeTypes.JSON
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.model.{CustomsDeclarationsMetricsRequest, FileTransmission}
+import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient

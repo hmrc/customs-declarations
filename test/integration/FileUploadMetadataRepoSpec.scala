@@ -31,13 +31,12 @@ import uk.gov.hmrc.customs.declaration.repo.{FileUploadMetadataMongoRepo, FileUp
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.MongoSpecSupport
 import uk.gov.hmrc.play.test.UnitSpec
-import util.ApiSubscriptionFieldsTestData
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.{FileMetadataWithFileOne, _}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.postfixOps
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 class FileUploadMetadataRepoSpec extends UnitSpec
   with BeforeAndAfterAll

@@ -27,12 +27,12 @@ import uk.gov.hmrc.http._
 import util.CustomsDeclarationsMetricsTestData._
 import util.ExternalServicesConfig.{Host, Port}
 import util.TestData.TestModule
-import util.externalservices.CustomsDeclarationsMetricsService
+import util.externalservices.{AuditService, CustomsDeclarationsMetricsService}
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 
 class CustomsDeclarationsMetricsConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
-with BeforeAndAfterAll with CustomsDeclarationsMetricsService {
+with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService {
 
   private lazy val connector = app.injector.instanceOf[CustomsDeclarationsMetricsConnector]
 
@@ -46,6 +46,7 @@ with BeforeAndAfterAll with CustomsDeclarationsMetricsService {
 
   override protected def beforeEach() {
     resetMockServer()
+    setupAuditServiceToReturn()
   }
 
   override protected def afterAll() {
@@ -56,7 +57,7 @@ with BeforeAndAfterAll with CustomsDeclarationsMetricsService {
     GuiceApplicationBuilder(overrides = Seq(TestModule.asGuiceableModule)).configure(Map(
       "auditing.consumer.baseUri.host" -> Host,
       "auditing.consumer.baseUri.port" -> Port,
-      "auditing.enabled" -> false,
+      "auditing.enabled" -> true,
       "microservice.services.customs-declarations-metrics.host" -> Host,
       "microservice.services.customs-declarations-metrics.port" -> Port,
       "microservice.services.customs-declarations-metrics.context" -> CustomsDeclarationsExternalServicesConfig.CustomsDeclarationsMetricsContext
@@ -67,29 +68,32 @@ with BeforeAndAfterAll with CustomsDeclarationsMetricsService {
     "make a correct request" in {
       setupCustomsDeclarationsMetricsServiceToReturn()
 
-      val response = await(sendValidRequest())
+      val response: Unit = await(sendValidRequest())
 
       response shouldBe (())
       verifyCustomsDeclarationsMetricsServiceWasCalledWith(ValidCustomsDeclarationsMetricsRequest)
-
+      verifyAuditServiceWasNotCalled()
     }
 
     "return a failed future when external service returns 404" in {
       setupCustomsDeclarationsMetricsServiceToReturn(NOT_FOUND)
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[NotFoundException]
+      verifyAuditServiceWasNotCalled()
     }
 
     "return a failed future when external service returns 400" in {
       setupCustomsDeclarationsMetricsServiceToReturn(BAD_REQUEST)
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadRequestException]
+      verifyAuditServiceWasNotCalled()
     }
 
     "return a failed future when external service returns 500" in {
       setupCustomsDeclarationsMetricsServiceToReturn(INTERNAL_SERVER_ERROR)
 
       intercept[Upstream5xxResponse](await(sendValidRequest()))
+      verifyAuditServiceWasNotCalled()
     }
 
     "return a failed future when fail to connect the external service" in {

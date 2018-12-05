@@ -19,8 +19,8 @@ package util.externalservices
 import com.github.tomakehurst.wiremock.client.WireMock.{post, _}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers._
-import util.{ApiSubscriptionFieldsTestData, TestData, WireMockRunner}
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
+import util.{TestData, WireMockRunner}
 
 import scala.collection.JavaConverters._
 

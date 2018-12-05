@@ -17,45 +17,135 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
+
+import play.api.http.Status
 import play.api.mvc.{ActionRefiner, Result}
 import play.mvc.Http.Status.FORBIDDEN
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ForbiddenCode
+import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, HttpStatusCodeShortDescriptions, ResponseContents}
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedUploadPayloadRequest}
-import uk.gov.hmrc.customs.declaration.services.FileUploadXmlValidationService
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.{FileGroupSize, _}
+import uk.gov.hmrc.customs.declaration.services.{FileUploadXmlValidationService, DeclarationsConfigService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class FileUploadPayloadValidationAction @Inject() (fileUploadXmlValidationService: FileUploadXmlValidationService,
-                                                   logger: DeclarationsLogger, googleAnalyticsConnector: GoogleAnalyticsConnector)
-  extends PayloadValidationAction(fileUploadXmlValidationService, logger, Some(googleAnalyticsConnector))
+class FileUploadPayloadValidationAction @Inject()(fileUploadXmlValidationService: FileUploadXmlValidationService,
+                                                  logger: DeclarationsLogger,
+                                                  googleAnalyticsConnector: GoogleAnalyticsConnector)
+    extends PayloadValidationAction(fileUploadXmlValidationService, logger, Some(googleAnalyticsConnector))
 
-@Singleton
 class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction,
-                                                          val logger: DeclarationsLogger)
-  extends ActionRefiner[AuthorisedRequest, ValidatedUploadPayloadRequest] {
+                                                          val logger: DeclarationsLogger,
+                                                          val declarationsConfigService: DeclarationsConfigService)
+  extends ActionRefiner[AuthorisedRequest, ValidatedFileUploadPayloadRequest] with HttpStatusCodeShortDescriptions {
 
-  private val declarationIdPropertyName = "declarationID"
-  private val documentationTypePropertyName = "documentationType"
+  private val declarationIdLabel = "DeclarationID"
+  private val documentTypeLabel = "DocumentType"
+  private val fileGroupSizeLabel = "FileGroupSize"
+  private val fileSequenceNoLabel = "FileSequenceNo"
+  private val filesLabel = "Files"
+  private val fileLabel = "File"
 
-  override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedUploadPayloadRequest[A]]] = {
+  private val errorMaxFileGroupSizeMsg = s"$fileGroupSizeLabel exceeds ${declarationsConfigService.fileUploadConfig.fileGroupSizeMaximum} limit"
+  private val errorFileGroupSizeMsg = s"$fileGroupSizeLabel does not match number of $fileLabel elements"
+  private val errorMaxFileSequenceNoMsg = s"$fileSequenceNoLabel must not be greater than $fileGroupSizeLabel"
+  private val errorDuplicateFileSequenceNoMsg = s"$fileSequenceNoLabel contains duplicates"
+  private val errorFileSequenceNoLessThanOneMsg = s"$fileSequenceNoLabel must start from 1"
+
+  private val errorMaxFileGroupSize = ResponseContents(BadRequestCode, errorMaxFileGroupSizeMsg)
+  private val errorFileGroupSize = ResponseContents(BadRequestCode, errorFileGroupSizeMsg)
+  private val errorMaxFileSequenceNo = ResponseContents(BadRequestCode, errorMaxFileSequenceNoMsg)
+  private val errorDuplicateFileSequenceNo = ResponseContents(BadRequestCode, errorDuplicateFileSequenceNoMsg)
+  private val errorFileSequenceNoLessThanOne = ResponseContents(BadRequestCode, errorFileSequenceNoLessThanOneMsg)
+
+  override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedFileUploadPayloadRequest[A]]] = {
     implicit val implicitAr: AuthorisedRequest[A] = ar
     ar.authorisedAs match {
-      case NonCsp(_, _) =>
+      case FileUploadCsp(_, _, _) | NonCsp(_, _) =>
         fileUploadPayloadValidationAction.refine(ar).map {
-          case Right(validatedPayloadRequest) =>
-            Right(validatedPayloadRequest.toValidatedUploadPayloadRequest(
-              DeclarationId((validatedPayloadRequest.xmlBody \ declarationIdPropertyName).text),
-              DocumentationType((validatedPayloadRequest.xmlBody \ documentationTypePropertyName).text)))
-          case Left(b) => Left(b)
+          case Right(validatedFilePayloadRequest) =>
+
+            implicit val implicitVpr: ValidatedPayloadRequest[A] = validatedFilePayloadRequest
+            val xml = validatedFilePayloadRequest.xmlBody
+
+            val declarationId = DeclarationId((xml \ declarationIdLabel).text)
+            val fileGroupSize = FileGroupSize((xml \ fileGroupSizeLabel).text.trim.toInt)
+
+            val files: Seq[FileUploadFile] = (xml \ filesLabel \ "_").theSeq.collect {
+              case file =>
+                val fileSequenceNumber = FileSequenceNo((file \ fileSequenceNoLabel).text.trim.toInt)
+                val maybeDocumentTypeText = (file \ documentTypeLabel).text
+                val documentType = if (maybeDocumentTypeText.isEmpty) None else Some(DocumentType(maybeDocumentTypeText))
+                FileUploadFile(fileSequenceNumber, documentType)
+              }
+
+            val fileUpload = FileUploadRequest(declarationId, fileGroupSize, files.sortWith(_.fileSequenceNo.value < _.fileSequenceNo.value))
+
+            additionalValidation(fileUpload) match {
+              case Right(_) =>
+                Right(validatedFilePayloadRequest.toValidatedFileUploadPayloadRequest(fileUpload))
+              case Left(errorResponse) =>
+                Left(errorResponse.XmlResult)
+            }
+          case Left(result) => Left(result)
         }
       case _ => Future.successful(Left(ErrorResponse(FORBIDDEN, ForbiddenCode, "Not an authorized service").XmlResult.withConversationId))
     }
+  }
+
+
+  private def additionalValidation[A](fileUpload: FileUploadRequest)(implicit vpr: ValidatedPayloadRequest[A]): Either[ErrorResponse, Unit] = {
+
+    def maxFileGroupSize = validate(
+      fileUpload,
+      { b: FileUploadRequest =>
+        b.fileGroupSize.value <= declarationsConfigService.fileUploadConfig.fileGroupSizeMaximum},
+      errorMaxFileGroupSize)
+
+    def maxFileSequenceNo = validate(
+      fileUpload,
+      { b: FileUploadRequest =>
+        b.fileGroupSize.value >= b.files.last.fileSequenceNo.value },
+      errorMaxFileSequenceNo)
+
+    def fileGroupSize = validate(
+      fileUpload,
+      { b: FileUploadRequest =>
+        b.fileGroupSize.value == b.files.length },
+      errorFileGroupSize)
+
+    def duplicateFileSequenceNo = validate(
+      fileUpload,
+      { b: FileUploadRequest =>
+        b.files.distinct.length == b.files.length },
+      errorDuplicateFileSequenceNo)
+
+    def fileSequenceNoLessThanOne = validate(
+      fileUpload,
+      { b: FileUploadRequest =>
+        b.files.head.fileSequenceNo.value == 1},
+      errorFileSequenceNoLessThanOne)
+
+    maxFileGroupSize ++ maxFileSequenceNo ++ fileGroupSize ++ duplicateFileSequenceNo ++ fileSequenceNoLessThanOne match {
+      case Seq() => Right(())
+      case errors =>
+        Left(new ErrorResponse(Status.BAD_REQUEST, BadRequestCode, "Payload did not pass validation", errors: _*))
+    }
+  }
+
+  private def validate[A](fileUploadRequest: FileUploadRequest,
+                          rule: FileUploadRequest => Boolean,
+                          responseContents: ResponseContents)(implicit vpr: ValidatedPayloadRequest[A]): Seq[ResponseContents] = {
+
+    def leftWithLogContainingValue(fileUploadRequest: FileUploadRequest, responseContents: ResponseContents) = {
+      logger.error(responseContents.message)
+      Seq(responseContents)
+    }
+
+    if (rule(fileUploadRequest)) Seq() else leftWithLogContainingValue(fileUploadRequest, responseContents)
   }
 }

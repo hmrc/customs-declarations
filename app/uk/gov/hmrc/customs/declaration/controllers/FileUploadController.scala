@@ -16,28 +16,25 @@
 
 package uk.gov.hmrc.customs.declaration.controllers
 
-import java.util.UUID
-
 import javax.inject.{Inject, Singleton}
+
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
-import uk.gov.hmrc.customs.declaration.model.ConversationId
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{FileUploadAnalyticsValuesAction, FileUploadAuthAction, FileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedUploadPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class FileUploadController @Inject()(
-                                      val common: Common,
-                                      val fileUploadBusinessService: FileUploadBusinessService,
-                                      val fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction,
-                                      val fileUploadAnalyticsValuesAction: FileUploadAnalyticsValuesAction,
-                                      val googleAnalyticsConnector: GoogleAnalyticsConnector
-                                    )
+class FileUploadController @Inject()(val common: Common,
+                                     val fileUploadBusinessService: FileUploadBusinessService,
+                                     val fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction,
+                                     val fileUploadAnalyticsValuesAction: FileUploadAnalyticsValuesAction,
+                                     val fileUploadAuthAction: FileUploadAuthAction,
+                                     val googleAnalyticsConnector: GoogleAnalyticsConnector)
   extends BaseController {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {
@@ -51,28 +48,22 @@ class FileUploadController @Inject()(
     Action andThen
       fileUploadAnalyticsValuesAction andThen
       common.validateAndExtractHeadersAction andThen
-      common.authAction andThen
+      fileUploadAuthAction andThen
       fileUploadPayloadValidationComposedAction
-    )
-    .async(bodyParser = xmlOrEmptyBody) {
+    ).async(bodyParser = xmlOrEmptyBody) {
 
-      implicit vupr: ValidatedUploadPayloadRequest[AnyContent] =>
-        val logger = common.logger
+    implicit validatedRequest: ValidatedFileUploadPayloadRequest[AnyContent] =>
+      val logger = common.logger
 
-        logger.debug(s"Request received. Payload = ${vupr.body.toString} headers = ${vupr.headers.headers}")
+      logger.debug(s"File upload initiate request received. Payload=${validatedRequest.body.toString} headers=${validatedRequest.headers.headers}")
 
-        fileUploadBusinessService.send map {
-          case Right(res) =>
-            val referenceConversationId = ConversationId(UUID.fromString(res.reference))
-            logger.debug(s"Replacing conversationId with $referenceConversationId")
-            val id = new HasConversationId {
-              override val conversationId: ConversationId = referenceConversationId
-            }
-            logger.info(s"Upload initiate request processed successfully.")(id)
-            googleAnalyticsConnector.success
-            Ok(res.uploadRequest.toXml).withConversationId(id)
-          case Left(errorResult) =>
-            errorResult
-        }
-    }
+      fileUploadBusinessService.send map {
+        case Right(res) =>
+          logger.info("Upload initiate request processed successfully")
+          googleAnalyticsConnector.success
+          Ok(res).withConversationId
+        case Left(errorResult) =>
+          errorResult
+      }
+  }
 }

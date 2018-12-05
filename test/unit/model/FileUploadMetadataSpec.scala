@@ -19,9 +19,9 @@ package unit.model
 import play.api.libs.json.{JsSuccess, Json}
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestData.BatchFileMetadataWithFileOne
+import util.TestData.FileMetadataWithFileOne
 
-class BatchFileUploadMetadataSpec extends UnitSpec {
+class FileUploadMetadataSpec extends UnitSpec {
   private val jsonString = """{
                              |  "declarationId": "1",
                              |  "eori": "123",
@@ -47,19 +47,19 @@ class BatchFileUploadMetadataSpec extends UnitSpec {
 
   private val json = Json.parse(jsonString)
 
-  "BatchFileUploadMetaData model" should {
+  "FileUploadMetaData model" should {
     "serialise to Json" in {
 
-      val actualJson = Json.toJson(BatchFileMetadataWithFileOne)
+      val actualJson = Json.toJson(FileMetadataWithFileOne)
 
       actualJson shouldBe json
     }
 
     "de-serialise from Json" in {
 
-      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[BatchFileUploadMetadata]
+      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[FileUploadMetadata]
 
-      actualMetaData shouldBe BatchFileMetadataWithFileOne
+      actualMetaData shouldBe FileMetadataWithFileOne
     }
   }
 

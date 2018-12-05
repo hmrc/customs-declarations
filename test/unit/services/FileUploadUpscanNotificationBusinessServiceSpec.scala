@@ -27,15 +27,15 @@ import uk.gov.hmrc.customs.declaration.connectors.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.repo.BatchFileUploadMetadataRepo
-import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadUpscanNotificationBusinessService, DeclarationsConfigService}
+import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadUpscanNotificationBusinessService}
 import uk.gov.hmrc.play.test.UnitSpec
-import util.ApiSubscriptionFieldsTestData
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
+
 import scala.concurrent.Future
 
-class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with MockitoSugar {
+class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
   private val downloadUrl = new URL("http://remotehost/bucket/123")
   private val initiateDate = Instant.parse("2018-04-24T09:30:00Z")
@@ -43,8 +43,8 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
   private val readyCallbackBody = UploadedReadyCallbackBody(FileReferenceOne, downloadUrl, ReadyFileStatus, uploadDetails)
   private val callbackFields = CallbackFields(uploadDetails.fileName, uploadDetails.fileMimeType, uploadDetails.checksum)
 
-  private val md = BatchFileMetadataWithFilesOneAndThree
-  private val mdFileOne = BatchFileMetadataWithFilesOneAndThree.files.head
+  private val md = FileMetadataWithFilesOneAndThree
+  private val mdFileOne = FileMetadataWithFilesOneAndThree.files.head
   private val mdFileOneCallback = mdFileOne.maybeCallbackFields.get
   private val fileTransmissionBatchOne = FileTransmissionBatch(md.batchId, md.fileCount)
   private val fileTransmissionCallbackUrl = "http://file_transmission_callback_url/clientSubscriptionId/"
@@ -62,21 +62,21 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
   private val fileGroupSizeMaximum = 5
-  private val batchFileUploadConfig = BatchFileUploadConfig("UPSCAN_INITIATE_URL", "UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionServiceURL)
+  private val fileUploadConfig = FileUploadConfig("UPSCAN_INITIATE_URL", "UPSCAN_URL_IGNORED", "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionServiceURL)
 
   trait SetUp {
-    val mockRepo = mock[BatchFileUploadMetadataRepo]
+    val mockRepo = mock[FileUploadMetadataRepo]
     val mockConnector = mock[FileTransmissionConnector]
     val mockConfig = mock[DeclarationsConfigService]
     val mockLogger = mock[DeclarationsLogger]
-    val service = new BatchFileUploadUpscanNotificationBusinessService(mockRepo, mockConnector, mockConfig, mockLogger)
+    val service = new FileUploadUpscanNotificationBusinessService(mockRepo, mockConnector, mockConfig, mockLogger)
 
-    when(mockConfig.batchFileUploadConfig).thenReturn(batchFileUploadConfig)
+    when(mockConfig.fileUploadConfig).thenReturn(fileUploadConfig)
   }
 
-  "BatchFileUploadUpscanNotificationBusinessService" should {
+  "FileUploadUpscanNotificationBusinessService" should {
     "update metadata and call file transmission service" in new SetUp {
-      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFilesOneAndThree)))
+      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
       when(mockConnector.send(any[FileTransmission])).thenReturn(Future.successful(()))
 
       val actual = await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody))
@@ -105,7 +105,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     }
 
     "return failed future when file reference not found in returned metadata" in new SetUp {
-      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFileTwo)))
+      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFileTwo)))
 
       val error = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 
@@ -133,7 +133,7 @@ class BatchFileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with
     }
 
     "propagate exception encountered in connector" in new SetUp {
-      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(BatchFileMetadataWithFilesOneAndThree)))
+      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
       when(mockConnector.send(any[FileTransmission])).thenReturn(Future.failed(emulatedServiceFailure))
 
       val error = intercept[EmulatedServiceFailure](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))

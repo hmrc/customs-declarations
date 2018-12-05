@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationService, FileTransmissionCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.services.{FileUploadNotificationService, FileTransmissionCallbackToXmlNotification}
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 class FileTransmissionNotificationController @Inject() (callbackToXmlNotification: FileTransmissionCallbackToXmlNotification,
-                                                        notificationService: BatchFileUploadNotificationService,
+                                                        notificationService: FileUploadNotificationService,
                                                         cdsLogger: CdsLogger) extends BaseController {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async {

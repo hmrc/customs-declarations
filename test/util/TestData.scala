@@ -38,12 +38,12 @@ import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedBatchFileUploadPayloadRequest, _}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedFileUploadPayloadRequest, _}
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 import unit.logging.StubDeclarationsLogger
-import util.TestData.declarantEori
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.CustomsDeclarationsMetricsTestData.EventStart
+import util.TestData.declarantEori
 
 import scala.xml.{Elem, NodeSeq}
 
@@ -76,7 +76,7 @@ object TestData {
   val nrsConfigEnabled = NrsConfig(nrsEnabled = true, "nrs-api-key", 300, "nrs.url")
   val nrsConfigDisabled = NrsConfig(nrsEnabled = false, "nrs-api-key", 300, "nrs.url")
 
-  val batchFileUploadConfig = BatchFileUploadConfig("upscan-initiate.url", "callback.url", "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl")
+  val fileUploadConfig = FileUploadConfig("upscan-initiate.url", "callback.url", "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl")
 
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
@@ -91,48 +91,48 @@ object TestData {
   val declarantEori = Eori(declarantEoriValue)
   val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
 
-  val ValidatedBatchFileUploadPayloadRequestForNonCspWithTwoFiles = ValidatedBatchFileUploadPayloadRequest(
+  val ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
-    GoogleAnalyticsValues.Fileupload,
+    GoogleAnalyticsValues.FileUpload,
     EventStart,
     VersionTwo,
     ClientId("ABC"),
     NonCsp(Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    BatchFileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
-    Seq(BatchFileUploadFile(FileSequenceNo(1), maybeDocumentType = None), BatchFileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
+    FileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
+    Seq(FileUploadFile(FileSequenceNo(1), maybeDocumentType = None), FileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
   )
 
-  val ValidatedBatchFileUploadPayloadRequestForCspWithTwoFiles = ValidatedBatchFileUploadPayloadRequest(
+  val ValidatedFileUploadPayloadRequestForCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
-    GoogleAnalyticsValues.Fileupload,
+    GoogleAnalyticsValues.FileUpload,
     EventStart,
     VersionTwo,
     ClientId("ABC"),
-    BatchFileUploadCsp(badgeIdentifier, Eori("123"), None),
+    FileUploadCsp(badgeIdentifier, Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    BatchFileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
-    Seq(BatchFileUploadFile(FileSequenceNo(1), Some(DocumentType("docType1"))), BatchFileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
+    FileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
+    Seq(FileUploadFile(FileSequenceNo(1), Some(DocumentType("docType1"))), FileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
   )
 
-  val ValidatedBatchFileUploadPayloadRequestWithFourFiles = ValidatedBatchFileUploadPayloadRequest(
+  val ValidatedFileUploadPayloadRequestWithFourFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
-    GoogleAnalyticsValues.Fileupload,
+    GoogleAnalyticsValues.FileUpload,
     EventStart,
     VersionTwo,
     ClientId("ABC"),
     NonCsp(Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    BatchFileUploadRequest(
+    FileUploadRequest(
       DeclarationId("decId123"),
       FileGroupSize(4),
-      Seq(BatchFileUploadFile(FileSequenceNo(1), maybeDocumentType = None),
-        BatchFileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2"))),
-        BatchFileUploadFile(FileSequenceNo(3), Some(DocumentType("docType3"))),
-        BatchFileUploadFile(FileSequenceNo(4), Some(DocumentType("docType4")))))
+      Seq(FileUploadFile(FileSequenceNo(1), maybeDocumentType = None),
+        FileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2"))),
+        FileUploadFile(FileSequenceNo(3), Some(DocumentType("docType3"))),
+        FileUploadFile(FileSequenceNo(4), Some(DocumentType("docType4")))))
   )
 
   val nrsInternalIdValue = "internalId"
@@ -320,16 +320,16 @@ object TestData {
   val BatchFileThree = BatchFile(reference = FileReferenceThree, Some(CallbackFieldsThree),
     location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(3), size = 1, documentType = Some(DocumentType("Document Type 3")))
   val BatchFileOneNoCallbackFields = BatchFileOne.copy(maybeCallbackFields = None)
-  val BatchFileMetadataWithFileOne = BatchFileUploadMetadata(DeclarationId("1"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 1, Seq(
+  val FileMetadataWithFileOne = FileUploadMetadata(DeclarationId("1"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 1, Seq(
     BatchFileOne
   ))
-  val BatchFileMetadataWithFileTwo = BatchFileUploadMetadata(DeclarationId("2"), Eori("123"), csId = subscriptionFieldsId, BatchIdTwo, fileCount = 1, Seq(
+  val FileMetadataWithFileTwo = FileUploadMetadata(DeclarationId("2"), Eori("123"), csId = subscriptionFieldsId, BatchIdTwo, fileCount = 1, Seq(
     BatchFileTwo
   ))
-  val BatchFileMetadataWithFilesOneAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdThree, fileCount = 2, Seq(
+  val FileMetadataWithFilesOneAndThree = FileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdThree, fileCount = 2, Seq(
     BatchFileOne, BatchFileThree
   ))
-  val BatchFileMetadataWithFileOneWithNoCallbackFieldsAndThree = BatchFileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 2, Seq(
+  val FileMetadataWithFileOneWithNoCallbackFieldsAndThree = FileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 2, Seq(
     BatchFileOneNoCallbackFields, BatchFileThree
   ))
 

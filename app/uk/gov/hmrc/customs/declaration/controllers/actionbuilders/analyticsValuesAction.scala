@@ -44,12 +44,7 @@ abstract class EndpointAction() extends ActionTransformer[Request, AnalyticsValu
 
 @Singleton
 class FileUploadAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
-  override val googleAnalyticsValues: GoogleAnalyticsValues = Fileupload
-}
-
-@Singleton
-class BatchFileUploadAnalyticsValuesAction @Inject()(override val logger: DeclarationsLogger, override val correlationIdService: UniqueIdsService, override val timeService: DateTimeService) extends EndpointAction {
-  override val googleAnalyticsValues: GoogleAnalyticsValues = BatchFileUpload //TODO can existing `Fileupload` values be used?
+  override val googleAnalyticsValues: GoogleAnalyticsValues = FileUpload
 }
 
 @Singleton

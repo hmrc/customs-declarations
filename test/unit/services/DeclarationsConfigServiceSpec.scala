@@ -50,7 +50,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |circuitBreaker.unstablePeriodDurationInMillis=1000
       |declarationStatus.requestDaysLimit=60
       |upscan-callback.url="http://upscan-callback.url"
-      |batch-file-upload-upscan-callback.url="http://batch-file-upload-upscan-callback.url"
+      |file-upload-upscan-callback.url="http://file-upload-upscan-callback.url"
       |file-transmission-callback.url="http://some-host3:1113/file-transmission"
       |fileUpload.fileGroupSize.maximum=10
       |nrs.enabled=true
@@ -88,9 +88,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange shouldBe 5
       configService.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis shouldBe 1000
       configService.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis shouldBe 1000
-      configService.batchFileUploadConfig.fileTransmissionCallbackUrl shouldBe "http://some-host3:1113/file-transmission"
-      configService.batchFileUploadConfig.batchFileUploadCallbackUrl shouldBe "http://batch-file-upload-upscan-callback.url"
-      configService.batchFileUploadConfig.upscanInitiateUrl shouldBe "http://upscan-initiate.url:11115/upscan/initiate"
+      configService.fileUploadConfig.fileTransmissionCallbackUrl shouldBe "http://some-host3:1113/file-transmission"
+      configService.fileUploadConfig.fileUploadCallbackUrl shouldBe "http://file-upload-upscan-callback.url"
+      configService.fileUploadConfig.upscanInitiateUrl shouldBe "http://upscan-initiate.url:11115/upscan/initiate"
       configService.nrsConfig.nrsUrl shouldBe "http://nrs.url:11114/submission"
 
     }
@@ -123,7 +123,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config upscan-initiate.host
           |Service configuration not found for key: upscan-initiate.context
           |Could not find config key 'upscan-callback.url'
-          |Could not find config key 'batch-file-upload-upscan-callback.url'
+          |Could not find config key 'file-upload-upscan-callback.url'
           |Could not find config key 'fileUpload.fileGroupSize.maximum'
           |Could not find config key 'file-transmission-callback.url'
           |Could not find config file-transmission.host

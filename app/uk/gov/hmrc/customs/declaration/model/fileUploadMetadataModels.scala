@@ -80,7 +80,7 @@ object BatchFile {
   implicit val format = Json.format[BatchFile]
 }
 
-case class BatchFileUploadMetadata(
+case class FileUploadMetadata(
   declarationId: DeclarationId,
   eori: Eori,
   csId: SubscriptionFieldsId,
@@ -88,7 +88,7 @@ case class BatchFileUploadMetadata(
   fileCount: Int,
   files: Seq[BatchFile]
 )
-object BatchFileUploadMetadata {
-  implicit val format = Json.format[BatchFileUploadMetadata]
-  implicit val batchFileUploadMetadataJF = ReactiveMongoFormats.mongoEntity(Json.format[BatchFileUploadMetadata])
+object FileUploadMetadata {
+  implicit val format = Json.format[FileUploadMetadata]
+  implicit val fileUploadMetadataJF = ReactiveMongoFormats.mongoEntity(Json.format[FileUploadMetadata])
 }

@@ -32,7 +32,6 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
   private lazy val mockAmendXmlValidationService = mock[AmendXmlValidationService]
   private lazy val mockArrivalNotificationXmlValidationService = mock[ArrivalNotificationXmlValidationService]
   private lazy val mockFileUploadXmlValidationService = mock[FileUploadXmlValidationService]
-  private lazy val mockBatchFileUploadXmlValidationService = mock[BatchFileUploadXmlValidationService]
   private lazy val mockDeclarationsLogger = mock[DeclarationsLogger]
   private lazy val mockGoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
   private lazy val clearanceController = app.injector.instanceOf[ClearanceDeclarationController]
@@ -41,7 +40,6 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
   private lazy val submitController = app.injector.instanceOf[SubmitDeclarationController]
   private lazy val cancelController = app.injector.instanceOf[CancelDeclarationController]
   private lazy val fileUploadController = app.injector.instanceOf[FileUploadController]
-  private lazy val batchFileUploadController = app.injector.instanceOf[BatchFileUploadController]
   private lazy val metricsConnector = app.injector.instanceOf[CustomsDeclarationsMetricsConnector]
 
   "The correct XmlValidationAction" should {
@@ -80,12 +78,6 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
 
       action.getClass.getSimpleName shouldBe new FileUploadPayloadValidationAction(mockFileUploadXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsConnector).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.fileupload"
-    }
-    "be wired into BatchFileUploadController" in {
-      val action = batchFileUploadController.batchFileUploadPayloadValidationComposedAction.batchFileUploadPayloadValidationAction
-
-      action.getClass.getSimpleName shouldBe new BatchFileUploadPayloadValidationAction(mockBatchFileUploadXmlValidationService, mockDeclarationsLogger, mockGoogleAnalyticsConnector).getClass.getSimpleName
-      action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.batchfileupload"
     }
   }
 

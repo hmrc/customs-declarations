@@ -34,7 +34,6 @@ class AnalyticsValuesActionSpec extends UnitSpec with MockitoSugar {
   "AnalyticsValuesAction" can {
     "for Google Analytics" should {
       "should have the correct values setup against them" in new SetUp {
-        new FileUploadAnalyticsValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Fileupload
         new DeclarationSubmitAnalyticsValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Submit
         new DeclarationClearanceAnalyticsValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Clearance
         new DeclarationCancellationAnalyticsValuesAction(mockLogger, stubUniqueIdsService, mockDateTimeService).googleAnalyticsValues shouldBe GoogleAnalyticsValues.Cancel

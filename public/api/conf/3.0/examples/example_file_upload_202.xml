@@ -1,4 +1,10 @@
-<hmrc:upscanInitiate xmlns:hmrc="hmrc:fileupload">
-  <hmrc:declarationID>DEC123</hmrc:declarationID>
-  <hmrc:documentationType>DOCTYPE123</hmrc:documentationType>
-</hmrc:upscanInitiate>
+<FileUploadRequest xmlns="hmrc:fileupload" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DeclarationID>DEC123</DeclarationID>
+  <FileGroupSize>1</FileGroupSize>
+  <Files>
+    <File>
+      <FileSequenceNo>1</FileSequenceNo>
+      <DocumentType>document type 1</DocumentType>
+    </File>
+  </Files>
+</FileUploadRequest>

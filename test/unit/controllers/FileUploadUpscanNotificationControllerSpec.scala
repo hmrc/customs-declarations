@@ -28,32 +28,33 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, _}
+import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.controllers.BatchFileUploadUpscanNotificationController
+import uk.gov.hmrc.customs.declaration.controllers.FileUploadUpscanNotificationController
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.services.{BatchFileUploadNotificationService, BatchFileUploadUpscanNotificationBusinessService, InternalErrorXmlNotification, UpscanNotificationCallbackToXmlNotification}
-import util.ApiSubscriptionFieldsTestData
+import uk.gov.hmrc.customs.declaration.services.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, InternalErrorXmlNotification, UpscanNotificationCallbackToXmlNotification}
+import unit.logging.StubCdsLogger
+import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 import util.UpscanNotifyTestData._
-import ApiSubscriptionFieldsTestData.subscriptionFieldsId
 
 import scala.concurrent.Future
 
-class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {
+class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {
 
   trait SetUp {
-    val mockNotificationService = mock[BatchFileUploadNotificationService]
+    val mockNotificationService = mock[FileUploadNotificationService]
     val mockToXmlNotification = mock[UpscanNotificationCallbackToXmlNotification]
     val mockErrorToXmlNotification = mock[InternalErrorXmlNotification]
-    val mockBusinessService = mock[BatchFileUploadUpscanNotificationBusinessService]
-    val mockCdsLogger = mock[CdsLogger]
-    val controller = new BatchFileUploadUpscanNotificationController(
+    val mockBusinessService = mock[FileUploadUpscanNotificationBusinessService]
+
+    val controller = new FileUploadUpscanNotificationController(
       mockNotificationService,
       mockToXmlNotification,
       mockErrorToXmlNotification,
       mockBusinessService,
-      mockCdsLogger)
+      new StubCdsLogger(mock[ServicesConfig]))
     val post: Action[AnyContent] = controller.post(subscriptionFieldsId.toString)
     val postWithInvalidCsid: Action[AnyContent] = controller.post("invalid-csid")
 
@@ -87,7 +88,7 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
     }
   }
 
-  "BatchFileUploadUpscanNotificationController on Happy Path" should {
+  "FileUploadUpscanNotificationController on Happy Path" should {
     "on receipt of READY callback call business service and return 204 with empty body" in new SetUp {
       when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])).thenReturn(Future.successful(()))
 
@@ -103,7 +104,7 @@ class BatchFileUploadUpscanNotificationControllerSpec extends PlaySpec with Mock
     }
   }
 
-  "BatchFileUploadUpscanNotificationController on Unhappy Path" should {
+  "FileUploadUpscanNotificationController on Unhappy Path" should {
     "on receipt of FAILURE callback send notification and return 204 with empty body" in new SetUp {
       whenNotificationService(FailedCallbackBody)
 

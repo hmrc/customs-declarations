@@ -18,7 +18,7 @@ package uk.gov.hmrc.customs.declaration.connectors
 
 import com.google.inject._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedUploadPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
@@ -32,17 +32,18 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
                                         logger: DeclarationsLogger,
                                         config: DeclarationsConfigService) {
 
-  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vupr: ValidatedUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
-    post(payload, config.batchFileUploadConfig.upscanInitiateUrl)
+  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
+    post(payload, config.fileUploadConfig.upscanInitiateUrl)
   }
 
-  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vupr: ValidatedUploadPayloadRequest[A]) = {
+  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]) = {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload: ${payload.toString}")
     http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
       .map { res: UpscanInitiateResponsePayload =>
+        logger.info(s"reference from call to upscan initiate ${res.reference}")
         logger.debug(s"Response received from upscan initiate service $res")
         res
       }

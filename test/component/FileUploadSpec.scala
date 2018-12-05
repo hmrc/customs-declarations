@@ -22,14 +22,13 @@ import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
-import util.{AuditService, TestData}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.TestData._
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, UpscanInitiateService}
+import util.{AuditService, TestData}
 
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration.Duration
+import scala.concurrent.Future
 
 class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
@@ -61,9 +60,26 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     stopMockServer()
   }
 
-  feature("File upload API authorises submissions from Software Houses with v2.0 accept header") {
+  feature("Valid request is processed correctly") {
+    scenario("Response status 200 when user submits correct request") {
+      Given("the API is available")
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
+      val request = ValidFileUploadV2Request.fromNonCsp.postTo(endpoint)
+      setupWiremockExpectations()
 
-    scenario("An unauthorised CSP is not allowed to submit a file upload request") {
+      When("a POST request with data is sent to the API")
+      val result: Future[Result] = route(app = app, request).value
+
+      Then("a response with a 200 (OK) status is received")
+      status(result) shouldBe OK
+
+      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+    }
+  }
+
+  feature("Unauthorized file upload API submissions are processed correctly") {
+
+    scenario("An unauthorised CSP is not allowed to submit a file upload request with v2.0 accept header") {
       Given("A CSP wants to submit a valid file upload")
       val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request.fromCsp.postTo(endpoint)
 
@@ -83,11 +99,8 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCsp())
     }
-  }
 
-  feature("File upload API authorises submissions from Software Houses with v3.0 accept header") {
-
-    scenario("An unauthorised CSP is not allowed to submit a file upload request") {
+    scenario("An unauthorised CSP is not allowed to submit a file upload request with v3.0 accept header") {
       Given("A CSP wants to submit a valid file upload")
       val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV3Request.fromCsp.postTo(endpoint)
 
@@ -109,7 +122,6 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCsp())
     }
-
   }
 
   feature("The API handles errors as expected") {
@@ -119,7 +131,6 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
         .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
         .copyFakeRequest(method = POST, uri = endpoint)
       setupWiremockExpectations()
-
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -167,23 +178,6 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       And("the response body is a \"malformed xml body\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
     }
-
-    scenario("Response status 200 when user submits correct request") {
-      Given("the API is available")
-      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
-      val request = ValidFileUploadV2Request.fromNonCsp.postTo(endpoint)
-      setupWiremockExpectations()
-
-      When("a POST request with data is sent to the API")
-      val result: Future[Result] = route(app = app, request).value
-
-      Then("a response with a 200 (OK) status is received")
-      status(result) shouldBe OK
-
-      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
-    }
-
-
   }
 
   private def setupWiremockExpectations(): Unit = {

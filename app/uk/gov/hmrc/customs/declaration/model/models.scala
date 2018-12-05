@@ -23,8 +23,6 @@ import play.api.libs.json._
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
 
-import scala.xml.{Elem, NodeSeq}
-
 case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 
 case class Eori(value: String) extends AnyVal {
@@ -110,12 +108,7 @@ object GoogleAnalyticsValues {
     override val failure: String = "declarationCancellationFailure"
   }
 
-  val Fileupload = new GoogleAnalyticsValues {
-    override val success: String = "declarationFileUploadSuccess"
-    override val failure: String = "declarationFileUploadFailure"
-  }
-
-  val BatchFileUpload = new GoogleAnalyticsValues {
+  val FileUpload = new GoogleAnalyticsValues {
     override val success: String = "declarationFileUploadSuccess"
     override val failure: String = "declarationFileUploadFailure"
   }
@@ -220,7 +213,7 @@ sealed trait AuthorisedAsCsp extends AuthorisedAs {
   val retrievalData: Option[NrsRetrievalData]
 }
 case class Csp(badgeIdentifier: BadgeIdentifier, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
-case class BatchFileUploadCsp(badgeIdentifier: BadgeIdentifier, eori: Eori, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
+case class FileUploadCsp(badgeIdentifier: BadgeIdentifier, eori: Eori, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
 case class NonCsp(eori: Eori, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAs
 
 case class UpscanInitiatePayload(callbackUrl: String)
@@ -230,8 +223,6 @@ object UpscanInitiatePayload {
 }
 
 case class AuthorisedRetrievalData(retrievalJSONBody: String)
-
-case class FileUploadPayload(declarationID: String, documentationType: String)
 
 case class UpscanInitiateResponsePayload(reference: String, uploadRequest: UpscanInitiateUploadRequest)
 
@@ -244,29 +235,6 @@ case class UpscanInitiateUploadRequest
   href: String,
   fields: Map[String, String]
 )
-{
-  def addChild(n: NodeSeq, newChild: NodeSeq): NodeSeq = n match {
-    case Elem(prefix, label, attribs, scope, child @ _*) =>
-      Elem(prefix, label, attribs, scope, true, child ++ newChild : _*)
-    case _ => sys.error("Can only add children to elements!")
-  }
-
-  def toXml: NodeSeq = {
-    var xmlFields: NodeSeq = <fields></fields>
-
-    fields.foreach { f =>
-      val tag = f._1
-      val content = f._2
-      xmlFields = addChild(xmlFields, <a/>.copy(label = tag, child = scala.xml.Text(content)))
-    }
-    <fileUpload>
-      <href>
-        {href}
-      </href>
-      {xmlFields}
-    </fileUpload>
-  }
-}
 
 object UpscanInitiateResponsePayload {
   implicit val format: OFormat[UpscanInitiateResponsePayload] = Json.format[UpscanInitiateResponsePayload]

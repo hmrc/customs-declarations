@@ -38,7 +38,7 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
   )
 
   def send[A](request: FileTransmission): Future[Unit] = {
-    post(request, config.batchFileUploadConfig.fileTransmissionBaseUrl)
+    post(request, config.fileUploadConfig.fileTransmissionBaseUrl)
   }
 
   private def post[A](request: FileTransmission, url: String): Future[Unit] = {

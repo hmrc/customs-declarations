@@ -25,35 +25,35 @@ import reactivemongo.bson.BSONObjectID
 import reactivemongo.play.json.JsObjectDocumentWriter
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.model.{BatchFileUploadMetadata, CallbackFields, FileReference, SubscriptionFieldsId}
+import uk.gov.hmrc.customs.declaration.model.{FileUploadMetadata, CallbackFields, FileReference, SubscriptionFieldsId}
 import uk.gov.hmrc.mongo.ReactiveRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-@ImplementedBy(classOf[BatchFileUploadMetadataMongoRepo])
-trait BatchFileUploadMetadataRepo {
+@ImplementedBy(classOf[FileUploadMetadataMongoRepo])
+trait FileUploadMetadataRepo {
 
-  def create(batchFileUploadMetadata: BatchFileUploadMetadata)(implicit r: HasConversationId): Future[Boolean]
+  def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean]
 
-  def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]]
+  def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]]
 
-  def delete(clientNotification: BatchFileUploadMetadata)(implicit r: HasConversationId): Future[Unit]
+  def delete(clientNotification: FileUploadMetadata)(implicit r: HasConversationId): Future[Unit]
 
-  def update(csId: SubscriptionFieldsId, reference: FileReference, callbackFields: CallbackFields)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]]
+  def update(csId: SubscriptionFieldsId, reference: FileReference, callbackFields: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]]
 }
 
 @Singleton
-class BatchFileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvider,
-                                                 errorHandler: BatchFileUploadMetadataRepoErrorHandler,
-                                                 logger: DeclarationsLogger)
-  extends ReactiveRepository[BatchFileUploadMetadata, BSONObjectID](
+class FileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvider,
+                                            errorHandler: FileUploadMetadataRepoErrorHandler,
+                                            logger: DeclarationsLogger)
+  extends ReactiveRepository[FileUploadMetadata, BSONObjectID](
     collectionName = "batchFileUploads",
     mongo = mongoDbProvider.mongo,
-    domainFormat = BatchFileUploadMetadata.batchFileUploadMetadataJF
-  ) with BatchFileUploadMetadataRepo {
+    domainFormat = FileUploadMetadata.fileUploadMetadataJF
+  ) with FileUploadMetadataRepo {
 
-  private implicit val format = BatchFileUploadMetadata.batchFileUploadMetadataJF
+  private implicit val format = FileUploadMetadata.fileUploadMetadataJF
 
   override def indexes: Seq[Index] = Seq(
     Index(
@@ -68,32 +68,32 @@ class BatchFileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvide
     )
   )
 
-  override def create(batchFileUploadMetadata: BatchFileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
-    logger.debug(s"saving batchFileUploadMetadata: $batchFileUploadMetadata")
-    lazy val errorMsg = s"Batch file meta data not inserted for $batchFileUploadMetadata"
+  override def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
+    logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
+    lazy val errorMsg = s"File meta data not inserted for $fileUploadMetadata"
 
-    collection.insert(batchFileUploadMetadata).map {
+    collection.insert(fileUploadMetadata).map {
       writeResult => errorHandler.handleSaveError(writeResult, errorMsg)
     }
   }
 
-  override def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]] = {
-    logger.debug(s"fetching batch file upload metadata with file reference: $reference")
+  override def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
+    logger.debug(s"fetching file upload metadata with file reference: $reference")
 
     val selector = Json.obj("files.reference" -> reference)
-    collection.find(selector).one[BatchFileUploadMetadata]
+    collection.find(selector).one[FileUploadMetadata]
   }
 
-  override def delete(batchFileUploadMetadata: BatchFileUploadMetadata)(implicit r: HasConversationId): Future[Unit] = {
-    logger.debug(s"deleting batchFileUploadMetadata: $batchFileUploadMetadata")
+  override def delete(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Unit] = {
+    logger.debug(s"deleting fileUploadMetadata: $fileUploadMetadata")
 
-    val selector = Json.obj("batchId" -> batchFileUploadMetadata.batchId)
+    val selector = Json.obj("batchId" -> fileUploadMetadata.batchId)
     lazy val errorMsg = s"Could not delete entity for selector: $selector"
     collection.remove(selector).map(errorHandler.handleDeleteError(_, errorMsg))
   }
 
-  def update(csId: SubscriptionFieldsId, reference: FileReference, cf: CallbackFields)(implicit r: HasConversationId): Future[Option[BatchFileUploadMetadata]] = {
-    logger.debug(s"updating batch file upload metadata with file reference: $reference with callbackField=$cf")
+  def update(csId: SubscriptionFieldsId, reference: FileReference, cf: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
+    logger.debug(s"updating file upload metadata with file reference: $reference with callbackField=$cf")
 
     val selector = Json.obj("files.reference" -> reference.toString, "csId" -> csId.toString)
     val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum)))
@@ -108,7 +108,7 @@ class BatchFileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvide
       findAndModifyResult.value match {
         case None => None
         case Some(jsonDoc) =>
-          val record = jsonDoc.as[BatchFileUploadMetadata]
+          val record = jsonDoc.as[FileUploadMetadata]
           Some(record)
       })
   }

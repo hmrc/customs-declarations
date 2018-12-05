@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 
 @Singleton
-class BatchFileUploadMetadataRepoErrorHandler @Inject()(logger: DeclarationsLogger) {
+class FileUploadMetadataRepoErrorHandler @Inject()(logger: DeclarationsLogger) {
 
   def handleDeleteError(result: WriteResult, exceptionMsg: => String)(implicit r: HasConversationId): Boolean = {
     handleError(result, databaseAltered, exceptionMsg)

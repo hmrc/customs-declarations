@@ -57,7 +57,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   private val upscanInitiateUrl = upscanService.serviceUrl
   private val upscanCallbackUrl = root.string("upscan-callback.url")
-  private val batchFileUploadUpscanCallbackUrl = root.string("batch-file-upload-upscan-callback.url")
+  private val fileUploadUpscanCallbackUrl = root.string("file-upload-upscan-callback.url")
   private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
   private val fileTransmissionUrl = fileTransmissionService.serviceUrl
   private val fileTransmissionCallbackUrl =  root.string("file-transmission-callback.url")
@@ -78,16 +78,16 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     nrsEnabled, nrsApiKey, nrsWaitTimeMillis, nrsUrl
     ) mapN NrsConfig
 
-  private val validatedBatchFileUploadConfig: CustomsValidatedNel[BatchFileUploadConfig] = (
-    upscanInitiateUrl, upscanCallbackUrl, batchFileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
-  ) mapN BatchFileUploadConfig
+  private val validatedFileUploadConfig: CustomsValidatedNel[FileUploadConfig] = (
+    upscanInitiateUrl, upscanCallbackUrl, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
+  ) mapN FileUploadConfig
 
   private val customsConfigHolder =
     (validatedDeclarationsConfig,
       validatedDeclarationsCircuitBreakerConfig,
       validatedGoogleAnalyticsSenderConfig,
       validatedNrsConfig,
-      validatedBatchFileUploadConfig
+      validatedFileUploadConfig
       ) mapN CustomsConfigHolder fold(
         fe = { nel =>
           // error case exposes nel (a NotEmptyList)
@@ -106,11 +106,11 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   val nrsConfig: NrsConfig = customsConfigHolder.validatedNrsConfig
 
-  val batchFileUploadConfig: BatchFileUploadConfig = customsConfigHolder.validatedBatchFileUploadConfig
+  val fileUploadConfig: FileUploadConfig = customsConfigHolder.validatedFileUploadConfig
 
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
                                          declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,
                                          validatedGoogleAnalyticsConfig: GoogleAnalyticsConfig,
                                          validatedNrsConfig: NrsConfig,
-                                         validatedBatchFileUploadConfig: BatchFileUploadConfig)
+                                         validatedFileUploadConfig: FileUploadConfig)
 }

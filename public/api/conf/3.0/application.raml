@@ -167,7 +167,7 @@ documentation:
         securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
         body:
           application/xml:
-            type: !include schemas/wco/declaration/FileUploadRequest.xsd
+            type: !include schemas/wco/fileupload/FileUploadRequest.xsd
             example: !include examples/example_file_upload_202.xml
         responses:
           200:

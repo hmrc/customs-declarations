@@ -48,7 +48,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
     val mockToXmlNotification = mock[UpscanNotificationCallbackToXmlNotification]
     val mockErrorToXmlNotification = mock[InternalErrorXmlNotification]
     val mockBusinessService = mock[FileUploadUpscanNotificationBusinessService]
-    val mockCdsLogger = mock[CdsLogger]
+
     val controller = new FileUploadUpscanNotificationController(
       mockNotificationService,
       mockToXmlNotification,

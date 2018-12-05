@@ -10,7 +10,7 @@
 | [`/clearance`](#user-content-post-clearance)                                                                                    |   `POST` |    Allows submission of a Customs Clearance Declaration |
 | [`/amend`](#user-content-post-amend)                                                                                            |   `POST` |    Allows submission of a Customs Amend Declaration. |
 | [`/status-request/mrn/{valid mrn}`](#user-content-get-status-request)                                                           |   `GET`  |    Allows requesting the status of a Declaration |
-| [`/batch-file-upload`](#user-content-post-batch-file-upload)                                                                    |   `POST` |    Allows requests for Amazon endpoints for uploading supporting files for a declaration |
+| [`/file-upload`](#user-content-post-file-upload)                                                                                |   `POST` |    Allows requests for Amazon endpoints for uploading supporting files for a declaration |
 
 --- 
  
@@ -179,13 +179,13 @@ curl -v -X POST "http://localhost:9820/cancellation-requests" \
  ```
 ---
 
-### Post Batch FIle Upload 
- #### `POST /batch-file-upload`
+### Post File Upload 
+ #### `POST /file-upload`
 
  ##### curl command
 ```
 curl -X POST \
-  http://localhost:9820/batch-file-upload \
+  http://localhost:9820/file-upload \
   -H 'Accept: application/vnd.hmrc.1.0+xml' \
   -H 'Authorization: Bearer {ADD VALID TOKEN}' \
   -H 'Content-Type: application/xml; charset=utf-8' \

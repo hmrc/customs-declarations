@@ -110,14 +110,6 @@ trait ExpectedTestResponses {
       |</errorResponse>
     """.stripMargin
 
-  protected val BadRequestErrorXBatchIdentifierMissingOrInvalid: String =
-    """<?xml version="1.0" encoding="UTF-8"?>
-      |<errorResponse>
-      |  <code>BAD_REQUEST</code>
-      |  <message>X-Badge-Identifier header is missing or invalid</message>
-      |</errorResponse>
-    """.stripMargin
-
   protected val ForbiddenError: String =
     """<errorResponse>
       |  <code>FORBIDDEN</code> <message>Not an authorized service</message>

@@ -28,10 +28,6 @@ trait AuditService extends WireMockRunner {
       willReturn aResponse()
       .withStatus(status))
 
-  def verifyAuditServiceWasCalled() {
-    verify(1, postRequestedFor(urlMatchingRequestPath))
-  }
-
   def verifyAuditServiceWasNotCalled() {
     verify(0, postRequestedFor(urlMatchingRequestPath))
   }

@@ -16,6 +16,7 @@
 
 package unit.services
 
+import java.time.ZonedDateTime
 import java.util.UUID
 
 import akka.actor.ActorSystem
@@ -94,7 +95,8 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
         result shouldBe Right(Some(nrSubmissionId))
         verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
 
-
+        val now = ZonedDateTime.now()
+        when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(now, now.plusSeconds(2))
         PassByNameVerifier(mockLogger, "info")
           .withByNameParam[String]("Duration of call to NRS 2000 ms")
           .verify()

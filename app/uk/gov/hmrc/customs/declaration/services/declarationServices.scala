@@ -17,12 +17,13 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import java.net.URLEncoder
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeoutException
 
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
-
 import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
@@ -103,6 +104,7 @@ trait DeclarationService {
 
     if (declarationsConfigService.nrsConfig.nrsEnabled) {
       logger.debug("NRS enabled. Calling NRS.")
+      val startTime = dateTimeProvider.zonedDateTimeUtc
 
       val nrsServiceCallFutureWithTimeout = futureWithTimeout(nrsService.send(vpr, hc), Duration(declarationsConfigService.nrsConfig.nrsWaitTimeMillis, MILLISECONDS), actorSystem)
       callBackend(sfId).flatMap{
@@ -121,6 +123,7 @@ trait DeclarationService {
           }
         case Right(_) =>
           logger.debug("MDG call success.")
+          logCallDuration(startTime)
           nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {
             logger.debug(s"NRS returned submission id: $nrSubmissionId")
             Right(Some(nrSubmissionId))
@@ -172,4 +175,11 @@ trait DeclarationService {
     logger.debug(s"preparePayload called")
     wrapper.wrap(xml, clientId, dateTime)
   }
+
+  protected def logCallDuration[A](startTime: ZonedDateTime)
+                                  (implicit hc: HeaderCarrier, vpr: ValidatedPayloadRequest[A]): Unit ={
+    val callDuration = ChronoUnit.MILLIS.between(startTime, dateTimeProvider.zonedDateTimeUtc)
+    logger.info(s"Duration of call to NRS ${callDuration} ms")
+  }
+
 }

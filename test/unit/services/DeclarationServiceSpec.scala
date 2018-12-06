@@ -37,6 +37,7 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
+import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -52,7 +53,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
   trait SetUp {
-    protected val mockLogger: DeclarationsLogger = stubDeclarationsLogger
+    protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]/*new DeclarationsLogger(TestData.mockCdsLogger)*/
     protected val mockMdgDeclarationConnector: MdgDeclarationConnector = mock[MdgDeclarationConnector]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
@@ -92,6 +93,11 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
         result shouldBe Right(Some(nrSubmissionId))
         verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+
+
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("Duration of call to NRS 2000 ms")
+          .verify()
       }
     }
 

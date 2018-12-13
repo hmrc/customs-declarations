@@ -43,7 +43,9 @@ class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
 
     http.GET[ApiSubscriptionFieldsResponse](url)
       .recoverWith {
-        case httpError: HttpException => Future.failed(new RuntimeException(httpError))
+        case httpError: HttpException =>
+          logger.error(s"Subscriptions fields lookup call failed. url=$url HttpStatus=${httpError.responseCode} error=${httpError.getMessage}")
+          Future.failed(new RuntimeException(httpError))
       }
       .recoverWith {
         case e: Throwable =>

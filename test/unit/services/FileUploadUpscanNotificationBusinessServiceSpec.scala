@@ -58,7 +58,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     FileTransmissionProperty("DocumentType", mdFileOne.documentType.get.toString)
   )
   private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(fileTransmissionCallbackUrl + clientSubscriptionIdString), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)
-  private implicit val implicitHasConversationId = new HasConversationId {
+  private implicit val implicitHasConversationId: HasConversationId = new HasConversationId {
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
   private val fileGroupSizeMaximum = 5
@@ -77,9 +77,9 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
   "FileUploadUpscanNotificationBusinessService" should {
     "update metadata and call file transmission service" in new SetUp {
       when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
-      when(mockConnector.send(any[FileTransmission])).thenReturn(Future.successful(()))
+      when(mockConnector.send(any[FileTransmission])(any[HasConversationId])).thenReturn(Future.successful(()))
 
-      val actual = await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody))
+      val actual: Unit = await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody))
 
       actual shouldBe (())
       verify(mockRepo).update(
@@ -87,7 +87,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verify(mockConnector).send(ameq(fileTransmissionRequest))
+      verify(mockConnector).send(ameq(fileTransmissionRequest))(any[HasConversationId])
     }
 
     "return failed future when no metadata record found for file reference" in new SetUp {
@@ -134,7 +134,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
 
     "propagate exception encountered in connector" in new SetUp {
       when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
-      when(mockConnector.send(any[FileTransmission])).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockConnector.send(any[FileTransmission])(any[HasConversationId])).thenReturn(Future.failed(emulatedServiceFailure))
 
       val error = intercept[EmulatedServiceFailure](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 

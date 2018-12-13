@@ -33,7 +33,7 @@ trait CallbackToXmlNotification[A] {
 }
 
 /**
-  Generic notification sending service for both upscan-notify and file-transmission callback endpoints
+  Notification sending service
 */
 @Singleton
 class FileUploadNotificationService @Inject()(notificationConnector: FileUploadCustomsNotificationConnector,

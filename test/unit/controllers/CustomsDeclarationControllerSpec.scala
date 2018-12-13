@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.connectors.{CustomsDeclarationsMetricsCon
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, HasAnalyticsValues, HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.{CustomsDeclarationsMetricsRequest, GoogleAnalyticsValues}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -50,6 +50,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
   trait SetUp extends AuthConnectorStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
+
+    protected implicit val conversationIdRequest: HasConversationId = TestConversationIdRequest
 
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]
@@ -90,7 +92,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
     protected def verifyMetrics = {
       val captor: ArgumentCaptor[CustomsDeclarationsMetricsRequest] = ArgumentCaptor.forClass(classOf[CustomsDeclarationsMetricsRequest])
-      verify(mockMetricsConnector).post(captor.capture())
+      verify(mockMetricsConnector).post(captor.capture())(any[HasConversationId])
       captor.getValue.eventType shouldBe "DECLARATION"
       captor.getValue.conversationId shouldBe conversationId
       captor.getValue.eventStart shouldBe EventStart

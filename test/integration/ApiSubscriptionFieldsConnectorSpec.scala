@@ -16,18 +16,21 @@
 
 package integration
 
+import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.ApiSubscriptionFieldsResponse
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._
 import util.ExternalServicesConfig.{Host, Port}
-import util.TestData._
+import util.VerifyLogging.verifyDeclarationsLoggerError
 import util._
 import util.externalservices.ApiSubscriptionFieldsService
 
@@ -40,13 +43,15 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  private implicit val vpr = TestData.TestCspValidatedPayloadRequest
+  private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
+  private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
 
   override protected def beforeAll() {
     startMockServer()
   }
 
   override protected def beforeEach() {
+    reset(mockDeclarationsLogger)
     resetMockServer()
   }
 
@@ -55,7 +60,7 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
   }
 
   override implicit lazy val app: Application =
-    GuiceApplicationBuilder(overrides = Seq(TestModule.asGuiceableModule)).configure(Map(
+    GuiceApplicationBuilder(overrides = Seq(IntegrationTestModule(mockDeclarationsLogger))).configure(Map(
       "microservice.services.api-subscription-fields.host" -> Host,
       "microservice.services.api-subscription-fields.port" -> Port,
       "microservice.services.api-subscription-fields.context" -> CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
@@ -76,27 +81,43 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
       setupGetSubscriptionFieldsToReturn(NOT_FOUND)
 
       intercept[RuntimeException](await(getApiSubscriptionFields)).getCause.getClass shouldBe classOf[NotFoundException]
+
+      verifyDeclarationsLoggerError("Subscriptions fields lookup call failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=404 error=GET of 'http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' returned 404 (Not Found). Response body: '{\n  \"clientId\": \"afsdknbw34ty4hebdv\",\n  \"apiContext\": \"ciao-api\",\n  \"apiVersion\": \"1.0\",\n  \"fieldsId\":\"327d9145-4965-4d28-a2c5-39dedee50334\",\n  \"fields\":{\n    \"callback-id\":\"http://localhost\",\n    \"token\":\"abc123\"\n  }\n}'")
     }
 
     "return a failed future when external service returns 400" in {
       setupGetSubscriptionFieldsToReturn(BAD_REQUEST)
+
       intercept[RuntimeException](await(getApiSubscriptionFields)).getCause.getClass shouldBe classOf[BadRequestException]
+
+      verifyDeclarationsLoggerError("Subscriptions fields lookup call failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=400 error=GET of 'http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' returned 400 (Bad Request). Response body '{\n  \"clientId\": \"afsdknbw34ty4hebdv\",\n  \"apiContext\": \"ciao-api\",\n  \"apiVersion\": \"1.0\",\n  \"fieldsId\":\"327d9145-4965-4d28-a2c5-39dedee50334\",\n  \"fields\":{\n    \"callback-id\":\"http://localhost\",\n    \"token\":\"abc123\"\n  }\n}'")
     }
 
     "return a failed future when external service returns any 4xx response other than 400" in {
       setupGetSubscriptionFieldsToReturn(FORBIDDEN)
+
       intercept[Upstream4xxResponse](await(getApiSubscriptionFields))
+
+      verifyDeclarationsLoggerError("Call to subscription information service failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0")
     }
 
     "return a failed future when external service returns 500" in {
       setupGetSubscriptionFieldsToReturn(INTERNAL_SERVER_ERROR)
+
       intercept[Upstream5xxResponse](await(getApiSubscriptionFields))
+
+      verifyDeclarationsLoggerError("Call to subscription information service failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0")
     }
 
     "return a failed future when fail to connect the external service" in {
       stopMockServer()
+
       intercept[RuntimeException](await(getApiSubscriptionFields)).getCause.getClass shouldBe classOf[BadGatewayException]
+
+      verifyDeclarationsLoggerError("Subscriptions fields lookup call failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=502 error=GET of 'http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' failed. Caused by: 'Connection refused: localhost/127.0.0.1:11111'")
+
       startMockServer()
+
     }
 
   }

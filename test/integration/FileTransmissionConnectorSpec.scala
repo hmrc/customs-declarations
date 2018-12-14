@@ -16,29 +16,40 @@
 
 package integration
 
+import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.FileTransmissionConnector
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.http._
-import util.CustomsDeclarationsExternalServicesConfig
 import util.ExternalServicesConfig.{Host, Port}
 import util.FileTransmissionTestData._
-import util.TestData._
+import util.VerifyLogging._
 import util.externalservices.FileTransmissionService
+import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with FileTransmissionService {
 
   private lazy val connector = app.injector.instanceOf[FileTransmissionConnector]
+  private implicit val mockCdsLogger: CdsLogger = mock[CdsLogger]
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
+  private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
+  private implicit val conversationIdRequest = TestData.TestConversationIdRequest
 
   override protected def beforeAll() {
     startMockServer()
+  }
+
+  override protected def beforeEach(): Unit = {
+    reset(mockCdsLogger)
   }
 
   override protected def afterEach(): Unit = {
@@ -50,7 +61,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
   }
 
   override implicit lazy val app: Application =
-    GuiceApplicationBuilder(overrides = Seq(TestModule.asGuiceableModule)).configure(Map(
+    GuiceApplicationBuilder(overrides = Seq(IntegrationTestModule(mockDeclarationsLogger).asGuiceableModule)).configure(Map(
       "auditing.consumer.baseUri.host" -> Host,
       "auditing.consumer.baseUri.port" -> Port,
       "auditing.enabled" -> false,
@@ -64,7 +75,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "make a correct request" in {
       startFileTransmissionService()
 
-      val response = await(sendValidRequest())
+      val response: Unit = await(sendValidRequest)
 
       response shouldBe (())
       verifyFileTransmissionServiceWasCalledWith(FileTransmissionRequest)
@@ -73,31 +84,41 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when external service returns 404" in {
       setupFileTransmissionToReturn(NOT_FOUND)
 
-      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[NotFoundException]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[NotFoundException]
+
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=404, Error=POST of 'http://localhost:11111/file/transmission' returned 404 (Not Found). Response body: ''")
     }
 
     "return a failed future when external service returns 400" in {
       setupFileTransmissionToReturn(BAD_REQUEST)
 
-      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadRequestException]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[BadRequestException]
+
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=400, Error=POST of 'http://localhost:11111/file/transmission' returned 400 (Bad Request). Response body ''")
     }
 
     "return a failed future when external service returns 500" in {
       setupFileTransmissionToReturn(INTERNAL_SERVER_ERROR)
 
-      intercept[Upstream5xxResponse](await(sendValidRequest()))
+      intercept[Upstream5xxResponse](await(sendValidRequest))
+
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission")
     }
 
     "return a failed future when fail to connect the external service" in {
       stopMockServer()
 
-      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadGatewayException]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[BadGatewayException]
+
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=502, Error=POST of 'http://localhost:11111/file/transmission' failed. Caused by: 'Connection refused: localhost/127.0.0.1:11111'")
+
       startMockServer()
     }
 
   }
 
-  private def sendValidRequest() = {
+  private def sendValidRequest(implicit hasConversationId: HasConversationId) = {
     connector.send(FileTransmissionRequest)
   }
+
 }

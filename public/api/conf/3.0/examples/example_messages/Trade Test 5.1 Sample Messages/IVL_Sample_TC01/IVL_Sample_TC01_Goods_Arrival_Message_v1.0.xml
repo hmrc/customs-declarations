@@ -1,5 +1,5 @@
 POST /customs/inventory-linking-imports/arrival-notifications/ HTTP/1.1
-Host: api.qa.tax.service.gov.uk
+Host: <INSERTHOSTHERE>
 Accept: application/vnd.hmrc.1.0+xml
 Content-Type: application/xml; charset=UTF-8
 Authorization: Bearer 71b6ec301ee8a8547dc21286c52f883

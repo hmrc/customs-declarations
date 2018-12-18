@@ -176,7 +176,7 @@ trait DeclarationService {
     wrapper.wrap(xml, clientId, dateTime)
   }
 
-  protected def logCallDuration[A](startTime: ZonedDateTime)
+  private def logCallDuration[A](startTime: ZonedDateTime)
                                   (implicit hc: HeaderCarrier, vpr: ValidatedPayloadRequest[A]): Unit ={
     val endTime = dateTimeProvider.zonedDateTimeUtc
     val callDuration = ChronoUnit.MILLIS.between(startTime, endTime)

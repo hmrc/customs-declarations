@@ -178,7 +178,8 @@ trait DeclarationService {
 
   protected def logCallDuration[A](startTime: ZonedDateTime)
                                   (implicit hc: HeaderCarrier, vpr: ValidatedPayloadRequest[A]): Unit ={
-    val callDuration = ChronoUnit.MILLIS.between(startTime, dateTimeProvider.zonedDateTimeUtc)
+    val endTime = dateTimeProvider.zonedDateTimeUtc
+    val callDuration = ChronoUnit.MILLIS.between(startTime, endTime)
     logger.info(s"Duration of call to NRS ${callDuration} ms")
   }
 

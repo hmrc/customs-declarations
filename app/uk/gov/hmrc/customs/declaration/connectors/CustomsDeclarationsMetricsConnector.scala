@@ -19,9 +19,10 @@ package uk.gov.hmrc.customs.declaration.connectors
 import javax.inject.{Inject, Singleton}
 import play.mvc.Http.HeaderNames.{ACCEPT, CONTENT_TYPE}
 import play.mvc.Http.MimeTypes.JSON
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.http.NoAuditHttpClient
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 
@@ -30,25 +31,27 @@ import scala.concurrent.Future
 
 @Singleton
 class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
-                                          logger: CdsLogger,
-                                          config: DeclarationsConfigService) {
+                                                     logger: DeclarationsLogger,
+                                                     config: DeclarationsConfigService) {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON)
   )
 
-  def post[A](request: CustomsDeclarationsMetricsRequest): Future[Unit] = {
+  def post[A](request: CustomsDeclarationsMetricsRequest)(implicit hasConversationId: HasConversationId): Future[Unit] = {
     post(request, config.declarationsConfig.customsDeclarationsMetricsBaseBaseUrl)
   }
 
-  private def post[A](request: CustomsDeclarationsMetricsRequest, url: String): Future[Unit] = {
+  private def post[A](request: CustomsDeclarationsMetricsRequest, url: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
 
     logger.debug(s"Sending request to customs declarations metrics service. Url: $url Payload: ${request.toString}")
     http.POST[CustomsDeclarationsMetricsRequest, HttpResponse](url, request).map{ _ =>
       logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
       ()
     }.recoverWith {
-      case httpError: HttpException => Future.failed(new RuntimeException(httpError))
+      case httpError: HttpException =>
+        logger.error(s"Call to customs declarations metrics service failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
+        Future.failed(new RuntimeException(httpError))
       case e: Throwable =>
         logger.warn(s"Call to customs declarations metrics service failed. url=$url")
         Future.failed(e)

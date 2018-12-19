@@ -19,8 +19,6 @@ package uk.gov.hmrc.customs.declaration.services
 import java.net.URLEncoder
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import java.util.concurrent.TimeUnit.MILLISECONDS
-import java.util.concurrent.TimeoutException
 
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
@@ -34,13 +32,11 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.util.FutureUtil.futureWithTimeout
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.duration.Duration
 import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml.NodeSeq
@@ -102,44 +98,32 @@ trait DeclarationService {
 
   private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier, sfId: SubscriptionFieldsId): Future[Either[Result, Option[NrSubmissionId]]] = {
 
+  val nrSubmissionId = new NrSubmissionId(vpr.conversationId.uuid)
     if (declarationsConfigService.nrsConfig.nrsEnabled) {
       logger.debug("NRS enabled. Calling NRS.")
+
       val startTime = dateTimeProvider.zonedDateTimeUtc
 
-      val nrsServiceCallFutureWithTimeout = futureWithTimeout(nrsService.send(vpr, hc), Duration(declarationsConfigService.nrsConfig.nrsWaitTimeMillis, MILLISECONDS), actorSystem)
-      callBackend(sfId).flatMap{
-        case Left(result) =>
-          logger.debug("MDG call failed")
-          nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {
-            logger.debug(s"NRS returned submission id: $nrSubmissionId")
-            Left(result.withNrSubmissionId(nrSubmissionId))
-          }).recover {
-            case _: TimeoutException =>
-              logger.warn("NRS wait time exceeded")
-              Right(None)
-            case throwable =>
-              logger.warn(s"NRS call failed: $throwable")
-              Left(result)
-          }
-        case Right(_) =>
-          logger.debug("MDG call success.")
+      nrsService.send(vpr, hc)
+        .map(nrSubmissionId => {
+          logger.debug(s"NRS returned submission id: $nrSubmissionId")
           logCallDuration(startTime)
-          nrsServiceCallFutureWithTimeout.map(nrSubmissionId => {
-            logger.debug(s"NRS returned submission id: $nrSubmissionId")
-            Right(Some(nrSubmissionId))
-          }).recover {
-            case _: TimeoutException =>
-              logger.warn("NRS wait time exceeded")
-              Right(None)
-            case throwable =>
-              logger.warn(s"NRS call failed: $throwable")
-              Right(None)
-          }
-      }
+        })
+        .recover{
+          case ex:Exception => logger.warn(s"NRS call failed: $ex")
+        }
     } else {
       logger.debug("NRS not enabled")
-      callBackend(sfId)
     }
+
+    callBackend(sfId).map {
+        case Left(errorResult) =>
+          logger.debug("MDG call failed")
+          Left(errorResult.withNrSubmissionId(nrSubmissionId))
+        case Right(_) =>
+          logger.debug("MDG call success.")
+          if (declarationsConfigService.nrsConfig.nrsEnabled) Right(Some(nrSubmissionId)) else Right(None)
+      }
   }
 
   private def futureApiSubFieldsId[A](c: ClientId)

@@ -63,18 +63,16 @@ object TestData {
   val mrnValue = "theMrn"
   val mrn = Mrn(mrnValue)
 
-  val date = DateTime.parse("2018-09-11T10:28:54.128Z")
+  val date: DateTime = DateTime.parse("2018-09-11T10:28:54.128Z")
 
   val subscriptionFieldsIdString: String = "b82f31c6-2239-4253-b6f5-ed75e37ab7a5"
   val subscriptionFieldsIdUuid: UUID = fromString("b82f31c6-2239-4253-b6f5-ed75e37ab7a5")
 
   val clientSubscriptionIdString: String = "327d9145-4965-4d28-a2c5-39dedee50334"
 
-  val nrSubmissionIdValue = "902b0150-aa9a-4046-bf27-85889f128c2a"
-  val nrSubmissionIdValueUuid: UUID = fromString(nrSubmissionIdValue)
-  val nrSubmissionId = NrSubmissionId(nrSubmissionIdValueUuid)
-  val nrsConfigEnabled = NrsConfig(nrsEnabled = true, "nrs-api-key", 300, "nrs.url")
-  val nrsConfigDisabled = NrsConfig(nrsEnabled = false, "nrs-api-key", 300, "nrs.url")
+  val nrSubmissionId = NrSubmissionId(conversationId.uuid)
+  val nrsConfigEnabled = NrsConfig(nrsEnabled = true, "nrs-api-key", "nrs.url")
+  val nrsConfigDisabled = NrsConfig(nrsEnabled = false, "nrs-api-key",  "nrs.url")
 
   val fileUploadConfig = FileUploadConfig("upscan-initiate.url", "callback.url", "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl")
 
@@ -90,6 +88,10 @@ object TestData {
   val declarantEoriValue = "ZZ123456789000"
   val declarantEori = Eori(declarantEoriValue)
   val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
+  val ONE = 1
+  val TWO = 2
+  val THREE = 3
+  val FOUR = 4
 
   val ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
@@ -100,8 +102,8 @@ object TestData {
     NonCsp(Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    FileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
-    Seq(FileUploadFile(FileSequenceNo(1), maybeDocumentType = None), FileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
+    FileUploadRequest(DeclarationId("decId123"),FileGroupSize(TWO),
+    Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None), FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")))))
   )
 
   val ValidatedFileUploadPayloadRequestForCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
@@ -113,8 +115,8 @@ object TestData {
     FileUploadCsp(badgeIdentifier, Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
-    FileUploadRequest(DeclarationId("decId123"),FileGroupSize(2),
-    Seq(FileUploadFile(FileSequenceNo(1), Some(DocumentType("docType1"))), FileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2")))))
+    FileUploadRequest(DeclarationId("decId123"),FileGroupSize(TWO),
+    Seq(FileUploadFile(FileSequenceNo(ONE), Some(DocumentType("docType1"))), FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")))))
   )
 
   val ValidatedFileUploadPayloadRequestWithFourFiles = ValidatedFileUploadPayloadRequest(
@@ -128,24 +130,25 @@ object TestData {
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     FileUploadRequest(
       DeclarationId("decId123"),
-      FileGroupSize(4),
-      Seq(FileUploadFile(FileSequenceNo(1), maybeDocumentType = None),
-        FileUploadFile(FileSequenceNo(2), Some(DocumentType("docType2"))),
-        FileUploadFile(FileSequenceNo(3), Some(DocumentType("docType3"))),
-        FileUploadFile(FileSequenceNo(4), Some(DocumentType("docType4")))))
+      FileGroupSize(FOUR),
+      Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None),
+        FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2"))),
+        FileUploadFile(FileSequenceNo(THREE), Some(DocumentType("docType3"))),
+        FileUploadFile(FileSequenceNo(FOUR), Some(DocumentType("docType4")))))
   )
 
-  val nrsInternalIdValue = "internalId"
-  val nrsExternalIdValue = "externalId"
-  val nrsAgentCodeValue = "agentCode"
-  val nrsCredentials = Credentials(providerId= "providerId", providerType= "providerType")
-  val nrsConfidenceLevel = L500
-  val nrsNinoValue = "ninov"
-  val nrsSaUtrValue = "saUtr"
-  val nrsNameValue = Name(Some("name"), Some("lastname"))
-  val nrsDateOfBirth = Some(LocalDate.now().minusYears(25))
-  val nrsEmailValue = Some("nrsEmailValue")
-  val nrsAgentInformationValue = AgentInformation(Some("agentId"),
+  val nrsInternalIdValue: String = "internalId"
+  val nrsExternalIdValue: String = "externalId"
+  val nrsAgentCodeValue: String = "agentCode"
+  val nrsCredentials: Credentials = Credentials(providerId= "providerId", providerType= "providerType")
+  val nrsConfidenceLevel: ConfidenceLevel.L500.type = L500
+  val nrsNinoValue: String = "ninov"
+  val nrsSaUtrValue: String = "saUtr"
+  val nrsNameValue: Name = Name(Some("name"), Some("lastname"))
+  val TWENTY_FIVE = 25
+  val nrsDateOfBirth: Option[LocalDate] = Some(LocalDate.now().minusYears(TWENTY_FIVE))
+  val nrsEmailValue: Option[String] = Some("nrsEmailValue")
+  val nrsAgentInformationValue: AgentInformation = AgentInformation(Some("agentId"),
                                                   Some("agentCode"),
                                                   Some("agentFriendlyName"))
   val nrsGroupIdentifierValue = Some("groupIdentifierValue")
@@ -165,9 +168,12 @@ object TestData {
   val nrsAffinityGroup = Some(Individual)
   val nrsCredentialStrength = Some("STRONG")
 
-  val currentLoginTime: DateTime = new DateTime(1530442800000L, UTC)
-  val previousLoginTime: DateTime = new DateTime(1530464400000L, UTC)
-  val nrsTimeStamp: DateTime = new DateTime(1530475200000L, UTC)
+  val CURRENT_TIME_IN_MILLIS = 1530442800000L
+  val PREVIOUS_TIME_IN_MILLIS = 1530464400000L
+  val NRS_TIMESTAMP_IN_MILLIS = 1530475200000L
+  val currentLoginTime: DateTime = new DateTime(CURRENT_TIME_IN_MILLIS, UTC)
+  val previousLoginTime: DateTime = new DateTime(PREVIOUS_TIME_IN_MILLIS, UTC)
+  val nrsTimeStamp: DateTime = new DateTime(NRS_TIMESTAMP_IN_MILLIS, UTC)
 
   val nrsLoginTimes = LoginTimes(currentLoginTime, Some(previousLoginTime))
 
@@ -192,7 +198,7 @@ object TestData {
     nrsCredentialStrength,
     nrsLoginTimes)
 
-  val nrsRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
+  val nrsRetrievalData: Retrieval[Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes] = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
     Retrievals.nino and Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
     Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
     Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
@@ -220,16 +226,16 @@ object TestData {
 
   val cspNrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
     "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
-    JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
+    JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))), conversationIdValue)
 
 
   val nrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
     "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
-    JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
+    JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))), conversationIdValue)
 
   val cspNrsMetadataMultipleHeaderValues = new NrsMetadata("cds", "cds-declaration", "application/xml",
     "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Accept":"ABC,DEF","Authorization":"bearer-token"}"""),
-    JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))))
+    JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))), conversationIdValue)
 
   val nrsPayload = new NrsPayload("QW55Q29udGVudEFzWG1sKDxmb28+YmFyPC9mb28+KQ==", nrsMetadata)
   val cspNrsPayload = new NrsPayload("QW55Q29udGVudEFzWG1sKDxmb28+YmFyPC9mb28+KQ==", cspNrsMetadata)
@@ -261,7 +267,7 @@ object TestData {
     """.stripMargin)
 
   // note we can not mock service methods that return value classes - however using a simple stub IMHO it results in cleaner code (less mocking noise)
-  lazy val stubUniqueIdsService = new UniqueIdsService(mockUuidService) {
+  lazy val stubUniqueIdsService: UniqueIdsService = new UniqueIdsService(mockUuidService) {
     override def conversation: ConversationId = conversationId
 
     override def correlation: CorrelationId = correlationId
@@ -319,7 +325,7 @@ object TestData {
     location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(2), size = 1, documentType = Some(DocumentType("Document Type 2")))
   val BatchFileThree = BatchFile(reference = FileReferenceThree, Some(CallbackFieldsThree),
     location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(3), size = 1, documentType = Some(DocumentType("Document Type 3")))
-  val BatchFileOneNoCallbackFields = BatchFileOne.copy(maybeCallbackFields = None)
+  val BatchFileOneNoCallbackFields: BatchFile = BatchFileOne.copy(maybeCallbackFields = None)
   val FileMetadataWithFileOne = FileUploadMetadata(DeclarationId("1"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 1, Seq(
     BatchFileOne
   ))
@@ -367,28 +373,28 @@ object RequestHeaders {
   val ACCEPT_HMRC_XML_V3_HEADER: (String, String) = ACCEPT -> ACCEPT_HMRC_XML_V3_VALUE
   val ACCEPT_HEADER_INVALID: (String, String) = ACCEPT -> "invalid"
 
-  val ValidHeadersV2 = Map(
+  val ValidHeadersV2: Map[String, String] = Map(
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V2_HEADER,
     X_CLIENT_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER
   )
 
-  val ValidHeadersV3 = Map(
+  val ValidHeadersV3: Map[String, String] = Map(
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V3_HEADER,
     X_CLIENT_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER
   )
 
-  val ValidHeadersV1 = Map(
+  val ValidHeadersV1: Map[String, String] = Map(
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V1_HEADER,
     X_CLIENT_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER
   )
 
-  val ValidGoogleAnalyticsHeaders = Map(
+  val ValidGoogleAnalyticsHeaders: Map[String, String] = Map(
     CONTENT_TYPE -> MimeTypes.JSON,
     ACCEPT_HMRC_XML_V1_HEADER
   )

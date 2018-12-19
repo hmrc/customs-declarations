@@ -55,7 +55,6 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |fileUpload.fileGroupSize.maximum=10
       |nrs.enabled=true
       |nrs.apikey="nrs-api-key"
-      |nrs.waittime.millis=300
       |microservice.services.nrs.host="nrs.url"
       |microservice.services.nrs.port=11114
       |microservice.services.nrs.context=/submission
@@ -117,7 +116,6 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'googleAnalytics.eventValue'
           |Could not find config key 'nrs.enabled'
           |Could not find config key 'nrs.apikey'
-          |Could not find config key 'nrs.waittime.millis'
           |Could not find config nrs.host
           |Service configuration not found for key: nrs.context
           |Could not find config upscan-initiate.host

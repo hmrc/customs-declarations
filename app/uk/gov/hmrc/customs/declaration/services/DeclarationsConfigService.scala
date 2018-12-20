@@ -75,7 +75,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     ) mapN GoogleAnalyticsConfig
 
   private val validatedNrsConfig: CustomsValidatedNel[NrsConfig] = (
-    nrsEnabled, nrsApiKey, nrsWaitTimeMillis, nrsUrl
+    nrsEnabled, nrsApiKey, nrsUrl
     ) mapN NrsConfig
 
   private val validatedFileUploadConfig: CustomsValidatedNel[FileUploadConfig] = (

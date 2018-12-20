@@ -22,7 +22,7 @@ case class DeclarationsConfig(apiSubscriptionFieldsBaseUrl: String,
                               customsNotificationBearerToken: String,
                               declarationStatusRequestDaysLimit: Int)
 
-case class NrsConfig(nrsEnabled: Boolean, nrsApiKey: String, nrsWaitTimeMillis: Int, nrsUrl: String)
+case class NrsConfig(nrsEnabled: Boolean, nrsApiKey: String,  nrsUrl: String)
 
 case class DeclarationsCircuitBreakerConfig(numberOfCallsToTriggerStateChange: Int,
                                             unavailablePeriodDurationInMillis: Int,

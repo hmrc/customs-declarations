@@ -41,7 +41,6 @@ import util.CustomsDeclarationsMetricsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
@@ -100,6 +99,16 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
           .withParamMatcher(any[HasConversationId])
           .verify()
       }
+
+      "send transformed xml to connector even when nrs fails" in new SetUp() {
+        when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.failed(emulatedServiceFailure))
+
+        val result: Either[Result, Option[NrSubmissionId]] = send()
+
+        result shouldBe Right(Some(nrSubmissionId))
+        verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+      }
+
     }
 
     "get utc date time and pass to connector" in new SetUp() {
@@ -153,28 +162,14 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       result shouldBe Left(errorResponseServiceUnavailable.XmlResult.withNrSubmissionId(nrSubmissionId))
     }
 
-  "should not have nrs receipt id when call to nrs does not return in time" in new SetUp() {
+    "when NRS disabled should not get a submission id" in new SetUp() {
 
-    when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future {
-      Thread.sleep(1000)
-      nrSubmissionId
-    })
+      when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
 
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    result shouldBe Right(None)
-    verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
-  }
-
-  "when NRS disabled should not get a submission id" in new SetUp() {
-
-    when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
-
-    val result: Either[Result, Option[NrSubmissionId]] = send()
-
-    result shouldBe Right(None)
-    verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
-  }
+      result shouldBe Right(None)
+      verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+    }
 
 }
-

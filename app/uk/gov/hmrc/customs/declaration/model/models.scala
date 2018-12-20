@@ -29,8 +29,8 @@ case class Eori(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
 object Eori {
-  implicit val writer = Writes[Eori] { x => JsString(x.value) }
-  implicit val reader = Reads.of[String].map(new Eori(_))
+  implicit val writer: Writes[Eori] = Writes[Eori] { x => JsString(x.value) }
+  implicit val reader: Reads[Eori] = Reads.of[String].map(new Eori(_))
 }
 
 case class BadgeIdentifierEoriPair(badgeIdentifier: BadgeIdentifier, eori: Eori)
@@ -40,7 +40,7 @@ case class NrSubmissionId(nrSubmissionId: UUID) extends AnyVal {
 }
 
 object NrSubmissionId {
-  implicit val format = Json.format[NrSubmissionId]
+  implicit val format: OFormat[NrSubmissionId] = Json.format[NrSubmissionId]
 }
 
 case class NrsRetrievalData(internalId: Option[String],
@@ -65,14 +65,14 @@ case class NrsRetrievalData(internalId: Option[String],
   loginTimes: LoginTimes)
 
 object NrsRetrievalData {
-  implicit val credentialsFormat = Json.format[Credentials]
-  implicit val nameFormat = Json.format[Name]
-  implicit val agentInformationFormat = Json.format[AgentInformation]
-  implicit val mdtpInformationFormat = Json.format[MdtpInformation]
-  implicit val itmpNameFormat = Json.format[ItmpName]
-  implicit val itmpAddressFormat = Json.format[ItmpAddress]
-  implicit val loginTimesFormat = Json.format[LoginTimes]
-  implicit val nrsRetrievalData = Json.format[NrsRetrievalData]
+  implicit val credentialsFormat: OFormat[Credentials] = Json.format[Credentials]
+  implicit val nameFormat: OFormat[Name] = Json.format[Name]
+  implicit val agentInformationFormat: OFormat[AgentInformation] = Json.format[AgentInformation]
+  implicit val mdtpInformationFormat: OFormat[MdtpInformation] = Json.format[MdtpInformation]
+  implicit val itmpNameFormat: OFormat[ItmpName] = Json.format[ItmpName]
+  implicit val itmpAddressFormat: OFormat[ItmpAddress] = Json.format[ItmpAddress]
+  implicit val loginTimesFormat: OFormat[LoginTimes] = Json.format[LoginTimes]
+  implicit val nrsRetrievalData: OFormat[NrsRetrievalData] = Json.format[NrsRetrievalData]
 }
 
 case class ClientId(value: String) extends AnyVal {
@@ -83,8 +83,8 @@ case class ConversationId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
 }
 object ConversationId {
-  implicit val writer = Writes[ConversationId] { x => JsString(x.uuid.toString) }
-  implicit val reader = Reads.of[UUID].map(new ConversationId(_))
+  implicit val writer: Writes[ConversationId] = Writes[ConversationId] { x => JsString(x.uuid.toString) }
+  implicit val reader: Reads[ConversationId] = Reads.of[UUID].map(new ConversationId(_))
 }
 
 case class Mrn(value: String) extends AnyVal {
@@ -108,27 +108,27 @@ object GoogleAnalyticsValues {
     override val failure: String = "declarationCancellationFailure"
   }
 
-  val FileUpload = new GoogleAnalyticsValues {
+  val FileUpload: GoogleAnalyticsValues = new GoogleAnalyticsValues {
     override val success: String = "declarationFileUploadSuccess"
     override val failure: String = "declarationFileUploadFailure"
   }
 
-  val Clearance = new GoogleAnalyticsValues {
+  val Clearance: GoogleAnalyticsValues = new GoogleAnalyticsValues {
     override val success: String = "declarationClearanceSuccess"
     override val failure: String = "declarationClearanceFailure"
   }
 
-  val Amend = new GoogleAnalyticsValues {
+  val Amend: GoogleAnalyticsValues = new GoogleAnalyticsValues {
     override lazy val success: String = "declarationAmendSuccess"
     override lazy val failure: String = "declarationAmendFailure"
   }
 
-  val ArrivalNotification = new GoogleAnalyticsValues {
+  val ArrivalNotification: GoogleAnalyticsValues = new GoogleAnalyticsValues {
     override val success: String = "declarationArrivalNotificationSuccess"
     override val failure: String = "declarationArrivalNotificationFailure"
   }
 
-  val DeclarationStatus = new GoogleAnalyticsValues {
+  val DeclarationStatus: GoogleAnalyticsValues = new GoogleAnalyticsValues {
     override val success: String = "declarationStatusSuccess"
     override val failure: String = "declarationStatusFailure"
   }
@@ -151,16 +151,16 @@ case class SubscriptionFieldsId(value: UUID) extends AnyVal{
   override def toString: String = value.toString
 }
 object SubscriptionFieldsId {
-  implicit val writer = Writes[SubscriptionFieldsId] { x => JsString(x.value.toString) }
-  implicit val reader = Reads.of[UUID].map(new SubscriptionFieldsId(_))
+  implicit val writer: Writes[SubscriptionFieldsId] = Writes[SubscriptionFieldsId] { x => JsString(x.value.toString) }
+  implicit val reader: Reads[SubscriptionFieldsId] = Reads.of[UUID].map(new SubscriptionFieldsId(_))
 }
 
 case class DeclarationId(value: String) extends AnyVal{
   override def toString: String = value.toString
 }
 object DeclarationId {
-  implicit val writer = Writes[DeclarationId] { x => JsString(x.value) }
-  implicit val reader = Reads.of[String].map(new DeclarationId(_))
+  implicit val writer: Writes[DeclarationId] = Writes[DeclarationId] { x => JsString(x.value) }
+  implicit val reader: Reads[DeclarationId] = Reads.of[String].map(new DeclarationId(_))
 }
 
 case class DocumentationType(value: String) extends AnyVal{
@@ -168,19 +168,19 @@ case class DocumentationType(value: String) extends AnyVal{
 }
 
 object DocumentationType {
-  implicit val writer = Writes[DocumentationType] { x => JsString(x.value) }
-  implicit val reader = Reads.of[String].map(new DocumentationType(_))
+  implicit val writer: Writes[DocumentationType] = Writes[DocumentationType] { x => JsString(x.value) }
+  implicit val reader: Reads[DocumentationType] = Reads.of[String].map(new DocumentationType(_))
 }
 
 case class FileSequenceNo(value: Int) extends AnyVal{
   override def toString: String = value.toString
 }
 object FileSequenceNo {
-  implicit val writer = Writes[FileSequenceNo] { x =>
+  implicit val writer: Writes[FileSequenceNo] = Writes[FileSequenceNo] { x =>
     val d: BigDecimal = x.value
     JsNumber(d)
   }
-  implicit val reader = Reads.of[Int].map(new FileSequenceNo(_))
+  implicit val reader: Reads[FileSequenceNo] = Reads.of[Int].map(new FileSequenceNo(_))
 }
 
 case class FileGroupSize(value: Int) extends AnyVal{
@@ -243,20 +243,21 @@ object UpscanInitiateResponsePayload {
 case class GoogleAnalyticsRequest(payload: String)
 
 object GoogleAnalyticsRequest {
-  implicit val format = Json.format[GoogleAnalyticsRequest]
+  implicit val format: OFormat[GoogleAnalyticsRequest] = Json.format[GoogleAnalyticsRequest]
 }
 
 case class NrsMetadata(businessId: String, notableEvent: String, payloadContentType: String, payloadSha256Checksum: String,
-                       userSubmissionTimestamp: String, identityData: NrsRetrievalData, userAuthToken: String, headerData: JsValue, searchKeys: JsValue)
+                       userSubmissionTimestamp: String, identityData: NrsRetrievalData, userAuthToken: String, headerData: JsValue,
+                       searchKeys: JsValue, nrsSubmissionId: String)
 
 object NrsMetadata {
-  implicit val format = Json.format[NrsMetadata]
+  implicit val format: OFormat[NrsMetadata] = Json.format[NrsMetadata]
 }
 
 case class NrsPayload(payload: String, metadata: NrsMetadata)
 
 object NrsPayload {
-  implicit val format = Json.format[NrsPayload]
+  implicit val format: OFormat[NrsPayload] = Json.format[NrsPayload]
 }
 
 private object NotAvailable { val na = Some("NOT AVAILABLE") }
@@ -266,7 +267,7 @@ case class Declaration(versionNumber: Option[String] = NotAvailable.na, creation
 case class Parties(partyIdentification: PartyIdentification)
 case class PartyIdentification(number: Option[String] = NotAvailable.na)
 
-object PartyIdentification { implicit val format = Json.format[PartyIdentification] }
-object Parties { implicit val format = Json.format[Parties] }
-object Declaration { implicit val format = Json.format[Declaration] }
-object DeclarationManagementInformationResponse { implicit val format = Json.format[DeclarationManagementInformationResponse] }
+object PartyIdentification { implicit val format: OFormat[PartyIdentification] = Json.format[PartyIdentification] }
+object Parties { implicit val format: OFormat[Parties] = Json.format[Parties] }
+object Declaration { implicit val format: OFormat[Declaration] = Json.format[Declaration] }
+object DeclarationManagementInformationResponse { implicit val format: OFormat[DeclarationManagementInformationResponse] = Json.format[DeclarationManagementInformationResponse] }

@@ -53,7 +53,8 @@ class NrsService @Inject()(logger: DeclarationsLogger,
       userAuthToken = vpr.headers.get(Authorization).getOrElse(""),
       identityData = vpr.authorisedAs.retrievalData.get, // this should always be populated when nrs is enabled and called
       headerData = new JsObject(vpr.request.headers.toMap.map(x => x._1 -> JsString(x._2 mkString ","))),
-      searchKeys = JsObject(Map[String, JsValue](conversationIdKey -> JsString(vpr.conversationId.toString)))
+      searchKeys = JsObject(Map[String, JsValue](conversationIdKey -> JsString(vpr.conversationId.toString))),
+      nrsSubmissionId = vpr.conversationId.toString
     )
 
     val nrsPayload: NrsPayload = NrsPayload(base64().encode(vpr.request.body.toString.getBytes(UTF_8)), nrsMetadata)

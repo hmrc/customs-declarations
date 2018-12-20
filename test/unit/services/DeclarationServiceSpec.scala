@@ -41,7 +41,6 @@ import util.CustomsDeclarationsMetricsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
@@ -101,7 +100,6 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
           .verify()
       }
 
-
       "send transformed xml to connector even when nrs fails" in new SetUp() {
         when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.failed(emulatedServiceFailure))
 
@@ -110,7 +108,6 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
         result shouldBe Right(Some(nrSubmissionId))
         verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
       }
-
 
     }
 
@@ -176,4 +173,3 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     }
 
 }
-

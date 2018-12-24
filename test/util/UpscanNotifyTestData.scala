@@ -23,6 +23,8 @@ import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.customs.declaration.model._
 import util.TestData.FileReferenceOne
 
+import scala.xml.Elem
+
 object UpscanNotifyTestData {
   def readyJson(fileReference: FileReference = FileReferenceOne): JsValue = Json.parse(
     s"""{
@@ -38,7 +40,7 @@ object UpscanNotifyTestData {
       |}
       |""".stripMargin)
 
-  val FailedJson = Json.parse(
+  val FailedJson: JsValue = Json.parse(
     s"""{
       |       "reference" : "${FileReferenceOne.toString}",
       |       "fileStatus" : "FAILED",
@@ -48,7 +50,7 @@ object UpscanNotifyTestData {
       |       }
       |}""".stripMargin)
 
-  val FailedJsonWithInvalidFileStatus = Json.parse(
+  val FailedJsonWithInvalidFileStatus: JsValue = Json.parse(
     s"""{
       |       "reference" : "${FileReferenceOne.toString}",
       |       "fileStatus" : "INVALID_FILE_STATUS",
@@ -67,9 +69,10 @@ object UpscanNotifyTestData {
 
   val UpscanNotificationInternalServerErrorJson = """{"code":"INTERNAL_SERVER_ERROR","message":"Internal server error"}"""
   val UpscanNotificationBadRequestJson = """{"code":"BAD_REQUEST","message":"Invalid upscan notification"}"""
+  val UpscanNotificationBadRequestJsonPayload = """{"code":"BAD_REQUEST","message":"Invalid JSON payload"}"""
   val UpscanNotifyClientSubscriptionIdErrorJson = """{"code":"BAD_REQUEST","message":"Invalid clientSubscriptionId"}"""
 
-  val UpscanNotificationFailedCustomsNotificationXml =
+  val UpscanNotificationFailedCustomsNotificationXml: Elem =
     <root>
       <reference>{FileReferenceOne.toString}</reference>
       <fileStatus>FAILED</fileStatus>
@@ -79,7 +82,7 @@ object UpscanNotifyTestData {
       </failureDetails>
     </root>
 
-  val FileUploadInternalErrorNotificationXml =
+  val FileUploadInternalErrorNotificationXml: Elem =
     <errorResponse>
       <code>INTERNAL_SERVER_ERROR</code>
       <message>File upload for file reference {FileReferenceOne.toString} failed. A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.</message>

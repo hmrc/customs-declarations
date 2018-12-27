@@ -52,18 +52,18 @@ class DeclarationSchemaSpec extends ComponentTestSpec
 
   feature("The API handles cancellation-specific type code (INV) correctly") {
 
-    scenario("Response status 400 when user submits function code 13 + type code INV") {
+    scenario("Response status 202 when user submits function code 13 + type code INV") {
       Given("the API is available")
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
       val request = ValidSubmission_13_INV_Request.fromCsp.postTo(endpoint)
-
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
 
-      Then(s"a response with a 400 status is received")
+      Then(s"a response with a 202 status is received")
       result shouldBe 'defined
       val resultFuture = result.value
 
-      status(resultFuture) shouldBe BAD_REQUEST
+      status(resultFuture) shouldBe ACCEPTED
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }
 
@@ -82,7 +82,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       status(result) shouldBe ACCEPTED
     }
 
-    scenario("Response status 400 when authorised as CSP with privileged application and submits type code INV in the request") {
+    scenario("Response status 202 when authorised as CSP with privileged application and submits type code INV in the request") {
       Given("the API is available")
       val request = ValidSubmission_13_INV_Request.fromCsp.postTo(endpoint)
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
@@ -92,8 +92,8 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       When("a POST request with data is sent to the API")
       val resultFuture: Future[Result] = route(app = app, request).value
 
-      Then("a response with a 400 (BADREQUEST) status is received")
-      status(resultFuture) shouldBe BAD_REQUEST
+      Then("a response with a 202 (ACCEPTED) status is received")
+      status(resultFuture) shouldBe ACCEPTED
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }
 
@@ -109,18 +109,18 @@ class DeclarationSchemaSpec extends ComponentTestSpec
     }
 
 
-    scenario("Response status 400 when user submits type code INV in the request") {
+    scenario("Response status 202 when user submits type code INV in the request") {
       Given("the API is available")
       val request = ValidSubmission_INV_Request.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
 
-      Then(s"a response with a 400 status is received")
+      Then(s"a response with a 202 status is received")
       result shouldBe 'defined
       val resultFuture = result.value
 
-      status(resultFuture) shouldBe BAD_REQUEST
+      status(resultFuture) shouldBe ACCEPTED
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }
   }

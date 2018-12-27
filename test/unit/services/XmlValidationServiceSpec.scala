@@ -25,6 +25,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import uk.gov.hmrc.play.test.UnitSpec
+import util.TestXMLData
 import util.TestXMLData.{InvalidSubmissionXML, InvalidSubmissionXMLWith2Errors, ValidSubmissionXML}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -146,6 +147,12 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
       }
 
       caught.getMessage shouldBe "requirement failed: maxErrors should be a positive number but 0 was provided instead."
+    }
+
+    "successfully validate a cancellation request with typecode and function code" in {
+      val result = await(xmlValidationService.validate(TestXMLData.validCancellationXML()))
+
+      result should be(())
     }
 
   }

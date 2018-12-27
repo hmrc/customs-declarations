@@ -101,8 +101,9 @@ object TestXMLData {
       <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
       <md:ResponsibleAgencyName>Agency ABC</md:ResponsibleAgencyName>
       <md:AgencyAssignedCustomizationVersionCode>v1.2</md:AgencyAssignedCustomizationVersionCode>
-
-      <Declaration foo="bar"/>
+      <Declaration foo="bar">
+        <FunctionCode>13</FunctionCode>
+      </Declaration>
     </md:MetaData>
 
   val InvalidSubmissionXMLWith2Errors: Elem =
@@ -113,8 +114,8 @@ object TestXMLData {
       <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
       <md:ResponsibleAgencyName>Agency ABC</md:ResponsibleAgencyName>
       <md:AgencyAssignedCustomizationVersionCode>v1.2</md:AgencyAssignedCustomizationVersionCode>
-
       <Declaration foo="bar">
+        <FunctionCode>13</FunctionCode>
         <TotalPackageQuantity>ABC</TotalPackageQuantity>
       </Declaration>
     </md:MetaData>

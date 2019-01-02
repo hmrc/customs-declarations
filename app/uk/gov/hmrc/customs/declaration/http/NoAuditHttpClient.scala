@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.http
 
-
+import akka.actor.ActorSystem
 import com.typesafe.config.Config
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
@@ -26,11 +26,9 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.ws._
 
 @Singleton
-class NoAuditHttpClient @Inject()(
-                                   config: Configuration,
-                                   override val wsClient: WSClient)
-  extends HttpClient
-    with WSHttp {
+class NoAuditHttpClient @Inject()( config: Configuration,
+                                   override val wsClient: WSClient,
+                                   override val actorSystem: ActorSystem) extends HttpClient with WSHttp {
   override lazy val configuration: Option[Config] = Option(config.underlying)
   override val hooks: Seq[HttpHook] = Seq.empty
 }

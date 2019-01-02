@@ -29,7 +29,6 @@ import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, _}
 import uk.gov.hmrc.customs.api.common.config.ServicesConfig
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers.FileUploadUpscanNotificationController
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
@@ -44,11 +43,10 @@ import scala.concurrent.Future
 class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {
 
   trait SetUp {
-    val mockNotificationService = mock[FileUploadNotificationService]
-    val mockToXmlNotification = mock[UpscanNotificationCallbackToXmlNotification]
-    val mockErrorToXmlNotification = mock[InternalErrorXmlNotification]
-    val mockBusinessService = mock[FileUploadUpscanNotificationBusinessService]
-
+    val mockNotificationService: FileUploadNotificationService = mock[FileUploadNotificationService]
+    val mockToXmlNotification: UpscanNotificationCallbackToXmlNotification = mock[UpscanNotificationCallbackToXmlNotification]
+    val mockErrorToXmlNotification: InternalErrorXmlNotification = mock[InternalErrorXmlNotification]
+    val mockBusinessService: FileUploadUpscanNotificationBusinessService = mock[FileUploadUpscanNotificationBusinessService]
     val controller = new FileUploadUpscanNotificationController(
       mockNotificationService,
       mockToXmlNotification,
@@ -174,12 +172,25 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
         verifyZeroInteractions(mockToXmlNotification)
       }
     }
+
+    "return 400 when a invalid json is received" in new SetUp {
+    private val result = post(FakeRequest().withTextBody("some").withHeaders((CONTENT_TYPE, "application/json")))
+
+    status(result) mustBe BAD_REQUEST
+
+    contentAsString(result) mustBe UpscanNotificationBadRequestJsonPayload
+    verifyZeroInteractions(mockNotificationService)
+    verifyZeroInteractions(mockBusinessService)
+    verifyZeroInteractions(mockErrorToXmlNotification)
+    verifyZeroInteractions(mockToXmlNotification)
   }
+
+}
 
   private def fakeRequestWith(json: JsValue) =
     FakeRequest().withJsonBody(json)
 
-  private implicit val hasConversationId = new HasConversationId {
+  private implicit val hasConversationId: HasConversationId = new HasConversationId {
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
 }

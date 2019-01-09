@@ -97,6 +97,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       status(result) shouldBe ACCEPTED
 
       And("the response body is empty")
+
       contentAsString(result) shouldBe 'empty
 
       And("the request was authorised with AuthService")

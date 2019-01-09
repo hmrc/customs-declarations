@@ -41,7 +41,7 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"$XBadgeIdentifierHeaderName header is missing or invalid")
   private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
-  private lazy val xEoriIdentifierRegex = "^[0-9A-Za-z]{1,17}$".r
+  private lazy val xCustomIdentifierHeaderRegex = "^[^\\s]{1,17}$".r
   private def errorResponseEoriIdentifierHeaderMissing(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is missing or invalid")
 
   def validateHeaders[A](implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeaders] = {
@@ -95,12 +95,12 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 
-  def eitherEori[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
-    val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
+  def eitherEori[A](customIdentifierHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
+    val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(customIdentifierHeaderName)
 
-    maybeEori.filter(xEoriIdentifierRegex.findFirstIn(_).nonEmpty).map(s => Eori(s)).toRight{
-      logger.error(s"EORI identifier invalid or not present for CSP ($maybeEori)")
-      errorResponseEoriIdentifierHeaderMissing(eoriHeaderName)
+    maybeEori.filter(xCustomIdentifierHeaderRegex.findFirstIn(_).nonEmpty).map(s => Eori(s)).toRight{
+      logger.error(s"$customIdentifierHeaderName header is invalid or not present for CSP ($maybeEori)")
+      errorResponseEoriIdentifierHeaderMissing(customIdentifierHeaderName)
     }
   }
 

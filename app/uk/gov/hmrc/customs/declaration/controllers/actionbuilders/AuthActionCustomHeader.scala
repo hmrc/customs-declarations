@@ -25,26 +25,47 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, HasRequest}
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 
-@Singleton
-class FileUploadAuthAction @Inject()(customsAuthService: CustomsAuthService,
-                                     headerValidator: HeaderValidator,
-                                     logger: DeclarationsLogger,
-                                     googleAnalyticsConnector: GoogleAnalyticsConnector,
-                                     declarationConfigService: DeclarationsConfigService)
+abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthService,
+                                       headerValidator: HeaderValidator,
+                                       logger: DeclarationsLogger,
+                                       googleAnalyticsConnector: GoogleAnalyticsConnector,
+                                       declarationConfigService: DeclarationsConfigService,
+                                       identifierHeaderName: String)
   extends AuthAction(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService) {
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, AuthorisedAsCsp] = {
     for {
       badgeId <- eitherBadgeIdentifier.right
       eori <- eitherEori.right
-    } yield FileUploadCsp(badgeId, eori, maybeNrsRetrievalData)
+    } yield CspWithEori(badgeId, eori, maybeNrsRetrievalData)
   }
 
   private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, Eori] = {
-    headerValidator.eitherEori(XEoriIdentifierHeaderName).left.map{errorResponse =>
+    headerValidator.eitherEori(identifierHeaderName).left.map{errorResponse =>
       googleAnalyticsConnector.failure(errorResponse.message)
       errorResponse
     }
   }
+
+}
+
+@Singleton
+class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
+                                     headerValidator: HeaderValidator,
+                                     logger: DeclarationsLogger,
+                                     googleAnalyticsConnector: GoogleAnalyticsConnector,
+                                     declarationConfigService: DeclarationsConfigService)
+  extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService, XEoriIdentifierHeaderName) {
+
+}
+
+
+@Singleton
+class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService,
+                                          headerValidator: HeaderValidator,
+                                          logger: DeclarationsLogger,
+                                          googleAnalyticsConnector: GoogleAnalyticsConnector,
+                                          declarationConfigService: DeclarationsConfigService)
+  extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService, XSubmitterIdentifierHeaderName) {
 
 }

@@ -20,6 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{ActionRefiner, RequestHeader, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.XSubmitterIdentifierHeaderName
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -52,7 +53,8 @@ class AuthAction @Inject()(
                             headerValidator: HeaderValidator,
                             logger: DeclarationsLogger,
                             googleAnalyticsConnector: GoogleAnalyticsConnector,
-                            declarationConfigService: DeclarationsConfigService
+                            declarationConfigService: DeclarationsConfigService,
+                            identifierHeaderName: String = XSubmitterIdentifierHeaderName
 ) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {

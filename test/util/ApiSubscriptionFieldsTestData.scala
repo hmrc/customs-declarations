@@ -22,6 +22,7 @@ import com.typesafe.config.{Config, ConfigFactory}
 import uk.gov.hmrc.customs.declaration.model._
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
 import util.ExternalServicesConfig.{Host, Port}
+import util.TestData.declarantEoriValue
 
 trait ApiSubscriptionFieldsTestData {
   val subscriptionFieldsIdString = "327d9145-4965-4d28-a2c5-39dedee50334"
@@ -33,7 +34,7 @@ trait ApiSubscriptionFieldsTestData {
   val apiVersion = "1.0"
   val apiSubscriptionKey = ApiSubscriptionKey(clientId, apiContext, VersionOne)
   val apiSubscriptionKeyWithEncodedContext: ApiSubscriptionKey = apiSubscriptionKey.copy(context = apiContextEncoded)
-  val apiSubscriptionFieldsResponse = ApiSubscriptionFieldsResponse(UUID.fromString(subscriptionFieldsIdString))
+  val apiSubscriptionFieldsResponse = ApiSubscriptionFieldsResponse(UUID.fromString(subscriptionFieldsIdString), ApiSubscriptionFieldsResponseFields(Some(declarantEoriValue)))
   val responseJsonString: String =
     s"""{
        |  "clientId": "afsdknbw34ty4hebdv",
@@ -42,7 +43,8 @@ trait ApiSubscriptionFieldsTestData {
        |  "fieldsId":"$subscriptionFieldsIdString",
        |  "fields":{
        |    "callback-id":"http://localhost",
-       |    "token":"abc123"
+       |    "token":"abc123",
+       |    "authenticatedEori":"$declarantEoriValue"
        |  }
        |}""".stripMargin
 

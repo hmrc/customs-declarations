@@ -53,8 +53,7 @@ class AuthAction @Inject()(
                             headerValidator: HeaderValidator,
                             logger: DeclarationsLogger,
                             googleAnalyticsConnector: GoogleAnalyticsConnector,
-                            declarationConfigService: DeclarationsConfigService,
-                            identifierHeaderName: String = XSubmitterIdentifierHeaderName
+                            declarationConfigService: DeclarationsConfigService
 ) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {

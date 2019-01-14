@@ -18,14 +18,14 @@ package uk.gov.hmrc.customs.declaration.xml
 
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedPayloadRequest}
 
 import scala.xml.NodeSeq
 
 class MdgPayloadDecorator() {
 
-  def wrap[A](xml: NodeSeq, clientId: SubscriptionFieldsId, dateTime: DateTime)(implicit vpr: ValidatedPayloadRequest[A]): NodeSeq =
+  def wrap[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: DateTime)(implicit vpr: ValidatedPayloadRequest[A]): NodeSeq =
     <v1:submitDeclarationRequest
     xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1"
     xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2"
@@ -35,11 +35,18 @@ class MdgPayloadDecorator() {
         <!--type: regimeType-->
         <v1:regime>CDS</v1:regime>
         <v1:receiptDate>{ dateTime.toString(ISODateTimeFormat.dateTimeNoMillis) }</v1:receiptDate>
-        <v1:clientID>{clientId}</v1:clientID>
+        <v1:clientID>{asfr.fieldsId}</v1:clientID>
         <v1:conversationID>{vpr.conversationId.uuid}</v1:conversationID>
-        { vpr.authorisedAs match {
+        {val as = vpr.authorisedAs
+      as match {
             case Csp(badgeId, _) => <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>
-            case _ => NodeSeq.Empty
+            case NonCsp(eori, _) =>
+              <v1:authenticatedPartyID>{eori.value}</v1:authenticatedPartyID> // originatingPartyID is only required for CSPs
+            case CspWithEori(badgeId, eori, _) =>
+              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>
+              <v1:originatingPartyID>{eori.value}</v1:originatingPartyID>
+              <v1:authenticatedPartyID>{asfr.fields.authenticatedEori.get}</v1:authenticatedPartyID>
+
           }
         }
       </v1:requestCommon>

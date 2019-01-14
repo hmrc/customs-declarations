@@ -287,6 +287,9 @@ object TestData {
   def testFakeRequestWithBadgeIdEoriPair(badgeIdString: String = badgeIdentifier.value, eoriString: String = declarantEori.value): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString, RequestHeaders.X_EORI_IDENTIFIER_NAME -> eoriString)
 
+  def testFakeRequestWithHeader(header: String, headerValue: String): FakeRequest[AnyContentAsXml] =
+    FakeRequest().withXmlBody(TestXmlPayload).withHeaders(header -> headerValue)
+
   // For Status endpoint
   val TestConversationIdStatusRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, EventStart, TestFakeRequest)
   val TestExtractedStatusHeaders = ExtractedStatusHeadersImpl(VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
@@ -306,6 +309,7 @@ object TestData {
   val TestValidatedHeadersRequestWithBadgeIdAndNoEori: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithBadgeIdAndNoEori.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestValidatedHeadersRequestWithEoriAndNoBadgeId: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithEoriAndNoBadgeId.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestCspWithEoriValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(CspWithEori(badgeIdentifier, declarantEori, Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
   val TestCspValidatedPayloadRequestMultipleHeaderValues: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequestMultipleHeaderValues.toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
   val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori, Some(nrsRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 

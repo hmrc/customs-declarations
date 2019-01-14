@@ -27,6 +27,8 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 
+import scala.util.matching.Regex
+
 @Singleton
 class HeaderValidator @Inject()(logger: DeclarationsLogger) {
 
@@ -41,8 +43,10 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"$XBadgeIdentifierHeaderName header is missing or invalid")
   private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
-  private lazy val xCustomIdentifierHeaderRegex = "^[^\\s]{1,17}$".r
+  private lazy val EoriHeaderRegex: Regex = "^[^\\s]{1,17}$".r
+
   private def errorResponseEoriIdentifierHeaderMissing(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is missing or invalid")
+  private def errorResponseEoriIdentifierHeaderInvalid(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is invalid")
 
   def validateHeaders[A](implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeaders] = {
     implicit val headers: Headers = conversationIdRequest.headers
@@ -95,12 +99,26 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 
-  def eitherEori[A](customIdentifierHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
-    val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(customIdentifierHeaderName)
+  def eoriMustBeValidAndPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
+    val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
 
-    maybeEori.filter(xCustomIdentifierHeaderRegex.findFirstIn(_).nonEmpty).map(s => Eori(s)).toRight{
-      logger.error(s"$customIdentifierHeaderName header is invalid or not present for CSP ($maybeEori)")
-      errorResponseEoriIdentifierHeaderMissing(customIdentifierHeaderName)
+    maybeEori.filter(EoriHeaderRegex.findFirstIn(_).nonEmpty).map(s => Eori(s)).toRight{
+      logger.error(s"$eoriHeaderName header is invalid or not present for CSP ($maybeEori)")
+      errorResponseEoriIdentifierHeaderMissing(eoriHeaderName)
+    }
+  }
+
+  def eoriMustBeValidIfPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Unit] = {
+
+    val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
+
+    if (maybeEori.nonEmpty) {
+      maybeEori.filter(EoriHeaderRegex.findFirstIn(_).nonEmpty).map(_ => ()).toRight {
+        logger.error(s"$eoriHeaderName header is invalid: ($maybeEori)")
+        errorResponseEoriIdentifierHeaderInvalid(eoriHeaderName)
+      }
+    } else {
+      Right()
     }
   }
 

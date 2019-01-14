@@ -17,20 +17,24 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
+import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId, HasRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 
+import scala.concurrent.Future
+
 abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthService,
-                                       headerValidator: HeaderValidator,
-                                       logger: DeclarationsLogger,
-                                       googleAnalyticsConnector: GoogleAnalyticsConnector,
-                                       declarationConfigService: DeclarationsConfigService,
-                                       identifierHeaderName: String)
+                                                headerValidator: HeaderValidator,
+                                                logger: DeclarationsLogger,
+                                                googleAnalyticsConnector: GoogleAnalyticsConnector,
+                                                declarationConfigService: DeclarationsConfigService,
+                                                eoriHeaderName: String)
   extends AuthAction(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService) {
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, AuthorisedAsCsp] = {
@@ -41,7 +45,7 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
   }
 
   private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, Eori] = {
-    headerValidator.eitherEori(identifierHeaderName).left.map{errorResponse =>
+    headerValidator.eoriMustBeValidAndPresent(eoriHeaderName).left.map{ errorResponse =>
       googleAnalyticsConnector.failure(errorResponse.message)
       errorResponse
     }
@@ -67,5 +71,17 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
                                           googleAnalyticsConnector: GoogleAnalyticsConnector,
                                           declarationConfigService: DeclarationsConfigService)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService, XSubmitterIdentifierHeaderName) {
+
+  override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
+
+    implicit val implicitVhr: ValidatedHeadersRequest[A] = vhr
+
+    headerValidator.eoriMustBeValidIfPresent(XSubmitterIdentifierHeaderName) match {
+      case Right(_) => super.refine(vhr)
+      case Left(errorResponse) =>
+        googleAnalyticsConnector.failure(errorResponse.message)
+        Future.successful(Left(errorResponse.XmlResult.withConversationId))
+    }
+  }
 
 }

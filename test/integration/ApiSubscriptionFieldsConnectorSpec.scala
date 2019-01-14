@@ -82,7 +82,7 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
 
       intercept[RuntimeException](await(getApiSubscriptionFields)).getCause.getClass shouldBe classOf[NotFoundException]
 
-      verifyDeclarationsLoggerError("Subscriptions fields lookup call failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=404 error=GET of 'http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' returned 404 (Not Found). Response body: '{\n  \"clientId\": \"afsdknbw34ty4hebdv\",\n  \"apiContext\": \"ciao-api\",\n  \"apiVersion\": \"1.0\",\n  \"fieldsId\":\"327d9145-4965-4d28-a2c5-39dedee50334\",\n  \"fields\":{\n    \"callback-id\":\"http://localhost\",\n    \"token\":\"abc123\"\n  }\n}'")
+      verifyDeclarationsLoggerError("Subscriptions fields lookup call failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=404 error=GET of 'http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' returned 404 (Not Found). Response body: '{\n  \"clientId\": \"afsdknbw34ty4hebdv\",\n  \"apiContext\": \"ciao-api\",\n  \"apiVersion\": \"1.0\",\n  \"fieldsId\":\"327d9145-4965-4d28-a2c5-39dedee50334\",\n  \"fields\":{\n    \"callback-id\":\"http://localhost\",\n    \"token\":\"abc123\",\n    \"authenticatedEori\":\"ZZ123456789000\"\n  }\n}'")
     }
 
     "return a failed future when external service returns 400" in {
@@ -90,7 +90,7 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
 
       intercept[RuntimeException](await(getApiSubscriptionFields)).getCause.getClass shouldBe classOf[BadRequestException]
 
-      verifyDeclarationsLoggerError("Subscriptions fields lookup call failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=400 error=GET of 'http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' returned 400 (Bad Request). Response body '{\n  \"clientId\": \"afsdknbw34ty4hebdv\",\n  \"apiContext\": \"ciao-api\",\n  \"apiVersion\": \"1.0\",\n  \"fieldsId\":\"327d9145-4965-4d28-a2c5-39dedee50334\",\n  \"fields\":{\n    \"callback-id\":\"http://localhost\",\n    \"token\":\"abc123\"\n  }\n}'")
+      verifyDeclarationsLoggerError("Subscriptions fields lookup call failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=400 error=GET of 'http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' returned 400 (Bad Request). Response body '{\n  \"clientId\": \"afsdknbw34ty4hebdv\",\n  \"apiContext\": \"ciao-api\",\n  \"apiVersion\": \"1.0\",\n  \"fieldsId\":\"327d9145-4965-4d28-a2c5-39dedee50334\",\n  \"fields\":{\n    \"callback-id\":\"http://localhost\",\n    \"token\":\"abc123\",\n    \"authenticatedEori\":\"ZZ123456789000\"\n  }\n}'")
     }
 
     "return a failed future when external service returns any 4xx response other than 400" in {

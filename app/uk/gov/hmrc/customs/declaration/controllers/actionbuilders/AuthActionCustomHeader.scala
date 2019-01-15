@@ -72,16 +72,4 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
                                           declarationConfigService: DeclarationsConfigService)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService, XSubmitterIdentifierHeaderName) {
 
-  override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
-
-    implicit val implicitVhr: ValidatedHeadersRequest[A] = vhr
-
-    headerValidator.eoriMustBeValidIfPresent(XSubmitterIdentifierHeaderName) match {
-      case Right(_) => super.refine(vhr)
-      case Left(errorResponse) =>
-        googleAnalyticsConnector.failure(errorResponse.message)
-        Future.successful(Left(errorResponse.XmlResult.withConversationId))
-    }
-  }
-
 }

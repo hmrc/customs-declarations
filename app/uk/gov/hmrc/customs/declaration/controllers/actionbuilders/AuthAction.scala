@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{ActionRefiner, RequestHeader, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.XSubmitterIdentifierHeaderName
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._

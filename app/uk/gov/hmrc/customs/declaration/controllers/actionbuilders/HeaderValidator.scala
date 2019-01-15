@@ -43,7 +43,7 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   private val errorResponseBadgeIdentifierHeaderMissing = errorBadRequest(s"$XBadgeIdentifierHeaderName header is missing or invalid")
   private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
-  private lazy val EoriHeaderRegex: Regex = "^[^\\s]{1,17}$".r
+  private lazy val EoriHeaderRegex: Regex = "(^[\\s]*$|^.{18,}$)".r
 
   private def errorResponseEoriIdentifierHeaderMissing(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is missing or invalid")
   private def errorResponseEoriIdentifierHeaderInvalid(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is invalid")
@@ -102,23 +102,9 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   def eoriMustBeValidAndPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
     val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
 
-    maybeEori.filter(EoriHeaderRegex.findFirstIn(_).nonEmpty).map(s => Eori(s)).toRight{
+    maybeEori.filter(EoriHeaderRegex.findFirstIn(_).isEmpty).map(s => Eori(s)).toRight{
       logger.error(s"$eoriHeaderName header is invalid or not present for CSP ($maybeEori)")
       errorResponseEoriIdentifierHeaderMissing(eoriHeaderName)
-    }
-  }
-
-  def eoriMustBeValidIfPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Unit] = {
-
-    val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
-
-    if (maybeEori.nonEmpty) {
-      maybeEori.filter(EoriHeaderRegex.findFirstIn(_).nonEmpty).map(_ => ()).toRight {
-        logger.error(s"$eoriHeaderName header is invalid: ($maybeEori)")
-        errorResponseEoriIdentifierHeaderInvalid(eoriHeaderName)
-      }
-    } else {
-      Right()
     }
   }
 

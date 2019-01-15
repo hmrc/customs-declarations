@@ -197,7 +197,7 @@ case class AnalyticsValuesAndConversationIdRequest[A](
  analyticsValues: GoogleAnalyticsValues,
  start: ZonedDateTime,
  request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues
+) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with HasAnalyticsValues
 
 // Available after ValidatedHeadersAction builder
 case class ValidatedHeadersRequest[A](

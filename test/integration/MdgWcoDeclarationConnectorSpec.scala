@@ -84,7 +84,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
     "make a correct request" in {
       setupMdgWcoDecServiceToReturn(ACCEPTED)
       await(sendValidXml())
-      verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+      verifyMdgWcoDecServiceWasCalledWithV2(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
     }
 
     "circuit breaker trips after specified number of failures" in {
@@ -109,7 +109,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
         resetMockServer()
         setupMdgWcoDecServiceToReturn(ACCEPTED)
         await(sendValidXml())
-        verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+        verifyMdgWcoDecServiceWasCalledWithV2(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
       }
     }
 

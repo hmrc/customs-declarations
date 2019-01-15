@@ -25,8 +25,8 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, ExtractedHeaders, ExtractedHeadersImpl}
-import uk.gov.hmrc.customs.declaration.model.{GoogleAnalyticsValues, VersionOne, VersionThree, VersionTwo}
+import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ValidHeadersV2, _}
@@ -80,6 +80,50 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
       }
       "fail when request has invalid X-Client-ID header" in new SetUp {
         validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + X_CLIENT_ID_HEADER_INVALID)) shouldBe Left(ErrorInternalServerError)
+      }
+    }
+
+    "in validating the eori header" should {
+      "not allow an empty header" in new SetUp {
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "")))
+
+        value shouldBe Left(errorBadRequest(s"$X_SUBMITTER_IDENTIFIER_NAME header is missing or invalid"))
+      }
+
+      "not allow only spaces in the header" in new SetUp {
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "       ")))
+
+        value shouldBe Left(errorBadRequest(s"$X_SUBMITTER_IDENTIFIER_NAME header is missing or invalid"))
+      }
+
+      "now allow headers longer than 17 characters" in new SetUp {
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "012345678901234567")))
+
+        value shouldBe Left(errorBadRequest(s"$X_SUBMITTER_IDENTIFIER_NAME header is missing or invalid"))
+      }
+
+      "allow headers with leading spaces" in new SetUp {
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "  0123456789")))
+
+        value shouldBe Right(Eori("  0123456789"))
+      }
+
+      "allow headers with trailing spaces" in new SetUp {
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "0123456789    ")))
+
+        value shouldBe Right(Eori("0123456789    "))
+      }
+
+      "allow headers with embedded spaces" in new SetUp {
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "01234  56789")))
+
+        value shouldBe Right(Eori("01234  56789"))
+      }
+
+      "allow special characters" in new SetUp {
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "!£$%^&*()-_=+/<>@")))
+
+        value shouldBe Right(Eori("!£$%^&*()-_=+/<>@"))
       }
     }
   }

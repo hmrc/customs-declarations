@@ -112,7 +112,7 @@ object TestData {
     EventStart,
     VersionTwo,
     ClientId("ABC"),
-    FileUploadCsp(badgeIdentifier, Eori("123"), None),
+    CspWithEori(badgeIdentifier, Eori("123"), None),
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     FileUploadRequest(DeclarationId("decId123"),FileGroupSize(TWO),
@@ -287,6 +287,9 @@ object TestData {
   def testFakeRequestWithBadgeIdEoriPair(badgeIdString: String = badgeIdentifier.value, eoriString: String = declarantEori.value): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString, RequestHeaders.X_EORI_IDENTIFIER_NAME -> eoriString)
 
+  def testFakeRequestWithHeader(header: String, headerValue: String): FakeRequest[AnyContentAsXml] =
+    FakeRequest().withXmlBody(TestXmlPayload).withHeaders(header -> headerValue)
+
   // For Status endpoint
   val TestConversationIdStatusRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, EventStart, TestFakeRequest)
   val TestExtractedStatusHeaders = ExtractedStatusHeadersImpl(VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
@@ -306,6 +309,7 @@ object TestData {
   val TestValidatedHeadersRequestWithBadgeIdAndNoEori: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithBadgeIdAndNoEori.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestValidatedHeadersRequestWithEoriAndNoBadgeId: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithEoriAndNoBadgeId.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+  val TestCspWithEoriValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(CspWithEori(badgeIdentifier, declarantEori, Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
   val TestCspValidatedPayloadRequestMultipleHeaderValues: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequestMultipleHeaderValues.toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
   val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori, Some(nrsRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 
@@ -360,6 +364,9 @@ object RequestHeaders {
   val X_EORI_IDENTIFIER_NAME = "X-EORI-Identifier"
   val X_EORI_IDENTIFIER_HEADER: (String, String) = X_EORI_IDENTIFIER_NAME -> declarantEori.value
 
+  val X_SUBMITTER_IDENTIFIER_NAME = "X-Submitter-Identifier"
+  val X_SUBMITTER_IDENTIFIER_HEADER: (String, String) = X_SUBMITTER_IDENTIFIER_NAME -> declarantEori.value
+
   val CONTENT_TYPE_HEADER: (String, String) = CONTENT_TYPE -> MimeTypes.XML
   val CONTENT_TYPE_CHARSET_VALUE: String = s"${MimeTypes.XML}; charset=UTF-8"
   val CONTENT_TYPE_HEADER_CHARSET: (String, String) = CONTENT_TYPE -> CONTENT_TYPE_CHARSET_VALUE
@@ -377,21 +384,24 @@ object RequestHeaders {
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V2_HEADER,
     X_CLIENT_ID_HEADER,
-    X_BADGE_IDENTIFIER_HEADER
+    X_BADGE_IDENTIFIER_HEADER,
+    X_SUBMITTER_IDENTIFIER_HEADER
   )
 
   val ValidHeadersV3: Map[String, String] = Map(
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V3_HEADER,
     X_CLIENT_ID_HEADER,
-    X_BADGE_IDENTIFIER_HEADER
+    X_BADGE_IDENTIFIER_HEADER,
+    X_SUBMITTER_IDENTIFIER_HEADER
   )
 
   val ValidHeadersV1: Map[String, String] = Map(
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V1_HEADER,
     X_CLIENT_ID_HEADER,
-    X_BADGE_IDENTIFIER_HEADER
+    X_BADGE_IDENTIFIER_HEADER,
+    X_SUBMITTER_IDENTIFIER_HEADER
   )
 
   val ValidGoogleAnalyticsHeaders: Map[String, String] = Map(

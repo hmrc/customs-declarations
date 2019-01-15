@@ -81,7 +81,7 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with Guic
     "make a correct request" in {
       startMdgCancellationV1Service(ACCEPTED)
       await(sendValidXml())
-      verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+      verifyMdgWcoDecServiceWasCalledWithV1(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
     }
 
     "circuit breaker trips after specified number of failures" in {
@@ -106,7 +106,7 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with Guic
         resetMockServer()
         startMdgCancellationV1Service(ACCEPTED)
         await(sendValidXml())
-        verifyMdgWcoDecServiceWasCalledWith(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+        verifyMdgWcoDecServiceWasCalledWithV1(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
       }
     }
 

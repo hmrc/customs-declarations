@@ -19,12 +19,13 @@ package util.externalservices
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.UrlPattern
 import play.api.test.Helpers._
-import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig, WireMockRunner}
+import util.CustomsDeclarationsExternalServicesConfig.{MdgWcoDecV1ServiceContext, MdgWcoDecV2ServiceContext, MdgWcoDecV3ServiceContext}
+import util.{ExternalServicesConfig, WireMockRunner}
 
 trait MdgWcoDecService extends WireMockRunner {
-  private val urlV1MatchingRequestPath = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV1ServiceContext)
-  private val urlV2MatchingRequestPath = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext)
-  private val urlV3MatchingRequestPath = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV3ServiceContext)
+  private val urlV1MatchingRequestPath = urlMatching(MdgWcoDecV1ServiceContext)
+  private val urlV2MatchingRequestPath = urlMatching(MdgWcoDecV2ServiceContext)
+  private val urlV3MatchingRequestPath = urlMatching(MdgWcoDecV3ServiceContext)
 
   def startMdgWcoDecServiceV1(): Unit = {
     setupMdgWcoDecServiceToReturn(ACCEPTED, urlV1MatchingRequestPath)
@@ -45,10 +46,33 @@ trait MdgWcoDecService extends WireMockRunner {
         aResponse()
           .withStatus(status)))
 
-  def verifyMdgWcoDecServiceWasCalledWith(requestBody: String,
+  def verifyMdgWcoDecServiceWasCalledWithV2(requestBody: String,
+                                            expectedAuthToken: String = ExternalServicesConfig.AuthToken,
+                                            maybeUnexpectedAuthToken: Option[String] = None) {
+
+    verifyMdgWcoDecServiceWasCalledWith(MdgWcoDecV2ServiceContext, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
+  }
+
+  def verifyMdgWcoDecServiceWasCalledWithV1(requestBody: String,
                                           expectedAuthToken: String = ExternalServicesConfig.AuthToken,
                                           maybeUnexpectedAuthToken: Option[String] = None) {
-    verify(1, postRequestedFor(urlV2MatchingRequestPath)
+
+    verifyMdgWcoDecServiceWasCalledWith(MdgWcoDecV1ServiceContext, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
+  }
+
+  def verifyMdgWcoDecServiceWasCalledWithV3(requestBody: String,
+                                          expectedAuthToken: String = ExternalServicesConfig.AuthToken,
+                                          maybeUnexpectedAuthToken: Option[String] = None) {
+
+      verifyMdgWcoDecServiceWasCalledWith(MdgWcoDecV3ServiceContext, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
+  }
+
+  def verifyMdgWcoDecServiceWasCalledWith(requestPath: String,
+                                          requestBody: String,
+                                          expectedAuthToken: String,
+                                          maybeUnexpectedAuthToken: Option[String]) {
+
+    verify(1, postRequestedFor(urlMatching(requestPath))
       .withHeader(CONTENT_TYPE, equalTo(XML))
       .withHeader(ACCEPT, equalTo(XML))
       .withHeader(AUTHORIZATION, equalTo(s"Bearer $expectedAuthToken"))
@@ -56,10 +80,10 @@ trait MdgWcoDecService extends WireMockRunner {
       .withHeader("X-Correlation-ID", notMatching(""))
       .withHeader(X_FORWARDED_HOST, equalTo("MDTP"))
       .withRequestBody(equalToXml(requestBody))
-      )
+    )
 
     maybeUnexpectedAuthToken foreach { unexpectedAuthToken =>
-      verify(0, postRequestedFor(urlV2MatchingRequestPath).withHeader(AUTHORIZATION, equalTo(s"Bearer $unexpectedAuthToken")))
+      verify(0, postRequestedFor(urlMatching(requestPath)).withHeader(AUTHORIZATION, equalTo(s"Bearer $unexpectedAuthToken")))
     }
   }
 }

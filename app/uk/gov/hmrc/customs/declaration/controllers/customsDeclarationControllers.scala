@@ -38,8 +38,15 @@ class Common @Inject() (
 )
 
 @Singleton
+class CommonSubmitterHeader @Inject()(
+  override val authAction: AuthActionSubmitterHeader,
+  validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
+  logger: DeclarationsLogger
+) extends Common(authAction, validateAndExtractHeadersAction, logger)
+
+@Singleton
 class SubmitDeclarationController @Inject()(
-  common: Common,
+  common: CommonSubmitterHeader,
   businessService: StandardDeclarationSubmissionService,
   payloadValidationAction: SubmitPayloadValidationAction,
   analyticsValuesAction: DeclarationSubmitAnalyticsValuesAction,
@@ -49,7 +56,7 @@ class SubmitDeclarationController @Inject()(
 
 @Singleton
 class CancelDeclarationController @Inject()(
-  common: Common,
+  common: CommonSubmitterHeader,
   businessService: CancellationDeclarationSubmissionService,
   payloadValidationAction: CancelPayloadValidationAction,
   analyticsValuesAction: DeclarationCancellationAnalyticsValuesAction,
@@ -67,7 +74,7 @@ class ClearanceDeclarationController @Inject()(
 
 @Singleton
 class AmendDeclarationController @Inject()(
- common: Common,
+ common: CommonSubmitterHeader,
  businessService: StandardDeclarationSubmissionService,
  payloadValidationAction: AmendPayloadValidationAction,
  analyticsValuesAction: DeclarationAmendValuesAction,

@@ -96,7 +96,7 @@ trait DeclarationService {
     }
   }
 
-  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier, sfId: SubscriptionFieldsId): Future[Either[Result, Option[NrSubmissionId]]] = {
+  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier, asfr: ApiSubscriptionFieldsResponse): Future[Either[Result, Option[NrSubmissionId]]] = {
 
   val nrSubmissionId = new NrSubmissionId(vpr.conversationId.uuid)
     if (declarationsConfigService.nrsConfig.nrsEnabled) {
@@ -116,7 +116,7 @@ trait DeclarationService {
       logger.debug("NRS not enabled")
     }
 
-    callBackend(sfId).map {
+    callBackend(asfr).map {
         case Left(errorResult) =>
           logger.debug("MDG call failed")
           Left(errorResult.withNrSubmissionId(nrSubmissionId))
@@ -127,10 +127,20 @@ trait DeclarationService {
   }
 
   private def futureApiSubFieldsId[A](c: ClientId)
-                                     (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
+                                     (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, ApiSubscriptionFieldsResponse]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
-        Right(SubscriptionFieldsId(response.fieldsId))
+        vpr.authorisedAs match {
+          case Csp(_, _) | CspWithEori(_, _, _) =>
+            if (response.fields.authenticatedEori.isEmpty) {
+              logger.error(s"authenticatedEori for CSP not returned from api subscription fields for client id: ${c.value}")
+              Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+            } else {
+              Right(response)
+            }
+          case _ =>
+            Right(response)
+        }
     }).recover {
       case NonFatal(e) =>
         logger.error(s"Subscriptions fields lookup call failed: ${e.getMessage}", e)
@@ -138,11 +148,11 @@ trait DeclarationService {
     }
   }
 
-  private def callBackend[A](subscriptionFieldsId: SubscriptionFieldsId)
+  private def callBackend[A](asfr: ApiSubscriptionFieldsResponse)
                             (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     val dateTime = dateTimeProvider.nowUtc()
     val correlationId = uniqueIdsService.correlation
-    val xmlToSend = preparePayload(vpr.xmlBody, subscriptionFieldsId, dateTime)
+    val xmlToSend = preparePayload(vpr.xmlBody, asfr, dateTime)
 
     connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(None)).recover {
       case _: UnhealthyServiceException =>
@@ -154,10 +164,10 @@ trait DeclarationService {
     }
   }
 
-  private def preparePayload[A](xml: NodeSeq, clientId: SubscriptionFieldsId, dateTime: DateTime)
+  private def preparePayload[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: DateTime)
                                (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): NodeSeq = {
     logger.debug(s"preparePayload called")
-    wrapper.wrap(xml, clientId, dateTime)
+    wrapper.wrap(xml, asfr, dateTime)
   }
 
   private def logCallDuration[A](startTime: ZonedDateTime)

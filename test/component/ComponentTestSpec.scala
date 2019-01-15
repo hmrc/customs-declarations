@@ -16,20 +16,38 @@
 
 package component
 
+import java.time.{Instant, ZoneId, ZonedDateTime}
+
+import org.joda.time.{DateTime, DateTimeZone}
+import org.mockito.Mockito.when
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
+import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.customs.declaration.services.{DateTimeService, UniqueIdsService}
+import util.TestData.stubUniqueIdsService
 import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig}
 
 import scala.util.control.NonFatal
 import scala.xml.{Node, Utility, XML}
 
 trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
-  with BeforeAndAfterAll with BeforeAndAfterEach with Eventually {
+  with BeforeAndAfterAll with BeforeAndAfterEach with Eventually with MockitoSugar {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
+  private val mockDateTimeService =  mock[DateTimeService]
+
+  val dateTime = 1546344000000L // 01/01/2019 12:00:00
+
+  when(mockDateTimeService.nowUtc()).thenReturn(new DateTime(dateTime, DateTimeZone.UTC))
+  when(mockDateTimeService.zonedDateTimeUtc).thenReturn(ZonedDateTime.ofInstant(Instant.ofEpochMilli(dateTime), ZoneId.of("UTC")))
+
+  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+    .overrides(bind[DateTimeService].toInstance(mockDateTimeService))
+    .overrides(bind[UniqueIdsService].toInstance(stubUniqueIdsService))
+    .configure(Map(
     "xml.max-errors" -> 2,
     "microservice.services.auth.host" -> ExternalServicesConfig.Host,
     "microservice.services.auth.port" -> ExternalServicesConfig.Port,

@@ -78,7 +78,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       await(service.send(vpr, hc))
     }
 
-    when(mockPayloadDecorator.wrap(meq(TestXmlPayload), meq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
+    when(mockPayloadDecorator.wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(CustomsDeclarationsMetricsTestData.EventStart, CustomsDeclarationsMetricsTestData.EventEnd)
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
@@ -132,7 +132,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Right(Some(nrSubmissionId))
-      verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), meq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], any[DateTime])(any[ValidatedPayloadRequest[_]])
+      verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[DateTime])(any[ValidatedPayloadRequest[_]])
       verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
     }
 
@@ -170,6 +170,17 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       result shouldBe Right(None)
       verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+    }
+
+    "return 500 error when CSP has no authenticatedEori in api subscription fields" in new SetUp() {
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+        .thenReturn(Future.successful(apiSubscriptionFieldsResponse.copy(fields = ApiSubscriptionFieldsResponseFields(None))))
+
+      val result: Either[Result, Option[NrSubmissionId]] = send()
+
+      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+      verifyZeroInteractions(mockPayloadDecorator)
+      verifyZeroInteractions(mockMdgDeclarationConnector)
     }
 
 }

@@ -17,10 +17,9 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{FileUploadAnalyticsValuesAction, FileUploadAuthAction, FileUploadPayloadValidationComposedAction}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, FileUploadAnalyticsValuesAction, FileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
@@ -33,7 +32,7 @@ class FileUploadController @Inject()(val common: Common,
                                      val fileUploadBusinessService: FileUploadBusinessService,
                                      val fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction,
                                      val fileUploadAnalyticsValuesAction: FileUploadAnalyticsValuesAction,
-                                     val fileUploadAuthAction: FileUploadAuthAction,
+                                     val fileUploadAuthAction: AuthActionEoriHeader,
                                      val googleAnalyticsConnector: GoogleAnalyticsConnector)
   extends BaseController {
 

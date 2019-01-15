@@ -19,12 +19,13 @@ package util.externalservices
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.UrlPattern
 import play.api.test.Helpers._
-import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig, WireMockRunner}
+import util.CustomsDeclarationsExternalServicesConfig.{MdgCancellationDeclarationServiceContext, MdgCancellationDeclarationServiceContextV2, MdgCancellationDeclarationServiceContextV3}
+import util.{ExternalServicesConfig, WireMockRunner}
 
 trait MdgCancellationDeclarationService extends WireMockRunner {
-  private val v1URL = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContext)
-  private val v2URL = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV2)
-  private val v3URL = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV3)
+  private val v1URL = urlMatching(MdgCancellationDeclarationServiceContext)
+  private val v2URL = urlMatching(MdgCancellationDeclarationServiceContextV2)
+  private val v3URL = urlMatching(MdgCancellationDeclarationServiceContextV3)
 
   def startMdgCancellationV1Service(status: Int = ACCEPTED): Unit = startService(status, v1URL)
 
@@ -39,10 +40,25 @@ trait MdgCancellationDeclarationService extends WireMockRunner {
           .withStatus(status)))
 
   }
-  def verifyMdgWcoDecServiceWasCalledWith(requestBody: String,
+  def verifyMdgWcoDecServiceWasCalledWithV1(requestBody: String,
+                                            expectedAuthToken: String = ExternalServicesConfig.AuthToken,
+                                            maybeUnexpectedAuthToken: Option[String] = None) {
+
+    verifyMdgWcoDecServiceWasCalledWith(MdgCancellationDeclarationServiceContext, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
+  }
+
+  def verifyMdgWcoDecServiceWasCalledWithV2(requestBody: String,
                                           expectedAuthToken: String = ExternalServicesConfig.AuthToken,
                                           maybeUnexpectedAuthToken: Option[String] = None) {
-    verify(1, postRequestedFor(v1URL)
+
+    verifyMdgWcoDecServiceWasCalledWith(MdgCancellationDeclarationServiceContextV2, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
+  }
+
+  private def verifyMdgWcoDecServiceWasCalledWith(requestPath: String,
+                                                  requestBody: String,
+                                                  expectedAuthToken: String ,
+                                                  maybeUnexpectedAuthToken: Option[String]) {
+    verify(1, postRequestedFor(urlMatching(requestPath))
       .withHeader(CONTENT_TYPE, equalTo(XML))
       .withHeader(ACCEPT, equalTo(XML))
       .withHeader(AUTHORIZATION, equalTo(s"Bearer $expectedAuthToken"))
@@ -50,10 +66,10 @@ trait MdgCancellationDeclarationService extends WireMockRunner {
       .withHeader("X-Correlation-ID", notMatching(""))
       .withHeader(X_FORWARDED_HOST, equalTo("MDTP"))
       .withRequestBody(equalToXml(requestBody))
-      )
+    )
 
     maybeUnexpectedAuthToken foreach { unexpectedAuthToken =>
-      verify(0, postRequestedFor(v1URL).withHeader(AUTHORIZATION, equalTo(s"Bearer $unexpectedAuthToken")))
+      verify(0, postRequestedFor(urlMatching(requestPath)).withHeader(AUTHORIZATION, equalTo(s"Bearer $unexpectedAuthToken")))
     }
   }
 }

@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionThree, 
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgWcoDecService}
-import util.{AuditService, CustomsDeclarationsExternalServicesConfig}
+import util.{AuditService, CustomsDeclarationsExternalServicesConfig, TestXMLData}
 
 import scala.concurrent.Future
 
@@ -65,6 +65,22 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
       |</errorResponse>
     """.stripMargin
 
+  val expectedXml = <v1:submitDeclarationRequest xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <v1:requestCommon>
+      <!--type: regimeType-->
+      <v1:regime>CDS</v1:regime>
+      <v1:receiptDate>2019-01-01T12:00:00Z</v1:receiptDate>
+      <v1:clientID>327d9145-4965-4d28-a2c5-39dedee50334</v1:clientID>
+      <v1:conversationID>38400000-8cf0-11bd-b23e-10b96e4ef00d</v1:conversationID>
+      <v1:badgeIdentifier>BADGEID123</v1:badgeIdentifier>
+      <v1:originatingPartyID>ZZ123456789000</v1:originatingPartyID>
+      <v1:authenticatedPartyID>ZZ123456789000</v1:authenticatedPartyID>
+    </v1:requestCommon>
+    <v1:requestDetail>
+      {TestXMLData.ValidSubmissionXML}
+    </v1:requestDetail>
+  </v1:submitDeclarationRequest>.toString()
+
   override protected def beforeAll() {
     startMockServer()
   }
@@ -102,6 +118,9 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
 
       And("v2 config was used")
       eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext))))
+
+      And("the payload is correct")
+      verifyMdgWcoDecServiceWasCalledWithV2(expectedXml)
 
       And("GA call was made")
       eventually(verifyGoogleAnalyticsServiceWasCalled())

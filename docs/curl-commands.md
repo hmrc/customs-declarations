@@ -27,6 +27,7 @@ curl -v -X POST "http://localhost:9820/" \
   -H 'Content-Type: application/xml' \
   -H 'X-Badge-Identifier: {Badge Id}' \
   -H 'X-Client-ID: {Valid Client Id}' \
+  -H 'X-Submitter-Identifier: {Valid Submitter Id}' \
   -H 'cache-control: no-cache' \
  -d '<?xml version="1.0" encoding="UTF-8"?>
      <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
@@ -82,6 +83,7 @@ curl -v -X POST "http://localhost:9820/cancellation-requests" \
   -H 'Content-Type: application/xml' \
   -H 'X-Badge-Identifier: {Badge Id}' \
   -H 'X-Client-ID: {Valid Client Id}' \
+  -H 'X-Submitter-Identifier: {Valid Submitter Id}' \
   -H 'cache-control: no-cache' \
  -d '<?xml version="1.0" encoding="UTF-8"?>
      <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
@@ -149,6 +151,7 @@ curl -v -X POST "http://localhost:9820/cancellation-requests" \
    -H 'Content-Type: application/xml' \
    -H 'X-Badge-Identifier: {Badge Id}' \
    -H 'X-Client-ID: {Valid Client Id}' \
+   -H 'X-Submitter-Identifier: {Valid Submitter Id}' \
    -H 'cache-control: no-cache' \
   -d '<?xml version="1.0" encoding="UTF-8"?>
       <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">

@@ -152,6 +152,20 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
       rd.isEmpty shouldBe true
     }
 
+    "set the originatingPartyID when present" in {
+      val result = wrapPayloadWithoutBadgeIdentifier()
+
+      val rd = result \\ "authenticatedPartyID"
+      rd.head.text shouldBe apiSubscriptionFieldsResponse.fields.authenticatedEori.get
+    }
+
+    "NOT set the authenticatedPartyID" in {
+      val result = wrapPayloadWithoutBadgeIdentifier()
+
+      val rd: NodeSeq = result \\ "originatingPartyID"
+      rd shouldBe NodeSeq.Empty
+    }
+
   }
 
 }

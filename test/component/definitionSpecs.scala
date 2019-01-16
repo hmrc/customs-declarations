@@ -84,6 +84,12 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
           |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |          },
+          |          {
+          |            "name": "authenticatedEori",
+          |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
+          |            "type": "STRING",
+          |            "hint": "This is your EORI that will associate your application with you as a CSP"
           |          }
           |        ]
           |      },
@@ -110,6 +116,12 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
           |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |          },
+          |          {
+          |            "name": "authenticatedEori",
+          |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
+          |            "type": "STRING",
+          |            "hint": "This is your EORI that will associate your application with you as a CSP"
           |          }
           |        ]
           |      },
@@ -135,6 +147,12 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
           |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |          },
+          |          {
+          |            "name": "authenticatedEori",
+          |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
+          |            "type": "STRING",
+          |            "hint": "This is your EORI that will associate your application with you as a CSP"
           |          }
           |        ]
           |      }
@@ -202,6 +220,12 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
           |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |          },
+          |          {
+          |            "name": "authenticatedEori",
+          |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
+          |            "type": "STRING",
+          |            "hint": "This is your EORI that will associate your application with you as a CSP"
           |          }
           |        ]
           |      },
@@ -224,6 +248,12 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
           |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |          },
+          |          {
+          |            "name": "authenticatedEori",
+          |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
+          |            "type": "STRING",
+          |            "hint": "This is your EORI that will associate your application with you as a CSP"
           |          }
           |        ]
           |      },
@@ -249,6 +279,12 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
           |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |          },
+          |          {
+          |            "name": "authenticatedEori",
+          |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
+          |            "type": "STRING",
+          |            "hint": "This is your EORI that will associate your application with you as a CSP"
           |          }
           |        ]
           |      }

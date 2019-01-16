@@ -44,6 +44,11 @@ documentation:
             type: string
             required: false
             example: ABC123
+        X-Submitter-Identifier:
+            description: This is your EORI that will associate your application with you as a CSP. Required for CSP users. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 17.
+            type: string
+            required: false
+            example: ABC123
 
       (annotations.scope): "write:customs-declaration"
       securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
@@ -100,6 +105,11 @@ documentation:
             example: application/xml; charset=UTF-8
           X-Badge-Identifier:
               description: Represents the end-user who is interacting with the subscribed application. Required for CSP users. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 12.
+              type: string
+              required: false
+              example: ABC123
+          X-Submitter-Identifier:
+              description: This is your EORI that will associate your application with you as a CSP. Required for CSP users. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 17.
               type: string
               required: false
               example: ABC123

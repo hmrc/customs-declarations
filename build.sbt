@@ -142,7 +142,7 @@ zipWcoXsds := {
     .listFiles()
     .filter(_.isDirectory)
     .foreach { dir =>
-      val wcoXsdPaths = Path.allSubpaths(dir / "schemas" / "wco")
+      val wcoXsdPaths = Path.allSubpaths(dir / "schemas")
       val exampleMessagesFilter = new SimpleFileFilter(_.getPath.contains("/example_messages/"))
       val exampleMessagesPaths = Path.selectSubpaths(dir / "examples", exampleMessagesFilter)
       val zipFile = dir / "wco-declaration-schemas.zip"

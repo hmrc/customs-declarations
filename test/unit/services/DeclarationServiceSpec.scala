@@ -146,6 +146,17 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       verifyZeroInteractions(mockMdgDeclarationConnector)
     }
 
+    "return 500 error response when authenticatedEori is blank" in new SetUp() {
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+        .thenReturn(Future.successful(apiSubscriptionFieldsResponse.copy( fields =ApiSubscriptionFieldsResponseFields(Some("")))))
+
+      val result: Either[Result, Option[NrSubmissionId]] = send()
+
+      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+      verifyZeroInteractions(mockPayloadDecorator)
+      verifyZeroInteractions(mockMdgDeclarationConnector)
+    }
+
     "return 500 error response when MDG call fails" in new SetUp() {
       when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
 

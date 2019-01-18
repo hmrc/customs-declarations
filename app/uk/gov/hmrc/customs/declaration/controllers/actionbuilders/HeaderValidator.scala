@@ -46,7 +46,6 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   private lazy val EoriHeaderRegex: Regex = "(^[\\s]*$|^.{18,}$)".r
 
   private def errorResponseEoriIdentifierHeaderMissing(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is missing or invalid")
-  private def errorResponseEoriIdentifierHeaderInvalid(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is invalid")
 
   def validateHeaders[A](implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeaders] = {
     implicit val headers: Headers = conversationIdRequest.headers
@@ -93,7 +92,13 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
 
   def eitherBadgeIdentifier[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, BadgeIdentifier] = {
     val maybeBadgeId: Option[String] = vhr.request.headers.toSimpleMap.get(XBadgeIdentifierHeaderName)
-    maybeBadgeId.filter(xBadgeIdentifierRegex.findFirstIn(_).nonEmpty).map(BadgeIdentifier).toRight[ErrorResponse]{
+
+    maybeBadgeId.filter(xBadgeIdentifierRegex.findFirstIn(_).nonEmpty).map(b =>
+    {
+      logger.info(s"$XBadgeIdentifierHeaderName header passed validation: $b")
+      BadgeIdentifier(b)
+    }
+    ).toRight[ErrorResponse]{
       logger.error(s"$XBadgeIdentifierHeaderName invalid or not present for CSP")
       errorResponseBadgeIdentifierHeaderMissing
     }
@@ -102,7 +107,12 @@ class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   def eoriMustBeValidAndPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
     val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
 
-    maybeEori.filter(EoriHeaderRegex.findFirstIn(_).isEmpty).map(s => Eori(s)).toRight{
+    maybeEori.filter(EoriHeaderRegex.findFirstIn(_).isEmpty).map(e =>
+      {
+        logger.info(s"$eoriHeaderName header passed validation: $e")
+        Eori(e)
+      }
+    ).toRight{
       logger.error(s"$eoriHeaderName header is invalid or not present for CSP ($maybeEori)")
       errorResponseEoriIdentifierHeaderMissing(eoriHeaderName)
     }

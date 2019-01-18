@@ -132,11 +132,11 @@ trait DeclarationService {
       response: ApiSubscriptionFieldsResponse =>
         vpr.authorisedAs match {
           case Csp(_, _) | CspWithEori(_, _, _) =>
-            if (response.fields.authenticatedEori.isEmpty) {
+            if (response.fields.authenticatedEori.exists(_.trim.nonEmpty)) {
+              Right(response)
+            } else {
               logger.error(s"authenticatedEori for CSP not returned from api subscription fields for client id: ${c.value}")
               Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
-            } else {
-              Right(response)
             }
           case _ =>
             Right(response)

@@ -16,6 +16,7 @@
 
 package unit.controllers.actionbuilders
 
+import org.mockito.ArgumentMatchers.any
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.http.HeaderNames._
@@ -26,9 +27,10 @@ import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, _}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
+import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders.{ValidHeadersV2, _}
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
@@ -83,6 +85,18 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
       }
     }
 
+    "in validating the badge identifier header" should {
+      "log at info level" in new SetUp {
+
+        validator.eitherBadgeIdentifier(analyticsValuesAndConversationIdRequest(ValidHeadersV2))
+
+        PassByNameVerifier(loggerMock, "info")
+          .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
+      }
+    }
+
     "in validating the eori header" should {
       "not allow an empty header" in new SetUp {
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "")))
@@ -124,6 +138,15 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "!£$%^&*()-_=+/<>@")))
 
         value shouldBe Right(Eori("!£$%^&*()-_=+/<>@"))
+      }
+
+      "log info level when valid" in new SetUp {
+        validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "ABCABC")))
+
+        PassByNameVerifier(loggerMock, "info")
+          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ABCABC")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
       }
     }
   }

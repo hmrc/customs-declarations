@@ -53,8 +53,8 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
     "return 400 when FileGroupSize is greater than config value" in new SetUp {
 
       private val payload: Elem = TestXMLData.validFileUploadXml()
-      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
-        EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
+      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
+        clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig.copy(fileGroupSizeMaximum = 1))
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
@@ -68,8 +68,8 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
     "return 400 when FileSequenceNo is greater than FileGroupSize" in new SetUp {
 
       private val payload: Elem = TestXMLData.validFileUploadXml(fileSequenceNo2 = 3)
-      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
-        EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
+      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
+        clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
@@ -82,8 +82,8 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
     "return 400 when number of file elements does not match FileGroupSize" in new SetUp {
 
       private val payload: Elem = TestXMLData.validFileUploadXml(1, 1, 1)
-      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
-        EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
+      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
+        clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
@@ -96,8 +96,8 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
     "return 400 when FileSequenceNo is duplicated" in new SetUp {
 
       private val payload: Elem = TestXMLData.validFileUploadXml(2, 1, 1)
-      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
-        EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
+      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
+        clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
@@ -110,8 +110,8 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
     "return 400 when FileSequenceNo does not start from 1" in new SetUp {
 
       private val payload: Elem = TestXMLData.validFileUploadXml(2, 0, 1)
-      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
-        EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
+      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
+        clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
@@ -124,8 +124,8 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
     "return success for valid request" in new SetUp {
 
       private val payload: Elem = TestXMLData.validFileUploadXml()
-      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, GoogleAnalyticsValues.FileUpload,
-        EventStart, VersionTwo, clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
+      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
+        clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
       val expected = Right(testVpr.toValidatedFileUploadPayloadRequest(

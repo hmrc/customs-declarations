@@ -25,9 +25,8 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode}
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasAnalyticsValues, HasConversationId}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.{Eori, NonCsp, NrsRetrievalData}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
@@ -39,7 +38,6 @@ import scala.util.control.NonFatal
 
 @Singleton
 class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
-                                   googleAnalyticsConnector: GoogleAnalyticsConnector,
                                    logger: DeclarationsLogger) extends AuthorisedFunctions {
 
   private val hmrcCustomsEnrolment = "HMRC-CUS-ORG"
@@ -74,7 +72,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   /*
   Wrapper around HMRC authentication library authorised function for CSP authentication
   */
-  def authAsCsp(isNrs: Boolean)(implicit vhr: HasConversationId with HasAnalyticsValues, hc: HeaderCarrier): Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] = {
+  def authAsCsp(isNrs: Boolean)(implicit vhr: HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] = {
     val eventualAuth: Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] =
       if (isNrs) {
         authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
@@ -110,7 +108,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   /*
     Wrapper around HMRC authentication library authorised function for NON CSP authentication
     */
-  def authAsNonCsp(isNrs: Boolean)(implicit vhr: HasConversationId with HasAnalyticsValues, hc: HeaderCarrier): Future[Either[ErrorResponse, NonCsp]] = {
+  def authAsNonCsp(isNrs: Boolean)(implicit vhr: HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, NonCsp]] = {
     val eventualAuth: Future[(Enrolments, Option[NrsRetrievalData])] =
       if (isNrs) {
         authorised(Enrolment(hmrcCustomsEnrolment) and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
@@ -136,7 +134,6 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
       val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(enrolments, hc.authorization)
       logger.debug(s"EORI from Customs enrolment for non-CSP request: $maybeEori")
       maybeEori.fold[Either[ErrorResponse, NonCsp]]{
-        googleAnalyticsConnector.failure(errorResponseEoriNotFoundInCustomsEnrolment.message)
         Left(errorResponseEoriNotFoundInCustomsEnrolment)
       }{ eori =>
         logger.debug("Authorising as non-CSP")
@@ -144,7 +141,6 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
       }
     }.recover{
       case NonFatal(_: AuthorisationException) =>
-        googleAnalyticsConnector.failure(errorResponseUnauthorisedGeneral.message)
         Left(errorResponseUnauthorisedGeneral)
       case NonFatal(e) =>
         logger.error("Error authorising non-CSP", e)
@@ -152,7 +148,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
     }
   }
 
-  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: HasConversationId with HasAnalyticsValues, hc: HeaderCarrier): Option[Eori] = {
+  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: HasConversationId, hc: HeaderCarrier): Option[Eori] = {
     val maybeCustomsEnrolment = enrolments.getEnrolment(hmrcCustomsEnrolment)
     if (maybeCustomsEnrolment.isEmpty) {
       logger.warn(s"Customs enrolment $hmrcCustomsEnrolment not retrieved for authorised non-CSP call")

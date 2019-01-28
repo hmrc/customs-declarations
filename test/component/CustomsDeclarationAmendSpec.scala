@@ -24,7 +24,7 @@ import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
-import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgWcoDecService}
+import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoDecService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, TestXMLData}
 
 import scala.concurrent.Future
@@ -36,8 +36,7 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
   with BeforeAndAfterEach
   with MdgWcoDecService
   with ApiSubscriptionFieldsService
-  with AuthService
-  with GoogleAnalyticsService {
+  with AuthService {
 
   private val endpoint = "/amend"
 
@@ -121,9 +120,6 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
 
       And("the payload is correct")
       verifyMdgWcoDecServiceWasCalledWithV2(expectedXml)
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
@@ -153,9 +149,6 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
 
       And("v3 config was used")
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV3ServiceContext)))
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
   }
 
@@ -179,9 +172,6 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
 
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }

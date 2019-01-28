@@ -38,10 +38,9 @@ object ActionBuilderModelHelper {
     }
   }
 
-  implicit class CorrelationIdsRequestOps[A](val cir: AnalyticsValuesAndConversationIdRequest[A]) extends AnyVal {
+  implicit class CorrelationIdsRequestOps[A](val cir: ConversationIdRequest[A]) extends AnyVal {
     def toValidatedHeadersRequest(eh: ExtractedHeaders): ValidatedHeadersRequest[A] = ValidatedHeadersRequest(
       cir.conversationId,
-      cir.analyticsValues,
       cir.start,
       eh.requestedApiVersion,
       eh.clientId,
@@ -50,7 +49,6 @@ object ActionBuilderModelHelper {
 
     def toValidatedHeadersStatusRequest(eh: ExtractedStatusHeaders): ValidatedHeadersStatusRequest[A] = ValidatedHeadersStatusRequest(
       cir.conversationId,
-      cir.analyticsValues,
       cir.start,
       eh.requestedApiVersion,
       eh.badgeIdentifier,
@@ -67,7 +65,6 @@ object ActionBuilderModelHelper {
 
     def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
       vhr.conversationId,
-      vhr.analyticsValues,
       vhr.start,
       vhr.requestedApiVersion,
       vhr.clientId,
@@ -80,7 +77,6 @@ object ActionBuilderModelHelper {
 
     def toAuthorisedStatusRequest: AuthorisedStatusRequest[A] = AuthorisedStatusRequest(
       vhsr.conversationId,
-      vhsr.analyticsValues,
       vhsr.start,
       vhsr.requestedApiVersion,
       vhsr.badgeIdentifier,
@@ -92,7 +88,6 @@ object ActionBuilderModelHelper {
   implicit class AuthorisedRequestOps[A](val ar: AuthorisedRequest[A]) extends AnyVal {
     def toValidatedPayloadRequest(xmlBody: NodeSeq): ValidatedPayloadRequest[A] = ValidatedPayloadRequest(
       ar.conversationId,
-      ar.analyticsValues,
       ar.start,
       ar.requestedApiVersion,
       ar.clientId,
@@ -107,7 +102,6 @@ object ActionBuilderModelHelper {
     def toValidatedFileUploadPayloadRequest(fileUploadRequest: FileUploadRequest): ValidatedFileUploadPayloadRequest[A] =
       ValidatedFileUploadPayloadRequest(
         vpr.conversationId,
-        vpr.analyticsValues,
         vpr.start,
         vpr.requestedApiVersion,
         vpr.clientId,
@@ -126,10 +120,6 @@ trait HasRequest[A] {
 
 trait HasConversationId {
   val conversationId: ConversationId
-}
-
-trait HasAnalyticsValues {
-  val analyticsValues: GoogleAnalyticsValues
 }
 
 trait ExtractedHeaders {
@@ -192,82 +182,74 @@ case class ExtractedStatusHeadersImpl(
  * eg `r.badgeIdentifier` vs `r.requestData.badgeIdentifier`
  */
 
-case class AnalyticsValuesAndConversationIdRequest[A](
+case class ConversationIdRequest[A](
  conversationId: ConversationId,
- analyticsValues: GoogleAnalyticsValues,
  start: ZonedDateTime,
  request: Request[A]
-) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with HasAnalyticsValues
+) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId
 
 // Available after ValidatedHeadersAction builder
 case class ValidatedHeadersRequest[A](
   conversationId: ConversationId,
-  analyticsValues: GoogleAnalyticsValues,
   start: ZonedDateTime,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   request: Request[A]
-) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with HasAnalyticsValues with ExtractedHeaders
+) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with ExtractedHeaders
 
 // Specifically for status endpoint
 case class ValidatedHeadersStatusRequest[A](
  conversationId: ConversationId,
- analyticsValues: GoogleAnalyticsValues,
  start: ZonedDateTime,
  requestedApiVersion: ApiVersion,
  badgeIdentifier: BadgeIdentifier,
  clientId: ClientId,
  request: Request[A]
-) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with HasAnalyticsValues with HasBadgeIdentifier with ExtractedStatusHeaders
+) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with HasBadgeIdentifier with ExtractedStatusHeaders
 
 // Available after Authorise action builder
 case class AuthorisedRequest[A](
   conversationId: ConversationId,
-  analyticsValues: GoogleAnalyticsValues,
   start: ZonedDateTime,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
   request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs
+) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs
 
 // Available after Authorise action builder
 case class AuthorisedStatusRequest[A](
  conversationId: ConversationId,
- analyticsValues: GoogleAnalyticsValues,
  start: ZonedDateTime,
  requestedApiVersion: ApiVersion,
  badgeIdentifier: BadgeIdentifier,
  clientId: ClientId,
  request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasAnalyticsValues with HasBadgeIdentifier with ExtractedStatusHeaders
+) extends WrappedRequest[A](request) with HasConversationId with HasBadgeIdentifier with ExtractedStatusHeaders
 
 // Available after ValidatedPayloadAction builder
 abstract class GenericValidatedPayloadRequest[A](
  conversationId: ConversationId,
- analyticsValues: GoogleAnalyticsValues,
  start: ZonedDateTime,
  requestedApiVersion: ApiVersion,
  clientId: ClientId,
  authorisedAs: AuthorisedAs,
  xmlBody: NodeSeq,
  request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId  with HasAnalyticsValues with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
+) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
 
 case class ValidatedPayloadRequest[A](
   conversationId: ConversationId,
-  analyticsValues: GoogleAnalyticsValues,
   start: ZonedDateTime,
   requestedApiVersion: ApiVersion,
   clientId: ClientId,
   authorisedAs: AuthorisedAs,
   xmlBody: NodeSeq,
   request: Request[A]
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
+) extends GenericValidatedPayloadRequest(conversationId, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
 
 case class ValidatedFileUploadPayloadRequest[A](
                                                  conversationId: ConversationId,
-                                                 analyticsValues: GoogleAnalyticsValues,
                                                  start: ZonedDateTime,
                                                  requestedApiVersion: ApiVersion,
                                                  clientId: ClientId,
@@ -275,4 +257,4 @@ case class ValidatedFileUploadPayloadRequest[A](
                                                  xmlBody: NodeSeq,
                                                  request: Request[A],
                                                  fileUploadRequest: FileUploadRequest
-) extends GenericValidatedPayloadRequest(conversationId, analyticsValues: GoogleAnalyticsValues, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
+) extends GenericValidatedPayloadRequest(conversationId, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties

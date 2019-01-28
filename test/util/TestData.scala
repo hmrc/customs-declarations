@@ -95,7 +95,6 @@ object TestData {
 
   val ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
-    GoogleAnalyticsValues.FileUpload,
     EventStart,
     VersionTwo,
     ClientId("ABC"),
@@ -108,7 +107,6 @@ object TestData {
 
   val ValidatedFileUploadPayloadRequestForCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
-    GoogleAnalyticsValues.FileUpload,
     EventStart,
     VersionTwo,
     ClientId("ABC"),
@@ -121,7 +119,6 @@ object TestData {
 
   val ValidatedFileUploadPayloadRequestWithFourFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
-    GoogleAnalyticsValues.FileUpload,
     EventStart,
     VersionTwo,
     ClientId("ABC"),
@@ -257,15 +254,6 @@ object TestData {
     def asGuiceableModule: GuiceableModule = GuiceableModule.guiceable(this)
   }
 
-  val GoogleAnalyticsPayloadValue = "some-query-string-for-ga"
-
-  lazy val ValidGoogleAnalyticsJson: JsValue = Json.parse(
-    s"""
-       |{
-       | "payload": $GoogleAnalyticsPayloadValue
-       |}
-    """.stripMargin)
-
   // note we can not mock service methods that return value classes - however using a simple stub IMHO it results in cleaner code (less mocking noise)
   lazy val stubUniqueIdsService: UniqueIdsService = new UniqueIdsService(mockUuidService) {
     override def conversation: ConversationId = conversationId
@@ -291,15 +279,15 @@ object TestData {
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(header -> headerValue)
 
   // For Status endpoint
-  val TestConversationIdStatusRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, EventStart, TestFakeRequest)
+  val TestConversationIdStatusRequest = ConversationIdRequest(conversationId, EventStart, TestFakeRequest)
   val TestExtractedStatusHeaders = ExtractedStatusHeadersImpl(VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
   val TestValidatedHeadersStatusRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestConversationIdStatusRequest.toValidatedHeadersStatusRequest(TestExtractedStatusHeaders)
   val TestAuthorisedStatusRequest: AuthorisedStatusRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest.toAuthorisedStatusRequest
 
-  val TestConversationIdRequest = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, TestFakeRequest)
-  val TestConversationIdRequestWithBadgeIdAndNoEori = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, TestFakeRequestWithBadgeIdAndNoEori)
-  val TestConversationIdRequestWithEoriAndNoBadgeId = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, TestFakeRequestWithEoriAndNoBadgeId)
-  val TestConversationIdRequestMultipleHeaderValues = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, TestFakeRequestMultipleHeaderValues)
+  val TestConversationIdRequest = ConversationIdRequest(conversationId, EventStart, TestFakeRequest)
+  val TestConversationIdRequestWithBadgeIdAndNoEori = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithBadgeIdAndNoEori)
+  val TestConversationIdRequestWithEoriAndNoBadgeId = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithEoriAndNoBadgeId)
+  val TestConversationIdRequestMultipleHeaderValues = ConversationIdRequest(conversationId, EventStart, TestFakeRequestMultipleHeaderValues)
   val TestExtractedHeaders = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
   val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
 
@@ -402,10 +390,5 @@ object RequestHeaders {
     X_CLIENT_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER,
     X_SUBMITTER_IDENTIFIER_HEADER
-  )
-
-  val ValidGoogleAnalyticsHeaders: Map[String, String] = Map(
-    CONTENT_TYPE -> MimeTypes.JSON,
-    ACCEPT_HMRC_XML_V1_HEADER
   )
 }

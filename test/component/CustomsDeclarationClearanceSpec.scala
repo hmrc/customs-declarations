@@ -24,7 +24,7 @@ import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
-import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgWcoDecService}
+import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoDecService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig}
 
 import scala.concurrent.Future
@@ -36,8 +36,7 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
   with BeforeAndAfterEach
   with MdgWcoDecService
   with ApiSubscriptionFieldsService
-  with AuthService
-  with GoogleAnalyticsService {
+  with AuthService {
 
   private val endpoint = "/clearance"
 
@@ -72,7 +71,6 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
 
   override protected def beforeEach() {
     resetMockServer()
-    setupGoogleAnalyticsServiceToReturn(ACCEPTED)
   }
 
   override protected def afterAll() {
@@ -104,9 +102,6 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
 
       And("v2 config was used")
       eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV2ServiceContext))))
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
@@ -136,9 +131,6 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
 
       And("v2 config was used")
       verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgWcoDecV3ServiceContext)))
-
-      And("GA call was made")
-      verifyGoogleAnalyticsServiceWasCalled()
     }
 
   }
@@ -163,9 +155,6 @@ class CustomsDeclarationClearanceSpec extends ComponentTestSpec with AuditServic
 
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }

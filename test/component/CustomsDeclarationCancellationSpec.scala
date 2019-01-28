@@ -36,8 +36,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
   with BeforeAndAfterEach
   with MdgCancellationDeclarationService
   with ApiSubscriptionFieldsService
-  with AuthService
-  with GoogleAnalyticsService {
+  with AuthService {
 
   private val endpoint = "/cancellation-requests"
 
@@ -103,9 +102,6 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
       And("the payload is correct")
       verifyMdgWcoDecServiceWasCalledWithV1(expectedXml)
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
   }
 
@@ -136,9 +132,6 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
       And("the payload is correct")
       verifyMdgWcoDecServiceWasCalledWithV2(expectedXml)
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
   }
     feature("Declaration API authorises cancellation of submissions from CSPs with v3.0 accept header") {
@@ -165,9 +158,6 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
         And("v2 config was used")
         eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgCancellationDeclarationServiceContextV3))))
-
-        And("GA call was made")
-        eventually(verifyGoogleAnalyticsServiceWasCalled())
       }
     }
 
@@ -191,9 +181,6 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }

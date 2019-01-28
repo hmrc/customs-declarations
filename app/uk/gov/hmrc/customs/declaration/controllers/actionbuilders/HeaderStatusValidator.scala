@@ -38,7 +38,7 @@ class HeaderStatusValidator @Inject()(logger: DeclarationsLogger) extends Header
     "application/vnd.hmrc.3.0+xml" -> VersionThree
   )
 
-  override def validateHeaders[A](implicit conversationIdRequest: AnalyticsValuesAndConversationIdRequest[A]): Either[ErrorResponse, ExtractedStatusHeaders] = {
+  override def validateHeaders[A](implicit conversationIdRequest: ConversationIdRequest[A]): Either[ErrorResponse, ExtractedStatusHeaders] = {
 
     implicit val headers: Headers = conversationIdRequest.headers
 

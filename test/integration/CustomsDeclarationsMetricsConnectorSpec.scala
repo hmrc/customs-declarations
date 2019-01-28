@@ -74,7 +74,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
 
       val response: Unit = await(sendValidRequest())
 
-      response shouldBe ()
+      response shouldBe (())
       verifyCustomsDeclarationsMetricsServiceWasCalledWith(ValidCustomsDeclarationsMetricsRequest)
       verifyAuditServiceWasNotCalled()
     }

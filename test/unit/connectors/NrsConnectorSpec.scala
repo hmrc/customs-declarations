@@ -52,7 +52,6 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
 
   private implicit val jsonRequest: ValidatedPayloadRequest[AnyContentAsJson] =  ValidatedPayloadRequest(
     ConversationId(UUID.randomUUID()),
-    GoogleAnalyticsValues.Submit,
     EventStart,
     VersionTwo,
     ClientId("ABC"),

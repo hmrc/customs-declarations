@@ -19,7 +19,6 @@ package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{ActionRefiner, RequestHeader, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -51,7 +50,6 @@ class AuthAction @Inject()(
                             customsAuthService: CustomsAuthService,
                             headerValidator: HeaderValidator,
                             logger: DeclarationsLogger,
-                            googleAnalyticsConnector: GoogleAnalyticsConnector,
                             declarationConfigService: DeclarationsConfigService
 ) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
@@ -78,7 +76,7 @@ class AuthAction @Inject()(
     }
   }
 
-  private def authAsCspWithMandatoryAuthHeaders[A](isNrs: Boolean)(implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues, hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {
+  private def authAsCspWithMandatoryAuthHeaders[A](isNrs: Boolean)(implicit vhr: HasRequest[A] with HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {
 
     val eventualAuthWithBadgeId: Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = customsAuthService.authAsCsp(isNrs).map{
       case Right((isCsp, maybeNrsRetrievalData)) =>
@@ -94,16 +92,13 @@ class AuthAction @Inject()(
     eventualAuthWithBadgeId
   }
 
-  protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, AuthorisedAsCsp] = {
+  protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
 
     eitherBadgeIdentifier.right.map(badgeId => Csp(badgeId, maybeNrsRetrievalData))
   }
 
-  protected def eitherBadgeIdentifier[A](implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, BadgeIdentifier] = {
-    headerValidator.eitherBadgeIdentifier.left.map{errorResponse =>
-      googleAnalyticsConnector.failure(errorResponse.message)
-      errorResponse
-    }
+  protected def eitherBadgeIdentifier[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, BadgeIdentifier] = {
+    headerValidator.eitherBadgeIdentifier
   }
 
 }

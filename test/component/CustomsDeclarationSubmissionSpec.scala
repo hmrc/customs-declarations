@@ -37,7 +37,6 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
   with MdgWcoDecService
   with ApiSubscriptionFieldsService
   with AuthService
-  with GoogleAnalyticsService
   with CustomsDeclarationsMetricsService
   with NrsService {
 
@@ -125,9 +124,6 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       And("the payload is correct")
       verifyMdgWcoDecServiceWasCalledWithV1(expectedXml)
 
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
-
       And("Metrics logging call was made")
       eventually(verifyCustomsDeclarationsMetricsServiceWasCalled())
 
@@ -155,9 +151,6 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("the response body is a \"malformed xml body\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }
@@ -190,9 +183,6 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("the payload is correct")
       verifyMdgWcoDecServiceWasCalledWithV2(expectedXml)
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
 
       And("Metrics logging call was made")
       eventually(verifyCustomsDeclarationsMetricsServiceWasCalled())
@@ -229,9 +219,6 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       And("the payload is correct")
       verifyMdgWcoDecServiceWasCalledWithV3(expectedXml)
 
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
-
       And("Metrics logging call was made")
       eventually(verifyCustomsDeclarationsMetricsServiceWasCalled())
     }
@@ -259,9 +246,6 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
 
   }

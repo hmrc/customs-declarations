@@ -21,9 +21,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.EndpointAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues.Submit
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, UniqueIdsService}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
@@ -39,11 +37,10 @@ class EndpointActionSpec extends UnitSpec with MockitoSugar {
     val request = FakeRequest()
     val endpointAction = new EndpointAction {
       override val logger: DeclarationsLogger = mockExportsLogger
-      override val googleAnalyticsValues: GoogleAnalyticsValues = Submit
       override val correlationIdService: UniqueIdsService = TestData.stubUniqueIdsService
       override val timeService: DateTimeService = mockDateTimeService
     }
-    val expected = AnalyticsValuesAndConversationIdRequest(conversationId, Submit, EventStart, request)
+    val expected = ConversationIdRequest(conversationId, EventStart, request)
   }
 
   "EndpointAction" should {

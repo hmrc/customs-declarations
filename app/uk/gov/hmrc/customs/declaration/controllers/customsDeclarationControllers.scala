@@ -19,7 +19,7 @@ package uk.gov.hmrc.customs.declaration.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.http.MimeTypes
 import play.api.mvc._
-import uk.gov.hmrc.customs.declaration.connectors.{CustomsDeclarationsMetricsConnector, GoogleAnalyticsConnector}
+import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
@@ -46,57 +46,51 @@ class CommonSubmitterHeader @Inject()(
 
 @Singleton
 class SubmitDeclarationController @Inject()(
-  common: CommonSubmitterHeader,
-  businessService: StandardDeclarationSubmissionService,
-  payloadValidationAction: SubmitPayloadValidationAction,
-  analyticsValuesAction: DeclarationSubmitAnalyticsValuesAction,
-  googleAnalyticsConnector: GoogleAnalyticsConnector,
-  metricsConnector: CustomsDeclarationsMetricsConnector
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector), Some(metricsConnector))
+                                             common: CommonSubmitterHeader,
+                                             businessService: StandardDeclarationSubmissionService,
+                                             payloadValidationAction: SubmitPayloadValidationAction,
+                                             conversationIdAction: DeclarationSubmitConversationIdAction,
+                                             metricsConnector: CustomsDeclarationsMetricsConnector
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction, Some(metricsConnector))
 
 @Singleton
 class CancelDeclarationController @Inject()(
-  common: CommonSubmitterHeader,
-  businessService: CancellationDeclarationSubmissionService,
-  payloadValidationAction: CancelPayloadValidationAction,
-  analyticsValuesAction: DeclarationCancellationAnalyticsValuesAction,
-  googleAnalyticsConnector: GoogleAnalyticsConnector
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector))
+                                             common: CommonSubmitterHeader,
+                                             businessService: CancellationDeclarationSubmissionService,
+                                             payloadValidationAction: CancelPayloadValidationAction,
+                                             conversationIdAction: DeclarationCancellationConversationIdAction
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
 class ClearanceDeclarationController @Inject()(
- common: Common,
- businessService: StandardDeclarationSubmissionService,
- payloadValidationAction: ClearancePayloadValidationAction,
- analyticsValuesAction: DeclarationClearanceAnalyticsValuesAction,
- googleAnalyticsConnector: GoogleAnalyticsConnector
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector))
+                                                common: Common,
+                                                businessService: StandardDeclarationSubmissionService,
+                                                payloadValidationAction: ClearancePayloadValidationAction,
+                                                conversationIdAction: DeclarationClearanceConversationIdAction
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
 class AmendDeclarationController @Inject()(
- common: CommonSubmitterHeader,
- businessService: StandardDeclarationSubmissionService,
- payloadValidationAction: AmendPayloadValidationAction,
- analyticsValuesAction: DeclarationAmendValuesAction,
- googleAnalyticsConnector: GoogleAnalyticsConnector
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector))
+                                            common: CommonSubmitterHeader,
+                                            businessService: StandardDeclarationSubmissionService,
+                                            payloadValidationAction: AmendPayloadValidationAction,
+                                            conversationIdAction: DeclarationAmendConversationIdAction
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
 class ArrivalNotificationDeclarationController @Inject()(
- common: Common,
- businessService: StandardDeclarationSubmissionService,
- payloadValidationAction: ArrivalNotificationPayloadValidationAction,
- analyticsValuesAction: DeclarationArrivalNotificationValuesAction,
- googleAnalyticsConnector: GoogleAnalyticsConnector
-) extends CustomsDeclarationController(common, businessService, payloadValidationAction, analyticsValuesAction, Some(googleAnalyticsConnector))
+                                                          common: Common,
+                                                          businessService: StandardDeclarationSubmissionService,
+                                                          payloadValidationAction: ArrivalNotificationPayloadValidationAction,
+                                                          conversationIdAction: DeclarationArrivalNotificationConversationIdAction
+) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 abstract class CustomsDeclarationController(
-  val common: Common,
-  val businessService: DeclarationService,
-  val payloadValidationAction: PayloadValidationAction,
-  val analyticsValuesAction: EndpointAction,
-  val maybeGoogleAnalyticsConnector: Option[GoogleAnalyticsConnector],
-  val maybeMetricsConnector: Option[CustomsDeclarationsMetricsConnector] = None
+                                             val common: Common,
+                                             val businessService: DeclarationService,
+                                             val payloadValidationAction: PayloadValidationAction,
+                                             val conversationIdAction: EndpointAction,
+                                             val maybeMetricsConnector: Option[CustomsDeclarationsMetricsConnector] = None
 )
 extends BaseController {
 
@@ -109,7 +103,7 @@ extends BaseController {
 
   def post(): Action[AnyContent] = (
     Action andThen
-      analyticsValuesAction andThen
+      conversationIdAction andThen
       common.validateAndExtractHeadersAction andThen
       common.authAction andThen
       payloadValidationAction
@@ -124,10 +118,9 @@ extends BaseController {
         businessService.send map {
           case Right(maybeNrSubmissionId) =>
             logger.info("Declaration request processed successfully")
-            maybeGoogleAnalyticsConnector.map(conn => conn.success)
             maybeMetricsConnector.map{conn =>
               conn.post(CustomsDeclarationsMetricsRequest(
-                "DECLARATION", vpr.conversationId, vpr.start, analyticsValuesAction.timeService.zonedDateTimeUtc))
+                "DECLARATION", vpr.conversationId, vpr.start, conversationIdAction.timeService.zonedDateTimeUtc))
             }
             maybeNrSubmissionId match {
               case Some(nrSubmissionId) => Accepted.as(MimeTypes.XML).withConversationId.withNrSubmissionId(nrSubmissionId)

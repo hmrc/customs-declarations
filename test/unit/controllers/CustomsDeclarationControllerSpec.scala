@@ -63,11 +63,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val mockXmlValidationService: XmlValidationService = mock[XmlValidationService]
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
-    protected val endpointAction = new EndpointAction {
-      override val logger: DeclarationsLogger = mockLogger
-      override val correlationIdService: UniqueIdsService = stubUniqueIdsService
-      override val timeService: DateTimeService = mockDateTimeService
-    }
+    protected val conversationIdAction = new ConversationIdAction(mockLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockLogger)
     protected val headerValidator = new HeaderValidator(mockLogger)
@@ -77,8 +73,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
     protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
 
-    protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, Some(mockMetricsConnector)) {}
-    protected val controllerWithoutMetrics: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, endpointAction, None) {}
+    protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, conversationIdAction, Some(mockMetricsConnector)) {}
+    protected val controllerWithoutMetrics: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, conversationIdAction, None) {}
 
     protected def awaitSubmit(request: Request[AnyContent]): Result = {
       await(controller.post().apply(request))

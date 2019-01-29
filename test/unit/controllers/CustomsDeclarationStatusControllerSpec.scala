@@ -63,12 +63,6 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
     protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(StatusTestXMLData.generateDeclarationManagementInformationResponse().toString))
 
-    protected val endpointAction = new EndpointAction {
-      override val logger: DeclarationsLogger = mockDeclarationsLogger
-      override val correlationIdService: UniqueIdsService = stubUniqueIdsService
-      override val timeService: DateTimeService = mockDateTimeService
-    }
-
     protected val mockStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
     protected val dateTime = new DateTime()
@@ -76,12 +70,12 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger)
     protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
-    protected val stubDeclarationStatusValuesAction = new DeclarationStatusConversationIdAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
+    protected val stubConversationIdAction = new ConversationIdAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(
       stubValidateAndExtractHeadersStatusAction,
       stubAuthStatusAction,
-      stubDeclarationStatusValuesAction,
+      stubConversationIdAction,
       stubDeclarationStatusService,
       mockDeclarationsLogger) {}
 

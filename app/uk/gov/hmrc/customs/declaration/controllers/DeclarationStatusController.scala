@@ -31,13 +31,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 @Singleton
 class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction,
                                             val authAction: AuthStatusAction,
-                                            val declarationStatusValuesAction: DeclarationStatusConversationIdAction,
+                                            val conversationIdAction: ConversationIdAction,
                                             val declarationStatusService: DeclarationStatusService,
                                             val logger: DeclarationsLogger) extends BaseController {
 
   def get(mrn: String): Action[AnyContent] = (
     Action andThen
-      declarationStatusValuesAction andThen
+      conversationIdAction andThen
       validateAndExtractHeadersStatusAction andThen
       authAction
     ).async {

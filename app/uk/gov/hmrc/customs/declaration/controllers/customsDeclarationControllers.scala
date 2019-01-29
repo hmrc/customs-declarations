@@ -49,7 +49,7 @@ class SubmitDeclarationController @Inject()(
                                              common: CommonSubmitterHeader,
                                              businessService: StandardDeclarationSubmissionService,
                                              payloadValidationAction: SubmitPayloadValidationAction,
-                                             conversationIdAction: DeclarationSubmitConversationIdAction,
+                                             conversationIdAction: ConversationIdAction,
                                              metricsConnector: CustomsDeclarationsMetricsConnector
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction, Some(metricsConnector))
 
@@ -58,7 +58,7 @@ class CancelDeclarationController @Inject()(
                                              common: CommonSubmitterHeader,
                                              businessService: CancellationDeclarationSubmissionService,
                                              payloadValidationAction: CancelPayloadValidationAction,
-                                             conversationIdAction: DeclarationCancellationConversationIdAction
+                                             conversationIdAction: ConversationIdAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
@@ -66,7 +66,7 @@ class ClearanceDeclarationController @Inject()(
                                                 common: Common,
                                                 businessService: StandardDeclarationSubmissionService,
                                                 payloadValidationAction: ClearancePayloadValidationAction,
-                                                conversationIdAction: DeclarationClearanceConversationIdAction
+                                                conversationIdAction: ConversationIdAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
@@ -74,7 +74,7 @@ class AmendDeclarationController @Inject()(
                                             common: CommonSubmitterHeader,
                                             businessService: StandardDeclarationSubmissionService,
                                             payloadValidationAction: AmendPayloadValidationAction,
-                                            conversationIdAction: DeclarationAmendConversationIdAction
+                                            conversationIdAction: ConversationIdAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
@@ -82,14 +82,14 @@ class ArrivalNotificationDeclarationController @Inject()(
                                                           common: Common,
                                                           businessService: StandardDeclarationSubmissionService,
                                                           payloadValidationAction: ArrivalNotificationPayloadValidationAction,
-                                                          conversationIdAction: DeclarationArrivalNotificationConversationIdAction
+                                                          conversationIdAction: ConversationIdAction
 ) extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 abstract class CustomsDeclarationController(
                                              val common: Common,
                                              val businessService: DeclarationService,
                                              val payloadValidationAction: PayloadValidationAction,
-                                             val conversationIdAction: EndpointAction,
+                                             val conversationIdAction: ConversationIdAction,
                                              val maybeMetricsConnector: Option[CustomsDeclarationsMetricsConnector] = None
 )
 extends BaseController {

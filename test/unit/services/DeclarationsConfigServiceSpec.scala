@@ -38,13 +38,6 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.customs-declarations-metrics.host=some-host3
       |microservice.services.customs-declarations-metrics.port=1113
       |microservice.services.customs-declarations-metrics.context=/some-context3
-      |microservice.services.google-analytics-sender.host=some-host3
-      |microservice.services.google-analytics-sender.port=1113
-      |microservice.services.google-analytics-sender.context=/some-context3
-      |googleAnalytics.enabled=true
-      |googleAnalytics.trackingId=ga-tr,
-      |googleAnalytics.clientId=gl-cl-id,
-      |googleAnalytics.eventValue=ga-ev-id
       |circuitBreaker.numberOfCallsToTriggerStateChange=5
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
@@ -108,12 +101,6 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'
-          |Could not find config key 'googleAnalytics.enabled'
-          |Could not find config google-analytics-sender.host
-          |Service configuration not found for key: google-analytics-sender.context
-          |Could not find config key 'googleAnalytics.trackingId'
-          |Could not find config key 'googleAnalytics.clientId'
-          |Could not find config key 'googleAnalytics.eventValue'
           |Could not find config key 'nrs.enabled'
           |Could not find config key 'nrs.apikey'
           |Could not find config nrs.host

@@ -19,38 +19,30 @@ package unit.controllers.actionbuilders
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import play.api.test.FakeRequest
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.EndpointAction
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.ConversationIdAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues
-import uk.gov.hmrc.customs.declaration.model.GoogleAnalyticsValues.Submit
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
-import uk.gov.hmrc.customs.declaration.services.{DateTimeService, UniqueIdsService}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
+import uk.gov.hmrc.customs.declaration.services.DateTimeService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
-import util.TestData
-import util.TestData.conversationId
+import util.TestData.{conversationId, stubUniqueIdsService}
 
-class EndpointActionSpec extends UnitSpec with MockitoSugar {
+class ConversationIdActionSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
     private val mockExportsLogger = mock[DeclarationsLogger]
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
 
     val request = FakeRequest()
-    val endpointAction = new EndpointAction {
-      override val logger: DeclarationsLogger = mockExportsLogger
-      override val googleAnalyticsValues: GoogleAnalyticsValues = Submit
-      override val correlationIdService: UniqueIdsService = TestData.stubUniqueIdsService
-      override val timeService: DateTimeService = mockDateTimeService
-    }
-    val expected = AnalyticsValuesAndConversationIdRequest(conversationId, Submit, EventStart, request)
+    val conversationIdAction = new ConversationIdAction(mockExportsLogger, stubUniqueIdsService, mockDateTimeService)
+    val expected = ConversationIdRequest(conversationId, EventStart, request)
   }
 
-  "EndpointAction" should {
+  "ConversationIdAction" should {
     "Generate a Request containing a unique correlation id" in new SetUp {
       when(mockDateTimeService.zonedDateTimeUtc).thenReturn(EventStart)
 
-      private val actual = await(endpointAction.transform(request))
+      private val actual = await(conversationIdAction.transform(request))
 
       actual shouldBe expected
     }

@@ -17,12 +17,11 @@
 package util
 
 import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION}
-import play.api.libs.json.JsValue
-import play.api.mvc.{AnyContentAsText, AnyContentAsXml, Request}
+import play.api.mvc.{AnyContentAsText, AnyContentAsXml}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.POST
 import util.RequestHeaders._
-import util.TestData.{ValidGoogleAnalyticsJson, cspBearerToken, nonCspBearerToken}
+import util.TestData.{cspBearerToken, nonCspBearerToken}
 import util.TestXMLData.{InvalidFileUploadXml, _}
 
 object FakeRequests {
@@ -152,15 +151,9 @@ object FakeRequests {
     .withHeaders(ValidHeadersV3.toSeq: _*)
     .withXmlBody(validFileUploadXml())
 
-  lazy val ValidGoogleAnalyticsRequest = FakeRequest()
-    .withHeaders(RequestHeaders.ValidGoogleAnalyticsHeaders.toSeq: _*)
-    .withJsonBody(ValidGoogleAnalyticsJson)
-
   lazy val InvalidFileUploadRequest = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(InvalidFileUploadXml)
-
-  lazy val ValidGoogleAnalyticsRequestAsJsValue: Request[JsValue] = ValidGoogleAnalyticsRequest.copyFakeRequest[JsValue](body = ValidGoogleAnalyticsRequest.body.json)
 
   lazy val ValidDeclarationStatusRequest = FakeRequest().withHeaders(ValidHeadersV2.toSeq: _*)
 

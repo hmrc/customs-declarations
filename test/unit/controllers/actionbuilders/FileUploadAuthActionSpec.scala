@@ -16,19 +16,18 @@
 
 package unit.controllers.actionbuilders
 
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorBadRequest}
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XEoriIdentifierHeaderName}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, HeaderValidator}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.CspWithEori
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.AnalyticsValuesAndConversationIdRequest
-import uk.gov.hmrc.customs.declaration.model.{CspWithEori, GoogleAnalyticsValues}
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
 
@@ -40,41 +39,40 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
     errorBadRequest(s"$XEoriIdentifierHeaderName header is missing or invalid")
 
   private lazy val validatedHeadersRequestWithValidBadgeIdEoriPair =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair()).toValidatedHeadersRequest(TestExtractedHeaders)
+    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair()).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdEoriPair =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "", badgeIdString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "", badgeIdString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithValidBadgeIdAndEmptyEori =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithValidBadgeIdAndEoriTooLong =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "INVALID_EORI_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "INVALID_EORI_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidEoriInvalidChars =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "     ")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "     ")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdTooLong =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "INVALID_BADGE_IDENTIFIER_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "INVALID_BADGE_IDENTIFIER_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdLowerCase =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdTooShort =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdInvalidChars =
-    AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
 
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
   }
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
-    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
+    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockLogger)
     protected val headerValidator = new HeaderValidator(mockLogger)
-    val fileUploadAuthAction = new AuthActionEoriHeader(customsAuthService, headerValidator, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    val fileUploadAuthAction = new AuthActionEoriHeader(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
   trait NrsDisabled extends AuthConnectorNrsDisabledStubbing with SetUp {
-    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockGoogleAnalyticsConnector, mockLogger)
+    protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockLogger)
     protected val headerValidator = new HeaderValidator(mockLogger)
-    val fileUploadAuthAction = new AuthActionEoriHeader(customsAuthService, headerValidator, mockLogger, mockGoogleAnalyticsConnector, mockDeclarationConfigService)
+    val fileUploadAuthAction = new AuthActionEoriHeader(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
   }
 
@@ -97,7 +95,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidBadgeIdEoriPair)
       }
 
       "Return 401 response when authorised by auth API but badge identifier does not exist" in new NrsEnabled {
@@ -107,7 +104,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(TestValidatedHeadersRequestNoBadge)
       }
 
       "Return 401 response when authorised by auth API but badge identifier does not exist and eori does" in new NrsEnabled {
@@ -117,7 +113,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(TestValidatedHeadersRequestWithEoriAndNoBadgeId)
       }
 
       "Return 401 response when authorised by auth API but badge identifier is too long" in new NrsEnabled {
@@ -127,7 +122,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidBadgeIdTooLong)
       }
 
       "Return 401 response when authorised by auth API but badge identifier is too short" in new NrsEnabled {
@@ -137,7 +131,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidBadgeIdTooShort)
       }
 
       "Return 401 response when authorised by auth API but badge identifier contains invalid chars" in new NrsEnabled {
@@ -147,7 +140,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidBadgeIdInvalidChars)
       }
 
       "Return 401 response when authorised by auth API but badge identifier contains all lowercase chars" in new NrsEnabled {
@@ -157,7 +149,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidBadgeIdLowerCase)
       }
 
       "Return 401 response when authorised by auth API where badge identifier exists and eori does not" in new NrsEnabled {
@@ -167,7 +158,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriIdentifierHeaderMissing.message)(TestValidatedHeadersRequestWithBadgeIdAndNoEori)
       }
 
       "Return 401 response when authorised by auth API with empty eori" in new NrsEnabled {
@@ -177,7 +167,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriIdentifierHeaderMissing.message)(validatedHeadersRequestWithValidBadgeIdAndEmptyEori)
       }
 
       "Return 401 response when authorised by auth API with eori too long" in new NrsEnabled {
@@ -187,7 +176,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriIdentifierHeaderMissing.message)(validatedHeadersRequestWithValidBadgeIdAndEoriTooLong)
       }
 
       "Return 401 response when authorised by auth API with eori containing invalid characters" in new NrsEnabled {
@@ -197,7 +185,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidEoriInvalidChars)
       }
 
       "Return 500 response if errors occur in CSP auth API call" in new NrsEnabled {
@@ -227,7 +214,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(TestValidatedHeadersRequestNoBadge)
       }
 
       "Return 401 response when authorised by auth API but badge identifier does not exist and eori does" in new NrsDisabled {
@@ -237,7 +223,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(TestValidatedHeadersRequestWithEoriAndNoBadgeId)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but is too long" in new NrsDisabled {
@@ -247,7 +232,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidBadgeIdTooLong)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but is too short" in new NrsDisabled {
@@ -257,7 +241,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidBadgeIdTooShort)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but contains invalid chars" in new NrsDisabled {
@@ -267,7 +250,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidBadgeIdInvalidChars)
       }
 
       "Return 401 response when authorised by auth API but badge identifier exists but contains all lowercase chars" in new NrsDisabled {
@@ -277,7 +259,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseBadgeIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidBadgeIdLowerCase)
       }
 
       "Return 401 response when authorised by auth API where badge identifier exists and eori does not" in new NrsDisabled {
@@ -287,7 +268,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriIdentifierHeaderMissing.message)(TestValidatedHeadersRequestWithBadgeIdAndNoEori)
       }
 
       "Return 401 response when authorised by auth API empty eori" in new NrsDisabled {
@@ -297,7 +277,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriIdentifierHeaderMissing.message)(validatedHeadersRequestWithValidBadgeIdAndEmptyEori)
       }
 
       "Return 401 response when authorised by auth API with eori too long" in new NrsDisabled {
@@ -307,7 +286,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriIdentifierHeaderMissing.message)(validatedHeadersRequestWithValidBadgeIdAndEoriTooLong)
       }
 
       "Return 401 response when authorised by auth API with eori containing invalid characters" in new NrsDisabled {
@@ -317,7 +295,6 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         actual shouldBe Left(errorResponseEoriIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
-        verify(mockGoogleAnalyticsConnector).failure(errorResponseEoriIdentifierHeaderMissing.message)(validatedHeadersRequestWithInvalidEoriInvalidChars)
       }
 
       "Return 500 response if errors occur in CSP auth API call" in new NrsDisabled {

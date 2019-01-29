@@ -56,11 +56,10 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private val v3Config = ServiceConfig("v3-url", Some("v3-bearer"), "v3-default")
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val asr = AuthorisedStatusRequest(conversationId, GoogleAnalyticsValues.DeclarationStatus, EventStart, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, mock[Request[AnyContent]])
+  private implicit val asr = AuthorisedStatusRequest(conversationId, EventStart, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, mock[Request[AnyContent]])
 
   private implicit val jsonRequest: ValidatedPayloadRequest[AnyContentAsJson] =  ValidatedPayloadRequest(
     ConversationId(UUID.randomUUID()),
-    GoogleAnalyticsValues.Submit,
     EventStart,
     VersionTwo,
     ClientId("ABC"),

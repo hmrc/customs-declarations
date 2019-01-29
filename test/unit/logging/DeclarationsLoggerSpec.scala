@@ -21,9 +21,9 @@ import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{Csp, GoogleAnalyticsValues}
+import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AnalyticsValuesAndConversationIdRequest, AuthorisedRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ConversationIdRequest}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.MockitoPassByNameHelper.PassByNameVerifier
@@ -34,7 +34,7 @@ class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
   trait SetUp {
     val mockCdsLogger: CdsLogger = mock[CdsLogger]
     val logger = new DeclarationsLogger(mockCdsLogger)
-    implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = AnalyticsValuesAndConversationIdRequest(conversationId, GoogleAnalyticsValues.Submit, EventStart, FakeRequest()
+    implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, FakeRequest()
       .withXmlBody(TestXmlPayload).withHeaders("Content-Type" -> "Some-Content-Type"))
       .toValidatedHeadersRequest(TestExtractedHeaders)
       .toCspAuthorisedRequest(Csp(badgeIdentifier, Some(nrsRetrievalValues)))

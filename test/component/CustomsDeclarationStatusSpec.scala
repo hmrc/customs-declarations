@@ -26,7 +26,7 @@ import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.{ValidHeadersV2, ValidHeadersV3}
-import util.externalservices.{ApiSubscriptionFieldsService, AuthService, GoogleAnalyticsService, MdgStatusDeclarationService}
+import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgStatusDeclarationService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTestXMLData}
 
 import scala.concurrent.Future
@@ -38,8 +38,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
   with BeforeAndAfterEach
   with MdgStatusDeclarationService
   with ApiSubscriptionFieldsService
-  with AuthService
-  with GoogleAnalyticsService {
+  with AuthService {
 
   private val mrn = "some-mrn"
   private val endpoint = s"/status-request/mrn/$mrn"
@@ -80,7 +79,6 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
   override protected def beforeEach() {
     resetMockServer()
-    setupGoogleAnalyticsServiceToReturn(ACCEPTED)
   }
 
   override protected def afterAll() {
@@ -110,9 +108,6 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
       And("v2 config was used")
       eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgStatusDeclarationServiceContextV2))))
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
   }
 
@@ -139,9 +134,6 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
       And("v3 config was used")
       eventually(verify(1, postRequestedFor(urlEqualTo(CustomsDeclarationsExternalServicesConfig.MdgStatusDeclarationServiceContextV3))))
-
-      And("GA call was made")
-      eventually(verifyGoogleAnalyticsServiceWasCalled())
     }
   }
 
@@ -163,7 +155,6 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorInvalidDate)
-
     }
 
     scenario("Response status 400 when Declaration Management Information Response does not contain a valid communicationAddress") {
@@ -182,7 +173,6 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
-
     }
 
     scenario("Response status 400 when Declaration Management Information Response does contains different Badge Identifier") {
@@ -201,7 +191,6 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
       And("the response body is a \"invalid xml\" XML")
       string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
-
     }
   }
 

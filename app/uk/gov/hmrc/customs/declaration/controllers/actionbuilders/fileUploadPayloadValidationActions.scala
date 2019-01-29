@@ -22,7 +22,6 @@ import play.api.http.Status
 import play.api.mvc.{ActionRefiner, Result}
 import play.mvc.Http.Status.FORBIDDEN
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, HttpStatusCodeShortDescriptions, ResponseContents}
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
@@ -34,9 +33,8 @@ import scala.concurrent.Future
 
 @Singleton
 class FileUploadPayloadValidationAction @Inject()(fileUploadXmlValidationService: FileUploadXmlValidationService,
-                                                  logger: DeclarationsLogger,
-                                                  googleAnalyticsConnector: GoogleAnalyticsConnector)
-    extends PayloadValidationAction(fileUploadXmlValidationService, logger, Some(googleAnalyticsConnector))
+                                                  logger: DeclarationsLogger)
+    extends PayloadValidationAction(fileUploadXmlValidationService, logger)
 
 class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction,
                                                           val logger: DeclarationsLogger,

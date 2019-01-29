@@ -44,12 +44,6 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
   private val customsDeclarationsMetricsServiceUrlNel = customsDeclarationsMetricsService.serviceUrl
 
-  private val gaEnabled = root.boolean("googleAnalytics.enabled")
-  private val gaServiceUrl = configValidatedNel.service("google-analytics-sender").serviceUrl
-  private val gaTrackingId = root.string("googleAnalytics.trackingId")
-  private val gaClientId = root.string("googleAnalytics.clientId")
-  private val gaEventValue = root.string("googleAnalytics.eventValue")
-
   private val nrsEnabled = root.boolean("nrs.enabled")
   private val nrsApiKey = root.string("nrs.apikey")
   private val nrsWaitTimeMillis = root.int("nrs.waittime.millis")
@@ -70,10 +64,6 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     numberOfCallsToTriggerStateChangeNel, unavailablePeriodDurationInMillisNel, unstablePeriodDurationInMillisNel
     ) mapN DeclarationsCircuitBreakerConfig
 
-  val validatedGoogleAnalyticsSenderConfig: CustomsValidatedNel[GoogleAnalyticsConfig] = (
-    gaEnabled, gaServiceUrl, gaTrackingId, gaClientId, gaEventValue
-    ) mapN GoogleAnalyticsConfig
-
   private val validatedNrsConfig: CustomsValidatedNel[NrsConfig] = (
     nrsEnabled, nrsApiKey, nrsUrl
     ) mapN NrsConfig
@@ -85,7 +75,6 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val customsConfigHolder =
     (validatedDeclarationsConfig,
       validatedDeclarationsCircuitBreakerConfig,
-      validatedGoogleAnalyticsSenderConfig,
       validatedNrsConfig,
       validatedFileUploadConfig
       ) mapN CustomsConfigHolder fold(
@@ -102,15 +91,12 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   val declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig = customsConfigHolder.declarationsCircuitBreakerConfig
 
-  val googleAnalyticsConfig: GoogleAnalyticsConfig = customsConfigHolder.validatedGoogleAnalyticsConfig
-
   val nrsConfig: NrsConfig = customsConfigHolder.validatedNrsConfig
 
   val fileUploadConfig: FileUploadConfig = customsConfigHolder.validatedFileUploadConfig
 
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
                                          declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,
-                                         validatedGoogleAnalyticsConfig: GoogleAnalyticsConfig,
                                          validatedNrsConfig: NrsConfig,
                                          validatedFileUploadConfig: FileUploadConfig)
 }

@@ -18,7 +18,6 @@ package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -28,23 +27,19 @@ import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, Declaration
 abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthService,
                                                 headerValidator: HeaderValidator,
                                                 logger: DeclarationsLogger,
-                                                googleAnalyticsConnector: GoogleAnalyticsConnector,
                                                 declarationConfigService: DeclarationsConfigService,
                                                 eoriHeaderName: String)
-  extends AuthAction(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService) {
+  extends AuthAction(customsAuthService, headerValidator, logger, declarationConfigService) {
 
-  override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, AuthorisedAsCsp] = {
+  override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     for {
       badgeId <- eitherBadgeIdentifier.right
       eori <- eitherEori.right
     } yield CspWithEori(badgeId, eori, maybeNrsRetrievalData)
   }
 
-  private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId with HasAnalyticsValues): Either[ErrorResponse, Eori] = {
-    headerValidator.eoriMustBeValidAndPresent(eoriHeaderName).left.map{ errorResponse =>
-      googleAnalyticsConnector.failure(errorResponse.message)
-      errorResponse
-    }
+  private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
+    headerValidator.eoriMustBeValidAndPresent(eoriHeaderName)
   }
 
 }
@@ -53,9 +48,8 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
 class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
                                      headerValidator: HeaderValidator,
                                      logger: DeclarationsLogger,
-                                     googleAnalyticsConnector: GoogleAnalyticsConnector,
                                      declarationConfigService: DeclarationsConfigService)
-  extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService, XEoriIdentifierHeaderName) {
+  extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XEoriIdentifierHeaderName) {
 
 }
 
@@ -64,8 +58,7 @@ class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
 class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService,
                                           headerValidator: HeaderValidator,
                                           logger: DeclarationsLogger,
-                                          googleAnalyticsConnector: GoogleAnalyticsConnector,
                                           declarationConfigService: DeclarationsConfigService)
-  extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, googleAnalyticsConnector, declarationConfigService, XSubmitterIdentifierHeaderName) {
+  extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XSubmitterIdentifierHeaderName) {
 
 }

@@ -28,12 +28,6 @@ case class DeclarationsCircuitBreakerConfig(numberOfCallsToTriggerStateChange: I
                                             unavailablePeriodDurationInMillis: Int,
                                             unstablePeriodDurationInMillis: Int)
 
-case class GoogleAnalyticsConfig(enabled: Boolean,
-                                 url: String,
-                                 trackingId: String,
-                                 clientId: String,
-                                 eventValue: String)
-
 case class FileUploadConfig(upscanInitiateUrl: String,
                                  upscanCallbackUrl: String,
                                  fileUploadCallbackUrl: String,

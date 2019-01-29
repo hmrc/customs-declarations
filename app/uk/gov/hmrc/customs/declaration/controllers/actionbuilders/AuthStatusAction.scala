@@ -53,7 +53,7 @@ class AuthStatusAction @Inject()(override val authConnector: AuthConnector, logg
       }.recover{
         case NonFatal(_: AuthorisationException) =>
           logger.error("Not authorised")
-          Left(errorResponseUnauthorisedGeneral.XmlResult.withConversationId) // TODO Google Analytics here?
+          Left(errorResponseUnauthorisedGeneral.XmlResult.withConversationId)
         case NonFatal(e) =>
           logger.error("Error authorising CSP", e)
           Left(ErrorInternalServerError.XmlResult.withConversationId)

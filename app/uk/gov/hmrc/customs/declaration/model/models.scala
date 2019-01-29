@@ -91,50 +91,6 @@ case class Mrn(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
 
-sealed trait GoogleAnalyticsValues {
-  val enabled: Boolean = true
-  val success: String
-  val failure: String
-}
-
-object GoogleAnalyticsValues {
-  val Submit: GoogleAnalyticsValues = new GoogleAnalyticsValues {
-    override val success: String = "declarationSubmitSuccess"
-    override val failure: String = "declarationSubmitFailure"
-  }
-
-  val Cancel: GoogleAnalyticsValues = new GoogleAnalyticsValues {
-    override val success: String = "declarationCancellationSuccess"
-    override val failure: String = "declarationCancellationFailure"
-  }
-
-  val FileUpload: GoogleAnalyticsValues = new GoogleAnalyticsValues {
-    override val success: String = "declarationFileUploadSuccess"
-    override val failure: String = "declarationFileUploadFailure"
-  }
-
-  val Clearance: GoogleAnalyticsValues = new GoogleAnalyticsValues {
-    override val success: String = "declarationClearanceSuccess"
-    override val failure: String = "declarationClearanceFailure"
-  }
-
-  val Amend: GoogleAnalyticsValues = new GoogleAnalyticsValues {
-    override lazy val success: String = "declarationAmendSuccess"
-    override lazy val failure: String = "declarationAmendFailure"
-  }
-
-  val ArrivalNotification: GoogleAnalyticsValues = new GoogleAnalyticsValues {
-    override val success: String = "declarationArrivalNotificationSuccess"
-    override val failure: String = "declarationArrivalNotificationFailure"
-  }
-
-  val DeclarationStatus: GoogleAnalyticsValues = new GoogleAnalyticsValues {
-    override val success: String = "declarationStatusSuccess"
-    override val failure: String = "declarationStatusFailure"
-  }
-}
-
-
 case class CorrelationId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
 }
@@ -238,12 +194,6 @@ case class UpscanInitiateUploadRequest
 
 object UpscanInitiateResponsePayload {
   implicit val format: OFormat[UpscanInitiateResponsePayload] = Json.format[UpscanInitiateResponsePayload]
-}
-
-case class GoogleAnalyticsRequest(payload: String)
-
-object GoogleAnalyticsRequest {
-  implicit val format: OFormat[GoogleAnalyticsRequest] = Json.format[GoogleAnalyticsRequest]
 }
 
 case class NrsMetadata(businessId: String, notableEvent: String, payloadContentType: String, payloadSha256Checksum: String,

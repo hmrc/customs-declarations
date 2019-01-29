@@ -44,7 +44,7 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
     val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
     val validator = new HeaderValidator(loggerMock)
 
-    def validate(c: AnalyticsValuesAndConversationIdRequest[_]): Either[ErrorResponse, ExtractedHeaders] = {
+    def validate(c: ConversationIdRequest[_]): Either[ErrorResponse, ExtractedHeaders] = {
       validator.validateHeaders(c)
     }
   }
@@ -52,43 +52,43 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
   "HeaderValidator" can {
     "in happy path, validation" should {
       "be successful for a valid request with accept header for V1" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV1)) shouldBe Right(extractedHeadersWithBadgeIdentifierV1)
+        validate(conversationIdRequest(ValidHeadersV1)) shouldBe Right(extractedHeadersWithBadgeIdentifierV1)
       }
       "be successful for a valid request with accept header for V2" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+        validate(conversationIdRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
       }
       "be successful for a valid request with accept header for V3" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV3)) shouldBe Right(extractedHeadersWithBadgeIdentifierV3)
+        validate(conversationIdRequest(ValidHeadersV3)) shouldBe Right(extractedHeadersWithBadgeIdentifierV3)
       }
       "be successful for content type XML with no space header" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (CONTENT_TYPE -> "application/xml;charset=utf-8"))) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+        validate(conversationIdRequest(ValidHeadersV2 + (CONTENT_TYPE -> "application/xml;charset=utf-8"))) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
       }
     }
     "in unhappy path, validation" should {
       "fail when request is missing accept header" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 - ACCEPT)) shouldBe Left(ErrorAcceptHeaderInvalid)
+        validate(conversationIdRequest(ValidHeadersV2 - ACCEPT)) shouldBe Left(ErrorAcceptHeaderInvalid)
       }
       "fail when request is missing content type header" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 - CONTENT_TYPE)) shouldBe Left(ErrorContentTypeHeaderInvalid)
+        validate(conversationIdRequest(ValidHeadersV2 - CONTENT_TYPE)) shouldBe Left(ErrorContentTypeHeaderInvalid)
       }
       "fail when request is missing X-Client-ID header" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 - XClientIdHeaderName)) shouldBe Left(ErrorInternalServerError)
+        validate(conversationIdRequest(ValidHeadersV2 - XClientIdHeaderName)) shouldBe Left(ErrorInternalServerError)
       }
       "fail when request has invalid accept header" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + ACCEPT_HEADER_INVALID)) shouldBe Left(ErrorAcceptHeaderInvalid)
+        validate(conversationIdRequest(ValidHeadersV2 + ACCEPT_HEADER_INVALID)) shouldBe Left(ErrorAcceptHeaderInvalid)
       }
       "fail when request has invalid content type header (for JSON)" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + CONTENT_TYPE_HEADER_INVALID)) shouldBe Left(ErrorContentTypeHeaderInvalid)
+        validate(conversationIdRequest(ValidHeadersV2 + CONTENT_TYPE_HEADER_INVALID)) shouldBe Left(ErrorContentTypeHeaderInvalid)
       }
       "fail when request has invalid X-Client-ID header" in new SetUp {
-        validate(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + X_CLIENT_ID_HEADER_INVALID)) shouldBe Left(ErrorInternalServerError)
+        validate(conversationIdRequest(ValidHeadersV2 + X_CLIENT_ID_HEADER_INVALID)) shouldBe Left(ErrorInternalServerError)
       }
     }
 
     "in validating the badge identifier header" should {
       "log at info level" in new SetUp {
 
-        validator.eitherBadgeIdentifier(analyticsValuesAndConversationIdRequest(ValidHeadersV2))
+        validator.eitherBadgeIdentifier(conversationIdRequest(ValidHeadersV2))
 
         PassByNameVerifier(loggerMock, "info")
           .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")
@@ -99,49 +99,49 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
 
     "in validating the eori header" should {
       "not allow an empty header" in new SetUp {
-        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "")))
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "")))
 
         value shouldBe Left(errorBadRequest(s"$X_SUBMITTER_IDENTIFIER_NAME header is missing or invalid"))
       }
 
       "not allow only spaces in the header" in new SetUp {
-        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "       ")))
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "       ")))
 
         value shouldBe Left(errorBadRequest(s"$X_SUBMITTER_IDENTIFIER_NAME header is missing or invalid"))
       }
 
       "now allow headers longer than 17 characters" in new SetUp {
-        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "012345678901234567")))
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "012345678901234567")))
 
         value shouldBe Left(errorBadRequest(s"$X_SUBMITTER_IDENTIFIER_NAME header is missing or invalid"))
       }
 
       "allow headers with leading spaces" in new SetUp {
-        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "  0123456789")))
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "  0123456789")))
 
         value shouldBe Right(Eori("  0123456789"))
       }
 
       "allow headers with trailing spaces" in new SetUp {
-        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "0123456789    ")))
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "0123456789    ")))
 
         value shouldBe Right(Eori("0123456789    "))
       }
 
       "allow headers with embedded spaces" in new SetUp {
-        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "01234  56789")))
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "01234  56789")))
 
         value shouldBe Right(Eori("01234  56789"))
       }
 
       "allow special characters" in new SetUp {
-        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "!£$%^&*()-_=+/<>@")))
+        private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "!£$%^&*()-_=+/<>@")))
 
         value shouldBe Right(Eori("!£$%^&*()-_=+/<>@"))
       }
 
       "log info level when valid" in new SetUp {
-        validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(analyticsValuesAndConversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "ABCABC")))
+        validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "ABCABC")))
 
         PassByNameVerifier(loggerMock, "info")
           .withByNameParam[String]("X-Submitter-Identifier header passed validation: ABCABC")
@@ -151,6 +151,6 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
     }
   }
 
-  private def analyticsValuesAndConversationIdRequest(requestMap: Map[String, String]): AnalyticsValuesAndConversationIdRequest[_] =
-    AnalyticsValuesAndConversationIdRequest(TestData.conversationId, GoogleAnalyticsValues.Submit, EventStart, FakeRequest().withHeaders(requestMap.toSeq: _*))
+  private def conversationIdRequest(requestMap: Map[String, String]): ConversationIdRequest[_] =
+    ConversationIdRequest(TestData.conversationId, EventStart, FakeRequest().withHeaders(requestMap.toSeq: _*))
 }

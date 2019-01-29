@@ -18,8 +18,7 @@ package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, FileUploadAnalyticsValuesAction, FileUploadPayloadValidationComposedAction}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, ConversationIdAction, FileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
@@ -31,9 +30,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class FileUploadController @Inject()(val common: Common,
                                      val fileUploadBusinessService: FileUploadBusinessService,
                                      val fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction,
-                                     val fileUploadAnalyticsValuesAction: FileUploadAnalyticsValuesAction,
-                                     val fileUploadAuthAction: AuthActionEoriHeader,
-                                     val googleAnalyticsConnector: GoogleAnalyticsConnector)
+                                     val conversationIdAction: ConversationIdAction,
+                                     val fileUploadAuthAction: AuthActionEoriHeader)
   extends BaseController {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {
@@ -45,7 +43,7 @@ class FileUploadController @Inject()(val common: Common,
 
   def post(): Action[AnyContent] = (
     Action andThen
-      fileUploadAnalyticsValuesAction andThen
+      conversationIdAction andThen
       common.validateAndExtractHeadersAction andThen
       fileUploadAuthAction andThen
       fileUploadPayloadValidationComposedAction
@@ -59,7 +57,6 @@ class FileUploadController @Inject()(val common: Common,
       fileUploadBusinessService.send map {
         case Right(res) =>
           logger.info("Upload initiate request processed successfully")
-          googleAnalyticsConnector.success
           Ok(res).withConversationId
         case Left(errorResult) =>
           errorResult

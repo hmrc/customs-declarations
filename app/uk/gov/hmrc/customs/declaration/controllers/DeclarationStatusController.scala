@@ -17,9 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc._
-import uk.gov.hmrc.customs.declaration.connectors.GoogleAnalyticsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -33,14 +31,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 @Singleton
 class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction,
                                             val authAction: AuthStatusAction,
-                                            val declarationStatusValuesAction: DeclarationStatusValuesAction,
+                                            val conversationIdAction: ConversationIdAction,
                                             val declarationStatusService: DeclarationStatusService,
-                                            val logger: DeclarationsLogger,
-                                            val googleAnalyticsConnector: GoogleAnalyticsConnector) extends BaseController {
+                                            val logger: DeclarationsLogger) extends BaseController {
 
   def get(mrn: String): Action[AnyContent] = (
     Action andThen
-      declarationStatusValuesAction andThen
+      conversationIdAction andThen
       validateAndExtractHeadersStatusAction andThen
       authAction
     ).async {
@@ -55,7 +52,6 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
               override val conversationId: ConversationId = asr.conversationId
             }
             logger.info(s"Declaration status request processed successfully.")(id)
-            googleAnalyticsConnector.success
             Ok(res.body).withConversationId(id)
           case Left(errorResult) =>
             errorResult

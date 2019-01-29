@@ -30,12 +30,12 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.connectors.{DeclarationStatusConnector, GoogleAnalyticsConnector}
+import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.controllers.DeclarationStatusController
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{ValidateAndExtractHeadersStatusAction, _}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, HasAnalyticsValues, HasConversationId}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedStatusRequest
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
@@ -59,34 +59,25 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
     protected val mockResult: Result = mock[Result]
-    protected val mockGoogleAnalyticsConnector: GoogleAnalyticsConnector = mock[GoogleAnalyticsConnector]
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
     protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(StatusTestXMLData.generateDeclarationManagementInformationResponse().toString))
-
-    protected val endpointAction = new EndpointAction {
-      override val logger: DeclarationsLogger = mockDeclarationsLogger
-      override val googleAnalyticsValues: GoogleAnalyticsValues = GoogleAnalyticsValues.Submit
-      override val correlationIdService: UniqueIdsService = stubUniqueIdsService
-      override val timeService: DateTimeService = mockDateTimeService
-    }
 
     protected val mockStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
     protected val dateTime = new DateTime()
 
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
-    protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger, mockGoogleAnalyticsConnector)
+    protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger)
     protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
-    protected val stubDeclarationStatusValuesAction = new DeclarationStatusValuesAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
+    protected val stubConversationIdAction = new ConversationIdAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(
       stubValidateAndExtractHeadersStatusAction,
       stubAuthStatusAction,
-      stubDeclarationStatusValuesAction,
+      stubConversationIdAction,
       stubDeclarationStatusService,
-      mockDeclarationsLogger,
-      mockGoogleAnalyticsConnector) {}
+      mockDeclarationsLogger) {}
 
     protected def awaitSubmit(request: Request[AnyContent]): Result = {
       controller.get(mrnValue).apply(request)
@@ -122,7 +113,6 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
       status(result) shouldBe OK
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
-      verify(mockGoogleAnalyticsConnector).success(any[HasConversationId with HasAnalyticsValues])
     }
 
     "respond with status 400 for a CSP request with a missing X-Badge-Identifier" in new SetUp() {
@@ -172,7 +162,6 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
       val result: Result = awaitSubmit(ValidDeclarationStatusRequest)
 
       result.header.status shouldBe INTERNAL_SERVER_ERROR
-      verifyZeroInteractions(mockGoogleAnalyticsConnector)
     }
   }
 }

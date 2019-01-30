@@ -1,0 +1,43 @@
+<_2:MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+      <_2_1:FunctionCode>07</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>4477cdf4e7284ce6af4a56f1edce958a</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20190120131901Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:Amendment>
+        <_2_1:ChangeReasonCode/>
+        <_2_1:Pointer>
+          <_2_1:DocumentSectionCode>42A</_2_1:DocumentSectionCode>
+        </_2_1:Pointer>
+        <_2_1:Pointer>
+          <_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>
+          <_2_1:DocumentSectionCode>15A</_2_1:DocumentSectionCode>
+          <_2_1:TagID>T014</_2_1:TagID>
+        </_2_1:Pointer>
+      </_2_1:Amendment>
+      <_2_1:Declaration>
+        <_2_1:FunctionalReferenceID>TTM5IVL01PA</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GB0RX559B4YFGVR2</_2_1:ID>
+        <_2_1:VersionID>2</_2_1:VersionID>
+      </_2_1:Declaration>
+      <_2_3:Declaration xmlns:_2_3="urn:wco:datamodel:WCO:DEC-DMS:2">
+        <_2_3:BorderTransportMeans>
+          <_2_3:RegistrationNationalityCode>NL</_2_3:RegistrationNationalityCode>
+        </_2_3:BorderTransportMeans>
+      </_2_3:Declaration>
+    </_2_1:Response><_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+      <_2_1:FunctionCode>08</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>0dda64b00876433f87ff3a7ca29647f3</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20190120131901Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:AdditionalInformation>
+        <_2_1:StatementCode>A2</_2_1:StatementCode>
+        <_2_1:StatementTypeCode>AFB</_2_1:StatementTypeCode>
+      </_2_1:AdditionalInformation>
+      <_2_1:Declaration>
+        <_2_1:FunctionalReferenceID>TTM5IVL01PA</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GB0RX559B4YFGVR2</_2_1:ID>
+        <_2_1:VersionID>2</_2_1:VersionID>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>

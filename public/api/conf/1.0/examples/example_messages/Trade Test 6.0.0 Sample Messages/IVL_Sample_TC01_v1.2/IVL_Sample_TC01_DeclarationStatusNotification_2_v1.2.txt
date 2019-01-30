@@ -1,0 +1,12 @@
+<n1:InventoryLinkingImportsDeclarationStatusNotification xmlns:n1="http://gov.uk/customs/inventoryLinkingImport/v1">
+   <n1:declarationMethod>2</n1:declarationMethod>
+   <n1:dateOfEntry>2019-01-20T12:57:33.000Z</n1:dateOfEntry>
+   <n1:entryNumber>19GB0RX559B4YFGVR2</n1:entryNumber>
+   <n1:entryVersionNumber>1</n1:entryVersionNumber>
+   <n1:goodsArrivalDeclaration>N</n1:goodsArrivalDeclaration>
+   <n1:ics>14</n1:ics>
+   <n1:inventoryConsignmentReference>GB/1234-99999886JCP</n1:inventoryConsignmentReference>
+   <n1:roe>H6</n1:roe>
+   <n1:traderReference>8GB025115100018-123456ABABAB1</n1:traderReference>
+   <n1:totalPackages>40</n1:totalPackages>
+</n1:InventoryLinkingImportsDeclarationStatusNotification>

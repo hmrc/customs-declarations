@@ -104,10 +104,10 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
       "wrap an underlying error when nrs service call fails with an http exception" in {
         returnResponseForRequest(Future.failed(httpException))
 
-        val caught = intercept[RuntimeException] {
+        val caught = intercept[NotFoundException] {
           awaitRequest
         }
-        caught.getCause shouldBe httpException
+        caught shouldBe httpException
       }
     }
   }

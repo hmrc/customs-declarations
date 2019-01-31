@@ -22,7 +22,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -51,9 +51,12 @@ class NrsConnector @Inject()(http: HttpClient,
         res
       }
       .recoverWith {
-        case httpError: HttpException =>
-          logger.error(s"Call to nrs service failed url=$url, HttpException=$httpError")
-          Future.failed(new RuntimeException(httpError))
+        case e: HttpException =>
+          logger.error(s"Call to nrs service failed url=$url, HttpException=$e")
+          Future.failed(e)
+        case e: Upstream5xxResponse =>
+          logger.error(s"Call to nrs service failed url=$url, Upstream5xxResponse=$e")
+          Future.failed(e)
         case e: Throwable =>
           logger.error(s"Call to nrs service failed url=$url, exception=$e")
           Future.failed(e)

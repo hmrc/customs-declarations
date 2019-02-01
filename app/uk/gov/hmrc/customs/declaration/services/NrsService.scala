@@ -20,8 +20,8 @@ import java.lang.String.format
 import java.math.BigInteger
 import java.nio.charset.StandardCharsets.UTF_8
 import java.security.MessageDigest.getInstance
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import com.google.common.io.BaseEncoding.base64
 import play.api.libs.json.{JsObject, JsString, JsValue}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
@@ -29,13 +29,15 @@ import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.Authorizati
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException, Upstream5xxResponse}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
 class NrsService @Inject()(logger: DeclarationsLogger,
                            nrsConnector: NrsConnector,
+                           auditingService: AuditingService,
                            dateTimeService: DateTimeService) {
 
   private val conversationIdKey = "conversationId"
@@ -59,7 +61,24 @@ class NrsService @Inject()(logger: DeclarationsLogger,
 
     val nrsPayload: NrsPayload = NrsPayload(base64().encode(vpr.request.body.toString.getBytes(UTF_8)), nrsMetadata)
 
-    nrsConnector.send(nrsPayload, vpr.requestedApiVersion)
+    nrsConnector.send(nrsPayload, vpr.requestedApiVersion).recoverWith {
+        case e: HttpException =>
+          logger.info(s"Error occurred while submitting NRS payload got HttpException status: ${e.responseCode} error message: ${e.message}")
+          if (is5xx(e.responseCode)) {
+            auditingService.auditFailedNrs(nrsPayload, e)
+          }
+          Future.failed(e)
+        case e: Upstream5xxResponse =>
+          logger.info(s"Error occurred while submitting NRS payload got Upstream5xxResponse status: ${e.upstreamResponseCode} error message: ${e.message}")
+          if (is5xx(e.upstreamResponseCode)) {
+            auditingService.auditFailedNrs(nrsPayload, e)
+          }
+          Future.failed(e)
+      }
+  }
+
+  private def is5xx(statusCode: Int): Boolean ={
+    statusCode >= 500 & statusCode < 600
   }
 
   private def sha256Hash(text: String) : String =  {

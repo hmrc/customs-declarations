@@ -59,9 +59,7 @@ class AuditingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
       val mockAuditResult = mock[AuditResult]
       implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
-
       val captor = ArgumentCaptor.forClass(classOf[ExtendedDataEvent])
-
       when(mockAuditConnector.sendExtendedEvent(any[ExtendedDataEvent])(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(mockAuditResult))
       when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
 
@@ -72,13 +70,11 @@ class AuditingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         val actualExtendedDataEvent: ExtendedDataEvent = captor.getValue
         actualExtendedDataEvent.auditSource shouldBe "customs-declaration-submission"
         actualExtendedDataEvent.auditType shouldBe "DeclarationNotificationOutboundCall"
-
         actualExtendedDataEvent.tags("path") shouldBe nrsConfigEnabled.nrsUrl
         actualExtendedDataEvent.tags("transactionName") shouldBe  "Unsuccessful Non-Repudiation Submission API call"
         actualExtendedDataEvent.tags("x-request-id") shouldBe vpr.headers.get("X-Request-Id").getOrElse("")
         actualExtendedDataEvent.tags("clientIP") shouldBe vpr.headers.get("X-Forwarded-For").getOrElse("")
         actualExtendedDataEvent.tags("clientPort") shouldBe vpr.headers.get("X-Forwarded-Port").getOrElse("")
-
         (actualExtendedDataEvent.detail \ "errorCode" ).as[String] shouldBe "400"
         (actualExtendedDataEvent.detail \ "errorMessage" ).as[String] shouldBe "bad request"
         (actualExtendedDataEvent.detail \ "businessId" ).as[String] shouldBe nrsPayload.metadata.businessId
@@ -86,7 +82,6 @@ class AuditingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         (actualExtendedDataEvent.detail \ "x-conversation-Id" ).as[String] shouldBe vpr.conversationId.toString
         (actualExtendedDataEvent.detail \ "userSubmissionTimestamp" ).as[String] shouldBe nrsPayload.metadata.userSubmissionTimestamp
         (actualExtendedDataEvent.detail \ "identityData" ).as[JsValue] shouldBe Json.toJson(nrsPayload.metadata.identityData)
-
         actualExtendedDataEvent.eventId should fullyMatch regex """[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"""
         actualExtendedDataEvent.generatedAt.toString() should have size 24
       }
@@ -96,9 +91,7 @@ class AuditingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
       val mockAuditResult = mock[AuditResult]
       implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
-
       val captor = ArgumentCaptor.forClass(classOf[ExtendedDataEvent])
-
       when(mockAuditConnector.sendExtendedEvent(any[ExtendedDataEvent])(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(mockAuditResult))
       when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
 
@@ -109,13 +102,11 @@ class AuditingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         val actualExtendedDataEvent: ExtendedDataEvent = captor.getValue
         actualExtendedDataEvent.auditSource shouldBe "customs-declaration-submission"
         actualExtendedDataEvent.auditType shouldBe "DeclarationNotificationOutboundCall"
-
         actualExtendedDataEvent.tags("path") shouldBe nrsConfigEnabled.nrsUrl
         actualExtendedDataEvent.tags("transactionName") shouldBe  "Unsuccessful Non-Repudiation Submission API call"
         actualExtendedDataEvent.tags("x-request-id") shouldBe vpr.headers.get("X-Request-Id").getOrElse("")
         actualExtendedDataEvent.tags("clientIP") shouldBe vpr.headers.get("X-Forwarded-For").getOrElse("")
         actualExtendedDataEvent.tags("clientPort") shouldBe vpr.headers.get("X-Forwarded-Port").getOrElse("")
-
         (actualExtendedDataEvent.detail \ "errorCode" ).as[String] shouldBe "500"
         (actualExtendedDataEvent.detail \ "errorMessage" ).as[String] shouldBe "internal server"
         (actualExtendedDataEvent.detail \ "businessId" ).as[String] shouldBe nrsPayload.metadata.businessId
@@ -123,7 +114,6 @@ class AuditingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         (actualExtendedDataEvent.detail \ "x-conversation-Id" ).as[String] shouldBe vpr.conversationId.toString
         (actualExtendedDataEvent.detail \ "userSubmissionTimestamp" ).as[String] shouldBe nrsPayload.metadata.userSubmissionTimestamp
         (actualExtendedDataEvent.detail \ "identityData" ).as[JsValue] shouldBe Json.toJson(nrsPayload.metadata.identityData)
-
         actualExtendedDataEvent.eventId should fullyMatch regex """[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"""
         actualExtendedDataEvent.generatedAt.toString() should have size 24
       }

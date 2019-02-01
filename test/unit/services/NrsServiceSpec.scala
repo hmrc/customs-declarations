@@ -49,7 +49,7 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
     protected val cspResponsePayload: NrSubmissionId = TestData.nrSubmissionId
     protected val dateTime = new DateTime()
 
-    protected def send(vupr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Future[NrSubmissionId] = {
+    protected def send(vupr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): NrSubmissionId = {
       when(mockDateTimeService.nowUtc()).thenReturn(TestData.nrsTimeStamp)
       await(service.send(vupr, hc))
     }
@@ -59,9 +59,9 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
     "send CSP payload to connector" in new SetUp() {
       when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(cspResponsePayload))
 
-      val result: Future[NrSubmissionId] = send()
+      val result = send()
 
-      await(result) shouldBe cspResponsePayload
+      result shouldBe cspResponsePayload
 
       verify(mockNrsConnector).send(meq(TestData.cspNrsPayload), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
@@ -69,26 +69,26 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
     "serialise multiple headers correctly" in new SetUp() {
       when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(cspResponsePayload))
 
-      val result: Future[NrSubmissionId] = send(TestCspValidatedPayloadRequestMultipleHeaderValues)
+      val result = send(TestCspValidatedPayloadRequestMultipleHeaderValues)
 
-      await(result) shouldBe cspResponsePayload
+      result shouldBe cspResponsePayload
       verify(mockNrsConnector).send(meq(TestData.cspNrsPayloadMultipleHeaderValues), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
 
     "return failed future when nrs service call fails" in new SetUp() {
       when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new Exception()))
 
-      val result: Future[NrSubmissionId] = send()
+      val result = intercept[Exception](send())
 
-      ScalaFutures.whenReady(result.failed) { ex => ex shouldBe a[Exception] }
+      result shouldBe a[Exception]
     }
 
     "audit when nrs returns 5xx error response" in new SetUp() {
       when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new InternalServerException("internal server")))
 
-      val result: Future[NrSubmissionId] = send()
+      val result = intercept[Exception](send())
 
-      ScalaFutures.whenReady(result.failed) { ex => ex shouldBe a[Exception] }
+      result shouldBe a[Exception]
       verify(mockAuditingService).auditFailedNrs(any[NrsPayload], any[HttpException])(any[ValidatedPayloadRequest[AnyContent]])
       verify(mockAuditingService, times(0)).auditFailedNrs(any[NrsPayload], any[Upstream5xxResponse])(any[ValidatedPayloadRequest[AnyContent]])
     }
@@ -96,9 +96,9 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
     "DO NOT audit when nrs returns 4xx error response" in new SetUp() {
       when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new BadRequestException("bad request")))
 
-      val result: Future[NrSubmissionId] = send()
+      val result = intercept[Exception](send())
 
-      ScalaFutures.whenReady(result.failed) { ex => ex shouldBe a[Exception] }
+      result shouldBe a[Exception]
       verify(mockAuditingService, times(0)).auditFailedNrs(any[NrsPayload], any[HttpException])(any[ValidatedPayloadRequest[AnyContent]])
       verify(mockAuditingService, times(0)).auditFailedNrs(any[NrsPayload], any[Upstream5xxResponse])(any[ValidatedPayloadRequest[AnyContent]])
     }

@@ -70,7 +70,6 @@ class AuditingService @Inject()(logger: DeclarationsLogger, declarationsConfigSe
     clientIpKey -> vpr.headers.get(xForwardedForHeaderName).getOrElse(EMPTY),
     clientPortKey -> vpr.headers.get(xForwardedPortHeaderName).getOrElse(EMPTY))
 
-
     val detail = JsObject(Map[String, JsValue](
       errorCodeKey -> JsString(responseCode.toString),
       errorMessageKey -> JsString(errorMessage),

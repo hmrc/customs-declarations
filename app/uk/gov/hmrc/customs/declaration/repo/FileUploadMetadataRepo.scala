@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.customs.declaration.repo
 
-import javax.inject.{Inject, Singleton}
-
 import com.google.inject.ImplementedBy
+import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
+import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.BSONObjectID
 import reactivemongo.play.json.JsObjectDocumentWriter
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.model.{FileUploadMetadata, CallbackFields, FileReference, SubscriptionFieldsId}
+import uk.gov.hmrc.customs.declaration.model.{CallbackFields, FileReference, FileUploadMetadata, SubscriptionFieldsId}
 import uk.gov.hmrc.mongo.ReactiveRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -80,16 +80,16 @@ class FileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvider,
   override def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
     logger.debug(s"fetching file upload metadata with file reference: $reference")
 
-    val selector = Json.obj("files.reference" -> reference)
-    collection.find(selector).one[FileUploadMetadata]
+    val selector = "files.reference" -> toJsFieldJsValueWrapper(reference)
+    find(selector).map (_.headOption)
   }
 
   override def delete(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Unit] = {
     logger.debug(s"deleting fileUploadMetadata: $fileUploadMetadata")
 
-    val selector = Json.obj("batchId" -> fileUploadMetadata.batchId)
+    val selector = "batchId" -> toJsFieldJsValueWrapper(fileUploadMetadata.batchId)
     lazy val errorMsg = s"Could not delete entity for selector: $selector"
-    collection.remove(selector).map(errorHandler.handleDeleteError(_, errorMsg))
+    remove(selector).map(errorHandler.handleDeleteError(_, errorMsg))
   }
 
   def update(csId: SubscriptionFieldsId, reference: FileReference, cf: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
@@ -98,13 +98,7 @@ class FileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvider,
     val selector = Json.obj("files.reference" -> reference.toString, "csId" -> csId.toString)
     val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum)))
 
-    val updateOp = collection.updateModifier(
-      update = update,
-      fetchNewObject = true,
-      upsert = false
-    )
-
-    collection.findAndModify(selector, updateOp).map(findAndModifyResult =>
+    findAndUpdate(selector, update, fetchNewObject = true).map(findAndModifyResult =>
       findAndModifyResult.value match {
         case None => None
         case Some(jsonDoc) =>

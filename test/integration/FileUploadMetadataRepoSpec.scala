@@ -23,7 +23,6 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import play.api.libs.json.Json
 import reactivemongo.api.DB
-import reactivemongo.play.json.JsObjectDocumentWriter
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
@@ -42,7 +41,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
   with BeforeAndAfterAll
   with BeforeAndAfterEach
   with MockitoSugar
-  with MongoSpecSupport  { self =>
+  with MongoSpecSupport { self =>
 
   private val mockLogger = mock[DeclarationsLogger]
   private val mockErrorHandler = mock[FileUploadMetadataRepoErrorHandler]
@@ -56,16 +55,16 @@ class FileUploadMetadataRepoSpec extends UnitSpec
   private val repository = new FileUploadMetadataMongoRepo(mongoDbProvider, mockErrorHandler, mockLogger)
 
   override def beforeEach() {
-    await(repository.drop)
+    dropTestCollection("batchFileUploads")
     Mockito.reset(mockErrorHandler, mockLogger)
   }
 
   override def afterAll() {
-    await(repository.drop)
+    dropTestCollection("batchFileUploads")
   }
 
   private def collectionSize: Int = {
-    await(repository.collection.count())
+    await(repository.count(Json.obj()))
   }
 
   private def logVerifier(logLevel: String, logText: String) = {
@@ -76,7 +75,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
   }
 
   private def selector(fileReference: String) = {
-    Json.obj("files.reference" -> fileReference)
+    "files.reference" -> play.api.libs.json.Json.toJsFieldJsValueWrapper(fileReference)
   }
 
   "repository" should {
@@ -86,7 +85,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
       saveResult shouldBe true
       collectionSize shouldBe 1
 
-      val findResult = await(repository.collection.find(selector(BatchFileOne.reference.toString)).one[FileUploadMetadata]).get
+      val findResult = await(repository.find(selector(BatchFileOne.reference.toString)).head)
 
       findResult shouldBe FileMetadataWithFileOne
       logVerifier("debug", "saving fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1)),https://a.b.com,1,1,Some(Document Type 1))))")
@@ -97,11 +96,11 @@ class FileUploadMetadataRepoSpec extends UnitSpec
       await(repository.create(FileMetadataWithFileTwo))
       collectionSize shouldBe 2
 
-      val findResult1 = await(repository.collection.find(selector(BatchFileOne.reference.toString)).one[FileUploadMetadata]).get
+      val findResult1 = await(repository.find(selector(BatchFileOne.reference.toString)).head)
 
       findResult1 shouldBe FileMetadataWithFileOne
 
-      val findResult2 = await(repository.collection.find(selector(BatchFileTwo.reference.toString)).one[FileUploadMetadata]).get
+      val findResult2 = await(repository.find(selector(BatchFileTwo.reference.toString)).head)
 
       findResult2 shouldBe FileMetadataWithFileTwo
     }

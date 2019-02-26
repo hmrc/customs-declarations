@@ -1,7 +1,0 @@
-<v2:receiveValidationResponse xmlns:_31="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/movement/2017/01/31/" xmlns:v2="http://movement.core.ecf/EntryManagementServiceInboundSOAP/v2/">
-  <validationResponse>
-    <_31:request>
-      <_31:id>adb3f954-d875-471e-b2f1-c614d46f364a</_31:id>
-    </_31:request>
-  </validationResponse>
-</v2:receiveValidationResponse>

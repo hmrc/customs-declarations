@@ -128,7 +128,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
         }
       }
 
-    eventualAuth.map{ enrolmentsAndMaybeNrsData: (Enrolments, Option[NrsRetrievalData]) =>
+    eventualAuth.map{ enrolmentsAndMaybeNrsData =>
       val enrolments: Enrolments = enrolmentsAndMaybeNrsData._1
       val maybeNrsData: Option[NrsRetrievalData] = enrolmentsAndMaybeNrsData._2
       val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(enrolments, hc.authorization)

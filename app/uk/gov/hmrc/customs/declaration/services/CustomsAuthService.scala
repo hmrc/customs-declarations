@@ -72,9 +72,9 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   /*
   Wrapper around HMRC authentication library authorised function for CSP authentication
   */
-  def authAsCsp(isNrs: Boolean)(implicit vhr: HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] = {
+  def authAsCsp(requestRetrievals: Boolean)(implicit vhr: HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] = {
     val eventualAuth: Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] =
-      if (isNrs) {
+      if (requestRetrievals) {
         authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
           case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
             credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes =>
@@ -128,7 +128,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
         }
       }
 
-    eventualAuth.map{ enrolmentsAndMaybeNrsData =>
+    eventualAuth.map{ enrolmentsAndMaybeNrsData: (Enrolments, Option[NrsRetrievalData]) =>
       val enrolments: Enrolments = enrolmentsAndMaybeNrsData._1
       val maybeNrsData: Option[NrsRetrievalData] = enrolmentsAndMaybeNrsData._2
       val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(enrolments, hc.authorization)

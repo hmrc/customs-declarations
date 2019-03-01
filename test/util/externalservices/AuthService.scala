@@ -18,7 +18,7 @@ package util.externalservices
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.Status
-import play.api.libs.json.{JsArray, JsString, Json}
+import play.api.libs.json.{JsArray, Json}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
@@ -42,10 +42,7 @@ trait AuthService {
   private def bearerTokenMatcher(bearerToken: String)= equalTo("Bearer " + bearerToken)
 
   private def authRequestJson(predicate: Predicate, retrievals: Retrieval[_]*): String = {
-    val predicateJsArray = predicate.toJson match {
-      case arr: JsArray => arr
-      case other => Json.arr(other)
-    }
+    val predicateJsArray = predicateToJson(predicate)
     val js =
       s"""
          |{
@@ -57,10 +54,7 @@ trait AuthService {
   }
 
   private def authRequestJsonWithoutRetrievals(predicate: Predicate): String = {
-    val predicateJsArray = predicate.toJson match {
-      case arr: JsArray => arr
-      case other => Json.arr(other)
-    }
+    val predicateJsArray = predicateToJson(predicate)
     val js =
       s"""
          |{
@@ -71,18 +65,23 @@ trait AuthService {
     js
   }
 
-  private def authRequestJsonWithAuthorisedEnrolmentRetrievals(predicate: Predicate, retrievals: Retrieval[Enrolments]): String = {
-    val predicateJsArray = predicate.toJson match {
-      case arr: JsArray => arr
-      case other => Json.arr(other)
-    }
+  private def authRequestJsonWithAuthorisedEnrolmentRetrievals(predicate: Predicate) = {
+    val predicateJsArray: JsArray = predicateToJson(predicate)
     val js =
       s"""
          |{
-         |  "authorise": $predicateJsArray, "retrieve" : ${JsArray(retrievals.propertyNames.map(JsString))}
+         |  "authorise": $predicateJsArray,
+         |  "retrieve" : ["authorisedEnrolments"]
          |}
     """.stripMargin
     js
+  }
+
+  private def predicateToJson(predicate: Predicate) = {
+    predicate.toJson match {
+      case arr: JsArray => arr
+      case other => Json.arr(other)
+    }
   }
 
   def authServiceAuthorizesCSP(bearerToken: String = TestData.cspBearerToken): Unit = {
@@ -126,8 +125,16 @@ trait AuthService {
   }
 
   def authServiceUnauthorisesScopeForCSP(bearerToken: String = TestData.cspBearerToken): Unit = {
+    cspAuthServiceUnauthorisesScope(bearerToken, authRequestJson(cspAuthorisationPredicate, cspRetrieval))
+  }
+
+  def authServiceUnauthorisesScopeForCSPWithoutRetrievals(bearerToken: String = TestData.cspBearerToken): Unit = {
+    cspAuthServiceUnauthorisesScope(bearerToken, authRequestJsonWithoutRetrievals(cspAuthorisationPredicate))
+  }
+
+  private def cspAuthServiceUnauthorisesScope(bearerToken: String, body: String): Unit = {
     stubFor(post(authUrlMatcher)
-      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate, cspRetrieval)))
+      .withRequestBody(equalToJson(body))
       .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
       .willReturn(
         aResponse()
@@ -137,17 +144,6 @@ trait AuthService {
     )
   }
 
-  def authServiceUnauthorisesScopeForCSPWithoutRetrievals(bearerToken: String = TestData.cspBearerToken): Unit = {
-    stubFor(post(authUrlMatcher)
-      .withRequestBody(equalToJson(authRequestJsonWithoutRetrievals(cspAuthorisationPredicate)))
-      .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
-      .willReturn(
-        aResponse()
-          .withStatus(Status.UNAUTHORIZED)
-          .withHeader(WWW_AUTHENTICATE, """MDTP detail="InsufficientEnrolments"""")
-      )
-    )
-  }
 
   def authServiceAuthorizesNonCspWithEori(bearerToken: String = TestData.nonCspBearerToken,
                                           eori: Eori = TestData.declarantEori): Unit = {
@@ -195,7 +191,7 @@ trait AuthService {
   def authServiceAuthorizesNonCspWithEoriAndNoRetrievals(bearerToken: String = TestData.nonCspBearerToken,
                                           eori: Eori = TestData.declarantEori): Unit = {
     stubFor(post(authUrlMatcher)
-      .withRequestBody(equalToJson(authRequestJsonWithAuthorisedEnrolmentRetrievals(nonCspAuthorisationPredicate, Retrievals.authorisedEnrolments)))
+      .withRequestBody(equalToJson(authRequestJsonWithAuthorisedEnrolmentRetrievals(nonCspAuthorisationPredicate)))
       .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
       .willReturn(
         aResponse()
@@ -210,8 +206,16 @@ trait AuthService {
   }
 
   def authServiceUnauthorisesCustomsEnrolmentForNonCSP(bearerToken: String = TestData.nonCspBearerToken): Unit = {
+    nonCSPAuthServiceUnauthorisesCustomsEnrolment(bearerToken, authRequestJson(nonCspAuthorisationPredicate, nonCspRetrieval))
+  }
+
+  def authServiceUnauthorisesCustomsEnrolmentForNonCSPWithoutRetrievals(bearerToken: String = TestData.nonCspBearerToken): Unit = {
+    nonCSPAuthServiceUnauthorisesCustomsEnrolment(bearerToken, authRequestJsonWithAuthorisedEnrolmentRetrievals(nonCspAuthorisationPredicate))
+  }
+
+  private def nonCSPAuthServiceUnauthorisesCustomsEnrolment(bearerToken: String, body: String): Unit = {
     stubFor(post(authUrlMatcher)
-      .withRequestBody(equalToJson(authRequestJson(nonCspAuthorisationPredicate, nonCspRetrieval)))
+      .withRequestBody(equalToJson(body))
       .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
       .willReturn(
         aResponse()
@@ -222,8 +226,16 @@ trait AuthService {
   }
 
   def verifyAuthServiceCalledForCsp(bearerToken: String = TestData.cspBearerToken): Unit = {
+    verifyCspAuthServiceCalled(bearerToken, authRequestJson(cspAuthorisationPredicate, cspRetrieval))
+  }
+
+  def verifyAuthServiceCalledForCspWithoutRetrievals(bearerToken: String = TestData.cspBearerToken): Unit = {
+    verifyCspAuthServiceCalled(bearerToken, authRequestJsonWithoutRetrievals(cspAuthorisationPredicate))
+  }
+
+  private def verifyCspAuthServiceCalled(bearerToken: String, body: String): Unit = {
     verify(1, postRequestedFor(authUrlMatcher)
-      .withRequestBody(equalToJson(authRequestJson(cspAuthorisationPredicate, cspRetrieval)))
+      .withRequestBody(equalToJson(body))
       .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
     )
   }

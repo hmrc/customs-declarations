@@ -18,7 +18,7 @@ package util.externalservices
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.Status
-import play.api.libs.json.{JsArray, Json}
+import play.api.libs.json.{JsArray, JsString, Json}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
@@ -51,6 +51,35 @@ trait AuthService {
          |{
          |  "authorise": $predicateJsArray,
          |  "retrieve": [${retrievals.flatMap(_.propertyNames).map(Json.toJson(_)).mkString(",")}]
+         |}
+    """.stripMargin
+    js
+  }
+
+  private def authRequestJsonWithoutRetrievals(predicate: Predicate): String = {
+    val predicateJsArray = predicate.toJson match {
+      case arr: JsArray => arr
+      case other => Json.arr(other)
+    }
+    val js =
+      s"""
+         |{
+         |  "authorise": $predicateJsArray,
+         |  "retrieve" : [ ]
+         |}
+    """.stripMargin
+    js
+  }
+
+  private def authRequestJsonWithAuthorisedEnrolmentRetrievals(predicate: Predicate, retrievals: Retrieval[Enrolments]): String = {
+    val predicateJsArray = predicate.toJson match {
+      case arr: JsArray => arr
+      case other => Json.arr(other)
+    }
+    val js =
+      s"""
+         |{
+         |  "authorise": $predicateJsArray, "retrieve" : ${JsArray(retrievals.propertyNames.map(JsString))}
          |}
     """.stripMargin
     js
@@ -108,6 +137,18 @@ trait AuthService {
     )
   }
 
+  def authServiceUnauthorisesScopeForCSPWithoutRetrievals(bearerToken: String = TestData.cspBearerToken): Unit = {
+    stubFor(post(authUrlMatcher)
+      .withRequestBody(equalToJson(authRequestJsonWithoutRetrievals(cspAuthorisationPredicate)))
+      .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
+      .willReturn(
+        aResponse()
+          .withStatus(Status.UNAUTHORIZED)
+          .withHeader(WWW_AUTHENTICATE, """MDTP detail="InsufficientEnrolments"""")
+      )
+    )
+  }
+
   def authServiceAuthorizesNonCspWithEori(bearerToken: String = TestData.nonCspBearerToken,
                                           eori: Eori = TestData.declarantEori): Unit = {
     stubFor(post(authUrlMatcher)
@@ -145,6 +186,23 @@ trait AuthService {
                |    "currentLogin": "2018-04-23T09:26:45.069Z",
                |    "previousLogin": "2018-04-05T13:59:54.082Z"
                |  }
+               |}""".stripMargin
+          )
+      )
+    )
+  }
+
+  def authServiceAuthorizesNonCspWithEoriAndNoRetrievals(bearerToken: String = TestData.nonCspBearerToken,
+                                          eori: Eori = TestData.declarantEori): Unit = {
+    stubFor(post(authUrlMatcher)
+      .withRequestBody(equalToJson(authRequestJsonWithAuthorisedEnrolmentRetrievals(nonCspAuthorisationPredicate, Retrievals.authorisedEnrolments)))
+      .withHeader(AUTHORIZATION, bearerTokenMatcher(bearerToken))
+      .willReturn(
+        aResponse()
+          .withStatus(Status.OK)
+          .withBody(
+            s"""{
+               |  "authorisedEnrolments": [ ${enrolmentRetrievalJson(customsEnrolmentName, "EORINumber", eori.value)} ]
                |}""".stripMargin
           )
       )

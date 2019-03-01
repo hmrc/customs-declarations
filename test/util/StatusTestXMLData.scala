@@ -805,12 +805,12 @@ object StatusTestXMLData {
   def statusResponseDeclarationNoProcedureCategory: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
     <n3:tradeMovementType>{COTradeMovementType}</n3:tradeMovementType>
-    <n3:acceptanceDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))}</n3:acceptanceDate>
+    <n3:acceptanceDate>{DateTime.now(DateTimeZone.UTC).minusDays(61).toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))}</n3:acceptanceDate>
   </xsd_1:declaration>
 
   def statusResponseDeclarationNoTradeMovementType: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
-    <n3:acceptanceDate>{DateTime.now(DateTimeZone.UTC).minusMonths(2).toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))}</n3:acceptanceDate>
+    <n3:acceptanceDate>{DateTime.now(DateTimeZone.UTC).minusDays(61).toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))}</n3:acceptanceDate>
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
   </xsd_1:declaration>
 

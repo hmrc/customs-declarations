@@ -50,7 +50,7 @@ class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
                                      logger: DeclarationsLogger,
                                      declarationConfigService: DeclarationsConfigService)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XEoriIdentifierHeaderName) {
-
+  override def requestRetrievalsForEndpoint: Boolean = false
 }
 
 
@@ -60,5 +60,4 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
                                           logger: DeclarationsLogger,
                                           declarationConfigService: DeclarationsConfigService)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XSubmitterIdentifierHeaderName) {
-
 }

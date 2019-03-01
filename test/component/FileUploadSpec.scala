@@ -76,111 +76,113 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     }
   }
 
-  feature("Unauthorized file upload API submissions are processed correctly") {
-
-    scenario("An unauthorised CSP is not allowed to submit a file upload request with v2.0 accept header") {
-      Given("A CSP wants to submit a valid file upload")
-      val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request.fromCsp.postTo(endpoint)
-
-      And("the CSP is unauthorised with its privileged application")
-      authServiceUnauthorisesScopeForCSP()
-      authServiceUnauthorisesCustomsEnrolmentForNonCSP(cspBearerToken)
-
-      When("a POST request with data is sent to the API")
-      val result: Future[Result] = route(app = app, request).value
-
-      Then("a response with a 401 (UNAUTHORIZED) status is received")
-      status(result) shouldBe UNAUTHORIZED
-
-      And("the response body is empty")
-      string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
-
-      And("the request was authorised with AuthService")
-      eventually(verifyAuthServiceCalledForCsp())
-    }
-
-    scenario("An unauthorised CSP is not allowed to submit a file upload request with v3.0 accept header") {
-      Given("A CSP wants to submit a valid file upload")
-      val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV3Request.fromCsp.postTo(endpoint)
-
-      And("the CSP is unauthorised with its privileged application")
-      authServiceUnauthorisesScopeForCSP()
-      authServiceUnauthorisesCustomsEnrolmentForNonCSP(cspBearerToken)
-
-      When("a POST request with data is sent to the API")
-      val result: Future[Result] = route(app = app, request).value
-
-      Then("a response with a 401 (UNAUTHORIZED) status is received")
-      status(result) shouldBe UNAUTHORIZED
-
-      And("the response body is empty")
-      string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
-
-      And("the request was authorised with AuthService")
-      eventually(verifyAuthServiceCalledForCsp())
-    }
-  }
-
-  feature("The API handles errors as expected") {
-    scenario("Response status 400 when user submits a non-xml payload") {
-      Given("the API is available")
-      val request = InvalidFileUploadRequest.fromNonCsp
-        .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
-        .copyFakeRequest(method = POST, uri = endpoint)
-      setupWiremockExpectations()
-
-      When("a POST request with data is sent to the API")
-      val result: Option[Future[Result]] = route(app = app, request)
-
-      Then(s"a response with a 400 status is received")
-      result shouldBe 'defined
-      val resultFuture = result.value
-
-      status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
-
-      And("the response body is a \"malformed xml body\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
-    }
-
-    scenario("Response status 400 when user submits invalid request") {
-      Given("the API is available")
-      val request = ValidSubmission_13_INV_Request.fromNonCsp.postTo(endpoint)
-      setupWiremockExpectations()
-
-      When("a POST request with data is sent to the API")
-      val result: Future[Result] = route(app = app, request).value
-
-      Then(s"a response with a 400 status is received")
-
-      status(result) shouldBe BAD_REQUEST
-      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
-    }
-
-    scenario("Response status 400 when user submits a malformed xml payload") {
-      Given("the API is available")
-      val request = MalformedXmlRequest.fromNonCsp.copyFakeRequest(method = POST, uri = endpoint)
-      setupWiremockExpectations()
-
-      When("a POST request with data is sent to the API")
-      val result: Option[Future[Result]] = route(app = app, request)
-
-      Then(s"a response with a 400 status is received")
-      result shouldBe 'defined
-      val resultFuture = result.value
-
-      status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
-
-      And("the response body is a \"malformed xml body\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
-    }
-  }
+//  feature("Unauthorized file upload API submissions are processed correctly") {
+//
+//    scenario("An unauthorised CSP is not allowed to submit a file upload request with v2.0 accept header") {
+//      Given("A CSP wants to submit a valid file upload")
+//      val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request.fromCsp.postTo(endpoint)
+//
+//      And("the CSP is unauthorised with its privileged application")
+//      authServiceUnauthorisesScopeForCSP()
+//      authServiceUnauthorisesCustomsEnrolmentForNonCSP(cspBearerToken)
+//
+//      When("a POST request with data is sent to the API")
+//      val result: Future[Result] = route(app = app, request).value
+//
+//      Then("a response with a 401 (UNAUTHORIZED) status is received")
+//      status(result) shouldBe UNAUTHORIZED
+//
+//      And("the response body is empty")
+//      string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
+//
+//      And("the request was authorised with AuthService")
+//      eventually(verifyAuthServiceCalledForCsp())
+//    }
+//
+//    scenario("An unauthorised CSP is not allowed to submit a file upload request with v3.0 accept header") {
+//      Given("A CSP wants to submit a valid file upload")
+//      val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV3Request.fromCsp.postTo(endpoint)
+//
+//      And("the CSP is unauthorised with its privileged application")
+//      authServiceUnauthorisesScopeForCSP()
+//      authServiceUnauthorisesCustomsEnrolmentForNonCSP(cspBearerToken)
+//
+//      When("a POST request with data is sent to the API")
+//      val result: Future[Result] = route(app = app, request).value
+//
+//      Then("a response with a 401 (UNAUTHORIZED) status is received")
+//      status(result) shouldBe UNAUTHORIZED
+//
+//      And("the response body is empty")
+//      string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
+//
+//      And("the request was authorised with AuthService")
+//      eventually(verifyAuthServiceCalledForCsp())
+//    }
+//  }
+//
+//  feature("The API handles errors as expected") {
+//    scenario("Response status 400 when user submits a non-xml payload") {
+//      Given("the API is available")
+//      val request = InvalidFileUploadRequest.fromNonCsp
+//        .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
+//        .copyFakeRequest(method = POST, uri = endpoint)
+//      setupWiremockExpectations()
+//
+//      When("a POST request with data is sent to the API")
+//      val result: Option[Future[Result]] = route(app = app, request)
+//
+//      Then(s"a response with a 400 status is received")
+//      result shouldBe 'defined
+//      val resultFuture = result.value
+//
+//      status(resultFuture) shouldBe BAD_REQUEST
+//      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+//
+//      And("the response body is a \"malformed xml body\" XML")
+//      string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
+//    }
+//
+//    scenario("Response status 400 when user submits invalid request") {
+//      Given("the API is available")
+//      val request = ValidSubmission_13_INV_Request.fromNonCsp.postTo(endpoint)
+//      setupWiremockExpectations()
+//
+//      When("a POST request with data is sent to the API")
+//      val result: Future[Result] = route(app = app, request).value
+//
+//      Then(s"a response with a 400 status is received")
+//
+//      status(result) shouldBe BAD_REQUEST
+//      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+//    }
+//
+//    scenario("Response status 400 when user submits a malformed xml payload") {
+//      Given("the API is available")
+//      val request = MalformedXmlRequest.fromNonCsp.copyFakeRequest(method = POST, uri = endpoint)
+//      setupWiremockExpectations()
+//
+//      When("a POST request with data is sent to the API")
+//      val result: Option[Future[Result]] = route(app = app, request)
+//
+//      Then(s"a response with a 400 status is received")
+//      result shouldBe 'defined
+//      val resultFuture = result.value
+//
+//      status(resultFuture) shouldBe BAD_REQUEST
+//      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+//
+//      And("the response body is a \"malformed xml body\" XML")
+//      string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
+//    }
+//  }
 
   private def setupWiremockExpectations(): Unit = {
     stubAuditService()
-    authServiceUnauthorisesScopeForCSP(TestData.nonCspBearerToken)
-    authServiceAuthorizesNonCspWithEori()
+    authServiceUnauthorisesScopeForCSPWithoutRetrievals(TestData.nonCspBearerToken)
+//    authServiceUnauthorisesScopeForCSP(TestData.nonCspBearerToken)
+//    authServiceAuthorizesNonCspWithEori()
+    authServiceAuthorizesNonCspWithEoriAndNoRetrievals()
     startUpscanInitiateService()
   }
 }

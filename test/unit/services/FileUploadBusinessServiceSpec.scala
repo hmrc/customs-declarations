@@ -61,7 +61,15 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
           <uploadRequest>
             <href>https://a.b.com</href>
             <fields>
-              <label1>value1</label1><label2>value2</label2>
+              <Content-Type>application/xml; charset=utf-8</Content-Type>
+              <acl>private</acl>
+              <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+              <policy>xxxxxxxx==</policy>
+              <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+              <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+              <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
+              <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+              <x-amz-signature>xxxx</x-amz-signature>
             </fields>
           </uploadRequest>
         </File><File>
@@ -69,7 +77,15 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
           <uploadRequest>
             <href>https://x.y.com</href>
             <fields>
-              <labelx>valuey</labelx>
+              <Content-Type>application/xml; charset=utf-8</Content-Type>
+              <acl>private</acl>
+              <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+              <policy>xxxxxxxx==</policy>
+              <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+              <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+              <x-amz-date>2019-03-04T11:56:34Z</x-amz-date>
+              <x-amz-meta-callback-url>https://some-callback-url2</x-amz-meta-callback-url>
+              <x-amz-signature>xxxx</x-amz-signature>
             </fields>
           </uploadRequest>
         </File>
@@ -79,8 +95,16 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     implicit val jsonRequest = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 
     val upscanInitiatePayload = UpscanInitiatePayload("http://file-upload-upscan-callback.url/uploaded-file-upscan-notifications/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
-    val upscanInitiateResponsePayload1 = UpscanInitiateResponsePayload(FileReferenceOne.value.toString, UpscanInitiateUploadRequest("https://a.b.com", Map(("label1","value1"), ("label2","value2"))))
-    val upscanInitiateResponsePayload2 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", Map(("labelx","valuey"))))
+    val upscanInitiateResponseFields1 = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
+      ("key","xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"), ("policy","xxxxxxxx=="), ("x-amz-algorithm","AWS4-HMAC-SHA256"),
+      ("x-amz-credential","ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request"), ("x-amz-date","2019-03-05T11:56:34Z"),
+      ("x-amz-meta-callback-url","https://some-callback-url"), ("x-amz-signature","xxxx"))
+    val upscanInitiateResponseFields2 = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
+      ("key","xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"), ("policy","xxxxxxxx=="), ("x-amz-algorithm","AWS4-HMAC-SHA256"),
+      ("x-amz-credential","ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request"), ("x-amz-date","2019-03-04T11:56:34Z"),
+      ("x-amz-meta-callback-url","https://some-callback-url2"), ("x-amz-signature","xxxx"))
+    val upscanInitiateResponsePayload1 = UpscanInitiateResponsePayload(FileReferenceOne.value.toString, UpscanInitiateUploadRequest("https://a.b.com", upscanInitiateResponseFields1))
+    val upscanInitiateResponsePayload2 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", upscanInitiateResponseFields2))
 
     protected def send(vupr: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, NodeSeq] = {
       await(service.send(vupr, hc))

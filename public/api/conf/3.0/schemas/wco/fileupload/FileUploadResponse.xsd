@@ -32,9 +32,16 @@
 
     <xs:complexType name="Fields">
         <xs:sequence>
-            <xs:any maxOccurs="unbounded" processContents="lax" />
+            <xs:element name="Content-Type" type="xs:string" minOccurs="0"  />
+            <xs:element name="acl" type="xs:string" minOccurs="0"/>
+            <xs:element name="key" type="xs:string" minOccurs="0"/>
+            <xs:element name="policy" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-algorithm" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-credential" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-date" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-callback-url" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-signature" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
-
 
 </xs:schema>

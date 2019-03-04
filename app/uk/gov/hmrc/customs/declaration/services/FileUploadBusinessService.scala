@@ -18,8 +18,8 @@ package uk.gov.hmrc.customs.declaration.services
 
 import java.net.{URL, URLEncoder}
 import java.util.UUID
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, UpscanInitiateConnector}
@@ -34,7 +34,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Left
 import scala.util.control.NonFatal
-import scala.xml.{NodeSeq, Text}
+import scala.xml.NodeSeq
 
 @Singleton
 class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiateConnector,
@@ -116,9 +116,15 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
           <uploadRequest>
             <href>{payload.uploadRequest.href}</href>
             <fields>
-              {payload.uploadRequest.fields.map(field =>
-            {<a/>.copy(label = field._1, child = Text(field._2))}
-            )}
+              <Content-Type>{payload.uploadRequest.fields("Content-Type")}</Content-Type>
+              <acl>{payload.uploadRequest.fields("acl")}</acl>
+              <key>{payload.uploadRequest.fields("key")}</key>
+              <policy>{payload.uploadRequest.fields("policy")}</policy>
+              <x-amz-algorithm>{payload.uploadRequest.fields("x-amz-algorithm")}</x-amz-algorithm>
+              <x-amz-credential>{payload.uploadRequest.fields("x-amz-credential")}</x-amz-credential>
+              <x-amz-date>{payload.uploadRequest.fields("x-amz-date")}</x-amz-date>
+              <x-amz-meta-callback-url>{payload.uploadRequest.fields("x-amz-meta-callback-url")}</x-amz-meta-callback-url>
+              <x-amz-signature>{payload.uploadRequest.fields("x-amz-signature")}</x-amz-signature>
             </fields>
           </uploadRequest>
         </File>

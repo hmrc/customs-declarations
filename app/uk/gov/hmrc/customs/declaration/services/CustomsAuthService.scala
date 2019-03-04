@@ -83,6 +83,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
                 name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
                 itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
 
+              logger.debug("authorised as CSP and requested retrievals")
               Right((true, Some(retrievalData)))
             }
         }
@@ -90,6 +91,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
       else {
         authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
           Future.successful[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] {
+            logger.debug("authorised as CSP without retrievals")
             Right((true, None))
           }
         }
@@ -119,10 +121,12 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
               name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
               itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
 
+            logger.debug("authorised as non-CSP and requested non-CSP retrievals")
             Future.successful((authorisedEnrolments, Some(retrievalData)))
         }
       } else {
         authorised(Enrolment(hmrcCustomsEnrolment) and AuthProviders(GovernmentGateway)).retrieve(Retrievals.authorisedEnrolments) {
+          logger.debug("authorised as non-CSP and requested authorisedEnrolment retrievals")
           enrolments =>
             Future.successful((enrolments, None))
         }

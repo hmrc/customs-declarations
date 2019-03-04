@@ -67,12 +67,12 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
     ErrorResponse(Status.UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
 
   type IsCsp = Boolean
-
+  type RequestRetrievals = Boolean
 
   /*
   Wrapper around HMRC authentication library authorised function for CSP authentication
   */
-  def authAsCsp(requestRetrievals: Boolean)(implicit vhr: HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] = {
+  def authAsCsp(requestRetrievals: RequestRetrievals)(implicit vhr: HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] = {
     val eventualAuth: Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] =
       if (requestRetrievals) {
         authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
@@ -110,9 +110,9 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   /*
     Wrapper around HMRC authentication library authorised function for NON CSP authentication
     */
-  def authAsNonCsp(isNrs: Boolean)(implicit vhr: HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, NonCsp]] = {
+  def authAsNonCsp(requestRetrievals: RequestRetrievals)(implicit vhr: HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, NonCsp]] = {
     val eventualAuth: Future[(Enrolments, Option[NrsRetrievalData])] =
-      if (isNrs) {
+      if (requestRetrievals) {
         authorised(Enrolment(hmrcCustomsEnrolment) and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
           case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
             credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes ~ authorisedEnrolments =>

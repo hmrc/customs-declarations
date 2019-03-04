@@ -53,16 +53,19 @@ class AuthAction @Inject()(
                             declarationConfigService: DeclarationsConfigService
 ) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
+  protected[this] def requestRetrievalsForEndpoint: Boolean = true
+
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val implicitVhr: ValidatedHeadersRequest[A] = vhr
     implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
-    val isNrs = declarationConfigService.nrsConfig.nrsEnabled
+    val requestRetrievals = requestRetrievalsForEndpoint && declarationConfigService.nrsConfig.nrsEnabled
+    logger.debug(s"retrievals being requested - $requestRetrievals")
 
-    authAsCspWithMandatoryAuthHeaders(isNrs).flatMap{
+    authAsCspWithMandatoryAuthHeaders(requestRetrievals).flatMap{
       case Right(maybeAuthorisedAsCspWithBadgeIdentifierAndNrsData) =>
         maybeAuthorisedAsCspWithBadgeIdentifierAndNrsData.fold{
-          customsAuthService.authAsNonCsp(isNrs).map[Either[Result, AuthorisedRequest[A]]]{
+          customsAuthService.authAsNonCsp(requestRetrievals).map[Either[Result, AuthorisedRequest[A]]]{
             case Left(errorResponse) =>
               Left(errorResponse.XmlResult.withConversationId)
             case Right(nonCspData) =>
@@ -76,9 +79,9 @@ class AuthAction @Inject()(
     }
   }
 
-  private def authAsCspWithMandatoryAuthHeaders[A](isNrs: Boolean)(implicit vhr: HasRequest[A] with HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {
+  private def authAsCspWithMandatoryAuthHeaders[A](requestRetrievals: Boolean)(implicit vhr: HasRequest[A] with HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {
 
-    val eventualAuthWithBadgeId: Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = customsAuthService.authAsCsp(isNrs).map{
+    val eventualAuthWithBadgeId: Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = customsAuthService.authAsCsp(requestRetrievals).map{
       case Right((isCsp, maybeNrsRetrievalData)) =>
         if (isCsp) {
           eitherCspAuthData(maybeNrsRetrievalData).right.map(authAsCsp => Some(authAsCsp))

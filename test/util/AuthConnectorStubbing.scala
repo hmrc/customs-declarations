@@ -43,8 +43,18 @@ trait AuthConnectorStubbing extends UnitSpec with MockitoSugar {
       .thenReturn(TestData.nrsReturnData)
   }
 
+  def authoriseCspButDontFetchRetrievals(): Unit = {
+    when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext]))
+      .thenReturn(Future.successful(()))
+  }
+
   def authoriseCspError(): Unit = {
     when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(nrsRetrievalData))(any[HeaderCarrier], any[ExecutionContext]))
+      .thenReturn(Future.failed(TestData.emulatedServiceFailure))
+  }
+
+  def authoriseCspErrorButDontFetchRetrievals(): Unit = {
+    when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.failed(TestData.emulatedServiceFailure))
   }
 

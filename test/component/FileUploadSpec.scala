@@ -64,7 +64,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       Given("the API is available")
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
       val request = ValidFileUploadV2Request.fromNonCsp.postTo(endpoint)
-      setupWiremockExpectations()
+      setupExternalServiceExpectations()
 
       When("a POST request with data is sent to the API")
       val result: Future[Result] = route(app = app, request).value
@@ -83,8 +83,8 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request.fromCsp.postTo(endpoint)
 
       And("the CSP is unauthorised with its privileged application")
-      authServiceUnauthorisesScopeForCSP()
-      authServiceUnauthorisesCustomsEnrolmentForNonCSP(cspBearerToken)
+      authServiceUnauthorisesScopeForCSPWithoutRetrievals()
+      authServiceUnauthorisesCustomsEnrolmentForNonCSPWithoutRetrievals(cspBearerToken)
 
       When("a POST request with data is sent to the API")
       val result: Future[Result] = route(app = app, request).value
@@ -96,7 +96,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
 
       And("the request was authorised with AuthService")
-      eventually(verifyAuthServiceCalledForCsp())
+      eventually(verifyAuthServiceCalledForCspWithoutRetrievals())
     }
 
     scenario("An unauthorised CSP is not allowed to submit a file upload request with v3.0 accept header") {
@@ -104,8 +104,8 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV3Request.fromCsp.postTo(endpoint)
 
       And("the CSP is unauthorised with its privileged application")
-      authServiceUnauthorisesScopeForCSP()
-      authServiceUnauthorisesCustomsEnrolmentForNonCSP(cspBearerToken)
+      authServiceUnauthorisesScopeForCSPWithoutRetrievals()
+      authServiceUnauthorisesCustomsEnrolmentForNonCSPWithoutRetrievals(cspBearerToken)
 
       When("a POST request with data is sent to the API")
       val result: Future[Result] = route(app = app, request).value
@@ -117,7 +117,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
 
       And("the request was authorised with AuthService")
-      eventually(verifyAuthServiceCalledForCsp())
+      eventually(verifyAuthServiceCalledForCspWithoutRetrievals())
     }
   }
 
@@ -127,7 +127,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       val request = InvalidFileUploadRequest.fromNonCsp
         .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
         .copyFakeRequest(method = POST, uri = endpoint)
-      setupWiremockExpectations()
+      setupExternalServiceExpectations()
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -146,7 +146,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     scenario("Response status 400 when user submits invalid request") {
       Given("the API is available")
       val request = ValidSubmission_13_INV_Request.fromNonCsp.postTo(endpoint)
-      setupWiremockExpectations()
+      setupExternalServiceExpectations()
 
       When("a POST request with data is sent to the API")
       val result: Future[Result] = route(app = app, request).value
@@ -160,7 +160,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     scenario("Response status 400 when user submits a malformed xml payload") {
       Given("the API is available")
       val request = MalformedXmlRequest.fromNonCsp.copyFakeRequest(method = POST, uri = endpoint)
-      setupWiremockExpectations()
+      setupExternalServiceExpectations()
 
       When("a POST request with data is sent to the API")
       val result: Option[Future[Result]] = route(app = app, request)
@@ -177,10 +177,10 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     }
   }
 
-  private def setupWiremockExpectations(): Unit = {
+  private def setupExternalServiceExpectations(): Unit = {
     stubAuditService()
-    authServiceUnauthorisesScopeForCSP(TestData.nonCspBearerToken)
-    authServiceAuthorizesNonCspWithEori()
+    authServiceUnauthorisesScopeForCSPWithoutRetrievals(TestData.nonCspBearerToken)
+    authServiceAuthorizesNonCspWithEoriAndNoRetrievals()
     startUpscanInitiateService()
   }
 }

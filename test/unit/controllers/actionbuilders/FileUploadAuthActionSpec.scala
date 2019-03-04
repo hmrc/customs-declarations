@@ -80,16 +80,16 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
     "as CSP when NRS is enabled" should {
       "authorise as CSP when authorised by auth API and both badge identifier and eori exists" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
 
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(CspWithEori(badgeIdentifier, declarantEori, Some(nrsRetrievalValues))))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(CspWithEori(badgeIdentifier, declarantEori, None)))
         verifyNonCspAuthorisationNotCalled
       }
 
       "Return 401 response when authorised by auth API but both badge identifier and eori are invalid" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdEoriPair))
 
@@ -98,7 +98,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API but badge identifier does not exist" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
 
@@ -107,7 +107,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API but badge identifier does not exist and eori does" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(TestValidatedHeadersRequestWithEoriAndNoBadgeId))
 
@@ -116,7 +116,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API but badge identifier is too long" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooLong))
 
@@ -125,7 +125,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API but badge identifier is too short" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooShort))
 
@@ -134,7 +134,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API but badge identifier contains invalid chars" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdInvalidChars))
 
@@ -143,7 +143,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API but badge identifier contains all lowercase chars" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithInvalidBadgeIdLowerCase))
 
@@ -152,7 +152,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API where badge identifier exists and eori does not" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(TestValidatedHeadersRequestWithBadgeIdAndNoEori))
 
@@ -161,7 +161,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API with empty eori" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEmptyEori))
 
@@ -170,7 +170,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API with eori too long" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdAndEoriTooLong))
 
@@ -179,7 +179,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 401 response when authorised by auth API with eori containing invalid characters" in new NrsEnabled {
-        authoriseCsp()
+        authoriseCspButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithInvalidEoriInvalidChars))
 
@@ -188,7 +188,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       }
 
       "Return 500 response if errors occur in CSP auth API call" in new NrsEnabled {
-        authoriseCspError()
+        authoriseCspErrorButDontFetchRetrievals()
 
         private val actual = await(fileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
 

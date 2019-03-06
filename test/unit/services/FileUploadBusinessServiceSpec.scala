@@ -57,10 +57,10 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       """<FileUploadResponse xmlns="hmrc:fileupload">
         |  <Files>
         |    <File>
-        |      <reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</reference>
-        |      <uploadRequest>
-        |        <href>https://a.b.com</href>
-        |        <fields>
+        |      <Reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</Reference>
+        |      <UploadRequest>
+        |        <Href>https://a.b.com</Href>
+        |        <Fields>
         |          <Content-Type>application/xml; charset=utf-8</Content-Type>
         |          <acl>private</acl>
         |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
@@ -70,14 +70,14 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
         |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
         |          <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
         |          <x-amz-signature>xxxx</x-amz-signature>
-        |        </fields>
-        |      </uploadRequest>
+        |        </Fields>
+        |      </UploadRequest>
         |    </File>
         |    <File>
-        |      <reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</reference>
-        |      <uploadRequest>
-        |        <href>https://x.y.com</href>
-        |        <fields>
+        |      <Reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</Reference>
+        |      <UploadRequest>
+        |        <Href>https://x.y.com</Href>
+        |        <Fields>
         |          <Content-Type>application/xml; charset=utf-8</Content-Type>
         |          <acl>private</acl>
         |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
@@ -87,8 +87,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
         |          <x-amz-date>2019-03-04T11:56:34Z</x-amz-date>
         |          <x-amz-meta-callback-url>https://some-callback-url2</x-amz-meta-callback-url>
         |          <x-amz-signature>xxxx</x-amz-signature>
-        |        </fields>
-        |      </uploadRequest>
+        |        </Fields>
+        |      </UploadRequest>
         |    </File>
         |  </Files>
         |</FileUploadResponse>""".stripMargin
@@ -97,10 +97,10 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       """<FileUploadResponse xmlns="hmrc:fileupload">
         |  <Files>
         |    <File>
-        |      <reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</reference>
-        |      <uploadRequest>
-        |        <href>https://a.b.com</href>
-        |        <fields>
+        |      <Reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</Reference>
+        |      <UploadRequest>
+        |        <Href>https://a.b.com</Href>
+        |        <Fields>
         |          <Content-Type>application/xml; charset=utf-8</Content-Type>
         |          <acl>private</acl>
         |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
@@ -110,17 +110,17 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
         |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
         |          <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
         |          <x-amz-signature>xxxx</x-amz-signature>
-        |        </fields>
-        |      </uploadRequest>
+        |        </Fields>
+        |      </UploadRequest>
         |    </File>
         |    <File>
-        |      <reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</reference>
-        |      <uploadRequest>
-        |        <href>https://x.y.com</href>
-        |        <fields>
+        |      <Reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</Reference>
+        |      <UploadRequest>
+        |        <Href>https://x.y.com</Href>
+        |        <Fields>
         |          <acl>some-acl</acl>
-        |        </fields>
-        |      </uploadRequest>
+        |        </Fields>
+        |      </UploadRequest>
         |    </File>
         |  </Files>
         |</FileUploadResponse>""".stripMargin

@@ -112,10 +112,10 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
         <Files>
           {payloads.map(payload =>
           <File>
-            <reference>{payload.reference}</reference>
-            <uploadRequest>
-              <href>{payload.uploadRequest.href}</href>
-              <fields>
+            <Reference>{payload.reference}</Reference>
+            <UploadRequest>
+              <Href>{payload.uploadRequest.href}</Href>
+              <Fields>
                 {toNode("Content-Type", payload.uploadRequest.fields)}
                 {toNode("acl", payload.uploadRequest.fields)}
                 {toNode("key", payload.uploadRequest.fields)}
@@ -125,8 +125,8 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
                 {toNode("x-amz-date", payload.uploadRequest.fields)}
                 {toNode("x-amz-meta-callback-url", payload.uploadRequest.fields)}
                 {toNode("x-amz-signature", payload.uploadRequest.fields)}
-              </fields>
-            </uploadRequest>
+              </Fields>
+            </UploadRequest>
           </File>
         )}
         </Files>

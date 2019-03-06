@@ -28,14 +28,13 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedFileUploadPayloadRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.{UpscanInitiateResponsePayload, _}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
-import uk.gov.hmrc.customs.declaration.services.{FileUploadBusinessService, DeclarationsConfigService, UuidService}
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadBusinessService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
 
 import scala.concurrent.Future
-import scala.xml.NodeSeq
 
 class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
@@ -54,59 +53,94 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     protected lazy val service = new FileUploadBusinessService(mockUpscanInitiateConnector,
       mockFileUploadMetadataRepo, mockUuidService, mockLogger, mockApiSubscriptionFieldsConnector, mockConfiguration)
 
-    val xmlResponse = <FileUploadResponse>
-      <Files>
-        <File>
-          <reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</reference>
-          <uploadRequest>
-            <href>https://a.b.com</href>
-            <fields>
-              <Content-Type>application/xml; charset=utf-8</Content-Type>
-              <acl>private</acl>
-              <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-              <policy>xxxxxxxx==</policy>
-              <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-              <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
-              <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
-              <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
-              <x-amz-signature>xxxx</x-amz-signature>
-            </fields>
-          </uploadRequest>
-        </File><File>
-          <reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</reference>
-          <uploadRequest>
-            <href>https://x.y.com</href>
-            <fields>
-              <Content-Type>application/xml; charset=utf-8</Content-Type>
-              <acl>private</acl>
-              <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-              <policy>xxxxxxxx==</policy>
-              <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-              <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
-              <x-amz-date>2019-03-04T11:56:34Z</x-amz-date>
-              <x-amz-meta-callback-url>https://some-callback-url2</x-amz-meta-callback-url>
-              <x-amz-signature>xxxx</x-amz-signature>
-            </fields>
-          </uploadRequest>
-        </File>
-      </Files>
-    </FileUploadResponse>
+    protected val xmlResponse: String =
+      """<FileUploadResponse xmlns="hmrc:fileupload">
+        |  <Files>
+        |    <File>
+        |      <reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</reference>
+        |      <uploadRequest>
+        |        <href>https://a.b.com</href>
+        |        <fields>
+        |          <Content-Type>application/xml; charset=utf-8</Content-Type>
+        |          <acl>private</acl>
+        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+        |          <policy>xxxxxxxx==</policy>
+        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+        |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
+        |          <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+        |          <x-amz-signature>xxxx</x-amz-signature>
+        |        </fields>
+        |      </uploadRequest>
+        |    </File>
+        |    <File>
+        |      <reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</reference>
+        |      <uploadRequest>
+        |        <href>https://x.y.com</href>
+        |        <fields>
+        |          <Content-Type>application/xml; charset=utf-8</Content-Type>
+        |          <acl>private</acl>
+        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+        |          <policy>xxxxxxxx==</policy>
+        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+        |          <x-amz-date>2019-03-04T11:56:34Z</x-amz-date>
+        |          <x-amz-meta-callback-url>https://some-callback-url2</x-amz-meta-callback-url>
+        |          <x-amz-signature>xxxx</x-amz-signature>
+        |        </fields>
+        |      </uploadRequest>
+        |    </File>
+        |  </Files>
+        |</FileUploadResponse>""".stripMargin
 
-    implicit val jsonRequest = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
+    protected val xmlResponseWithEmptyOptionals: String =
+      """<FileUploadResponse xmlns="hmrc:fileupload">
+        |  <Files>
+        |    <File>
+        |      <reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</reference>
+        |      <uploadRequest>
+        |        <href>https://a.b.com</href>
+        |        <fields>
+        |          <Content-Type>application/xml; charset=utf-8</Content-Type>
+        |          <acl>private</acl>
+        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+        |          <policy>xxxxxxxx==</policy>
+        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+        |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
+        |          <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+        |          <x-amz-signature>xxxx</x-amz-signature>
+        |        </fields>
+        |      </uploadRequest>
+        |    </File>
+        |    <File>
+        |      <reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</reference>
+        |      <uploadRequest>
+        |        <href>https://x.y.com</href>
+        |        <fields>
+        |          <acl>some-acl</acl>
+        |        </fields>
+        |      </uploadRequest>
+        |    </File>
+        |  </Files>
+        |</FileUploadResponse>""".stripMargin
+
+    implicit val jsonRequest: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 
     val upscanInitiatePayload = UpscanInitiatePayload("http://file-upload-upscan-callback.url/uploaded-file-upscan-notifications/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
-    val upscanInitiateResponseFields1 = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
+    val upscanInitiateResponseFields1: Map[String, String] = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
       ("key","xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"), ("policy","xxxxxxxx=="), ("x-amz-algorithm","AWS4-HMAC-SHA256"),
       ("x-amz-credential","ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request"), ("x-amz-date","2019-03-05T11:56:34Z"),
       ("x-amz-meta-callback-url","https://some-callback-url"), ("x-amz-signature","xxxx"))
-    val upscanInitiateResponseFields2 = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
+    val upscanInitiateResponseFields2: Map[String, String] = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
       ("key","xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"), ("policy","xxxxxxxx=="), ("x-amz-algorithm","AWS4-HMAC-SHA256"),
       ("x-amz-credential","ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request"), ("x-amz-date","2019-03-04T11:56:34Z"),
       ("x-amz-meta-callback-url","https://some-callback-url2"), ("x-amz-signature","xxxx"))
     val upscanInitiateResponsePayload1 = UpscanInitiateResponsePayload(FileReferenceOne.value.toString, UpscanInitiateUploadRequest("https://a.b.com", upscanInitiateResponseFields1))
     val upscanInitiateResponsePayload2 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", upscanInitiateResponseFields2))
+    val upscanInitiateResponsePayload3 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", Map(("Content-Type", "   "), ("new-field", "   "), ("acl", "some-acl"))))
 
-    protected def send(vupr: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, NodeSeq] = {
+    protected def send(vupr: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, String] = {
       await(service.send(vupr, hc))
     }
 
@@ -124,6 +158,16 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       val result = send().right.get
 
       result shouldBe xmlResponse
+      verify(mockUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(jsonRequest))
+    }
+
+    "send payload to connector for non-CSP with optional fields" in new SetUp() {
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(upscanInitiateResponsePayload1, upscanInitiateResponsePayload3)
+
+      val result = send().right.get
+
+      result shouldBe xmlResponseWithEmptyOptionals
       verify(mockUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(jsonRequest))
     }
 

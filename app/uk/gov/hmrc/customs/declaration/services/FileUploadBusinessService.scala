@@ -34,7 +34,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Left
 import scala.util.control.NonFatal
-import scala.xml.NodeSeq
+import scala.xml._
 
 @Singleton
 class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiateConnector,
@@ -47,16 +47,16 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
   def send[A](implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
-              hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
+              hc: HeaderCarrier): Future[Either[Result, String]] = {
 
     futureApiSubFieldsId(validatedRequest.clientId).flatMap {
       case Right(sfId) =>
         backendCalls(sfId).flatMap { fileDetails =>
           persist(fileDetails, sfId).map {
             case true =>
-              val responseBodyXml = serialize(fileDetails)
-              logger.debug(s"response body xml to be returned=${responseBodyXml.toString()}")
-              Right(responseBodyXml)
+              val responseBody = serialize(fileDetails)
+              logger.debug(s"response body to be returned=$responseBody")
+              Right(responseBody)
             case false => Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
           }
         }.recover {
@@ -106,31 +106,47 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     fileUploadMetadataRepo.create(metadata)
   }
 
-  private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {
+  private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): String = {
+    prettyPrint(
+      <FileUploadResponse xmlns="hmrc:fileupload">
+        <Files>
+          {payloads.map(payload =>
+          <File>
+            <reference>{payload.reference}</reference>
+            <uploadRequest>
+              <href>{payload.uploadRequest.href}</href>
+              <fields>
+                {toNode("Content-Type", payload.uploadRequest.fields)}
+                {toNode("acl", payload.uploadRequest.fields)}
+                {toNode("key", payload.uploadRequest.fields)}
+                {toNode("policy", payload.uploadRequest.fields)}
+                {toNode("x-amz-algorithm", payload.uploadRequest.fields)}
+                {toNode("x-amz-credential", payload.uploadRequest.fields)}
+                {toNode("x-amz-date", payload.uploadRequest.fields)}
+                {toNode("x-amz-meta-callback-url", payload.uploadRequest.fields)}
+                {toNode("x-amz-signature", payload.uploadRequest.fields)}
+              </fields>
+            </uploadRequest>
+          </File>
+        )}
+        </Files>
+      </FileUploadResponse>
+    )
+  }
 
-    <FileUploadResponse xmlns="hmrc:fileupload">
-      <Files>
-        {payloads.map(payload =>
-        <File>
-          <reference>{payload.reference}</reference>
-          <uploadRequest>
-            <href>{payload.uploadRequest.href}</href>
-            <fields>
-              <Content-Type>{payload.uploadRequest.fields("Content-Type")}</Content-Type>
-              <acl>{payload.uploadRequest.fields("acl")}</acl>
-              <key>{payload.uploadRequest.fields("key")}</key>
-              <policy>{payload.uploadRequest.fields("policy")}</policy>
-              <x-amz-algorithm>{payload.uploadRequest.fields("x-amz-algorithm")}</x-amz-algorithm>
-              <x-amz-credential>{payload.uploadRequest.fields("x-amz-credential")}</x-amz-credential>
-              <x-amz-date>{payload.uploadRequest.fields("x-amz-date")}</x-amz-date>
-              <x-amz-meta-callback-url>{payload.uploadRequest.fields("x-amz-meta-callback-url")}</x-amz-meta-callback-url>
-              <x-amz-signature>{payload.uploadRequest.fields("x-amz-signature")}</x-amz-signature>
-            </fields>
-          </uploadRequest>
-        </File>
-      )}
-      </Files>
-    </FileUploadResponse>
+  private def prettyPrint(xml: Node): String = {
+    val xmlWidth = 120
+    val xmlIndent = 2
+
+    new PrettyPrinter(xmlWidth, xmlIndent).format(xml)
+  }
+
+  private def toNode(labelName: String, fields: Map[String, String]): NodeSeq = {
+    if (fields.contains(labelName) && !fields(labelName).trim.isEmpty) {
+      <a/>.copy(label = labelName, child = Text(fields(labelName)))
+    } else {
+      NodeSeq.Empty
+    }
   }
 
   private def failFastSequence[A,B](iter: Iterable[A])(fn: A => Future[B]): Future[Seq[B]] =

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
+import play.api.http.ContentTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, ConversationIdAction, FileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -57,7 +58,7 @@ class FileUploadController @Inject()(val common: Common,
       fileUploadBusinessService.send map {
         case Right(res) =>
           logger.info("Upload initiate request processed successfully")
-          Ok(res).withConversationId
+          Ok(res).withConversationId.as(ContentTypes.XML)
         case Left(errorResult) =>
           errorResult
       }

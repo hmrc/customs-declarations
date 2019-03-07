@@ -107,6 +107,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): String = {
+    //xml pretty printed and converted to string to eliminate blank lines when optional fields not present
     prettyPrint(
       <FileUploadResponse xmlns="hmrc:fileupload">
         <Files>

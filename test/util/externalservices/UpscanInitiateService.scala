@@ -27,21 +27,24 @@ import util.WireMockRunner
 trait UpscanInitiateService extends WireMockRunner {
   private val urlMatchingRequestPath = urlMatching(UpscanInitiateContext)
 
-  private val validUpscanInitiateResponse = s"""{
-    "reference": "${UUID.randomUUID()}",
-    "uploadRequest": {
-      "href": "https://bucketName.s3.eu-west-2.amazonaws.com",
-      "fields": {
-      "X-Amz-Algorithm": "AWS4-HMAC-SHA256",
-      "X-Amz-Expiration": "2018-02-09T12:35:45.297Z",
-      "X-Amz-Signature": "xxxx",
-      "key": "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-      "acl": "private",
-      "X-Amz-Credential": "ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request",
-      "policy": "xxxxxxxx=="
-    }
-    }
-  }""".stripMargin
+  private val validUpscanInitiateResponse =
+    s"""|{
+        | "reference": "${UUID.randomUUID()}",
+        | "uploadRequest": {
+        | "href": "https://bucketName.s3.eu-west-2.amazonaws.com",
+        | "fields": {
+        |     "Content-Type": "application/xml",
+        |     "acl": "private",
+        |     "key": "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        |     "policy": "xxxxxxxx==",
+        |     "x-amz-algorithm": "AWS4-HMAC-SHA256",
+        |     "x-amz-credential": "ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request",
+        |     "x-amz-date": "yyyyMMddThhmmssZ",
+        |     "x-amz-meta-callback-url": "https://myservice.com/callback",
+        |     "x-amz-signature": "xxxx"
+        |    }
+        |  }
+        |}""".stripMargin
 
   def startUpscanInitiateService(): Unit = {
     setupUpscanInitiateToReturn(OK)

@@ -54,7 +54,7 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
         await(xmlValidationService.validate(InvalidFileUploadResponseXML))
       }
 
-      caught.getMessage shouldBe "cvc-complex-type.2.4.b: The content of element 'File' is not complete. One of '{\"hmrc:fileupload\":reference, \"hmrc:fileupload\":uploadRequest}' is expected."
+      caught.getMessage shouldBe "cvc-complex-type.2.4.b: The content of element 'File' is not complete. One of '{\"hmrc:fileupload\":Reference, \"hmrc:fileupload\":UploadRequest}' is expected."
 
       Option(caught.getException) shouldBe None
     }
@@ -72,10 +72,10 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
     <FileUploadResponse xmlns="hmrc:fileupload">
       <Files>
         <File>
-          <reference>11370e18-6e24-453e-b45a-76d3e32ea33d</reference>
-          <uploadRequest>
-            <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
-            <fields>
+          <Reference>11370e18-6e24-453e-b45a-76d3e32ea33d</Reference>
+          <UploadRequest>
+            <Href>https://bucketName.s3.eu-west-2.amazonaws.com</Href>
+            <Fields>
               <Content-Type>application/xml</Content-Type>
               <acl>private</acl>
               <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
@@ -85,14 +85,14 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
               <x-amz-date>2018-02-09T12:35:45.297Z</x-amz-date>
               <x-amz-meta-callback-url>https://myservice.com/callback</x-amz-meta-callback-url>
               <x-amz-signature>xxxx</x-amz-signature>
-            </fields>
-          </uploadRequest>
+            </Fields>
+          </UploadRequest>
         </File>
         <File>
-          <reference>11370e18-6e24-453e-b45a-76d3e32ea33d</reference>
-          <uploadRequest>
-            <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
-            <fields>
+          <Reference>11370e18-6e24-453e-b45a-76d3e32ea33d</Reference>
+          <UploadRequest>
+            <Href>https://bucketName.s3.eu-west-2.amazonaws.com</Href>
+            <Fields>
               <Content-Type>application/xml</Content-Type>
               <acl>private</acl>
               <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
@@ -102,8 +102,8 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
               <x-amz-date>2018-02-09T12:35:45.297Z</x-amz-date>
               <x-amz-meta-callback-url>https://myservice.com/callback</x-amz-meta-callback-url>
               <x-amz-signature>xxxx</x-amz-signature>
-            </fields>
-          </uploadRequest>
+            </Fields>
+          </UploadRequest>
         </File>
       </Files>
     </FileUploadResponse>

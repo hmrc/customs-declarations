@@ -35,8 +35,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml.NodeSeq
@@ -51,7 +50,7 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
                                                      override val nrsService: NrsService,
                                                      override val declarationsConfigService: DeclarationsConfigService,
                                                      override val actorSystem: ActorSystem
-                                                    ) extends DeclarationService
+                                                    )(implicit val ec: ExecutionContext) extends DeclarationService
 
 @Singleton
 class CancellationDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
@@ -62,7 +61,7 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
                                                      override val uniqueIdsService: UniqueIdsService,
                                                      override val nrsService: NrsService,
                                                      override val declarationsConfigService: DeclarationsConfigService,
-                                                     override val actorSystem: ActorSystem) extends DeclarationService {
+                                                     override val actorSystem: ActorSystem)(implicit val ec: ExecutionContext) extends DeclarationService {
 }
 trait DeclarationService {
 
@@ -83,6 +82,8 @@ trait DeclarationService {
   def declarationsConfigService: DeclarationsConfigService
 
   def actorSystem: ActorSystem
+
+  implicit def ec: ExecutionContext
 
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")

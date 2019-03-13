@@ -27,8 +27,7 @@ import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, Declaration
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
 
 
@@ -50,8 +49,8 @@ class AuthAction @Inject()(
                             customsAuthService: CustomsAuthService,
                             headerValidator: HeaderValidator,
                             logger: DeclarationsLogger,
-                            declarationConfigService: DeclarationsConfigService
-) extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
+                            declarationConfigService: DeclarationsConfigService)(implicit ec: ExecutionContext)
+  extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
   protected[this] def requestRetrievalsForEndpoint: Boolean = true
 

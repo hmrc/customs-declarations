@@ -22,7 +22,7 @@ import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.declaration.config.DeclarationsCircuitBreaker
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XCorrelationIdHeaderName, XConversationIdHeaderName}
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XConversationIdHeaderName, XCorrelationIdHeaderName}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedStatusRequest
@@ -32,15 +32,14 @@ import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 @Singleton
 class DeclarationStatusConnector @Inject() (val http: HttpClient,
   val logger: DeclarationsLogger,
   override val serviceConfigProvider: ServiceConfigProvider,
-  override val config: DeclarationsConfigService) extends DeclarationsCircuitBreaker {
+  override val config: DeclarationsConfigService)(implicit ec: ExecutionContext) extends DeclarationsCircuitBreaker {
 
   override val configKey = "declaration-status"
 

@@ -17,24 +17,23 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import java.util.UUID
-import javax.inject.Inject
 
+import javax.inject.Inject
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.services.{FileUploadNotificationService, FileTransmissionCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.services.{FileTransmissionCallbackToXmlNotification, FileUploadNotificationService}
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 class FileTransmissionNotificationController @Inject() (callbackToXmlNotification: FileTransmissionCallbackToXmlNotification,
                                                         notificationService: FileUploadNotificationService,
-                                                        cdsLogger: CdsLogger) extends BaseController {
+                                                        cdsLogger: CdsLogger)(implicit ec: ExecutionContext) extends BaseController {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async {
     request =>

@@ -21,6 +21,7 @@ import org.mockito.Mockito
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import reactivemongo.api.DB
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -34,7 +35,6 @@ import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.{FileMetadataWithFileOne, _}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.postfixOps
 
 class FileUploadMetadataRepoSpec extends UnitSpec

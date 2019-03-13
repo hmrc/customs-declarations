@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.Status.UNAUTHORIZED
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AuthProvider.PrivilegedApplication
@@ -30,14 +29,13 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusReq
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
 import scala.util.control.NonFatal
 
 
 @Singleton
-class AuthStatusAction @Inject()(override val authConnector: AuthConnector, logger: DeclarationsLogger)
+class AuthStatusAction @Inject()(override val authConnector: AuthConnector, logger: DeclarationsLogger)(implicit ec: ExecutionContext)
   extends ActionRefiner[ValidatedHeadersStatusRequest, AuthorisedStatusRequest] with AuthorisedFunctions  {
 
   private val errorResponseUnauthorisedGeneral =

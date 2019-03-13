@@ -26,14 +26,14 @@ import uk.gov.hmrc.customs.declaration.model.{ConversationId, Mrn}
 import uk.gov.hmrc.customs.declaration.services.DeclarationStatusService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction,
                                             val authAction: AuthStatusAction,
                                             val conversationIdAction: ConversationIdAction,
                                             val declarationStatusService: DeclarationStatusService,
-                                            val logger: DeclarationsLogger) extends BaseController {
+                                            val logger: DeclarationsLogger)(implicit ec: ExecutionContext) extends BaseController {
 
   def get(mrn: String): Action[AnyContent] = (
     Action andThen

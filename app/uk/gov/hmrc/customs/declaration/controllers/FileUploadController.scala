@@ -25,14 +25,14 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadP
 import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class FileUploadController @Inject()(val common: Common,
                                      val fileUploadBusinessService: FileUploadBusinessService,
                                      val fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction,
                                      val conversationIdAction: ConversationIdAction,
-                                     val fileUploadAuthAction: AuthActionEoriHeader)
+                                     val fileUploadAuthAction: AuthActionEoriHeader)(implicit ec: ExecutionContext)
   extends BaseController {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {

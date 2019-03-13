@@ -28,11 +28,13 @@ import uk.gov.hmrc.play.audit.EventKeys.{Path, TransactionName}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
 @Singleton
-class AuditingService @Inject()(logger: DeclarationsLogger, declarationsConfigService: DeclarationsConfigService, auditConnector: AuditConnector) {
+class AuditingService @Inject()(logger: DeclarationsLogger,
+                                declarationsConfigService: DeclarationsConfigService,
+                                auditConnector: AuditConnector)(implicit ec: ExecutionContext) {
 
   private val auditSourceValue = "customs-declaration-submission"
   private val auditTypeValue = "DeclarationNotificationOutboundCall"

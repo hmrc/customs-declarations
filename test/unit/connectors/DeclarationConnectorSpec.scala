@@ -26,6 +26,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.HeaderNames
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.AnyContentAsXml
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
@@ -58,7 +59,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
     val serviceConfigProvider = mockServiceConfigProvider
     val config = mockDeclarationsConfigService
     val configKey = "wco-declaration"
-
+    override implicit def ec: ExecutionContext = defaultContext
   }
 
   private val v1Config = ServiceConfig("v1-url", Some("v1-bearer-token"), "v1-default")

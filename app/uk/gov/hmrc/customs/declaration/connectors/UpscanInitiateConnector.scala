@@ -24,13 +24,12 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class UpscanInitiateConnector @Inject()(http: HttpClient,
                                         logger: DeclarationsLogger,
-                                        config: DeclarationsConfigService) {
+                                        config: DeclarationsConfigService)(implicit ec: ExecutionContext) {
 
   def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
     post(payload, config.fileUploadConfig.upscanInitiateUrl)

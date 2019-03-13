@@ -31,14 +31,13 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, Upstream5xxResponse}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class NrsService @Inject()(logger: DeclarationsLogger,
                            nrsConnector: NrsConnector,
                            auditingService: AuditingService,
-                           dateTimeService: DateTimeService) {
+                           dateTimeService: DateTimeService)(implicit ec: ExecutionContext) {
 
   private val conversationIdKey = "conversationId"
   private val applicationXml = "application/xml"

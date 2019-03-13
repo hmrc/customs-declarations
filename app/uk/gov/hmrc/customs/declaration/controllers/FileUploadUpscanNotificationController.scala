@@ -28,15 +28,14 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 class FileUploadUpscanNotificationController @Inject()(notificationService: FileUploadNotificationService,
                                                        toXmlNotification: UpscanNotificationCallbackToXmlNotification,
                                                        errorToXmlNotification: InternalErrorXmlNotification,
                                                        businessService: FileUploadUpscanNotificationBusinessService,
-                                                       cdsLogger: CdsLogger) extends BaseController {
+                                                       cdsLogger: CdsLogger)(implicit ec: ExecutionContext) extends BaseController {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async { implicit request =>
 

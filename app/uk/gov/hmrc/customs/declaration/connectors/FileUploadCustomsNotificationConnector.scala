@@ -20,17 +20,16 @@ import com.google.inject.{Inject, Singleton}
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.services.{FileUploadCustomsNotification, DeclarationsConfigService}
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadCustomsNotification}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
                                                        logger: CdsLogger,
-                                                       config: DeclarationsConfigService) {
+                                                       config: DeclarationsConfigService)(implicit ec: ExecutionContext) {
 
   private implicit val hc = HeaderCarrier()
   private val XMLHeader = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>"""

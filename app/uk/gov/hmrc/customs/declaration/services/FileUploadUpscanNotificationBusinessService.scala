@@ -17,22 +17,21 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import java.net.URL
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.declaration.connectors.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMetadataRepo,
                                                             connector: FileTransmissionConnector,
                                                             config: DeclarationsConfigService,
-                                                            logger: DeclarationsLogger) {
+                                                            logger: DeclarationsLogger)(implicit ec: ExecutionContext) {
 
   def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(implicit r: HasConversationId): Future[Unit] = {
     repo.update(

@@ -18,7 +18,7 @@ package uk.gov.hmrc.customs.declaration.repo
 
 import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.Json
+import play.api.libs.json.{Format, Json}
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.BSONObjectID
@@ -28,8 +28,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.{CallbackFields, FileReference, FileUploadMetadata, SubscriptionFieldsId}
 import uk.gov.hmrc.mongo.ReactiveRepository
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[FileUploadMetadataMongoRepo])
 trait FileUploadMetadataRepo {
@@ -46,14 +45,14 @@ trait FileUploadMetadataRepo {
 @Singleton
 class FileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvider,
                                             errorHandler: FileUploadMetadataRepoErrorHandler,
-                                            logger: DeclarationsLogger)
+                                            logger: DeclarationsLogger)(implicit ec: ExecutionContext)
   extends ReactiveRepository[FileUploadMetadata, BSONObjectID](
     collectionName = "batchFileUploads",
     mongo = mongoDbProvider.mongo,
     domainFormat = FileUploadMetadata.fileUploadMetadataJF
   ) with FileUploadMetadataRepo {
 
-  private implicit val format = FileUploadMetadata.fileUploadMetadataJF
+  private implicit val format: Format[FileUploadMetadata] = FileUploadMetadata.fileUploadMetadataJF
 
   override def indexes: Seq[Index] = Seq(
     Index(

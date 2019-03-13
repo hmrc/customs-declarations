@@ -25,13 +25,12 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class NrsConnector @Inject()(http: HttpClient,
                              logger: DeclarationsLogger,
-                             declarationConfigService: DeclarationsConfigService) {
+                             declarationConfigService: DeclarationsConfigService)(implicit ec: ExecutionContext) {
 
   private val XApiKey = "X-API-Key"
 

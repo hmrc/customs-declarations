@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
@@ -27,8 +26,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedStatusRequest
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml.{Elem, PrettyPrinter, TopScope, XML}
@@ -39,7 +37,8 @@ class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResp
                                          logger: DeclarationsLogger,
                                          connector: DeclarationStatusConnector,
                                          dateTimeProvider: DateTimeService,
-                                         uniqueIdsService: UniqueIdsService) {
+                                         uniqueIdsService: UniqueIdsService)
+                                        (implicit ec: ExecutionContext) {
 
   def send[A](mrn: Mrn)(implicit asr: AuthorisedStatusRequest[A], hc: HeaderCarrier): Future[Either[Result, HttpResponse]] = {
 

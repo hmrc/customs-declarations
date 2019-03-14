@@ -18,7 +18,7 @@ package unit.controllers
 
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play._
 import play.api.http.HttpErrorHandler
 import play.api.libs.json.Json

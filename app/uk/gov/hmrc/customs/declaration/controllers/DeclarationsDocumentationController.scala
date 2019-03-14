@@ -24,7 +24,10 @@ import uk.gov.hmrc.customs.api.common.controllers.DocumentationController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 
 @Singleton
-class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorHandler, configuration: Configuration, logger: DeclarationsLogger) extends DocumentationController(httpErrorHandler) {
+class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorHandler,
+                                                    configuration: Configuration,
+                                                    logger: DeclarationsLogger)
+  extends DocumentationController(httpErrorHandler) {
 
   private lazy val mayBeV1WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-1.0.whitelistedApplicationIds")
   private lazy val mayBeV2WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-2.0.whitelistedApplicationIds")

@@ -26,13 +26,13 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FileTransmissionConnector @Inject()(http: HttpClient,
                                           logger: DeclarationsLogger,
-                                          config: DeclarationsConfigService) {
+                                          config: DeclarationsConfigService)
+                                         (implicit ec: ExecutionContext) {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON, USER_AGENT -> "customs-declarations")

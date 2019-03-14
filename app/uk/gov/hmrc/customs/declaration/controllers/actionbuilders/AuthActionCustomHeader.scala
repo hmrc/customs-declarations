@@ -24,11 +24,14 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 
+import scala.concurrent.ExecutionContext
+
 abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthService,
                                                 headerValidator: HeaderValidator,
                                                 logger: DeclarationsLogger,
                                                 declarationConfigService: DeclarationsConfigService,
                                                 eoriHeaderName: String)
+                                               (implicit ec: ExecutionContext)
   extends AuthAction(customsAuthService, headerValidator, logger, declarationConfigService) {
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
@@ -49,6 +52,7 @@ class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
                                      headerValidator: HeaderValidator,
                                      logger: DeclarationsLogger,
                                      declarationConfigService: DeclarationsConfigService)
+                                    (implicit ec: ExecutionContext)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XEoriIdentifierHeaderName) {
   override def requestRetrievalsForEndpoint: Boolean = false
 }
@@ -59,5 +63,6 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
                                           headerValidator: HeaderValidator,
                                           logger: DeclarationsLogger,
                                           declarationConfigService: DeclarationsConfigService)
+                                         (implicit ec: ExecutionContext)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XSubmitterIdentifierHeaderName) {
 }

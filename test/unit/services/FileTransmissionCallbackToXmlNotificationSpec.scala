@@ -16,7 +16,7 @@
 
 package unit.services
 
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.customs.declaration.services.FileTransmissionCallbackToXmlNotification
 import util.FileTransmissionTestData._

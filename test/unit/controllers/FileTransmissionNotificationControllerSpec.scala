@@ -17,8 +17,9 @@
 package unit.controllers
 
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play._
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import play.api.test.Helpers._
@@ -26,7 +27,7 @@ import play.api.test._
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers._
 import uk.gov.hmrc.customs.declaration.model.FileTransmissionNotification
-import uk.gov.hmrc.customs.declaration.services.{FileUploadNotificationService, FileTransmissionCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.services.{FileTransmissionCallbackToXmlNotification, FileUploadNotificationService}
 import util.ApiSubscriptionFieldsTestData.{subscriptionFieldsId, subscriptionFieldsIdString}
 import util.FileTransmissionTestData._
 import util.MockitoPassByNameHelper.PassByNameVerifier

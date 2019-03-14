@@ -32,15 +32,14 @@ import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 @Singleton
 class MdgWcoDeclarationConnector @Inject()(override val http: HttpClient,
                                          override val logger: DeclarationsLogger,
                                          override val serviceConfigProvider: ServiceConfigProvider,
-                                         override val config: DeclarationsConfigService)
+                                         override val config: DeclarationsConfigService)(implicit val ec: ExecutionContext)
   extends MdgDeclarationConnector with DeclarationsCircuitBreaker {
 
   override val configKey = "wco-declaration"
@@ -51,6 +50,7 @@ class MdgDeclarationCancellationConnector @Inject()(override val http: HttpClien
                                                     override val logger: DeclarationsLogger,
                                                     override val serviceConfigProvider: ServiceConfigProvider,
                                                     override val config: DeclarationsConfigService)
+                                                   (implicit val ec: ExecutionContext)
   extends MdgDeclarationConnector with DeclarationsCircuitBreaker {
 
   override val configKey = "declaration-cancellation"
@@ -67,6 +67,8 @@ trait MdgDeclarationConnector extends DeclarationsCircuitBreaker {
   def config: DeclarationsConfigService
 
   def configKey: String
+
+  implicit def ec: ExecutionContext
 
   def send[A](xml: NodeSeq, date: DateTime, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))

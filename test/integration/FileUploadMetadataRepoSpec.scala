@@ -19,40 +19,41 @@ package integration
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
-import reactivemongo.api.DB
+import play.modules.reactivemongo.ReactiveMongoComponent
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.repo.{FileUploadMetadataMongoRepo, FileUploadMetadataRepoErrorHandler, MongoDbProvider}
+import uk.gov.hmrc.customs.declaration.repo.{FileUploadMetadataMongoRepo, FileUploadMetadataRepoErrorHandler}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mongo.MongoSpecSupport
+import uk.gov.hmrc.mongo.{MongoConnector, MongoSpecSupport}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.{FileMetadataWithFileOne, _}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.postfixOps
 
 class FileUploadMetadataRepoSpec extends UnitSpec
   with BeforeAndAfterAll
   with BeforeAndAfterEach
   with MockitoSugar
-  with MongoSpecSupport { self =>
+  with MongoSpecSupport {
 
   private val mockLogger = mock[DeclarationsLogger]
   private val mockErrorHandler = mock[FileUploadMetadataRepoErrorHandler]
   private lazy implicit val emptyHC: HeaderCarrier = HeaderCarrier()
   private implicit val implicitVHR = TestValidatedHeadersRequest
 
-  private val mongoDbProvider = new MongoDbProvider{
-    override val mongo: () => DB = self.mongo
-  }
-
-  private val repository = new FileUploadMetadataMongoRepo(mongoDbProvider, mockErrorHandler, mockLogger)
+  override implicit lazy val mongoConnectorForTest: MongoConnector = MongoConnector(mongoUri)
+  private val reactiveMongoComponent: ReactiveMongoComponent =
+    new ReactiveMongoComponent {
+      override def mongoConnector: MongoConnector = mongoConnectorForTest
+    }
+  private val repository = new FileUploadMetadataMongoRepo(reactiveMongoComponent, mockErrorHandler, mockLogger)
 
   override def beforeEach() {
     dropTestCollection("batchFileUploads")

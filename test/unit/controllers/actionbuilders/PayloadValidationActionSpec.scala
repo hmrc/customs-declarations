@@ -33,7 +33,8 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
@@ -47,7 +48,6 @@ import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.xml.SAXException
 

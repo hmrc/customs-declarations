@@ -19,8 +19,8 @@ package unit.services
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger

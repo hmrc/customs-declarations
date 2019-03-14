@@ -26,13 +26,13 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
                                                      logger: DeclarationsLogger,
-                                                     config: DeclarationsConfigService) {
+                                                     config: DeclarationsConfigService)
+                                                    (implicit ec: ExecutionContext) {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON)

@@ -20,7 +20,7 @@ import java.util.UUID
 
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.model.{ConversationId, CorrelationId, DeclarationManagementInformationRequestId}
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 

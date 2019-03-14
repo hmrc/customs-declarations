@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.Status
 import play.api.mvc.{ActionRefiner, Result}
 import play.mvc.Http.Status.FORBIDDEN
@@ -26,19 +25,20 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.model.{FileGroupSize, _}
-import uk.gov.hmrc.customs.declaration.services.{FileUploadXmlValidationService, DeclarationsConfigService}
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadXmlValidationService}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FileUploadPayloadValidationAction @Inject()(fileUploadXmlValidationService: FileUploadXmlValidationService,
                                                   logger: DeclarationsLogger)
+                                                 (implicit ec: ExecutionContext)
     extends PayloadValidationAction(fileUploadXmlValidationService, logger)
 
 class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction,
                                                           val logger: DeclarationsLogger,
                                                           val declarationsConfigService: DeclarationsConfigService)
+                                                         (implicit ec: ExecutionContext)
   extends ActionRefiner[AuthorisedRequest, ValidatedFileUploadPayloadRequest] with HttpStatusCodeShortDescriptions {
 
   private val declarationIdLabel = "DeclarationID"

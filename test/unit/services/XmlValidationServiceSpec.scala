@@ -21,14 +21,14 @@ import java.io.FileNotFoundException
 import org.mockito.ArgumentMatchers.{eq => ameq}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestXMLData
 import util.TestXMLData.{InvalidSubmissionXML, InvalidSubmissionXMLWith2Errors, ValidSubmissionXML}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.xml.{Node, SAXException}
 
 class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {

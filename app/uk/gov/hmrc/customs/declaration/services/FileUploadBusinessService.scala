@@ -30,8 +30,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadP
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml._
@@ -42,7 +41,8 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
                                           uuidService: UuidService,
                                           logger: DeclarationsLogger,
                                           apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                          config: DeclarationsConfigService) {
+                                          config: DeclarationsConfigService)
+                                         (implicit ec: ExecutionContext) {
 
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 

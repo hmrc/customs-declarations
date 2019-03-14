@@ -18,6 +18,7 @@ package component
 
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{ACCEPT, CONTENT_TYPE, contentAsString, route, status, _}
@@ -30,7 +31,6 @@ import util.TestData._
 import util.UpscanNotifyTestData._
 import util.externalservices.{CustomsNotificationService, FileTransmissionService}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.xml.Utility.trim
 
 class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTestResponses

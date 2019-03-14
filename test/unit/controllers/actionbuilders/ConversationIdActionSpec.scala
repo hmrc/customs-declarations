@@ -17,7 +17,7 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.ConversationIdAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger

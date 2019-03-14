@@ -41,27 +41,44 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, 
 import uk.gov.hmrc.customs.declaration.services._
 
 import scala.collection.Seq
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.xml.{NodeSeq, SAXException}
 
 @Singleton
-class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionXmlValidationService,
+                                               logger: DeclarationsLogger)
+                                              (implicit ec: ExecutionContext)
+  extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
-class ClearancePayloadValidationAction @Inject() (xmlValidationService: ClearanceXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+class ClearancePayloadValidationAction @Inject() (xmlValidationService: ClearanceXmlValidationService,
+                                                  logger: DeclarationsLogger)
+                                                 (implicit ec: ExecutionContext)
+  extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
-class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService,
+                                              logger: DeclarationsLogger)
+                                             (implicit ec: ExecutionContext)
+  extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
-class ArrivalNotificationPayloadValidationAction @Inject() (xmlValidationService: ArrivalNotificationXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+class ArrivalNotificationPayloadValidationAction @Inject() (xmlValidationService: ArrivalNotificationXmlValidationService,
+                                                            logger: DeclarationsLogger)
+                                                           (implicit ec: ExecutionContext)
+  extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
-class CancelPayloadValidationAction @Inject() (xmlValidationService: CancellationXmlValidationService, logger: DeclarationsLogger) extends PayloadValidationAction(xmlValidationService, logger)
+class CancelPayloadValidationAction @Inject() (xmlValidationService: CancellationXmlValidationService,
+                                               logger: DeclarationsLogger)
+                                              (implicit ec: ExecutionContext)
+  extends PayloadValidationAction(xmlValidationService, logger)
 
-abstract class PayloadValidationAction(val xmlValidationService: XmlValidationService, logger: DeclarationsLogger) extends ActionRefiner[AuthorisedRequest, ValidatedPayloadRequest] {
+abstract class PayloadValidationAction(val xmlValidationService: XmlValidationService,
+                                       logger: DeclarationsLogger)
+                                      (implicit ec: ExecutionContext)
+  extends ActionRefiner[AuthorisedRequest, ValidatedPayloadRequest] {
 
   override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedPayloadRequest[A]]] = {
     implicit val implicitAr = ar

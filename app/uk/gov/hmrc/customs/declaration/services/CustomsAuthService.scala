@@ -31,14 +31,14 @@ import uk.gov.hmrc.customs.declaration.model.{Eori, NonCsp, NrsRetrievalData}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
 import scala.util.control.NonFatal
 
 @Singleton
 class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
-                                   logger: DeclarationsLogger) extends AuthorisedFunctions {
+                                   logger: DeclarationsLogger)
+                                  (implicit ec: ExecutionContext) extends AuthorisedFunctions {
 
   private val hmrcCustomsEnrolment = "HMRC-CUS-ORG"
 

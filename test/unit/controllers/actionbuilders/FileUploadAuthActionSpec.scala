@@ -17,17 +17,18 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XEoriIdentifierHeaderName}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, HeaderValidator}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.CspWithEori
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
-import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
 

@@ -51,7 +51,8 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
 class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
                                      headerValidator: HeaderValidator,
                                      logger: DeclarationsLogger,
-                                     declarationConfigService: DeclarationsConfigService)(implicit ec: ExecutionContext)
+                                     declarationConfigService: DeclarationsConfigService)
+                                    (implicit ec: ExecutionContext)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XEoriIdentifierHeaderName) {
   override def requestRetrievalsForEndpoint: Boolean = false
 }
@@ -61,6 +62,7 @@ class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
 class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService,
                                           headerValidator: HeaderValidator,
                                           logger: DeclarationsLogger,
-                                          declarationConfigService: DeclarationsConfigService)(implicit ec: ExecutionContext)
+                                          declarationConfigService: DeclarationsConfigService)
+                                         (implicit ec: ExecutionContext)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XSubmitterIdentifierHeaderName) {
 }

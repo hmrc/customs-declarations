@@ -18,7 +18,7 @@ package unit.schemas
 
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService

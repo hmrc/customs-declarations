@@ -18,7 +18,7 @@ package unit.controllers.actionbuilders
 
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.AnyContentAsXml

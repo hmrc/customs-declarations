@@ -17,7 +17,7 @@
 package unit.services
 
 import org.joda.time.{DateTime, DateTimeZone}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseFilterService}
 import uk.gov.hmrc.play.test.UnitSpec

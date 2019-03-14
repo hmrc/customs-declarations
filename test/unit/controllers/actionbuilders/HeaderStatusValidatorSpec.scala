@@ -16,7 +16,7 @@
 
 package unit.controllers.actionbuilders
 
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.test.FakeRequest
 import play.mvc.Http.Status.BAD_REQUEST

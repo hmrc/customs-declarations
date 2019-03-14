@@ -17,7 +17,7 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.ArgumentMatchers.any
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.http.HeaderNames._
 import play.api.test.FakeRequest

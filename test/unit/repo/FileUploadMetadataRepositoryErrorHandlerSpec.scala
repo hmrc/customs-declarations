@@ -16,7 +16,7 @@
 
 package unit.repo
 
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import reactivemongo.api.commands.{DefaultWriteResult, WriteConcernError, WriteError}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepoErrorHandler

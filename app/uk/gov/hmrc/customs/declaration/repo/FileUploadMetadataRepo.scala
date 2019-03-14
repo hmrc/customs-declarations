@@ -20,6 +20,7 @@ import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{Format, Json}
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import play.modules.reactivemongo.ReactiveMongoComponent
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.BSONObjectID
 import reactivemongo.play.json.JsObjectDocumentWriter
@@ -43,12 +44,12 @@ trait FileUploadMetadataRepo {
 }
 
 @Singleton
-class FileUploadMetadataMongoRepo @Inject()(mongoDbProvider: MongoDbProvider,
+class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMongoComponent,
                                             errorHandler: FileUploadMetadataRepoErrorHandler,
                                             logger: DeclarationsLogger)(implicit ec: ExecutionContext)
   extends ReactiveRepository[FileUploadMetadata, BSONObjectID](
     collectionName = "batchFileUploads",
-    mongo = mongoDbProvider.mongo,
+    mongo = reactiveMongoComponent.mongoConnector.db,
     domainFormat = FileUploadMetadata.fileUploadMetadataJF
   ) with FileUploadMetadataRepo {
 

@@ -19,7 +19,7 @@ package unit.controllers
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterEach, Matchers}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._

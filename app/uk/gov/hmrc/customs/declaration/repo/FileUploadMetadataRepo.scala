@@ -46,7 +46,8 @@ trait FileUploadMetadataRepo {
 @Singleton
 class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMongoComponent,
                                             errorHandler: FileUploadMetadataRepoErrorHandler,
-                                            logger: DeclarationsLogger)(implicit ec: ExecutionContext)
+                                            logger: DeclarationsLogger)
+                                           (implicit ec: ExecutionContext)
   extends ReactiveRepository[FileUploadMetadata, BSONObjectID](
     collectionName = "batchFileUploads",
     mongo = reactiveMongoComponent.mongoConnector.db,

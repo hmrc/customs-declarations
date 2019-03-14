@@ -35,7 +35,9 @@ import scala.util.control.NonFatal
 
 
 @Singleton
-class AuthStatusAction @Inject()(override val authConnector: AuthConnector, logger: DeclarationsLogger)(implicit ec: ExecutionContext)
+class AuthStatusAction @Inject()(override val authConnector: AuthConnector,
+                                 logger: DeclarationsLogger)
+                                (implicit ec: ExecutionContext)
   extends ActionRefiner[ValidatedHeadersStatusRequest, AuthorisedStatusRequest] with AuthorisedFunctions  {
 
   private val errorResponseUnauthorisedGeneral =

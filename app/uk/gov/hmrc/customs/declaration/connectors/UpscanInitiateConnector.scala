@@ -29,7 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class UpscanInitiateConnector @Inject()(http: HttpClient,
                                         logger: DeclarationsLogger,
-                                        config: DeclarationsConfigService)(implicit ec: ExecutionContext) {
+                                        config: DeclarationsConfigService)
+                                       (implicit ec: ExecutionContext) {
 
   def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
     post(payload, config.fileUploadConfig.upscanInitiateUrl)

@@ -45,52 +45,52 @@ class CommonSubmitterHeader @Inject()(
 ) extends Common(authAction, validateAndExtractHeadersAction, logger)
 
 @Singleton
-class SubmitDeclarationController @Inject()(
-                                             common: CommonSubmitterHeader,
-                                             businessService: StandardDeclarationSubmissionService,
-                                             payloadValidationAction: SubmitPayloadValidationAction,
-                                             conversationIdAction: ConversationIdAction,
-                                             metricsConnector: CustomsDeclarationsMetricsConnector)(implicit ec: ExecutionContext)
+class SubmitDeclarationController @Inject()(common: CommonSubmitterHeader,
+                                            businessService: StandardDeclarationSubmissionService,
+                                            payloadValidationAction: SubmitPayloadValidationAction,
+                                            conversationIdAction: ConversationIdAction,
+                                            metricsConnector: CustomsDeclarationsMetricsConnector)
+                                           (implicit ec: ExecutionContext)
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction, Some(metricsConnector))
 
 @Singleton
-class CancelDeclarationController @Inject()(
-                                             common: CommonSubmitterHeader,
-                                             businessService: CancellationDeclarationSubmissionService,
-                                             payloadValidationAction: CancelPayloadValidationAction,
-                                             conversationIdAction: ConversationIdAction)(implicit ec: ExecutionContext)
+class CancelDeclarationController @Inject()(common: CommonSubmitterHeader,
+                                            businessService: CancellationDeclarationSubmissionService,
+                                            payloadValidationAction: CancelPayloadValidationAction,
+                                            conversationIdAction: ConversationIdAction)
+                                           (implicit ec: ExecutionContext)
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
-class ClearanceDeclarationController @Inject()(
-                                                common: Common,
-                                                businessService: StandardDeclarationSubmissionService,
-                                                payloadValidationAction: ClearancePayloadValidationAction,
-                                                conversationIdAction: ConversationIdAction)(implicit ec: ExecutionContext)
+class ClearanceDeclarationController @Inject()(common: Common,
+                                               businessService: StandardDeclarationSubmissionService,
+                                               payloadValidationAction: ClearancePayloadValidationAction,
+                                               conversationIdAction: ConversationIdAction)
+                                              (implicit ec: ExecutionContext)
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
-class AmendDeclarationController @Inject()(
-                                            common: CommonSubmitterHeader,
-                                            businessService: StandardDeclarationSubmissionService,
-                                            payloadValidationAction: AmendPayloadValidationAction,
-                                            conversationIdAction: ConversationIdAction)(implicit ec: ExecutionContext)
+class AmendDeclarationController @Inject()(common: CommonSubmitterHeader,
+                                           businessService: StandardDeclarationSubmissionService,
+                                           payloadValidationAction: AmendPayloadValidationAction,
+                                           conversationIdAction: ConversationIdAction)
+                                          (implicit ec: ExecutionContext)
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
-class ArrivalNotificationDeclarationController @Inject()(
-                                                          common: Common,
-                                                          businessService: StandardDeclarationSubmissionService,
-                                                          payloadValidationAction: ArrivalNotificationPayloadValidationAction,
-                                                          conversationIdAction: ConversationIdAction)(implicit ec: ExecutionContext)
+class ArrivalNotificationDeclarationController @Inject()(common: Common,
+                                                         businessService: StandardDeclarationSubmissionService,
+                                                         payloadValidationAction: ArrivalNotificationPayloadValidationAction,
+                                                         conversationIdAction: ConversationIdAction)
+                                                        (implicit ec: ExecutionContext)
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
-abstract class CustomsDeclarationController(
-                                             val common: Common,
-                                             val businessService: DeclarationService,
-                                             val payloadValidationAction: PayloadValidationAction,
-                                             val conversationIdAction: ConversationIdAction,
-                                             val maybeMetricsConnector: Option[CustomsDeclarationsMetricsConnector] = None)(implicit ec: ExecutionContext)
+abstract class CustomsDeclarationController(val common: Common,
+                                            val businessService: DeclarationService,
+                                            val payloadValidationAction: PayloadValidationAction,
+                                            val conversationIdAction: ConversationIdAction,
+                                            val maybeMetricsConnector: Option[CustomsDeclarationsMetricsConnector] = None)
+                                           (implicit ec: ExecutionContext)
   extends BaseController {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {

@@ -45,11 +45,11 @@ import scala.util.Left
   * </ul>
   */
 @Singleton
-class AuthAction @Inject()(
-                            customsAuthService: CustomsAuthService,
-                            headerValidator: HeaderValidator,
-                            logger: DeclarationsLogger,
-                            declarationConfigService: DeclarationsConfigService)(implicit ec: ExecutionContext)
+class AuthAction @Inject()(customsAuthService: CustomsAuthService,
+                           headerValidator: HeaderValidator,
+                           logger: DeclarationsLogger,
+                           declarationConfigService: DeclarationsConfigService)
+                          (implicit ec: ExecutionContext)
   extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
   protected[this] def requestRetrievalsForEndpoint: Boolean = true

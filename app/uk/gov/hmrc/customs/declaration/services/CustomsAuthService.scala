@@ -37,7 +37,8 @@ import scala.util.control.NonFatal
 
 @Singleton
 class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
-                                   logger: DeclarationsLogger)(implicit ec: ExecutionContext) extends AuthorisedFunctions {
+                                   logger: DeclarationsLogger)
+                                  (implicit ec: ExecutionContext) extends AuthorisedFunctions {
 
   private val hmrcCustomsEnrolment = "HMRC-CUS-ORG"
 

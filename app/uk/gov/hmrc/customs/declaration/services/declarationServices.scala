@@ -49,8 +49,8 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
                                                      override val uniqueIdsService: UniqueIdsService,
                                                      override val nrsService: NrsService,
                                                      override val declarationsConfigService: DeclarationsConfigService,
-                                                     override val actorSystem: ActorSystem
-                                                    )(implicit val ec: ExecutionContext) extends DeclarationService
+                                                     override val actorSystem: ActorSystem)
+                                                    (implicit val ec: ExecutionContext) extends DeclarationService
 
 @Singleton
 class CancellationDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
@@ -61,7 +61,8 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
                                                      override val uniqueIdsService: UniqueIdsService,
                                                      override val nrsService: NrsService,
                                                      override val declarationsConfigService: DeclarationsConfigService,
-                                                     override val actorSystem: ActorSystem)(implicit val ec: ExecutionContext) extends DeclarationService {
+                                                     override val actorSystem: ActorSystem)
+                                                    (implicit val ec: ExecutionContext) extends DeclarationService {
 }
 trait DeclarationService {
 

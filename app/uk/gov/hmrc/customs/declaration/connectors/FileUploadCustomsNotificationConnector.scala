@@ -29,7 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
                                                        logger: CdsLogger,
-                                                       config: DeclarationsConfigService)(implicit ec: ExecutionContext) {
+                                                       config: DeclarationsConfigService)
+                                                      (implicit ec: ExecutionContext) {
 
   private implicit val hc = HeaderCarrier()
   private val XMLHeader = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>"""

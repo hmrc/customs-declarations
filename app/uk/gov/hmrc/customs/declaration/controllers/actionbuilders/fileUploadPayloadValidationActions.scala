@@ -31,12 +31,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FileUploadPayloadValidationAction @Inject()(fileUploadXmlValidationService: FileUploadXmlValidationService,
-                                                  logger: DeclarationsLogger)(implicit ec: ExecutionContext)
+                                                  logger: DeclarationsLogger)
+                                                 (implicit ec: ExecutionContext)
     extends PayloadValidationAction(fileUploadXmlValidationService, logger)
 
 class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction,
                                                           val logger: DeclarationsLogger,
-                                                          val declarationsConfigService: DeclarationsConfigService)(implicit ec: ExecutionContext)
+                                                          val declarationsConfigService: DeclarationsConfigService)
+                                                         (implicit ec: ExecutionContext)
   extends ActionRefiner[AuthorisedRequest, ValidatedFileUploadPayloadRequest] with HttpStatusCodeShortDescriptions {
 
   private val declarationIdLabel = "DeclarationID"

@@ -31,7 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class FileTransmissionConnector @Inject()(http: HttpClient,
                                           logger: DeclarationsLogger,
-                                          config: DeclarationsConfigService)(implicit ec: ExecutionContext) {
+                                          config: DeclarationsConfigService)
+                                         (implicit ec: ExecutionContext) {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON, USER_AGENT -> "customs-declarations")

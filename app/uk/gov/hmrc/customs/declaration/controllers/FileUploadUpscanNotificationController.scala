@@ -35,7 +35,8 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
                                                        toXmlNotification: UpscanNotificationCallbackToXmlNotification,
                                                        errorToXmlNotification: InternalErrorXmlNotification,
                                                        businessService: FileUploadUpscanNotificationBusinessService,
-                                                       cdsLogger: CdsLogger)(implicit ec: ExecutionContext) extends BaseController {
+                                                       cdsLogger: CdsLogger)
+                                                      (implicit ec: ExecutionContext) extends BaseController {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async { implicit request =>
 

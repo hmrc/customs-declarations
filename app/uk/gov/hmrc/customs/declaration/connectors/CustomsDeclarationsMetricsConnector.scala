@@ -31,7 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
                                                      logger: DeclarationsLogger,
-                                                     config: DeclarationsConfigService)(implicit ec: ExecutionContext) {
+                                                     config: DeclarationsConfigService)
+                                                    (implicit ec: ExecutionContext) {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON)

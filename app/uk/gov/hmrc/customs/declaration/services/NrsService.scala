@@ -37,7 +37,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class NrsService @Inject()(logger: DeclarationsLogger,
                            nrsConnector: NrsConnector,
                            auditingService: AuditingService,
-                           dateTimeService: DateTimeService)(implicit ec: ExecutionContext) {
+                           dateTimeService: DateTimeService)
+                          (implicit ec: ExecutionContext) {
 
   private val conversationIdKey = "conversationId"
   private val applicationXml = "application/xml"

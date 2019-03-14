@@ -37,7 +37,8 @@ class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResp
                                          logger: DeclarationsLogger,
                                          connector: DeclarationStatusConnector,
                                          dateTimeProvider: DateTimeService,
-                                         uniqueIdsService: UniqueIdsService)(implicit ec: ExecutionContext) {
+                                         uniqueIdsService: UniqueIdsService)
+                                        (implicit ec: ExecutionContext) {
 
   def send[A](mrn: Mrn)(implicit asr: AuthorisedStatusRequest[A], hc: HeaderCarrier): Future[Either[Result, HttpResponse]] = {
 

@@ -30,7 +30,8 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
                                                 headerValidator: HeaderValidator,
                                                 logger: DeclarationsLogger,
                                                 declarationConfigService: DeclarationsConfigService,
-                                                eoriHeaderName: String)(implicit ec: ExecutionContext)
+                                                eoriHeaderName: String)
+                                               (implicit ec: ExecutionContext)
   extends AuthAction(customsAuthService, headerValidator, logger, declarationConfigService) {
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {

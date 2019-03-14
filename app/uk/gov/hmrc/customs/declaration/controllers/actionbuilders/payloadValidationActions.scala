@@ -47,30 +47,37 @@ import scala.xml.{NodeSeq, SAXException}
 
 @Singleton
 class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionXmlValidationService,
-                                               logger: DeclarationsLogger)(implicit ec: ExecutionContext)
+                                               logger: DeclarationsLogger)
+                                              (implicit ec: ExecutionContext)
   extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
 class ClearancePayloadValidationAction @Inject() (xmlValidationService: ClearanceXmlValidationService,
-                                                  logger: DeclarationsLogger)(implicit ec: ExecutionContext)
+                                                  logger: DeclarationsLogger)
+                                                 (implicit ec: ExecutionContext)
   extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
 class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService,
-                                              logger: DeclarationsLogger)(implicit ec: ExecutionContext)
+                                              logger: DeclarationsLogger)
+                                             (implicit ec: ExecutionContext)
   extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
 class ArrivalNotificationPayloadValidationAction @Inject() (xmlValidationService: ArrivalNotificationXmlValidationService,
-                                                            logger: DeclarationsLogger)(implicit ec: ExecutionContext)
+                                                            logger: DeclarationsLogger)
+                                                           (implicit ec: ExecutionContext)
   extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
 class CancelPayloadValidationAction @Inject() (xmlValidationService: CancellationXmlValidationService,
-                                               logger: DeclarationsLogger)(implicit ec: ExecutionContext)
+                                               logger: DeclarationsLogger)
+                                              (implicit ec: ExecutionContext)
   extends PayloadValidationAction(xmlValidationService, logger)
 
-abstract class PayloadValidationAction(val xmlValidationService: XmlValidationService, logger: DeclarationsLogger)(implicit ec: ExecutionContext)
+abstract class PayloadValidationAction(val xmlValidationService: XmlValidationService,
+                                       logger: DeclarationsLogger)
+                                      (implicit ec: ExecutionContext)
   extends ActionRefiner[AuthorisedRequest, ValidatedPayloadRequest] {
 
   override def refine[A](ar: AuthorisedRequest[A]): Future[Either[Result, ValidatedPayloadRequest[A]]] = {

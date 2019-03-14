@@ -49,7 +49,8 @@ class MdgWcoDeclarationConnector @Inject()(override val http: HttpClient,
 class MdgDeclarationCancellationConnector @Inject()(override val http: HttpClient,
                                                     override val logger: DeclarationsLogger,
                                                     override val serviceConfigProvider: ServiceConfigProvider,
-                                                    override val config: DeclarationsConfigService)(implicit val ec: ExecutionContext)
+                                                    override val config: DeclarationsConfigService)
+                                                   (implicit val ec: ExecutionContext)
   extends MdgDeclarationConnector with DeclarationsCircuitBreaker {
 
   override val configKey = "declaration-cancellation"

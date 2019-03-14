@@ -41,7 +41,8 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
                                           uuidService: UuidService,
                                           logger: DeclarationsLogger,
                                           apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                          config: DeclarationsConfigService)(implicit ec: ExecutionContext) {
+                                          config: DeclarationsConfigService)
+                                         (implicit ec: ExecutionContext) {
 
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 

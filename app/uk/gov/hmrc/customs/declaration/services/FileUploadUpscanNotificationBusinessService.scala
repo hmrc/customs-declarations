@@ -31,7 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMetadataRepo,
                                                             connector: FileTransmissionConnector,
                                                             config: DeclarationsConfigService,
-                                                            logger: DeclarationsLogger)(implicit ec: ExecutionContext) {
+                                                            logger: DeclarationsLogger)
+                                                           (implicit ec: ExecutionContext) {
 
   def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(implicit r: HasConversationId): Future[Unit] = {
     repo.update(

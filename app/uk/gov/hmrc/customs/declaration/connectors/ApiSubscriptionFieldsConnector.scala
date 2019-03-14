@@ -30,7 +30,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
                                                logger: DeclarationsLogger,
-                                               config: DeclarationsConfigService)(implicit ec: ExecutionContext) {
+                                               config: DeclarationsConfigService)
+                                              (implicit ec: ExecutionContext) {
 
   def getSubscriptionFields[A](apiSubsKey: ApiSubscriptionKey)(implicit vpr: GenericValidatedPayloadRequest[A], hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
     val url = ApiSubscriptionFieldsPath.url(config.declarationsConfig.apiSubscriptionFieldsBaseUrl, apiSubsKey)

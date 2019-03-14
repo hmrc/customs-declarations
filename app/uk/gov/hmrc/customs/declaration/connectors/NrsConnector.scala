@@ -30,7 +30,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class NrsConnector @Inject()(http: HttpClient,
                              logger: DeclarationsLogger,
-                             declarationConfigService: DeclarationsConfigService)(implicit ec: ExecutionContext) {
+                             declarationConfigService: DeclarationsConfigService)
+                            (implicit ec: ExecutionContext) {
 
   private val XApiKey = "X-API-Key"
 

@@ -34,7 +34,8 @@ import scala.util.{Failure, Success}
 @Singleton
 class AuditingService @Inject()(logger: DeclarationsLogger,
                                 declarationsConfigService: DeclarationsConfigService,
-                                auditConnector: AuditConnector)(implicit ec: ExecutionContext) {
+                                auditConnector: AuditConnector)
+                               (implicit ec: ExecutionContext) {
 
   private val auditSourceValue = "customs-declaration-submission"
   private val auditTypeValue = "DeclarationNotificationOutboundCall"

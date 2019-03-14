@@ -31,9 +31,10 @@ import uk.gov.hmrc.play.bootstrap.controller.BaseController
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-class FileTransmissionNotificationController @Inject() (callbackToXmlNotification: FileTransmissionCallbackToXmlNotification,
-                                                        notificationService: FileUploadNotificationService,
-                                                        cdsLogger: CdsLogger)(implicit ec: ExecutionContext) extends BaseController {
+class FileTransmissionNotificationController @Inject()(callbackToXmlNotification: FileTransmissionCallbackToXmlNotification,
+                                                       notificationService: FileUploadNotificationService,
+                                                       cdsLogger: CdsLogger)
+                                                      (implicit ec: ExecutionContext) extends BaseController {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async {
     request =>

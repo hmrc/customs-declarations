@@ -32,7 +32,8 @@ class FileUploadController @Inject()(val common: Common,
                                      val fileUploadBusinessService: FileUploadBusinessService,
                                      val fileUploadPayloadValidationComposedAction: FileUploadPayloadValidationComposedAction,
                                      val conversationIdAction: ConversationIdAction,
-                                     val fileUploadAuthAction: AuthActionEoriHeader)(implicit ec: ExecutionContext)
+                                     val fileUploadAuthAction: AuthActionEoriHeader)
+                                    (implicit ec: ExecutionContext)
   extends BaseController {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {

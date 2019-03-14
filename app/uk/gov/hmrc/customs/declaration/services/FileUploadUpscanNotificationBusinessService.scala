@@ -45,7 +45,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
         logger.error(errorMsg)
         Future.failed(new IllegalStateException(errorMsg))
       case Some(metadata) =>
-        maybeFileTransmission(ready.reference, metadata) match {
+        maybeFileTransmission(ready, metadata) match {
           case None =>
             val errorMsg = s"database error - can't find file with file reference ${ready.reference}"
             logger.error(errorMsg)
@@ -59,20 +59,20 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
     }
   }
 
-  private def maybeFileTransmission(fileReference: FileReference, md: FileUploadMetadata): Option[FileTransmission] = {
+  private def maybeFileTransmission(ready: UploadedReadyCallbackBody, md: FileUploadMetadata): Option[FileTransmission] = {
     for {
-      (bf, ftf) <- maybeFileTransmissionFile(fileReference, md)
+      (bf, ftf) <- maybeFileTransmissionFile(ready.reference, md)
     } yield
       FileTransmission(FileTransmissionBatch(md.batchId, md.fileCount),
         new URL(s"${config.fileUploadConfig.fileTransmissionCallbackUrl}${md.csId}"),
         ftf,
         FileTransmissionInterface("DEC64", "1.0.0"),
-        extractFileProperties(md, bf)
+        extractFileProperties(ready, md, bf)
     )
   }
 
-  private def extractFileProperties(md: FileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {
-    val fileProperties = Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString)
+  private def extractFileProperties(ready: UploadedReadyCallbackBody, md: FileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {
+    val fileProperties = Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString, "uploadTimestamp" -> ready.uploadDetails.uploadTimestamp.toString)
       .map(t => FileTransmissionProperty(name = t._1, value = t._2))
     if (bf.documentType.isDefined) fileProperties :+ FileTransmissionProperty("DocumentType", bf.documentType.get.toString) else fileProperties
   }

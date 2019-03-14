@@ -186,6 +186,10 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       |      "value": "123"
       |    },
       |    {
+      |      "name": "uploadTimestamp",
+      |      "value": "2018-04-24T09:30:00Z"
+      |    },
+      |    {
       |      "name": "DocumentType",
       |      "value": "Document Type 1"
       |    }

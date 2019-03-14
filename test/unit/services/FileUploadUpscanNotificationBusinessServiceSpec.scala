@@ -39,7 +39,8 @@ import scala.concurrent.Future
 class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
   private val downloadUrl = new URL("http://remotehost/bucket/123")
-  private val initiateDate = Instant.parse("2018-04-24T09:30:00Z")
+  private val initiateDateAsString = "2018-04-24T09:30:00Z"
+  private val initiateDate = Instant.parse(initiateDateAsString)
   private val uploadDetails = UploadedDetails("test.pdf", "application/pdf", initiateDate, "1a2b3c4d5e")
   private val readyCallbackBody = UploadedReadyCallbackBody(FileReferenceOne, downloadUrl, ReadyFileStatus, uploadDetails)
   private val callbackFields = CallbackFields(uploadDetails.fileName, uploadDetails.fileMimeType, uploadDetails.checksum)
@@ -56,6 +57,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
   private val fileTransmissionProperties = Seq(
     FileTransmissionProperty("DeclarationId", md.declarationId.toString),
     FileTransmissionProperty("Eori", md.eori.toString),
+    FileTransmissionProperty("uploadTimestamp", initiateDateAsString),
     FileTransmissionProperty("DocumentType", mdFileOne.documentType.get.toString)
   )
   private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(fileTransmissionCallbackUrl + clientSubscriptionIdString), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)

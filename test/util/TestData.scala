@@ -17,6 +17,7 @@
 package util
 
 import java.net.URL
+import java.time.Instant
 import java.util.UUID
 import java.util.UUID.fromString
 
@@ -307,10 +308,12 @@ object TestData {
   val FileReferenceOne = FileReference(fromString("31400000-8ce0-11bd-b23e-10b96e4ef00f"))
   val FileReferenceTwo = FileReference(fromString("32400000-8cf0-11bd-b23e-10b96e4ef00f"))
   val FileReferenceThree = FileReference(fromString("33400000-8cd0-11bd-b23e-10b96e4ef00f"))
-  val CallbackFieldsOne = CallbackFields("name1", "application/xml", "checksum1")
-  val CallbackFieldsTwo = CallbackFields("name2", "application/xml", "checksum2")
-  val CallbackFieldsThree = CallbackFields("name3", "application/xml", "checksum3")
-  val CallbackFieldsUpdated = CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM")
+  val InitiateDateAsString = "2018-04-24T09:30:00Z"
+  val InitiateDate = Instant.parse(InitiateDateAsString)
+  val CallbackFieldsOne = CallbackFields("name1", "application/xml", "checksum1", InitiateDate)
+  val CallbackFieldsTwo = CallbackFields("name2", "application/xml", "checksum2", InitiateDate)
+  val CallbackFieldsThree = CallbackFields("name3", "application/xml", "checksum3", InitiateDate)
+  val CallbackFieldsUpdated = CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate)
   val BatchFileOne = BatchFile(reference = FileReferenceOne, Some(CallbackFieldsOne),
     location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(1), size = 1, documentType = Some(DocumentType("Document Type 1")))
   val BatchFileTwo = BatchFile(reference = FileReferenceTwo, Some(CallbackFieldsTwo),

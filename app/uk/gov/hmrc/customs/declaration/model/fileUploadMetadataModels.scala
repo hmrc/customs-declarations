@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.model
 
 import java.net.URL
+import java.time.Instant
 import java.util.UUID
 
 import play.api.data.validation.ValidationError
@@ -62,7 +63,7 @@ object FileReference {
   implicit val reader = Reads.of[UUID].map(new FileReference(_))
 }
 
-case class CallbackFields(name: String, mimeType: String, checksum: String)
+case class CallbackFields(name: String, mimeType: String, checksum: String, uploadTimestamp: Instant)
 object CallbackFields {
   implicit val format = Json.format[CallbackFields]
 }

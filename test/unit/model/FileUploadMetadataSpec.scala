@@ -34,7 +34,8 @@ class FileUploadMetadataSpec extends UnitSpec {
                              |      "maybeCallbackFields": {
                              |        "name": "name1",
                              |        "mimeType": "application/xml",
-                             |        "checksum": "checksum1"
+                             |        "checksum": "checksum1",
+                             |        "uploadTimestamp": "2018-04-24T09:30:00Z"
                              |      },
                              |      "location": "https://a.b.com",
                              |      "sequenceNumber": 1,

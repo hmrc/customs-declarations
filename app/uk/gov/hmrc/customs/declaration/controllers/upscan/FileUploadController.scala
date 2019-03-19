@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.controllers
+package uk.gov.hmrc.customs.declaration.controllers.upscan
 
 import javax.inject.{Inject, Singleton}
 import play.api.http.ContentTypes
 import play.api.mvc._
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, ConversationIdAction, FileUploadPayloadValidationComposedAction}
+import uk.gov.hmrc.customs.declaration.controllers.Common
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.FileUploadPayloadValidationComposedAction
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, ConversationIdAction}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
-import uk.gov.hmrc.customs.declaration.services.FileUploadBusinessService
+import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext

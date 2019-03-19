@@ -24,12 +24,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{AnyContentAsJson, Result}
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, UpscanInitiateConnector}
+import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
+import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedFileUploadPayloadRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.{UpscanInitiateResponsePayload, _}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
-import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadBusinessService, UuidService}
+import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse

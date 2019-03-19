@@ -23,7 +23,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{FileUploadPayloadValidationAction, FileUploadPayloadValidationComposedAction}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.{FileUploadPayloadValidationAction, FileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._

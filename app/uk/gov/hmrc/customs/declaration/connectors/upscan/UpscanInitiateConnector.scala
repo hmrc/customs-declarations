@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.connectors
+package uk.gov.hmrc.customs.declaration.connectors.upscan
 
 import com.google.inject._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger

@@ -22,6 +22,8 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
 import uk.gov.hmrc.customs.declaration.controllers._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.FileUploadPayloadValidationAction
+import uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services._
 

@@ -5,7 +5,7 @@ POST        /                             @uk.gov.hmrc.customs.declaration.contr
 
 POST        /cancellation-requests        @uk.gov.hmrc.customs.declaration.controllers.CancelDeclarationController.post()
 
-POST        /file-upload                  @uk.gov.hmrc.customs.declaration.controllers.FileUploadController.post()
+POST        /file-upload                  @uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadController.post()
 
 GET         /admin/metrics                @com.kenshoo.play.metrics.MetricsController.metrics
 

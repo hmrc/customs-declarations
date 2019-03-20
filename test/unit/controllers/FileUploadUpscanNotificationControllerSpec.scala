@@ -30,10 +30,11 @@ import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, _}
 import uk.gov.hmrc.customs.api.common.config.ServicesConfig
-import uk.gov.hmrc.customs.declaration.controllers.FileUploadUpscanNotificationController
+import uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadUpscanNotificationController
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.services.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, InternalErrorXmlNotification, UpscanNotificationCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.services.upscan.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, UpscanNotificationCallbackToXmlNotification}
+import uk.gov.hmrc.customs.declaration.services.InternalErrorXmlNotification
 import unit.logging.StubCdsLogger
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._

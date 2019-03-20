@@ -22,8 +22,8 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
-import uk.gov.hmrc.customs.declaration.connectors.FileUploadCustomsNotificationConnector
-import uk.gov.hmrc.customs.declaration.services.FileUploadCustomsNotification
+import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
+import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadCustomsNotification
 import uk.gov.hmrc.http._
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.ExternalServicesConfig.{Host, Port}

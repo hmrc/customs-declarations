@@ -23,9 +23,9 @@ import org.scalatest.Assertion
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Reads
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.connectors.FileUploadCustomsNotificationConnector
+import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.model.{BatchId, FileReference}
-import uk.gov.hmrc.customs.declaration.services._
+import uk.gov.hmrc.customs.declaration.services.upscan.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.services.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId

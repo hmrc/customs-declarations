@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.services
+package uk.gov.hmrc.customs.declaration.services.upscan
 
 import javax.inject.Singleton
-
 import uk.gov.hmrc.customs.declaration.model.UploadedFailedCallbackBody
 
 import scala.xml.NodeSeq

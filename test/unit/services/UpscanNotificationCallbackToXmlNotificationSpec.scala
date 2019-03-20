@@ -18,7 +18,7 @@ package unit.services
 
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.customs.declaration.services.UpscanNotificationCallbackToXmlNotification
+import uk.gov.hmrc.customs.declaration.services.upscan.UpscanNotificationCallbackToXmlNotification
 import util.UpscanNotifyTestData._
 
 import scala.util.control.NonFatal

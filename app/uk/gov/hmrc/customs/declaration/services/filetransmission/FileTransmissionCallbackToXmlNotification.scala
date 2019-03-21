@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.services
+package uk.gov.hmrc.customs.declaration.services.filetransmission
 
 import javax.inject.Singleton
 import uk.gov.hmrc.customs.declaration.model.{FileTransmissionFailureOutcome, FileTransmissionNotification, FileTransmissionSuccessOutcome}

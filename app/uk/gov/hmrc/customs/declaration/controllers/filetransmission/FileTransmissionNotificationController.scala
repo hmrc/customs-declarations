@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.controllers
+package uk.gov.hmrc.customs.declaration.controllers.filetransmission
 
 import java.util.UUID
 
@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.services.FileTransmissionCallbackToXmlNotification
+import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadNotificationService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 

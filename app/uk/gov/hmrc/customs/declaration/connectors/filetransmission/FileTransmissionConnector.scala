@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.connectors
+package uk.gov.hmrc.customs.declaration.connectors.filetransmission
 
 import com.google.inject._
 import play.mvc.Http.HeaderNames._

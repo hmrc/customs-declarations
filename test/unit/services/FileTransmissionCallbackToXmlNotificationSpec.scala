@@ -18,7 +18,7 @@ package unit.services
 
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.customs.declaration.services.FileTransmissionCallbackToXmlNotification
+import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification
 import util.FileTransmissionTestData._
 
 class FileTransmissionCallbackToXmlNotificationSpec extends PlaySpec with MockitoSugar {

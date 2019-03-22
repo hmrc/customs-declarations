@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.connectors
+package unit.connectors.upscan
 
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._

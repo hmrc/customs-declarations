@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package integration
+package integration.filetransmission
 
+import integration.{IntegrationTestModule, IntegrationTestSpec}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar

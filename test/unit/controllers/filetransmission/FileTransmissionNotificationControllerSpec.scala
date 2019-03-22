@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.controllers
+package unit.controllers.filetransmission
 
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
@@ -25,7 +25,6 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import play.api.test._
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.controllers._
 import uk.gov.hmrc.customs.declaration.controllers.filetransmission.FileTransmissionNotificationController
 import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmissionNotification
 import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.services
+package unit.services.filetransmission
 
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -27,7 +27,7 @@ import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotifi
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, FileReference}
 import uk.gov.hmrc.customs.declaration.services.upscan.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
 import uk.gov.hmrc.play.test.UnitSpec
-import unit.services.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
+import unit.services.filetransmission.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 

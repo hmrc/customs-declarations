@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.model
+package unit.model.upscan
 
 import util.UpscanNotifyTestData._
 import play.api.libs.json._

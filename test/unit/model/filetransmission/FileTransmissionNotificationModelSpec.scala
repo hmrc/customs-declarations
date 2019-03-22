@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package unit.model
+package unit.model.filetransmission
 
 import play.api.libs.json.{JsError, JsSuccess, Json}
-import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmissionCallbackDecider
 import uk.gov.hmrc.play.test.UnitSpec
 import util.FileTransmissionTestData._

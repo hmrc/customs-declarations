@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.controllers
+package unit.controllers.upscan
 
 import java.util.UUID
 
@@ -34,8 +34,8 @@ import uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadUpscanNotifi
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.{FileReference, UploadedCallbackBody, UploadedFailedCallbackBody}
-import uk.gov.hmrc.customs.declaration.services.upscan.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, UpscanNotificationCallbackToXmlNotification}
 import uk.gov.hmrc.customs.declaration.services.InternalErrorXmlNotification
+import uk.gov.hmrc.customs.declaration.services.upscan.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, UpscanNotificationCallbackToXmlNotification}
 import unit.logging.StubCdsLogger
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._

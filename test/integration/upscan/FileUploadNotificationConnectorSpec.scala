@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package integration
+package integration.upscan
 
+import integration.IntegrationTestSpec
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.services
+package unit.services.filetransmission
 
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.controllers.actionbuilders
+package unit.controllers.actionbuilders.upscan
 
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar

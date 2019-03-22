@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package component
+package component.upscan
 
+import component.{ComponentTestSpec, ExpectedTestResponses}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.libs.json.{JsObject, JsString}
 import play.api.mvc._

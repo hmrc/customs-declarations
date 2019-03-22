@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package component
+package component.filetransmission
 
+import component.{ComponentTestSpec, ExpectedTestResponses}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.libs.json.Json

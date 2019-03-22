@@ -25,6 +25,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.PayloadValidat
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.upscan.DocumentType
 import uk.gov.hmrc.customs.declaration.model.{FileGroupSize, _}
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadXmlValidationService}
 

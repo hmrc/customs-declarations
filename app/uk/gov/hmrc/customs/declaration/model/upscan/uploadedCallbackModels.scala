@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.model
+package uk.gov.hmrc.customs.declaration.model.upscan
 
 import java.net.URL
 import java.time.Instant

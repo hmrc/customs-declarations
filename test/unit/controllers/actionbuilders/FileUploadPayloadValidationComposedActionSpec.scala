@@ -27,7 +27,8 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.{FileUp
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
-import uk.gov.hmrc.customs.declaration.model.{DocumentType, _}
+import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.upscan.DocumentType
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.clientId

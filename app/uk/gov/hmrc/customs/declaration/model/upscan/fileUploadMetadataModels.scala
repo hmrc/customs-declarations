@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.model
+package uk.gov.hmrc.customs.declaration.model.upscan
 
 import java.net.URL
 import java.time.Instant
@@ -22,6 +22,7 @@ import java.util.UUID
 
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
 
 import scala.util.Try

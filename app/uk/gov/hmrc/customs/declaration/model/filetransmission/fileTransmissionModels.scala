@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.model
+package uk.gov.hmrc.customs.declaration.model.filetransmission
 
 import java.net.URL
 
 import play.api.libs.json._
+import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, FileReference, HttpUrlFormat}
 
 case class FileTransmissionBatch(
   id: BatchId,

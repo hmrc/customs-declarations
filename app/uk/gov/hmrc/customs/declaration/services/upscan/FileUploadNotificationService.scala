@@ -21,7 +21,8 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
-import uk.gov.hmrc.customs.declaration.model.{FileReference, SubscriptionFieldsId}
+import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
+import uk.gov.hmrc.customs.declaration.model.upscan.FileReference
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq

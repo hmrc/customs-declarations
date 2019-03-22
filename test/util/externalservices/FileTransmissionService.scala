@@ -20,9 +20,10 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.libs.json.Json
 import play.api.test.Helpers._
-import uk.gov.hmrc.customs.declaration.model.FileTransmission
+import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmission
 import util.CustomsDeclarationsExternalServicesConfig._
 import util.WireMockRunner
+
 import scala.collection.JavaConverters._
 
 trait FileTransmissionService extends WireMockRunner {

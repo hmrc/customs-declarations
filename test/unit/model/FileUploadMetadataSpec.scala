@@ -18,6 +18,7 @@ package unit.model
 
 import play.api.libs.json.{JsSuccess, Json}
 import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.upscan.FileUploadMetadata
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData.FileMetadataWithFileOne
 

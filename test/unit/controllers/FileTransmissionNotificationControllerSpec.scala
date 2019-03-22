@@ -27,7 +27,7 @@ import play.api.test._
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.controllers._
 import uk.gov.hmrc.customs.declaration.controllers.filetransmission.FileTransmissionNotificationController
-import uk.gov.hmrc.customs.declaration.model.FileTransmissionNotification
+import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmissionNotification
 import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadNotificationService
 import util.ApiSubscriptionFieldsTestData.{subscriptionFieldsId, subscriptionFieldsIdString}

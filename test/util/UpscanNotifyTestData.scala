@@ -21,6 +21,7 @@ import java.time.Instant
 
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.upscan._
 import util.TestData.FileReferenceOne
 
 import scala.xml.Elem

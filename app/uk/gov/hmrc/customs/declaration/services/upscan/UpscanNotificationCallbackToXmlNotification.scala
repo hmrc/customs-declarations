@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.services
+package uk.gov.hmrc.customs.declaration.services.upscan
 
 import javax.inject.Singleton
-import uk.gov.hmrc.customs.declaration.model.upscan.FileReference
-import uk.gov.hmrc.customs.declaration.services.upscan.CallbackToXmlNotification
+import uk.gov.hmrc.customs.declaration.model.upscan.UploadedFailedCallbackBody
 
 import scala.xml.NodeSeq
 
 @Singleton
-class InternalErrorXmlNotification extends CallbackToXmlNotification[FileReference] {
+class UpscanNotificationCallbackToXmlNotification extends CallbackToXmlNotification[UploadedFailedCallbackBody] {
 
-  override def toXml(fileReference: FileReference): NodeSeq =
-    <errorResponse>
-      <code>INTERNAL_SERVER_ERROR</code>
-      <message>File upload for file reference {fileReference.toString} failed. A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.</message>
-    </errorResponse>
+  override def toXml(failed: UploadedFailedCallbackBody): NodeSeq =
+    <root>
+      <reference>{failed.reference.toString}</reference>
+      <fileStatus>FAILED</fileStatus>
+      <failureDetails>
+        <failureReason>{failed.failureDetails.failureReason}</failureReason>
+        <message>{failed.failureDetails.message}</message>
+      </failureDetails>
+    </root>
+
 }

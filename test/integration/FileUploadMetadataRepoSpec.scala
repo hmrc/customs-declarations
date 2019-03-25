@@ -27,6 +27,7 @@ import play.modules.reactivemongo.ReactiveMongoComponent
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
+import uk.gov.hmrc.customs.declaration.model.upscan.CallbackFields
 import uk.gov.hmrc.customs.declaration.repo.{FileUploadMetadataMongoRepo, FileUploadMetadataRepoErrorHandler}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.{MongoConnector, MongoSpecSupport}

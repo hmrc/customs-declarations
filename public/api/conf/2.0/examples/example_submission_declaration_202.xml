@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
              xmlns:udt="urn:wco:datamodel:WCO:Declaration_DS:DMS:2">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
@@ -39,6 +39,51 @@
             <ID>ZZ123456789001</ID>
             <FunctionCode>2</FunctionCode>
         </Agent>
+        <Consignment>
+            <Carrier>
+                <Name>CarrierName</Name>
+                <ID>123</ID>
+                <Address>
+                    <CityName>Carrier City name</CityName>
+                    <CountryCode>NL</CountryCode>
+                    <Line>Carrier street Part1CarrierStreet Part2 7C</Line>
+                    <PostcodeID>8603 AV</PostcodeID>
+                </Address>
+            </Carrier>
+            <ConsignmentItem>
+                <SequenceNumeric>1</SequenceNumeric>
+                <Consignor>
+                    <Name>ConsignorItemName</Name>
+                    <ID>456</ID>
+                    <Address>
+                        <CityName>Consignor City name</CityName>
+                        <CountryCode>NL</CountryCode>
+                        <Line>Consignorstreet Part1ConsignorStreet Part2 7C</Line>
+                        <PostcodeID>8603 AV</PostcodeID>
+                    </Address>
+                </Consignor>
+                <Freight>
+                    <PaymentMethodCode>123</PaymentMethodCode>
+                </Freight>
+            </ConsignmentItem>
+            <Consignor>
+                <Name>ConsignorName</Name>
+                <ID>789</ID>
+                <Address>
+                    <CityName>Consignor City name</CityName>
+                    <CountryCode>NL</CountryCode>
+                    <Line>Consignorstreet Part1ConsignorStreet Part2 7C</Line>
+                    <PostcodeID>8603 AV</PostcodeID>
+                </Address>
+            </Consignor>
+            <Freight>
+                <PaymentMethodCode>123</PaymentMethodCode>
+            </Freight>
+            <Itinerary>
+                <SequenceNumeric>2</SequenceNumeric>
+                <RoutingCountryCode>NL</RoutingCountryCode>
+            </Itinerary>
+        </Consignment>
         <CurrencyExchange> <!-- 1094 new section-->
             <RateNumeric>1.234</RateNumeric>
         </CurrencyExchange>
@@ -62,27 +107,6 @@
             <Consignee>
                 <ID>ZZ123456789002</ID>
             </Consignee>
-            <Consignment>
-                <ArrivalTransportMeans>
-                    <Name>Titanic II</Name>
-                    <TypeCode>1</TypeCode>
-                </ArrivalTransportMeans>
-                <GoodsLocation>
-                    <Name>3016 DR, Loods 5</Name>
-                </GoodsLocation>
-                <LoadingLocation>  <!-- 1094 -->
-                    <Name>Neverland</Name>
-                    <ID>1234</ID>
-                </LoadingLocation>
-                <TransportEquipment>
-                    <SequenceNumeric>1</SequenceNumeric>
-                    <ID>CONTAINERNUMBER17</ID>
-                </TransportEquipment>
-                <TransportEquipment>
-                    <SequenceNumeric>2</SequenceNumeric>
-                    <ID>CONTAINERNUMBER22</ID>
-                </TransportEquipment>
-            </Consignment>
             <DomesticDutyTaxParty>
                 <ID>ZZ123456789003</ID>
             </DomesticDutyTaxParty>

@@ -91,7 +91,7 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:group ref="Declaration"/>
+          <xs:group ref="Declaration"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

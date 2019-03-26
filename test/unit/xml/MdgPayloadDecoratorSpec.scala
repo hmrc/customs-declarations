@@ -50,6 +50,13 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
       rd.head.text shouldBe badgeIdentifier.value
     }
+
+    "set the authenticatedPartyID when present" in {
+      val result = wrapPayloadWithBadgeIdentifier()
+
+      val rd = result \\ "authenticatedPartyID"
+      rd.head.text shouldBe declarantEoriValue
+    }
   }
 
   "MdgPayloadDecorator for CspWithEori" should {
@@ -97,14 +104,14 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
     "set the originatingPartyID when present" in {
       val result = wrapPayloadWithBadgeIdentifier()
 
-      val rd = result \\ "authenticatedPartyID"
+      val rd = result \\ "originatingPartyID"
       rd.head.text shouldBe apiSubscriptionFieldsResponse.fields.authenticatedEori.get
     }
 
     "set the authenticatedPartyID when present" in {
       val result = wrapPayloadWithBadgeIdentifier()
 
-      val rd = result \\ "originatingPartyID"
+      val rd = result \\ "authenticatedPartyID"
       rd.head.text shouldBe declarantEoriValue
     }
   }
@@ -152,14 +159,14 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
       rd.isEmpty shouldBe true
     }
 
-    "set the originatingPartyID when present" in {
+    "set the authenticatedPartyID when present" in {
       val result = wrapPayloadWithoutBadgeIdentifier()
 
       val rd = result \\ "authenticatedPartyID"
       rd.head.text shouldBe apiSubscriptionFieldsResponse.fields.authenticatedEori.get
     }
 
-    "NOT set the authenticatedPartyID" in {
+    "NOT set the originatingPartyID" in {
       val result = wrapPayloadWithoutBadgeIdentifier()
 
       val rd: NodeSeq = result \\ "originatingPartyID"

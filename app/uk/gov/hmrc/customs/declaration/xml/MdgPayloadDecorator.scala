@@ -39,7 +39,9 @@ class MdgPayloadDecorator() {
         <v1:conversationID>{vpr.conversationId.uuid}</v1:conversationID>
         {val as = vpr.authorisedAs
       as match {
-            case Csp(badgeId, _) => <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>
+            case Csp(badgeId, _) =>
+              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>
+              <v1:authenticatedPartyID>{asfr.fields.authenticatedEori.get}</v1:authenticatedPartyID>
             case NonCsp(eori, _) =>
               <v1:authenticatedPartyID>{eori.value}</v1:authenticatedPartyID> // originatingPartyID is only required for CSPs
             case CspWithEori(badgeId, eori, _) =>

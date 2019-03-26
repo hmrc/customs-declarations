@@ -45,14 +45,14 @@ class DeclarationStatusResponseSpec extends UnitSpec with MockitoSugar with Befo
 
   "A status query response" should {
     "be successfully validated if correct" in {
-      val result = await(xmlValidationService.validate(ValidStatusQueryResponseXML))
+      val result = await(xmlValidationService.validate(ValidDeclarationStatusQueryResponseXML))
 
       result should be(())
     }
 
     "fail validation if is incorrect" in {
       val caught = intercept[SAXException] {
-        await(xmlValidationService.validate(InvalidStatusQueryResponseXML))
+        await(xmlValidationService.validate(InvalidDeclarationStatusQueryResponseXML))
       }
 
       caught.getMessage shouldBe "cvc-elt.1.a: Cannot find the declaration of element 'taggie'."
@@ -62,7 +62,7 @@ class DeclarationStatusResponseSpec extends UnitSpec with MockitoSugar with Befo
 
     "fail validation if is not filtered" in {
       val caught = intercept[SAXException] {
-        await(xmlValidationService.validate(FullStatusQueryResponseXML))
+        await(xmlValidationService.validate(FullDeclarationStatusQueryResponseXML))
       }
 
       caught.getMessage shouldBe "cvc-elt.1.a: Cannot find the declaration of element 'n1:queryDeclarationInformationResponse'."
@@ -71,10 +71,10 @@ class DeclarationStatusResponseSpec extends UnitSpec with MockitoSugar with Befo
     }
   }
 
-  private val InvalidStatusQueryResponseXML = <taggie>content</taggie>
+  private val InvalidDeclarationStatusQueryResponseXML = <taggie>content</taggie>
 
 
-  private val ValidStatusQueryResponseXML: Elem =
+  private val ValidDeclarationStatusQueryResponseXML: Elem =
     <stat:declarationStatusResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
       <stat:declaration>
         <!--Optional:-->
@@ -102,7 +102,7 @@ class DeclarationStatusResponseSpec extends UnitSpec with MockitoSugar with Befo
     </stat:declarationStatusResponse>
 
 
-  private val FullStatusQueryResponseXML: Elem = <n1:queryDeclarationInformationResponse
+  private val FullDeclarationStatusQueryResponseXML: Elem = <n1:queryDeclarationInformationResponse
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/"
   xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1"

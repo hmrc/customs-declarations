@@ -53,7 +53,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
   private val apiSubscriptionKeyForXClientIdV3 = apiSubscriptionKeyForXClientIdV2.copy(version = VersionThree)
 
   private def validResponse(acceptanceDateVal : String) =
-    raw"""<stat:declarationManagementInformationResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
+    raw"""<stat:declarationStatusResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
       |  <stat:declaration>
       |    <stat:versionNumber>0</stat:versionNumber>
       |    <stat:creationDate formatCode="string">2001-12-17T09:30:47Z</stat:creationDate>
@@ -68,7 +68,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       |      </stat:partyIdentification>
       |    </stat:parties>
       |  </stat:declaration>
-      |</stat:declarationManagementInformationResponse>""".stripMargin
+      |</stat:declarationStatusResponse>""".stripMargin
 
   val validRequestV2: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", endpoint).withHeaders(ValidHeadersV2.toSeq: _*).fromCsp
   val validRequestV3: FakeRequest[AnyContentAsEmpty.type] = validRequestV2.withHeaders(ValidHeadersV3.toSeq: _*)
@@ -141,7 +141,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
     scenario("Response status 400 when Date of declaration is older than configured allowed value") {
       Given("the API is available")
-      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationManagementInformationResponse(acceptanceDate = DateTime.now().minusYears(1)))
+      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceDate = DateTime.now().minusYears(1)))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
 
       And("the CSP is authorised with its privileged application")
@@ -177,7 +177,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
     scenario("Response status 400 when Declaration Management Information Response does contains different Badge Identifier") {
       Given("the API is available")
-      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationManagementInformationResponse(communicationAddress = "hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:IWONTMATCH"))
+      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(communicationAddress = "hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:IWONTMATCH"))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
 
       And("the CSP is authorised with its privileged application")

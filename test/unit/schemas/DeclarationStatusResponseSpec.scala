@@ -26,14 +26,14 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.xml.{Elem, Node, SAXException}
 
-class StatusQueryResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+class DeclarationStatusResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
   protected val MockConfiguration = mock[Configuration]
   protected val MockXml = mock[Node]
 
   protected val propertyName: String = "xsd.locations.statusqueryresponse"
 
-  protected val xsdLocations: Seq[String] = Seq("/api/conf/2.0/schemas/wco/status/StatusQueryResponse.xsd")
+  protected val xsdLocations: Seq[String] = Seq("/api/conf/2.0/schemas/wco/status/DeclarationStatusResponse.xsd")
 
   def xmlValidationService: XmlValidationService = new XmlValidationService(MockConfiguration, schemaPropertyName = propertyName) {}
 
@@ -45,14 +45,14 @@ class StatusQueryResponseSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "A status query response" should {
     "be successfully validated if correct" in {
-      val result = await(xmlValidationService.validate(ValidStatusQueryResponseXML))
+      val result = await(xmlValidationService.validate(ValidDeclarationStatusQueryResponseXML))
 
       result should be(())
     }
 
     "fail validation if is incorrect" in {
       val caught = intercept[SAXException] {
-        await(xmlValidationService.validate(InvalidStatusQueryResponseXML))
+        await(xmlValidationService.validate(InvalidDeclarationStatusQueryResponseXML))
       }
 
       caught.getMessage shouldBe "cvc-elt.1.a: Cannot find the declaration of element 'taggie'."
@@ -62,7 +62,7 @@ class StatusQueryResponseSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
     "fail validation if is not filtered" in {
       val caught = intercept[SAXException] {
-        await(xmlValidationService.validate(FullStatusQueryResponseXML))
+        await(xmlValidationService.validate(FullDeclarationStatusQueryResponseXML))
       }
 
       caught.getMessage shouldBe "cvc-elt.1.a: Cannot find the declaration of element 'n1:queryDeclarationInformationResponse'."
@@ -71,11 +71,11 @@ class StatusQueryResponseSpec extends UnitSpec with MockitoSugar with BeforeAndA
     }
   }
 
-  private val InvalidStatusQueryResponseXML = <taggie>content</taggie>
+  private val InvalidDeclarationStatusQueryResponseXML = <taggie>content</taggie>
 
 
-  private val ValidStatusQueryResponseXML: Elem =
-    <stat:declarationManagementInformationResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
+  private val ValidDeclarationStatusQueryResponseXML: Elem =
+    <stat:declarationStatusResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
       <stat:declaration>
         <!--Optional:-->
         <stat:versionNumber>100</stat:versionNumber>
@@ -99,10 +99,10 @@ class StatusQueryResponseSpec extends UnitSpec with MockitoSugar with BeforeAndA
           </stat:partyIdentification>
         </stat:parties>
       </stat:declaration>
-    </stat:declarationManagementInformationResponse>
+    </stat:declarationStatusResponse>
 
 
-  private val FullStatusQueryResponseXML: Elem = <n1:queryDeclarationInformationResponse
+  private val FullDeclarationStatusQueryResponseXML: Elem = <n1:queryDeclarationInformationResponse
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/"
   xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1"
@@ -116,7 +116,7 @@ class StatusQueryResponseSpec extends UnitSpec with MockitoSugar with BeforeAndA
       <n1:processingDate>2016-11-30T09:31:00Z</n1:processingDate>
     </n1:responseCommon>
     <n1:responseDetail>
-      <n1:declarationManagementInformationResponse>
+      <n1:declarationStatusResponse>
         <tns_1:request>
           <tns_1:id>12b0a74b-13bb-42a0-b9db-8ba4ada22fd9</tns_1:id>
           <tns_1:timeStamp>2016-11-30T10:28:54.128Z</tns_1:timeStamp>
@@ -170,7 +170,7 @@ class StatusQueryResponseSpec extends UnitSpec with MockitoSugar with BeforeAndA
             </xsd_1:goodsItems>
           </xsd_1:consignmentShipment>
         </xsd_1:declaration>
-      </n1:declarationManagementInformationResponse>
+      </n1:declarationStatusResponse>
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 }

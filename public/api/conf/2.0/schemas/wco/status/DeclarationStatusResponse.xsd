@@ -3,9 +3,9 @@
            targetNamespace="http://gov.uk/customs/declarations/status-request" elementFormDefault="qualified"
            attributeFormDefault="unqualified">
 
-    <xs:element name="declarationManagementInformationResponse" type="DeclarationManagementInformationResponse"/>
+    <xs:element name="declarationStatusResponse" type="DeclarationStatusResponse"/>
 
-    <xs:complexType name="DeclarationManagementInformationResponse">
+    <xs:complexType name="DeclarationStatusResponse">
         <xs:sequence>
             <xs:element name="declaration" type="Declaration"/>
         </xs:sequence>

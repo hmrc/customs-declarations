@@ -21,11 +21,11 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseFilterService}
 import uk.gov.hmrc.play.test.UnitSpec
-import util.StatusTestXMLData.{ImportTradeMovementType, generateDeclarationManagementInformationResponse, generateValidStatusResponseWithMultiplePartiesOnly}
+import util.StatusTestXMLData.{ImportTradeMovementType, generateDeclarationStatusResponse, generateValidStatusResponseWithMultiplePartiesOnly}
 
 import scala.xml.NodeSeq
 
-class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
+class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
 
   val acceptanceDateVal = DateTime.now(DateTimeZone.UTC)
 
@@ -36,7 +36,7 @@ class StatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
 
     val service = new StatusResponseFilterService(mockDeclarationsLogger, mockDeclarationsConfigService)
 
-    def createStatusResponseWithAllValues(): NodeSeq = service.transform(generateDeclarationManagementInformationResponse(acceptanceDate = acceptanceDateVal))
+    def createStatusResponseWithAllValues(): NodeSeq = service.transform(generateDeclarationStatusResponse(acceptanceDate = acceptanceDateVal))
   }
 
   "Status Response Filter Service" should {

@@ -1,4 +1,4 @@
-<stat:declarationManagementInformationResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
+<stat:declarationStatusResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
   <stat:declaration>
     <!--Optional:-->
     <stat:versionNumber>100</stat:versionNumber>
@@ -22,4 +22,4 @@
       </stat:partyIdentification>
     </stat:parties>
   </stat:declaration>
-</stat:declarationManagementInformationResponse>
+</stat:declarationStatusResponse>

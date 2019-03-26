@@ -33,7 +33,7 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
   def transform(xml: NodeSeq): NodeSeq = {
 
     var declaration = Elem(namespacePrefix, "declaration", Null, namespaceBinding, minimizeEmptyElement)
-    val path: NodeSeq = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
+    val path: NodeSeq = xml \ "responseDetail" \ "declarationStatusResponse" \ "declaration"
 
     val labels = Seq("versionNumber", "creationDate", "goodsItemCount", "tradeMovementType", "type", "packageCount", "acceptanceDate")
     declaration = maybeAddNode(path, declaration, labels)
@@ -49,7 +49,7 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
       }
     }
 
-    val root = Elem(namespacePrefix, "declarationManagementInformationResponse", Null, namespaceBinding, minimizeEmptyElement, declaration)
+    val root = Elem(namespacePrefix, "declarationStatusResponse", Null, namespaceBinding, minimizeEmptyElement, declaration)
     declarationsLogger.debugWithoutRequestContext(s"created status response xml ${root.toString()}")
     root
   }

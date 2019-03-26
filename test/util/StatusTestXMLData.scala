@@ -59,7 +59,7 @@ object StatusTestXMLData {
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>
     <n1:responseDetail>
-      <n1:declarationManagementInformationResponse>
+      <n1:declarationStatusResponse>
         <n2:extensions>
           <tns_3:value>String</tns_3:value>
           <tns_3:type>token</tns_3:type>
@@ -230,16 +230,16 @@ object StatusTestXMLData {
             <n3:authentication>String</n3:authentication>
           </xsd_1:signature>
         </xsd_1:declaration>
-      </n1:declarationManagementInformationResponse>
+      </n1:declarationStatusResponse>
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 
-  def generateDeclarationManagementInformationResponse(acceptanceDate: DateTime = DateTime.now(DateTimeZone.UTC),  tradeMovementType: String = ImportTradeMovementType, procedureCategory: String = ValidImportProcedureCategory, communicationAddress: String = validCommunicationAddress, dateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC()): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
+  def generateDeclarationStatusResponse(acceptanceDate: DateTime = DateTime.now(DateTimeZone.UTC),  tradeMovementType: String = ImportTradeMovementType, procedureCategory: String = ValidImportProcedureCategory, communicationAddress: String = validCommunicationAddress, dateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC()): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
     <n1:responseCommon>
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>
     <n1:responseDetail>
-      <n1:declarationManagementInformationResponse>
+      <n1:declarationStatusResponse>
         <n2:extensions>
           <tns_3:value>String</tns_3:value>
           <tns_3:type>token</tns_3:type>
@@ -785,7 +785,7 @@ object StatusTestXMLData {
             </xsd_1:goodsItems>
           </xsd_1:consignmentShipment>
         </xsd_1:declaration>
-      </n1:declarationManagementInformationResponse>
+      </n1:declarationStatusResponse>
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 
@@ -825,7 +825,7 @@ object StatusTestXMLData {
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>
     <n1:responseDetail>
-      <n1:declarationManagementInformationResponse>
+      <n1:declarationStatusResponse>
         <n2:extensions>
           <tns_3:value>String</tns_3:value>
           <tns_3:type>token</tns_3:type>
@@ -843,7 +843,7 @@ object StatusTestXMLData {
         <n2:isFinal>true</n2:isFinal>
         <n2:externalId>String</n2:externalId>
           {declarationNode}
-      </n1:declarationManagementInformationResponse>
+      </n1:declarationStatusResponse>
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 }

@@ -423,7 +423,7 @@ documentation:
             example: "ABC123"
         get:
           displayName: Request the status of Declaration
-          description: Allows requesting the status of a Declaration.
+          description: Allows requesting the status of a Declaration. This endpoint is available to CSP users only. The CSP user must supply a movement reference number (MRN) as a parameter in the request URL. The endpoint returns a set of latest status details for the MRN.
           headers:
             Accept:
               description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).

@@ -33,14 +33,20 @@
     <xs:complexType name="Fields">
         <xs:sequence>
             <xs:element name="Content-Type" type="xs:string" minOccurs="0"/>
-            <xs:element name="acl" type="xs:string" minOccurs="0"/>
-            <xs:element name="key" type="xs:string" minOccurs="0"/>
-            <xs:element name="policy" type="xs:string" minOccurs="0"/>
-            <xs:element name="x-amz-algorithm" type="xs:string" minOccurs="0"/>
-            <xs:element name="x-amz-credential" type="xs:string" minOccurs="0"/>
-            <xs:element name="x-amz-date" type="xs:string" minOccurs="0"/>
             <xs:element name="x-amz-meta-callback-url" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-date" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-credential" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-upscan-initiate-response" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-upscan-initiate-received" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-request-id" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-original-filename" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-algorithm" type="xs:string" minOccurs="0"/>
+            <xs:element name="key" type="xs:string" minOccurs="0"/>
+            <xs:element name="acl" type="xs:string" minOccurs="0"/>
             <xs:element name="x-amz-signature" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-session-id" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-consuming-service" type="xs:string" minOccurs="0"/>
+            <xs:element name="policy" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

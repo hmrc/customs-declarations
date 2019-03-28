@@ -76,15 +76,21 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
           <UploadRequest>
             <Href>https://bucketName.s3.eu-west-2.amazonaws.com</Href>
             <Fields>
-              <Content-Type>application/xml</Content-Type>
-              <acl>private</acl>
-              <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-              <policy>xxxxxxxx==</policy>
+              <Content-Type>application/xml; charset=utf-8</Content-Type>
+              <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+              <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
+              <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+              <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
+              <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
+              <x-amz-meta-request-id>123</x-amz-meta-request-id>
+              <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
               <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-              <x-amz-credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</x-amz-credential>
-              <x-amz-date>2018-02-09T12:35:45.297Z</x-amz-date>
-              <x-amz-meta-callback-url>https://myservice.com/callback</x-amz-meta-callback-url>
+              <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+              <acl>private</acl>
               <x-amz-signature>xxxx</x-amz-signature>
+              <x-amz-meta-session-id>789</x-amz-meta-session-id>
+              <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+              <policy>xxxxxxxx==</policy>
             </Fields>
           </UploadRequest>
         </File>
@@ -93,15 +99,21 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
           <UploadRequest>
             <Href>https://bucketName.s3.eu-west-2.amazonaws.com</Href>
             <Fields>
-              <Content-Type>application/xml</Content-Type>
-              <acl>private</acl>
-              <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-              <policy>xxxxxxxx==</policy>
+              <Content-Type>application/xml; charset=utf-8</Content-Type>
+              <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+              <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
+              <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+              <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
+              <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
+              <x-amz-meta-request-id>123</x-amz-meta-request-id>
+              <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
               <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-              <x-amz-credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</x-amz-credential>
-              <x-amz-date>2018-02-09T12:35:45.297Z</x-amz-date>
-              <x-amz-meta-callback-url>https://myservice.com/callback</x-amz-meta-callback-url>
+              <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+              <acl>private</acl>
               <x-amz-signature>xxxx</x-amz-signature>
+              <x-amz-meta-session-id>789</x-amz-meta-session-id>
+              <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+              <policy>xxxxxxxx==</policy>
             </Fields>
           </UploadRequest>
         </File>

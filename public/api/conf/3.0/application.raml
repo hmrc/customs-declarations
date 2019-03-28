@@ -184,27 +184,10 @@ documentation:
         responses:
           200:
             body:
-              example: |
-                <?xml version="1.0" encoding="UTF-8"?>
-                <FileUploadResponse>
-                  <Files>
-                    <File>
-                     <reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</reference>
-                     <uploadRequest>
-                     <href>https://bucketName.s3.eu-west-2.amazonaws.com</href>
-                      <fields>
-                         <X-Amz-Algorithm>AWS4-HMAC-SHA256</X-Amz-Algorithm>
-                         <X-Amz-Expiration>2018-02-09T12:35:45.297Z</X-Amz-Expiration>
-                         <X-Amz-Signature>xxxx</X-Amz-Signature>
-                         <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-                         <acl>private</acl>
-                         <X-Amz-Credential>ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request</X-Amz-Credential>
-                         <policy>xxxxxxxx==</policy>
-                       </fields>
-                     </uploadRequest>
-                    </File>
-                  </Files>
-                </FileUploadResponse>
+              application/xml:
+                description: Successful response payload
+                type: !include schemas/wco/fileupload/FileUploadResponse.xsd
+                example: !include schemas/wco/fileupload/FileUploadResponseExample.xml
           400:
             body:
               application/xml:

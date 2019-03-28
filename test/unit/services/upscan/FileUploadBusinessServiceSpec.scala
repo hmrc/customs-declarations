@@ -66,14 +66,20 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
         |        <Href>https://a.b.com</Href>
         |        <Fields>
         |          <Content-Type>application/xml; charset=utf-8</Content-Type>
-        |          <acl>private</acl>
-        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-        |          <policy>xxxxxxxx==</policy>
-        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
-        |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
         |          <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+        |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
+        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+        |          <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
+        |          <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
+        |          <x-amz-meta-request-id>123</x-amz-meta-request-id>
+        |          <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
+        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+        |          <acl>private</acl>
         |          <x-amz-signature>xxxx</x-amz-signature>
+        |          <x-amz-meta-session-id>789</x-amz-meta-session-id>
+        |          <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+        |          <policy>xxxxxxxx==</policy>
         |        </Fields>
         |      </UploadRequest>
         |    </File>
@@ -83,14 +89,20 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
         |        <Href>https://x.y.com</Href>
         |        <Fields>
         |          <Content-Type>application/xml; charset=utf-8</Content-Type>
-        |          <acl>private</acl>
-        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-        |          <policy>xxxxxxxx==</policy>
-        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
-        |          <x-amz-date>2019-03-04T11:56:34Z</x-amz-date>
         |          <x-amz-meta-callback-url>https://some-callback-url2</x-amz-meta-callback-url>
+        |          <x-amz-date>2019-03-04T11:56:34Z</x-amz-date>
+        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+        |          <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
+        |          <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
+        |          <x-amz-meta-request-id>123</x-amz-meta-request-id>
+        |          <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
+        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+        |          <acl>private</acl>
         |          <x-amz-signature>xxxx</x-amz-signature>
+        |          <x-amz-meta-session-id>789</x-amz-meta-session-id>
+        |          <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+        |          <policy>xxxxxxxx==</policy>
         |        </Fields>
         |      </UploadRequest>
         |    </File>
@@ -106,14 +118,20 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
         |        <Href>https://a.b.com</Href>
         |        <Fields>
         |          <Content-Type>application/xml; charset=utf-8</Content-Type>
-        |          <acl>private</acl>
-        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-        |          <policy>xxxxxxxx==</policy>
-        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
-        |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
         |          <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+        |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
+        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+        |          <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
+        |          <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
+        |          <x-amz-meta-request-id>123</x-amz-meta-request-id>
+        |          <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
+        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+        |          <acl>private</acl>
         |          <x-amz-signature>xxxx</x-amz-signature>
+        |          <x-amz-meta-session-id>789</x-amz-meta-session-id>
+        |          <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+        |          <policy>xxxxxxxx==</policy>
         |        </Fields>
         |      </UploadRequest>
         |    </File>
@@ -135,11 +153,15 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     val upscanInitiateResponseFields1: Map[String, String] = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
       ("key","xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"), ("policy","xxxxxxxx=="), ("x-amz-algorithm","AWS4-HMAC-SHA256"),
       ("x-amz-credential","ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request"), ("x-amz-date","2019-03-05T11:56:34Z"),
-      ("x-amz-meta-callback-url","https://some-callback-url"), ("x-amz-signature","xxxx"))
+      ("x-amz-meta-callback-url","https://some-callback-url"), ("x-amz-signature","xxxx"), ("x-amz-meta-upscan-initiate-response", "response"),
+      ("x-amz-meta-upscan-initiate-received", "received"), ("x-amz-meta-request-id", "123"), ("x-amz-meta-original-filename", "some-filename"),
+      ("x-amz-meta-session-id", "789"), ("x-amz-meta-consuming-service", "a-service-name"))
     val upscanInitiateResponseFields2: Map[String, String] = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
       ("key","xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"), ("policy","xxxxxxxx=="), ("x-amz-algorithm","AWS4-HMAC-SHA256"),
       ("x-amz-credential","ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request"), ("x-amz-date","2019-03-04T11:56:34Z"),
-      ("x-amz-meta-callback-url","https://some-callback-url2"), ("x-amz-signature","xxxx"))
+      ("x-amz-meta-callback-url","https://some-callback-url2"), ("x-amz-signature","xxxx"), ("x-amz-meta-upscan-initiate-response", "response"),
+      ("x-amz-meta-upscan-initiate-received", "received"), ("x-amz-meta-request-id", "123"), ("x-amz-meta-original-filename", "some-filename"),
+      ("x-amz-meta-session-id", "789"), ("x-amz-meta-consuming-service", "a-service-name"))
     val upscanInitiateResponsePayload1 = UpscanInitiateResponsePayload(FileReferenceOne.value.toString, UpscanInitiateUploadRequest("https://a.b.com", upscanInitiateResponseFields1))
     val upscanInitiateResponsePayload2 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", upscanInitiateResponseFields2))
     val upscanInitiateResponsePayload3 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", Map(("Content-Type", "   "), ("new-field", "   "), ("acl", "some-acl"))))

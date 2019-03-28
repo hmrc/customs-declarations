@@ -121,14 +121,20 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
               <Href>{payload.uploadRequest.href}</Href>
               <Fields>
                 {toNode("Content-Type", payload.uploadRequest.fields)}
-                {toNode("acl", payload.uploadRequest.fields)}
-                {toNode("key", payload.uploadRequest.fields)}
-                {toNode("policy", payload.uploadRequest.fields)}
-                {toNode("x-amz-algorithm", payload.uploadRequest.fields)}
-                {toNode("x-amz-credential", payload.uploadRequest.fields)}
-                {toNode("x-amz-date", payload.uploadRequest.fields)}
                 {toNode("x-amz-meta-callback-url", payload.uploadRequest.fields)}
+                {toNode("x-amz-date", payload.uploadRequest.fields)}
+                {toNode("x-amz-credential", payload.uploadRequest.fields)}
+                {toNode("x-amz-meta-upscan-initiate-response", payload.uploadRequest.fields)}
+                {toNode("x-amz-meta-upscan-initiate-received", payload.uploadRequest.fields)}
+                {toNode("x-amz-meta-request-id", payload.uploadRequest.fields)}
+                {toNode("x-amz-meta-original-filename", payload.uploadRequest.fields)}
+                {toNode("x-amz-algorithm", payload.uploadRequest.fields)}
+                {toNode("key", payload.uploadRequest.fields)}
+                {toNode("acl", payload.uploadRequest.fields)}
                 {toNode("x-amz-signature", payload.uploadRequest.fields)}
+                {toNode("x-amz-meta-session-id", payload.uploadRequest.fields)}
+                {toNode("x-amz-meta-consuming-service", payload.uploadRequest.fields)}
+                {toNode("policy", payload.uploadRequest.fields)}
               </Fields>
             </UploadRequest>
           </File>

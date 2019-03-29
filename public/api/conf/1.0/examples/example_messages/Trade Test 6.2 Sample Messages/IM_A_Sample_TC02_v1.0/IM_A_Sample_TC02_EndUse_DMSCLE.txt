@@ -1,0 +1,17 @@
+
+  <_2:MetaData><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response>
+      <_2_1:FunctionCode>09</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>6c6fe43cbdbc45068b2ed17a8ca870c9</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304">20190325153202Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:AdditionalInformation>
+        <_2_1:StatementCode>A2</_2_1:StatementCode>
+        <_2_1:StatementTypeCode>AFB</_2_1:StatementTypeCode>
+      </_2_1:AdditionalInformation>
+      <_2_1:Declaration>
+        <_2_1:FunctionalReferenceID>A_Sample_EndUse25</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GB3BIFV412AX8PR3</_2_1:ID>
+        <_2_1:VersionID>1</_2_1:VersionID>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>

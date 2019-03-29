@@ -1,0 +1,228 @@
+<v1:submitDeclarationRequest
+  xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1"
+  xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2"
+  xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+  xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+  xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+  xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+  xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+  xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <v1:requestCommon>
+    <v1:regime>CDS</v1:regime>
+    <v1:receiptDate>2019-03-20T11:25:47.047Z</v1:receiptDate>
+    <v1:clientID>${#TestCase#ClientID}</v1:clientID>
+    <v1:conversationID>${#TestCase#ConvoID}</v1:conversationID>
+<v1:authenticatedPartyID>GB717572504502811</v1:authenticatedPartyID>
+  </v1:requestCommon>
+  <v1:requestDetail>
+    <md:MetaData
+      xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+      xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+      xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+      xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+    >
+      <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+      <md:WCOTypeName>DEC</md:WCOTypeName>
+      <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+      <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+      <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+      <Declaration
+        xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+        xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+        xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+        xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+        xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+      >
+        <AcceptanceDateTime>
+          <p1:DateTimeString formatCode="304">20190320220000Z</p1:DateTimeString>
+        </AcceptanceDateTime>
+        <FunctionCode>9</FunctionCode>
+        <FunctionalReferenceID>3.1_TestMassGross_001</FunctionalReferenceID> 
+        <TypeCode>EXZ</TypeCode>
+        <GoodsItemQuantity>2</GoodsItemQuantity>
+                        <!-- <InvoiceAmount currencyID="GBP"></InvoiceAmount> -->
+         <TotalGrossMassMeasure unitCode="KGM">5350</TotalGrossMassMeasure>
+        <TotalPackageQuantity>1</TotalPackageQuantity>
+            <Agent>
+                        <Name>Agent 1</Name>
+                        <ID>GB025115100009</ID>
+                        <FunctionCode>2</FunctionCode>
+                        <Address>
+                                    <CityName>Telford</CityName>
+                                    <CountryCode>GB</CountryCode>
+                                    <CountrySubDivisionCode>SH</CountrySubDivisionCode>
+                                    <CountrySubDivisionName>Shropshire</CountrySubDivisionName>
+                                    <Line>Line 1</Line>
+                                    <PostcodeID>TF3 4NT</PostcodeID>
+                        </Address>
+            </Agent>
+        <AuthorisationHolder>
+          <ID>GB025115100010</ID>
+          <CategoryCode>EIR</CategoryCode>
+        </AuthorisationHolder>
+        <BorderTransportMeans>
+                          <!-- <ID></ID> -->  
+          <RegistrationNationalityCode>HK</RegistrationNationalityCode>
+          <ModeCode>1</ModeCode>
+        </BorderTransportMeans>
+        <Declarant>
+        <Name>Declarant 1</Name>
+          <ID>GB025115100009</ID>
+          <Address>
+             <CityName>Birmingham</CityName>		
+             <CountryCode>GB</CountryCode>			
+             <Line>Straw Lane</Line>				
+             <PostcodeID>B42 1NN</PostcodeID>		
+           </Address>  
+        </Declarant>
+                        <!-- <CurrencyExchange>                             
+                          <CurrencyTypeCode></CurrencyTypeCode>
+                          <RateRate></RateRate>
+                        </CurrencyExchange> -->
+        <ExitOffice>
+          <ID>GB000051</ID>
+        </ExitOffice>
+        <Exporter>
+                                                  <Name>Oilwell equipment company</Name>
+                                                  <ID>GB025115100010</ID>
+                 <Address>
+                    <CityName>London</CityName>
+                     <CountryCode>GB</CountryCode>
+                     <Line>London</Line>
+                      <PostcodeID>NA</PostcodeID>
+                  </Address>
+         </Exporter>
+        <GoodsShipment>
+          <TransactionNatureCode>11</TransactionNatureCode>
+          <!-- <AEOMutualRecognitionParty>
+                            <ID></ID>
+                                    <RoleCode></RoleCode>
+                          </AEOMutualRecognitionParty> -->
+          <Consignee>
+            <Name>Bags Export</Name>
+            <ID>945769210001</ID>
+            <Address>
+              <CityName>New York</CityName>
+              <CountryCode>US</CountryCode>
+              <Line>1 Bags Avenue</Line>
+              <PostcodeID>NY1 234</PostcodeID>
+            </Address>
+          </Consignee>
+          <Consignment>
+            <ContainerCode>1</ContainerCode>
+            <DepartureTransportMeans>
+             <ID>CSCGLOBE</ID>
+              <IdentificationTypeCode>11</IdentificationTypeCode>
+           
+            </DepartureTransportMeans>
+            <GoodsLocation>
+              <Name>ABDABDABD</Name>
+              <TypeCode>A</TypeCode>
+              <Address>
+                <TypeCode>U</TypeCode>
+                <CountryCode>GB</CountryCode>
+              </Address>
+            </GoodsLocation>
+            <TransportEquipment>
+              <SequenceNumeric>1</SequenceNumeric>
+              <ID>LN21734</ID>
+            </TransportEquipment>
+          </Consignment>
+          <ExportCountry>
+            <ID>GB</ID>
+          </ExportCountry>
+          <GovernmentAgencyGoodsItem>
+            <SequenceNumeric>1</SequenceNumeric>
+            <StatisticalValueAmount currencyID="GBP">2599.55</StatisticalValueAmount>
+            <TransactionNatureCode>11</TransactionNatureCode>
+            <AdditionalDocument>
+              <CategoryCode>C</CategoryCode>
+              <ID>GBEIRGB0251151000010</ID>
+              <TypeCode>514</TypeCode>
+            </AdditionalDocument>
+            <Commodity>
+             <Description>Oilwell equipment</Description>
+                       <Classification>
+                           <ID>85389099</ID>
+                           <IdentificationTypeCode>TSP</IdentificationTypeCode>
+                       </Classification>
+              <GoodsMeasure>
+                <GrossMassMeasure unitCode="KGM">2675</GrossMassMeasure>
+                <NetNetWeightMeasure unitCode="KGM">2433.534</NetNetWeightMeasure>
+              </GoodsMeasure>
+              
+            </Commodity>
+                                    <Destination>
+            <CountryCode>US</CountryCode>
+          </Destination>
+            <GovernmentProcedure>
+              <CurrentCode>10</CurrentCode>
+              <PreviousCode>40</PreviousCode>
+            </GovernmentProcedure>
+            <GovernmentProcedure>
+              <CurrentCode>000</CurrentCode>
+            </GovernmentProcedure>
+            <Packaging>
+              <SequenceNumeric>1</SequenceNumeric>
+              <MarksNumbersID>AT-0054576</MarksNumbersID>
+                                      <QuantityQuantity>1</QuantityQuantity>
+              <TypeCode>8B</TypeCode>
+            </Packaging>    
+          </GovernmentAgencyGoodsItem>
+          <GovernmentAgencyGoodsItem>
+            <SequenceNumeric>2</SequenceNumeric>
+            <StatisticalValueAmount currencyID="GBP">2599.55</StatisticalValueAmount>
+                        <TransactionNatureCode>11</TransactionNatureCode>
+            <AdditionalDocument>
+              <CategoryCode>C</CategoryCode>
+              <ID>GBEIRGB0251151000010</ID>
+              <TypeCode>514</TypeCode>
+            </AdditionalDocument>
+            <Commodity>
+             <Description>Oilwell equipment</Description>
+                       <Classification>
+                           <ID>85389099</ID>
+                           <IdentificationTypeCode>TSP</IdentificationTypeCode> 
+                </Classification>
+              <GoodsMeasure>
+                <GrossMassMeasure unitCode="KGM">2675</GrossMassMeasure>
+                <NetNetWeightMeasure unitCode="KGM">2433.534</NetNetWeightMeasure>
+              </GoodsMeasure>
+            </Commodity>
+                                    <Destination>
+            <CountryCode>US</CountryCode>
+          </Destination>
+            <GovernmentProcedure>
+              <CurrentCode>10</CurrentCode>
+              <PreviousCode>40</PreviousCode>
+            </GovernmentProcedure>
+            <GovernmentProcedure>
+              <CurrentCode>000</CurrentCode>
+            </GovernmentProcedure>
+          
+            <Packaging>
+              <SequenceNumeric>1</SequenceNumeric>
+              <MarksNumbersID>AT-0054576</MarksNumbersID>
+                                      <QuantityQuantity>1</QuantityQuantity>
+              <TypeCode>8B</TypeCode>
+            </Packaging>
+       
+          </GovernmentAgencyGoodsItem>
+          <PreviousDocument>
+                        <CategoryCode>Y</CategoryCode>
+                        <ID>9GB123456789101-12345</ID>
+                        <TypeCode>DCR</TypeCode>
+                        <LineNumeric>1</LineNumeric>
+            </PreviousDocument>
+         
+        </GoodsShipment>
+      </Declaration>
+    </md:MetaData>
+  </v1:requestDetail>
+</v1:submitDeclarationRequest>

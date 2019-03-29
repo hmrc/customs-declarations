@@ -1,0 +1,31 @@
+
+
+
+43eed3616b674bf28cb656ac4e620bf5
+
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+<soap:Header>
+<v1:dmsGatewayHeader xmlns:v1="http://ecf.dms.core/gatewayHeader/v1/">
+  <communicationAddress>hmrcgwid:74a2a68e-f438-48e1-a99b-33c67d42d1e7:bd8ae6fd-1590-404d-abba-22de39b81cf5:</communicationAddress>
+  <messageType>WCOTN</messageType>
+</v1:dmsGatewayHeader></soap:Header>
+<soap:Body>
+<v3:notifyTrader xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/">
+  <_2:MetaData><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response>
+      <_2_1:FunctionCode>01</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>43eed3616b674bf28cb656ac4e620bf5</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304">20190326091951Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:Declaration>
+        <_2_1:AcceptanceDateTime>
+          <_2_2:DateTimeString formatCode="304">20190320220000Z</_2_2:DateTimeString>
+        </_2_1:AcceptanceDateTime>
+        <_2_1:FunctionalReferenceID>E30sc1.1_BM</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GB3CKZHI830FGVA2</_2_1:ID>
+        <_2_1:VersionID>1</_2_1:VersionID>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>
+</v3:notifyTrader></soap:Body>
+</soap:Envelope>

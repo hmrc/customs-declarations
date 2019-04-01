@@ -25,7 +25,7 @@ import scala.xml.NodeSeq
 @Singleton
 class InternalErrorXmlNotification extends CallbackToXmlNotification[FileReference] {
 
-  override def toXml(fileReference: FileReference): NodeSeq =
+  override def toXml(maybeFilename: Option[String], fileReference: FileReference): NodeSeq =
     <errorResponse>
       <code>INTERNAL_SERVER_ERROR</code>
       <message>File upload for file reference {fileReference.toString} failed. A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.</message>

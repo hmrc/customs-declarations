@@ -26,6 +26,7 @@ import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, Ve
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.TestData._
+import util.XmlOps.stringToXml
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, UpscanInitiateService}
 import util.{AuditService, TestData}
 
@@ -94,7 +95,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       status(result) shouldBe UNAUTHORIZED
 
       And("the response body is empty")
-      string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
+      stringToXml(contentAsString(result)) shouldBe stringToXml(UnauthorisedRequestError)
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspWithoutRetrievals())
@@ -115,7 +116,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       status(result) shouldBe UNAUTHORIZED
 
       And("the response body is empty")
-      string2xml(contentAsString(result)) shouldBe string2xml(UnauthorisedRequestError)
+      stringToXml(contentAsString(result)) shouldBe stringToXml(UnauthorisedRequestError)
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspWithoutRetrievals())
@@ -141,7 +142,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is a \"malformed xml body\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
+      stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(MalformedXmlBodyError)
     }
 
     scenario("Response status 400 when user submits invalid request") {
@@ -174,7 +175,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is a \"malformed xml body\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(MalformedXmlBodyError)
+      stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(MalformedXmlBodyError)
     }
   }
 

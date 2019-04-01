@@ -109,13 +109,4 @@ trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppP
     "microservice.services.customs-declarations-metrics.context" -> CustomsDeclarationsExternalServicesConfig.CustomsDeclarationsMetricsContext
   )).build()
 
-  protected def string2xml(s: String): Node = {
-    val xml = try {
-      XML.loadString(s)
-    } catch {
-      case NonFatal(thr) => fail("Not an xml: " + s, thr)
-    }
-    Utility.trim(xml)
-  }
-
 }

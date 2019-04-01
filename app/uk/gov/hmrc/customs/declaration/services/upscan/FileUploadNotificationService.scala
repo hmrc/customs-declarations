@@ -21,31 +21,53 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
-import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
-import uk.gov.hmrc.customs.declaration.model.upscan.FileReference
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
+import uk.gov.hmrc.customs.declaration.model.upscan.{FileReference, FileUploadMetadata}
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, SubscriptionFieldsId}
+import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 case class FileUploadCustomsNotification(clientSubscriptionId: SubscriptionFieldsId, conversationId: UUID, payload: NodeSeq)
 
 trait CallbackToXmlNotification[A] {
-  def toXml(callbackResponse: A): NodeSeq
+  def toXml(maybeFilename: Option[String], callbackResponse: A): NodeSeq
 }
+
 
 /**
   Notification sending service
 */
 @Singleton
-class FileUploadNotificationService @Inject()(notificationConnector: FileUploadCustomsNotificationConnector,
-                                              logger: CdsLogger) {
+class FileUploadNotificationService @Inject()(fileUploadMetadataRepo: FileUploadMetadataRepo,
+                                              notificationConnector: FileUploadCustomsNotificationConnector,
+                                              logger: CdsLogger)
+                                             (implicit ec: ExecutionContext) {
 
   def sendMessage[T](callbackResponse: T, fileReference: FileReference, clientSubscriptionId: SubscriptionFieldsId)(implicit callbackToXml: CallbackToXmlNotification[T]): Future[Unit] = {
 
-    val notification = FileUploadCustomsNotification(
-      clientSubscriptionId, fileReference.value, callbackToXml.toXml(callbackResponse)
+    implicit val hasConversationId = new HasConversationId {
+      override val conversationId: ConversationId = ConversationId(fileReference.value)
+    }
+
+    for {
+      maybeMetaData <- fileUploadMetadataRepo.fetch(fileReference)
+      maybeFile = maybeFileName(fileReference, maybeMetaData)
+      notification = FileUploadCustomsNotification(
+        clientSubscriptionId, fileReference.value, callbackToXml.toXml(maybeFile, callbackResponse))
+      _ <- notificationConnector.send(notification)
+    } yield ()
+  }
+
+  private def maybeFileName(fileReference: FileReference, maybeMetadata: Option[FileUploadMetadata]): Option[String] = {
+    for {
+      metadata <- maybeMetadata
+      batchFile <- metadata.files.find(bf => bf.reference == fileReference)
+      cbFields <- batchFile.maybeCallbackFields
+    } yield (
+      cbFields.name
     )
-    notificationConnector.send(notification)
   }
 
 }

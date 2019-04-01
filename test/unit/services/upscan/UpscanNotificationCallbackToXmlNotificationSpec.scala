@@ -20,25 +20,16 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.customs.declaration.services.upscan.UpscanNotificationCallbackToXmlNotification
 import util.UpscanNotifyTestData._
-
-import scala.util.control.NonFatal
-import scala.xml.{Node, Utility, XML}
+import util.XmlOps.stringToXml
 
 class UpscanNotificationCallbackToXmlNotificationSpec extends PlaySpec with MockitoSugar {
 
   "UpscanNotificationCallbackToXmlNotification" should {
     "transform FAILED callback payload to valid customs notification XML" in {
-      val actual = new UpscanNotificationCallbackToXmlNotification().toXml(FailedCallbackBody)
-      string2xml(actual.toString()) mustBe string2xml(UpscanNotificationFailedCustomsNotificationXml.toString)
+      val actual = new UpscanNotificationCallbackToXmlNotification().toXml(None, FailedCallbackBody)
+
+      stringToXml(actual.toString()) mustBe stringToXml(UpscanNotificationFailedCustomsNotificationXml.toString)
     }
   }
 
-  private def string2xml(s: String): Node = {
-    val xml = try {
-      XML.loadString(s)
-    } catch {
-      case NonFatal(thr) => fail("Not an xml: " + s, thr)
-    }
-    Utility.trim(xml)
-  }
 }

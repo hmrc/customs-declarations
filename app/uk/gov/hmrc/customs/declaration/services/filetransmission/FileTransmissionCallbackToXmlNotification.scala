@@ -20,17 +20,18 @@ import javax.inject.Singleton
 import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionFailureOutcome, FileTransmissionNotification, FileTransmissionSuccessOutcome}
 import uk.gov.hmrc.customs.declaration.services.upscan.CallbackToXmlNotification
 
-import scala.xml.NodeSeq
+import scala.xml.{Node, NodeSeq}
 
 @Singleton
 class FileTransmissionCallbackToXmlNotification extends CallbackToXmlNotification[FileTransmissionNotification] {
 
-  override def toXml(callbackResponse: FileTransmissionNotification): NodeSeq = {
+  override def toXml(maybeFilename: Option[String], callbackResponse: FileTransmissionNotification): Node = {
     callbackResponse.outcome match {
       case FileTransmissionSuccessOutcome =>
       <Root>
         <FileReference>{callbackResponse.fileReference.toString}</FileReference>
         <BatchId>{callbackResponse.batchId.toString}</BatchId>
+        {maybeFilename.fold(NodeSeq.Empty)(filename => <FileName>{filename}</FileName> )}
         <Outcome>SUCCESS</Outcome>
         <Details>Thank you for submitting your documents. Typical clearance times are 2 hours for air and 3 hours for maritime declarations. During busy periods wait times may be longer.</Details>
       </Root>

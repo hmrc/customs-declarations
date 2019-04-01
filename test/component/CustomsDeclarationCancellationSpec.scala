@@ -24,6 +24,7 @@ import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
+import util.XmlOps.stringToXml
 import util.externalservices._
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, TestXMLData}
 
@@ -180,7 +181,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
 
       And("the response body is a \"invalid xml\" XML")
-      string2xml(contentAsString(resultFuture)) shouldBe string2xml(BadRequestErrorWith2Errors)
+      stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(BadRequestErrorWith2Errors)
     }
 
   }

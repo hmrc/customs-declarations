@@ -30,6 +30,7 @@ import util.ApiSubscriptionFieldsTestData
 import util.CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
 import util.TestData._
 import util.UpscanNotifyTestData._
+import util.XmlOps.stringToXml
 import util.externalservices.{CustomsNotificationService, FileTransmissionService}
 
 import scala.xml.Utility.trim
@@ -136,7 +137,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       requestHeaders.get(ACCEPT) shouldBe Some("application/xml")
 
       And("The request XML payload contains details of the failure outcome")
-      trim(string2xml(requestPayload)) shouldBe trim(UpscanNotificationFailedCustomsNotificationXml)
+      trim(stringToXml(requestPayload)) shouldBe trim(UpscanNotificationFailedCustomsNotificationXml)
     }
 
     scenario("Success request has been made to the Declaration API but metadata record does not exist in the database") {

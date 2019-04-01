@@ -24,7 +24,7 @@ import scala.xml.NodeSeq
 @Singleton
 class UpscanNotificationCallbackToXmlNotification extends CallbackToXmlNotification[UploadedFailedCallbackBody] {
 
-  override def toXml(failed: UploadedFailedCallbackBody): NodeSeq =
+  override def toXml(maybeFilename: Option[String], failed: UploadedFailedCallbackBody): NodeSeq =
     <root>
       <reference>{failed.reference.toString}</reference>
       <fileStatus>FAILED</fileStatus>

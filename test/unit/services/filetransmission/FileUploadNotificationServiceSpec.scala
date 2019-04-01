@@ -16,24 +16,32 @@
 
 package unit.services.filetransmission
 
+import java.util.UUID
+
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.scalatest.Assertion
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Reads
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
+import uk.gov.hmrc.customs.declaration.model.ConversationId
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
+import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionFailureOutcome, FileTransmissionNotification, FileTransmissionSuccessNotification, FileTransmissionSuccessOutcome}
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, FileReference}
+import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.services.filetransmission.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
+import util.TestData
 import util.TestData._
+import util.XmlOps._
 
 import scala.concurrent.Future
-import scala.util.control.NonFatal
-import scala.xml.{Node, NodeSeq, Utility, XML}
+import scala.xml.NodeSeq
 
 object ExampleFileTransmissionStatus extends Enumeration {
   type ExampleFileTransmissionStatus = Value
@@ -50,17 +58,19 @@ case class ExampleFileTransmissionNotification(fileReference: FileReference,
 class FileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
-    val mockNotificationConnector = mock[FileUploadCustomsNotificationConnector]
-    val mockDeclarationsLogger = mock[CdsLogger]
-    val service = new FileUploadNotificationService(mockNotificationConnector, mockDeclarationsLogger)
-    val expectedSuccessXml =
+    private[FileUploadNotificationServiceSpec] val mockFileUploadMetadataRepo = mock[FileUploadMetadataRepo]
+    private[FileUploadNotificationServiceSpec] val mockNotificationConnector = mock[FileUploadCustomsNotificationConnector]
+    private[FileUploadNotificationServiceSpec] val mockDeclarationsLogger = mock[CdsLogger]
+    private[FileUploadNotificationServiceSpec] val service = new FileUploadNotificationService(mockFileUploadMetadataRepo, mockNotificationConnector, mockDeclarationsLogger)
+    private[FileUploadNotificationServiceSpec] val expectedSuccessXml =
       <Root>
         <FileReference>{FileReferenceOne}</FileReference>
         <BatchId>{BatchIdOne}</BatchId>
+        <FileName>name1</FileName>
         <Outcome>SUCCESS</Outcome>
         <Details>Thank you for submitting your documents. Typical clearance times are 2 hours for air and 3 hours for maritime declarations. During busy periods wait times may be longer.</Details>
       </Root>
-    val expectedFailureXml =
+    private[FileUploadNotificationServiceSpec] val expectedFailureXml =
       <Root>
         <FileReference>{FileReferenceOne}</FileReference>
         <BatchId>{BatchIdOne}</BatchId>
@@ -68,65 +78,49 @@ class FileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
         <Details>A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.</Details>
       </Root>
 
-    def verifyNotificationConnectorCalledWithXml(xml: NodeSeq): Assertion = {
+    private[FileUploadNotificationServiceSpec] def verifyNotificationConnectorCalledWithXml(xml: NodeSeq): Assertion = {
       val captor: ArgumentCaptor[FileUploadCustomsNotification] = ArgumentCaptor.forClass(classOf[FileUploadCustomsNotification])
       verify(mockNotificationConnector).send(captor.capture())
       val actual: FileUploadCustomsNotification = captor.getValue
       actual.clientSubscriptionId shouldBe subscriptionFieldsId
       actual.conversationId shouldBe FileReferenceOne.value
-      string2xml(actual.payload.toString) shouldBe string2xml(xml.toString)
+      stringToXml(actual.payload.toString) shouldBe stringToXml(xml.toString)
     }
+
+    private[FileUploadNotificationServiceSpec] implicit val hasConversationId: HasConversationId = new HasConversationId {
+      override val conversationId: ConversationId = TestData.conversationId
+    }
+
+    private[FileUploadNotificationServiceSpec] def fileRefEq(fRef: FileReference) = ameq[UUID](fRef.value).asInstanceOf[FileReference]
+
+    private[FileUploadNotificationServiceSpec] implicit val toXml: CallbackToXmlNotification[FileTransmissionNotification] =
+      new uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification()
   }
 
-  // Example  CallbackToXmlNotification implementation for file transmission response
-  class FileTransmissionToCallbackToXmlNotification extends CallbackToXmlNotification[ExampleFileTransmissionNotification] {
-    override def toXml(callbackResponse: ExampleFileTransmissionNotification): NodeSeq = {
-      val (status, details) =
-        if (callbackResponse.fileTransmissionStatus == ExampleFileTransmissionStatus.SUCCESS) {
-          ("SUCCESS", "Thank you for submitting your documents. Typical clearance times are 2 hours for air and 3 hours for maritime declarations. During busy periods wait times may be longer.")
-        } else {
-          ("FAILURE", "A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.")
-        }
-      <Root>
-        <FileReference>{callbackResponse.fileReference.toString}</FileReference>
-        <BatchId>{callbackResponse.batchId.toString}</BatchId>
-        <Outcome>{status}</Outcome>
-        <Details>{details}</Details>
-      </Root>
-    }
-  }
+  private val successCallbackPayload: FileTransmissionNotification =
+    FileTransmissionSuccessNotification(FileReferenceOne, BatchIdOne, FileTransmissionSuccessOutcome)
+  private val failureCallbackPayload: FileTransmissionNotification =
+    FileTransmissionSuccessNotification(FileReferenceOne, BatchIdOne, FileTransmissionFailureOutcome)
 
-  // endpoint specific callback payload
-  private val successCallbackPayload = ExampleFileTransmissionNotification(FileReferenceOne, BatchIdOne, ExampleFileTransmissionStatus.SUCCESS, None)
-  private val failureCallbackPayload = ExampleFileTransmissionNotification(FileReferenceOne, BatchIdOne, ExampleFileTransmissionStatus.FAILURE, None)
-
-  private implicit val toXml = new FileTransmissionToCallbackToXmlNotification()
 
   "FileUploadNotificationService" should {
     "send SUCCESS notification to the customs notification service" in new SetUp {
       when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
+      when(mockFileUploadMetadataRepo.fetch(fileRefEq(FileReferenceOne))(any[HasConversationId])).thenReturn(Future.successful(Some(FileMetadataWithFileOne)))
 
-      await(service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId))
+      await(service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)(toXml))
 
       verifyNotificationConnectorCalledWithXml(expectedSuccessXml)
     }
 
     "send FAILURE notification to the customs notification service" in new SetUp {
       when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
+      when(mockFileUploadMetadataRepo.fetch(fileRefEq(FileReferenceOne))(any[HasConversationId])).thenReturn(Future.successful(None))
 
       await(service.sendMessage(failureCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId))
 
       verifyNotificationConnectorCalledWithXml(expectedFailureXml)
     }
-  }
-
-  private def string2xml(s: String): Node = {
-    val xml = try {
-      XML.loadString(s)
-    } catch {
-      case NonFatal(thr) => fail("Not an xml: " + s, thr)
-    }
-    Utility.trim(xml)
   }
 
 }

@@ -26,6 +26,7 @@ import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.{ValidHeadersV2, ValidHeadersV3}
+import util.XmlOps.stringToXml
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgStatusDeclarationService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTestXMLData}
 
@@ -154,7 +155,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe BAD_REQUEST
 
       And("the response body is a \"invalid xml\" XML")
-      string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorInvalidDate)
+      stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorInvalidDate)
     }
 
     scenario("Response status 400 when Declaration Management Information Response does not contain a valid communicationAddress") {
@@ -172,7 +173,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe BAD_REQUEST
 
       And("the response body is a \"invalid xml\" XML")
-      string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
+      stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
     }
 
     scenario("Response status 400 when Declaration Management Information Response does contains different Badge Identifier") {
@@ -190,7 +191,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe BAD_REQUEST
 
       And("the response body is a \"invalid xml\" XML")
-      string2xml(contentAsString(result)) shouldBe string2xml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
+      stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
     }
   }
 

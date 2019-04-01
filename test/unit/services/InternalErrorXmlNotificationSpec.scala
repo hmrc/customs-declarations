@@ -21,25 +21,15 @@ import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.customs.declaration.services.InternalErrorXmlNotification
 import util.TestData._
 import util.UpscanNotifyTestData._
-
-import scala.util.control.NonFatal
-import scala.xml.{Node, Utility, XML}
+import util.XmlOps.stringToXml
 
 class InternalErrorXmlNotificationSpec extends PlaySpec with MockitoSugar {
   "InternalErrorXmlNotification" should {
     "format internal error message to XML" in {
-      val actual = new InternalErrorXmlNotification().toXml(FileReferenceOne)
-      string2xml(actual.toString) mustBe string2xml(FileUploadInternalErrorNotificationXml.toString)
-    }
-  }
+      val actual = new InternalErrorXmlNotification().toXml(None, FileReferenceOne)
 
-  private def string2xml(s: String): Node = {
-    val xml = try {
-      XML.loadString(s)
-    } catch {
-      case NonFatal(thr) => fail("Not an xml: " + s, thr)
+      stringToXml(actual.toString) mustBe stringToXml(FileUploadInternalErrorNotificationXml.toString)
     }
-    Utility.trim(xml)
   }
 
 }

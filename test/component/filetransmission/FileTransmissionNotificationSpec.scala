@@ -19,13 +19,18 @@ package component.filetransmission
 import component.{ComponentTestSpec, ExpectedTestResponses}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{ACCEPT, AUTHORIZATION, CONTENT_TYPE, contentAsString, route, status, _}
+import uk.gov.hmrc.customs.declaration.model.ConversationId
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
+import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataMongoRepo
 import util.ApiSubscriptionFieldsTestData
 import util.CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
 import util.FileTransmissionTestData._
-import util.TestData.FileReferenceOne
+import util.TestData._
+import util.XmlOps.stringToXml
 import util.externalservices.CustomsNotificationService
 
 import scala.xml.Utility.trim
@@ -44,21 +49,33 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
   private val endpoint = s"/file-transmission-notify/clientSubscriptionId/$subscriptionFieldsIdString"
 
   override protected def beforeAll() {
+    await(repo.drop)
     startMockServer()
   }
 
   override protected def beforeEach() {
+    await(repo.drop)
     resetMockServer()
   }
 
   override protected def afterAll() {
     stopMockServer()
+    await(repo.drop)
+  }
+
+  val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]
+
+  private val hasConversationId = new HasConversationId {
+    override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
 
   feature("File Transmission Notification") {
     scenario("Success request has been made to Customs Notification service") {
       notificationServiceIsRunning()
       Given("the File Transmission service sends a notification")
+
+      And("and a FileMetadata record with a FileName exists for FileReferenceOne in the database")
+      await(repo.create(FileMetadataWithFileOne)(hasConversationId))
 
       When("File Transmission service notifies Declaration API using previously provided callback URL")
       val validRequest = FakeRequest("POST", endpoint).withJsonBody(Json.parse(FileTransmissionSuccessNotificationPayload))
@@ -89,7 +106,7 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
       requestHeaders.get(ACCEPT) shouldBe Some("application/xml")
 
       And("The request XML payload contains details of the scan outcome")
-      trim(string2xml(requestPayload)) shouldBe trim(FileTransmissionSuccessCustomsNotificationXml)
+      trim(stringToXml(requestPayload)) shouldBe trim(FileTransmissionSuccessCustomsNotificationXml)
     }
 
     scenario("Response status 400 when File Transmission service sends invalid payload") {

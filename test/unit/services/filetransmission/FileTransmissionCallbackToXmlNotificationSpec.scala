@@ -33,8 +33,11 @@ class FileTransmissionCallbackToXmlNotificationSpec extends PlaySpec with Mockit
       stringToXml(new FileTransmissionCallbackToXmlNotification().toXml(None, SuccessNotification)) mustBe stringToXml(FileTransmissionSuccessCustomsNotificationXmlWithoutFilename)
     }
 
-    "correctly convert failure payload to xml" in {
-        new FileTransmissionCallbackToXmlNotification().toXml(None, FailureNotification) mustBe FileTransmissionFailureCustomsNotificationXml
+    "correctly convert failure payload to xml when filename is present" in {
+      stringToXml(new FileTransmissionCallbackToXmlNotification().toXml(Some(CallbackFieldsOne.name), FailureNotification)) mustBe stringToXml(FileTransmissionFailureCustomsNotificationXml)
+    }
+    "correctly convert failure payload to xml when filename is not present" in {
+      stringToXml(new FileTransmissionCallbackToXmlNotification().toXml(None, FailureNotification)) mustBe stringToXml(FileTransmissionFailureCustomsNotificationXmlWithoutFilename)
     }
   }
 

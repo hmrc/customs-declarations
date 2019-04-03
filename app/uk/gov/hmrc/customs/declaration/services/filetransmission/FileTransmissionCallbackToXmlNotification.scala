@@ -39,6 +39,7 @@ class FileTransmissionCallbackToXmlNotification extends CallbackToXmlNotificatio
       <Root>
         <FileReference>{callbackResponse.fileReference.toString}</FileReference>
         <BatchId>{callbackResponse.batchId.toString}</BatchId>
+        {maybeFilename.fold(NodeSeq.Empty)(filename => <FileName>{filename}</FileName> )}
         <Outcome>FAILURE</Outcome>
         <Details>A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.</Details>
       </Root>

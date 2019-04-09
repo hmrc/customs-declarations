@@ -224,22 +224,22 @@ object TestData {
     nrsLoginTimes)
 
   val cspNrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
+    "9aa7c53a734c517fa70edf946f113b123b1d43556ca558235826e145df70051d", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))), conversationIdValue)
 
 
   val nrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
+    "9aa7c53a734c517fa70edf946f113b123b1d43556ca558235826e145df70051d", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))), conversationIdValue)
 
   val cspNrsMetadataMultipleHeaderValues = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "248857ca67c92e1c18459ff287139fd8409372221e32d245ad8cc470dd5c80d5", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Accept":"ABC,DEF","Authorization":"bearer-token"}"""),
+    "9aa7c53a734c517fa70edf946f113b123b1d43556ca558235826e145df70051d", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Accept":"ABC,DEF","Authorization":"bearer-token"}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))), conversationIdValue)
 
-  val nrsPayload = new NrsPayload("QW55Q29udGVudEFzWG1sKDxmb28+YmFyPC9mb28+KQ==", nrsMetadata)
-  val cspNrsPayload = new NrsPayload("QW55Q29udGVudEFzWG1sKDxmb28+YmFyPC9mb28+KQ==", cspNrsMetadata)
+  val nrsPayload = new NrsPayload("PGZvbz5iYXI8L2Zvbz4=", nrsMetadata)
+  val cspNrsPayload = new NrsPayload("PGZvbz5iYXI8L2Zvbz4=", cspNrsMetadata) // <foo>bar</foo>
 
-  val cspNrsPayloadMultipleHeaderValues = new NrsPayload("QW55Q29udGVudEFzWG1sKDxmb28+YmFyPC9mb28+KQ==", cspNrsMetadataMultipleHeaderValues)
+  val cspNrsPayloadMultipleHeaderValues = new NrsPayload("PGZvbz5iYXI8L2Zvbz4=", cspNrsMetadataMultipleHeaderValues)
 
   type EmulatedServiceFailure = UnsupportedOperationException
   val emulatedServiceFailure = new EmulatedServiceFailure("Emulated service failure.")

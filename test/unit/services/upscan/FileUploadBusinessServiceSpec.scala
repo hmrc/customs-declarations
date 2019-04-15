@@ -39,6 +39,7 @@ import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
 
 import scala.concurrent.Future
+import scala.xml.NodeSeq
 
 class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
@@ -57,95 +58,95 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     protected lazy val service = new FileUploadBusinessService(mockUpscanInitiateConnector,
       mockFileUploadMetadataRepo, mockUuidService, mockLogger, mockApiSubscriptionFieldsConnector, mockConfiguration)
 
-    protected val xmlResponse: String =
-      """<FileUploadResponse xmlns="hmrc:fileupload">
-        |  <Files>
-        |    <File>
-        |      <Reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</Reference>
-        |      <UploadRequest>
-        |        <Href>https://a.b.com</Href>
-        |        <Fields>
-        |          <Content-Type>application/xml; charset=utf-8</Content-Type>
-        |          <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
-        |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
-        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
-        |          <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
-        |          <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
-        |          <x-amz-meta-request-id>123</x-amz-meta-request-id>
-        |          <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
-        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-        |          <acl>private</acl>
-        |          <x-amz-signature>xxxx</x-amz-signature>
-        |          <x-amz-meta-session-id>789</x-amz-meta-session-id>
-        |          <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
-        |          <policy>xxxxxxxx==</policy>
-        |        </Fields>
-        |      </UploadRequest>
-        |    </File>
-        |    <File>
-        |      <Reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</Reference>
-        |      <UploadRequest>
-        |        <Href>https://x.y.com</Href>
-        |        <Fields>
-        |          <Content-Type>application/xml; charset=utf-8</Content-Type>
-        |          <x-amz-meta-callback-url>https://some-callback-url2</x-amz-meta-callback-url>
-        |          <x-amz-date>2019-03-04T11:56:34Z</x-amz-date>
-        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
-        |          <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
-        |          <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
-        |          <x-amz-meta-request-id>123</x-amz-meta-request-id>
-        |          <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
-        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-        |          <acl>private</acl>
-        |          <x-amz-signature>xxxx</x-amz-signature>
-        |          <x-amz-meta-session-id>789</x-amz-meta-session-id>
-        |          <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
-        |          <policy>xxxxxxxx==</policy>
-        |        </Fields>
-        |      </UploadRequest>
-        |    </File>
-        |  </Files>
-        |</FileUploadResponse>""".stripMargin
+    protected val xmlResponse =
+      <FileUploadResponse xmlns="hmrc:fileupload">
+        <Files>
+          <File>
+            <Reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</Reference>
+            <UploadRequest>
+              <Href>https://a.b.com</Href>
+              <Fields>
+                <Content-Type>application/xml; charset=utf-8</Content-Type>
+                <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+                <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
+                <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+                <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
+                <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
+                <x-amz-meta-request-id>123</x-amz-meta-request-id>
+                <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
+                <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+                <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+                <acl>private</acl>
+                <x-amz-signature>xxxx</x-amz-signature>
+                <x-amz-meta-session-id>789</x-amz-meta-session-id>
+                <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+                <policy>xxxxxxxx==</policy>
+              </Fields>
+            </UploadRequest>
+          </File>
+          <File>
+            <Reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</Reference>
+            <UploadRequest>
+              <Href>https://x.y.com</Href>
+              <Fields>
+                <Content-Type>application/xml; charset=utf-8</Content-Type>
+                <x-amz-meta-callback-url>https://some-callback-url2</x-amz-meta-callback-url>
+                <x-amz-date>2019-03-04T11:56:34Z</x-amz-date>
+                <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+                <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
+                <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
+                <x-amz-meta-request-id>123</x-amz-meta-request-id>
+                <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
+                <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+                <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+                <acl>private</acl>
+                <x-amz-signature>xxxx</x-amz-signature>
+                <x-amz-meta-session-id>789</x-amz-meta-session-id>
+                <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+                <policy>xxxxxxxx==</policy>
+              </Fields>
+            </UploadRequest>
+          </File>
+        </Files>
+      </FileUploadResponse>
 
-    protected val xmlResponseWithEmptyOptionals: String =
-      """<FileUploadResponse xmlns="hmrc:fileupload">
-        |  <Files>
-        |    <File>
-        |      <Reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</Reference>
-        |      <UploadRequest>
-        |        <Href>https://a.b.com</Href>
-        |        <Fields>
-        |          <Content-Type>application/xml; charset=utf-8</Content-Type>
-        |          <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
-        |          <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
-        |          <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
-        |          <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
-        |          <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
-        |          <x-amz-meta-request-id>123</x-amz-meta-request-id>
-        |          <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
-        |          <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
-        |          <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
-        |          <acl>private</acl>
-        |          <x-amz-signature>xxxx</x-amz-signature>
-        |          <x-amz-meta-session-id>789</x-amz-meta-session-id>
-        |          <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
-        |          <policy>xxxxxxxx==</policy>
-        |        </Fields>
-        |      </UploadRequest>
-        |    </File>
-        |    <File>
-        |      <Reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</Reference>
-        |      <UploadRequest>
-        |        <Href>https://x.y.com</Href>
-        |        <Fields>
-        |          <acl>some-acl</acl>
-        |        </Fields>
-        |      </UploadRequest>
-        |    </File>
-        |  </Files>
-        |</FileUploadResponse>""".stripMargin
+    protected val xmlResponseWithEmptyOptionals =
+      <FileUploadResponse xmlns="hmrc:fileupload">
+        <Files>
+          <File>
+            <Reference>31400000-8ce0-11bd-b23e-10b96e4ef00f</Reference>
+            <UploadRequest>
+              <Href>https://a.b.com</Href>
+              <Fields>
+                <Content-Type>application/xml; charset=utf-8</Content-Type>
+                <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+                <x-amz-date>2019-03-05T11:56:34Z</x-amz-date>
+                <x-amz-credential>ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request</x-amz-credential>
+                <x-amz-meta-upscan-initiate-response>response</x-amz-meta-upscan-initiate-response>
+                <x-amz-meta-upscan-initiate-received>received</x-amz-meta-upscan-initiate-received>
+                <x-amz-meta-request-id>123</x-amz-meta-request-id>
+                <x-amz-meta-original-filename>some-filename</x-amz-meta-original-filename>
+                <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+                <key>xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</key>
+                <acl>private</acl>
+                <x-amz-signature>xxxx</x-amz-signature>
+                <x-amz-meta-session-id>789</x-amz-meta-session-id>
+                <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+                <policy>xxxxxxxx==</policy>
+              </Fields>
+            </UploadRequest>
+          </File>
+          <File>
+            <Reference>32400000-8cf0-11bd-b23e-10b96e4ef00f</Reference>
+            <UploadRequest>
+              <Href>https://x.y.com</Href>
+              <Fields>
+                <acl>some-acl</acl>
+              </Fields>
+            </UploadRequest>
+          </File>
+        </Files>
+      </FileUploadResponse>
 
     implicit val jsonRequest: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 
@@ -166,7 +167,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     val upscanInitiateResponsePayload2 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", upscanInitiateResponseFields2))
     val upscanInitiateResponsePayload3 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", Map(("Content-Type", "   "), ("new-field", "   "), ("acl", "some-acl"))))
 
-    protected def send(vupr: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, String] = {
+    protected def send(vupr: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, NodeSeq] = {
       await(service.send(vupr, hc))
     }
 

@@ -50,7 +50,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
   def send[A](implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
-              hc: HeaderCarrier): Future[Either[Result, String]] = {
+              hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
 
     futureApiSubFieldsId(validatedRequest.clientId).flatMap {
       case Right(sfId) =>
@@ -109,51 +109,42 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     fileUploadMetadataRepo.create(metadata)
   }
 
-  private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): String = {
+  private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {
     //xml pretty printed and converted to string to eliminate blank lines when optional fields not present
-    prettyPrint(
+
       <FileUploadResponse xmlns="hmrc:fileupload">
-        <Files>
-          {payloads.map(payload =>
+        <Files>{payloads.map(payload => Seq[Node](Text("\n          "),
           <File>
             <Reference>{payload.reference}</Reference>
             <UploadRequest>
               <Href>{payload.uploadRequest.href}</Href>
-              <Fields>
-                {toNode("Content-Type", payload.uploadRequest.fields)}
-                {toNode("x-amz-meta-callback-url", payload.uploadRequest.fields)}
-                {toNode("x-amz-date", payload.uploadRequest.fields)}
-                {toNode("x-amz-credential", payload.uploadRequest.fields)}
-                {toNode("x-amz-meta-upscan-initiate-response", payload.uploadRequest.fields)}
-                {toNode("x-amz-meta-upscan-initiate-received", payload.uploadRequest.fields)}
-                {toNode("x-amz-meta-request-id", payload.uploadRequest.fields)}
-                {toNode("x-amz-meta-original-filename", payload.uploadRequest.fields)}
-                {toNode("x-amz-algorithm", payload.uploadRequest.fields)}
-                {toNode("key", payload.uploadRequest.fields)}
-                {toNode("acl", payload.uploadRequest.fields)}
-                {toNode("x-amz-signature", payload.uploadRequest.fields)}
-                {toNode("x-amz-meta-session-id", payload.uploadRequest.fields)}
-                {toNode("x-amz-meta-consuming-service", payload.uploadRequest.fields)}
-                {toNode("policy", payload.uploadRequest.fields)}
+              <Fields>{Seq[NodeSeq](toNode("Content-Type", payload.uploadRequest.fields),
+                toNode("x-amz-meta-callback-url", payload.uploadRequest.fields),
+                toNode("x-amz-date", payload.uploadRequest.fields),
+                toNode("x-amz-credential", payload.uploadRequest.fields),
+                toNode("x-amz-meta-upscan-initiate-response", payload.uploadRequest.fields),
+                toNode("x-amz-meta-upscan-initiate-received", payload.uploadRequest.fields),
+                toNode("x-amz-meta-request-id", payload.uploadRequest.fields),
+                toNode("x-amz-meta-original-filename", payload.uploadRequest.fields),
+                toNode("x-amz-algorithm", payload.uploadRequest.fields),
+                toNode("key", payload.uploadRequest.fields),
+                toNode("acl", payload.uploadRequest.fields),
+                toNode("x-amz-signature", payload.uploadRequest.fields),
+                toNode("x-amz-meta-session-id", payload.uploadRequest.fields),
+                toNode("x-amz-meta-consuming-service", payload.uploadRequest.fields),
+                toNode("policy", payload.uploadRequest.fields))}
               </Fields>
             </UploadRequest>
-          </File>
+          </File>)
         )}
         </Files>
       </FileUploadResponse>
-    )
-  }
 
-  private def prettyPrint(xml: Node): String = {
-    val xmlWidth = 120
-    val xmlIndent = 2
-
-    new PrettyPrinter(xmlWidth, xmlIndent).format(xml)
   }
 
   private def toNode(labelName: String, fields: Map[String, String]): NodeSeq = {
     if (fields.contains(labelName) && !fields(labelName).trim.isEmpty) {
-      <a/>.copy(label = labelName, child = Text(fields(labelName)))
+      Seq[Node](Text("\n                "), <a/>.copy(label = labelName, child = Text(fields(labelName))))
     } else {
       NodeSeq.Empty
     }

@@ -90,13 +90,13 @@ object FileTransmissionTestData {
     """.stripMargin
 
   val FileTransmissionSuccessCustomsNotificationXml =
-    <Root>
-      <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
-      <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
-      <FileName>name1</FileName>
-      <Outcome>SUCCESS</Outcome>
-      <Details>Thank you for submitting your documents. Typical clearance times are 2 hours for air and 3 hours for maritime declarations. During busy periods wait times may be longer.</Details>
-    </Root>
+      <Root>
+        <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
+        <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
+        <FileName>name1</FileName>
+        <Outcome>SUCCESS</Outcome>
+        <Details>Thank you for submitting your documents. Typical clearance times are 2 hours for air and 3 hours for maritime declarations. During busy periods wait times may be longer.</Details>
+      </Root>
 
   val FileTransmissionSuccessCustomsNotificationXmlWithoutFilename =
     <Root>
@@ -107,13 +107,13 @@ object FileTransmissionTestData {
       </Root>
 
   val FileTransmissionFailureCustomsNotificationXml =
-    <Root>
-      <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
-      <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
-      <FileName>name1</FileName>
-      <Outcome>FAILURE</Outcome>
-      <Details>A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.</Details>
-    </Root>
+      <Root>
+        <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
+        <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
+        <FileName>name1</FileName>
+        <Outcome>FAILURE</Outcome>
+        <Details>A system error has prevented your document from being accepted. Please follow the guidance on www.gov.uk and submit your documents by an alternative method.</Details>
+      </Root>
 
   val FileTransmissionFailureCustomsNotificationXmlWithoutFilename =
     <Root>

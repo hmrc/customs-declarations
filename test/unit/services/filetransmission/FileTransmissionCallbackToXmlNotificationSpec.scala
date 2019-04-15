@@ -21,24 +21,28 @@ import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification
 import util.FileTransmissionTestData._
 import util.TestData._
-import util.XmlOps._
 
 class FileTransmissionCallbackToXmlNotificationSpec extends PlaySpec with MockitoSugar {
 
+  // Removal of string2xml is deliberate to ensure blank lines are not output.
+
   "FileTransmissionSuccessCallbackToXmlNotification" should {
     "correctly convert success payload to xml when filename is present" in {
-      stringToXml(new FileTransmissionCallbackToXmlNotification().toXml(Some(CallbackFieldsOne.name), SuccessNotification)) mustBe stringToXml(FileTransmissionSuccessCustomsNotificationXml)
+      val actual = new FileTransmissionCallbackToXmlNotification().toXml(Some(CallbackFieldsOne.name), SuccessNotification)
+      actual mustBe FileTransmissionSuccessCustomsNotificationXml
     }
     "correctly convert success payload to xml when filename is not present" in {
-      stringToXml(new FileTransmissionCallbackToXmlNotification().toXml(None, SuccessNotification)) mustBe stringToXml(FileTransmissionSuccessCustomsNotificationXmlWithoutFilename)
+      val actual = new FileTransmissionCallbackToXmlNotification().toXml(None, SuccessNotification)
+      actual mustBe FileTransmissionSuccessCustomsNotificationXmlWithoutFilename
     }
 
     "correctly convert failure payload to xml when filename is present" in {
-      stringToXml(new FileTransmissionCallbackToXmlNotification().toXml(Some(CallbackFieldsOne.name), FailureNotification)) mustBe stringToXml(FileTransmissionFailureCustomsNotificationXml)
+      val actual = new FileTransmissionCallbackToXmlNotification().toXml(Some(CallbackFieldsOne.name), FailureNotification)
+      actual mustBe FileTransmissionFailureCustomsNotificationXml
     }
     "correctly convert failure payload to xml when filename is not present" in {
-      stringToXml(new FileTransmissionCallbackToXmlNotification().toXml(None, FailureNotification)) mustBe stringToXml(FileTransmissionFailureCustomsNotificationXmlWithoutFilename)
+      val actual = new FileTransmissionCallbackToXmlNotification().toXml(None, FailureNotification)
+      actual mustBe FileTransmissionFailureCustomsNotificationXmlWithoutFilename
     }
   }
-
 }

@@ -21,9 +21,11 @@ import org.joda.time.format.ISODateTimeFormat
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedPayloadRequest}
 
-import scala.xml.NodeSeq
+import scala.xml.{Node, NodeSeq, Text}
 
 class MdgPayloadDecorator() {
+
+  private val newLineAndIndentation = "\n        "
 
   def wrap[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: DateTime)(implicit vpr: ValidatedPayloadRequest[A]): NodeSeq =
     <v1:submitDeclarationRequest
@@ -38,17 +40,17 @@ class MdgPayloadDecorator() {
         <v1:clientID>{asfr.fieldsId}</v1:clientID>
         <v1:conversationID>{vpr.conversationId.uuid}</v1:conversationID>
         {val as = vpr.authorisedAs
+
       as match {
-            case Csp(badgeId, _) =>
-              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>
-              <v1:authenticatedPartyID>{asfr.fields.authenticatedEori.get}</v1:authenticatedPartyID>
+            case Csp(badgeId, _) => Seq[Node](
+              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>, Text(newLineAndIndentation),
+              <v1:authenticatedPartyID>{asfr.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
             case NonCsp(eori, _) =>
               <v1:authenticatedPartyID>{eori.value}</v1:authenticatedPartyID> // originatingPartyID is only required for CSPs
-            case CspWithEori(badgeId, eori, _) =>
-              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>
-              <v1:originatingPartyID>{eori.value}</v1:originatingPartyID>
-              <v1:authenticatedPartyID>{asfr.fields.authenticatedEori.get}</v1:authenticatedPartyID>
-
+            case CspWithEori(badgeId, eori, _) => Seq[Node](
+              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>, Text(newLineAndIndentation),
+              <v1:originatingPartyID>{eori.value}</v1:originatingPartyID>, Text(newLineAndIndentation),
+              <v1:authenticatedPartyID>{asfr.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
           }
         }
       </v1:requestCommon>

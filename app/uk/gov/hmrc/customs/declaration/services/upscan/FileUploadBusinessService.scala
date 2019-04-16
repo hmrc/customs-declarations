@@ -110,7 +110,6 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {
-    //xml pretty printed and converted to string to eliminate blank lines when optional fields not present
 
       <FileUploadResponse xmlns="hmrc:fileupload">
         <Files>{payloads.map(payload => Seq[Node](Text("\n          "),

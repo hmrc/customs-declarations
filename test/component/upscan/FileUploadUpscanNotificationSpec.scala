@@ -172,7 +172,8 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       |    "checksum": "1a2b3c4d5e",
       |    "location": "https://a.b.com",
       |    "sequenceNumber": 1,
-      |    "size": 1
+      |    "size": 1,
+      |    "uploadTimestamp": "2018-04-24T09:30:00Z"
       |  },
       |  "interface": {
       |    "name": "DEC64",
@@ -186,10 +187,6 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       |    {
       |      "name": "Eori",
       |      "value": "123"
-      |    },
-      |    {
-      |      "name": "uploadTimestamp",
-      |      "value": "2018-04-24T09:30:00Z"
       |    },
       |    {
       |      "name": "DocumentType",

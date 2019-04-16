@@ -75,7 +75,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
   }
 
   private def extractFileProperties(ready: UploadedReadyCallbackBody, md: FileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {
-    val fileProperties = Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString, "uploadTimestamp" -> ready.uploadDetails.uploadTimestamp.toString)
+    val fileProperties = Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString)
       .map(t => FileTransmissionProperty(name = t._1, value = t._2))
     if (bf.documentType.isDefined) fileProperties :+ FileTransmissionProperty("DocumentType", bf.documentType.get.toString) else fileProperties
   }
@@ -92,7 +92,8 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
         cbFields.mimeType,
         cbFields.checksum,
         batchFile.location,
-        batchFile.sequenceNumber
+        batchFile.sequenceNumber,
+        uploadTimestamp = cbFields.uploadTimestamp
       )
     )
   }

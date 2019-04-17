@@ -52,12 +52,11 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
   private val fileTransmissionCallbackUrl = "http://file_transmission_callback_url/clientSubscriptionId/"
   private val fileTransmissionServiceURL = "http://file_transmission_service_url"
   private val fileTransmissionLocation = mdFileOne.location
-  private val fileTransmissionFileOne = FileTransmissionFile(mdFileOne.reference, mdFileOneCallback.name, mdFileOneCallback.mimeType, mdFileOneCallback.checksum, location = fileTransmissionLocation, mdFileOne.sequenceNumber)
+  private val fileTransmissionFileOne = FileTransmissionFile(mdFileOne.reference, mdFileOneCallback.name, mdFileOneCallback.mimeType, mdFileOneCallback.checksum, location = fileTransmissionLocation, mdFileOne.sequenceNumber, uploadTimestamp = InitiateDate)
   private val fileTransmissionInterfaceOne = FileTransmissionInterface("DEC64", "1.0.0")
   private val fileTransmissionProperties = Seq(
     FileTransmissionProperty("DeclarationId", md.declarationId.toString),
     FileTransmissionProperty("Eori", md.eori.toString),
-    FileTransmissionProperty("uploadTimestamp", InitiateDateAsString),
     FileTransmissionProperty("DocumentType", mdFileOne.documentType.get.toString)
   )
   private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(fileTransmissionCallbackUrl + clientSubscriptionIdString), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.model.filetransmission
 
 import java.net.URL
+import java.time.Instant
 
 import play.api.libs.json._
 import uk.gov.hmrc.customs.declaration.model._
@@ -37,7 +38,8 @@ case class FileTransmissionFile(
   checksum: String,
   location: URL,
   sequenceNumber: FileSequenceNo,
-  size: Int = 1
+  size: Int = 1,
+  uploadTimestamp: Instant
 )
 object FileTransmissionFile {
   implicit val urlFormat = HttpUrlFormat

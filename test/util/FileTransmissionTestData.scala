@@ -20,14 +20,14 @@ import java.net.URL
 
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.filetransmission._
-import util.TestData.{BatchIdOne, FileReferenceOne}
+import util.TestData.{BatchIdOne, FileReferenceOne, InitiateDate}
 
 object FileTransmissionTestData {
 
   val FileTransmissionBatchOne = FileTransmissionBatch(BatchIdOne, 2)
   val FileTransmissionCallBackUrl = new URL("https:/foo.com/callback")
   val FileTransmissionLocation = new URL("https:/foo.com/location")
-  val FileTransmissionFileOne = FileTransmissionFile(FileReferenceOne, name = "someFileN.ame", mimeType = "application/pdf", checksum = "asdrfgvbhujk13579", location = FileTransmissionLocation, FileSequenceNo(1))
+  val FileTransmissionFileOne = FileTransmissionFile(FileReferenceOne, name = "someFileN.ame", mimeType = "application/pdf", checksum = "asdrfgvbhujk13579", location = FileTransmissionLocation, FileSequenceNo(1), uploadTimestamp = InitiateDate)
   val FileTransmissionInterfaceOne = FileTransmissionInterface("interfaceName name", "1.0")
   val FileTransmissionProperties = Seq("p1" -> "v1", "p2" -> "v2").map(t => FileTransmissionProperty(name = t._1, value = t._2))
   val FileTransmissionRequest = FileTransmission(FileTransmissionBatchOne, FileTransmissionCallBackUrl, FileTransmissionFileOne, FileTransmissionInterfaceOne, FileTransmissionProperties)
@@ -48,7 +48,8 @@ object FileTransmissionTestData {
                                |    "checksum" : "asdrfgvbhujk13579",
                                |    "location" : "https:/foo.com/location",
                                |    "sequenceNumber" : 1,
-                               |    "size" : 1
+                               |    "size" : 1,
+                               |    "uploadTimestamp" : "2018-04-24T09:30:00Z"
                                |  },
                                |  "interface" : {
                                |    "name" : "interfaceName name",

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.connectors.filetransmission
 
 import com.google.inject._
+import play.api.libs.json.Json
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes.JSON
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -43,8 +44,7 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
   }
 
   private def post[A](request: FileTransmission, url: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
-
-    logger.debug(s"Sending request to file transmission service. Url: $url Payload: ${request.toString}")
+    logger.debug(s"Sending request to file transmission service. Url: $url Payload: ${Json.prettyPrint(Json.toJson(request))}")
     http.POST[FileTransmission, HttpResponse](url, request).map{ _ =>
       logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")
       ()

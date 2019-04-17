@@ -98,7 +98,7 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
     logger.debug(s"updating file upload metadata with file reference: $reference with callbackField=$cf")
 
     val selector = Json.obj("files.reference" -> reference.toString, "csId" -> csId.toString)
-    val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum, "uploadTimestamp" -> cf.uploadTimestamp)))
+    val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum, "uploadTimestamp" -> cf.uploadTimestamp, "outboundLocation" -> cf.outboundLocation.toString)))
 
     findAndUpdate(selector, update, fetchNewObject = true).map(findAndModifyResult =>
       findAndModifyResult.value match {

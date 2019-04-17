@@ -41,7 +41,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
     repo.update(
       csId,
       ready.reference,
-      CallbackFields(ready.uploadDetails.fileName, ready.uploadDetails.fileMimeType, ready.uploadDetails.checksum, ready.uploadDetails.uploadTimestamp)
+      CallbackFields(ready.uploadDetails.fileName, ready.uploadDetails.fileMimeType, ready.uploadDetails.checksum, ready.uploadDetails.uploadTimestamp, ready.downloadUrl)
     ).flatMap{
       case None =>
         val errorMsg = s"database error - can't find record with file reference ${ready.reference}"
@@ -91,7 +91,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
         cbFields.name,
         cbFields.mimeType,
         cbFields.checksum,
-        batchFile.location,
+        batchFile.inboundLocation,
         batchFile.sequenceNumber,
         uploadTimestamp = cbFields.uploadTimestamp
       )

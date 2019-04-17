@@ -16,6 +16,8 @@
 
 package integration
 
+import java.net.URL
+
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito
 import org.mockito.Mockito._
@@ -90,7 +92,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
       val findResult = await(repository.find(selector(BatchFileOne.reference.toString)).head)
 
       findResult shouldBe FileMetadataWithFileOne
-      logVerifier("debug", "saving fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z)),https://a.b.com,1,1,Some(Document Type 1))))")
+      logVerifier("debug", "saving fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
     }
 
     "successfully save when create is called multiple times" in {
@@ -110,7 +112,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
     "successfully update checksum, searching by reference" in {
       await(repository.create(FileMetadataWithFilesOneAndThree))
       await(repository.create(FileMetadataWithFileTwo))
-      val updatedFileOne = BatchFileOne.copy(maybeCallbackFields = Some(CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate)))
+      val updatedFileOne = BatchFileOne.copy(maybeCallbackFields = Some(CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate, new URL("https://outbound.a.com"))))
       val expectedRecord = FileMetadataWithFilesOneAndThree.copy(files = Seq(updatedFileOne, BatchFileThree))
 
       val maybeActual = await(repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
@@ -118,7 +120,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
       maybeActual shouldBe Some(expectedRecord)
       await(repository.fetch(BatchFileOne.reference)) shouldBe Some(expectedRecord)
       await(repository.fetch(BatchFileTwo.reference)) shouldBe Some(FileMetadataWithFileTwo)
-      logVerifier("debug", "updating file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f with callbackField=CallbackFields(UPDATED_NAME,UPDATED_MIMETYPE,UPDATED_CHECKSUM,2018-04-24T09:30:00Z)")
+      logVerifier("debug", "updating file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f with callbackField=CallbackFields(UPDATED_NAME,UPDATED_MIMETYPE,UPDATED_CHECKSUM,2018-04-24T09:30:00Z,https://outbound.a.com)")
     }
 
     "not update checksum, when searching by reference fails" in {
@@ -166,7 +168,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
       val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
 
       maybeFoundRecordTwo shouldBe Some(FileMetadataWithFileTwo)
-      logVerifier("debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z)),https://a.b.com,1,1,Some(Document Type 1))))")
+      logVerifier("debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
     }
 
     "collection should be same size when deleting non-existent record" in {

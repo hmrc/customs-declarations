@@ -64,15 +64,16 @@ object FileReference {
   implicit val reader = Reads.of[UUID].map(new FileReference(_))
 }
 
-case class CallbackFields(name: String, mimeType: String, checksum: String, uploadTimestamp: Instant)
+case class CallbackFields(name: String, mimeType: String, checksum: String, uploadTimestamp: Instant, outboundLocation: URL)
 object CallbackFields {
+  implicit val urlFormat = HttpUrlFormat
   implicit val format = Json.format[CallbackFields]
 }
 
 case class BatchFile(
   reference: FileReference, // can be used as UNIQUE KEY, upscan-initiate
   maybeCallbackFields: Option[CallbackFields], // upscan-notify
-  location: URL, // upscan-initiate
+  inboundLocation: URL, // upscan-initiate
   sequenceNumber: FileSequenceNo, // derived from user request
   size: Int, // assumption - it appears to be mandatory but is ignored
   documentType: Option[DocumentType] // user request

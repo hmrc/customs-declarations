@@ -35,9 +35,10 @@ class FileUploadMetadataSpec extends UnitSpec {
                              |        "name": "name1",
                              |        "mimeType": "application/xml",
                              |        "checksum": "checksum1",
-                             |        "uploadTimestamp": "2018-04-24T09:30:00Z"
+                             |        "uploadTimestamp": "2018-04-24T09:30:00Z",
+                             |        "outboundLocation": "https://outbound.a.com"
                              |      },
-                             |      "location": "https://a.b.com",
+                             |      "inboundLocation": "https://a.b.com",
                              |      "sequenceNumber": 1,
                              |      "size": 1,
                              |      "documentType": "Document Type 1"

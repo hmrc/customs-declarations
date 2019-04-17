@@ -311,16 +311,16 @@ object TestData {
   val FileReferenceThree = FileReference(fromString("33400000-8cd0-11bd-b23e-10b96e4ef00f"))
   val InitiateDateAsString = "2018-04-24T09:30:00Z"
   val InitiateDate = Instant.parse(InitiateDateAsString)
-  val CallbackFieldsOne = CallbackFields("name1", "application/xml", "checksum1", InitiateDate)
-  val CallbackFieldsTwo = CallbackFields("name2", "application/xml", "checksum2", InitiateDate)
-  val CallbackFieldsThree = CallbackFields("name3", "application/xml", "checksum3", InitiateDate)
-  val CallbackFieldsUpdated = CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate)
+  val CallbackFieldsOne = CallbackFields("name1", "application/xml", "checksum1", InitiateDate, new URL("https://outbound.a.com"))
+  val CallbackFieldsTwo = CallbackFields("name2", "application/xml", "checksum2", InitiateDate, new URL("https://outbound.a.com"))
+  val CallbackFieldsThree = CallbackFields("name3", "application/xml", "checksum3", InitiateDate, new URL("https://outbound.a.com"))
+  val CallbackFieldsUpdated = CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate, new URL("https://outbound.a.com"))
   val BatchFileOne = BatchFile(reference = FileReferenceOne, Some(CallbackFieldsOne),
-    location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(1), size = 1, documentType = Some(DocumentType("Document Type 1")))
+    inboundLocation = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(1), size = 1, documentType = Some(DocumentType("Document Type 1")))
   val BatchFileTwo = BatchFile(reference = FileReferenceTwo, Some(CallbackFieldsTwo),
-    location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(2), size = 1, documentType = Some(DocumentType("Document Type 2")))
+    inboundLocation = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(2), size = 1, documentType = Some(DocumentType("Document Type 2")))
   val BatchFileThree = BatchFile(reference = FileReferenceThree, Some(CallbackFieldsThree),
-    location = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(3), size = 1, documentType = Some(DocumentType("Document Type 3")))
+    inboundLocation = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(3), size = 1, documentType = Some(DocumentType("Document Type 3")))
   val BatchFileOneNoCallbackFields: BatchFile = BatchFileOne.copy(maybeCallbackFields = None)
   val FileMetadataWithFileOne = FileUploadMetadata(DeclarationId("1"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 1, Seq(
     BatchFileOne

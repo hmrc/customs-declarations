@@ -40,10 +40,10 @@ import scala.concurrent.Future
 
 class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
-  private val downloadUrl = new URL("http://remotehost/bucket/123")
+  private val outboundUrl = new URL("http://remotehost/outbound-bucket/123")
   private val uploadDetails = UploadedDetails("test.pdf", "application/pdf", InitiateDate, "1a2b3c4d5e")
-  private val readyCallbackBody = UploadedReadyCallbackBody(FileReferenceOne, downloadUrl, ReadyFileStatus, uploadDetails)
-  private val callbackFields = CallbackFields(uploadDetails.fileName, uploadDetails.fileMimeType, uploadDetails.checksum, InitiateDate)
+  private val readyCallbackBody = UploadedReadyCallbackBody(FileReferenceOne, outboundUrl, ReadyFileStatus, uploadDetails)
+  private val callbackFields = CallbackFields(uploadDetails.fileName, uploadDetails.fileMimeType, uploadDetails.checksum, InitiateDate, outboundUrl)
 
   private val md = FileMetadataWithFilesOneAndThree
   private val mdFileOne = FileMetadataWithFilesOneAndThree.files.head
@@ -51,7 +51,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
   private val fileTransmissionBatchOne = FileTransmissionBatch(md.batchId, md.fileCount)
   private val fileTransmissionCallbackUrl = "http://file_transmission_callback_url/clientSubscriptionId/"
   private val fileTransmissionServiceURL = "http://file_transmission_service_url"
-  private val fileTransmissionLocation = mdFileOne.location
+  private val fileTransmissionLocation = mdFileOne.maybeCallbackFields.get.outboundLocation
   private val fileTransmissionFileOne = FileTransmissionFile(mdFileOne.reference, mdFileOneCallback.name, mdFileOneCallback.mimeType, mdFileOneCallback.checksum, location = fileTransmissionLocation, mdFileOne.sequenceNumber, uploadTimestamp = InitiateDate)
   private val fileTransmissionInterfaceOne = FileTransmissionInterface("DEC64", "1.0.0")
   private val fileTransmissionProperties = Seq(

@@ -91,7 +91,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
         cbFields.name,
         cbFields.mimeType,
         cbFields.checksum,
-        batchFile.inboundLocation,
+        cbFields.outboundLocation,
         batchFile.sequenceNumber,
         uploadTimestamp = cbFields.uploadTimestamp
       )

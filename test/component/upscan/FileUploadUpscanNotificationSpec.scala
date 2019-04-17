@@ -170,7 +170,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       |    "name": "test.pdf",
       |    "mimeType": "application/pdf",
       |    "checksum": "1a2b3c4d5e",
-      |    "location": "https://a.b.com",
+      |    "location": "http://remotehost/bucket/123",
       |    "sequenceNumber": 1,
       |    "size": 1,
       |    "uploadTimestamp": "2018-04-24T09:30:00Z"

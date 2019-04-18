@@ -55,7 +55,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
                 implicit val conversationId = conversationIdForLogging(callbackBody.reference.value)
                 callbackBody match {
                   case ready: UploadedReadyCallbackBody =>
-                    cdsLogger.debug(s"Valid JSON request received with READY status. Body: $js headers: ${request.headers}")
+                    cdsLogger.debug(s"Valid JSON request received with READY status. Body: ${Json.prettyPrint(js)} headers: ${request.headers}")
                     businessService.persistAndCallFileTransmission(clientSubscriptionId, ready).map{_ =>
                         Results.NoContent
                     }.recover{
@@ -64,7 +64,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
                         internalServerErrorResult(e)
                     }
                   case failed: UploadedFailedCallbackBody =>
-                    cdsLogger.debug(s"Valid JSON request received with FAILED status. Body: $js headers: ${request.headers}")
+                    cdsLogger.debug(s"Valid JSON request received with FAILED status. Body: ${Json.prettyPrint(js)} headers: ${request.headers}")
                     notificationService.sendMessage[UploadedFailedCallbackBody](
                       failed,
                       failed.reference,

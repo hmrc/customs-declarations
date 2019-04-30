@@ -234,7 +234,11 @@ object StatusTestXMLData {
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 
-  def generateDeclarationStatusResponse(acceptanceDate: DateTime = DateTime.now(DateTimeZone.UTC),  tradeMovementType: String = ImportTradeMovementType, procedureCategory: String = ValidImportProcedureCategory, communicationAddress: String = validCommunicationAddress, dateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC()): NodeSeq = <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
+  def generateDeclarationStatusResponse(acceptanceDate: DateTime = DateTime.now(DateTimeZone.UTC),
+                                        tradeMovementType: String = ImportTradeMovementType,
+                                        procedureCategory: String = ValidImportProcedureCategory,
+                                        communicationAddress: String = validCommunicationAddress,dateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC()): NodeSeq =
+    <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
     <n1:responseCommon>
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>
@@ -349,13 +353,13 @@ object StatusTestXMLData {
           </xsd_1:incidents>
           <xsd_1:parties>
             <n3:status>token</n3:status>
-            <n3:type>token</n3:type>
+            <n3:type>TB</n3:type>
             <n3:partyName>String</n3:partyName>
             <n3:subRole>token</n3:subRole>
             <n3:authorizationType>token</n3:authorizationType>
             <xsd_1:partyIdentification>
               <tns:type>token</tns:type>
-              <tns:number>1</tns:number>
+              <tns:number>123456</tns:number>
             </xsd_1:partyIdentification>
             <xsd_1:contactPerson>
               <n3:name>String</n3:name>
@@ -402,6 +406,17 @@ object StatusTestXMLData {
                 <tns:code>token</tns:code>
               </tns:country>
             </xsd_1:physicalAddress>
+          </xsd_1:parties>
+          <xsd_1:parties>
+            <n3:status>token</n3:status>
+            <n3:type>NOT-TB</n3:type>
+            <n3:partyName>String</n3:partyName>
+            <n3:subRole>token</n3:subRole>
+            <n3:authorizationType>token</n3:authorizationType>
+            <xsd_1:partyIdentification>
+              <tns:type>token</tns:type>
+              <tns:number>321</tns:number>
+            </xsd_1:partyIdentification>
           </xsd_1:parties>
           <xsd_1:signature>
             <n3:sign>UjBsR09EbGhjZ0dTQUxNQUFBUUNBRU1tQ1p0dU1GUXhEUzhi</n3:sign>

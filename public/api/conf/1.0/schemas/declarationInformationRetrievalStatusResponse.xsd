@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://gov.uk/customs/declarationInformationRetrieval/status/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:od="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:otn="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:odds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:otnds="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"  targetNamespace="http://gov.uk/customs/declarationInformationRetrieval/status/v1" elementFormDefault="qualified" version="1.0">
+  <xs:import namespace="urn:wco:datamodel:WCO:Response_DS:DMS:2" schemaLocation="WCO_DS/WCO_RES_DS_2_DMS.xsd" />
+  <xs:import namespace="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" schemaLocation="WCO_DS/WCO_DEC_DS_2_DMS.xsd" />
+  <xs:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" schemaLocation="UNECE/UnqualifiedDataType_6_DMS.xsd"/>
+
+
+  <!-- =============================================================================================== -->
+  <!-- Declaration Information Retrieval Status Response                                               -->
+  <!-- Allows a CSP to request the status of an individual declaration, identified by MRN              -->
+  <!-- =============================================================================================== -->
+  <xs:element name="DeclarationStatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Declaration">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="VersionID" type="otnds:DeclarationVersionIDType"
+                minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="EN">
+                    <WCOFormat>an..9</WCOFormat>
+                  </xs:documentation>
+                  <xs:documentation>
+                    <TDEDUID>1057</TDEDUID>
+                    <TDEDName>Version. Identifier</TDEDName>
+                  </xs:documentation>
+                  <xs:documentation xml:lang="EN">
+                    <WCOID>383</WCOID>
+                    <WCOName>Version number</WCOName>
+                    <WCODescription>The sequential number that determines the version of a
+                      specific document/message number
+                    </WCODescription>
+                  </xs:documentation>
+                  <xs:documentation>
+                    <DictionaryEntryName>Declaration. Version.
+                      Identifier
+                    </DictionaryEntryName>
+                    <NamedComplexType>DeclarationVersionIDType
+                    </NamedComplexType>
+                    <XMLTag>VersionID</XMLTag>
+                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                    <WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+                    <WCOUsage_Response>X</WCOUsage_Response>
+                    <UniquePositionID>10289</UniquePositionID>
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="CreationDateTime" 
+                minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="EN">
+                    <Format>an..35</Format>
+                    <DictionaryEntryName>Declaration. Creation. Date Time</DictionaryEntryName>
+                    <NamedComplexType>DeclarationCreationDateTimeType</NamedComplexType>
+                    <XMLTag>CreationDateTime</XMLTag>
+                  </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:choice>
+                    <xs:element name="DateTimeString">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:restriction base="udt:DateTimeType">
+                            <xs:maxLength value="35" />
+                          </xs:restriction>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="AcceptanceDateTime" type="otnds:DeclarationAcceptanceDateTimeType"
+                minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="EN">
+                    <WCOFormat>an..35</WCOFormat>
+                  </xs:documentation>
+                  <xs:documentation>
+                    <TDEDUID>2380</TDEDUID>
+                    <TDEDName>Date Or Time Or Period. Text</TDEDName>
+                  </xs:documentation>
+                  <xs:documentation xml:lang="EN">
+                    <WCOID>023</WCOID>
+                    <WCOName>Document acceptance date</WCOName>
+                    <WCODescription>Date on which a document has been or
+                      will be accepted
+                      in accordance with Governmental
+                      legislation
+                    </WCODescription>
+                  </xs:documentation>
+                  <xs:documentation>
+                    <DictionaryEntryName>Declaration. Acceptance. Date
+                      Time
+                    </DictionaryEntryName>
+                    <NamedComplexType>DeclarationAcceptanceDateTimeType
+                    </NamedComplexType>
+                    <XMLTag>AcceptanceDateTime</XMLTag>
+                    <UniquePositionID>339</UniquePositionID>
+                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                    <WCOUsageUPU>X</WCOUsageUPU>
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="TypeCode" type="odds:DeclarationTypeCodeType"
+                minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="EN">
+                    <WCOCodeRemarks>EDIFACT codes (1001) or User codes
+                    </WCOCodeRemarks>
+                    <WCOFormat>an..3</WCOFormat>
+                  </xs:documentation>
+                  <xs:documentation>
+                    <TDEDUID>1001</TDEDUID>
+                    <TDEDName>Document. Type.Code</TDEDName>
+                  </xs:documentation>
+                  <xs:documentation xml:lang="EN">
+                    <WCOID>D013</WCOID>
+                    <WCOName>Document name, coded</WCOName>
+                    <WCODescription>Code specifying the name of a
+                      document
+                    </WCODescription>
+                  </xs:documentation>
+                  <xs:documentation>
+                    <DictionaryEntryName>Declaration. Type. Code
+                    </DictionaryEntryName>
+                    <NamedComplexType>DeclarationTypeCodeType
+                    </NamedComplexType>
+                    <XMLTag>TypeCode</XMLTag>
+                    <UniquePositionID>337</UniquePositionID>
+                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                    <WCOUsageDeclarationCRI>X</WCOUsageDeclarationCRI>
+                    <WCOUsageDeclarationCRE>X</WCOUsageDeclarationCRE>
+                    <WCOUsageDeclarationCONV>X</WCOUsageDeclarationCONV>
+                    <WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="Submitter" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                  <xs:documentation xml:lang="EN">
+                    <WCOID>17B</WCOID>
+                    <WCOName>Submitter</WCOName>
+                    <WCODescription>Details related to the submitter of
+                      written or
+                      electronic documentation
+                    </WCODescription>
+                  </xs:documentation>
+                  <xs:documentation>
+                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                    <WCOUsageDeclarationCRI>X</WCOUsageDeclarationCRI>
+                    <WCOUsageDeclarationCRE>X</WCOUsageDeclarationCRE>
+                    <WCOUsageDeclarationCONV>X</WCOUsageDeclarationCONV>
+                    <WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+                  </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ID" type="odds:SubmitterIdentificationIDType"
+                      minOccurs="0">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="EN">
+                          <WCOFormat>an..17</WCOFormat>
+                        </xs:documentation>
+                        <xs:documentation>
+                          <TDEDUID>3039</TDEDUID>
+                          <TDEDName>Party. Identifier</TDEDName>
+                        </xs:documentation>
+                        <xs:documentation xml:lang="EN">
+                          <WCOID>R059</WCOID>
+                          <WCOName>Submitter, coded</WCOName>
+                          <WCODescription>The identifier of the party
+                            who presents a
+                            document or data for the
+                            approval, consideration, or
+                            decision
+                            of
+                            another
+                          </WCODescription>
+                          <WCOCodeRemarks>International codes (e.g.
+                            DUNS, EAN) or
+                            user
+                            codes
+                          </WCOCodeRemarks>
+                        </xs:documentation>
+                        <xs:documentation>
+                          <DictionaryEntryName>Submitter.
+                            Identification. Identifier
+                          </DictionaryEntryName>
+                          <NamedComplexType>SubmitterIdentificationIDType
+                          </NamedComplexType>
+                          <XMLTag>ID</XMLTag>
+                          <UniquePositionID>55</UniquePositionID>
+                          <WCOUsageDeclarationIM>X
+                          </WCOUsageDeclarationIM>
+                          <WCOUsageDeclarationEX>X
+                          </WCOUsageDeclarationEX>
+                          <WCOUsageDeclarationCRI>X
+                          </WCOUsageDeclarationCRI>
+                          <WCOUsageDeclarationCRE>X
+                          </WCOUsageDeclarationCRE>
+                          <WCOUsageDeclarationCONV>X
+                          </WCOUsageDeclarationCONV>
+                          <WCOUsageDeclarationTRT>X
+                          </WCOUsageDeclarationTRT>
+                        </xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="GoodsItemQuantity" type="odds:DeclarationGoodsItemQuantityType"
+                minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="EN">
+                    <WCOID>228</WCOID>
+                    <WCOName>Total number of items</WCOName>
+                    <WCODescription>Count of the total number of goods
+                      items within a
+                      document
+                    </WCODescription>
+                    <WCOFormat>n..5</WCOFormat>
+                  </xs:documentation>
+                  <xs:documentation>
+                    <TDEDUID>6061</TDEDUID>
+                    <TDEDName>Quantity.Quantity</TDEDName>
+                    <DictionaryEntryName>Declaration. Goods Item.
+                      Quantity
+                    </DictionaryEntryName>
+                    <NamedComplexType>DeclarationGoodsItemQuantityType
+                    </NamedComplexType>
+                    <XMLTag>GoodsItemQuantity</XMLTag>
+                    <UniquePositionID>342</UniquePositionID>
+                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                    <WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="TotalPackageQuantity" type="odds:DeclarationTotalPackageQuantityType"
+                minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="EN">
+                    <WCOID>146</WCOID>
+                    <WCOName>Total number of packages</WCOName>
+                    <WCODescription>Count of total number of packages of
+                      the entire
+                      document (e.g. declaration/ consignment)
+                    </WCODescription>
+                    <WCOFormat>n..8</WCOFormat>
+                  </xs:documentation>
+                  <xs:documentation>
+                    <TDEDUID>7365</TDEDUID>
+                    <TDEDName>Process.Indicator.Code</TDEDName>
+                    <DictionaryEntryName>Declaration. Total Package.
+                      Quantity
+                    </DictionaryEntryName>
+                    <NamedComplexType>DeclarationTotalPackageQuantityType
+                    </NamedComplexType>
+                    <XMLTag>TotalPackageQuantity</XMLTag>
+                    <UniquePositionID>352</UniquePositionID>
+                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                    <WCOUsageDeclarationCRI>X</WCOUsageDeclarationCRI>
+                    <WCOUsageDeclarationCRE>X</WCOUsageDeclarationCRE>
+                    <WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

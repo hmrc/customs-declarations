@@ -71,6 +71,25 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       |  </stat:declaration>
       |</stat:declarationStatusResponse>""".stripMargin
 
+  private def validResponse2(acceptanceDateVal : String) =
+    raw"""<stat:DeclarationStatusResponse xmlns:stat="http://gov.uk/customs/declarationInformationRetrieval/status/v1" xmlns:dms="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/status/v1 ../Schemas/declarationInformationRetrievalStatusResponse.xsd">
+      |  <stat:Declaration>
+      |    <stat:VersionID>0</stat:VersionID>
+      |    <stat:CreationDateTime>
+      |      <dms:DateTimeString formatCode="304">20190428183129+01</dms:DateTimeString>
+      |    </stat:CreationDateTime>
+      |    <stat:AcceptanceDateTime>
+      |      <dms:DateTimeString formatCode="304">20190428183130+01</dms:DateTimeString>
+      |    </stat:AcceptanceDateTime>
+      |    <stat:TypeCode>IMZ</stat:TypeCode>
+      |    <stat:Submitter>
+      |      <stat:ID>GB123456789012000</stat:ID>
+      |    </stat:Submitter>
+      |    <stat:GoodsItemQuantity unitCode="NPR">100</stat:GoodsItemQuantity>
+      |    <stat:TotalPackageQuantity>10</stat:TotalPackageQuantity>
+      |  </stat:Declaration>
+      |</stat:DeclarationStatusResponse>""".stripMargin
+
   val validRequestV2: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", endpoint).withHeaders(ValidHeadersV2.toSeq: _*).fromCsp
   val validRequestV3: FakeRequest[AnyContentAsEmpty.type] = validRequestV2.withHeaders(ValidHeadersV3.toSeq: _*)
 

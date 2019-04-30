@@ -43,7 +43,8 @@ class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSu
 
     "create the version number" in new SetUp {
       private val response = createStatusResponseWithAllValues()
-      private val node = response \\ "versionNumber"
+      println(response.toString())
+      private val node = response \\ "VersionID"
 
       node.text shouldBe "0"
     }

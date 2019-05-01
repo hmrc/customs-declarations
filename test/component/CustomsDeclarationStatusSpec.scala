@@ -67,7 +67,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       |    </v1:CreationDateTime>
       |  </v1:Declaration>
       |  <_2:Declaration>
-      |    <_2:FunctionCode>9</_2:FunctionCode>
+      |    <_2:FunctionCode>09</_2:FunctionCode>
       |    <_2:TypeCode>IM4567declaration type</_2:TypeCode>
       |    <_2:GoodsItemQuantity unitType="101">2</_2:GoodsItemQuantity>
       |    <_2:TotalPackageQuantity>3</_2:TotalPackageQuantity>

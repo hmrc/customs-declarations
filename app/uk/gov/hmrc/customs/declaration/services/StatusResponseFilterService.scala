@@ -56,7 +56,7 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
         </v1:CreationDateTime>
       ))}</v1:Declaration>
       <_2:Declaration>
-        <_2:FunctionCode>9</_2:FunctionCode>{maybeTypeCode.fold(NodeSeq.Empty)(typeCode => Seq[Node](newLineAndIndentation,
+        <_2:FunctionCode>09</_2:FunctionCode>{maybeTypeCode.fold(NodeSeq.Empty)(typeCode => Seq[Node](newLineAndIndentation,
         <_2:TypeCode>{typeCode}</_2:TypeCode>))}{maybeGoodsItemQuantity._1.fold(NodeSeq.Empty)(goodItemQuantity => Seq[Node](newLineAndIndentation,
         <_2:GoodsItemQuantity unitType={outputAttribute(maybeGoodsItemQuantity._2, "unitType")}>{goodItemQuantity}</_2:GoodsItemQuantity>))}{maybeTotalPackageQuantity._1.fold(NodeSeq.Empty)(totalPackageQuantity => Seq[Node](newLineAndIndentation,
         <_2:TotalPackageQuantity>{totalPackageQuantity}</_2:TotalPackageQuantity>))}{maybeSubmitterId.fold(NodeSeq.Empty)(submitterId => Seq[Node](newLineAndIndentation,

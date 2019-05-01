@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="urn:wco:datamodel:WCO:Response_DS:DMS:2" version="2.1">
+  <xs:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" schemaLocation="../UNECE/UnqualifiedDataType_6_DMS.xsd"/>
+  <xs:complexType name="AdditionalInformationLimitDateTimeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>264</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="DateTimeString">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:restriction base="udt:DateTimeType">
+              <xs:maxLength value="35"/>
+            </xs:restriction>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="AdditionalInformationStatementCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>226</WCOID>
+        <WCOFormat>an..17</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="17"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="AdditionalInformationStatementDescriptionTextType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>225</WCOID>
+        <WCOFormat>an..512</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:TextType">
+        <xs:maxLength value="512"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="AdditionalInformationStatementTypeCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>369</WCOID>
+        <WCOFormat>an..3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="AmendmentChangeReasonCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>099</WCOID>
+        <WCOFormat>an..3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="AppealOfficeIdentificationIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>G001</WCOID>
+        <WCOFormat>an..17</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="17"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="BankAccountIdentificationIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>372</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="35"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="BankReferenceIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>R069</WCOID>
+        <WCOFormat>an..17</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="17"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="CommunicationIdentificationIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>240</WCOID>
+        <WCOFormat>an..50</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="50"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="CommunicationTypeCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>253</WCOID>
+        <WCOFormat>an..3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ContactOfficeIdentificationIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>G002</WCOID>
+        <WCOFormat>an..17</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="17"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DeclarationAcceptanceDateTimeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>023</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="DateTimeString">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:restriction base="udt:DateTimeType">
+              <xs:maxLength value="35"/>
+            </xs:restriction>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="DeclarationCancellationDateTimeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>373</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="DateTimeString">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:restriction base="udt:DateTimeType">
+              <xs:maxLength value="35"/>
+            </xs:restriction>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="DeclarationFunctionalReferenceIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>D026</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="35"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DeclarationIdentificationIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>D014</WCOID>
+        <WCOFormat>an..70</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="70"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DeclarationRejectionDateTimeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>374</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="DateTimeString">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:restriction base="udt:DateTimeType">
+              <xs:maxLength value="35"/>
+            </xs:restriction>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="DeclarationVersionIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>383</WCOID>
+        <WCOFormat>an..9</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="9"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ErrorDescriptionTextType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>488</WCOID>
+        <WCOFormat>an..512</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:TextType">
+        <xs:maxLength value="512"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ErrorValidationCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>377</WCOID>
+        <WCOFormat>an..8</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="8"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="GovernmentAgencyGoodsItemSequenceNumericType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>006</WCOID>
+        <WCOFormat>n..5</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="udt:NumericType">
+      <xs:totalDigits value="5"/>
+      <xs:fractionDigits value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ObligationGuaranteeReferenceIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>100</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="35"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="PaymentDueDateTimeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>376</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="DateTimeString">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:restriction base="udt:DateTimeType">
+              <xs:maxLength value="35"/>
+            </xs:restriction>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="PaymentPaymentAmountType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>378</WCOID>
+        <WCOFormat>n..16,3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:AmountType">
+        <xs:totalDigits value="16"/>
+        <xs:fractionDigits value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="PointerDocumentSectionCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>375</WCOID>
+        <WCOFormat>an..3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="PointerSequenceNumericType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>006</WCOID>
+        <WCOFormat>n..5</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="udt:NumericType">
+      <xs:totalDigits value="5"/>
+      <xs:fractionDigits value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="PointerTagIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>381</WCOID>
+        <WCOFormat>an..4</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="4"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ResponseFunctionalReferenceIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>D026</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="35"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ResponseFunctionCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>017</WCOID>
+        <WCOFormat>n..2</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="2"/>
+        <xs:pattern value="([0-9])*"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ResponseIssueDateTimeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>D029</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="DateTimeString">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:restriction base="udt:DateTimeType">
+              <xs:maxLength value="35"/>
+            </xs:restriction>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="StatusEffectiveDateTimeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>380</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="DateTimeString">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:restriction base="udt:DateTimeType">
+              <xs:maxLength value="35"/>
+            </xs:restriction>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="StatusNameCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>379</WCOID>
+        <WCOFormat>an..3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="StatusReleaseDateTimeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>277</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="DateTimeString">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:restriction base="udt:DateTimeType">
+              <xs:maxLength value="35"/>
+            </xs:restriction>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="PaymentReferenceIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>014</WCOID>
+        <WCOFormat>an..35</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="35"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="PaymentTaxAssessedAmountType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>120</WCOID>
+        <WCOFormat>n..16,3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:AmountType">
+        <xs:totalDigits value="16"/>
+        <xs:fractionDigits value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DutyTaxFeeAdValoremTaxBaseAmountType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>116</WCOID>
+        <WCOFormat>n..16,3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:AmountType">
+        <xs:totalDigits value="16"/>
+        <xs:fractionDigits value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DutyTaxFeeDeductAmountType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>111</WCOID>
+        <WCOFormat>n..16,3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:AmountType">
+        <xs:totalDigits value="16"/>
+        <xs:fractionDigits value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DutyTaxFeeDutyRegimeCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>164</WCOID>
+        <WCOFormat>an..3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DutyTaxFeeQuotaOrderIDType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>401</WCOID>
+        <WCOFormat>an..17</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:IDType">
+        <xs:maxLength value="17"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DutyTaxFeeSpecificTaxBaseQuantityType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>129</WCOID>
+        <WCOFormat>n..16,6</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:QuantityType">
+        <xs:totalDigits value="16"/>
+        <xs:fractionDigits value="6"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="DutyTaxFeeTaxRateNumericType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>115</WCOID>
+        <WCOFormat>an..17,3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="udt:NumericType"/>
+  </xs:simpleType>
+  <xs:complexType name="DutyTaxFeeTypeCodeType">
+    <xs:annotation>
+      <xs:documentation>
+        <WCOID>113</WCOID>
+        <WCOFormat>an..3</WCOFormat>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:restriction base="udt:CodeType">
+        <xs:maxLength value="3"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

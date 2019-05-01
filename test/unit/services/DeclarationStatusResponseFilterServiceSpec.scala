@@ -21,13 +21,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseFilterService}
 import uk.gov.hmrc.play.test.UnitSpec
-import util.StatusTestXMLData.{ImportTradeMovementType, generateDeclarationStatusResponse, generateValidStatusResponseWithMultiplePartiesOnly}
+import util.StatusTestXMLData.{DeclarationType, ImportTradeMovementType, generateDeclarationStatusResponse, generateValidStatusResponseWithMultiplePartiesOnly}
 
 import scala.xml.NodeSeq
 
 class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
 
-  val acceptanceDateVal = DateTime.now(DateTimeZone.UTC)
+  private val acceptanceDateVal = DateTime.now(DateTimeZone.UTC)
 
   trait SetUp {
 
@@ -43,15 +43,21 @@ class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSu
 
     "create the version number" in new SetUp {
       private val response = createStatusResponseWithAllValues()
-      println(response.toString())
       private val node = response \\ "VersionID"
 
       node.text shouldBe "0"
     }
 
+    "create the mrn" in new SetUp {
+      private val response = createStatusResponseWithAllValues()
+      private val node = response \ "Declaration" \ "ID"
+
+      node.text shouldBe "mrn"
+    }
+
     "create the creation date" in new SetUp {
       private val response = createStatusResponseWithAllValues()
-      private val node = response \\ "creationDate"
+      private val node = response \\ "CreationDateTime" \\ "DateTimeString"
 
       node.text shouldBe "2001-12-17T09:30:47Z"
       node.head.attribute("formatCode").get.text shouldBe "string"
@@ -59,57 +65,56 @@ class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSu
 
     "create the goods item count" in new SetUp {
       private val response = createStatusResponseWithAllValues()
-      private val node = response \\ "goodsItemCount"
+      private val node = response \\ "GoodsItemQuantity"
 
       node.text shouldBe "2"
+      node.head.attribute("unitType").get.text shouldBe "101"
     }
 
-    "create the trade movement type" in new SetUp {
+    "create the type code" in new SetUp {
       private val response = createStatusResponseWithAllValues()
-      private val node = response \\ "tradeMovementType"
+      private val node = response \\ "TypeCode"
 
-      node.text shouldBe ImportTradeMovementType
+      node.text shouldBe ImportTradeMovementType + DeclarationType
     }
 
-    "create the declaration type" in new SetUp {
+    "create the TotalPackageQuantity" in new SetUp {
       private val response = createStatusResponseWithAllValues()
-      private val node = response \\ "type"
-
-      node.text shouldBe "declaration type"
-    }
-
-    "create the package count" in new SetUp {
-      private val response = createStatusResponseWithAllValues()
-      private val node = response \\ "packageCount"
+      private val node = response \\ "TotalPackageQuantity"
 
       node.text shouldBe "3"
     }
 
     "create the acceptance date" in new SetUp {
       private val response = createStatusResponseWithAllValues()
-      private val node = response \\ "acceptanceDate"
+      private val node = response \\ "AcceptanceDateTime" \\ "DateTimeString"
       node.head.text shouldBe acceptanceDateVal.toString("yyyy-MM-dd'T'HH:mm:ss'Z'")
     }
 
-    "create the party identification numbers" in new SetUp {
+    "create the TB party identification number" in new SetUp {
       private val response = createStatusResponseWithAllValues()
-      private val node = response \\ "parties" \ "partyIdentification" \ "number"
+      private val node = response \\ "Submitter" \ "ID"
+
+      node.head.text shouldBe "123456"
+    }
+
+    "create the party identification number when there is one with TB type and the rest are not" in new SetUp{
+      private val response = service.transform(generateValidStatusResponseWithMultiplePartiesOnly)
+      private val node = response \\ "Submitter" \ "ID"
 
       node.head.text shouldBe "1"
     }
 
-    "create the party identification numbers when there are two parties with id numbers and one without id" in new SetUp{
-      private val response = service.transform(generateValidStatusResponseWithMultiplePartiesOnly)
-      private val node = response \\ "parties"
-
-      (node.head \ "partyIdentification" \ "number").head.text shouldBe "1"
-      (node(1) \ "partyIdentification" \ "number").head.text shouldBe "2"
-      (node(2) \ "partyIdentification" \ "number").size shouldBe 0
-    }
-
     "not create acceptance date when not provided" in new SetUp {
       private val response = service.transform(generateValidStatusResponseWithMultiplePartiesOnly)
-      private val node = response \\ "acceptanceDate"
+      private val node = response \\ "AcceptanceDateTime" \\ "DateTimeString"
+
+      node shouldBe empty
+    }
+
+    "not create submitter id when not provided" in new SetUp {
+      private val response = service.transform(generateDeclarationStatusResponse(acceptanceDate = acceptanceDateVal, partyType = "TT"))
+      private val node = response \\ "Submitter" \ "ID"
 
       node shouldBe empty
     }

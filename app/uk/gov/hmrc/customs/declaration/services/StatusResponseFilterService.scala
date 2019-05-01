@@ -29,35 +29,36 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
 
   def transform(xml: NodeSeq): NodeSeq = {
     val maybeAcceptanceDateTime = extract(xml, buildPath(xml, "acceptanceDate"))
+    val maybeMrn = extract(xml, buildPath(xml, "reference"))
     val maybeVersionId = extract(xml, buildPath(xml, "versionNumber"))
     val maybeCreationDateTime = extract(xml, buildPath(xml, "receiveDate"))
     val maybeTradeMovementType = extract(xml, buildPath(xml, "tradeMovementType"))
     val maybeType = extract(xml, buildPath(xml, "type"))
-    val maybeTypeCode = (maybeTradeMovementType ++ maybeType).reduceOption(_ + _)
-    val maybeGoodsItemQuantity = extract(xml, buildPath(xml, "goodsItemCount"))
+    val maybeTypeCode = (maybeTradeMovementType._1 ++ maybeType._1).reduceOption(_ + _)
+    val maybeGoodsItemQuantity: (Option[String], Option[MetaData]) = extract(xml, buildPath(xml, "goodsItemCount"))
     val maybeTotalPackageQuantity = extract(xml, buildPath(xml, "packageCount"))
     val maybeSubmitterId = extractSubmitterId(xml)
 
-    val response = <v1:DeclarationStatusResponse
-      xmlns:v1="http://gov.uk/customs/declarationInformationRetrieval/status/v1"
-      xmlns:_2="urn:wco:datamodel:WCO:DEC-DMS:2"
-      xmlns:_3="urn:wco:datamodel:WCO:Response_DS:DMS:2"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/status/v1 ../Schemas/declarationInformationRetrievalStatusResponse-2.xsd ">
-      <v1:Declaration>{maybeAcceptanceDateTime.fold(NodeSeq.Empty)(acceptanceDateTime => Seq[Node](newLineAndIndentation,
+    val response = <v1:DeclarationStatusResponse xmlns:v1="http://gov.uk/customs/declarationInformationRetrieval/status/v1"
+                                                 xmlns:_2="urn:wco:datamodel:WCO:DEC-DMS:2"
+                                                 xmlns:_3="urn:wco:datamodel:WCO:Response_DS:DMS:2"
+                                                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                                 xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/status/v1 ../Schemas/declarationInformationRetrievalStatusResponse.xsd">
+      <v1:Declaration>{maybeAcceptanceDateTime._1.fold(NodeSeq.Empty)(acceptanceDateTime => Seq[Node](newLineAndIndentation,
         <v1:AcceptanceDateTime>
-          <_3:DateTimeString formatCode="304">{acceptanceDateTime}</_3:DateTimeString>
+          <_3:DateTimeString formatCode={outputAttribute(maybeAcceptanceDateTime._2, "formatCode")}>{acceptanceDateTime}</_3:DateTimeString>
         </v1:AcceptanceDateTime>
-      ))}{maybeVersionId.fold(NodeSeq.Empty)(versionId => Seq[Node](newLineAndIndentation,
-        <v1:VersionID>{versionId}</v1:VersionID>))}{maybeCreationDateTime.fold(NodeSeq.Empty)(creationDateTime => Seq[Node](newLineAndIndentation,
+      ))}{maybeVersionId._1.fold(NodeSeq.Empty)(versionId => Seq[Node](newLineAndIndentation,
+        <v1:VersionID>{versionId}</v1:VersionID>))}{maybeMrn._1.fold(NodeSeq.Empty)(mrn => Seq[Node](newLineAndIndentation,
+        <v1:ID>{mrn}</v1:ID>))}{maybeCreationDateTime._1.fold(NodeSeq.Empty)(creationDateTime => Seq[Node](newLineAndIndentation,
         <v1:CreationDateTime>
-          <v1:DateTimeString formatCode="304">{creationDateTime}</v1:DateTimeString>
+          <v1:DateTimeString formatCode={outputAttribute(maybeCreationDateTime._2, "formatCode")}>{creationDateTime}</v1:DateTimeString>
         </v1:CreationDateTime>
       ))}</v1:Declaration>
       <_2:Declaration>
         <_2:FunctionCode>9</_2:FunctionCode>{maybeTypeCode.fold(NodeSeq.Empty)(typeCode => Seq[Node](newLineAndIndentation,
-        <_2:TypeCode>{typeCode}</_2:TypeCode>))}{maybeGoodsItemQuantity.fold(NodeSeq.Empty)(goodItemQuantity => Seq[Node](newLineAndIndentation,
-        <_2:GoodsItemQuantity unitCode="NPR">{goodItemQuantity}</_2:GoodsItemQuantity>))}{maybeTotalPackageQuantity.fold(NodeSeq.Empty)(totalPackageQuantity => Seq[Node](newLineAndIndentation,
+        <_2:TypeCode>{typeCode}</_2:TypeCode>))}{maybeGoodsItemQuantity._1.fold(NodeSeq.Empty)(goodItemQuantity => Seq[Node](newLineAndIndentation,
+        <_2:GoodsItemQuantity unitType={outputAttribute(maybeGoodsItemQuantity._2, "unitType")}>{goodItemQuantity}</_2:GoodsItemQuantity>))}{maybeTotalPackageQuantity._1.fold(NodeSeq.Empty)(totalPackageQuantity => Seq[Node](newLineAndIndentation,
         <_2:TotalPackageQuantity>{totalPackageQuantity}</_2:TotalPackageQuantity>))}{maybeSubmitterId.fold(NodeSeq.Empty)(submitterId => Seq[Node](newLineAndIndentation,
         <_2:Submitter>
           <_2:ID>{submitterId}</_2:ID>
@@ -70,10 +71,18 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
     response
   }
 
+  private def outputAttribute(maybeAttributes: Option[MetaData], attributeLabel: String): Option[Text] = {
+    maybeAttributes.fold[Option[Text]](None){attr =>
+      attr.get(attributeLabel).fold[Option[Text]](None){attrValue =>
+        Some(Text(attrValue.text))
+      }
+    }
+  }
+
   private def extractSubmitterId(sourceXml: NodeSeq): Option[String] = {
     val tbParty = buildPath(sourceXml,"parties").filter{ party => (party \ "type").text == "TB" }
 
-    if (tbParty.nonEmpty && (tbParty \ "partyIdentification" \ "number").head.nonEmpty) {//TODO remove nonEmpty check?
+    if (tbParty.nonEmpty && (tbParty \ "partyIdentification" \ "number").head.nonEmpty) {
       val id = (tbParty \ "partyIdentification" \ "number").head
       if (id.nonEmpty) {
         Some(id.text)
@@ -85,18 +94,16 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
     }
   }
 
-  private def buildPath(sourceXml: NodeSeq, label: String) = {
+  private def buildPath(sourceXml: NodeSeq, label: String): NodeSeq = {
     sourceXml \ "responseDetail" \ "declarationStatusResponse" \ "declaration" \ label
   }
 
-  private def extract(sourceXml: NodeSeq, path: NodeSeq): Option[String] = {
-    val node: Node = path.head
-
-    if (node.nonEmpty) {
-      Some(node.text)
+  private def extract(sourceXml: NodeSeq, path: NodeSeq): (Option[String], Option[MetaData]) = {
+    if (path.nonEmpty && path.head.nonEmpty) {
+      (Some(path.head.text), Some(path.head.attributes))
     }
     else {
-      None
+      (None, None)
     }
   }
 

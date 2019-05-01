@@ -140,7 +140,7 @@ class DeclarationStatusResponseValidationServiceSpec extends UnitSpec with Mocki
 
     "return Right of true when response is tradeMovementType of CO... procedure category is ExportType, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, COTradeMovementType, ValidExportProcedureCategory)
+      val xmlBody: NodeSeq = generateDeclarationStatusResponse(acceptanceDate = dateWithinPeriod, tradeMovementType = COTradeMovementType, procedureCategory = ValidExportProcedureCategory)
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, invalidBadgeIdentifier)
       result shouldBe Right(true)
     }

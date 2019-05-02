@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers
 
 import javax.inject.{Inject, Singleton}
+import play.api.http.ContentTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -53,7 +54,7 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
               override val conversationId: ConversationId = asr.conversationId
             }
             logger.info(s"Declaration status request processed successfully.")(id)
-            Ok(res.body).withConversationId(id)
+            Ok(res.body).withConversationId(id).as(ContentTypes.XML)
           case Left(errorResult) =>
             errorResult
         }

@@ -54,22 +54,29 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
   private val apiSubscriptionKeyForXClientIdV3 = apiSubscriptionKeyForXClientIdV2.copy(version = VersionThree)
 
   private def validResponse(acceptanceDateVal : String) =
-    raw"""<stat:declarationStatusResponse xmlns:stat="http://gov.uk/customs/declarations/status-request">
-      |  <stat:declaration>
-      |    <stat:versionNumber>0</stat:versionNumber>
-      |    <stat:creationDate formatCode="string">2001-12-17T09:30:47Z</stat:creationDate>
-      |    <stat:goodsItemCount>2</stat:goodsItemCount>
-      |    <stat:tradeMovementType>IM4567</stat:tradeMovementType>
-      |    <stat:type>declaration type</stat:type>
-      |    <stat:packageCount>3</stat:packageCount>
-      |    <stat:acceptanceDate>$acceptanceDateVal</stat:acceptanceDate>
-      |    <stat:parties>
-      |      <stat:partyIdentification>
-      |        <stat:number>1</stat:number>
-      |      </stat:partyIdentification>
-      |    </stat:parties>
-      |  </stat:declaration>
-      |</stat:declarationStatusResponse>""".stripMargin
+    raw"""<v1:DeclarationStatusResponse 
+      |xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/status/v1 ../Schemas/declarationInformationRetrievalStatusResponse.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:_3="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:_2="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:v1="http://gov.uk/customs/declarationInformationRetrieval/status/v1">
+      |  <v1:Declaration>
+      |    <v1:AcceptanceDateTime>
+      |      <_3:DateTimeString>$acceptanceDateVal</_3:DateTimeString>
+      |    </v1:AcceptanceDateTime>
+      |    <v1:VersionID>0</v1:VersionID>
+      |    <v1:ID>mrn</v1:ID>
+      |    <v1:CreationDateTime>
+      |      <v1:DateTimeString formatCode="string">2001-12-17T09:30:47Z</v1:DateTimeString>
+      |    </v1:CreationDateTime>
+      |  </v1:Declaration>
+      |  <_2:Declaration>
+      |    <_2:FunctionCode>09</_2:FunctionCode>
+      |    <_2:TypeCode>IM4567declaration type</_2:TypeCode>
+      |    <_2:GoodsItemQuantity unitType="101">2</_2:GoodsItemQuantity>
+      |    <_2:TotalPackageQuantity>3</_2:TotalPackageQuantity>
+      |    <_2:Submitter>
+      |      <_2:ID>123456</_2:ID>
+      |    </_2:Submitter>
+      |  </_2:Declaration>
+      |</v1:DeclarationStatusResponse>
+      |""".stripMargin
 
   val validRequestV2: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", endpoint).withHeaders(ValidHeadersV2.toSeq: _*).fromCsp
   val validRequestV3: FakeRequest[AnyContentAsEmpty.type] = validRequestV2.withHeaders(ValidHeadersV3.toSeq: _*)

@@ -39,7 +39,7 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
     val maybeTotalPackageQuantity = extract(xml, buildPath(xml, "packageCount"))
     val maybeSubmitterId = extractSubmitterId(xml)
 
-    val response = <v1:DeclarationStatusResponse xmlns:v1="http://gov.uk/customs/declarationInformationRetrieval/status/v1"
+    <v1:DeclarationStatusResponse xmlns:v1="http://gov.uk/customs/declarationInformationRetrieval/status/v1"
                                                  xmlns:_2="urn:wco:datamodel:WCO:DEC-DMS:2"
                                                  xmlns:_3="urn:wco:datamodel:WCO:Response_DS:DMS:2"
                                                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -66,9 +66,6 @@ class StatusResponseFilterService @Inject() (declarationsLogger: DeclarationsLog
       ))}
       </_2:Declaration>
     </v1:DeclarationStatusResponse>
-
-    declarationsLogger.debugWithoutRequestContext(s"created status response xml ${response.toString()}")
-    response
   }
 
   private def outputAttribute(maybeAttributes: Option[MetaData], attributeLabel: String): Option[Text] = {

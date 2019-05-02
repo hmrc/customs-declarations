@@ -102,7 +102,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSPNoNrs()
 
-      When("a POST request with data is sent to the API")
+      When("a GET request with data is sent to the API")
       val result: Future[Result] = route(app = app, validRequestV2).value
 
       Then("a response with a 200 (OK) status is received")
@@ -128,7 +128,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSPNoNrs()
 
-      When("a POST request with data is sent to the API")
+      When("a GET request with data is sent to the API")
       val result: Future[Result] = route(app = app, validRequestV3).value
 
       Then("a response with a 200 (OK) status is received")
@@ -155,7 +155,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSPNoNrs()
 
-      When("a POST request with data is sent to the API")
+      When("a GET request with data is sent to the API")
       val result: Future[Result] = route(app = app, validRequestV3).value
 
       Then(s"a response with a 400 status is received")
@@ -173,7 +173,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSPNoNrs()
 
-      When("a POST request with data is sent to the API")
+      When("a GET request with data is sent to the API")
       val result: Future[Result] = route(app = app, validRequestV3).value
 
       Then(s"a response with a 400 status is received")
@@ -191,7 +191,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSPNoNrs()
 
-      When("a POST request with data is sent to the API")
+      When("a GET request with data is sent to the API")
       val result: Future[Result] = route(app = app, validRequestV3).value
 
       Then(s"a response with a 400 status is received")

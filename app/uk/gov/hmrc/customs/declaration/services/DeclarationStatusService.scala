@@ -19,6 +19,7 @@ package uk.gov.hmrc.customs.declaration.services
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorGenericBadRequest
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -51,14 +52,22 @@ class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResp
         val xmlResponseBody = XML.loadString(response.body)
         statusResponseValidationService.validate(xmlResponseBody, asr.badgeIdentifier) match {
           case Right(_) => Right(filterResponse(response, xmlResponseBody))
-          case Left(errorResponse) => Left(errorResponse.XmlResult.withConversationId)
-          case _ => Left(ErrorResponse.ErrorGenericBadRequest.XmlResult.withConversationId)
+          case Left(errorResponse) =>
+            logError(errorResponse)
+            Left(errorResponse.XmlResult.withConversationId)
+          case _ =>
+            logError(ErrorGenericBadRequest)
+            Left(ErrorGenericBadRequest.XmlResult.withConversationId)
         }
       }).recover{
       case NonFatal(e) =>
         logger.error(s"declaration status call failed: ${e.getMessage}", e)
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
     }
+  }
+  
+  private def logError[A](errorResponse: ErrorResponse)(implicit asr: AuthorisedStatusRequest[A]): Unit = {
+    logger.error(s"declaration status call returning error response '${errorResponse.message}' and status code ${errorResponse.httpStatusCode}")
   }
 
   private def filterResponse(response: HttpResponse, xmlResponseBody: Elem): HttpResponse = {

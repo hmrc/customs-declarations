@@ -46,7 +46,7 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
 
       implicit asr: AuthorisedStatusRequest[AnyContent] =>
 
-        logger.debug(s"Declaration status request  received. Payload = ${asr.body.toString} headers = ${asr.headers.headers}")
+        logger.debug(s"Declaration status request received. Path = ${asr.path} \nheaders = ${asr.headers.headers}")
 
         declarationStatusService.send(Mrn(mrn)) map {
           case Right(res) =>
@@ -54,6 +54,7 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
               override val conversationId: ConversationId = asr.conversationId
             }
             logger.info(s"Declaration status request processed successfully.")(id)
+            logger.debug(s"Returning filtered declaration status request with status code 200 and body\n ${res.body}")(id)
             Ok(res.body).withConversationId(id).as(ContentTypes.XML)
           case Left(errorResult) =>
             errorResult

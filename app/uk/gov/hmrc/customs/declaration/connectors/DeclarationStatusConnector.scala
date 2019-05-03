@@ -51,13 +51,14 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
               correlationId: CorrelationId,
               dmirId: DeclarationManagementInformationRequestId,
               apiVersion: ApiVersion,
+              apiSubscriptionFieldsResponse: ApiSubscriptionFieldsResponse,
               mrn: Mrn)(implicit asr: AuthorisedStatusRequest[A]): Future[HttpResponse] = {
 
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, asr.conversationId, correlationId), authorization = Some(Authorization(bearerToken)))
 
-    val declarationStatusPayload = mdgPayloadDecorator.status(asr, correlationId, date, mrn, dmirId)
+    val declarationStatusPayload = mdgPayloadDecorator.status(correlationId, date, mrn, dmirId, apiSubscriptionFieldsResponse)
     withCircuitBreaker(post(declarationStatusPayload, config.url, correlationId)).map{
       response => logger.debug(s"Declaration status response: ${response.body}")
       response

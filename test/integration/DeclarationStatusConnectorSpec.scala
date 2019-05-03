@@ -35,6 +35,7 @@ import util.ExternalServicesConfig.{AuthToken, Host, Port}
 import util.TestData._
 import util._
 import util.externalservices.MdgStatusDeclarationService
+import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 
 class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   with GuiceOneAppPerSuite
@@ -47,7 +48,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   private val incomingAuthToken = s"Bearer ${ExternalServicesConfig.AuthToken}"
   private val numberOfCallsToTriggerStateChange = 5
   private val unavailablePeriodDurationInMillis = 1000
-  private implicit val asr: AuthorisedStatusRequest[AnyContent] = AuthorisedStatusRequest(conversationId, EventStart, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, mock[Request[AnyContent]])
+  private implicit val asr: AuthorisedStatusRequest[AnyContent] = AuthorisedStatusRequest(conversationId, EventStart, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, Csp(badgeIdentifier, None), mock[Request[AnyContent]])
   private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
 
   override protected def beforeAll() {
@@ -131,6 +132,6 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   }
 
   private def sendValidXml() = {
-    connector.send(date, correlationId, dmirId, VersionTwo, mrn)
+    connector.send(date, correlationId, dmirId, VersionTwo, apiSubscriptionFieldsResponse, mrn)
   }
 }

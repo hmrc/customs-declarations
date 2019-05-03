@@ -35,7 +35,7 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
                                             val conversationIdAction: ConversationIdAction,
                                             val declarationStatusService: DeclarationStatusService,
                                             val logger: DeclarationsLogger)
-                                           (implicit ec: ExecutionContext) extends BaseController {
+                                           (implicit val ec: ExecutionContext) extends BaseController {
 
   def get(mrn: String): Action[AnyContent] = (
     Action andThen

@@ -41,7 +41,7 @@ object StatusTestXMLData {
     xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns_1="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/"
     xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 request_schema.xsd">
       <n1:requestCommon>
-        <n1:clientID>SOME_X_CLIENT_ID</n1:clientID>
+        <n1:clientID>327d9145-4965-4d28-a2c5-39dedee50334</n1:clientID>
         <n1:conversationID>38400000-8cf0-11bd-b23e-10b96e4ef00d</n1:conversationID>
         <n1:correlationID>e61f8eee-812c-4b8f-b193-06aedc60dca2</n1:correlationID>
         <n1:badgeIdentifier>BADGEID123</n1:badgeIdentifier>

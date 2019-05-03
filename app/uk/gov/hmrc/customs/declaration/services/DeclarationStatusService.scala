@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorGenericBadRequest
-import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -35,11 +35,12 @@ import scala.xml.{Elem, PrettyPrinter, TopScope, XML}
 @Singleton
 class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResponseFilterService,
                                          statusResponseValidationService: StatusResponseValidationService,
-                                         logger: DeclarationsLogger,
+                                         override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
+                                         override val logger: DeclarationsLogger,
                                          connector: DeclarationStatusConnector,
                                          dateTimeProvider: DateTimeService,
                                          uniqueIdsService: UniqueIdsService)
-                                        (implicit ec: ExecutionContext) {
+                                        (implicit val ec: ExecutionContext) extends ApiSubscriptionFieldsService {
 
   def send[A](mrn: Mrn)(implicit asr: AuthorisedStatusRequest[A], hc: HeaderCarrier): Future[Either[Result, HttpResponse]] = {
 
@@ -47,22 +48,27 @@ class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResp
     val correlationId = uniqueIdsService.correlation
     val dmirId = uniqueIdsService.dmir
 
-    connector.send(dateTime, correlationId, dmirId, asr.requestedApiVersion, mrn)
-      .map(response => {
-        val xmlResponseBody = XML.loadString(response.body)
-        statusResponseValidationService.validate(xmlResponseBody, asr.badgeIdentifier) match {
-          case Right(_) => Right(filterResponse(response, xmlResponseBody))
-          case Left(errorResponse) =>
-            logError(errorResponse)
-            Left(errorResponse.XmlResult.withConversationId)
-          case _ =>
-            logError(ErrorGenericBadRequest)
-            Left(ErrorGenericBadRequest.XmlResult.withConversationId)
+    futureApiSubFieldsId(asr.clientId) flatMap {
+      case Right(sfId) =>
+        connector.send(dateTime, correlationId, dmirId, asr.requestedApiVersion, sfId, mrn)
+          .map(response => {
+            val xmlResponseBody = XML.loadString(response.body)
+            statusResponseValidationService.validate(xmlResponseBody, asr.badgeIdentifier) match {
+              case Right(_) => Right(filterResponse(response, xmlResponseBody))
+              case Left(errorResponse) =>
+                logError(errorResponse)
+                Left(errorResponse.XmlResult.withConversationId)
+              case _ =>
+                logError(ErrorGenericBadRequest)
+                Left(ErrorGenericBadRequest.XmlResult.withConversationId)
+            }
+          }).recover{
+          case NonFatal(e) =>
+            logger.error(s"declaration status call failed: ${e.getMessage}", e)
+            Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
         }
-      }).recover{
-      case NonFatal(e) =>
-        logger.error(s"declaration status call failed: ${e.getMessage}", e)
-        Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+      case Left(result) =>
+        Future.successful(Left(result))
     }
   }
   

@@ -82,6 +82,7 @@ object ActionBuilderModelHelper {
       vhsr.requestedApiVersion,
       vhsr.badgeIdentifier,
       vhsr.clientId,
+      Csp(vhsr.badgeIdentifier, None),
       vhsr.request
     )
   }
@@ -225,8 +226,9 @@ case class AuthorisedStatusRequest[A](
  requestedApiVersion: ApiVersion,
  badgeIdentifier: BadgeIdentifier,
  clientId: ClientId,
+ authorisedAs: AuthorisedAs,
  request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasBadgeIdentifier with ExtractedStatusHeaders
+) extends WrappedRequest[A](request) with HasConversationId with HasBadgeIdentifier with ExtractedStatusHeaders with HasAuthorisedAs
 
 // Available after ValidatedPayloadAction builder
 abstract class GenericValidatedPayloadRequest[A](

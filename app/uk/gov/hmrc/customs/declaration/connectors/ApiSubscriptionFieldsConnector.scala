@@ -18,7 +18,7 @@ package uk.gov.hmrc.customs.declaration.connectors
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.GenericValidatedPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
@@ -33,12 +33,12 @@ class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
                                                config: DeclarationsConfigService)
                                               (implicit ec: ExecutionContext) {
 
-  def getSubscriptionFields[A](apiSubsKey: ApiSubscriptionKey)(implicit vpr: GenericValidatedPayloadRequest[A], hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
+  def getSubscriptionFields[A](apiSubsKey: ApiSubscriptionKey)(implicit hci: HasConversationId, hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
     val url = ApiSubscriptionFieldsPath.url(config.declarationsConfig.apiSubscriptionFieldsBaseUrl, apiSubsKey)
     get(url)
   }
 
-  private def get[A](url: String)(implicit vpr: GenericValidatedPayloadRequest[A], hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
+  private def get[A](url: String)(implicit hci: HasConversationId, hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
     logger.debug(s"Getting fields id from api subscription fields service. url=$url")
 
     http.GET[ApiSubscriptionFieldsResponse](url)

@@ -31,15 +31,16 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
 import uk.gov.hmrc.customs.declaration.controllers.DeclarationStatusController
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{ValidateAndExtractHeadersStatusAction, _}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedStatusRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
-import uk.gov.hmrc.http.HttpResponse
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._
@@ -56,6 +57,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
     protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
     protected val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
+    protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]
     protected val mockErrorResponse: ErrorResponse = mock[ErrorResponse]
@@ -70,7 +72,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger)
-    protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
+    protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockApiSubscriptionFieldsConnector, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
     protected val stubConversationIdAction = new ConversationIdAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(
@@ -88,8 +90,9 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
       controller.get(mrnValue).apply(request)
     }
 
-    when(mockStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]])).thenReturn(Future.successful(stubHttpResponse))
+    when(mockStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], any[ApiSubscriptionFieldsResponse], meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]])).thenReturn(Future.successful(stubHttpResponse))
     when(mockDateTimeService.nowUtc()).thenReturn(dateTime)
+    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
     when(mockStatusResponseFilterService.transform(any[NodeSeq])).thenReturn(<xml>some xml</xml>)
     when(mockStatusResponseValidationService.validate(any[NodeSeq],meq(validBadgeIdentifierValue).asInstanceOf[BadgeIdentifier])).thenReturn(Right(true))
@@ -155,7 +158,9 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
       when(mockStatusConnector.send(any[DateTime],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
         meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId],
-        any[ApiVersion], meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]]))
+        any[ApiVersion],
+        any[ApiSubscriptionFieldsResponse],
+        meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]]))
         .thenReturn(Future.failed(emulatedServiceFailure))
 
       authoriseCsp()

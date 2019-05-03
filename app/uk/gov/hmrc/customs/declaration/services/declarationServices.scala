@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnecto
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ExtractedHeaders, HasAuthorisedAs, HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -64,13 +64,9 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
                                                      override val actorSystem: ActorSystem)
                                                     (implicit val ec: ExecutionContext) extends DeclarationService {
 }
-trait DeclarationService {
-
-  def logger: DeclarationsLogger
+trait DeclarationService extends ApiSubscriptionFieldsService {
 
   def connector: MdgDeclarationConnector
-
-  def apiSubFieldsConnector: ApiSubscriptionFieldsConnector
 
   def wrapper: MdgPayloadDecorator
 
@@ -86,7 +82,6 @@ trait DeclarationService {
 
   implicit def ec: ExecutionContext
 
-  private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
 
   def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
@@ -128,28 +123,6 @@ trait DeclarationService {
       }
   }
 
-  private def futureApiSubFieldsId[A](c: ClientId)
-                                     (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, ApiSubscriptionFieldsResponse]] = {
-    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
-      response: ApiSubscriptionFieldsResponse =>
-        vpr.authorisedAs match {
-          case Csp(_, _) | CspWithEori(_, _, _) =>
-            if (response.fields.authenticatedEori.exists(_.trim.nonEmpty)) {
-              Right(response)
-            } else {
-              logger.error(s"authenticatedEori for CSP not returned from api subscription fields for client id: ${c.value}")
-              Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
-            }
-          case _ =>
-            Right(response)
-        }
-    }).recover {
-      case NonFatal(e) =>
-        logger.error(s"Subscriptions fields lookup call failed: ${e.getMessage}", e)
-        Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
-    }
-  }
-
   private def callBackend[A](asfr: ApiSubscriptionFieldsResponse)
                             (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     val dateTime = dateTimeProvider.nowUtc()
@@ -177,6 +150,40 @@ trait DeclarationService {
     val endTime = dateTimeProvider.zonedDateTimeUtc
     val callDuration = ChronoUnit.MILLIS.between(startTime, endTime)
     logger.info(s"Duration of call to NRS $callDuration ms")
+  }
+
+}
+
+trait ApiSubscriptionFieldsService {
+
+  def apiSubFieldsConnector: ApiSubscriptionFieldsConnector
+
+  def logger: DeclarationsLogger
+
+  implicit def ec: ExecutionContext
+
+  private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
+
+  def futureApiSubFieldsId[A](c: ClientId)
+                             (implicit vpr: HasConversationId with HasAuthorisedAs with ExtractedHeaders, hc: HeaderCarrier): Future[Either[Result, ApiSubscriptionFieldsResponse]] = {
+    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
+      response: ApiSubscriptionFieldsResponse =>
+        vpr.authorisedAs match {
+          case Csp(_, _) | CspWithEori(_, _, _) =>
+            if (response.fields.authenticatedEori.exists(_.trim.nonEmpty)) {
+              Right(response)
+            } else {
+              logger.error(s"authenticatedEori for CSP not returned from api subscription fields for client id: ${c.value}")
+              Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+            }
+          case _ =>
+            Right(response)
+        }
+    }).recover {
+      case NonFatal(e) =>
+        logger.error(s"Subscriptions fields lookup call failed: ${e.getMessage}", e)
+        Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+    }
   }
 
 }

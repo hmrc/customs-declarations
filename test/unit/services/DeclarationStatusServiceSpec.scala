@@ -26,7 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{AnyContentAsXml, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -35,6 +35,7 @@ import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
+import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData.{correlationId, _}
 
 import scala.concurrent.Future
@@ -47,6 +48,7 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
 
   protected lazy val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
   protected lazy val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
+  protected lazy val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
   protected lazy val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
   protected lazy val mockDeclarationStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
   protected lazy val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
@@ -58,14 +60,15 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
   trait SetUp {
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockDeclarationStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-      meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion],
+      meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], any[ApiSubscriptionFieldsResponse],
       meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]]))
       .thenReturn(Future.successful(mockHttpResponse))
     when(mockHttpResponse.body).thenReturn("<xml>some xml</xml>")
     when(mockHttpResponse.allHeaders).thenReturn(any[Map[String, Seq[String]]])
     when(mockStatusResponseFilterService.transform(<xml>backendXml</xml>)).thenReturn(<xml>transformed</xml>)
+    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
 
-    protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService,
+    protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockApiSubscriptionFieldsConnector,
       mockLogger, mockDeclarationStatusConnector, mockDateTimeProvider, stubUniqueIdsService)
 
     protected def send(vpr: AuthorisedStatusRequest[AnyContentAsXml] = TestAuthorisedStatusRequest, hc: HeaderCarrier = headerCarrier): Either[Result, HttpResponse] = {
@@ -83,11 +86,11 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
 
       val result: Either[Result, HttpResponse] = send()
       result.right.get.body shouldBe "<xml>transformed</xml>"
-      verify(mockDeclarationStatusConnector).send(dateTime, correlationId, dmirId, VersionTwo, mrn)(TestAuthorisedStatusRequest)
+      verify(mockDeclarationStatusConnector).send(dateTime, correlationId, dmirId, VersionTwo, apiSubscriptionFieldsResponse, mrn)(TestAuthorisedStatusRequest)
     }
 
     "return 500 error response when MDG call fails" in new SetUp() {
-      when(mockDeclarationStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockDeclarationStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], any[ApiSubscriptionFieldsResponse], meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedStatusRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
       val result: Either[Result, HttpResponse] = send()
 
       result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)

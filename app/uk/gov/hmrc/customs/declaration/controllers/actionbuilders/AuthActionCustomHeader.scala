@@ -27,7 +27,7 @@ import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, Declaration
 import scala.concurrent.ExecutionContext
 
 abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthService,
-                                                headerValidator: HeaderWithAcceptValidator,
+                                                headerValidator: HeaderWithContentTypeValidator,
                                                 logger: DeclarationsLogger,
                                                 declarationConfigService: DeclarationsConfigService,
                                                 eoriHeaderName: String)
@@ -49,7 +49,7 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
 
 @Singleton
 class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
-                                     headerValidator: HeaderWithAcceptValidator,
+                                     headerValidator: HeaderWithContentTypeValidator,
                                      logger: DeclarationsLogger,
                                      declarationConfigService: DeclarationsConfigService)
                                     (implicit ec: ExecutionContext)
@@ -60,7 +60,7 @@ class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
 
 @Singleton
 class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService,
-                                          headerValidator: HeaderWithAcceptValidator,
+                                          headerValidator: HeaderWithContentTypeValidator,
                                           logger: DeclarationsLogger,
                                           declarationConfigService: DeclarationsConfigService)
                                          (implicit ec: ExecutionContext)

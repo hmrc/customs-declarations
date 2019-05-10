@@ -26,7 +26,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 
 @Singleton
-class HeaderWithAcceptValidator @Inject()(logger: DeclarationsLogger) extends HeaderValidator(logger) {
+class HeaderWithContentTypeValidator @Inject()(logger: DeclarationsLogger) extends HeaderValidator(logger) {
 
   private lazy val validContentTypeHeaders = Seq(MimeTypes.XML, MimeTypes.XML + ";charset=utf-8", MimeTypes.XML + "; charset=utf-8")
 

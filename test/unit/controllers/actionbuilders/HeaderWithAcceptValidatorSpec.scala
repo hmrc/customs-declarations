@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderWithAcceptValidator
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderWithContentTypeValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, _}
@@ -42,7 +42,7 @@ class HeaderWithAcceptValidatorSpec extends UnitSpec with TableDrivenPropertyChe
 
   trait SetUp {
     val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
-    val validator = new HeaderWithAcceptValidator(loggerMock)
+    val validator = new HeaderWithContentTypeValidator(loggerMock)
 
     def validate(c: ConversationIdRequest[_]): Either[ErrorResponse, ExtractedHeaders] = {
       validator.validateHeaders(c)

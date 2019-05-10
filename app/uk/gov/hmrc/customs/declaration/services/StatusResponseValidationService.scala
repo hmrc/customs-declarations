@@ -94,7 +94,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
   private def validateCreationDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] =
     extractField(declarationNode, "creationDate").fold[Either[ErrorResponse, Boolean]]({
       declarationsLogger.errorWithoutRequestContext("Status response creationDate field is missing")
-      Left(ErrorResponse.errorBadRequest(s"Declaration acceptanceDate and creationDate fields are missing"))
+      Left(ErrorResponse.errorBadRequest("Declaration acceptanceDate and creationDate fields are missing"))
     })(creationDate => {
       val parsedDateTime = Try(ISO_UTC_DateTimeFormat_noMillis.parseDateTime(creationDate.head)).toOption
       val isDateValid = parsedDateTime.fold(false)(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))

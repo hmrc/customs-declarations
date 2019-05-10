@@ -34,7 +34,7 @@ import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders.{ValidHeadersV2, _}
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
-class HeaderWithAcceptValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
+class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
 
   private val extractedHeadersWithBadgeIdentifierV1 = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
   private val extractedHeadersWithBadgeIdentifierV2 = extractedHeadersWithBadgeIdentifierV1.copy(requestedApiVersion = VersionTwo)
@@ -49,7 +49,7 @@ class HeaderWithAcceptValidatorSpec extends UnitSpec with TableDrivenPropertyChe
     }
   }
 
-  "HeaderValidator" can {
+  "HeaderWithContentTypeValidator" can {
     "in happy path, validation" should {
       "be successful for a valid request with accept header for V1" in new SetUp {
         validate(conversationIdRequest(ValidHeadersV1)) shouldBe Right(extractedHeadersWithBadgeIdentifierV1)

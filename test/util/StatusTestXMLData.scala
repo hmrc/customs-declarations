@@ -237,7 +237,7 @@ object StatusTestXMLData {
   </n1:queryDeclarationInformationResponse>
 
   def generateDeclarationStatusResponse(acceptanceOrCreationDate: DateTime = DateTime.now(DateTimeZone.UTC),
-                                        populateAcceptance: Boolean = true,
+                                        populateAcceptanceDate: Boolean = true,
                                         tradeMovementType: String = ImportTradeMovementType,
                                         declarationType: String = DeclarationType,
                                         partyType: String = PartyType,
@@ -270,7 +270,7 @@ object StatusTestXMLData {
             <tns_3:isCurrent>true</tns_3:isCurrent>
             <tns_3:versionNumber>0</tns_3:versionNumber>
             {
-            if (!populateAcceptance)
+            if (!populateAcceptanceDate)
             <tns_3:creationDate formatCode="string">{acceptanceOrCreationDate.toString(dateTimeFormat)}</tns_3:creationDate>
             }
             <tns_3:isDisplayable>true</tns_3:isDisplayable>
@@ -291,7 +291,7 @@ object StatusTestXMLData {
             <n3:loadingListCount>0</n3:loadingListCount>
             <n3:packageCount>3</n3:packageCount>
             {
-            if (populateAcceptance)
+            if (populateAcceptanceDate)
             <n3:acceptanceDate>{acceptanceOrCreationDate.toString(dateTimeFormat)}</n3:acceptanceDate>
             }
             <n3:invoiceAmount>0</n3:invoiceAmount>

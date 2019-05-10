@@ -24,7 +24,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthAction, HeaderValidator}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthAction, HeaderWithContentTypeValidator}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -62,14 +62,14 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockLogger)
-    protected val headerValidator = new HeaderValidator(mockLogger)
+    protected val headerValidator = new HeaderWithContentTypeValidator(mockLogger)
     val authAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
   trait NrsDisabled extends AuthConnectorNrsDisabledStubbing with SetUp {
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockLogger)
-    protected val headerValidator = new HeaderValidator(mockLogger)
+    protected val headerValidator = new HeaderWithContentTypeValidator(mockLogger)
     val authAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
   }

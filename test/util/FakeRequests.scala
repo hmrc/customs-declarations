@@ -19,7 +19,7 @@ package util
 import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION}
 import play.api.mvc.{AnyContentAsText, AnyContentAsXml}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.POST
+import play.api.test.Helpers.{CONTENT_TYPE, POST}
 import util.RequestHeaders._
 import util.TestData.{cspBearerToken, nonCspBearerToken}
 import util.TestXMLData.{InvalidFileUploadXml, _}
@@ -155,7 +155,7 @@ object FakeRequests {
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(InvalidFileUploadXml)
 
-  lazy val ValidDeclarationStatusRequest = FakeRequest().withHeaders(ValidHeadersV2.toSeq: _*)
+  lazy val ValidDeclarationStatusRequest = FakeRequest().withHeaders(ValidHeadersV2.-(CONTENT_TYPE).toSeq: _*)
 
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")

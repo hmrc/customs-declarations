@@ -36,7 +36,7 @@ class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSu
 
     val service = new StatusResponseFilterService(mockDeclarationsLogger, mockDeclarationsConfigService)
 
-    def createStatusResponseWithAllValues(): NodeSeq = service.transform(generateDeclarationStatusResponse(acceptanceDate = acceptanceDateVal))
+    def createStatusResponseWithAllValues(): NodeSeq = service.transform(generateDeclarationStatusResponse(acceptanceOrCreationDate = acceptanceDateVal))
   }
 
   "Status Response Filter Service" should {
@@ -113,7 +113,7 @@ class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSu
     }
 
     "not create submitter id when not provided" in new SetUp {
-      private val response = service.transform(generateDeclarationStatusResponse(acceptanceDate = acceptanceDateVal, partyType = "TT"))
+      private val response = service.transform(generateDeclarationStatusResponse(acceptanceOrCreationDate = acceptanceDateVal, partyType = "TT"))
       private val node = response \\ "Submitter" \ "ID"
 
       node shouldBe empty

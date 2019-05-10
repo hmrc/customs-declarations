@@ -67,9 +67,9 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val conversationIdAction = new ConversationIdAction(mockLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockLogger)
-    protected val headerValidator = new HeaderValidator(mockLogger)
+    protected val headerValidator = new HeaderWithContentTypeValidator(mockLogger)
     protected val stubAuthAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
-    protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderValidator(mockLogger), mockLogger)
+    protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderWithContentTypeValidator(mockLogger), mockLogger)
     protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockLogger) {}
 
     protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)

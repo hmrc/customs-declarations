@@ -34,7 +34,7 @@ import scala.concurrent.Future
   * </ol>
   */
 @Singleton
-class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator,
+class ValidateAndExtractHeadersAction @Inject()(validator: HeaderWithContentTypeValidator,
                                                 logger: DeclarationsLogger)
   extends ActionRefiner[ConversationIdRequest, ValidatedHeadersRequest] with HttpErrorFunctions {
     actionName =>

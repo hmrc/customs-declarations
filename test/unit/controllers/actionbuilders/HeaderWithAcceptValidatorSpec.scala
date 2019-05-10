@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderValidator
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderWithAcceptValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, _}
@@ -34,7 +34,7 @@ import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders.{ValidHeadersV2, _}
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
-class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
+class HeaderWithAcceptValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
 
   private val extractedHeadersWithBadgeIdentifierV1 = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
   private val extractedHeadersWithBadgeIdentifierV2 = extractedHeadersWithBadgeIdentifierV1.copy(requestedApiVersion = VersionTwo)
@@ -42,7 +42,7 @@ class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with M
 
   trait SetUp {
     val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
-    val validator = new HeaderValidator(loggerMock)
+    val validator = new HeaderWithAcceptValidator(loggerMock)
 
     def validate(c: ConversationIdRequest[_]): Either[ErrorResponse, ExtractedHeaders] = {
       validator.validateHeaders(c)

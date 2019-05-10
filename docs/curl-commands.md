@@ -174,7 +174,6 @@ curl -v -X POST "http://localhost:9820/cancellation-requests" \
   curl -v -X GET "http://localhost:9820/status-request/mrn/{valid mrn}" \
    -H 'Accept: application/vnd.hmrc.2.0+xml' \
    -H 'Authorization: Bearer {ADD VALID TOKEN}' \
-   -H 'Content-Type: application/xml' \
    -H 'X-Badge-Identifier: {Badge Id}' \
    -H 'X-Client-ID: {Valid Client Id}' \
    -H 'cache-control: no-cache' 

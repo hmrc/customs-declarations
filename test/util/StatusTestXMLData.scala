@@ -236,7 +236,8 @@ object StatusTestXMLData {
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 
-  def generateDeclarationStatusResponse(acceptanceDate: DateTime = DateTime.now(DateTimeZone.UTC),
+  def generateDeclarationStatusResponse(acceptanceOrCreationDate: DateTime = DateTime.now(DateTimeZone.UTC),
+                                        populateAcceptance: Boolean = true,
                                         tradeMovementType: String = ImportTradeMovementType,
                                         declarationType: String = DeclarationType,
                                         partyType: String = PartyType,
@@ -268,7 +269,10 @@ object StatusTestXMLData {
           <xsd_1:declaration>
             <tns_3:isCurrent>true</tns_3:isCurrent>
             <tns_3:versionNumber>0</tns_3:versionNumber>
-            <tns_3:creationDate formatCode="string">2001-12-17T09:30:47Z</tns_3:creationDate>
+            {
+            if (!populateAcceptance)
+            <tns_3:creationDate formatCode="string">{acceptanceOrCreationDate.toString(dateTimeFormat)}</tns_3:creationDate>
+            }
             <tns_3:isDisplayable>true</tns_3:isDisplayable>
             <n3:extensions>
               <tns_3:value>String</tns_3:value>
@@ -286,7 +290,10 @@ object StatusTestXMLData {
             <n3:goodsCommunityStatus>token</n3:goodsCommunityStatus>
             <n3:loadingListCount>0</n3:loadingListCount>
             <n3:packageCount>3</n3:packageCount>
-            <n3:acceptanceDate>{acceptanceDate.toString(dateTimeFormat)}</n3:acceptanceDate>
+            {
+            if (populateAcceptance)
+            <n3:acceptanceDate>{acceptanceOrCreationDate.toString(dateTimeFormat)}</n3:acceptanceDate>
+            }
             <n3:invoiceAmount>0</n3:invoiceAmount>
             <n3:procedureCategory>{procedureCategory}</n3:procedureCategory>
             <n3:batchId>String</n3:batchId>
@@ -818,6 +825,13 @@ object StatusTestXMLData {
   def statusResponseDeclarationInvalidAcceptanceDate: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
     <n3:acceptanceDate>2002-05-30T09:29:47Z</n3:acceptanceDate>
+    <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
+    <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
+  </xsd_1:declaration>
+
+  def statusResponseDeclarationInvalidCreationDate: Elem =    <xsd_1:declaration>
+    <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
+    <tns_3:creationDate formatCode="string">2002-05-30T09:29:47Z</tns_3:creationDate>
     <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
   </xsd_1:declaration>

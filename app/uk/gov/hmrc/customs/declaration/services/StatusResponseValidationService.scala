@@ -75,9 +75,10 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
     })
   }
 
-  private def validateAcceptanceDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] = extractField(declarationNode, "acceptanceDate").fold[Either[ErrorResponse, Boolean]]({
+  private def validateAcceptanceDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] =
+    extractField(declarationNode, "acceptanceDate").fold[Either[ErrorResponse, Boolean]]({
     declarationsLogger.errorWithoutRequestContext("Status response acceptanceDate field is missing")
-    Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
+    validateCreationDate(declarationNode)
   })(acceptanceDate => {
     val parsedDateTime = Try(ISO_UTC_DateTimeFormat_noMillis.parseDateTime(acceptanceDate.head)).toOption
     val isDateValid = parsedDateTime.fold(false)(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
@@ -87,6 +88,22 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
     } else{
       Right(true)
     }
+  })
+
+  //TODO: Improve re-usability here
+  private def validateCreationDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] =
+    extractField(declarationNode, "creationDate").fold[Either[ErrorResponse, Boolean]]({
+      declarationsLogger.errorWithoutRequestContext("Status response creationDate field is missing")
+      Left(ErrorResponse.errorBadRequest(s"Declaration acceptanceDate and creationDate fields are missing"))
+    })(creationDate => {
+      val parsedDateTime = Try(ISO_UTC_DateTimeFormat_noMillis.parseDateTime(creationDate.head)).toOption
+      val isDateValid = parsedDateTime.fold(false)(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
+      if (!isDateValid) {
+        declarationsLogger.debugWithoutRequestContext(s"Status response creationDate failed validation $creationDate")
+        Left(ErrorResponse.errorBadRequest(s"Declaration creation date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
+      } else{
+        Right(true)
+      }
   })
 
   private def safelyExtractValue(extractedValues : Seq[String]): Option[String] = {

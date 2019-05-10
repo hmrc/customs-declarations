@@ -82,7 +82,7 @@ trait ExpectedTestResponses {
     """<?xml version="1.0" encoding="UTF-8"?>
       | <errorResponse>
       |   <code>BAD_REQUEST</code>
-      |   <message>Declaration acceptance date is greater than 60 days old</message>
+      |   <message>Declaration acceptance date is greater than 90 days old</message>
       | </errorResponse>
     """.stripMargin
 

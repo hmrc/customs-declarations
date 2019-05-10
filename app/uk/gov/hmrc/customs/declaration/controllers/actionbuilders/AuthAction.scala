@@ -46,7 +46,7 @@ import scala.util.Left
   */
 @Singleton
 class AuthAction @Inject()(customsAuthService: CustomsAuthService,
-                           headerValidator: HeaderValidator,
+                           headerValidator: HeaderWithAcceptValidator,
                            logger: DeclarationsLogger,
                            declarationConfigService: DeclarationsConfigService)
                           (implicit ec: ExecutionContext)

@@ -41,6 +41,8 @@ class DeclarationStatusResponseValidationServiceSpec extends UnitSpec with Mocki
   private val statusRequestDaysInsideLimit: Int = statusRequestDaysLimit - 2
 
   private val invalidDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than $statusRequestDaysLimit days old")
+  private val invalidCreationDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest(s"Declaration creation date is greater than $statusRequestDaysLimit days old")
+  private val missingAcceptanceAndCreationDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest(s"Declaration acceptanceDate and creationDate fields are missing")
   private val invalidOrMissingBadgeIdentifiersErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid")
 
   trait SetUp {
@@ -53,28 +55,41 @@ class DeclarationStatusResponseValidationServiceSpec extends UnitSpec with Mocki
 
   "StatusResponseValidationService" should {
 
-    "return Right of true when badgeIdentifiers match and date is within configured allowed period" in new SetUp() {
+    "return Right of true when badgeIdentifiers match and acceptance date is within configured allowed period" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, ImportTradeMovementType, InValidProcedureCategory)
+      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, true, ImportTradeMovementType, InValidProcedureCategory)
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, badgeIdentifier)
       result shouldBe Right(true)
     }
 
-    "return Left of Invalid Date ErrorResponse when badgeIdentifiers match and date is outside configured allowed period" in new SetUp() {
+    "return Left of Invalid Date ErrorResponse when badgeIdentifiers match and acceptance date is outside configured allowed period" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, true, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier)
       result.left.get.message shouldBe invalidDateErrorResponse.message
+    }
+
+    "return Right of true when badgeIdentifiers match and creation date is within configured allowed period" in new SetUp() {
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
+      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, false, ImportTradeMovementType, InValidProcedureCategory)
+      val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, badgeIdentifier)
+      result shouldBe Right(true)
+    }
+
+    "return Left of Invalid Date ErrorResponse when badgeIdentifiers match and creation date is outside configured allowed period" in new SetUp() {
+      val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod,false, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier)
+      result.left.get.message shouldBe invalidCreationDateErrorResponse.message
     }
 
     "return Left of Invalid or missing Badge Identifier ErrorResponse  when badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, ImportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, true, ImportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
       result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
     }
 
     "return Right of true or missing Badge Identifier ErrorResponse  when badgeIdentifier cases do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier.copy(badgeIdentifier.value.toLowerCase))
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, true, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier.copy(badgeIdentifier.value.toLowerCase))
       result shouldBe Right(true)
     }
 
@@ -108,71 +123,71 @@ class DeclarationStatusResponseValidationServiceSpec extends UnitSpec with Mocki
 
     "return Right of true when response is tradeMovementType of CO... procedure category is ImportType, date and badgeId are valid" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, COTradeMovementType, ValidImportProcedureCategory)
+      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, true, COTradeMovementType, ValidImportProcedureCategory)
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, badgeIdentifier)
       result shouldBe Right(true)
     }
 
     "return Right of true when response is tradeMovementType of CO... procedure category is empty, date and badgeId are valid" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, COTradeMovementType, ValidImportProcedureCategory)
+      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, true, COTradeMovementType, ValidImportProcedureCategory)
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, badgeIdentifier)
       result shouldBe Right(true)
     }
 
     "return Left of Invalid or missing Badge Identifier ErrorResponse when response is tradeMovementType of CO... procedure category is ImportType date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, COTradeMovementType, ValidImportProcedureCategory), invalidBadgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, true, COTradeMovementType, ValidImportProcedureCategory), invalidBadgeIdentifier)
       result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
     }
 
     "return Left of Invalid Date ErrorResponse when response is tradeMovementType of EX... date outside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, ExportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, true, ExportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
       result.left.get.message shouldBe invalidDateErrorResponse.message
     }
 
     "return Left of Invalid Date ErrorResponse when response is tradeMovementType of EX... and date format is invalid" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now.minusDays(statusRequestDaysOutsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, ExportTradeMovementType, InValidProcedureCategory, dateTimeFormat = ISODateTimeFormat.dateTime()), invalidBadgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, true, ExportTradeMovementType, InValidProcedureCategory, dateTimeFormat = ISODateTimeFormat.dateTime()), invalidBadgeIdentifier)
       result.left.get.message shouldBe invalidDateErrorResponse.message
     }
 
     "return Right of true when response is tradeMovementType of CO... procedure category is ExportType, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationStatusResponse(acceptanceDate = dateWithinPeriod, tradeMovementType = COTradeMovementType, procedureCategory = ValidExportProcedureCategory)
+      val xmlBody: NodeSeq = generateDeclarationStatusResponse(acceptanceOrCreationDate = dateWithinPeriod, tradeMovementType = COTradeMovementType, procedureCategory = ValidExportProcedureCategory)
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, invalidBadgeIdentifier)
       result shouldBe Right(true)
     }
 
     "return Right of true when response is tradeMovementType of CO... procedure category is 1 char, date and badgeId are valid" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, COTradeMovementType, "A")
+      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, true, COTradeMovementType, "A")
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, badgeIdentifier)
       result shouldBe Right(true)
     }
 
     "return Right of true when response is tradeMovementType of CO... procedure category is invalid, date and badgeId are valid" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, COTradeMovementType, "INVALID&*T&^&^")
+      val xmlBody: NodeSeq = generateDeclarationStatusResponse(dateWithinPeriod, true, COTradeMovementType, "INVALID&*T&^&^")
       val result: Either[ErrorResponse, Boolean] = service.validate(xmlBody, badgeIdentifier)
       result shouldBe Right(true)
     }
 
     "return Left of Invalid Date ErrorResponse when response is tradeMovementType of CO... procedure category is ExportType, date and badgeId are valid" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysOutsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, COTradeMovementType, ValidExportProcedureCategory), badgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, true, COTradeMovementType, ValidExportProcedureCategory), badgeIdentifier)
       result.left.get.message shouldBe invalidDateErrorResponse.message
     }
 
     "return Left of Invalid or missing Badge Identifier ErrorResponse when response is tradeMovementType of CO... procedure category is invalid, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod: DateTime =  DateTime.now(DateTimeZone.UTC).minusDays(statusRequestDaysInsideLimit)
-      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, COTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
+      val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, true, COTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
       result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
     }
 
-    "return Left of Invalid Date ErrorResponse when xml does not contain acceptanceDate" in new SetUp() {
-      testServiceErrors(service, statusResponseDeclarationNoAcceptanceDate, badgeIdentifier, invalidDateErrorResponse)
+    "return Left of Invalid Date ErrorResponse when xml does not contain acceptanceDate or creationDate" in new SetUp() {
+      testServiceErrors(service, statusResponseDeclarationNoAcceptanceDate, badgeIdentifier, missingAcceptanceAndCreationDateErrorResponse)
     }
 
     "return Left of Invalid Date ErrorResponse when xml does not contain procedureCategory" in new SetUp() {
@@ -185,6 +200,10 @@ class DeclarationStatusResponseValidationServiceSpec extends UnitSpec with Mocki
 
     "return Left of Invalid Date ErrorResponse when response xml contains invalid acceptanceDate" in new SetUp() {
       testServiceErrors(service, statusResponseDeclarationInvalidAcceptanceDate, badgeIdentifier, invalidDateErrorResponse)
+    }
+
+    "return Left of Invalid Date ErrorResponse when response xml contains invalid creationDate" in new SetUp() {
+      testServiceErrors(service, statusResponseDeclarationInvalidCreationDate, badgeIdentifier, invalidCreationDateErrorResponse)
     }
 
     "return Left of Invalid or missing Badge Identifier ErrorResponse when response xml does not contain communicationAddress" in new SetUp() {

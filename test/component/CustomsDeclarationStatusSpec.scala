@@ -78,8 +78,8 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       |</v1:DeclarationStatusResponse>
       |""".stripMargin
 
-  val validRequestV2: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", endpoint).withHeaders(ValidHeadersV2.toSeq: _*).fromCsp
-  val validRequestV3: FakeRequest[AnyContentAsEmpty.type] = validRequestV2.withHeaders(ValidHeadersV3.toSeq: _*)
+  val validRequestV2: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", endpoint).withHeaders(ValidHeadersV2.-(CONTENT_TYPE).toSeq: _*).fromCsp
+  val validRequestV3: FakeRequest[AnyContentAsEmpty.type] = validRequestV2.withHeaders(ValidHeadersV3.-(CONTENT_TYPE).toSeq: _*)
 
   override protected def beforeAll() {
     startMockServer()
@@ -149,7 +149,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
     scenario("Response status 400 when Date of declaration is older than configured allowed value") {
       Given("the API is available")
-      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceDate = DateTime.now().minusYears(1)))
+      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceOrCreationDate = DateTime.now().minusYears(1)))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
 
       And("the CSP is authorised with its privileged application")

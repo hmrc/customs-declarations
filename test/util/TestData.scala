@@ -76,7 +76,8 @@ object TestData {
   val nrsConfigEnabled = NrsConfig(nrsEnabled = true, "nrs-api-key", "nrs.url")
   val nrsConfigDisabled = NrsConfig(nrsEnabled = false, "nrs-api-key",  "nrs.url")
 
-  val fileUploadConfig = FileUploadConfig("upscan-initiate.url", "callback.url", "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl")
+  val TenMb = 10485760
+  val fileUploadConfig = FileUploadConfig("upscan-initiate.url", "callback.url", 10485760, "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl")
 
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"

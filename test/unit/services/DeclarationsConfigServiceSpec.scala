@@ -46,6 +46,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |file-upload-upscan-callback.url="http://file-upload-upscan-callback.url"
       |file-transmission-callback.url="http://some-host3:1113/file-transmission"
       |fileUpload.fileGroupSize.maximum=10
+      |fileUpload.fileSize.maximum=100
       |nrs.enabled=true
       |nrs.apikey="nrs-api-key"
       |microservice.services.nrs.host="nrs.url"
@@ -83,6 +84,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.fileUploadConfig.fileTransmissionCallbackUrl shouldBe "http://some-host3:1113/file-transmission"
       configService.fileUploadConfig.fileUploadCallbackUrl shouldBe "http://file-upload-upscan-callback.url"
       configService.fileUploadConfig.upscanInitiateUrl shouldBe "http://upscan-initiate.url:11115/upscan/initiate"
+      configService.fileUploadConfig.upscanInitiateMaximumFileSize shouldBe 100
       configService.nrsConfig.nrsUrl shouldBe "http://nrs.url:11114/submission"
 
     }
@@ -108,6 +110,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config upscan-initiate.host
           |Service configuration not found for key: upscan-initiate.context
           |Could not find config key 'upscan-callback.url'
+          |Could not find config key 'fileUpload.fileSize.maximum'
           |Could not find config key 'file-upload-upscan-callback.url'
           |Could not find config key 'fileUpload.fileGroupSize.maximum'
           |Could not find config key 'file-transmission-callback.url'

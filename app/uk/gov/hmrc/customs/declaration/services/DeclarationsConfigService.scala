@@ -55,6 +55,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
   private val fileTransmissionUrl = fileTransmissionService.serviceUrl
   private val fileTransmissionCallbackUrl =  root.string("file-transmission-callback.url")
+  private val upscanInitiateMaximumFileSize = root.int("fileUpload.fileSize.maximum")
 
   private val validatedDeclarationsConfig: CustomsValidatedNel[DeclarationsConfig] = (
     apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, customsDeclarationsMetricsServiceUrlNel, bearerTokenNel, declarationStatusRequestDaysLimit
@@ -69,7 +70,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     ) mapN NrsConfig
 
   private val validatedFileUploadConfig: CustomsValidatedNel[FileUploadConfig] = (
-    upscanInitiateUrl, upscanCallbackUrl, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
+    upscanInitiateUrl, upscanCallbackUrl, upscanInitiateMaximumFileSize, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
   ) mapN FileUploadConfig
 
   private val customsConfigHolder =

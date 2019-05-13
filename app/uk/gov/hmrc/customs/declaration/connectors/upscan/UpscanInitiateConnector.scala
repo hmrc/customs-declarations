@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.connectors.upscan
 
 import com.google.inject._
+import play.api.libs.json.Json
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
@@ -40,7 +41,7 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    logger.debug(s"Sending request to upscan initiate service. Url: $url Payload: ${payload.toString}")
+    logger.debug(s"Sending request to upscan initiate service. Url: $url Payload: ${Json.prettyPrint(Json.toJson(payload))}")
     http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
       .map { res: UpscanInitiateResponsePayload =>
         logger.info(s"reference from call to upscan initiate ${res.reference}")

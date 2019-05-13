@@ -45,7 +45,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
-  private val upscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com")
+  private val upscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", 10000)
 
   implicit val jsonRequest = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 

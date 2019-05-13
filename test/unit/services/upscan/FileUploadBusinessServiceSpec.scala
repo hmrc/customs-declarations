@@ -150,7 +150,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
     implicit val jsonRequest: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 
-    val upscanInitiatePayload = UpscanInitiatePayload("http://file-upload-upscan-callback.url/uploaded-file-upscan-notifications/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334")
+    val upscanInitiatePayload = UpscanInitiatePayload("http://file-upload-upscan-callback.url/uploaded-file-upscan-notifications/clientSubscriptionId/327d9145-4965-4d28-a2c5-39dedee50334", 10000)
     val upscanInitiateResponseFields1: Map[String, String] = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
       ("key","xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"), ("policy","xxxxxxxx=="), ("x-amz-algorithm","AWS4-HMAC-SHA256"),
       ("x-amz-credential","ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request"), ("x-amz-date","2019-03-05T11:56:34Z"),
@@ -172,6 +172,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     when(mockFileUploadConfig.fileUploadCallbackUrl).thenReturn("http://file-upload-upscan-callback.url")
+    when(mockFileUploadConfig.upscanInitiateMaximumFileSize).thenReturn(10000)
     when(mockConfiguration.fileUploadConfig).thenReturn(mockFileUploadConfig)
     when(mockUuidService.uuid()).thenReturn(any[UUID])
     when(mockFileUploadMetadataRepo.create(any[FileUploadMetadata])).thenReturn(Future.successful(true))

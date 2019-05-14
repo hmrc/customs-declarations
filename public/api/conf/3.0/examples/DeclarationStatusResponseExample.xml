@@ -15,7 +15,7 @@
     </v1:CreationDateTime>
   </v1:Declaration>
   <_2:Declaration>
-    <_2:FunctionCode>09</_2:FunctionCode>
+    <_2:FunctionCode>9</_2:FunctionCode>
     <_2:TypeCode>IMZ</_2:TypeCode>
     <_2:GoodsItemQuantity unitCode="NPR">100</_2:GoodsItemQuantity>
     <_2:TotalPackageQuantity>10</_2:TotalPackageQuantity>

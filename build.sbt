@@ -14,11 +14,6 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 
 import scala.language.postfixOps
 
-mappings in Universal ++= directory(baseDirectory.value / "public")
-// my understanding is publishing processed changed when we moved to the open and
-// now it is done in production mode (was in dev previously). hence, we encounter the problem accessing "public" folder
-// see https://stackoverflow.com/questions/36906106/reading-files-from-public-folder-in-play-framework-in-production
-
 name := "customs-declarations"
 
 targetJvm := "jvm-1.8"
@@ -130,8 +125,6 @@ val compileDependencies = Seq(customsApiCommon, circuitBreaker, simpleReactiveMo
 
 val testDependencies = Seq(hmrcTest, scalaTest, scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
 
-unmanagedResourceDirectories in Compile += baseDirectory.value / "public"
-
 libraryDependencies ++= compileDependencies ++ testDependencies
 
 // Task to create a ZIP file containing all WCO XSDs for each version, under the version directory
@@ -144,15 +137,13 @@ zipWcoXsds := {
       val wcoXsdPaths = Path.allSubpaths(dir / "schemas")
       val exampleMessagesFilter = new SimpleFileFilter(_.getPath.contains("/example_messages/"))
       val exampleMessagesPaths = Path.selectSubpaths(dir / "examples", exampleMessagesFilter)
-      val zipFile = dir / "wco-declaration-schemas.zip"
+      val zipFile = target.value / "public" / "api" / "conf" / dir.getName / "wco-declaration-schemas.zip"
       IO.zip(wcoXsdPaths ++ exampleMessagesPaths, zipFile)
     }
 }
 
-// default package task depends on packageBin which we override here to also invoke the custom ZIP task
-packageBin in Compile := {
-  zipWcoXsds.value
-  (packageBin in Compile).value
-}
+// ensure zip output is included in assets
+unmanagedResourceDirectories in Assets += target.value / "public"
+(packageBin in Assets) := ((packageBin in Assets) dependsOn zipWcoXsds).value
 
 evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false)

@@ -125,6 +125,8 @@ val compileDependencies = Seq(customsApiCommon, circuitBreaker, simpleReactiveMo
 
 val testDependencies = Seq(hmrcTest, scalaTest, scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
 
+unmanagedResourceDirectories in Compile += baseDirectory.value / "public"
+
 libraryDependencies ++= compileDependencies ++ testDependencies
 
 // Task to create a ZIP file containing all WCO XSDs for each version, under the version directory

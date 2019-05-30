@@ -28,14 +28,14 @@ class FileTransmissionCallbackToXmlNotification extends CallbackToXmlNotificatio
   override def toXml(maybeFilename: Option[String], callbackResponse: FileTransmissionNotification): Node = {
     callbackResponse.outcome match {
       case FileTransmissionSuccessOutcome =>
-      <Root>
+      <Root xmlns="hmrc:fileupload">
         <FileReference>{callbackResponse.fileReference.toString}</FileReference>
         <BatchId>{callbackResponse.batchId.toString}</BatchId>{maybeFilename.fold(NodeSeq.Empty)(filename => Seq[Node](Text("\n        "), <FileName>{filename}</FileName>))}
         <Outcome>SUCCESS</Outcome>
         <Details>Thank you for submitting your documents. Typical clearance times are 2 hours for air and 3 hours for maritime declarations. During busy periods wait times may be longer.</Details>
       </Root>
       case FileTransmissionFailureOutcome =>
-      <Root>
+      <Root xmlns="hmrc:fileupload">
         <FileReference>{callbackResponse.fileReference.toString}</FileReference>
         <BatchId>{callbackResponse.batchId.toString}</BatchId>{maybeFilename.fold(NodeSeq.Empty)(filename => Seq[Node](Text("\n        "), <FileName>{filename}</FileName>))}
         <Outcome>FAILURE</Outcome>

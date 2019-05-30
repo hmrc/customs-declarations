@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="hmrc:fileupload" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="hmrc:fileupload" elementFormDefault="qualified">
+    <xs:element name="Root">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="FileReference" type="xs:string"/>
+                <xs:element name="Outcome" type="xs:string"/>
+                <xs:element name="Details" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

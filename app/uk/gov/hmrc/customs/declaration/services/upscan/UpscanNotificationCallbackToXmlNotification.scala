@@ -25,13 +25,9 @@ import scala.xml.NodeSeq
 class UpscanNotificationCallbackToXmlNotification extends CallbackToXmlNotification[UploadedFailedCallbackBody] {
 
   override def toXml(maybeFilename: Option[String], failed: UploadedFailedCallbackBody): NodeSeq =
-    <root>
-      <reference>{failed.reference.toString}</reference>
-      <fileStatus>FAILED</fileStatus>
-      <failureDetails>
-        <failureReason>{failed.failureDetails.failureReason}</failureReason>
-        <message>{failed.failureDetails.message}</message>
-      </failureDetails>
-    </root>
-
+    <Root xmlns="hmrc:fileupload">
+      <FileReference>{failed.reference.toString}</FileReference>
+      <Outcome>{failed.failureDetails.failureReason}</Outcome>
+      <Details>{failed.failureDetails.message}</Details>
+    </Root>
 }

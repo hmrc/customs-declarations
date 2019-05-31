@@ -63,7 +63,7 @@ class FileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
     private[FileUploadNotificationServiceSpec] val mockDeclarationsLogger = mock[CdsLogger]
     private[FileUploadNotificationServiceSpec] val service = new FileUploadNotificationService(mockFileUploadMetadataRepo, mockNotificationConnector, mockDeclarationsLogger)
     private[FileUploadNotificationServiceSpec] val expectedSuccessXml =
-      <Root>
+      <Root xmlns="hmrc:fileupload">
         <FileReference>{FileReferenceOne}</FileReference>
         <BatchId>{BatchIdOne}</BatchId>
         <FileName>name1</FileName>
@@ -71,7 +71,7 @@ class FileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
         <Details>Thank you for submitting your documents. Typical clearance times are 2 hours for air and 3 hours for maritime declarations. During busy periods wait times may be longer.</Details>
       </Root>
     private[FileUploadNotificationServiceSpec] val expectedFailureXml =
-      <Root>
+      <Root xmlns="hmrc:fileupload">
         <FileReference>{FileReferenceOne}</FileReference>
         <BatchId>{BatchIdOne}</BatchId>
         <Outcome>FAILURE</Outcome>

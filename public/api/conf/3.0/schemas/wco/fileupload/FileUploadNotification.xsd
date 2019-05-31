@@ -5,6 +5,8 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="FileReference" type="xs:string"/>
+                <xs:element name="BatchId" type="xs:string" minOccurs="0"/>
+                <xs:element name="FileName" type="xs:string" minOccurs="0"/>
                 <xs:element name="Outcome" type="xs:string"/>
                 <xs:element name="Details" type="xs:string"/>
             </xs:sequence>

@@ -52,12 +52,6 @@ class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionX
   extends PayloadValidationAction(xmlValidationService, logger)
 
 @Singleton
-class ClearancePayloadValidationAction @Inject() (xmlValidationService: ClearanceXmlValidationService,
-                                                  logger: DeclarationsLogger)
-                                                 (implicit ec: ExecutionContext)
-  extends PayloadValidationAction(xmlValidationService, logger)
-
-@Singleton
 class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService,
                                               logger: DeclarationsLogger)
                                              (implicit ec: ExecutionContext)

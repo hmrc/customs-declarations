@@ -30,9 +30,6 @@ class FileUploadXmlValidationService @Inject()(configuration: Configuration) ext
 class CancellationXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.cancel")
 
 @Singleton
-class ClearanceXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.clearance")
-
-@Singleton
 class AmendXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.submit")
 
 @Singleton

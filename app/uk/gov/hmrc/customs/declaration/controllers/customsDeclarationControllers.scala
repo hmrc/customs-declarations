@@ -62,14 +62,6 @@ class CancelDeclarationController @Inject()(common: CommonSubmitterHeader,
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
-class ClearanceDeclarationController @Inject()(common: Common,
-                                               businessService: StandardDeclarationSubmissionService,
-                                               payloadValidationAction: ClearancePayloadValidationAction,
-                                               conversationIdAction: ConversationIdAction)
-                                              (implicit ec: ExecutionContext)
-  extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
-
-@Singleton
 class AmendDeclarationController @Inject()(common: CommonSubmitterHeader,
                                            businessService: StandardDeclarationSubmissionService,
                                            payloadValidationAction: AmendPayloadValidationAction,

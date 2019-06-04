@@ -64,8 +64,6 @@ object FakeRequests {
 
   lazy val InvalidSubmissionRequestWith2Errors: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest.withXmlBody(InvalidSubmissionXMLWith2Errors)
 
-  lazy val InvalidClearanceRequestWith2Errors: FakeRequest[AnyContentAsXml] = InvalidSubmissionRequest.withXmlBody(InvalidClearanceRequestXmlWith2Errors)
-
   lazy val InvalidCancellationRequestWith2Errors: FakeRequest[AnyContentAsXml] = InvalidCancellationRequest.withXmlBody(InvalidCancellationXMLWith2Errors)
 
   lazy val MalformedXmlRequest: FakeRequest[AnyContentAsText] = InvalidSubmissionRequest.withTextBody("<xml><non_well_formed></xml>")
@@ -93,14 +91,6 @@ object FakeRequests {
 
   lazy val NoClientIdIdHeaderCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request
     .copyFakeRequest(headers = ValidCancellationV2Request.headers.remove(X_CLIENT_ID_NAME))
-
-  lazy val ValidClearanceV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
-    .withXmlBody(ValidClearanceXML)
-
-  lazy val ValidClearanceV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV3.toSeq: _*)
-    .withXmlBody(ValidClearanceXML)
 
   lazy val ValidAmendV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)

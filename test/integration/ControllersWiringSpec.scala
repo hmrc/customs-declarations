@@ -31,12 +31,10 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
 
   private lazy val mockSubmissionXmlValidationService = mock[SubmissionXmlValidationService]
   private lazy val mockCancellationXmlValidationService = mock[CancellationXmlValidationService]
-  private lazy val mockClearanceXmlValidationService = mock[ClearanceXmlValidationService]
   private lazy val mockAmendXmlValidationService = mock[AmendXmlValidationService]
   private lazy val mockArrivalNotificationXmlValidationService = mock[ArrivalNotificationXmlValidationService]
   private lazy val mockFileUploadXmlValidationService = mock[FileUploadXmlValidationService]
   private lazy val mockDeclarationsLogger = mock[DeclarationsLogger]
-  private lazy val clearanceController = app.injector.instanceOf[ClearanceDeclarationController]
   private lazy val amendController = app.injector.instanceOf[AmendDeclarationController]
   private lazy val arrivalNotificationController = app.injector.instanceOf[ArrivalNotificationDeclarationController]
   private lazy val submitController = app.injector.instanceOf[SubmitDeclarationController]
@@ -56,12 +54,6 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
 
       action.getClass.getSimpleName shouldBe new CancelPayloadValidationAction(mockCancellationXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.cancel"
-    }
-    "be wired into ClearanceDeclarationController" in {
-      val action = clearanceController.payloadValidationAction
-
-      action.getClass.getSimpleName shouldBe new ClearancePayloadValidationAction(mockClearanceXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
-      action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.clearance"
     }
     "be wired into AmendDeclarationController" in {
       val action = amendController.payloadValidationAction
@@ -89,9 +81,6 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
     }
     "be disabled for CancelDeclarationController" in {
       cancelController.maybeMetricsConnector shouldBe None
-    }
-    "be disabled for ClearanceDeclarationController" in {
-      clearanceController.maybeMetricsConnector shouldBe None
     }
     "be disabled for AmendDeclarationController" in {
       amendController.maybeMetricsConnector shouldBe None

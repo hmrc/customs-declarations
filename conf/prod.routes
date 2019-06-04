@@ -13,8 +13,6 @@ POST        /uploaded-file-upscan-notifications/clientSubscriptionId/:clientSubs
 
 POST        /file-transmission-notify/clientSubscriptionId/:clientSubscriptionId     @uk.gov.hmrc.customs.declaration.controllers.filetransmission.FileTransmissionNotificationController.post(clientSubscriptionId)
 
-POST        /clearance                    @uk.gov.hmrc.customs.declaration.controllers.ClearanceDeclarationController.post()
-
 POST        /amend                        @uk.gov.hmrc.customs.declaration.controllers.AmendDeclarationController.post()
 
 POST        /arrival-notification         @uk.gov.hmrc.customs.declaration.controllers.ArrivalNotificationDeclarationController.post()

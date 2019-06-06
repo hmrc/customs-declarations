@@ -13,15 +13,15 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="NonZeroIntegerType">
-        <xs:restriction base="xs:nonNegativeInteger">
-            <xs:minInclusive value="1"/>
+    <xs:simpleType name="MinOneInt">
+        <xs:restriction base="xs:int">
+            <xs:minExclusive value="0"/>
         </xs:restriction>
     </xs:simpleType>
 
     <xs:complexType name="FileType">
         <xs:sequence>
-            <xs:element type="NonZeroIntegerType" name="FileSequenceNo"/>
+            <xs:element type="MinOneInt" name="FileSequenceNo"/>
             <xs:element type="xs:string" name="DocumentType" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
@@ -35,7 +35,7 @@
     <xs:complexType name="FileUploadRequestType">
         <xs:sequence>
             <xs:element type="DeclarationIDType" name="DeclarationID"/>
-            <xs:element type="NonZeroIntegerType" name="FileGroupSize"/>
+            <xs:element type="MinOneInt" name="FileGroupSize"/>
             <xs:element type="FilesType" name="Files" />
         </xs:sequence>
     </xs:complexType>

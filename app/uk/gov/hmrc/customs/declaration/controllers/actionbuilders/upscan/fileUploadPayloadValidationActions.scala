@@ -49,6 +49,8 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
   private val fileSequenceNoLabel = "FileSequenceNo"
   private val filesLabel = "Files"
   private val fileLabel = "File"
+  private val successRedirectLabel = "SuccessRedirect"
+  private val errorRedirectLabel = "ErrorRedirect"
 
   private val errorMaxFileGroupSizeMsg = s"$fileGroupSizeLabel exceeds ${declarationsConfigService.fileUploadConfig.fileGroupSizeMaximum} limit"
   private val errorFileGroupSizeMsg = s"$fileGroupSizeLabel does not match number of $fileLabel elements"
@@ -80,7 +82,9 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
                 val fileSequenceNumber = FileSequenceNo((file \ fileSequenceNoLabel).text.trim.toInt)
                 val maybeDocumentTypeText = (file \ documentTypeLabel).text
                 val documentType = if (maybeDocumentTypeText.isEmpty) None else Some(DocumentType(maybeDocumentTypeText))
-                FileUploadFile(fileSequenceNumber, documentType)
+                val successRedirect = (file \ successRedirectLabel).text
+                val errorRedirect = (file \ errorRedirectLabel).text
+                FileUploadFile(fileSequenceNumber, documentType, successRedirect, errorRedirect)
               }
 
             val fileUpload = FileUploadRequest(declarationId, fileGroupSize, files.sortWith(_.fileSequenceNo.value < _.fileSequenceNo.value))

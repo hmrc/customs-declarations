@@ -27,7 +27,7 @@ import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{FileUploadFile, ValidatedFileUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchFile, BatchId, FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, UuidService}
@@ -89,10 +89,9 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
                              hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
 
-    val upscanInitiateRequests = validatedRequest.fileUploadRequest.files.map { _ =>
-      subscriptionFieldsId
+    val upscanInitiateRequests = validatedRequest.fileUploadRequest.files.map { f => f
     }
-    failFastSequence(upscanInitiateRequests)(i => backendCall(i))
+    failFastSequence(upscanInitiateRequests)(f => backendCall(subscriptionFieldsId, f))
   }
 
   private def persist[A](fileDetails: Seq[UpscanInitiateResponsePayload], sfId: SubscriptionFieldsId)
@@ -117,21 +116,23 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
             <Reference>{payload.reference}</Reference>
             <UploadRequest>
               <Href>{payload.uploadRequest.href}</Href>
-              <Fields>{Seq[NodeSeq](toNode("Content-Type", payload.uploadRequest.fields),
-                toNode("x-amz-meta-callback-url", payload.uploadRequest.fields),
-                toNode("x-amz-date", payload.uploadRequest.fields),
-                toNode("x-amz-credential", payload.uploadRequest.fields),
-                toNode("x-amz-meta-upscan-initiate-response", payload.uploadRequest.fields),
-                toNode("x-amz-meta-upscan-initiate-received", payload.uploadRequest.fields),
-                toNode("x-amz-meta-request-id", payload.uploadRequest.fields),
-                toNode("x-amz-meta-original-filename", payload.uploadRequest.fields),
-                toNode("x-amz-algorithm", payload.uploadRequest.fields),
-                toNode("key", payload.uploadRequest.fields),
-                toNode("acl", payload.uploadRequest.fields),
-                toNode("x-amz-signature", payload.uploadRequest.fields),
-                toNode("x-amz-meta-session-id", payload.uploadRequest.fields),
-                toNode("x-amz-meta-consuming-service", payload.uploadRequest.fields),
-                toNode("policy", payload.uploadRequest.fields))}
+              <Fields>{Seq[NodeSeq](toNode("Content-Type", "Content-Type", payload.uploadRequest.fields),
+                toNode("x-amz-meta-callback-url", "x-amz-meta-callback-url", payload.uploadRequest.fields),
+                toNode("x-amz-date", "x-amz-date", payload.uploadRequest.fields),
+                toNode("x-amz-credential", "x-amz-credential", payload.uploadRequest.fields),
+                toNode("x-amz-meta-upscan-initiate-response", "x-amz-meta-upscan-initiate-response", payload.uploadRequest.fields),
+                toNode("x-amz-meta-upscan-initiate-received", "x-amz-meta-upscan-initiate-received", payload.uploadRequest.fields),
+                toNode("x-amz-meta-request-id", "x-amz-meta-request-id", payload.uploadRequest.fields),
+                toNode("x-amz-meta-original-filename", "x-amz-meta-original-filename", payload.uploadRequest.fields),
+                toNode("x-amz-algorithm", "x-amz-algorithm", payload.uploadRequest.fields),
+                toNode("key", "key", payload.uploadRequest.fields),
+                toNode("acl", "acl", payload.uploadRequest.fields),
+                toNode("x-amz-signature", "x-amz-signature", payload.uploadRequest.fields),
+                toNode("x-amz-meta-session-id", "x-amz-meta-session-id", payload.uploadRequest.fields),
+                toNode("x-amz-meta-consuming-service", "x-amz-meta-consuming-service", payload.uploadRequest.fields),
+                toNode("policy", "policy", payload.uploadRequest.fields),
+                toNode("success_action_redirect", "success-action-redirect", payload.uploadRequest.fields),
+                toNode("error_action_redirect", "error-action-redirect", payload.uploadRequest.fields))}
               </Fields>
             </UploadRequest>
           </File>)
@@ -141,9 +142,9 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
 
   }
 
-  private def toNode(labelName: String, fields: Map[String, String]): NodeSeq = {
+  private def toNode(labelName: String, outputLabelName: String, fields: Map[String, String]): NodeSeq = {
     if (fields.contains(labelName) && !fields(labelName).trim.isEmpty) {
-      Seq[Node](Text("\n                "), <a/>.copy(label = labelName, child = Text(fields(labelName))))
+      Seq[Node](Text("\n                "), <a/>.copy(label = outputLabelName, child = Text(fields(labelName))))
     } else {
       NodeSeq.Empty
     }
@@ -158,10 +159,10 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
         } yield previousResults :+ next
     }
 
-  private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId)
+  private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
                               (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
     upscanInitiateConnector.send(
-      preparePayload(subscriptionFieldsId), validatedRequest.requestedApiVersion)
+      preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)
   }
 
   private def extractEori(authorisedAs: AuthorisedAs): Eori = {
@@ -172,11 +173,13 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
   }
 
-  private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId)
+  private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
                                (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
 
     val upscanInitiatePayload = UpscanInitiatePayload(s"""${config.fileUploadConfig.fileUploadCallbackUrl}/uploaded-file-upscan-notifications/clientSubscriptionId/${subscriptionFieldsId.value}""".stripMargin,
-      config.fileUploadConfig.upscanInitiateMaximumFileSize)
+      config.fileUploadConfig.upscanInitiateMaximumFileSize,
+      fileUploadFile.successRedirect,
+      fileUploadFile.errorRedirect)
     logger.debug(s"Prepared payload for upscan initiate $upscanInitiatePayload")
     upscanInitiatePayload
   }

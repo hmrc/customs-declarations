@@ -20,6 +20,8 @@
           <x-amz-meta-session-id>789</x-amz-meta-session-id>
           <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
           <policy>xxxxxxxx==</policy>
+          <success-action-redirect>https://success-redirect.com</success-action-redirect>
+          <error-action-redirect>https://success-redirect.com</error-action-redirect>
         </Fields>
       </UploadRequest>
     </File>
@@ -43,6 +45,8 @@
           <x-amz-meta-session-id>789</x-amz-meta-session-id>
           <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
           <policy>xxxxxxxx==</policy>
+          <success-action-redirect>https://success-redirect.com</success-action-redirect>
+          <error-action-redirect>https://success-redirect.com</error-action-redirect>
         </Fields>
       </UploadRequest>
     </File>

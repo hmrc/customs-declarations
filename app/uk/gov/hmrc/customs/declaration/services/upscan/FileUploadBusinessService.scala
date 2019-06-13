@@ -143,7 +143,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def toNode(labelName: String, outputLabelName: String, fields: Map[String, String]): NodeSeq = {
-    if (fields.contains(labelName) && !fields(labelName).trim.isEmpty) {
+    if (fields.contains(labelName)) {
       Seq[Node](Text("\n                "), <a/>.copy(label = outputLabelName, child = Text(fields(labelName))))
     } else {
       NodeSeq.Empty

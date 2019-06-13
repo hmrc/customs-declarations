@@ -141,6 +141,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
             <UploadRequest>
               <Href>https://x.y.com</Href>
               <Fields>
+                <Content-Type>   </Content-Type>
                 <acl>some-acl</acl>
               </Fields>
             </UploadRequest>

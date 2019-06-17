@@ -39,7 +39,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
   val ISO_UTC_DateTimeFormat_noMillis: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis.withZoneUTC()
 
   def validate(xml: NodeSeq, badgeIdentifier: BadgeIdentifier): Either[ErrorResponse, Boolean] = {
-    val declarationNode = xml \ "responseDetail" \ "declarationStatusResponse" \ "declaration"
+    val declarationNode = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"
     val theResult =  for {
       tradeMovementType <- extractTradeMovementType(declarationNode).right
       xmlNode <- handleValidationForTradeTypes(badgeIdentifier, tradeMovementType, declarationNode).right

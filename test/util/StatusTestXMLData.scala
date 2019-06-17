@@ -61,7 +61,7 @@ object StatusTestXMLData {
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>
     <n1:responseDetail>
-      <n1:declarationStatusResponse>
+      <n1:declarationManagementInformationResponse>
         <n2:extensions>
           <tns_3:value>String</tns_3:value>
           <tns_3:type>token</tns_3:type>
@@ -232,7 +232,7 @@ object StatusTestXMLData {
             <n3:authentication>String</n3:authentication>
           </xsd_1:signature>
         </xsd_1:declaration>
-      </n1:declarationStatusResponse>
+      </n1:declarationManagementInformationResponse>
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 
@@ -249,7 +249,7 @@ object StatusTestXMLData {
         <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
       </n1:responseCommon>
       <n1:responseDetail>
-        <n1:declarationStatusResponse>
+        <n1:declarationManagementInformationResponse>
           <n2:extensions>
             <tns_3:value>String</tns_3:value>
             <tns_3:type>token</tns_3:type>
@@ -812,7 +812,7 @@ object StatusTestXMLData {
               </xsd_1:goodsItems>
             </xsd_1:consignmentShipment>
           </xsd_1:declaration>
-        </n1:declarationStatusResponse>
+        </n1:declarationManagementInformationResponse>
       </n1:responseDetail>
     </n1:queryDeclarationInformationResponse>
 
@@ -859,7 +859,7 @@ object StatusTestXMLData {
       <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
     </n1:responseCommon>
     <n1:responseDetail>
-      <n1:declarationStatusResponse>
+      <n1:declarationManagementInformationResponse>
         <n2:extensions>
           <tns_3:value>String</tns_3:value>
           <tns_3:type>token</tns_3:type>
@@ -877,7 +877,7 @@ object StatusTestXMLData {
         <n2:isFinal>true</n2:isFinal>
         <n2:externalId>String</n2:externalId>
           {declarationNode}
-      </n1:declarationStatusResponse>
+      </n1:declarationManagementInformationResponse>
     </n1:responseDetail>
   </n1:queryDeclarationInformationResponse>
 }

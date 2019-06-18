@@ -36,7 +36,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
   val importProcedureCategories: Seq[String] = Seq( "40", "42", "61", "07", "51", "53", "71")
   val exportProcedureCategories: Seq[String] = Seq( "10")
 
-  val ISO_UTC_DateTimeFormat_noMillis: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis.withZoneUTC()
+  val ISO_UTC_DateTimeFormat_noMillis: DateTimeFormatter = ISODateTimeFormat.dateTime.withZoneUTC()
 
   def validate(xml: NodeSeq, badgeIdentifier: BadgeIdentifier): Either[ErrorResponse, Boolean] = {
     val declarationNode = xml \ "responseDetail" \ "declarationManagementInformationResponse" \ "declaration"

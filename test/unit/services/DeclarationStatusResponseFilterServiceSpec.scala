@@ -22,6 +22,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseFilterService}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.StatusTestXMLData.{DeclarationType, ImportTradeMovementType, generateDeclarationStatusResponse, generateValidStatusResponseWithMultiplePartiesOnly}
+import util.TestData.{date, dateString}
 
 import scala.xml.NodeSeq
 
@@ -86,9 +87,9 @@ class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSu
     }
 
     "create the acceptance date" in new SetUp {
-      private val response = createStatusResponseWithAllValues()
+      private val response = service.transform(generateDeclarationStatusResponse(acceptanceOrCreationDate = date))
       private val node = response \\ "AcceptanceDateTime" \\ "DateTimeString"
-      node.head.text shouldBe acceptanceDateVal.toString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+      node.head.text shouldBe dateString
     }
 
     "create the TB party identification number" in new SetUp {

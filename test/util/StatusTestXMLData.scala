@@ -243,7 +243,7 @@ object StatusTestXMLData {
                                         partyType: String = PartyType,
                                         procedureCategory: String = ValidImportProcedureCategory,
                                         communicationAddress: String = validCommunicationAddress,
-                                        dateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC()): NodeSeq =
+                                        dateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTime.withZoneUTC()): NodeSeq =
     <n1:queryDeclarationInformationResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/" xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/trade/2017/02/22/" xmlns:n2="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/" xmlns:n3="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/trade/2017/02/22/" xmlns:tns_3="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/trade/2017/02/22/" xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 queryDeclarationInformationResponse.xsd">
       <n1:responseCommon>
         <n1:processingDate>2001-12-17T09:30:47Z</n1:processingDate>
@@ -822,9 +822,16 @@ object StatusTestXMLData {
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
   </xsd_1:declaration>
 
-  def statusResponseDeclarationInvalidAcceptanceDate: Elem =    <xsd_1:declaration>
+  def statusResponseDeclarationInvalidAcceptanceDateOld: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
     <n3:acceptanceDate>2002-05-30T09:29:47Z</n3:acceptanceDate>
+    <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
+    <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
+  </xsd_1:declaration>
+
+  def statusResponseDeclarationInvalidAcceptanceDateWithMillis: Elem =    <xsd_1:declaration>
+    <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
+    <n3:acceptanceDate>2019-04-10T00:00:00.000Z</n3:acceptanceDate>
     <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
   </xsd_1:declaration>

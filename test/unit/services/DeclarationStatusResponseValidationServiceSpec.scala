@@ -199,7 +199,11 @@ class DeclarationStatusResponseValidationServiceSpec extends UnitSpec with Mocki
     }
 
     "return Left of Invalid Date ErrorResponse when response xml contains invalid acceptanceDate" in new SetUp() {
-      testServiceErrors(service, statusResponseDeclarationInvalidAcceptanceDate, badgeIdentifier, invalidDateErrorResponse)
+      testServiceErrors(service, statusResponseDeclarationInvalidAcceptanceDateOld, badgeIdentifier, invalidDateErrorResponse)
+    }
+
+    "return Left of Invalid Date ErrorResponse when response xml contains invalid acceptanceDate due to millis" in new SetUp() {
+      testServiceErrors(service, statusResponseDeclarationInvalidAcceptanceDateWithMillis, badgeIdentifier, invalidDateErrorResponse)
     }
 
     "return Left of Invalid Date ErrorResponse when response xml contains invalid creationDate" in new SetUp() {

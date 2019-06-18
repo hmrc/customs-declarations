@@ -65,6 +65,7 @@ object TestData {
   val mrnValue = "theMrn"
   val mrn = Mrn(mrnValue)
 
+  val dateString = "2018-09-11T10:28:54.128Z"
   val date: DateTime = DateTime.parse("2018-09-11T10:28:54.128Z")
 
   val subscriptionFieldsIdString: String = "b82f31c6-2239-4253-b6f5-ed75e37ab7a5"

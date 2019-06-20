@@ -33,15 +33,18 @@ class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorH
   private lazy val mayBeV2WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-2.0.whitelistedApplicationIds")
   private lazy val mayBeV3WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-3.0.whitelistedApplicationIds")
 
+  private lazy val v1IsTrial = configuration.getBoolean("api.access.version-1.0.isTrial").getOrElse(false)
   private lazy val v2Enabled = configuration.getBoolean("api.access.version-2.0.enabled").getOrElse(true)
   private lazy val v3Enabled = configuration.getBoolean("api.access.version-3.0.enabled").getOrElse(true)
 
   def definition(): Action[AnyContent] = Action {
     logger.debugWithoutRequestContext("DeclarationsDocumentationController definition endpoint has been called")
+    logger.debugWithoutRequestContext(s"v1IsTrial is $v1IsTrial and mayBeV1WhitelistedApplicationIds is $mayBeV1WhitelistedApplicationIds")
     Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(
       mayBeV1WhitelistedApplicationIds,
       mayBeV2WhitelistedApplicationIds,
       mayBeV3WhitelistedApplicationIds,
+      v1IsTrial,
       v2Enabled,
       v3Enabled)).as(MimeTypes.JSON)
   }

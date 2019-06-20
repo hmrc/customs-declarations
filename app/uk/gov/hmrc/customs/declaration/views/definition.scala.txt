@@ -3,6 +3,7 @@
 @(  mayBeV1WhitelistedApplicationIds:  Option[Seq[String]],
     mayBeV2WhitelistedApplicationIds: Option[Seq[String]],
     mayBeV3WhitelistedApplicationIds: Option[Seq[String]],
+    v1IsTrial: Boolean,
     v2Enabled: Boolean,
     v3Enabled: Boolean
  )
@@ -25,6 +26,7 @@
         "status": "BETA",
         "endpointsEnabled": true,
         "access": {
+            "isTrial": @v1IsTrial,
             @mayBeV1WhitelistedApplicationIds.fold(""" "type": "PUBLIC" """)( ids =>
                 s"""
                     "type": "PRIVATE",

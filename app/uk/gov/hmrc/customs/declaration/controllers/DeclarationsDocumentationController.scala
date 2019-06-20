@@ -40,12 +40,14 @@ class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorH
   def definition(): Action[AnyContent] = Action {
     logger.debugWithoutRequestContext("DeclarationsDocumentationController definition endpoint has been called")
     logger.debugWithoutRequestContext(s"v1IsTrial is $v1IsTrial and mayBeV1WhitelistedApplicationIds is $mayBeV1WhitelistedApplicationIds")
-    Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(
+    val definitions = uk.gov.hmrc.customs.declaration.views.txt.definition(
       mayBeV1WhitelistedApplicationIds,
       mayBeV2WhitelistedApplicationIds,
       mayBeV3WhitelistedApplicationIds,
       v1IsTrial,
       v2Enabled,
-      v3Enabled)).as(MimeTypes.JSON)
+      v3Enabled)
+    logger.debugWithoutRequestContext(s"definitions => $definitions")
+    Ok(definitions).as(MimeTypes.JSON)
   }
 }

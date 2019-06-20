@@ -131,8 +131,9 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
                 toNode("x-amz-meta-session-id", "x-amz-meta-session-id", payload.uploadRequest.fields),
                 toNode("x-amz-meta-consuming-service", "x-amz-meta-consuming-service", payload.uploadRequest.fields),
                 toNode("policy", "policy", payload.uploadRequest.fields),
-                toNode("success_action_redirect", "success-action-redirect", payload.uploadRequest.fields),
-                toNode("error_action_redirect", "error-action-redirect", payload.uploadRequest.fields))}
+                //TODO remove label renaming
+                toNode("success_action_redirect", "success_action_redirect", payload.uploadRequest.fields),
+                toNode("error_action_redirect", "error_action_redirect", payload.uploadRequest.fields))}
               </Fields>
             </UploadRequest>
           </File>)

@@ -70,6 +70,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |        "status": "BETA",
           |        "endpointsEnabled": true,
           |        "access": {
+          |          "isTrial": false, 
           |          "type": "PUBLIC"
           |        },
           |        "fieldDefinitions": [
@@ -167,6 +168,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
 class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
+    "api.access.version-1.0.isTrial" -> true,
     "api.access.version-2.0.enabled" -> false,
     "api.access.version-3.0.whitelistedApplicationIds.0" -> "someId-3"
   )).build()
@@ -206,6 +208,7 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "status": "BETA",
           |        "endpointsEnabled": true,
           |        "access": {
+          |          "isTrial" : true,
           |          "type": "PUBLIC"
           |        },
           |        "fieldDefinitions": [

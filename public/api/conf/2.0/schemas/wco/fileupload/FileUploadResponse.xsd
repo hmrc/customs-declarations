@@ -47,8 +47,8 @@
             <xs:element name="x-amz-meta-session-id" type="xs:string" minOccurs="0"/>
             <xs:element name="x-amz-meta-consuming-service" type="xs:string" minOccurs="0"/>
             <xs:element name="policy" type="xs:string" minOccurs="0"/>
-            <xs:element name="success-action-redirect" type="xs:string" minOccurs="0"/>
-            <xs:element name="error-action-redirect" type="xs:string" minOccurs="0"/>
+            <xs:element name="success_action_redirect" type="xs:string" minOccurs="0"/>
+            <xs:element name="error_action_redirect" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

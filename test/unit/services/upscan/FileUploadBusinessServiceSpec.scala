@@ -81,6 +81,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
                 <x-amz-meta-session-id>789</x-amz-meta-session-id>
                 <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
                 <policy>xxxxxxxx==</policy>
+                <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                <error_action_redirect>https://error-redirect.com</error_action_redirect>
               </Fields>
             </UploadRequest>
           </File>
@@ -104,6 +106,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
                 <x-amz-meta-session-id>789</x-amz-meta-session-id>
                 <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
                 <policy>xxxxxxxx==</policy>
+                <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                <error_action_redirect>https://error-redirect.com</error_action_redirect>
               </Fields>
             </UploadRequest>
           </File>
@@ -133,6 +137,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
                 <x-amz-meta-session-id>789</x-amz-meta-session-id>
                 <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
                 <policy>xxxxxxxx==</policy>
+                <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                <error_action_redirect>https://error-redirect.com</error_action_redirect>
               </Fields>
             </UploadRequest>
           </File>
@@ -143,6 +149,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
               <Fields>
                 <Content-Type>   </Content-Type>
                 <acl>some-acl</acl>
+                <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                <error_action_redirect>https://error-redirect.com</error_action_redirect>
               </Fields>
             </UploadRequest>
           </File>
@@ -157,16 +165,19 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
       ("x-amz-credential","ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request"), ("x-amz-date","2019-03-05T11:56:34Z"),
       ("x-amz-meta-callback-url","https://some-callback-url"), ("x-amz-signature","xxxx"), ("x-amz-meta-upscan-initiate-response", "response"),
       ("x-amz-meta-upscan-initiate-received", "received"), ("x-amz-meta-request-id", "123"), ("x-amz-meta-original-filename", "some-filename"),
-      ("x-amz-meta-session-id", "789"), ("x-amz-meta-consuming-service", "a-service-name"))
+      ("x-amz-meta-session-id", "789"), ("x-amz-meta-consuming-service", "a-service-name"), ("success_action_redirect", "https://success-redirect.com"),
+      ("error_action_redirect", "https://error-redirect.com"))
     val upscanInitiateResponseFields2: Map[String, String] = Map(("Content-Type","application/xml; charset=utf-8"), ("acl","private"),
       ("key","xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"), ("policy","xxxxxxxx=="), ("x-amz-algorithm","AWS4-HMAC-SHA256"),
       ("x-amz-credential","ASIAxxxxxxxxx/20190304/eu-west-2/s3/aws4_request"), ("x-amz-date","2019-03-04T11:56:34Z"),
       ("x-amz-meta-callback-url","https://some-callback-url2"), ("x-amz-signature","xxxx"), ("x-amz-meta-upscan-initiate-response", "response"),
       ("x-amz-meta-upscan-initiate-received", "received"), ("x-amz-meta-request-id", "123"), ("x-amz-meta-original-filename", "some-filename"),
-      ("x-amz-meta-session-id", "789"), ("x-amz-meta-consuming-service", "a-service-name"))
+      ("x-amz-meta-session-id", "789"), ("x-amz-meta-consuming-service", "a-service-name"), ("success_action_redirect", "https://success-redirect.com"),
+      ("error_action_redirect", "https://error-redirect.com"))
     val upscanInitiateResponsePayload1 = UpscanInitiateResponsePayload(FileReferenceOne.value.toString, UpscanInitiateUploadRequest("https://a.b.com", upscanInitiateResponseFields1))
     val upscanInitiateResponsePayload2 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", upscanInitiateResponseFields2))
-    val upscanInitiateResponsePayload3 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", Map(("Content-Type", "   "), ("new-field", "   "), ("acl", "some-acl"))))
+    val upscanInitiateResponsePayload3 = UpscanInitiateResponsePayload(FileReferenceTwo.value.toString, UpscanInitiateUploadRequest("https://x.y.com", Map(("Content-Type", "   "), ("new-field", "   "), ("acl", "some-acl"),
+      ("success_action_redirect", "https://success-redirect.com"), ("error_action_redirect", "https://error-redirect.com"))))
 
     protected def send(vupr: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, NodeSeq] = {
       await(service.send(vupr, hc))

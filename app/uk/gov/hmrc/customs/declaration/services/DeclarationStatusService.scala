@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedStatusRequest
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, NotFoundException}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
@@ -63,6 +63,9 @@ class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResp
                 Left(ErrorGenericBadRequest.XmlResult.withConversationId)
             }
           }).recover{
+          case e: RuntimeException if e.getCause.isInstanceOf[NotFoundException] =>
+            logger.error(s"declaration status call failed with 404: ${e.getMessage}", e)
+            Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)
           case NonFatal(e) =>
             logger.error(s"declaration status call failed: ${e.getMessage}", e)
             Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)

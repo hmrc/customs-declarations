@@ -81,7 +81,12 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
     validateCreationDate(declarationNode)
   })(acceptanceDate => {
     val parsedDateTime = Try(ISO_UTC_DateTimeFormat_noMillis.parseDateTime(acceptanceDate.head)).toOption
-    val isDateValid = parsedDateTime.fold(false)(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
+    val isDateValid = parsedDateTime.fold(
+      {
+        declarationsLogger.errorWithoutRequestContext(s"Unable to parse acceptance date time: ${acceptanceDate.head}")
+        false
+      }
+    )(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
     if (!isDateValid) {
       declarationsLogger.debugWithoutRequestContext(s"Status response acceptanceDate failed validation $acceptanceDate")
       Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
@@ -97,7 +102,12 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
       Left(ErrorResponse.errorBadRequest("Declaration acceptanceDate and creationDate fields are missing"))
     })(creationDate => {
       val parsedDateTime = Try(ISO_UTC_DateTimeFormat_noMillis.parseDateTime(creationDate.head)).toOption
-      val isDateValid = parsedDateTime.fold(false)(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
+      val isDateValid = parsedDateTime.fold(
+        {
+          declarationsLogger.errorWithoutRequestContext(s"Unable to parse creation date time: ${creationDate.head}")
+          false
+        }
+      )(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
       if (!isDateValid) {
         declarationsLogger.debugWithoutRequestContext(s"Status response creationDate failed validation $creationDate")
         Left(ErrorResponse.errorBadRequest(s"Declaration creation date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))

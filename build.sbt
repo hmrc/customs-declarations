@@ -1,7 +1,6 @@
 import AppDependencies._
 import com.typesafe.sbt.packager.MappingsHelper._
 import org.scalastyle.sbt.ScalastylePlugin._
-import play.sbt.routes.RoutesKeys._
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
@@ -13,6 +12,11 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
 import scala.language.postfixOps
+
+mappings in Universal ++= directory(baseDirectory.value / "public")
+// my understanding is publishing processed changed when we moved to the open and
+// now it is done in production mode (was in dev previously). hence, we encounter the problem accessing "public" folder
+// see https://stackoverflow.com/questions/36906106/reading-files-from-public-folder-in-play-framework-in-production
 
 name := "customs-declarations"
 
@@ -134,13 +138,15 @@ zipWcoXsds := {
       val wcoXsdPaths = Path.allSubpaths(dir / "schemas")
       val exampleMessagesFilter = new SimpleFileFilter(_.getPath.contains("/example_messages/"))
       val exampleMessagesPaths = Path.selectSubpaths(dir / "examples", exampleMessagesFilter)
-      val zipFile = target.value / "public" / "api" / "conf" / dir.getName / "wco-declaration-schemas.zip"
+      val zipFile = dir / "wco-declaration-schemas.zip"
       IO.zip(wcoXsdPaths ++ exampleMessagesPaths, zipFile)
     }
 }
 
-// ensure zip output is included in assets
-unmanagedResourceDirectories in Assets += target.value / "public"
-(packageBin in Assets) := ((packageBin in Assets) dependsOn zipWcoXsds).value
+// default package task depends on packageBin which we override here to also invoke the custom ZIP task
+packageBin in Compile := {
+  zipWcoXsds.value
+  (packageBin in Compile).value
+}
 
 evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false)

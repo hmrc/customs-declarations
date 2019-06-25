@@ -30,6 +30,7 @@ import uk.gov.hmrc.customs.declaration.model.{FileGroupSize, _}
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadXmlValidationService}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.xml.Node
 
 @Singleton
 class FileUploadPayloadValidationAction @Inject()(fileUploadXmlValidationService: FileUploadXmlValidationService,
@@ -80,12 +81,11 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
             val files: Seq[FileUploadFile] = (xml \ filesLabel \ "_").theSeq.collect {
               case file =>
                 val fileSequenceNumber = FileSequenceNo((file \ fileSequenceNoLabel).text.trim.toInt)
-                val maybeDocumentTypeText = (file \ documentTypeLabel).text
-                val documentType = if (maybeDocumentTypeText.isEmpty) None else Some(DocumentType(maybeDocumentTypeText))
-                val successRedirect = (file \ successRedirectLabel).text
-                val errorRedirect = (file \ errorRedirectLabel).text
-                FileUploadFile(fileSequenceNumber, documentType, successRedirect, errorRedirect)
-              }
+                val maybeDocumentTypeText = maybeElement(file, documentTypeLabel)
+                val documentType = if (maybeElement(file, documentTypeLabel).isEmpty) None else Some(DocumentType(maybeDocumentTypeText.get))
+                FileUploadFile(fileSequenceNumber, documentType, maybeElement(file, successRedirectLabel), maybeElement(file, errorRedirectLabel))
+
+            }
 
             val fileUpload = FileUploadRequest(declarationId, fileGroupSize, files.sortWith(_.fileSequenceNo.value < _.fileSequenceNo.value))
 
@@ -99,6 +99,11 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
         }
       case _ => Future.successful(Left(ErrorResponse(FORBIDDEN, ForbiddenCode, "Not an authorized service").XmlResult.withConversationId))
     }
+  }
+
+  private def maybeElement(file: Node, label: String): Option[String] = {
+    val elementText = (file \ label).text
+    if (elementText.trim.isEmpty) None else Some(elementText)
   }
 
 

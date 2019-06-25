@@ -139,7 +139,7 @@ trait HasXmlBody {
 
 case class FileUploadRequest(declarationId: DeclarationId, fileGroupSize: FileGroupSize, files: Seq[FileUploadFile])
 
-case class FileUploadFile(fileSequenceNo: FileSequenceNo, maybeDocumentType: Option[DocumentType], successRedirect: String, errorRedirect: String) {
+case class FileUploadFile(fileSequenceNo: FileSequenceNo, maybeDocumentType: Option[DocumentType], successRedirect: Option[String], errorRedirect: Option[String]) {
 
   def canEqual(a: Any): Boolean = a.isInstanceOf[FileUploadFile]
 

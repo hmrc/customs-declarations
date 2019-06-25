@@ -106,7 +106,7 @@ object TestData {
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     FileUploadRequest(DeclarationId("decId123"),FileGroupSize(TWO),
-    Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None, "https://success-redirect.com", "https://error-redirect.com"), FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), "https://success-redirect.com", "https://error-redirect.com")))
+    Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None, Some("https://success-redirect.com"), Some("https://error-redirect.com")), FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), Some("https://success-redirect.com"), Some("https://error-redirect.com"))))
   )
 
   val ValidatedFileUploadPayloadRequestForCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
@@ -118,7 +118,7 @@ object TestData {
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     FileUploadRequest(DeclarationId("decId123"),FileGroupSize(TWO),
-    Seq(FileUploadFile(FileSequenceNo(ONE), Some(DocumentType("docType1")), "https://success-redirect.com", "https://error-redirect.com"), FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), "https://success-redirect.com", "https://error-redirect.com")))
+    Seq(FileUploadFile(FileSequenceNo(ONE), Some(DocumentType("docType1")), Some("https://success-redirect.com"), Some("https://error-redirect.com")), FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), Some("https://success-redirect.com"), Some("https://error-redirect.com"))))
   )
 
   val ValidatedFileUploadPayloadRequestWithFourFiles = ValidatedFileUploadPayloadRequest(
@@ -132,10 +132,10 @@ object TestData {
     FileUploadRequest(
       DeclarationId("decId123"),
       FileGroupSize(FOUR),
-      Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None, "https://success-redirect.com", "https://error-redirect.com"),
-        FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), "https://success-redirect.com", "https://error-redirect.com"),
-        FileUploadFile(FileSequenceNo(THREE), Some(DocumentType("docType3")), "https://success-redirect.com", "https://error-redirect.com"),
-        FileUploadFile(FileSequenceNo(FOUR), Some(DocumentType("docType4")), "https://success-redirect.com", "https://error-redirect.com")))
+      Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None, Some("https://success-redirect.com"), Some("https://error-redirect.com")),
+        FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), Some("https://success-redirect.com"), Some("https://error-redirect.com")),
+        FileUploadFile(FileSequenceNo(THREE), Some(DocumentType("docType3")), Some("https://success-redirect.com"), Some("https://error-redirect.com")),
+        FileUploadFile(FileSequenceNo(FOUR), Some(DocumentType("docType4")), Some("https://success-redirect.com"), Some("https://error-redirect.com"))))
   )
 
   val nrsInternalIdValue: String = "internalId"

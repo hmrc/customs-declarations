@@ -52,9 +52,12 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.nrs.host="nrs.url"
       |microservice.services.nrs.port=11114
       |microservice.services.nrs.context=/submission
-      |microservice.services.upscan-initiate.host="upscan-initiate.url"
-      |microservice.services.upscan-initiate.port=11115
-      |microservice.services.upscan-initiate.context=/upscan/initiate
+      |microservice.services.upscan-initiate-v1.host="upscan-initiate-v1.url"
+      |microservice.services.upscan-initiate-v1.port=11115
+      |microservice.services.upscan-initiate-v1.context=/upscan/initiate/v1
+      |microservice.services.upscan-initiate-v2.host="upscan-initiate-v2.url"
+      |microservice.services.upscan-initiate-v2.port=11115
+      |microservice.services.upscan-initiate-v2.context=/upscan/initiate/v2
       |microservice.services.file-transmission.host=some-host3
       |microservice.services.file-transmission.port=1113
       |microservice.services.file-transmission.context=/file-transmission
@@ -83,7 +86,8 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis shouldBe 1000
       configService.fileUploadConfig.fileTransmissionCallbackUrl shouldBe "http://some-host3:1113/file-transmission"
       configService.fileUploadConfig.fileUploadCallbackUrl shouldBe "http://file-upload-upscan-callback.url"
-      configService.fileUploadConfig.upscanInitiateUrl shouldBe "http://upscan-initiate.url:11115/upscan/initiate"
+      configService.fileUploadConfig.upscanInitiateV1Url shouldBe "http://upscan-initiate-v1.url:11115/upscan/initiate/v1"
+      configService.fileUploadConfig.upscanInitiateV2Url shouldBe "http://upscan-initiate-v2.url:11115/upscan/initiate/v2"
       configService.fileUploadConfig.upscanInitiateMaximumFileSize shouldBe 100
       configService.nrsConfig.nrsUrl shouldBe "http://nrs.url:11114/submission"
 
@@ -107,8 +111,10 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'nrs.apikey'
           |Could not find config nrs.host
           |Service configuration not found for key: nrs.context
-          |Could not find config upscan-initiate.host
-          |Service configuration not found for key: upscan-initiate.context
+          |Could not find config upscan-initiate-v1.host
+          |Service configuration not found for key: upscan-initiate-v1.context
+          |Could not find config upscan-initiate-v2.host
+          |Service configuration not found for key: upscan-initiate-v2.context
           |Could not find config key 'upscan-callback.url'
           |Could not find config key 'fileUpload.fileSize.maximum'
           |Could not find config key 'file-upload-upscan-callback.url'

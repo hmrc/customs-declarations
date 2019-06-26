@@ -23,9 +23,11 @@ import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Writes
+import play.api.mvc.AnyContentAsJson
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -45,9 +47,13 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
-  private val upscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", 10000, Some("https://success-redirect.com"), Some("https://error-redirect.com"))
+  private val tenThousand = 10000
+  private val upscanInitiatePayloadV1WithNoRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, None)
+  private val upscanInitiatePayloadV1WithSuccessRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), None)
+  private val upscanInitiatePayloadV1WithErrorRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, Some("https://error-redirect.com"))
+  private val upscanInitiatePayloadV2 = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), Some("https://error-redirect.com"))
 
-  implicit val jsonRequest = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
+  implicit val jsonRequest: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 
   override protected def beforeEach() {
     reset(mockWsPost, mockLogger)
@@ -58,21 +64,48 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
     "when making a successful request" should {
 
-      "pass URL from config" in {
+      "select V1 URL from config when no redirect values are present" in {
         returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
 
-        awaitRequest
+        awaitRequest(upscanInitiatePayloadV1WithNoRedirects)
 
-        verify(mockWsPost).POST(ameq("upscan-initiate.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
+        verify(mockWsPost).POST(ameq("upscan-initiate-v1.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
+          any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
+      }
+
+      "select V1 URL from config when success redirect and no error redirect values are present" in {
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
+
+        awaitRequest(upscanInitiatePayloadV1WithSuccessRedirects)
+
+        verify(mockWsPost).POST(ameq("upscan-initiate-v1.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
+          any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
+      }
+
+      "select V1 URL from config when error redirect and no success redirect values are present" in {
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
+
+        awaitRequest(upscanInitiatePayloadV1WithErrorRedirects)
+
+        verify(mockWsPost).POST(ameq("upscan-initiate-v1.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
+          any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
+      }
+
+      "select V2 URL from config when both redirect values are present" in {
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
+
+        awaitRequest()
+
+        verify(mockWsPost).POST(ameq("upscan-initiate-v2.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
           any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
       "pass in the body" in {
         returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
 
-        awaitRequest
+        awaitRequest()
 
-        verify(mockWsPost).POST(anyString, ameq(upscanInitiatePayload), any[SeqOfHeader])(
+        verify(mockWsPost).POST(anyString, ameq(upscanInitiatePayloadV2), any[SeqOfHeader])(
           any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
     }
@@ -82,7 +115,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
         returnResponseForRequest(Future.failed(emulatedServiceFailure))
 
         val caught = intercept[EmulatedServiceFailure] {
-          awaitRequest
+          awaitRequest()
         }
         caught shouldBe emulatedServiceFailure
       }
@@ -91,15 +124,15 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
         returnResponseForRequest(Future.failed(httpException))
 
         val caught = intercept[RuntimeException] {
-          awaitRequest
+          awaitRequest()
         }
         caught.getCause shouldBe httpException
       }
     }
   }
 
-  private def awaitRequest = {
-    await(connector.send(upscanInitiatePayload, VersionTwo))
+  private def awaitRequest(payload: UpscanInitiatePayload = upscanInitiatePayloadV2): UpscanInitiateResponsePayload = {
+    await(connector.send(payload, VersionOne))
   }
 
   private def returnResponseForRequest(eventualResponse: Future[UpscanInitiateResponsePayload]) = {

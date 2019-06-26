@@ -13,6 +13,11 @@ The objective of the General Customs Service - Declaration POST API is as below:
 
 It is assumed that the underlying DMS process is asynchronous, and that the only response to the declarant from this API is to indicate the success (or otherwise) of the validation and submission to CDS WSO2 for onward processing by DMS.
 
+## Calling /upload
+
+A request to the /upload endpoint can contain successRedirect and errorRedirect URLs. These are non-mandatory.
+If both a success and error redirect are included then upscan v2 will be called, otherwise v1.
+
 ## Useful CURL commands for local testing
 [link to curl commands](docs/curl-commands.md)
 # Custom SBT Task for generating ZIP file containing schemas and example messages
@@ -24,7 +29,7 @@ To generate the zip file locally run the following command in command line from 
 
     sbt package
 
-# Lookup of `fieldsId` UUID from `api-subscription-fields` service
+## Lookup of `fieldsId` UUID from `api-subscription-fields` service
 The `X-Client-ID` header, together with the application context and version are used
  to call the `api-subscription-fields` service to get the unique `fieldsId` UUID to pass on to the backend request.
 

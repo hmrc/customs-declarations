@@ -28,7 +28,8 @@ case class DeclarationsCircuitBreakerConfig(numberOfCallsToTriggerStateChange: I
                                             unavailablePeriodDurationInMillis: Int,
                                             unstablePeriodDurationInMillis: Int)
 
-case class FileUploadConfig(upscanInitiateUrl: String,
+case class FileUploadConfig(upscanInitiateV1Url: String,
+                            upscanInitiateV2Url: String,
                             upscanCallbackUrl: String,
                             upscanInitiateMaximumFileSize: Int,
                             fileUploadCallbackUrl: String,

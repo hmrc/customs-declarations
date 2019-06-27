@@ -54,17 +54,10 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.nrs.context=/submission
       |microservice.services.upscan-initiate-v1.host="upscan-initiate-v1.url"
       |microservice.services.upscan-initiate-v1.port=11115
-<<<<<<< HEAD
       |microservice.services.upscan-initiate-v1.context=/upscan/initiate
       |microservice.services.upscan-initiate-v2.host="upscan-initiate-v2.url"
       |microservice.services.upscan-initiate-v2.port=11115
       |microservice.services.upscan-initiate-v2.context=/upscan/v2/initiate
-=======
-      |microservice.services.upscan-initiate-v1.context=/upscan/initiate/v1
-      |microservice.services.upscan-initiate-v2.host="upscan-initiate-v2.url"
-      |microservice.services.upscan-initiate-v2.port=11115
-      |microservice.services.upscan-initiate-v2.context=/upscan/initiate/v2
->>>>>>> 97102664ad5abb8b16034a3bb85ec5f3a3a0af6c
       |microservice.services.file-transmission.host=some-host3
       |microservice.services.file-transmission.port=1113
       |microservice.services.file-transmission.context=/file-transmission
@@ -93,13 +86,8 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis shouldBe 1000
       configService.fileUploadConfig.fileTransmissionCallbackUrl shouldBe "http://some-host3:1113/file-transmission"
       configService.fileUploadConfig.fileUploadCallbackUrl shouldBe "http://file-upload-upscan-callback.url"
-<<<<<<< HEAD
       configService.fileUploadConfig.upscanInitiateV1Url shouldBe "http://upscan-initiate-v1.url:11115/upscan/initiate"
       configService.fileUploadConfig.upscanInitiateV2Url shouldBe "http://upscan-initiate-v2.url:11115/upscan/v2/initiate"
-=======
-      configService.fileUploadConfig.upscanInitiateV1Url shouldBe "http://upscan-initiate-v1.url:11115/upscan/initiate/v1"
-      configService.fileUploadConfig.upscanInitiateV2Url shouldBe "http://upscan-initiate-v2.url:11115/upscan/initiate/v2"
->>>>>>> 97102664ad5abb8b16034a3bb85ec5f3a3a0af6c
       configService.fileUploadConfig.upscanInitiateMaximumFileSize shouldBe 100
       configService.nrsConfig.nrsUrl shouldBe "http://nrs.url:11114/submission"
 

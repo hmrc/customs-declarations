@@ -121,6 +121,7 @@ val compileDependencies = Seq(customsApiCommon, circuitBreaker, simpleReactiveMo
 val testDependencies = Seq(hmrcTest, scalaTest, scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
 
 unmanagedResourceDirectories in Compile += baseDirectory.value / "public"
+(managedClasspath in Runtime) += (packageBin in Assets).value
 
 libraryDependencies ++= compileDependencies ++ testDependencies
 

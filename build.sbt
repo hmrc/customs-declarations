@@ -1,7 +1,6 @@
 import AppDependencies._
 import com.typesafe.sbt.packager.MappingsHelper._
 import org.scalastyle.sbt.ScalastylePlugin._
-import play.sbt.routes.RoutesKeys._
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
@@ -9,7 +8,8 @@ import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, s
 import uk.gov.hmrc.PublishingSettings._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+import com.typesafe.sbt.web.pipeline.Pipeline
+import com.typesafe.sbt.web.PathMapping
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
 import scala.language.postfixOps
@@ -92,7 +92,7 @@ lazy val acceptanceTestSettings =
     )
 
 lazy val commonSettings: Seq[Setting[_]] = scalaSettings ++
-  publishingSettings ++
+  SbtDistributablesPlugin.publishingSettings ++
   defaultSettings() ++
   gitStampSettings
 
@@ -125,22 +125,26 @@ unmanagedResourceDirectories in Compile += baseDirectory.value / "public"
 libraryDependencies ++= compileDependencies ++ testDependencies
 
 // Task to create a ZIP file containing all WCO XSDs for each version, under the version directory
-lazy val zipWcoXsds = taskKey[Unit]("Zips up all WCO declaration XSDs and example messages")
-zipWcoXsds := {
-  (baseDirectory.value / "public" / "api" / "conf")
-    .listFiles()
-    .filter(_.isDirectory)
-    .foreach { dir =>
-      val wcoXsdPaths = Path.allSubpaths(dir / "schemas")
-      val exampleMessagesFilter = new SimpleFileFilter(_.getPath.contains("/example_messages/"))
-      val exampleMessagesPaths = Path.selectSubpaths(dir / "examples", exampleMessagesFilter)
-      val zipFile = target.value / "public" / "api" / "conf" / dir.getName / "wco-declaration-schemas.zip"
-      IO.zip(wcoXsdPaths ++ exampleMessagesPaths, zipFile)
-    }
+val zipWcoXsds = taskKey[Pipeline.Stage]("Zips up all WCO declaration XSDs and example messages")
+
+zipWcoXsds := { mappings: Seq[PathMapping] =>
+  val targetDir = WebKeys.webTarget.value / "zip"
+  val zipFiles: Iterable[java.io.File] =
+    ((resourceDirectory in Assets).value / "api" / "conf")
+      .listFiles
+      .filter(_.isDirectory)
+      .map { dir =>
+        val wcoXsdPaths = Path.allSubpaths(dir / "schemas")
+        val exampleMessagesFilter = new SimpleFileFilter(_.getPath.contains("/example_messages/"))
+        val exampleMessagesPaths = Path.selectSubpaths(dir / "examples", exampleMessagesFilter)
+        val zipFile = targetDir / "api" / "conf" / dir.getName / "wco-declaration-schemas.zip"
+        IO.zip(wcoXsdPaths ++ exampleMessagesPaths, zipFile)
+        println(s"Created zip $zipFile")
+        zipFile
+      }
+  zipFiles.pair(relativeTo(targetDir)) ++ mappings
 }
 
-// ensure zip output is included in assets
-unmanagedResourceDirectories in Assets += target.value / "public"
-(packageBin in Assets) := ((packageBin in Assets) dependsOn zipWcoXsds).value
+pipelineStages := Seq(zipWcoXsds)
 
 evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false)

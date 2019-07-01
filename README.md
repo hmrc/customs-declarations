@@ -13,7 +13,7 @@ The objective of the General Customs Service - Declaration POST API is as below:
 
 It is assumed that the underlying DMS process is asynchronous, and that the only response to the declarant from this API is to indicate the success (or otherwise) of the validation and submission to CDS WSO2 for onward processing by DMS.
 
-## Calling /upload
+## Calling /file-upload
 
 A request to the /upload endpoint can contain successRedirect and errorRedirect URLs. These are non-mandatory.
 If both a success and error redirect are included then upscan v2 will be called, otherwise v1.

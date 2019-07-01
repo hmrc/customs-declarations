@@ -21,11 +21,11 @@ import java.util.UUID
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers._
-import util.CustomsDeclarationsExternalServicesConfig.UpscanInitiateContext
+import util.CustomsDeclarationsExternalServicesConfig.UpscanInitiateContextV2
 import util.WireMockRunner
 
 trait UpscanInitiateService extends WireMockRunner {
-  private val urlMatchingRequestPath = urlMatching(UpscanInitiateContext)
+  private val urlMatchingRequestPath = urlMatching(UpscanInitiateContextV2)
 
   private val validUpscanInitiateResponse =
     s"""|{

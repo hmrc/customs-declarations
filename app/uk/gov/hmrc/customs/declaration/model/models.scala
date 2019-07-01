@@ -172,7 +172,9 @@ case class Csp(badgeIdentifier: BadgeIdentifier, retrievalData: Option[NrsRetrie
 case class CspWithEori(badgeIdentifier: BadgeIdentifier, eori: Eori, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
 case class NonCsp(eori: Eori, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAs
 
-case class UpscanInitiatePayload(callbackUrl: String, maximumFileSize: Int, successRedirect: String, errorRedirect: String)
+case class UpscanInitiatePayload(callbackUrl: String, maximumFileSize: Int, successRedirect: Option[String], errorRedirect: Option[String]){
+  val isV2: Boolean = successRedirect.isDefined && errorRedirect.isDefined
+}
 
 object UpscanInitiatePayload {
   implicit val format: OFormat[UpscanInitiatePayload] = Json.format[UpscanInitiatePayload]

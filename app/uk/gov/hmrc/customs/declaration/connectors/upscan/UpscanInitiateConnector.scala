@@ -34,7 +34,11 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
                                        (implicit ec: ExecutionContext) {
 
   def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
-    post(payload, config.fileUploadConfig.upscanInitiateUrl)
+    if (payload.isV2) {
+      post(payload, config.fileUploadConfig.upscanInitiateV2Url)
+    } else {
+      post(payload, config.fileUploadConfig.upscanInitiateV1Url)
+    }
   }
 
   private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]) = {

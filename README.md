@@ -15,7 +15,7 @@ It is assumed that the underlying DMS process is asynchronous, and that the only
 
 ## Calling /file-upload
 
-A request to the /upload endpoint can contain successRedirect and errorRedirect URLs. These are non-mandatory.
+A request to the /file-upload endpoint can contain successRedirect and errorRedirect URLs. These are non-mandatory.
 If both a success and error redirect are included then upscan v2 will be called, otherwise v1.
 
 ## Useful CURL commands for local testing

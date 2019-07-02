@@ -44,12 +44,27 @@ class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with Mockit
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockFileUploadPayloadValidationAction: FileUploadPayloadValidationAction = mock[FileUploadPayloadValidationAction]
-    val mockDeclarationsConfigService = mock[DeclarationsConfigService]
+    val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
     when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig)
     val action: FileUploadPayloadValidationComposedAction = new FileUploadPayloadValidationComposedAction(mockFileUploadPayloadValidationAction, mockLogger, mockDeclarationsConfigService)
   }
 
   "FileUploadPayloadValidationComposedAction" should {
+
+    "return 400 when file has an error redirect but not a success redirect" in new SetUp {
+
+      private val payload: Elem = TestXMLData.validFileUploadXml(includeSuccessRedirect = false)
+      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
+        clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
+      val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
+      when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig.copy(fileGroupSizeMaximum = 2))
+      when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
+
+      val result = await(action.refine(testAr))
+
+      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "If ErrorRedirect is present then SuccessRedirect must be too")).XmlResult)
+      result shouldBe expected
+    }
 
     "return 400 when FileGroupSize is greater than config value" in new SetUp {
 

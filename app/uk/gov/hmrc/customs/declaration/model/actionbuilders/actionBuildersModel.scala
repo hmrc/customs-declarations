@@ -161,19 +161,16 @@ trait HasBadgeIdentifier {
   val badgeIdentifier: BadgeIdentifier
 }
 
-case class ExtractedHeadersImpl(
-  requestedApiVersion: ApiVersion,
-  clientId: ClientId
+case class ExtractedHeadersImpl(requestedApiVersion: ApiVersion, clientId: ClientId
 ) extends ExtractedHeaders
 
 trait ExtractedStatusHeaders extends ExtractedHeaders {
   val badgeIdentifier: BadgeIdentifier
 }
 
-case class ExtractedStatusHeadersImpl(
-  requestedApiVersion: ApiVersion,
-  badgeIdentifier: BadgeIdentifier,
-  clientId: ClientId
+case class ExtractedStatusHeadersImpl(requestedApiVersion: ApiVersion,
+                                      badgeIdentifier: BadgeIdentifier,
+                                      clientId: ClientId
 ) extends ExtractedStatusHeaders
 
 /*
@@ -184,80 +181,78 @@ case class ExtractedStatusHeadersImpl(
  * eg `r.badgeIdentifier` vs `r.requestData.badgeIdentifier`
  */
 
-case class ConversationIdRequest[A](
- conversationId: ConversationId,
- start: ZonedDateTime,
- request: Request[A]
+case class ConversationIdRequest[A](conversationId: ConversationId,
+                                    start: ZonedDateTime,
+                                    request: Request[A]
 ) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId
 
 // Available after ValidatedHeadersAction builder
-case class ValidatedHeadersRequest[A](
-  conversationId: ConversationId,
-  start: ZonedDateTime,
-  requestedApiVersion: ApiVersion,
-  clientId: ClientId,
-  request: Request[A]
+case class ValidatedHeadersRequest[A](conversationId: ConversationId,
+                                      start: ZonedDateTime,
+                                      requestedApiVersion: ApiVersion,
+                                      clientId: ClientId,
+                                      request: Request[A]
 ) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with ExtractedHeaders
 
 // Specifically for status endpoint
-case class ValidatedHeadersStatusRequest[A](
- conversationId: ConversationId,
- start: ZonedDateTime,
- requestedApiVersion: ApiVersion,
- badgeIdentifier: BadgeIdentifier,
- clientId: ClientId,
- request: Request[A]
+case class ValidatedHeadersStatusRequest[A](conversationId: ConversationId,
+                                            start: ZonedDateTime,
+                                            requestedApiVersion: ApiVersion,
+                                            badgeIdentifier: BadgeIdentifier,
+                                            clientId: ClientId,
+                                            request: Request[A]
 ) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with HasBadgeIdentifier with ExtractedStatusHeaders
 
 // Available after Authorise action builder
-case class AuthorisedRequest[A](
-  conversationId: ConversationId,
-  start: ZonedDateTime,
-  requestedApiVersion: ApiVersion,
-  clientId: ClientId,
-  authorisedAs: AuthorisedAs,
-  request: Request[A]
+case class AuthorisedRequest[A](conversationId: ConversationId,
+                                start: ZonedDateTime,
+                                requestedApiVersion: ApiVersion,
+                                clientId: ClientId,
+                                authorisedAs: AuthorisedAs,
+                                request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs
 
 // Available after Authorise action builder
-case class AuthorisedStatusRequest[A](
- conversationId: ConversationId,
- start: ZonedDateTime,
- requestedApiVersion: ApiVersion,
- badgeIdentifier: BadgeIdentifier,
- clientId: ClientId,
- authorisedAs: AuthorisedAs,
- request: Request[A]
+case class AuthorisedStatusRequest[A](conversationId: ConversationId,
+                                      start: ZonedDateTime,
+                                      requestedApiVersion: ApiVersion,
+                                      badgeIdentifier: BadgeIdentifier,
+                                      clientId: ClientId,
+                                      authorisedAs: AuthorisedAs,
+                                      request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with HasBadgeIdentifier with ExtractedStatusHeaders with HasAuthorisedAs
 
 // Available after ValidatedPayloadAction builder
-abstract class GenericValidatedPayloadRequest[A](
- conversationId: ConversationId,
- start: ZonedDateTime,
- requestedApiVersion: ApiVersion,
- clientId: ClientId,
- authorisedAs: AuthorisedAs,
- xmlBody: NodeSeq,
- request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
-
-case class ValidatedPayloadRequest[A](
-  conversationId: ConversationId,
-  start: ZonedDateTime,
-  requestedApiVersion: ApiVersion,
-  clientId: ClientId,
-  authorisedAs: AuthorisedAs,
-  xmlBody: NodeSeq,
-  request: Request[A]
-) extends GenericValidatedPayloadRequest(conversationId, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
-
-case class ValidatedFileUploadPayloadRequest[A](
-                                                 conversationId: ConversationId,
+abstract class GenericValidatedPayloadRequest[A](conversationId: ConversationId,
                                                  start: ZonedDateTime,
                                                  requestedApiVersion: ApiVersion,
                                                  clientId: ClientId,
                                                  authorisedAs: AuthorisedAs,
                                                  xmlBody: NodeSeq,
-                                                 request: Request[A],
-                                                 fileUploadRequest: FileUploadRequest
-) extends GenericValidatedPayloadRequest(conversationId, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
+                                                 request: Request[A]
+) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
+
+case class ValidatedPayloadRequest[A](conversationId: ConversationId,
+                                      start: ZonedDateTime,
+                                      requestedApiVersion: ApiVersion,
+                                      clientId: ClientId,
+                                      authorisedAs: AuthorisedAs,
+                                      xmlBody: NodeSeq,
+                                      request: Request[A]
+) extends GenericValidatedPayloadRequest(conversationId, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
+
+case class ValidatedFileUploadPayloadRequest[A](conversationId: ConversationId,
+                                                start: ZonedDateTime,
+                                                requestedApiVersion: ApiVersion,
+                                                clientId: ClientId,
+                                                authorisedAs: AuthorisedAs,
+                                                xmlBody: NodeSeq,
+                                                request: Request[A],
+                                                fileUploadRequest: FileUploadRequest
+) extends GenericValidatedPayloadRequest(conversationId,
+                                         start,
+                                         requestedApiVersion,
+                                         clientId,
+                                         authorisedAs,
+                                         xmlBody,
+                                         request) with HasFileUploadProperties

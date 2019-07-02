@@ -161,19 +161,17 @@ trait HasBadgeIdentifier {
   val badgeIdentifier: BadgeIdentifier
 }
 
-case class ExtractedHeadersImpl(
-  requestedApiVersion: ApiVersion,
-  clientId: ClientId
+case class ExtractedHeadersImpl(requestedApiVersion: ApiVersion,
+                                clientId: ClientId
 ) extends ExtractedHeaders
 
 trait ExtractedStatusHeaders extends ExtractedHeaders {
   val badgeIdentifier: BadgeIdentifier
 }
 
-case class ExtractedStatusHeadersImpl(
-  requestedApiVersion: ApiVersion,
-  badgeIdentifier: BadgeIdentifier,
-  clientId: ClientId
+case class ExtractedStatusHeadersImpl(requestedApiVersion: ApiVersion,
+                                      badgeIdentifier: BadgeIdentifier,
+                                      clientId: ClientId
 ) extends ExtractedStatusHeaders
 
 /*
@@ -245,11 +243,17 @@ case class ValidatedPayloadRequest[A](conversationId: ConversationId,
 ) extends GenericValidatedPayloadRequest(conversationId, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request)
 
 case class ValidatedFileUploadPayloadRequest[A](conversationId: ConversationId,
-                                                 start: ZonedDateTime,
-                                                 requestedApiVersion: ApiVersion,
-                                                 clientId: ClientId,
-                                                 authorisedAs: AuthorisedAs,
-                                                 xmlBody: NodeSeq,
-                                                 request: Request[A],
-                                                 fileUploadRequest: FileUploadRequest
-) extends GenericValidatedPayloadRequest(conversationId, start, requestedApiVersion, clientId, authorisedAs, xmlBody, request) with HasFileUploadProperties
+                                               start: ZonedDateTime,
+                                               requestedApiVersion: ApiVersion,
+                                               clientId: ClientId,
+                                               authorisedAs: AuthorisedAs,
+                                               xmlBody: NodeSeq,
+                                               request: Request[A],
+                                               fileUploadRequest: FileUploadRequest
+) extends GenericValidatedPayloadRequest(conversationId,
+                                        start,
+                                        requestedApiVersion,
+                                        clientId,
+                                        authorisedAs,
+                                        xmlBody,
+                                        request) with HasFileUploadProperties

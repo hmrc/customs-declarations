@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="hmrc:fileupload" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="hmrc:fileupload" elementFormDefault="qualified">
+
+    <xs:element name="FileUploadResponse" type="FileUploadResponse"/>
+
+    <xs:complexType name="FileUploadResponse">
+        <xs:sequence>
+            <xs:element name="Files" type="Files"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Files">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="File" type="File"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="File">
+        <xs:all>
+            <xs:element name="Reference" type="xs:string"/>
+            <xs:element name="UploadRequest" type="UploadRequest"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="UploadRequest">
+        <xs:all>
+            <xs:element name="Href" type="xs:string"/>
+            <xs:element name="Fields" type="Fields"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="Fields">
+        <xs:sequence>
+            <xs:element name="Content-Type" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-callback-url" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-date" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-credential" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-upscan-initiate-response" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-upscan-initiate-received" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-request-id" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-original-filename" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-algorithm" type="xs:string" minOccurs="0"/>
+            <xs:element name="key" type="xs:string" minOccurs="0"/>
+            <xs:element name="acl" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-signature" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-session-id" type="xs:string" minOccurs="0"/>
+            <xs:element name="x-amz-meta-consuming-service" type="xs:string" minOccurs="0"/>
+            <xs:element name="policy" type="xs:string" minOccurs="0"/>
+            <xs:element name="success_action_redirect" type="xs:string" minOccurs="0"/>
+            <xs:element name="error_action_redirect" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

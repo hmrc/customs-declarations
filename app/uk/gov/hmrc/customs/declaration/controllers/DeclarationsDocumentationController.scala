@@ -38,16 +38,13 @@ class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorH
   private lazy val v3Enabled = configuration.getBoolean("api.access.version-3.0.enabled").getOrElse(true)
 
   def definition(): Action[AnyContent] = Action {
-    logger.debugWithoutRequestContext("DeclarationsDocumentationController definition endpoint has been called")
-    logger.debugWithoutRequestContext(s"v1IsTrial is $v1IsTrial and mayBeV1WhitelistedApplicationIds is $mayBeV1WhitelistedApplicationIds")
-    val definitions = uk.gov.hmrc.customs.declaration.views.txt.definition(
+    logger.debugWithoutRequestContext(s"DeclarationsDocumentationController definition endpoint has been called with v1IsTrial is $v1IsTrial and mayBeV1WhitelistedApplicationIds is $mayBeV1WhitelistedApplicationIds")
+    Ok(uk.gov.hmrc.customs.declaration.views.txt.definition(
       mayBeV1WhitelistedApplicationIds,
       mayBeV2WhitelistedApplicationIds,
       mayBeV3WhitelistedApplicationIds,
       v1IsTrial,
       v2Enabled,
-      v3Enabled)
-    logger.debugWithoutRequestContext(s"definitions => $definitions")
-    Ok(definitions).as(MimeTypes.JSON)
+      v3Enabled)).as(MimeTypes.JSON)
   }
 }

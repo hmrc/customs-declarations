@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://gov.uk/customs/declarationInformationRetrieval/status/v1"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:od="urn:wco:datamodel:WCO:DEC-DMS:2"
+           xmlns:otn="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:odds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+           xmlns:otnds="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+           targetNamespace="http://gov.uk/customs/declarationInformationRetrieval/status/v1"
+           elementFormDefault="qualified" version="1.0">
+
+  <xs:import namespace="urn:wco:datamodel:WCO:Response_DS:DMS:2" schemaLocation="WCO_DS/WCO_RES_DS_2_DMS.xsd" />
+  <xs:import namespace="urn:wco:datamodel:WCO:DEC-DMS:2" schemaLocation="WCO_DEC_2_DMS.xsd" />
+  <xs:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" schemaLocation="UNECE/UnqualifiedDataType_6_DMS.xsd" />
+
+  <!-- =============================================================================================== -->
+  <!-- Declaration Information Retrieval Status Response -->
+  <!-- Allows a CSP to request the status of an individual declaration, identified by MRN -->
+  <!-- =============================================================================================== -->
+  <xs:element name="DeclarationStatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Declaration">
+          <xs:complexType>
+            <xs:complexContent>
+              <xs:extension base="TraderNotificationResponseDeclaration">
+                <xs:sequence>
+                  <xs:element name="CreationDateTime" minOccurs="0">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="EN">
+                        <Format>an..35</Format>
+                        <DictionaryEntryName>Declaration. Creation. Date Time
+                        </DictionaryEntryName>
+                        <NamedComplexType>DeclarationCreationDateTimeType
+                        </NamedComplexType>
+                        <XMLTag>CreationDateTime</XMLTag>
+                      </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:choice>
+                        <xs:element name="DateTimeString">
+                          <xs:complexType>
+                            <xs:simpleContent>
+                              <xs:restriction base="udt:DateTimeType">
+                                <xs:maxLength value="35" />
+                              </xs:restriction>
+                            </xs:simpleContent>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:choice>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:extension>
+            </xs:complexContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="od:Declaration" minOccurs="0" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="TraderNotificationResponseDeclaration">
+    <xs:annotation>
+      <xs:documentation xml:lang="EN">
+        <WCOID>42A</WCOID>
+        <WCOName>Declaration</WCOName>
+        <WCODescription>Any statement or action, in any form prescribed or accepted by
+          the Governmental Agency, giving information or particulars required by the
+          Governmental Agency
+        </WCODescription>
+      </xs:documentation>
+      <xs:documentation>
+        <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+        <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+        <WCOUsageDeclarationCRI>X</WCOUsageDeclarationCRI>
+        <WCOUsageDeclarationCRE>X</WCOUsageDeclarationCRE>
+        <WCOUsageDeclarationCONV>X</WCOUsageDeclarationCONV>
+        <WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+        <WCOUsage_Response>X</WCOUsage_Response>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="AcceptanceDateTime" type="otnds:DeclarationAcceptanceDateTimeType"
+                  minOccurs="0">
+        <xs:annotation>
+          <xs:documentation xml:lang="EN">
+            <WCOFormat>an..35</WCOFormat>
+          </xs:documentation>
+          <xs:documentation>
+            <TDEDUID>2380</TDEDUID>
+            <TDEDName>Date Or Time Or Period. Text</TDEDName>
+          </xs:documentation>
+          <xs:documentation xml:lang="EN">
+            <WCOID>023</WCOID>
+            <WCOName>Document acceptance date</WCOName>
+            <WCODescription>Date on which a document has been or will be accepted in
+              accordance with Governmental legislation
+            </WCODescription>
+          </xs:documentation>
+          <xs:documentation>
+            <DictionaryEntryName>Declaration. Acceptance. Date Time
+            </DictionaryEntryName>
+            <NamedComplexType>DeclarationAcceptanceDateTimeType</NamedComplexType>
+            <XMLTag>AcceptanceDateTime</XMLTag>
+            <UniquePositionID>339</UniquePositionID>
+            <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+            <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+            <WCOUsageUPU>X</WCOUsageUPU>
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CancellationDateTime" type="otnds:DeclarationCancellationDateTimeType"
+                  minOccurs="0">
+        <xs:annotation>
+          <xs:documentation xml:lang="EN">
+            <WCOFormat>an..35</WCOFormat>
+          </xs:documentation>
+          <xs:documentation>
+            <TDEDUID>2380</TDEDUID>
+            <TDEDName>Date Or Time Or Period. Text</TDEDName>
+          </xs:documentation>
+          <xs:documentation xml:lang="EN">
+            <WCOID>373</WCOID>
+            <WCOName>Document/message cancellation date and time</WCOName>
+            <WCODescription>Date and time when the document/message was cancelled
+            </WCODescription>
+          </xs:documentation>
+          <xs:documentation>
+            <DictionaryEntryName>Declaration. Cancellation. Date Time
+            </DictionaryEntryName>
+            <NamedComplexType>DeclarationCancellationDateTimeType</NamedComplexType>
+            <XMLTag>CancellationDateTime</XMLTag>
+            <UniquePositionID>349</UniquePositionID>
+            <WCOUsage_Response>X</WCOUsage_Response>
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="FunctionalReferenceID" type="otnds:DeclarationFunctionalReferenceIDType"
+                  minOccurs="0">
+        <xs:annotation>
+          <xs:documentation xml:lang="EN">
+            <WCOFormat>an..35</WCOFormat>
+          </xs:documentation>
+          <xs:documentation>
+            <TDEDUID>1154</TDEDUID>
+            <TDEDName>Reference. Identifier</TDEDName>
+          </xs:documentation>
+          <xs:documentation xml:lang="EN">
+            <WCOID>D026</WCOID>
+            <WCOName>Functional reference number</WCOName>
+            <WCODescription>Reference number identifying a specific information
+              exchange
+            </WCODescription>
+          </xs:documentation>
+          <xs:documentation>
+            <DictionaryEntryName>Declaration. Functional Reference. Identifier
+            </DictionaryEntryName>
+            <NamedComplexType>DeclarationFunctionalReferenceIDType
+            </NamedComplexType>
+            <XMLTag>FunctionalReferenceID</XMLTag>
+            <UniquePositionID>338</UniquePositionID>
+            <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+            <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+            <WCOUsageDeclarationCRI>X</WCOUsageDeclarationCRI>
+            <WCOUsageDeclarationCRE>X</WCOUsageDeclarationCRE>
+            <WCOUsageDeclarationCONV>X</WCOUsageDeclarationCONV>
+            <WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ID" type="otnds:DeclarationIdentificationIDType"
+                  minOccurs="0">
+        <xs:annotation>
+          <xs:documentation xml:lang="EN">
+            <WCOFormat>an..70</WCOFormat>
+          </xs:documentation>
+          <xs:documentation>
+            <TDEDUID>1004</TDEDUID>
+            <TDEDName>Document. Identifier</TDEDName>
+          </xs:documentation>
+          <xs:documentation xml:lang="EN">
+            <WCOID>D014</WCOID>
+            <WCOName>Document reference number</WCOName>
+            <WCODescription>Reference number identifying a specific document
+            </WCODescription>
+          </xs:documentation>
+          <xs:documentation>
+            <DictionaryEntryName>Declaration. Identification. Identifier
+            </DictionaryEntryName>
+            <NamedComplexType>DeclarationIdentificationIDType</NamedComplexType>
+            <XMLTag>ID</XMLTag>
+            <UniquePositionID>336</UniquePositionID>
+            <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+            <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+            <WCOUsageDeclarationCRI>X</WCOUsageDeclarationCRI>
+            <WCOUsageDeclarationCRE>X</WCOUsageDeclarationCRE>
+            <WCOUsageDeclarationCONV>X</WCOUsageDeclarationCONV>
+            <WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+            <WCOUsageUPU>X</WCOUsageUPU>
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="RejectionDateTime" type="otnds:DeclarationRejectionDateTimeType"
+                  minOccurs="0">
+        <xs:annotation>
+          <xs:documentation xml:lang="EN">
+            <WCOFormat>an..35</WCOFormat>
+          </xs:documentation>
+          <xs:documentation>
+            <TDEDUID>2380</TDEDUID>
+            <TDEDName>Date Or Time Or Period. Text</TDEDName>
+          </xs:documentation>
+          <xs:documentation xml:lang="EN">
+            <WCOID>374</WCOID>
+            <WCOName>Document/message rejection date and time</WCOName>
+            <WCODescription>Date and time when the document/message was rejected
+            </WCODescription>
+          </xs:documentation>
+          <xs:documentation>
+            <DictionaryEntryName>Declaration. Rejection. Date Time
+            </DictionaryEntryName>
+            <NamedComplexType>DeclarationRejectionDateTimeType</NamedComplexType>
+            <XMLTag>RejectionDateTime</XMLTag>
+            <UniquePositionID>350</UniquePositionID>
+            <WCOUsage_Response>X</WCOUsage_Response>
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="VersionID" type="otnds:DeclarationVersionIDType"
+                  minOccurs="0">
+        <xs:annotation>
+          <xs:documentation xml:lang="EN">
+            <WCOFormat>an..9</WCOFormat>
+          </xs:documentation>
+          <xs:documentation>
+            <TDEDUID>1057</TDEDUID>
+            <TDEDName>Version. Identifier</TDEDName>
+          </xs:documentation>
+          <xs:documentation xml:lang="EN">
+            <WCOID>383</WCOID>
+            <WCOName>Version number</WCOName>
+            <WCODescription>The sequential number that determines the version of a
+              specific document/message number
+            </WCODescription>
+          </xs:documentation>
+          <xs:documentation>
+            <DictionaryEntryName>Declaration. Version. Identifier
+            </DictionaryEntryName>
+            <NamedComplexType>DeclarationVersionIDType</NamedComplexType>
+            <XMLTag>VersionID</XMLTag>
+            <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+            <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+            <WCOUsageDeclarationTRT>X</WCOUsageDeclarationTRT>
+            <WCOUsage_Response>X</WCOUsage_Response>
+            <UniquePositionID>10289</UniquePositionID>
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="DutyTaxFee" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation xml:lang="EN">
+            <WCOID>50A</WCOID>
+            <WCOName>DutyTaxFee</WCOName>
+            <WCODescription> Calculation one instance one duty, one tax, one fee
+              Comment: Each instance of this class is to be used for a single
+              occurence of duty, tax or fee
+            </WCODescription>
+          </xs:documentation>
+          <xs:documentation>
+            <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+            <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+            <WCOUsageDeclarationCONV>X</WCOUsageDeclarationCONV>
+            <WCOUsage_Response>X</WCOUsage_Response>
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Payment" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation xml:lang="EN">
+                  <WCOID>94A</WCOID>
+                  <WCOName>Payment</WCOName>
+                  <WCODescription>Information about payment details</WCODescription>
+                </xs:documentation>
+                <xs:documentation>
+                  <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                  <WCOUsage_Response>X</WCOUsage_Response>
+                </xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="ReferenceID" type="otnds:PaymentReferenceIDType"
+                              minOccurs="0">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="EN">
+                        <WCOID>014</WCOID>
+                        <WCOName>Payment reference number</WCOName>
+                        <WCODescription>Reference number specifying a payment of a
+                          duty or tax
+                        </WCODescription>
+                        <WCOFormat>an..35</WCOFormat>
+                      </xs:documentation>
+                      <xs:documentation>
+                        <TDEDUID>1168</TDEDUID>
+                        <TDEDName>Tax. Payment.Identifier</TDEDName>
+                        <DictionaryEntryName>Payment. Reference. Identifier
+                        </DictionaryEntryName>
+                        <NamedComplexType>PaymentReferenceIDType</NamedComplexType>
+                        <XMLTag>ReferenceID</XMLTag>
+                        <UniquePositionID>460</UniquePositionID>
+                        <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="TaxAssessedAmount" type="otnds:PaymentTaxAssessedAmountType"
+                              minOccurs="0">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="EN">
+                        <WCOID>120</WCOID>
+                        <WCOName>Duty/tax/fee assessed</WCOName>
+                        <WCODescription>Assessed amount of duty/tax/fee (includes
+                          all types of charges and duties) due and amount of
+                          reduction (if applicable). Assessed per duty/tax/fee type
+                          by item and/or declaration
+                        </WCODescription>
+                        <WCOFormat>n..16,3</WCOFormat>
+                      </xs:documentation>
+                      <xs:documentation>
+                        <TDEDUID>5504</TDEDUID>
+                        <TDEDName>TaxOrFee.Assessed.Amount</TDEDName>
+                        <DictionaryEntryName>Payment. Tax Assessed. Amount
+                        </DictionaryEntryName>
+                        <NamedComplexType>PaymentTaxAssessedAmountType
+                        </NamedComplexType>
+                        <XMLTag>TaxAssessedAmount</XMLTag>
+                        <UniquePositionID>3776</UniquePositionID>
+                        <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="DueDateTime" type="otnds:PaymentDueDateTimeType"
+                              minOccurs="0">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="EN">
+                        <WCOID>376</WCOID>
+                        <WCOName>Payment due date</WCOName>
+                        <WCODescription>Date when an amount due should be made
+                          available to the creditor under the terms of payment
+                        </WCODescription>
+                        <WCOFormat>an..35</WCOFormat>
+                      </xs:documentation>
+                      <xs:documentation>
+                        <TDEDUID>2480</TDEDUID>
+                        <TDEDName>Payment. Due.Date Time</TDEDName>
+                        <DictionaryEntryName>Payment. Due. Date Time
+                        </DictionaryEntryName>
+                        <NamedComplexType>PaymentDueDateTimeType</NamedComplexType>
+                        <XMLTag>DueDateTime</XMLTag>
+                        <UniquePositionID>462</UniquePositionID>
+                        <WCOUsage_Response>X</WCOUsage_Response>
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="PaymentAmount" type="otnds:PaymentPaymentAmountType"
+                              minOccurs="0">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="EN">
+                        <WCOID>378</WCOID>
+                        <WCOName>Payment amount</WCOName>
+                        <WCODescription>The actual amount paid, or to be paid
+                        </WCODescription>
+                        <WCOFormat>n..16,3</WCOFormat>
+                      </xs:documentation>
+                      <xs:documentation>
+                        <TDEDUID>5082</TDEDUID>
+                        <TDEDName>Payment. Amount</TDEDName>
+                        <DictionaryEntryName>Payment. Payment. Amount
+                        </DictionaryEntryName>
+                        <NamedComplexType>PaymentPaymentAmountType
+                        </NamedComplexType>
+                        <XMLTag>PaymentAmount</XMLTag>
+                        <UniquePositionID>463</UniquePositionID>
+                        <WCOUsage_Response>X</WCOUsage_Response>
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ObligationGuarantee" minOccurs="0"
+                              maxOccurs="unbounded">
+                    <xs:annotation>
+                      <xs:documentation>
+                        <WCOID>90A</WCOID>
+                        <WCOName>ObligationGuarantee</WCOName>
+                        <WCODescription>Details regarding undertaking given in cash,
+                          bond or as a written guarantee to ensure that an
+                          obligation will be fulfilled, e.g. under a transit
+                          procedure
+                        </WCODescription>
+                        <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                        <WCOUsage_Response>X</WCOUsage_Response>
+                      </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="ReferenceID"
+                                    type="otnds:ObligationGuaranteeReferenceIDType" minOccurs="0">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="EN">
+                              <WCOID>100</WCOID>
+                              <WCOName>Guarantee reference identifier</WCOName>
+                              <WCODescription>A reference number to identify the
+                                undertaking given as a written guarantee in cash,
+                                bond, or by other such means in order to ensure that
+                                an
+                                obligation will be fulfilled
+                              </WCODescription>
+                              <WCOFormat>an..35</WCOFormat>
+                            </xs:documentation>
+                            <xs:documentation>
+                              <TDEDUID>1154</TDEDUID>
+                              <TDEDName>Reference. Identifier</TDEDName>
+                              <DictionaryEntryName>Obligation Guarantee. Reference.
+                                Identifier
+                              </DictionaryEntryName>
+                              <NamedComplexType>ObligationGuaranteeReferenceIDType
+                              </NamedComplexType>
+                              <XMLTag>ReferenceID</XMLTag>
+                              <UniquePositionID>464</UniquePositionID>
+                              <WCOUsage_Response>X</WCOUsage_Response>
+                            </xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GoodsShipment" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation xml:lang="EN">
+            <WCOID>67A</WCOID>
+            <WCOName>GoodsShipment</WCOName>
+            <WCODescription>Details about the movement and the handling of goods
+              shipped together on one or more means of transport between original
+              consignor and final consignee
+            </WCODescription>
+          </xs:documentation>
+          <xs:documentation>
+            <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+            <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="GovernmentAgencyGoodsItem" minOccurs="0"
+                        maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="EN">
+                  <WCOID>68A</WCOID>
+                  <WCOName>GovernmentAgencyGoodsItem</WCOName>
+                  <WCODescription>Goods item as declared to Government Agency
+                  </WCODescription>
+                </xs:documentation>
+                <xs:documentation>
+                  <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                  <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                </xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="SequenceNumeric"
+                              type="otnds:GovernmentAgencyGoodsItemSequenceNumericType" minOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="EN">
+                        <WCOID>006</WCOID>
+                        <WCOName>Sequence number</WCOName>
+                        <WCODescription>Number indicating the position in a sequence
+                        </WCODescription>
+                        <WCOFormat>n..5</WCOFormat>
+                      </xs:documentation>
+                      <xs:documentation>
+                        <TDEDUID>1050</TDEDUID>
+                        <TDEDName>Sequence. Position.Identifier</TDEDName>
+                        <DictionaryEntryName>Government Agency Goods Item. Sequence.
+                          Numeric
+                        </DictionaryEntryName>
+                        <NamedComplexType>GovernmentAgencyGoodsItemSequenceNumericType
+                        </NamedComplexType>
+                        <XMLTag>SequenceNumeric</XMLTag>
+                        <WCOUsageUPU>X</WCOUsageUPU>
+                        <UniquePositionID>3509</UniquePositionID>
+                        <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                        <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Commodity" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="EN">
+                        <WCOID>23A</WCOID>
+                        <WCOName>Commodity</WCOName>
+                        <WCODescription>Details about the properties of the goods
+                        </WCODescription>
+                      </xs:documentation>
+                      <xs:documentation>
+                        <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                        <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                      </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="DutyTaxFee" minOccurs="0" maxOccurs="unbounded">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="EN">
+                              <WCOID>50A</WCOID>
+                              <WCOName>DutyTaxFee</WCOName>
+                              <WCODescription> Calculation one instance one duty,
+                                one tax, one fee Comment: Each instance of this
+                                class is to be used for a single occurence of duty,
+                                tax or fee
+                              </WCODescription>
+                            </xs:documentation>
+                            <xs:documentation>
+                              <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                              <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                            </xs:documentation>
+                          </xs:annotation>
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="AdValoremTaxBaseAmount"
+                                          type="otnds:DutyTaxFeeAdValoremTaxBaseAmountType"
+                                          minOccurs="0">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="EN">
+                                    <WCOID>116</WCOID>
+                                    <WCOName>Duty/tax/fee assessment basis in value
+                                    </WCOName>
+                                    <WCODescription>To specify the amount on which a
+                                      duty or tax or fee will be assessed
+                                    </WCODescription>
+                                    <WCOFormat>n..16,3</WCOFormat>
+                                  </xs:documentation>
+                                  <xs:documentation>
+                                    <TDEDUID>5286</TDEDUID>
+                                    <TDEDName>TaxOrFee.AssessmentBasis.Amount
+                                    </TDEDName>
+                                    <DictionaryEntryName>Duty Tax Fee. AdValorem Tax
+                                      Base. Amount
+                                    </DictionaryEntryName>
+                                    <NamedComplexType>DutyTaxFeeAdValoremTaxBaseAmountType
+                                    </NamedComplexType>
+                                    <XMLTag>AdValoremTaxBaseAmount</XMLTag>
+                                    <UniquePositionID>3765</UniquePositionID>
+                                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                                  </xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="DeductAmount"
+                                          type="otnds:DutyTaxFeeDeductAmountType" minOccurs="0">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="EN">
+                                    <WCOID>111</WCOID>
+                                    <WCOName>Duty/tax/fee reduced assessed</WCOName>
+                                    <WCODescription>Amount of deduction from a duty
+                                      or tax
+                                    </WCODescription>
+                                    <WCOFormat>n..16,3</WCOFormat>
+                                  </xs:documentation>
+                                  <xs:documentation>
+                                    <TDEDUID>5074</TDEDUID>
+                                    <TDEDName>Tax.Deduction.Amount</TDEDName>
+                                    <DictionaryEntryName>Duty Tax Fee. Deduct.
+                                      Amount
+                                    </DictionaryEntryName>
+                                    <NamedComplexType>DutyTaxFeeDeductAmountType
+                                    </NamedComplexType>
+                                    <XMLTag>DeductAmount</XMLTag>
+                                    <UniquePositionID>3766</UniquePositionID>
+                                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                                  </xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="DutyRegimeCode"
+                                          type="otnds:DutyTaxFeeDutyRegimeCodeType" minOccurs="0">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="EN">
+                                    <WCOCodeRemarks>EDIFACT codes (9213) or user
+                                      codes
+                                    </WCOCodeRemarks>
+                                    <WCOID>164</WCOID>
+                                    <WCOName>Type of duty regime, coded</WCOName>
+                                    <WCODescription>Code specifying a type of duty
+                                      regime
+                                    </WCODescription>
+                                    <WCOFormat>an..3</WCOFormat>
+                                  </xs:documentation>
+                                  <xs:documentation>
+                                    <TDEDUID>9213</TDEDUID>
+                                    <TDEDName>Duty.Regime.Code</TDEDName>
+                                    <DictionaryEntryName>Duty Tax Fee. Duty Regime.
+                                      Code
+                                    </DictionaryEntryName>
+                                    <NamedComplexType>DutyTaxFeeDutyRegimeCodeType
+                                    </NamedComplexType>
+                                    <XMLTag>DutyRegimeCode</XMLTag>
+                                    <WCOUsageUPU>X</WCOUsageUPU>
+                                    <UniquePositionID>3768</UniquePositionID>
+                                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                                  </xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="SpecificTaxBaseQuantity"
+                                          type="otnds:DutyTaxFeeSpecificTaxBaseQuantityType"
+                                          minOccurs="0">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="EN">
+                                    <WCOID>129</WCOID>
+                                    <WCOName>Duty/tax/fee assessment basis in
+                                      quantity
+                                    </WCOName>
+                                    <WCODescription>To specify the quantity on which
+                                      a duty or tax or fee will be assessed
+                                    </WCODescription>
+                                    <WCOFormat>n..16,6</WCOFormat>
+                                  </xs:documentation>
+                                  <xs:documentation>
+                                    <TDEDUID>6090</TDEDUID>
+                                    <TDEDName>TaxOrFee.AssessmentBasis.Quantity
+                                    </TDEDName>
+                                    <DictionaryEntryName>Duty Tax Fee. Specific Tax
+                                      Base. Quantity
+                                    </DictionaryEntryName>
+                                    <NamedComplexType>DutyTaxFeeSpecificTaxBaseQuantityType
+                                    </NamedComplexType>
+                                    <XMLTag>SpecificTaxBaseQuantity</XMLTag>
+                                    <UniquePositionID>3769</UniquePositionID>
+                                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                                  </xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="TaxRateNumeric"
+                                          type="otnds:DutyTaxFeeTaxRateNumericType" minOccurs="0">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="EN">
+                                    <WCOID>115</WCOID>
+                                    <WCOName>Duty/tax/fee rate</WCOName>
+                                    <WCODescription>Rate of duty or tax or fee
+                                      applicable to commodities or of tax applicable
+                                      to services
+                                    </WCODescription>
+                                    <WCOFormat>an..17,3</WCOFormat>
+                                  </xs:documentation>
+                                  <xs:documentation>
+                                    <TDEDUID>5278</TDEDUID>
+                                    <TDEDName>TaxOrFee.Rate.Text</TDEDName>
+                                    <DictionaryEntryName>Duty Tax Fee. Tax Rate.
+                                      Numeric
+                                    </DictionaryEntryName>
+                                    <NamedComplexType>DutyTaxFeeTaxRateNumericType
+                                    </NamedComplexType>
+                                    <XMLTag>TaxRateNumeric</XMLTag>
+                                    <UniquePositionID>3770</UniquePositionID>
+                                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                                  </xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="TypeCode" type="otnds:DutyTaxFeeTypeCodeType"
+                                          minOccurs="0">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="EN">
+                                    <WCOCodeRemarks>EDIFACT codes (5153) or user
+                                      codes
+                                    </WCOCodeRemarks>
+                                    <WCOID>113</WCOID>
+                                    <WCOName>Duty/tax/fee type, coded</WCOName>
+                                    <WCODescription>Code specifying a type of duty
+                                      or tax applicable to commodities or a type of
+                                      tax or fee applicable to services
+                                    </WCODescription>
+                                    <WCOFormat>an..3</WCOFormat>
+                                  </xs:documentation>
+                                  <xs:documentation>
+                                    <TDEDUID>5153</TDEDUID>
+                                    <TDEDName>TaxOrFee.Type.Code</TDEDName>
+                                    <DictionaryEntryName>Duty Tax Fee. Type. Code
+                                    </DictionaryEntryName>
+                                    <NamedComplexType>DutyTaxFeeTypeCodeType
+                                    </NamedComplexType>
+                                    <XMLTag>TypeCode</XMLTag>
+                                    <UniquePositionID>3771</UniquePositionID>
+                                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                                    <WCOUsageDeclarationEX>X</WCOUsageDeclarationEX>
+                                  </xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="Payment" minOccurs="0"
+                                          maxOccurs="1">
+                                <xs:annotation>
+                                  <xs:documentation xml:lang="EN">
+                                    <WCOID>94A</WCOID>
+                                    <WCOName>Payment</WCOName>
+                                    <WCODescription>Information about payment
+                                      details
+                                    </WCODescription>
+                                  </xs:documentation>
+                                  <xs:documentation>
+                                    <WCOUsageDeclarationIM>X</WCOUsageDeclarationIM>
+                                  </xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                  <xs:sequence>
+                                    <xs:element name="TaxAssessedAmount"
+                                                type="otnds:PaymentTaxAssessedAmountType" minOccurs="0">
+                                      <xs:annotation>
+                                        <xs:documentation xml:lang="EN">
+                                          <WCOID>120</WCOID>
+                                          <WCOName>Duty/tax/fee assessed</WCOName>
+                                          <WCODescription>Assessed amount of
+                                            duty/tax/fee (includes all types of
+                                            charges and duties) due and amount of
+                                            reduction (if applicable). Assessed per
+                                            duty/tax/fee type by item and/or
+                                            declaration
+                                          </WCODescription>
+                                          <WCOFormat>n..16,3</WCOFormat>
+                                        </xs:documentation>
+                                        <xs:documentation>
+                                          <TDEDUID>5504</TDEDUID>
+                                          <TDEDName>TaxOrFee.Assessed.Amount
+                                          </TDEDName>
+                                          <DictionaryEntryName>Payment. Tax
+                                            Assessed. Amount
+                                          </DictionaryEntryName>
+                                          <NamedComplexType>PaymentTaxAssessedAmountType
+                                          </NamedComplexType>
+                                          <XMLTag>TaxAssessedAmount</XMLTag>
+                                          <UniquePositionID>3776</UniquePositionID>
+                                          <WCOUsageDeclarationIM>X
+                                          </WCOUsageDeclarationIM>
+                                        </xs:documentation>
+                                      </xs:annotation>
+                                    </xs:element>
+                                    <xs:element name="PaymentAmount"
+                                                type="otnds:PaymentPaymentAmountType" minOccurs="0">
+                                      <xs:annotation>
+                                        <xs:documentation xml:lang="EN">
+                                          <WCOID>378</WCOID>
+                                          <WCOName>Payment amount</WCOName>
+                                          <WCODescription>The actual amount paid, or
+                                            to be paid
+                                          </WCODescription>
+                                          <WCOFormat>n..16,3</WCOFormat>
+                                        </xs:documentation>
+                                        <xs:documentation>
+                                          <TDEDUID>5082</TDEDUID>
+                                          <TDEDName>Payment. Amount</TDEDName>
+                                          <DictionaryEntryName>Payment. Payment.
+                                            Amount
+                                          </DictionaryEntryName>
+                                          <NamedComplexType>PaymentPaymentAmountType
+                                          </NamedComplexType>
+                                          <XMLTag>PaymentAmount</XMLTag>
+                                          <UniquePositionID>3778</UniquePositionID>
+                                        </xs:documentation>
+                                      </xs:annotation>
+                                    </xs:element>
+                                  </xs:sequence>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,26 @@
+<v1:DeclarationStatusResponse
+        xmlns:v1="http://gov.uk/customs/declarationInformationRetrieval/status/v1"
+        xmlns:_2="urn:wco:datamodel:WCO:DEC-DMS:2"
+        xmlns:_3="urn:wco:datamodel:WCO:Response_DS:DMS:2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/status/v1">
+  <v1:Declaration>
+    <v1:AcceptanceDateTime>
+      <_3:DateTimeString formatCode="304">20190428183130+01</_3:DateTimeString>
+    </v1:AcceptanceDateTime>
+    <v1:ID>18GB9JLC3CU1LFGVR2</v1:ID>
+    <v1:VersionID>1</v1:VersionID>
+    <v1:CreationDateTime>
+      <v1:DateTimeString formatCode="304">20190428183129+01</v1:DateTimeString>
+    </v1:CreationDateTime>
+  </v1:Declaration>
+  <_2:Declaration>
+    <_2:FunctionCode>9</_2:FunctionCode>
+    <_2:TypeCode>IMZ</_2:TypeCode>
+    <_2:GoodsItemQuantity unitCode="NPR">100</_2:GoodsItemQuantity>
+    <_2:TotalPackageQuantity>10</_2:TotalPackageQuantity>
+    <_2:Submitter>
+      <_2:ID>GB123456789012000</_2:ID>
+    </_2:Submitter>
+  </_2:Declaration>
+</v1:DeclarationStatusResponse>

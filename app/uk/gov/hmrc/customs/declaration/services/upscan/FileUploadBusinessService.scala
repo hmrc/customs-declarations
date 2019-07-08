@@ -116,24 +116,24 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
             <Reference>{payload.reference}</Reference>
             <UploadRequest>
               <Href>{payload.uploadRequest.href}</Href>
-              <Fields>{Seq[NodeSeq](toNode("Content-Type", "Content-Type", payload.uploadRequest.fields),
-                toNode("x-amz-meta-callback-url", "x-amz-meta-callback-url", payload.uploadRequest.fields),
-                toNode("x-amz-date", "x-amz-date", payload.uploadRequest.fields),
-                toNode("x-amz-credential", "x-amz-credential", payload.uploadRequest.fields),
-                toNode("x-amz-meta-upscan-initiate-response", "x-amz-meta-upscan-initiate-response", payload.uploadRequest.fields),
-                toNode("x-amz-meta-upscan-initiate-received", "x-amz-meta-upscan-initiate-received", payload.uploadRequest.fields),
-                toNode("x-amz-meta-request-id", "x-amz-meta-request-id", payload.uploadRequest.fields),
-                toNode("x-amz-meta-original-filename", "x-amz-meta-original-filename", payload.uploadRequest.fields),
-                toNode("x-amz-algorithm", "x-amz-algorithm", payload.uploadRequest.fields),
-                toNode("key", "key", payload.uploadRequest.fields),
-                toNode("acl", "acl", payload.uploadRequest.fields),
-                toNode("x-amz-signature", "x-amz-signature", payload.uploadRequest.fields),
-                toNode("x-amz-meta-session-id", "x-amz-meta-session-id", payload.uploadRequest.fields),
-                toNode("x-amz-meta-consuming-service", "x-amz-meta-consuming-service", payload.uploadRequest.fields),
-                toNode("policy", "policy", payload.uploadRequest.fields),
-                //TODO remove label renaming
-                toNode("success_action_redirect", "success_action_redirect", payload.uploadRequest.fields),
-                toNode("error_action_redirect", "error_action_redirect", payload.uploadRequest.fields))}
+              <Fields>{Seq[NodeSeq](
+                toNode("Content-Type", payload.uploadRequest.fields),
+                toNode("x-amz-meta-callback-url", payload.uploadRequest.fields),
+                toNode("x-amz-date", payload.uploadRequest.fields),
+                toNode("x-amz-credential", payload.uploadRequest.fields),
+                toNode("x-amz-meta-upscan-initiate-response", payload.uploadRequest.fields),
+                toNode("x-amz-meta-upscan-initiate-received", payload.uploadRequest.fields),
+                toNode("x-amz-meta-request-id", payload.uploadRequest.fields),
+                toNode("x-amz-meta-original-filename", payload.uploadRequest.fields),
+                toNode("x-amz-algorithm", payload.uploadRequest.fields),
+                toNode("key", payload.uploadRequest.fields),
+                toNode("acl", payload.uploadRequest.fields),
+                toNode("x-amz-signature", payload.uploadRequest.fields),
+                toNode("x-amz-meta-session-id", payload.uploadRequest.fields),
+                toNode("x-amz-meta-consuming-service", payload.uploadRequest.fields),
+                toNode("policy", payload.uploadRequest.fields),
+                toNode("success_action_redirect", payload.uploadRequest.fields),
+                toNode("error_action_redirect", payload.uploadRequest.fields))}
               </Fields>
             </UploadRequest>
           </File>)
@@ -143,9 +143,9 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
 
   }
 
-  private def toNode(labelName: String, outputLabelName: String, fields: Map[String, String]): NodeSeq = {
+  private def toNode(labelName: String, fields: Map[String, String]): NodeSeq = {
     if (fields.contains(labelName)) {
-      Seq[Node](Text("\n                "), <a/>.copy(label = outputLabelName, child = Text(fields(labelName))))
+      Seq[Node](Text("\n                "), <a/>.copy(label = labelName, child = Text(fields(labelName))))
     } else {
       NodeSeq.Empty
     }

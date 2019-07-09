@@ -61,47 +61,34 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
       val result = getApiDefinitionWith(Map())(FakeRequest())
 
       status(result) mustBe 200
-      contentAsJson(result) mustBe expectedJson(None, None, None, v1IsTrial = false)
-    }
-
-    "be correct when V1 & V2 are PUBLIC by default, V3 is always private and trial is true" in {
-      val result = getApiDefinitionWith(Map("api.access.version-1.0.isTrial" -> true))(FakeRequest())
-
-      status(result) mustBe 200
-      contentAsJson(result) mustBe expectedJson(None, None, None, v1IsTrial = true)
+      contentAsJson(result) mustBe expectedJson(None, None, None)
     }
 
     "be correct when V1 is PRIVATE & V2 is public  and V3 is always private" in {
       val result = getApiDefinitionWith(v1WhitelistedAppIdsConfigs)(FakeRequest())
 
       status(result) mustBe 200
-      contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = Some(v1WhitelistedAppIdsConfigs.values), None, None, v1IsTrial = false)
+      contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = Some(v1WhitelistedAppIdsConfigs.values), None, None)
     }
 
     "be correct when V1 is PUBLIC & V2 is PRIVATE  and V3 is always private" in {
       val result = getApiDefinitionWith(v2WhitelistedAppIdsConfigs)(FakeRequest())
 
       status(result) mustBe 200
-      contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = None, expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values), None, v1IsTrial = false)
+      contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = None, expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values), None)
     }
 
     "be correct when V1 & V2 & V3 are PRIVATE" in {
       val result = getApiDefinitionWith(v1WhitelistedAppIdsConfigs ++ v2WhitelistedAppIdsConfigs ++ v3WhitelistedAppIdsConfigs)(FakeRequest())
 
       status(result) mustBe 200
-      contentAsJson(result) mustBe expectedJson(
-        expectedV1WhitelistedAppIds = Some(v1WhitelistedAppIdsConfigs.values),
-        expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values),
-        expectedV3WhitelistedAppIds = Some(v3WhitelistedAppIdsConfigs.values),
-        v1IsTrial = false)
+      contentAsJson(result) mustBe expectedJson(expectedV1WhitelistedAppIds = Some(v1WhitelistedAppIdsConfigs.values), expectedV2WhitelistedAppIds = Some(v2WhitelistedAppIdsConfigs.values), expectedV3WhitelistedAppIds = Some(v3WhitelistedAppIdsConfigs.values))
     }
   }
 
   private def expectedJson(expectedV1WhitelistedAppIds: Option[Iterable[String]],
                            expectedV2WhitelistedAppIds: Option[Iterable[String]],
-                           expectedV3WhitelistedAppIds: Option[Iterable[String]],
-                           v1IsTrial: Boolean
-                          ) =
+                           expectedV3WhitelistedAppIds: Option[Iterable[String]]): Any =
     Json.parse(
       s"""
          |{
@@ -121,8 +108,8 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
          |            "version":"1.0",
          |            "status":"BETA",
          |            "endpointsEnabled":true,
-         |            "access":{""".stripMargin
-         +            s""" "isTrial": $v1IsTrial ,"""
+         |            "access":{
+         |               """.stripMargin
          +
         expectedV1WhitelistedAppIds.fold(""" "type":"PUBLIC" """)(ids =>
           """ "type":"PRIVATE", "whitelistedApplicationIds":[ """.stripMargin

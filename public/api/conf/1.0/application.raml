@@ -148,3 +148,144 @@ documentation:
                         <code>INTERNAL_SERVER_ERROR</code>
                         <message>Internal server error</message>
                     </errorResponse>
+
+  /file-upload:
+      post:
+        displayName: Submit an upload initiate request
+        description: | 
+          Obtain a signed URL to upload files to.
+          
+          The SuccessRedirect and ErrorRedirect fields are optional.
+          
+          If you provide them when you POST your file, then the response will be an automatic redirect. 
+          
+          If you do not require these redirects for your application, then do not provide these redirect fields.
+          
+          ### File upload workflow
+          Once you receive a successful response from this endpoint, use the information in the response to POST your file to the URL provided.
+          
+          You must use multipart encoding (multipart/form-data) NOT application/x-www-form-urlencoded.
+          
+          The 'file' field must be the last field in the submitted form.
+
+        headers:
+          Accept:
+            description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+            type: string
+            required: true
+            example: application/vnd.hmrc.1.0+xml
+          Content-Type:
+            description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+             Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/1.0/wco-declaration-schemas.zip).
+            type: string
+            required: true
+            example: application/xml; charset=UTF-8
+          X-Badge-Identifier:
+            description: Required only for submissions via CSPs. Represents the end-user who is interacting with the subscribed application. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 12.
+            type: string
+            required: false
+            example: ABC123
+          X-Eori-Identifier:
+            description: This is the EORI associated with the originating owner of the declaration. Required only for users submitting declarations via a CSP. Must be numeric and upper case characters with a maximum length of 17 characters.
+            type: string
+            required: false
+            example: GB123456789000
+        (annotations.scope): "write:customs-declaration"
+        securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
+        body:
+          application/xml:
+            type: !include schemas/wco/fileupload/FileUploadRequest.xsd
+            example: !include examples/example_file_upload_202.xml
+        responses:
+          200:
+            body:
+              application/xml:
+                description: Successful response payload
+                type: !include schemas/wco/fileupload/FileUploadResponse.xsd
+                example: !include schemas/wco/fileupload/FileUploadResponseExample.xml
+          400:
+            body:
+              application/xml:
+                description: Invalid XML Payload
+                type: !include schemas/customs/error.xsd
+                example: |
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <errorResponse>
+                        <code>BAD_REQUEST</code>
+                        <message>Payload is not valid according to schema</message>
+                        <errors>
+                            <error>
+                                <code>xml_validation_error</code>
+                                <message>Error at line 13, column 13: no declaration found for element 'unknown'</message>
+                            </error>
+                        </errors>
+                    </errorResponse>
+          500:
+            body:
+              application/xml:
+                description: Internal server error
+                type: !include schemas/customs/error.xsd
+                example: |
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <errorResponse>
+                        <code>INTERNAL_SERVER_ERROR</code>
+                        <message>Internal server error</message>
+                    </errorResponse>
+
+  /arrival-notification:
+    post:
+      displayName: Submit an Arrival Notification Declaration
+      description: Allows submission of a Customs Arrival Notification Declaration.
+      headers:
+        Accept:
+          description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+          type: string
+          required: true
+          example: application/vnd.hmrc.1.0+xml
+        Content-Type:
+          description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/1.0/wco-declaration-schemas.zip).
+          type: string
+          required: true
+          example: application/xml; charset=UTF-8
+        X-Badge-Identifier:
+            description: Required only for submissions via CSPs. Represents the end-user who is interacting with the subscribed application. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 12.
+            type: string
+            required: false
+            example: ABC123
+      (annotations.scope): "write:customs-declaration"
+      securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
+      body:
+        application/xml:
+          type: !include schemas/customs/wrapper_submit.xsd
+          example: !include examples/example_submission_declaration_202.xml
+      responses:
+        202:
+        400:
+          body:
+            application/xml:
+              description: Invalid XML Payload
+              type: !include schemas/customs/error.xsd
+              example: |
+                  <?xml version="1.0" encoding="UTF-8"?>
+                  <errorResponse>
+                      <code>BAD_REQUEST</code>
+                      <message>Payload is not valid according to schema</message>
+                      <errors>
+                          <error>
+                              <code>xml_validation_error</code>
+                              <message>Error at line 13, column 13: no declaration found for element 'unknown'</message>
+                          </error>
+                      </errors>
+                  </errorResponse>
+        500:
+          body:
+            application/xml:
+              description: Internal server error
+              type: !include schemas/customs/error.xsd
+              example: |
+                  <?xml version="1.0" encoding="UTF-8"?>
+                  <errorResponse>
+                      <code>INTERNAL_SERVER_ERROR</code>
+                      <message>Internal server error</message>
+                  </errorResponse>

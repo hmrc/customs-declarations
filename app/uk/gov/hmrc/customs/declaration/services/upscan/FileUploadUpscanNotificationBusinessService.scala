@@ -67,7 +67,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
       (bf, ftf) <- maybeFileTransmissionFile(ready.reference, md)
     } yield
       FileTransmission(FileTransmissionBatch(md.batchId, md.fileCount),
-        new URL(s"${config.fileUploadConfig.fileTransmissionCallbackUrl}${md.csId}"),
+        new URL(s"${config.fileUploadConfig.fileTransmissionCallbackUrl}/file-transmission-notify/clientSubscriptionId/${md.csId}"),
         ftf,
         FileTransmissionInterface("DEC64", "1.0.0"),
         extractFileProperties(ready, md, bf)

@@ -117,7 +117,7 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
         !b.files.exists(file => file.errorRedirect.isDefined && file.successRedirect.isEmpty)
       },
       errorErrorRedirectWithoutSuccessRedirect)
-
+    
     def maxFileGroupSize = validate(
       fileUpload,
       { b: FileUploadRequest =>

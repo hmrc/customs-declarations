@@ -49,7 +49,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
   private val mdFileOne = FileMetadataWithFilesOneAndThree.files.head
   private val mdFileOneCallback = mdFileOne.maybeCallbackFields.get
   private val fileTransmissionBatchOne = FileTransmissionBatch(md.batchId, md.fileCount)
-  private val fileTransmissionCallbackUrl = "http://file_transmission_callback_url/clientSubscriptionId/"
+  private val fileTransmissionCallbackUrl = "http://file_transmission_callback_url"
   private val fileTransmissionServiceURL = "http://file_transmission_service_url"
   private val fileTransmissionLocation = mdFileOne.maybeCallbackFields.get.outboundLocation
   private val fileTransmissionFileOne = FileTransmissionFile(mdFileOne.reference, mdFileOneCallback.name, mdFileOneCallback.mimeType, mdFileOneCallback.checksum, location = fileTransmissionLocation, mdFileOne.sequenceNumber, uploadTimestamp = InitiateDate)
@@ -59,7 +59,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     FileTransmissionProperty("Eori", md.eori.toString),
     FileTransmissionProperty("DocumentType", mdFileOne.documentType.get.toString)
   )
-  private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(fileTransmissionCallbackUrl + clientSubscriptionIdString), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)
+  private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(s"$fileTransmissionCallbackUrl/file-transmission-notify/clientSubscriptionId/$clientSubscriptionIdString"), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)
   private implicit val implicitHasConversationId: HasConversationId = new HasConversationId {
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }

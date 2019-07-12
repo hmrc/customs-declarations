@@ -27,15 +27,15 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedStatusRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
+import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.CustomsDeclarationsMetricsTestData._
 import util.ExternalServicesConfig.{AuthToken, Host, Port}
 import util.TestData._
 import util._
 import util.externalservices.MdgStatusDeclarationService
-import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 
 class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   with GuiceOneAppPerSuite
@@ -48,7 +48,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   private val incomingAuthToken = s"Bearer ${ExternalServicesConfig.AuthToken}"
   private val numberOfCallsToTriggerStateChange = 5
   private val unavailablePeriodDurationInMillis = 1000
-  private implicit val asr: AuthorisedStatusRequest[AnyContent] = AuthorisedStatusRequest(conversationId, EventStart, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, Csp(badgeIdentifier, None), mock[Request[AnyContent]])
+  private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo, ApiSubscriptionFieldsTestData.clientId, Csp(badgeIdentifier, None), mock[Request[AnyContent]])
   private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
 
   override protected def beforeAll() {

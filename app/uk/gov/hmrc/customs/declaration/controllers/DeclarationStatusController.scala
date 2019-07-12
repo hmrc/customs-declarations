@@ -22,7 +22,7 @@ import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, HasConversationId}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, HasConversationId}
 import uk.gov.hmrc.customs.declaration.model.{ConversationId, Mrn}
 import uk.gov.hmrc.customs.declaration.services.DeclarationStatusService
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
@@ -44,14 +44,14 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
       authAction
     ).async {
 
-      implicit asr: AuthorisedStatusRequest[AnyContent] =>
+      implicit ar: AuthorisedRequest[AnyContent] =>
 
-        logger.debug(s"Declaration status request received. Path = ${asr.path} \nheaders = ${asr.headers.headers}")
+        logger.debug(s"Declaration status request received. Path = ${ar.path} \nheaders = ${ar.headers.headers}")
 
         declarationStatusService.send(Mrn(mrn)) map {
           case Right(res) =>
             val id = new HasConversationId {
-              override val conversationId: ConversationId = asr.conversationId
+              override val conversationId: ConversationId = ar.conversationId
             }
             logger.info(s"Declaration status request processed successfully.")(id)
             logger.debug(s"Returning filtered declaration status request with status code 200 and body\n ${res.body}")(id)

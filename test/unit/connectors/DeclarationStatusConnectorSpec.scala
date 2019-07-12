@@ -30,7 +30,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -58,7 +58,7 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private val v3Config = ServiceConfig("v3-url", Some("v3-bearer"), "v3-default")
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val asr = AuthorisedStatusRequest(conversationId, EventStart, VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId, Csp(badgeIdentifier, None), mock[Request[AnyContent]])
+  private implicit val ar = AuthorisedRequest(conversationId, EventStart, VersionTwo, ApiSubscriptionFieldsTestData.clientId, Csp(badgeIdentifier, None), mock[Request[AnyContent]])
 
   private implicit val jsonRequest: ValidatedPayloadRequest[AnyContentAsJson] =  ValidatedPayloadRequest(
     ConversationId(UUID.randomUUID()),

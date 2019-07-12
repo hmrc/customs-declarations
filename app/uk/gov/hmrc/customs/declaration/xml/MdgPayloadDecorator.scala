@@ -19,7 +19,7 @@ package uk.gov.hmrc.customs.declaration.xml
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 
 import scala.xml.{Node, NodeSeq, Text}
 
@@ -64,16 +64,16 @@ class MdgPayloadDecorator() {
                 mrn: Mrn,
                 dmirId: DeclarationManagementInformationRequestId,
                 apiSubscriptionFieldsResponse: ApiSubscriptionFieldsResponse)
-               (implicit asr: AuthorisedStatusRequest[A]): NodeSeq = {
+               (implicit ar: AuthorisedRequest[A]): NodeSeq = {
     <n1:queryDeclarationInformationRequest
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/"
     xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns_1="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/"
     xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 request_schema.xsd">
       <n1:requestCommon>
         <n1:clientID>{apiSubscriptionFieldsResponse.fieldsId.toString}</n1:clientID>
-        <n1:conversationID>{asr.conversationId.toString}</n1:conversationID>
+        <n1:conversationID>{ar.conversationId.toString}</n1:conversationID>
         <n1:correlationID>{correlationId.toString}</n1:correlationID>
-        <n1:badgeIdentifier>{asr.badgeIdentifier.toString}</n1:badgeIdentifier>
+        <n1:badgeIdentifier>{ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier.toString}</n1:badgeIdentifier>
         <n1:dateTimeStamp>{date.toString}</n1:dateTimeStamp>
       </n1:requestCommon>
       <n1:requestDetail>

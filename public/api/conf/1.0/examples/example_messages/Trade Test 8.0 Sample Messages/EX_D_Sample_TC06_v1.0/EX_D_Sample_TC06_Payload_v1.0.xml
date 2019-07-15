@@ -1,0 +1,242 @@
+		<md:MetaData
+xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+>
+			<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+			<md:WCOTypeName>DEC</md:WCOTypeName>
+			<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+			<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+			<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+			<Declaration
+xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+>
+				<AcceptanceDateTime>
+					<p1:DateTimeString formatCode="304">20190705090000+01</p1:DateTimeString>
+				</AcceptanceDateTime>
+				<FunctionCode>9</FunctionCode>
+				<FunctionalReferenceID>E3.2sc1.1_NH050702</FunctionalReferenceID>
+				<IssueDateTime>
+					<p1:DateTimeString formatCode="304">20190705090000+01</p1:DateTimeString>
+				</IssueDateTime>
+				<TypeCode>EXD</TypeCode>
+				<GoodsItemQuantity>2</GoodsItemQuantity>
+				<TotalPackageQuantity>2</TotalPackageQuantity>
+				<BorderTransportMeans>
+					<RegistrationNationalityCode>GB</RegistrationNationalityCode>
+					<ModeCode>4</ModeCode>
+				</BorderTransportMeans>
+				<Consignment>
+					<Carrier>
+						<ID>GB025115100010</ID>
+					</Carrier>
+					<Freight>
+						<PaymentMethodCode>Z</PaymentMethodCode>
+					</Freight>
+					<Itinerary>
+						<SequenceNumeric>1</SequenceNumeric>
+						<RoutingCountryCode>GB</RoutingCountryCode>
+					</Itinerary>
+					<Itinerary>
+						<SequenceNumeric>2</SequenceNumeric>
+						<RoutingCountryCode>CA</RoutingCountryCode>
+					</Itinerary>
+					<Itinerary>
+						<SequenceNumeric>3</SequenceNumeric>
+						<RoutingCountryCode>US</RoutingCountryCode>
+					</Itinerary>
+				</Consignment>
+				<Declarant>
+			 <ID>GB025115100010</ID>
+				</Declarant>
+				<ExitOffice>
+					<ID>GB000245</ID>
+				</ExitOffice>
+				<Exporter>
+					<ID>GB025115100010</ID>
+			 </Exporter>
+				<GoodsShipment>
+					<TransactionNatureCode>11</TransactionNatureCode>
+					<Consignee>
+						<Name>Bags Export</Name>
+						<Address>
+							<CityName>New York</CityName>
+							<CountryCode>US</CountryCode>
+							<Line>1 Bags Avenue</Line>
+							<PostcodeID>NY1 234</PostcodeID>
+						</Address>
+					</Consignee>
+					<Consignment>
+						<ContainerCode>1</ContainerCode>
+						<DepartureTransportMeans>
+							<ID>CLX7148</ID>
+							<IdentificationTypeCode>41</IdentificationTypeCode>
+						</DepartureTransportMeans>
+						<GoodsLocation>
+							<Name>EMAEMAEMA</Name>
+							<TypeCode>A</TypeCode>
+							<Address>
+								<TypeCode>U</TypeCode>
+								<CountryCode>GB</CountryCode>
+							</Address>
+						</GoodsLocation>
+						<TransportEquipment>
+							<SequenceNumeric>1</SequenceNumeric>
+							<Seal>
+								<SequenceNumeric>1</SequenceNumeric>
+								<ID>34587</ID>
+							</Seal>
+						</TransportEquipment>
+					</Consignment>
+					<ExportCountry>
+						<ID>GB</ID>
+					</ExportCountry>
+					<GovernmentAgencyGoodsItem>
+						<SequenceNumeric>1</SequenceNumeric>
+						<StatisticalValueAmount currencyID="GBP">600</StatisticalValueAmount>
+
+						<AdditionalDocument>
+							<CategoryCode>Y</CategoryCode>
+							<ID>1332/2013</ID>
+							<TypeCode>935</TypeCode>
+							<LPCOExemptionCode>XX</LPCOExemptionCode>
+						</AdditionalDocument>
+						<AdditionalDocument>
+							<CategoryCode>Y</CategoryCode>
+							<ID>1382/2014</ID>
+							<TypeCode>901</TypeCode>
+							<LPCOExemptionCode>XX</LPCOExemptionCode>
+						</AdditionalDocument>
+						<AdditionalDocument>
+							<CategoryCode>Y</CategoryCode>
+							<ID>116/2009</ID>
+							<TypeCode>903</TypeCode>
+							<LPCOExemptionCode>XX</LPCOExemptionCode>
+						</AdditionalDocument>
+						<AdditionalInformation>
+							<StatementCode>00400</StatementCode>
+							<StatementDescription>EXPORTER</StatementDescription>
+							<StatementTypeCode>ACB</StatementTypeCode>
+						</AdditionalInformation>
+						<Commodity>
+							<Description>No Description given</Description>
+							<Classification>
+								<ID>49119900</ID>
+								<IdentificationTypeCode>TSP</IdentificationTypeCode>
+							</Classification>
+							<Classification>
+								<ID>4042</ID>
+								<IdentificationTypeCode>TRA</IdentificationTypeCode>
+							</Classification>
+							<DutyTaxFee>
+								<DutyRegimeCode>100</DutyRegimeCode>
+							</DutyTaxFee>
+							<GoodsMeasure>
+								<GrossMassMeasure unitCode="KGM">50</GrossMassMeasure>
+								<NetNetWeightMeasure unitCode="KGM">38</NetNetWeightMeasure>
+							</GoodsMeasure>
+
+						</Commodity>
+						<Destination>
+							<CountryCode>US</CountryCode>
+						</Destination>
+						<GovernmentProcedure>
+							<CurrentCode>10</CurrentCode>
+							<PreviousCode>40</PreviousCode>
+						</GovernmentProcedure>
+						<GovernmentProcedure>
+							<CurrentCode>000</CurrentCode>
+						</GovernmentProcedure>
+						<Packaging>
+							<SequenceNumeric>1</SequenceNumeric>
+							<MarksNumbersID>Booklets</MarksNumbersID>
+							<QuantityQuantity>30</QuantityQuantity>
+							<TypeCode>CR</TypeCode>
+						</Packaging>
+					</GovernmentAgencyGoodsItem>
+					<GovernmentAgencyGoodsItem>
+						<SequenceNumeric>2</SequenceNumeric>
+						<StatisticalValueAmount currencyID="GBP">100000</StatisticalValueAmount>
+
+						<AdditionalDocument>
+							<CategoryCode>Y</CategoryCode>
+							<ID>1332/2013</ID>
+							<TypeCode>935</TypeCode>
+							<LPCOExemptionCode>XX</LPCOExemptionCode>
+						</AdditionalDocument>
+						<AdditionalDocument>
+							<CategoryCode>Y</CategoryCode>
+							<ID>160/2017</ID>
+							<TypeCode>900</TypeCode>
+							<LPCOExemptionCode>XX</LPCOExemptionCode>
+						</AdditionalDocument>
+						<AdditionalDocument>
+							<CategoryCode>Y</CategoryCode>
+							<ID>116/2009</ID>
+							<TypeCode>903</TypeCode>
+							<LPCOExemptionCode>XX</LPCOExemptionCode>
+						</AdditionalDocument>
+						<AdditionalInformation>
+							<StatementCode>00400</StatementCode>
+							<StatementDescription>EXPORTER</StatementDescription>
+							<StatementTypeCode>ACB</StatementTypeCode>
+						</AdditionalInformation>
+						<Commodity>
+							<Description>Musical Instrument</Description>
+							<Classification>
+								<ID>92079010</ID>
+								<IdentificationTypeCode>TSP</IdentificationTypeCode>
+							</Classification>
+							<Classification>
+								<ID>4054</ID>
+								<IdentificationTypeCode>TRA</IdentificationTypeCode>
+							</Classification>
+							<DutyTaxFee>
+								<DutyRegimeCode>100</DutyRegimeCode>
+							</DutyTaxFee>
+							<GoodsMeasure>
+								<GrossMassMeasure unitCode="KGM">150</GrossMassMeasure>
+								<NetNetWeightMeasure unitCode="KGM">100</NetNetWeightMeasure>
+								<TariffQuantity>50</TariffQuantity>
+							</GoodsMeasure>
+
+						</Commodity>
+						<Destination>
+							<CountryCode>US</CountryCode>
+						</Destination>
+						<GovernmentProcedure>
+							<CurrentCode>10</CurrentCode>
+							<PreviousCode>40</PreviousCode>
+						</GovernmentProcedure>
+						<GovernmentProcedure>
+							<CurrentCode>000</CurrentCode>
+						</GovernmentProcedure>
+						<Packaging>
+							<SequenceNumeric>1</SequenceNumeric>
+							<MarksNumbersID>Instrument</MarksNumbersID>
+							<QuantityQuantity>60</QuantityQuantity>
+							<TypeCode>PX</TypeCode>
+						</Packaging>
+					</GovernmentAgencyGoodsItem>
+					<PreviousDocument>
+						<CategoryCode>Z</CategoryCode>
+						<ID>9GB025115100010-19H5702</ID>
+						<TypeCode>DCR</TypeCode>
+						<LineNumeric>1</LineNumeric>
+					</PreviousDocument>
+					<TradeTerms>
+						<ConditionCode>DDP</ConditionCode>
+						<LocationID>GBTIL</LocationID>
+					</TradeTerms>
+				</GoodsShipment>
+			</Declaration>
+		</md:MetaData>

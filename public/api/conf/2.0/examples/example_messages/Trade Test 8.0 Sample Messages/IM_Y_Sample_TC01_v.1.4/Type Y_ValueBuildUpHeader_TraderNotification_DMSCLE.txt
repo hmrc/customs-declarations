@@ -1,0 +1,28 @@
+<_2:MetaData
+    xmlns:_2=\"urn:wco:datamodel:WCO:DocumentMetaData-DMS:2\">
+    <_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode>
+    <_2:WCOTypeName>RES</_2:WCOTypeName>
+    <_2:ResponsibleCountryCode/>
+    <_2:ResponsibleAgencyName/>
+    <_2:AgencyAssignedCustomizationCode/>
+    <_2:AgencyAssignedCustomizationVersionCode/>
+    <_2_1:Response
+        xmlns:_2_1=\"urn:wco:datamodel:WCO:RES-DMS:2\">\n      
+        <_2_1:FunctionCode>09</_2_1:FunctionCode>\n      
+        <_2_1:FunctionalReferenceID>0bc166e59cdc452bb743cc5e1daaa97b</_2_1:FunctionalReferenceID>\n      
+        <_2_1:IssueDateTime>\n        
+            <_2_2:DateTimeString formatCode=\"304\"
+                xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20190507165514+01
+            </_2_2:DateTimeString>\n      
+        </_2_1:IssueDateTime>\n      
+        <_2_1:AdditionalInformation>\n        
+            <_2_1:StatementCode>A2</_2_1:StatementCode>\n        
+            <_2_1:StatementTypeCode>AFB</_2_1:StatementTypeCode>\n      
+        </_2_1:AdditionalInformation>\n      
+        <_2_1:Declaration>\n        
+            <_2_1:FunctionalReferenceID>TypeYVlBldUpHeader118</_2_1:FunctionalReferenceID>\n        
+            <_2_1:ID>19GB50ZLNPL4WX8PR9</_2_1:ID>\n        
+            <_2_1:VersionID>1</_2_1:VersionID>\n      
+        </_2_1:Declaration>\n    
+    </_2_1:Response>
+</_2:MetaData>

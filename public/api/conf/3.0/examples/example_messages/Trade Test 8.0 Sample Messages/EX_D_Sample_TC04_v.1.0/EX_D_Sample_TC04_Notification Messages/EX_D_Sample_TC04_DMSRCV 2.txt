@@ -1,0 +1,13 @@
+
+  <_2:MetaData><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response>
+      <_2_1:FunctionCode>02</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>4ae78f179b974d4698ba095106e53e8b</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304">20190703101157Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:Declaration>
+        <_2_1:FunctionalReferenceID>Movement14</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GB7A3DOH6SCFGVA4</_2_1:ID>
+        <_2_1:VersionID>1</_2_1:VersionID>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>

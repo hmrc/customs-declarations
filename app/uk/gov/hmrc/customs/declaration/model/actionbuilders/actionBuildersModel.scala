@@ -64,7 +64,7 @@ object ActionBuilderModelHelper {
 
     def toNonCspAuthorisedRequest(eori: Eori, retrievalData: Option[NrsRetrievalData]): AuthorisedRequest[A] = toAuthorisedRequest(NonCsp(eori, retrievalData))
 
-    def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
+    private def toAuthorisedRequest(authorisedAs: AuthorisedAs): AuthorisedRequest[A] = AuthorisedRequest(
       vhr.conversationId,
       vhr.start,
       vhr.requestedApiVersion,
@@ -76,13 +76,12 @@ object ActionBuilderModelHelper {
 
   implicit class ValidatedHeadersStatusRequestOps[A](val vhsr: ValidatedHeadersStatusRequest[A]) extends AnyVal {
 
-    def toAuthorisedStatusRequest: AuthorisedStatusRequest[A] = AuthorisedStatusRequest(
+    def toAuthorisedRequest(authorisedAsCsp: AuthorisedAsCsp): AuthorisedRequest[A] = AuthorisedRequest(
       vhsr.conversationId,
       vhsr.start,
       vhsr.requestedApiVersion,
-      vhsr.badgeIdentifier,
       vhsr.clientId,
-      Csp(vhsr.badgeIdentifier, None),
+      authorisedAsCsp,
       vhsr.request
     )
   }
@@ -203,7 +202,7 @@ case class ValidatedHeadersStatusRequest[A](conversationId: ConversationId,
                                             request: Request[A]
 ) extends WrappedRequest[A](request) with HasRequest[A] with HasConversationId with HasBadgeIdentifier with ExtractedStatusHeaders
 
-// Available after Authorise action builder
+// Available after AuthAction builder
 case class AuthorisedRequest[A](conversationId: ConversationId,
                                 start: ZonedDateTime,
                                 requestedApiVersion: ApiVersion,
@@ -211,16 +210,6 @@ case class AuthorisedRequest[A](conversationId: ConversationId,
                                 authorisedAs: AuthorisedAs,
                                 request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with ExtractedHeaders with HasAuthorisedAs
-
-// Available after Authorise action builder
-case class AuthorisedStatusRequest[A](conversationId: ConversationId,
-                                      start: ZonedDateTime,
-                                      requestedApiVersion: ApiVersion,
-                                      badgeIdentifier: BadgeIdentifier,
-                                      clientId: ClientId,
-                                      authorisedAs: AuthorisedAs,
-                                      request: Request[A]
-) extends WrappedRequest[A](request) with HasConversationId with HasBadgeIdentifier with ExtractedStatusHeaders with HasAuthorisedAs
 
 // Available after ValidatedPayloadAction builder
 abstract class GenericValidatedPayloadRequest[A](conversationId: ConversationId,

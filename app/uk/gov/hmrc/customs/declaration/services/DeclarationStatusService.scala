@@ -24,7 +24,8 @@ import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnecto
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedStatusRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
+import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, NotFoundException}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,27 +34,29 @@ import scala.util.control.NonFatal
 import scala.xml.{Elem, PrettyPrinter, TopScope, XML}
 
 @Singleton
-class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResponseFilterService,
-                                         statusResponseValidationService: StatusResponseValidationService,
+class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger,
                                          override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                         override val logger: DeclarationsLogger,
                                          connector: DeclarationStatusConnector,
+                                         wrapper: MdgPayloadDecorator,
                                          dateTimeProvider: DateTimeService,
-                                         uniqueIdsService: UniqueIdsService)
+                                         uniqueIdsService: UniqueIdsService,
+                                         statusResponseFilterService: StatusResponseFilterService,
+                                         statusResponseValidationService: StatusResponseValidationService)
                                         (implicit val ec: ExecutionContext) extends ApiSubscriptionFieldsService {
 
-  def send[A](mrn: Mrn)(implicit asr: AuthorisedStatusRequest[A], hc: HeaderCarrier): Future[Either[Result, HttpResponse]] = {
+  def send[A](mrn: Mrn)(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier): Future[Either[Result, HttpResponse]] = {
 
     val dateTime = dateTimeProvider.nowUtc()
     val correlationId = uniqueIdsService.correlation
     val dmirId = uniqueIdsService.dmir
 
-    futureApiSubFieldsId(asr.clientId) flatMap {
+    futureApiSubFieldsId(ar.clientId) flatMap {
       case Right(sfId) =>
-        connector.send(dateTime, correlationId, dmirId, asr.requestedApiVersion, sfId, mrn)
+        val declarationStatusPayload = wrapper.status(correlationId, dateTime, mrn, dmirId, sfId)
+        connector.send(declarationStatusPayload, dateTime, correlationId, ar.requestedApiVersion)
           .map(response => {
             val xmlResponseBody = XML.loadString(response.body)
-            statusResponseValidationService.validate(xmlResponseBody, asr.badgeIdentifier) match {
+            statusResponseValidationService.validate(xmlResponseBody, ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier) match {
               case Right(_) => Right(filterResponse(response, xmlResponseBody))
               case Left(errorResponse) =>
                 logError(errorResponse)
@@ -75,7 +78,7 @@ class DeclarationStatusService @Inject()(statusResponseFilterService: StatusResp
     }
   }
 
-  private def logError[A](errorResponse: ErrorResponse)(implicit asr: AuthorisedStatusRequest[A]): Unit = {
+  private def logError[A](errorResponse: ErrorResponse)(implicit ar: AuthorisedRequest[A]): Unit = {
     logger.error(s"declaration status call returning error response '${errorResponse.message}' and status code ${errorResponse.httpStatusCode}")
   }
 

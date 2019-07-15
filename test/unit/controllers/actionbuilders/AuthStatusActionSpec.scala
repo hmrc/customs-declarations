@@ -18,8 +18,8 @@ package unit.controllers.actionbuilders
 
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
-import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.AnyContentAsXml
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -27,6 +27,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorInternalSer
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthStatusAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersStatusRequest
 import uk.gov.hmrc.play.test.UnitSpec
@@ -59,7 +60,7 @@ class AuthStatusActionSpec extends UnitSpec with MockitoSugar with TableDrivenPr
 
         private val actual = await(authAction.refine(validatedHeadersRequest))
 
-        actual shouldBe Right(validatedHeadersRequest.toAuthorisedStatusRequest)
+        actual shouldBe Right(validatedHeadersRequest.toAuthorisedRequest(Csp(badgeIdentifier, None)))
         verifyCspAuthorisationCalled(1)
       }
 

@@ -24,8 +24,9 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedHeadersStatusRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedHeadersStatusRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -38,18 +39,18 @@ import scala.util.control.NonFatal
 class AuthStatusAction @Inject()(override val authConnector: AuthConnector,
                                  logger: DeclarationsLogger)
                                 (implicit ec: ExecutionContext)
-  extends ActionRefiner[ValidatedHeadersStatusRequest, AuthorisedStatusRequest] with AuthorisedFunctions  {
+  extends ActionRefiner[ValidatedHeadersStatusRequest, AuthorisedRequest] with AuthorisedFunctions  {
 
   private val errorResponseUnauthorisedGeneral =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
 
-    override def refine[A](vhsr: ValidatedHeadersStatusRequest[A]): Future[Either[Result, AuthorisedStatusRequest[A]]] = {
+    override def refine[A](vhsr: ValidatedHeadersStatusRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
       implicit val implicitVhsr: ValidatedHeadersStatusRequest[A] = vhsr
       implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
       authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
         logger.debug("Authorised as CSP")
-        Future.successful(Right(vhsr.toAuthorisedStatusRequest)) // Simply won't get through if no MRN is specified
+        Future.successful(Right(vhsr.toAuthorisedRequest(Csp(vhsr.badgeIdentifier, None)))) // Simply won't get through if no MRN is specified
       }.recover{
         case NonFatal(_: AuthorisationException) =>
           logger.error("Not authorised")

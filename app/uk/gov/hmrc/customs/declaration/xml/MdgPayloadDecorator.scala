@@ -19,7 +19,7 @@ package uk.gov.hmrc.customs.declaration.xml
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedStatusRequest, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 
 import scala.xml.{Node, NodeSeq, Text}
 
@@ -27,7 +27,7 @@ class MdgPayloadDecorator() {
 
   private val newLineAndIndentation = "\n        "
 
-  def wrap[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: DateTime)(implicit vpr: ValidatedPayloadRequest[A]): NodeSeq =
+  def wrap[A](xml: NodeSeq, sfId: ApiSubscriptionFieldsResponse, dateTime: DateTime)(implicit vpr: ValidatedPayloadRequest[A]): NodeSeq =
     <v1:submitDeclarationRequest
     xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1"
     xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2"
@@ -37,20 +37,20 @@ class MdgPayloadDecorator() {
         <!--type: regimeType-->
         <v1:regime>CDS</v1:regime>
         <v1:receiptDate>{ dateTime.toString(ISODateTimeFormat.dateTimeNoMillis) }</v1:receiptDate>
-        <v1:clientID>{asfr.fieldsId}</v1:clientID>
+        <v1:clientID>{sfId.fieldsId}</v1:clientID>
         <v1:conversationID>{vpr.conversationId.uuid}</v1:conversationID>
         {val as = vpr.authorisedAs
 
       as match {
             case Csp(badgeId, _) => Seq[Node](
               <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>, Text(newLineAndIndentation),
-              <v1:authenticatedPartyID>{asfr.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
+              <v1:authenticatedPartyID>{sfId.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
             case NonCsp(eori, _) =>
               <v1:authenticatedPartyID>{eori.value}</v1:authenticatedPartyID> // originatingPartyID is only required for CSPs
             case CspWithEori(badgeId, eori, _) => Seq[Node](
               <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>, Text(newLineAndIndentation),
               <v1:originatingPartyID>{eori.value}</v1:originatingPartyID>, Text(newLineAndIndentation),
-              <v1:authenticatedPartyID>{asfr.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
+              <v1:authenticatedPartyID>{sfId.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
           }
         }
       </v1:requestCommon>
@@ -63,17 +63,17 @@ class MdgPayloadDecorator() {
                 date: DateTime,
                 mrn: Mrn,
                 dmirId: DeclarationManagementInformationRequestId,
-                apiSubscriptionFieldsResponse: ApiSubscriptionFieldsResponse)
-               (implicit asr: AuthorisedStatusRequest[A]): NodeSeq = {
+                sfId: ApiSubscriptionFieldsResponse)
+               (implicit ar: AuthorisedRequest[A]): NodeSeq = {
     <n1:queryDeclarationInformationRequest
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd_1="http://trade.core.ecf/messages/2017/03/31/"
     xmlns:n1="http://gov.uk/customs/retrieveDeclarationInformation/v1" xmlns:tns_1="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/trade/2017/02/22/"
     xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationInformation/v1 request_schema.xsd">
       <n1:requestCommon>
-        <n1:clientID>{apiSubscriptionFieldsResponse.fieldsId.toString}</n1:clientID>
-        <n1:conversationID>{asr.conversationId.toString}</n1:conversationID>
+        <n1:clientID>{sfId.fieldsId.toString}</n1:clientID>
+        <n1:conversationID>{ar.conversationId.toString}</n1:conversationID>
         <n1:correlationID>{correlationId.toString}</n1:correlationID>
-        <n1:badgeIdentifier>{asr.badgeIdentifier.toString}</n1:badgeIdentifier>
+        <n1:badgeIdentifier>{ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier.toString}</n1:badgeIdentifier>
         <n1:dateTimeStamp>{date.toString}</n1:dateTimeStamp>
       </n1:requestCommon>
       <n1:requestDetail>

@@ -60,8 +60,8 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
     protected val mockNrsService: NrsService = mock[NrsService]
 
     protected lazy val service = new StandardDeclarationSubmissionService(mockLogger,
-      mockMdgDeclarationConnector,
       mockApiSubscriptionFieldsConnector,
+      mockMdgDeclarationConnector,
       mockPayloadDecorator,
       mockDateTimeProvider,
       stubUniqueIdsService,

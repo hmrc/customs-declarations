@@ -1,0 +1,73 @@
+<_2:MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+      <_2_1:FunctionCode>09</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>bd10c7f017bd471894da1356f71f22e4</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20190117155229Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:AdditionalInformation>
+        <_2_1:StatementCode>A2</_2_1:StatementCode>
+        <_2_1:StatementTypeCode>AFB</_2_1:StatementTypeCode>
+      </_2_1:AdditionalInformation>
+      <_2_1:Declaration>
+        <_2_1:FunctionalReferenceID>CDSZPKN01A</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GB0NT1ZOY39FGVR1</_2_1:ID>
+        <_2_1:VersionID>1</_2_1:VersionID>
+      </_2_1:Declaration>
+    </_2_1:Response><_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+      <_2_1:FunctionCode>13</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>a81229452c174bceb4405a5ff958e94b</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20190117155228Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:Bank>
+        <_2_1:ReferenceID>CITIGB2LLON</_2_1:ReferenceID>
+        <_2_1:ID>GB25CITI08320011963155</_2_1:ID>
+      </_2_1:Bank>
+      <_2_1:Status>
+        <_2_1:NameCode>4</_2_1:NameCode>
+      </_2_1:Status>
+      <_2_1:Declaration>
+        <_2_1:FunctionalReferenceID>CDSZPKN01A</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GB0NT1ZOY39FGVR1</_2_1:ID>
+        <_2_1:VersionID>1</_2_1:VersionID>
+        <_2_1:GoodsShipment>
+          <_2_1:GovernmentAgencyGoodsItem>
+            <_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>
+            <_2_1:Commodity>
+              <_2_1:DutyTaxFee>
+                <_2_1:DeductAmount>0.00</_2_1:DeductAmount>
+                <_2_1:DutyRegimeCode>100</_2_1:DutyRegimeCode>
+                <_2_1:TaxRateNumeric>20.00</_2_1:TaxRateNumeric>
+                <_2_1:TypeCode>B00</_2_1:TypeCode>
+                <_2_1:Payment>
+                  <_2_1:TaxAssessedAmount>5400.00</_2_1:TaxAssessedAmount>
+                  <_2_1:PaymentAmount>0.00</_2_1:PaymentAmount>
+                </_2_1:Payment>
+              </_2_1:DutyTaxFee>
+              <_2_1:DutyTaxFee>
+                <_2_1:DeductAmount>0.00</_2_1:DeductAmount>
+                <_2_1:DutyRegimeCode>100</_2_1:DutyRegimeCode>
+                <_2_1:TaxRateNumeric>8.00</_2_1:TaxRateNumeric>
+                <_2_1:TypeCode>A00</_2_1:TypeCode>
+                <_2_1:Payment>
+                  <_2_1:TaxAssessedAmount>2000.00</_2_1:TaxAssessedAmount>
+                  <_2_1:PaymentAmount>0.00</_2_1:PaymentAmount>
+                </_2_1:Payment>
+              </_2_1:DutyTaxFee>
+              <_2_1:DutyTaxFee>
+                <_2_1:TypeCode>SA</_2_1:TypeCode>
+                <_2_1:Payment>
+                  <_2_1:TaxAssessedAmount currencyID="GBP">5400.00</_2_1:TaxAssessedAmount>
+                </_2_1:Payment>
+              </_2_1:DutyTaxFee>
+              <_2_1:DutyTaxFee>
+                <_2_1:TypeCode>SA</_2_1:TypeCode>
+                <_2_1:Payment>
+                  <_2_1:TaxAssessedAmount currencyID="GBP">2000.00</_2_1:TaxAssessedAmount>
+                </_2_1:Payment>
+              </_2_1:DutyTaxFee>
+            </_2_1:Commodity>
+          </_2_1:GovernmentAgencyGoodsItem>
+        </_2_1:GoodsShipment>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>

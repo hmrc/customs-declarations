@@ -1,0 +1,24 @@
+
+  <_2:MetaData><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response>
+      <_2_1:FunctionCode>16</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>78de7bb3e32140cab2e8041776698a85</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304">20190703102005Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:AdditionalInformation>
+        <_2_1:StatementCode></_2_1:StatementCode>
+        <_2_1:StatementDescription>GB000085</_2_1:StatementDescription>
+        <_2_1:StatementTypeCode>CEX</_2_1:StatementTypeCode>
+      </_2_1:AdditionalInformation>
+      <_2_1:Status>
+        <_2_1:EffectiveDateTime>
+          <_2_2:DateTimeString>Wed Jul 03 00:00:00 UTC 2019</_2_2:DateTimeString>
+        </_2_1:EffectiveDateTime>
+        <_2_1:NameCode>A1</_2_1:NameCode>
+      </_2_1:Status>
+      <_2_1:Declaration>
+        <_2_1:FunctionalReferenceID>E3.2sc1.2_JF_9003</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GB7A3DOH6SCFGVA4</_2_1:ID>
+        <_2_1:VersionID>2</_2_1:VersionID>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>

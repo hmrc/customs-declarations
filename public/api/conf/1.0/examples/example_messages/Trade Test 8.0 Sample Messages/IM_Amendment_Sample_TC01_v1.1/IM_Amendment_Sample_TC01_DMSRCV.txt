@@ -1,0 +1,28 @@
+
+
+<_2:MetaData><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response>
+      <_2_1:FunctionCode>02</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>9eb050be6b134dd7bbec215a09cb95b4</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304">20190325145557Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:Declaration>
+        <_2_1:FunctionalReferenceID>B_Part2503A</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GB3BH9HZP25X8PR8</_2_1:ID>
+        <_2_1:VersionID>1</_2_1:VersionID>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>
+</v3:notifyTrader></soap:Body>
+</soap:Envelope>
+                <_2_1:TaxRateNumeric>0.00</_2_1:TaxRateNumeric>
+                <_2_1:TypeCode>B00</_2_1:TypeCode>
+                <_2_1:Payment>
+                  <_2_1:TaxAssessedAmount>0.00</_2_1:TaxAssessedAmount>
+                  <_2_1:PaymentAmount>0.00</_2_1:PaymentAmount>
+                </_2_1:Payment>
+              </_2_1:DutyTaxFee>
+            </_2_1:Commodity>
+          </_2_1:GovernmentAgencyGoodsItem>
+        </_2_1:GoodsShipment>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>

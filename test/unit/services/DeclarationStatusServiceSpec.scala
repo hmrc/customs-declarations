@@ -36,6 +36,7 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
+import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData.{correlationId, _}
 
 import scala.concurrent.Future
@@ -44,10 +45,11 @@ import scala.xml.NodeSeq
 class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach{
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
-  private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
+  private implicit val ar: AuthorisedRequest[AnyContentAsXml] = util.TestData.TestAuthorisedStatusRequest
 
   protected lazy val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
   protected lazy val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
+  protected lazy val mockMdgPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
   protected lazy val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
   protected lazy val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
   protected lazy val mockDeclarationStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
@@ -59,17 +61,15 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
 
   trait SetUp {
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
-    when(mockDeclarationStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-      meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], any[ApiSubscriptionFieldsResponse],
-      meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedRequest[_]]))
-      .thenReturn(Future.successful(mockHttpResponse))
+    when(mockDeclarationStatusConnector.send(any[NodeSeq], any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
+      any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockHttpResponse.body).thenReturn("<xml>some xml</xml>")
     when(mockHttpResponse.allHeaders).thenReturn(any[Map[String, Seq[String]]])
     when(mockStatusResponseFilterService.transform(<xml>backendXml</xml>)).thenReturn(<xml>transformed</xml>)
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
 
-    protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockApiSubscriptionFieldsConnector,
-      mockLogger, mockDeclarationStatusConnector, mockDateTimeProvider, stubUniqueIdsService)
+    protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockLogger, mockApiSubscriptionFieldsConnector, mockDeclarationStatusConnector, mockMdgPayloadDecorator,
+      mockDateTimeProvider, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService)
 
     protected def send(vpr: AuthorisedRequest[AnyContentAsXml] = TestAuthorisedStatusRequest, hc: HeaderCarrier = headerCarrier): Either[Result, HttpResponse] = {
       await(service.send(mrn) (vpr, hc))
@@ -77,37 +77,39 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
   }
 
   override def beforeEach(): Unit = {
-    reset(mockDateTimeProvider, mockDeclarationStatusConnector, mockHttpResponse, mockStatusResponseFilterService, mockStatusResponseValidationService)
+    reset(mockMdgPayloadDecorator, mockDateTimeProvider, mockDeclarationStatusConnector, mockHttpResponse, mockStatusResponseFilterService, mockStatusResponseValidationService)
   }
   "BusinessService" should {
 
     "send xml to connector" in new SetUp() {
       when(mockStatusResponseValidationService.validate(any[NodeSeq], meq(validBadgeIdentifierValue).asInstanceOf[BadgeIdentifier])).thenReturn(Right(true))
+      when(mockMdgPayloadDecorator.status(meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
+        meq(dateTime),
+        meq[String](mrn.value).asInstanceOf[Mrn],
+        meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId],
+        any[ApiSubscriptionFieldsResponse])
+        (any[AuthorisedRequest[_]])).thenReturn(expectedDeclarationStatusPayload)
 
       val result: Either[Result, HttpResponse] = send()
       result.right.get.body shouldBe "<xml>transformed</xml>"
-      verify(mockDeclarationStatusConnector).send(dateTime, correlationId, dmirId, VersionTwo, apiSubscriptionFieldsResponse, mrn)(TestAuthorisedStatusRequest)
+      verify(mockDeclarationStatusConnector).send(expectedDeclarationStatusPayload, dateTime, correlationId, VersionTwo)(TestAuthorisedStatusRequest)
     }
 
     "return 404 error response when MDG call fails with 404" in new SetUp() {
-      when(mockDeclarationStatusConnector.send(any[DateTime],
+      when(mockDeclarationStatusConnector.send(any[NodeSeq],
+        any[DateTime],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-        meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId],
-        any[ApiVersion],
-        any[ApiSubscriptionFieldsResponse],
-        meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new RuntimeException(new NotFoundException("nothing here"))))
+        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new RuntimeException(new NotFoundException("nothing here"))))
       val result: Either[Result, HttpResponse] = send()
 
       result shouldBe Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)
     }
 
     "return 500 error response when MDG call fails" in new SetUp() {
-      when(mockDeclarationStatusConnector.send(any[DateTime],
+      when(mockDeclarationStatusConnector.send(any[NodeSeq],
+        any[DateTime],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-        meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId],
-        any[ApiVersion],
-        any[ApiSubscriptionFieldsResponse],
-        meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
+        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
       val result: Either[Result, HttpResponse] = send()
 
       result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)

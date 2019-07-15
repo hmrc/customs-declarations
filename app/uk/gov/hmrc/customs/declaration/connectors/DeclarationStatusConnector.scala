@@ -27,7 +27,6 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -45,21 +44,17 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
 
   override val configKey = "declaration-status"
 
-  private val mdgPayloadDecorator = new MdgPayloadDecorator() // TODO inject this
-
-  def send[A](date: DateTime,
+  def send[A](xmlToSend: NodeSeq,
+              date: DateTime,
               correlationId: CorrelationId,
-              dmirId: DeclarationManagementInformationRequestId,
-              apiVersion: ApiVersion,
-              apiSubscriptionFieldsResponse: ApiSubscriptionFieldsResponse,
-              mrn: Mrn)(implicit ar: AuthorisedRequest[A]): Future[HttpResponse] = {
+              apiVersion: ApiVersion)
+             (implicit ar: AuthorisedRequest[A]): Future[HttpResponse] = {
 
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, ar.conversationId, correlationId), authorization = Some(Authorization(bearerToken)))
 
-    val declarationStatusPayload = mdgPayloadDecorator.status(correlationId, date, mrn, dmirId, apiSubscriptionFieldsResponse)
-    withCircuitBreaker(post(declarationStatusPayload, config.url, correlationId)).map{
+    withCircuitBreaker(post(xmlToSend, config.url, correlationId)).map{
       response => logger.debug(s"Declaration status response: ${response.body}")
       response
     }

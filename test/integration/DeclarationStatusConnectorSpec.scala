@@ -30,9 +30,9 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
-import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.CustomsDeclarationsMetricsTestData._
 import util.ExternalServicesConfig.{AuthToken, Host, Port}
+import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData._
 import util._
 import util.externalservices.MdgStatusDeclarationService
@@ -80,7 +80,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
     "make a correct request" in {
       startMdgStatusV2Service()
       await(sendValidXml())
-      verifyMdgStatusDecServiceWasCalledWith(requestBody = StatusTestXMLData.expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+      verifyMdgStatusDecServiceWasCalledWith(requestBody = expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
     }
 
     "circuit breaker trips after specified number of failures" in {
@@ -105,7 +105,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
         resetMockServer()
         startMdgStatusV2Service(ACCEPTED)
         await(sendValidXml())
-        verifyMdgStatusDecServiceWasCalledWith(requestBody = StatusTestXMLData.expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
+        verifyMdgStatusDecServiceWasCalledWith(requestBody = expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
       }
     }
 
@@ -132,6 +132,6 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   }
 
   private def sendValidXml() = {
-    connector.send(date, correlationId, dmirId, VersionTwo, apiSubscriptionFieldsResponse, mrn)
+    connector.send(expectedDeclarationStatusPayload, date, correlationId, VersionTwo)
   }
 }

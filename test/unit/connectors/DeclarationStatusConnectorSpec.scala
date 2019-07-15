@@ -35,8 +35,8 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.UnitSpec
-import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.CustomsDeclarationsMetricsTestData.EventStart
+import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData._
 import util.{ApiSubscriptionFieldsTestData, StatusTestXMLData, TestData}
 
@@ -58,7 +58,8 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private val v3Config = ServiceConfig("v3-url", Some("v3-bearer"), "v3-default")
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val ar = AuthorisedRequest(conversationId, EventStart, VersionTwo, ApiSubscriptionFieldsTestData.clientId, Csp(badgeIdentifier, None), mock[Request[AnyContent]])
+  private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
+    ApiSubscriptionFieldsTestData.clientId, Csp(badgeIdentifier, None), mock[Request[AnyContent]])
 
   private implicit val jsonRequest: ValidatedPayloadRequest[AnyContentAsJson] =  ValidatedPayloadRequest(
     ConversationId(UUID.randomUUID()),
@@ -135,7 +136,7 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
         when(mockServiceConfigProvider.getConfig("declaration-status")).thenReturn(null)
 
         val caught = intercept[IllegalArgumentException] {
-          await(connector.send(date, correlationId, dmirId, VersionOne, apiSubscriptionFieldsResponse, mrn))
+          await(connector.send(expectedDeclarationStatusPayload, date, correlationId, VersionOne))
         }
         caught.getMessage shouldBe "config not found"
       }
@@ -143,7 +144,7 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
   }
 
   private def awaitRequest = {
-    await(connector.send(date, correlationId, dmirId, VersionTwo, apiSubscriptionFieldsResponse, mrn))
+    await(connector.send(expectedDeclarationStatusPayload, date, correlationId, VersionTwo))
   }
 
   private def returnResponseForRequest(eventualResponse: Future[HttpResponse]) = {

@@ -38,6 +38,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
+import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
@@ -57,6 +58,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
     protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
     protected val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
+    protected val mockMdgPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]
@@ -72,7 +74,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger)
-    protected val stubDeclarationStatusService = new DeclarationStatusService(mockStatusResponseFilterService, mockStatusResponseValidationService, mockApiSubscriptionFieldsConnector, mockDeclarationsLogger, mockStatusConnector, mockDateTimeService, stubUniqueIdsService)
+    protected val stubDeclarationStatusService = new DeclarationStatusService(mockDeclarationsLogger, mockApiSubscriptionFieldsConnector, mockStatusConnector, mockMdgPayloadDecorator, mockDateTimeService, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService)
     protected val stubConversationIdAction = new ConversationIdAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(
@@ -90,7 +92,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
       controller.get(mrnValue).apply(request)
     }
 
-    when(mockStatusConnector.send(any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId], any[ApiVersion], any[ApiSubscriptionFieldsResponse], meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedRequest[_]])).thenReturn(Future.successful(stubHttpResponse))
+    when(mockStatusConnector.send(any[NodeSeq], any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.successful(stubHttpResponse))
     when(mockDateTimeService.nowUtc()).thenReturn(dateTime)
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
@@ -155,12 +157,10 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     }
 
     "return the Internal Server error when connector returns a 500 " in new SetUp() {
-      when(mockStatusConnector.send(any[DateTime],
+      when(mockStatusConnector.send(any[NodeSeq],
+        any[DateTime],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-        meq[UUID](dmirId.uuid).asInstanceOf[DeclarationManagementInformationRequestId],
-        any[ApiVersion],
-        any[ApiSubscriptionFieldsResponse],
-        meq[String](mrn.value).asInstanceOf[Mrn])(any[AuthorisedRequest[_]]))
+        any[ApiVersion])(any[AuthorisedRequest[_]]))
         .thenReturn(Future.failed(emulatedServiceFailure))
 
       authoriseCsp()

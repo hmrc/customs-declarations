@@ -42,8 +42,8 @@ import scala.xml.NodeSeq
 
 @Singleton
 class StandardDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
-                                                     override val connector: MdgWcoDeclarationConnector,
                                                      override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
+                                                     override val connector: MdgWcoDeclarationConnector,
                                                      override val wrapper: MdgPayloadDecorator,
                                                      override val dateTimeProvider: DateTimeService,
                                                      override val uniqueIdsService: UniqueIdsService,
@@ -54,15 +54,15 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
 
 @Singleton
 class CancellationDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
-                                                     override val connector: MdgDeclarationCancellationConnector,
-                                                     override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
-                                                     override val wrapper: MdgPayloadDecorator,
-                                                     override val dateTimeProvider: DateTimeService,
-                                                     override val uniqueIdsService: UniqueIdsService,
-                                                     override val nrsService: NrsService,
-                                                     override val declarationsConfigService: DeclarationsConfigService,
-                                                     override val actorSystem: ActorSystem)
-                                                    (implicit val ec: ExecutionContext) extends DeclarationService {
+                                                         override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
+                                                         override val connector: MdgDeclarationCancellationConnector,
+                                                         override val wrapper: MdgPayloadDecorator,
+                                                         override val dateTimeProvider: DateTimeService,
+                                                         override val uniqueIdsService: UniqueIdsService,
+                                                         override val nrsService: NrsService,
+                                                         override val declarationsConfigService: DeclarationsConfigService,
+                                                         override val actorSystem: ActorSystem)
+                                                        (implicit val ec: ExecutionContext) extends DeclarationService {
 }
 trait DeclarationService extends ApiSubscriptionFieldsService {
 

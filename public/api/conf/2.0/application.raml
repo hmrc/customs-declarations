@@ -360,10 +360,10 @@ documentation:
           mrn:
             description: Movement Reference Number
             type: string
-            example: "ABC123"
+            example: "19GBL4592NCOI21NR9"
         get:
-          displayName: Request the status of Declaration
-          description: Allows requesting the status of a Declaration. This endpoint is available to CSP users only. The CSP user must supply a movement reference number (MRN) as a parameter in the request URL. The endpoint returns a set of latest status details for the MRN.
+          displayName: Get the status of a declaration
+          description: Get the status of a declaration with the given MRN. This endpoint is only available to CSP users.
           headers:
             Accept:
               description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).

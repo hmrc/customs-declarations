@@ -3,3 +3,5 @@ This API allows the submission of any UCC declarations for asynchronous processi
 The API takes any UCC declaration payload. It also allows for the submission of a cancellation request (pre-clearance) and provides a method of securely uploading additional documentation to support a declaration submission.
 
 The file-upload endpoint is used to initiate a file upload as part of the declaration submission process. An example document you may be requested to upload could be a paper copy of a licence. This endpoint is used to initiate a file upload where a signed URL is returned by the endpoint to be used in the file upload workflow.
+
+Use the status-request endpoint to get the status of a declaration. This endpoint is only available to CSP users. A declaration can be identified by a movement reference number (MRN).

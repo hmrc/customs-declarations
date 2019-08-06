@@ -19,7 +19,6 @@ package unit.controllers.filetransmission
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play._
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import play.api.test.Helpers._
@@ -43,10 +42,11 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
 
   trait SetUp {
 
+    implicit val ec = Helpers.stubControllerComponents().executionContext
     val mockService = mock[FileUploadNotificationService]
     implicit val callbackToXmlNotification = mock[FileTransmissionCallbackToXmlNotification]
 
-    val controller = new FileTransmissionNotificationController(callbackToXmlNotification, mockService, mockCdsLogger)
+    val controller = new FileTransmissionNotificationController(callbackToXmlNotification, mockService, Helpers.stubControllerComponents(), mockCdsLogger)
   }
 
   "file transmission notification controller" should {
@@ -88,7 +88,7 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
       contentAsString(result) mustBe BadRequestErrorResponseInvalidJson
       verifyZeroInteractions(mockService)
       PassByNameVerifier(mockCdsLogger, "error")
-        .withByNameParam[String]("Malformed JSON received. Body: Some(some) headers: List((Content-Type,application/json))")
+        .withByNameParam[String]("Malformed JSON received. Body: Some(some) headers: List((Host,localhost), (Content-Type,application/json))")
         .verify()
     }
 

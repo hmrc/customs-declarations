@@ -23,8 +23,8 @@ import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{AnyContentAsXml, Result}
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgWcoDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -47,6 +47,7 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val wrappedValidXML = <wrapped></wrapped>
 
   trait SetUp {

@@ -23,8 +23,8 @@ import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.scalatest.Assertion
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Reads
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.model.ConversationId
@@ -58,6 +58,7 @@ case class ExampleFileTransmissionNotification(fileReference: FileReference,
 class FileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
+    private[FileUploadNotificationServiceSpec] implicit val ec = Helpers.stubControllerComponents().executionContext
     private[FileUploadNotificationServiceSpec] val mockFileUploadMetadataRepo = mock[FileUploadMetadataRepo]
     private[FileUploadNotificationServiceSpec] val mockNotificationConnector = mock[FileUploadCustomsNotificationConnector]
     private[FileUploadNotificationServiceSpec] val mockDeclarationsLogger = mock[CdsLogger]

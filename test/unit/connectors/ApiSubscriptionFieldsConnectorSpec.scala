@@ -21,7 +21,7 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -47,6 +47,7 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
   private val mockDeclarationsConfig = mock[DeclarationsConfig]
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private implicit val vpr = TestData.TestCspValidatedPayloadRequest
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
 
   private val connector = new ApiSubscriptionFieldsConnector(mockWSGetImpl, mockLogger, mockDeclarationsConfigService)
 

@@ -23,10 +23,9 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.mvc.{AnyContent, AnyContentAsJson, Request}
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.model._
@@ -45,6 +44,7 @@ import scala.xml.NodeSeq
 
 class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
 
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = stubDeclarationsLogger
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]

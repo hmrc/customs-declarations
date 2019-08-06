@@ -53,6 +53,7 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
   extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
   protected[this] def requestRetrievalsForEndpoint: Boolean = true
+  protected[this] def executionContext: ExecutionContext = ec
 
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val implicitVhr: ValidatedHeadersRequest[A] = vhr

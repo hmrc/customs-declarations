@@ -22,8 +22,8 @@ import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{atLeastOnce, times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{AnyContentAsJson, Result}
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -43,6 +43,7 @@ import scala.xml.NodeSeq
 
 class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   trait SetUp {

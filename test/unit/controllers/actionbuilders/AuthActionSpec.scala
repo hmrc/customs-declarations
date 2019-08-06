@@ -20,7 +20,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
@@ -58,6 +58,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
+    protected implicit val ec = Helpers.stubControllerComponents().executionContext
   }
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {

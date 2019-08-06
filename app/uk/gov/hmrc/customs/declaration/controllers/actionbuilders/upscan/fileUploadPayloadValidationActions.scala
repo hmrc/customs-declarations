@@ -36,13 +36,16 @@ import scala.xml.Node
 class FileUploadPayloadValidationAction @Inject()(fileUploadXmlValidationService: FileUploadXmlValidationService,
                                                   logger: DeclarationsLogger)
                                                  (implicit ec: ExecutionContext)
-    extends PayloadValidationAction(fileUploadXmlValidationService, logger)
+  extends PayloadValidationAction(fileUploadXmlValidationService, logger) {
+  override def executionContext: ExecutionContext = ec
+}
 
 class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadValidationAction: FileUploadPayloadValidationAction,
                                                           val logger: DeclarationsLogger,
                                                           val declarationsConfigService: DeclarationsConfigService)
                                                          (implicit ec: ExecutionContext)
   extends ActionRefiner[AuthorisedRequest, ValidatedFileUploadPayloadRequest] with HttpStatusCodeShortDescriptions {
+  override def executionContext: ExecutionContext = ec
 
   private val declarationIdLabel = "DeclarationID"
   private val documentTypeLabel = "DocumentType"

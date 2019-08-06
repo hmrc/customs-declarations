@@ -24,18 +24,17 @@ import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, _}
-import uk.gov.hmrc.customs.api.common.config.ServicesConfig
 import uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadUpscanNotificationController
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.{FileReference, UploadedCallbackBody, UploadedFailedCallbackBody}
 import uk.gov.hmrc.customs.declaration.services.InternalErrorXmlNotification
 import uk.gov.hmrc.customs.declaration.services.upscan.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, UpscanNotificationCallbackToXmlNotification}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import unit.logging.StubCdsLogger
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
@@ -46,6 +45,7 @@ import scala.concurrent.Future
 class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {
 
   trait SetUp {
+    implicit val ec = Helpers.stubControllerComponents().executionContext
     val mockNotificationService: FileUploadNotificationService = mock[FileUploadNotificationService]
     val mockToXmlNotification: UpscanNotificationCallbackToXmlNotification = mock[UpscanNotificationCallbackToXmlNotification]
     val mockErrorToXmlNotification: InternalErrorXmlNotification = mock[InternalErrorXmlNotification]
@@ -55,6 +55,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       mockToXmlNotification,
       mockErrorToXmlNotification,
       mockBusinessService,
+      Helpers.stubControllerComponents(),
       new StubCdsLogger(mock[ServicesConfig]))
     val post: Action[AnyContent] = controller.post(subscriptionFieldsId.toString)
     val postWithInvalidCsid: Action[AnyContent] = controller.post("invalid-csid")

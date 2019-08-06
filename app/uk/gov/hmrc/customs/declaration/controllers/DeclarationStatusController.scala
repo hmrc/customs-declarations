@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, HasConversationId}
 import uk.gov.hmrc.customs.declaration.model.{ConversationId, Mrn}
 import uk.gov.hmrc.customs.declaration.services.DeclarationStatusService
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext
 
@@ -34,8 +34,10 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
                                             val authAction: AuthStatusAction,
                                             val conversationIdAction: ConversationIdAction,
                                             val declarationStatusService: DeclarationStatusService,
+                                            cc: ControllerComponents,
                                             val logger: DeclarationsLogger)
-                                           (implicit val ec: ExecutionContext) extends BaseController {
+                                           (implicit val ec: ExecutionContext)
+  extends BackendController(cc) {
 
   def get(mrn: String): Action[AnyContent] = (
     Action andThen

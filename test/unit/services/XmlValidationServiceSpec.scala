@@ -23,7 +23,7 @@ import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.TestXMLData
@@ -33,6 +33,7 @@ import scala.xml.{Node, SAXException}
 
 class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   protected val MockConfiguration = mock[Configuration]
   protected val MockXml = mock[Node]
 
@@ -46,18 +47,18 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
   override protected def beforeEach() {
     reset(MockConfiguration)
-    when(MockConfiguration.getStringSeq(propertyName)).thenReturn(Some(xsdLocations))
-    when(MockConfiguration.getInt("xml.max-errors")).thenReturn(None)
+    when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(Some(xsdLocations))
+    when(MockConfiguration.getOptional[Int]("xml.max-errors")).thenReturn(None)
   }
 
   "XmlValidationService" should {
     "get location of xsd resource files from configuration" in  {
       await(xmlValidationService.validate(ValidSubmissionXML))
-      verify(MockConfiguration).getStringSeq(ameq(propertyName))
+      verify(MockConfiguration).getOptional[Seq[String]](propertyName)
     }
 
     "fail the future when in configuration there are no locations of xsd resource files" in {
-      when(MockConfiguration.getStringSeq(propertyName)).thenReturn(None)
+      when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(None)
 
       val caught = intercept[IllegalStateException]{
         await(xmlValidationService.validate(MockXml))
@@ -67,7 +68,7 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     }
 
     "fail the future when in configuration there is an empty list for locations of xsd resource files" in {
-      when(MockConfiguration.getStringSeq(propertyName)).thenReturn(Some(Nil))
+      when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(Some(Nil))
 
       val caught = intercept[IllegalStateException] {
         await(xmlValidationService.validate(MockXml))
@@ -77,7 +78,7 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     }
 
     "fail the future when a configured xsd resource file cannot be found" in {
-      when(MockConfiguration.getStringSeq(propertyName)).thenReturn(Some(List("there/is/no/such/file")))
+      when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(Some(List("there/is/no/such/file")))
 
       val caught = intercept[FileNotFoundException] {
         await(xmlValidationService.validate(MockXml))
@@ -122,12 +123,12 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     }
 
     "fail the future with configured number of wrapped SAXExceptions when there are multiple errors in XML" in {
-      when(MockConfiguration.getInt("xml.max-errors")).thenReturn(Some(2))
+      when(MockConfiguration.getOptional[Int]("xml.max-errors")).thenReturn(Some(2))
 
       val caught = intercept[SAXException] {
         await(xmlValidationService.validate(InvalidSubmissionXMLWith2Errors))
       }
-      verify(MockConfiguration).getInt("xml.max-errors")
+      verify(MockConfiguration).getOptional[Int]("xml.max-errors")
 
       caught.getMessage shouldBe "cvc-datatype-valid.1.2.1: 'ABC' is not a valid value for 'decimal'."
 
@@ -140,7 +141,7 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
     }
 
     "fail the future with system error when a configured maximum of xml errors is not a positive number" in {
-      when(MockConfiguration.getInt("xml.max-errors")).thenReturn(Some(0))
+      when(MockConfiguration.getOptional[Int]("xml.max-errors")).thenReturn(Some(0))
 
       val caught = intercept[IllegalArgumentException] {
         await(xmlValidationService.validate(MockXml))

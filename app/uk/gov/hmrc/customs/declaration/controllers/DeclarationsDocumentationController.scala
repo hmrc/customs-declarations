@@ -16,25 +16,27 @@
 
 package uk.gov.hmrc.customs.declaration.controllers
 
+import controllers.Assets
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
-import play.api.http.{HttpErrorHandler, MimeTypes}
-import play.api.mvc.{Action, AnyContent}
+import play.api.http.MimeTypes
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.customs.api.common.controllers.DocumentationController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 
 @Singleton
-class DeclarationsDocumentationController @Inject()(httpErrorHandler: HttpErrorHandler,
+class DeclarationsDocumentationController @Inject()(assets: Assets,
+                                                    cc: ControllerComponents,
                                                     configuration: Configuration,
                                                     logger: DeclarationsLogger)
-  extends DocumentationController(httpErrorHandler) {
+  extends DocumentationController(assets, cc) {
 
-  private lazy val mayBeV1WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-1.0.whitelistedApplicationIds")
-  private lazy val mayBeV2WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-2.0.whitelistedApplicationIds")
-  private lazy val mayBeV3WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-3.0.whitelistedApplicationIds")
+  private lazy val mayBeV1WhitelistedApplicationIds = configuration.getOptional[Seq[String]]("api.access.version-1.0.whitelistedApplicationIds")
+  private lazy val mayBeV2WhitelistedApplicationIds = configuration.getOptional[Seq[String]]("api.access.version-2.0.whitelistedApplicationIds")
+  private lazy val mayBeV3WhitelistedApplicationIds = configuration.getOptional[Seq[String]]("api.access.version-3.0.whitelistedApplicationIds")
 
-  private lazy val v2Enabled = configuration.getBoolean("api.access.version-2.0.enabled").getOrElse(true)
-  private lazy val v3Enabled = configuration.getBoolean("api.access.version-3.0.enabled").getOrElse(true)
+  private lazy val v2Enabled = configuration.getOptional[Boolean]("api.access.version-2.0.enabled").getOrElse(true)
+  private lazy val v3Enabled = configuration.getOptional[Boolean]("api.access.version-3.0.enabled").getOrElse(true)
 
   def definition(): Action[AnyContent] = Action {
     logger.debugWithoutRequestContext(s"DeclarationsDocumentationController definition endpoint has been called")

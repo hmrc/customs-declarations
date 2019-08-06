@@ -37,7 +37,7 @@ abstract class XmlValidationService @Inject()(val configuration: Configuration, 
     def resourceUrl(resourcePath: String): URL = Option(getClass.getResource(resourcePath))
       .getOrElse(throw new FileNotFoundException(s"XML Schema resource file: $resourcePath"))
 
-    val sources = configuration.getStringSeq(schemaPropertyName)
+    val sources = configuration.getOptional[Seq[String]](schemaPropertyName)
       .filter(_.nonEmpty)
       .getOrElse(throw new IllegalStateException(s"application.conf is missing mandatory property '$schemaPropertyName'"))
       .map(resourceUrl(_).toString)
@@ -46,7 +46,7 @@ abstract class XmlValidationService @Inject()(val configuration: Configuration, 
     SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources)
   }
 
-  private lazy val maxSAXErrors = configuration.getInt("xml.max-errors").getOrElse(Int.MaxValue)
+  private lazy val maxSAXErrors = configuration.getOptional[Int]("xml.max-errors").getOrElse(Int.MaxValue)
 
   def validate(xml: NodeSeq)(implicit ec: ExecutionContext): Future[Unit] = {
     Future(doValidate(xml))

@@ -74,7 +74,7 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
     logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
     lazy val errorMsg = s"File meta data not inserted for $fileUploadMetadata"
 
-    collection.insert(fileUploadMetadata).map {
+    collection.insert(ordered = false).one(fileUploadMetadata).map {
       writeResult => errorHandler.handleSaveError(writeResult, errorMsg)
     }
   }

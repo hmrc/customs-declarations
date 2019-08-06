@@ -22,6 +22,7 @@ import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode}
@@ -50,7 +51,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   private type CspRetrievalDataType = Retrieval[NrsRetrievalDataType]
   private type NonCspRetrievalDataType = Retrieval[NrsRetrievalDataType ~ Enrolments]
 
-  private val cspRetrievals: CspRetrievalDataType =
+  private val cspRetrievals =
     Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
       Retrievals.credentials and Retrievals.confidenceLevel and Retrievals.nino and
       Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
@@ -59,7 +60,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
       Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and
       Retrievals.credentialStrength and Retrievals.loginTimes
 
-  private val nonCspRetrievals: NonCspRetrievalDataType = cspRetrievals and Retrievals.authorisedEnrolments
+  private val nonCspRetrievals = cspRetrievals and Retrievals.authorisedEnrolments
 
   private lazy val errorResponseEoriNotFoundInCustomsEnrolment =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")

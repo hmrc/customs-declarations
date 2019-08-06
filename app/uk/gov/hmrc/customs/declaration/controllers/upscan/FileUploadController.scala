@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEor
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext
 
@@ -36,7 +36,7 @@ class FileUploadController @Inject()(val common: Common,
                                      val conversationIdAction: ConversationIdAction,
                                      val fileUploadAuthAction: AuthActionEoriHeader)
                                     (implicit ec: ExecutionContext)
-  extends BaseController {
+  extends BackendController(common.cc) {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {
     case Right(xml) =>

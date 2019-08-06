@@ -136,7 +136,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
     scenario("Response status 400 when user submits a malformed xml payload") {
       Given("the API is available")
       startMdgWcoDecServiceV1()
-      val request = MalformedXmlRequest.fromCsp.copyFakeRequest(method = POST, uri = endpoint)
+      val request = MalformedXmlRequest.fromCsp.withMethod(POST).withTarget(MalformedXmlRequest.target.withPath(endpoint))
       stubAuditService()
       authServiceAuthorizesCSP()
 

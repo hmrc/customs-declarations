@@ -22,7 +22,7 @@ import java.util.UUID
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -60,6 +60,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     FileTransmissionProperty("DocumentType", mdFileOne.documentType.get.toString)
   )
   private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(s"$fileTransmissionCallbackUrl/file-transmission-notify/clientSubscriptionId/$clientSubscriptionIdString"), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private implicit val implicitHasConversationId: HasConversationId = new HasConversationId {
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }

@@ -20,7 +20,7 @@ import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -28,6 +28,7 @@ import scala.xml.{Elem, Node, SAXException}
 
 class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   protected val MockConfiguration = mock[Configuration]
   protected val MockXml = mock[Node]
 
@@ -38,8 +39,8 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
 
   override protected def beforeEach() {
     reset(MockConfiguration)
-    when(MockConfiguration.getStringSeq(propertyName)).thenReturn(Some(xsdLocations))
-    when(MockConfiguration.getInt("xml.max-errors")).thenReturn(None)
+    when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(Some(xsdLocations))
+    when(MockConfiguration.getOptional[Int]("xml.max-errors")).thenReturn(None)
   }
 
   "File upload response" should {

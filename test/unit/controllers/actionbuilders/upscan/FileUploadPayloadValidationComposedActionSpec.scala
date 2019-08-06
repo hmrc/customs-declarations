@@ -19,9 +19,8 @@ package unit.controllers.actionbuilders.upscan
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.AnyContentAsXml
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.{FileUploadPayloadValidationAction, FileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -42,6 +41,7 @@ import scala.xml.Elem
 class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
+    implicit val ec = Helpers.stubControllerComponents().executionContext
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockFileUploadPayloadValidationAction: FileUploadPayloadValidationAction = mock[FileUploadPayloadValidationAction]
     val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]

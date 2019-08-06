@@ -16,11 +16,10 @@
 
 package unit.controllers
 
-import org.mockito.Mockito.reset
+import controllers.Assets
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play._
-import play.api.http.HttpErrorHandler
 import play.api.libs.json.Json
 import play.api.mvc._
 import play.api.test.Helpers._
@@ -29,8 +28,6 @@ import uk.gov.hmrc.customs.declaration.controllers.DeclarationsDocumentationCont
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 
 class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar with Results with BeforeAndAfterEach {
-
-  private val mockService = mock[HttpErrorHandler]
 
   private val mockLogger = mock[DeclarationsLogger]
 
@@ -48,12 +45,8 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
     "api.access.version-3.0.whitelistedApplicationIds.1" -> "v3AppId-2")
 
   private def getApiDefinitionWith(configMap: Map[String, Any]) =
-    new DeclarationsDocumentationController(mockService, play.api.Configuration.from(configMap), mockLogger)
+    new DeclarationsDocumentationController(mock[Assets], Helpers.stubControllerComponents(), play.api.Configuration.from(configMap), mockLogger)
       .definition()
-
-  override def beforeEach() {
-    reset(mockService)
-  }
 
   "API Definition" should {
 

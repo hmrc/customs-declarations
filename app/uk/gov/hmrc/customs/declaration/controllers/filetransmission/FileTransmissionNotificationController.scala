@@ -20,7 +20,7 @@ import java.util.UUID
 
 import javax.inject.Inject
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
@@ -28,15 +28,16 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionCallbackDecider, FileTransmissionNotification}
 import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadNotificationService
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 class FileTransmissionNotificationController @Inject()(callbackToXmlNotification: FileTransmissionCallbackToXmlNotification,
                                                        notificationService: FileUploadNotificationService,
+                                                       cc: ControllerComponents,
                                                        cdsLogger: CdsLogger)
-                                                      (implicit ec: ExecutionContext) extends BaseController {
+                                                      (implicit ec: ExecutionContext) extends BackendController(cc) {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async {
     request =>

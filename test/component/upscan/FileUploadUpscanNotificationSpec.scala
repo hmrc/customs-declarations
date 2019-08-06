@@ -19,9 +19,8 @@ package component.upscan
 import component.{ComponentTestSpec, ExpectedTestResponses}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{ACCEPT, CONTENT_TYPE, contentAsString, route, status, _}
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
@@ -46,6 +45,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
   with Eventually
   with IntegrationPatience {
 
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val endpoint = s"/uploaded-file-upscan-notifications/clientSubscriptionId/$subscriptionFieldsIdString"
 
   val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]

@@ -1,5 +1,6 @@
 import AppDependencies._
-import com.typesafe.sbt.packager.MappingsHelper._
+import com.typesafe.sbt.web.PathMapping
+import com.typesafe.sbt.web.pipeline.Pipeline
 import org.scalastyle.sbt.ScalastylePlugin._
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
@@ -8,8 +9,6 @@ import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, s
 import uk.gov.hmrc.PublishingSettings._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
-import com.typesafe.sbt.web.pipeline.Pipeline
-import com.typesafe.sbt.web.PathMapping
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
 import scala.language.postfixOps
@@ -49,7 +48,7 @@ lazy val microservice = (project in file("."))
     commonSettings,
     unitTestSettings,
     integrationTestSettings,
-    acceptanceTestSettings,
+    componentTestSettings,
     playPublishingSettings,
     allTest,
     scoverageSettings,
@@ -81,7 +80,7 @@ lazy val integrationTestSettings =
       testGrouping in CdsIntegrationTest := forkedJvmPerTestConfig((definedTests in Test).value, "integration", "component")
     )
 
-lazy val acceptanceTestSettings =
+lazy val componentTestSettings =
   inConfig(ComponentTest)(Defaults.testTasks) ++
     Seq(
       testOptions in ComponentTest := Seq(Tests.Filter(onPackageName("component"))),
@@ -103,10 +102,9 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = sbtrelease.ReleasePlugin.
 lazy val scoverageSettings: Seq[Setting[_]] = Seq(
   coverageExcludedPackages := List(
       "<empty>"
-      ,"Reverse.*"
       ,"uk\\.gov\\.hmrc\\.customs\\.declaration\\.model\\..*"
       ,"uk\\.gov\\.hmrc\\.customs\\.declaration\\.views\\..*"
-      ,".*(AuthService|BuildInfo|Routes).*"
+      ,".*(Reverse|AuthService|BuildInfo|Routes).*"
     ).mkString(";"),
   coverageMinimum := 97,
   coverageFailOnMinimum := true,
@@ -116,7 +114,7 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
-val compileDependencies = Seq(customsApiCommon, circuitBreaker, simpleReactiveMongo)
+val compileDependencies = Seq(customsApiCommon, circuitBreaker, simpleReactiveMongo, playJsonJoda)
 
 val testDependencies = Seq(hmrcTest, scalaTest, scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
 

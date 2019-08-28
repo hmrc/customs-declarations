@@ -24,8 +24,8 @@ import org.mockito.Mockito._
 import org.scalatest.{BeforeAndAfterEach, Matchers}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
+import play.api.test.Helpers
 import play.api.test.Helpers.{UNAUTHORIZED, header, _}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
@@ -56,6 +56,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
   trait SetUp extends AuthConnectorNrsDisabledStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
+    protected implicit val ec = Helpers.stubControllerComponents().executionContext
     protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
     protected val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
     protected val mockMdgPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
@@ -82,6 +83,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
       stubAuthStatusAction,
       stubConversationIdAction,
       stubDeclarationStatusService,
+      Helpers.stubControllerComponents(),
       mockDeclarationsLogger) {}
 
     protected def awaitSubmit(request: Request[AnyContent]): Result = {
@@ -124,7 +126,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     "respond with status 400 for a CSP request with a missing X-Badge-Identifier" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidDeclarationStatusRequest.copyFakeRequest(headers = ValidDeclarationStatusRequest.headers.remove(X_BADGE_IDENTIFIER_NAME)))
+      val result: Result = awaitSubmit(ValidDeclarationStatusRequest.withHeaders(ValidDeclarationStatusRequest.headers.remove(X_BADGE_IDENTIFIER_NAME)))
       result shouldBe errorResultBadgeIdentifier
       verifyZeroInteractions(mockStatusConnector)
     }
@@ -132,7 +134,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidDeclarationStatusRequest.copyFakeRequest(headers = ValidDeclarationStatusRequest.headers.remove(X_CLIENT_ID_NAME)))
+      val result: Result = awaitSubmit(ValidDeclarationStatusRequest.withHeaders(ValidDeclarationStatusRequest.headers.remove(X_CLIENT_ID_NAME)))
       status(result) shouldBe INTERNAL_SERVER_ERROR
       verifyZeroInteractions(mockStatusConnector)
     }

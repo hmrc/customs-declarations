@@ -18,7 +18,7 @@ package integration
 
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
 import uk.gov.hmrc.customs.declaration.controllers._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
@@ -29,6 +29,7 @@ import uk.gov.hmrc.customs.declaration.services._
 
 class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar {
 
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private lazy val mockSubmissionXmlValidationService = mock[SubmissionXmlValidationService]
   private lazy val mockCancellationXmlValidationService = mock[CancellationXmlValidationService]
   private lazy val mockAmendXmlValidationService = mock[AmendXmlValidationService]

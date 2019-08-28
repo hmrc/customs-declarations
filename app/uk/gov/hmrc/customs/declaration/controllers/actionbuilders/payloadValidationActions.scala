@@ -49,25 +49,33 @@ import scala.xml.{NodeSeq, SAXException}
 class SubmitPayloadValidationAction @Inject() (xmlValidationService: SubmissionXmlValidationService,
                                                logger: DeclarationsLogger)
                                               (implicit ec: ExecutionContext)
-  extends PayloadValidationAction(xmlValidationService, logger)
+  extends PayloadValidationAction(xmlValidationService, logger) {
+  override def executionContext: ExecutionContext = ec
+}
 
 @Singleton
 class AmendPayloadValidationAction @Inject() (xmlValidationService: AmendXmlValidationService,
                                               logger: DeclarationsLogger)
                                              (implicit ec: ExecutionContext)
-  extends PayloadValidationAction(xmlValidationService, logger)
+  extends PayloadValidationAction(xmlValidationService, logger) {
+  override def executionContext: ExecutionContext = ec
+}
 
 @Singleton
 class ArrivalNotificationPayloadValidationAction @Inject() (xmlValidationService: ArrivalNotificationXmlValidationService,
                                                             logger: DeclarationsLogger)
                                                            (implicit ec: ExecutionContext)
-  extends PayloadValidationAction(xmlValidationService, logger)
+  extends PayloadValidationAction(xmlValidationService, logger) {
+  override def executionContext: ExecutionContext = ec
+}
 
 @Singleton
 class CancelPayloadValidationAction @Inject() (xmlValidationService: CancellationXmlValidationService,
                                                logger: DeclarationsLogger)
                                               (implicit ec: ExecutionContext)
-  extends PayloadValidationAction(xmlValidationService, logger)
+  extends PayloadValidationAction(xmlValidationService, logger) {
+  override def executionContext: ExecutionContext = ec
+}
 
 abstract class PayloadValidationAction(val xmlValidationService: XmlValidationService,
                                        logger: DeclarationsLogger)

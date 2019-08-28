@@ -20,8 +20,8 @@ import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -29,13 +29,13 @@ import uk.gov.hmrc.customs.declaration.model.{ApiVersion, _}
 import uk.gov.hmrc.customs.declaration.services.{AuditingService, DateTimeService, NrsService}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestData
 import util.TestData._
 
 import scala.concurrent.Future
 
 class NrsServiceSpec extends UnitSpec with MockitoSugar {
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
 
   trait SetUp {
@@ -46,11 +46,11 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
 
     protected lazy val service: NrsService = new NrsService(mockLogger, mockNrsConnector, mockAuditingService, mockDateTimeService)
 
-    protected val cspResponsePayload: NrSubmissionId = TestData.nrSubmissionId
+    protected val cspResponsePayload: NrSubmissionId = nrSubmissionId
     protected val dateTime = new DateTime()
 
     protected def send(vupr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): NrSubmissionId = {
-      when(mockDateTimeService.nowUtc()).thenReturn(TestData.nrsTimeStamp)
+      when(mockDateTimeService.nowUtc()).thenReturn(nrsTimeStamp)
       await(service.send(vupr, hc))
     }
   }
@@ -63,7 +63,7 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
 
       result shouldBe cspResponsePayload
 
-      verify(mockNrsConnector).send(meq(TestData.cspNrsPayload), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+      verify(mockNrsConnector).send(meq(cspNrsPayload), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
 
     "serialise multiple headers correctly" in new SetUp() {
@@ -72,7 +72,7 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
       val result = send(TestCspValidatedPayloadRequestMultipleHeaderValues)
 
       result shouldBe cspResponsePayload
-      verify(mockNrsConnector).send(meq(TestData.cspNrsPayloadMultipleHeaderValues), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+      verify(mockNrsConnector).send(meq(cspNrsPayloadMultipleHeaderValues), any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
 
     "return failed future when nrs service call fails" in new SetUp() {

@@ -55,6 +55,7 @@ class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
                                     (implicit ec: ExecutionContext)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XEoriIdentifierHeaderName) {
   override def requestRetrievalsForEndpoint: Boolean = false
+  override def executionContext: ExecutionContext = ec
 }
 
 

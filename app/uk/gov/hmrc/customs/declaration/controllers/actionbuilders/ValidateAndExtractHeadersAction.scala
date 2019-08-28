@@ -17,14 +17,13 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc.{ActionRefiner, _}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.http.HttpErrorFunctions
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /** Action builder that validates headers.
   * <ol>
@@ -36,9 +35,11 @@ import scala.concurrent.Future
 @Singleton
 class ValidateAndExtractHeadersAction @Inject()(validator: HeaderWithContentTypeValidator,
                                                 logger: DeclarationsLogger)
+                                               (implicit ec: ExecutionContext)
   extends ActionRefiner[ConversationIdRequest, ValidatedHeadersRequest] with HttpErrorFunctions {
     actionName =>
 
+    override def executionContext: ExecutionContext = ec
     override def refine[A](cr: ConversationIdRequest[A]): Future[Either[Result, ValidatedHeadersRequest[A]]] = Future.successful {
       implicit val id: ConversationIdRequest[A] = cr
 

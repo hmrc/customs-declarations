@@ -20,7 +20,6 @@ import java.net.URL
 import java.time.Instant
 import java.util.UUID
 
-import play.api.data.validation.ValidationError
 import play.api.libs.json._
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
@@ -31,8 +30,8 @@ object HttpUrlFormat extends Format[URL] {
 
   override def reads(json: JsValue): JsResult[URL] = json match {
     case JsString(s) =>
-      parseUrl(s).map(JsSuccess(_)).getOrElse(JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.url")))))
-    case _ => JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.url"))))
+      parseUrl(s).map(JsSuccess(_)).getOrElse(JsError(Seq(JsPath() -> Seq(JsonValidationError("error.expected.url")))))
+    case _ => JsError(Seq(JsPath() -> Seq(JsonValidationError("error.expected.url"))))
   }
 
   private def parseUrl(s: String): Option[URL] = Try(new URL(s)).toOption

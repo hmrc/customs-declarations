@@ -28,7 +28,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.{FileReference, UploadedCallbackBody, UploadedFailedCallbackBody, UploadedReadyCallbackBody}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.services.upscan.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, UpscanNotificationCallbackToXmlNotification}
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
@@ -37,8 +37,9 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
                                                        toXmlNotification: UpscanNotificationCallbackToXmlNotification,
                                                        errorToXmlNotification: InternalErrorXmlNotification,
                                                        businessService: FileUploadUpscanNotificationBusinessService,
+                                                       cc: ControllerComponents,
                                                        cdsLogger: CdsLogger)
-                                                      (implicit ec: ExecutionContext) extends BaseController {
+                                                      (implicit ec: ExecutionContext) extends BackendController(cc) {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async { implicit request =>
 

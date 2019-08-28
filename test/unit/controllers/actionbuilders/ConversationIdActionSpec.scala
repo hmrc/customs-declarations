@@ -18,7 +18,7 @@ package unit.controllers.actionbuilders
 
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.ConversationIdAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
@@ -30,6 +30,8 @@ import util.TestData.{conversationId, stubUniqueIdsService}
 class ConversationIdActionSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
+
+    protected implicit val ec = Helpers.stubControllerComponents().executionContext
     private val mockExportsLogger = mock[DeclarationsLogger]
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
 

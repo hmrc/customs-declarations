@@ -20,6 +20,8 @@ import java.util.UUID
 
 import org.joda.time.LocalDate
 import play.api.libs.json._
+import play.api.libs.json.JodaWrites._
+import play.api.libs.json.JodaReads._
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
 
@@ -46,20 +48,20 @@ object NrSubmissionId {
 case class NrsRetrievalData(internalId: Option[String],
   externalId: Option[String],
   agentCode: Option[String],
-  credentials: Credentials,
+  credentials: Option[Credentials],
   confidenceLevel: ConfidenceLevel,
   nino: Option[String],
   saUtr: Option[String],
-  name: Name,
+  name: Option[Name],
   dateOfBirth: Option[LocalDate],
   email: Option[String],
   agentInformation: AgentInformation,
   groupIdentifier: Option[String],
   credentialRole: Option[CredentialRole],
   mdtpInformation: Option[MdtpInformation],
-  itmpName: ItmpName,
+  itmpName: Option[ItmpName],
   itmpDateOfBirth: Option[LocalDate],
-  itmpAddress: ItmpAddress,
+  itmpAddress: Option[ItmpAddress],
   affinityGroup: Option[AffinityGroup],
   credentialStrength: Option[String],
   loginTimes: LoginTimes)

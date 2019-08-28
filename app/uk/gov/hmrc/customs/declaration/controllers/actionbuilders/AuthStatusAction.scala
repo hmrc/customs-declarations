@@ -41,6 +41,8 @@ class AuthStatusAction @Inject()(override val authConnector: AuthConnector,
                                 (implicit ec: ExecutionContext)
   extends ActionRefiner[ValidatedHeadersStatusRequest, AuthorisedRequest] with AuthorisedFunctions  {
 
+  protected def executionContext: ExecutionContext = ec
+
   private val errorResponseUnauthorisedGeneral =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
 

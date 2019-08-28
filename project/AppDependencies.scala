@@ -2,15 +2,16 @@ import sbt._
 
 object AppDependencies {
 
-  private val hmrcTestVersion = "3.6.0-play-25"
-  private val scalaTestVersion = "3.0.6"
-  private val scalatestplusVersion = "2.0.1"
-  private val mockitoVersion = "2.25.1"
-  private val wireMockVersion = "2.22.0"
-  private val customsApiCommonVersion = "1.40.0"
+  private val hmrcTestVersion = "3.9.0-play-26"
+  private val scalaTestVersion = "3.0.8"
+  private val scalatestplusVersion = "3.1.2"
+  private val mockitoVersion = "3.0.0"
+  private val wireMockVersion = "2.23.2"
+  private val customsApiCommonVersion = "1.42.0"
   private val circuitBreakerVersion = "3.3.0"
-  private val simpleReactiveMongoVersion = "7.16.0-play-25"
-  private val reactiveMongoTestVersion = "4.10.0-play-25"
+  private val playJsonJodaVersion = "2.6.13"
+  private val simpleReactiveMongoVersion = "7.20.0-play-26"
+  private val reactiveMongoTestVersion = "4.15.0-play-26"
   private val testScope = "test,it"
 
   val hmrcTest = "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % testScope
@@ -19,7 +20,7 @@ object AppDependencies {
 
   val scalaTestPlusPlay = "org.scalatestplus.play" %% "scalatestplus-play" % scalatestplusVersion % testScope
 
-  val wireMock = "com.github.tomakehurst" % "wiremock" % wireMockVersion % testScope exclude("org.apache.httpcomponents","httpclient") exclude("org.apache.httpcomponents","httpcore")
+  val wireMock = "com.github.tomakehurst" % "wiremock-jre8" % wireMockVersion % testScope
 
   val mockito =  "org.mockito" % "mockito-core" % mockitoVersion % testScope
 
@@ -29,6 +30,8 @@ object AppDependencies {
 
   val circuitBreaker = "uk.gov.hmrc" %% "reactive-circuit-breaker" % circuitBreakerVersion
 
+  val  playJsonJoda = "com.typesafe.play" %% "play-json-joda" % playJsonJodaVersion
+  
   val simpleReactiveMongo = "uk.gov.hmrc" %% "simple-reactivemongo" % simpleReactiveMongoVersion
 
   val reactiveMongoTest = "uk.gov.hmrc" %% "reactivemongo-test" % reactiveMongoTestVersion % testScope

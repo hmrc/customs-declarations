@@ -21,8 +21,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterEach, Matchers}
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
+import play.api.test.Helpers
 import play.api.test.Helpers.{UNAUTHORIZED, header, _}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
@@ -52,6 +52,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
   trait SetUp extends AuthConnectorStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
+    private implicit val ec = Helpers.stubControllerComponents().executionContext
     protected implicit val conversationIdRequest: HasConversationId = TestConversationIdRequest
 
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
@@ -70,9 +71,12 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val headerValidator = new HeaderWithContentTypeValidator(mockLogger)
     protected val stubAuthAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
     protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderWithContentTypeValidator(mockLogger), mockLogger)
-    protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockLogger) {}
+    
+    protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockLogger) {
+      override def executionContext: ExecutionContext = ec
+    }
 
-    protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger)
+    protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger, Helpers.stubControllerComponents())
 
     protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, conversationIdAction, Some(mockMetricsConnector)) {}
     protected val controllerWithoutMetrics: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, conversationIdAction, None) {}
@@ -157,7 +161,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "respond with status 400 for a CSP request with a missing X-Badge-Identifier" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionV2Request.copyFakeRequest(headers = ValidSubmissionV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME)))
+      val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders(ValidSubmissionV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME)))
       result shouldBe errorResultBadgeIdentifier
       verifyZeroInteractions(mockBusinessService)
       verifyZeroInteractions(mockXmlValidationService)
@@ -166,7 +170,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionV2Request.copyFakeRequest(headers = ValidSubmissionV2Request.headers.remove(X_CLIENT_ID_NAME)))
+      val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders(ValidSubmissionV2Request.headers.remove(X_CLIENT_ID_NAME)))
       status(result) shouldBe INTERNAL_SERVER_ERROR
       verifyZeroInteractions(mockBusinessService)
       verifyZeroInteractions(mockXmlValidationService)

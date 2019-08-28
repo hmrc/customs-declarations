@@ -35,7 +35,9 @@ import play.api.test.Helpers.CONTENT_TYPE
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core.ConfidenceLevel.L500
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve._
+import uk.gov.hmrc.auth.core.retrieve.{AgentInformation, Credentials, ItmpAddress, ItmpName, LoginTimes, MdtpInformation, Name, ~}
+import uk.gov.hmrc.auth.core.retrieve.v2._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -141,11 +143,11 @@ object TestData {
   val nrsInternalIdValue: String = "internalId"
   val nrsExternalIdValue: String = "externalId"
   val nrsAgentCodeValue: String = "agentCode"
-  val nrsCredentials: Credentials = Credentials(providerId= "providerId", providerType= "providerType")
+  val nrsCredentials: Option[Credentials] = Some(Credentials(providerId= "providerId", providerType= "providerType"))
   val nrsConfidenceLevel: ConfidenceLevel.L500.type = L500
   val nrsNinoValue: String = "ninov"
   val nrsSaUtrValue: String = "saUtr"
-  val nrsNameValue: Name = Name(Some("name"), Some("lastname"))
+  val nrsNameValue: Option[Name] = Some(Name(Some("name"), Some("lastname")))
   val TWENTY_FIVE = 25
   val nrsDateOfBirth: Option[LocalDate] = Some(LocalDate.now().minusYears(TWENTY_FIVE))
   val nrsEmailValue: Option[String] = Some("nrsEmailValue")
@@ -155,17 +157,17 @@ object TestData {
   val nrsGroupIdentifierValue = Some("groupIdentifierValue")
   val nrsCredentialRole = Some(User)
   val nrsMdtpInformation = MdtpInformation("deviceId", "sessionId")
-  val nrsItmpName = ItmpName(Some("givenName"),
+  val nrsItmpName = Some(ItmpName(Some("givenName"),
                             Some("middleName"),
-                            Some("familyName"))
-  val nrsItmpAddress = ItmpAddress(Some("line1"),
+                            Some("familyName")))
+  val nrsItmpAddress = Some(ItmpAddress(Some("line1"),
                                   Some("line2"),
                                   Some("line3"),
                                   Some("line4"),
                                   Some("line5"),
                                   Some("postCode"),
                                   Some("countryName"),
-                                  Some("countryCode"))
+                                  Some("countryCode")))
   val nrsAffinityGroup = Some(Individual)
   val nrsCredentialStrength = Some("STRONG")
 
@@ -199,7 +201,7 @@ object TestData {
     nrsCredentialStrength,
     nrsLoginTimes)
 
-  val nrsRetrievalData: Retrieval[Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes] = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
+  val nrsRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
     Retrievals.nino and Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
     Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
     Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
@@ -226,20 +228,23 @@ object TestData {
     nrsLoginTimes)
 
   val cspNrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "9aa7c53a734c517fa70edf946f113b123b1d43556ca558235826e145df70051d", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
+    "9aa7c53a734c517fa70edf946f113b123b1d43556ca558235826e145df70051d", nrsTimeStamp.toString,
+    nrsRetrievalValues, "bearer-token", Json.parse("""{"Host":"localhost","Authorization":"bearer-token"}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))), conversationIdValue)
 
 
   val nrsMetadata = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "9aa7c53a734c517fa70edf946f113b123b1d43556ca558235826e145df70051d", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
+    "9aa7c53a734c517fa70edf946f113b123b1d43556ca558235826e145df70051d", nrsTimeStamp.toString,
+    nrsRetrievalValues, "bearer-token", Json.parse("""{"Authorization":"bearer-token"}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))), conversationIdValue)
 
   val cspNrsMetadataMultipleHeaderValues = new NrsMetadata("cds", "cds-declaration", "application/xml",
-    "9aa7c53a734c517fa70edf946f113b123b1d43556ca558235826e145df70051d", nrsTimeStamp.toString, nrsRetrievalValues, "bearer-token", Json.parse("""{"Accept":"ABC,DEF","Authorization":"bearer-token"}"""),
+    "9aa7c53a734c517fa70edf946f113b123b1d43556ca558235826e145df70051d", nrsTimeStamp.toString,
+    nrsRetrievalValues, "bearer-token", Json.parse("""{"Host":"localhost","Accept":"ABC,DEF","Authorization":"bearer-token"}"""),
     JsObject(Map[String, JsValue] ("conversationId" -> JsString(conversationIdValue))), conversationIdValue)
 
   val nrsPayload = new NrsPayload("PGZvbz5iYXI8L2Zvbz4=", nrsMetadata)
-  val cspNrsPayload = new NrsPayload("PGZvbz5iYXI8L2Zvbz4=", cspNrsMetadata) // <foo>bar</foo>
+  val cspNrsPayload = new NrsPayload("PGZvbz5iYXI8L2Zvbz4=", cspNrsMetadata)
 
   val cspNrsPayloadMultipleHeaderValues = new NrsPayload("PGZvbz5iYXI8L2Zvbz4=", cspNrsMetadataMultipleHeaderValues)
 

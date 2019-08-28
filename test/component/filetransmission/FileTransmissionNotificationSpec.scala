@@ -19,9 +19,8 @@ package component.filetransmission
 import component.{ComponentTestSpec, ExpectedTestResponses}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{ACCEPT, AUTHORIZATION, CONTENT_TYPE, contentAsString, route, status, _}
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
@@ -35,7 +34,6 @@ import util.externalservices.CustomsNotificationService
 
 import scala.xml.Utility.trim
 
-
 class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
   with OptionValues
@@ -46,6 +44,7 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
   with Eventually
   with IntegrationPatience {
 
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val endpoint = s"/file-transmission-notify/clientSubscriptionId/$subscriptionFieldsIdString"
 
   override protected def beforeAll() {

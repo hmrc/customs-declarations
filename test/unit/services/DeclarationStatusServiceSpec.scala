@@ -23,8 +23,8 @@ import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{AnyContentAsXml, Result}
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -42,9 +42,10 @@ import util.TestData.{correlationId, _}
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach{
+class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private implicit val ar: AuthorisedRequest[AnyContentAsXml] = util.TestData.TestAuthorisedStatusRequest
 
   protected lazy val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]

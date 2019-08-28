@@ -23,8 +23,8 @@ import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{AnyContentAsXml, Result}
+import play.api.test.Helpers
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
@@ -42,7 +42,7 @@ import util.CustomsDeclarationsMetricsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.xml.NodeSeq
 
 class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
@@ -73,7 +73,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       val nrsService: NrsService = mockNrsService
       val declarationsConfigService: DeclarationsConfigService = mockDeclarationsConfigService
       val actorSystem: ActorSystem = ActorSystem("DeclarationServiceSpec")
-      override implicit def ec: ExecutionContext = defaultContext
+      override implicit val ec = Helpers.stubControllerComponents().executionContext
     }
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {

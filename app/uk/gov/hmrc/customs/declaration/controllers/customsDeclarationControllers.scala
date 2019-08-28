@@ -26,7 +26,7 @@ import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.{CancellationDeclarationSubmissionService, DeclarationService, StandardDeclarationSubmissionService}
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext
 
@@ -34,15 +34,17 @@ import scala.concurrent.ExecutionContext
 class Common @Inject() (
   val authAction: AuthAction,
   val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
-  val logger: DeclarationsLogger
+  val logger: DeclarationsLogger,
+  val cc: ControllerComponents
 )
 
 @Singleton
 class CommonSubmitterHeader @Inject()(
   override val authAction: AuthActionSubmitterHeader,
   validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
-  logger: DeclarationsLogger
-) extends Common(authAction, validateAndExtractHeadersAction, logger)
+  logger: DeclarationsLogger,
+  cc: ControllerComponents
+) extends Common(authAction, validateAndExtractHeadersAction, logger, cc)
 
 @Singleton
 class SubmitDeclarationController @Inject()(common: CommonSubmitterHeader,
@@ -83,7 +85,7 @@ abstract class CustomsDeclarationController(val common: Common,
                                             val conversationIdAction: ConversationIdAction,
                                             val maybeMetricsConnector: Option[CustomsDeclarationsMetricsConnector] = None)
                                            (implicit ec: ExecutionContext)
-  extends BaseController {
+  extends BackendController(common.cc) {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {
     case Right(xml) =>

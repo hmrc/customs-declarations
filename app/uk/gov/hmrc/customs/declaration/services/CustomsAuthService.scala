@@ -22,6 +22,7 @@ import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode}
@@ -42,9 +43,9 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
 
   private val hmrcCustomsEnrolment = "HMRC-CUS-ORG"
 
-  private type NrsRetrievalDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~
-    Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
-    Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~
+  private type NrsRetrievalDataType = Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ Option[String] ~
+    Option[String] ~ Option[Name] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
+    Option[CredentialRole] ~ Option[MdtpInformation] ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] ~
     Option[AffinityGroup] ~ Option[String] ~ LoginTimes
 
   private type CspRetrievalDataType = Retrieval[NrsRetrievalDataType]
@@ -59,7 +60,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
       Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and
       Retrievals.credentialStrength and Retrievals.loginTimes
 
-  private val nonCspRetrievals: NonCspRetrievalDataType = cspRetrievals and Retrievals.authorisedEnrolments
+  private val nonCspRetrievals: NonCspRetrievalDataType  = cspRetrievals and Retrievals.authorisedEnrolments
 
   private lazy val errorResponseEoriNotFoundInCustomsEnrolment =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")

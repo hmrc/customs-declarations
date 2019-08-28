@@ -128,7 +128,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       Given("the API is available")
       val request = InvalidFileUploadRequest.fromNonCsp
         .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
-        .copyFakeRequest(method = POST, uri = endpoint)
+        .withMethod(POST).withTarget(InvalidFileUploadRequest.target.withPath(endpoint))
       setupExternalServiceExpectations()
 
       When("a POST request with data is sent to the API")
@@ -161,7 +161,8 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
 
     scenario("Response status 400 when user submits a malformed xml payload") {
       Given("the API is available")
-      val request = MalformedXmlRequest.fromNonCsp.copyFakeRequest(method = POST, uri = endpoint)
+      val request = MalformedXmlRequest.fromNonCsp
+        .withMethod(POST).withTarget(InvalidFileUploadRequest.target.withPath(endpoint))
       setupExternalServiceExpectations()
 
       When("a POST request with data is sent to the API")

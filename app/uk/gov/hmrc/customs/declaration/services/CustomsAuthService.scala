@@ -43,15 +43,15 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
 
   private val hmrcCustomsEnrolment = "HMRC-CUS-ORG"
 
-  private type NrsRetrievalDataType = Option[String] ~ Option[String] ~ Option[String] ~ Credentials ~ ConfidenceLevel ~ Option[String] ~
-    Option[String] ~ Name ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
-    Option[CredentialRole] ~ Option[MdtpInformation] ~ ItmpName ~ Option[LocalDate] ~ ItmpAddress ~
+  private type NrsRetrievalDataType = Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ Option[String] ~
+    Option[String] ~ Option[Name] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
+    Option[CredentialRole] ~ Option[MdtpInformation] ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] ~
     Option[AffinityGroup] ~ Option[String] ~ LoginTimes
 
   private type CspRetrievalDataType = Retrieval[NrsRetrievalDataType]
   private type NonCspRetrievalDataType = Retrieval[NrsRetrievalDataType ~ Enrolments]
 
-  private val cspRetrievals =
+  private val cspRetrievals: CspRetrievalDataType =
     Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
       Retrievals.credentials and Retrievals.confidenceLevel and Retrievals.nino and
       Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
@@ -60,7 +60,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
       Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and
       Retrievals.credentialStrength and Retrievals.loginTimes
 
-  private val nonCspRetrievals = cspRetrievals and Retrievals.authorisedEnrolments
+  private val nonCspRetrievals: NonCspRetrievalDataType  = cspRetrievals and Retrievals.authorisedEnrolments
 
   private lazy val errorResponseEoriNotFoundInCustomsEnrolment =
     ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "EORI number not found in Customs Enrolment")

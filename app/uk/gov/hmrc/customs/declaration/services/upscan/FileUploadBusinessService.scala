@@ -30,7 +30,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{FileUploadFile, ValidatedFileUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchFile, BatchId, FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
-import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, UuidService}
+import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,6 +42,7 @@ import scala.xml._
 class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiateConnector,
                                           fileUploadMetadataRepo: FileUploadMetadataRepo,
                                           uuidService: UuidService,
+                                          dateTimeService: DateTimeService,
                                           logger: DeclarationsLogger,
                                           apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                           config: DeclarationsConfigService)
@@ -103,7 +104,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
 
     val metadata = FileUploadMetadata(request.fileUploadRequest.declarationId, extractEori(request.authorisedAs), sfId,
-      BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, batchFiles)
+      BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, dateTimeService.nowUtc(), batchFiles)
 
     fileUploadMetadataRepo.create(metadata)
   }

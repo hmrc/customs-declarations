@@ -35,4 +35,5 @@ case class FileUploadConfig(upscanInitiateV1Url: String,
                             fileUploadCallbackUrl: String,
                             fileGroupSizeMaximum: Int,
                             fileTransmissionCallbackUrl: String,
-                            fileTransmissionBaseUrl: String)
+                            fileTransmissionBaseUrl: String,
+                            ttlInSeconds: Int)

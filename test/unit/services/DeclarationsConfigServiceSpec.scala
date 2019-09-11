@@ -48,6 +48,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |file-transmission-callback.url="http://some-host3:1113/file-transmission"
       |fileUpload.fileGroupSize.maximum=10
       |fileUpload.fileSize.maximum=100
+      |ttlInSeconds=600
       |nrs.enabled=true
       |nrs.apikey="nrs-api-key"
       |microservice.services.nrs.host="nrs.url"
@@ -91,7 +92,7 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.fileUploadConfig.upscanInitiateV2Url shouldBe "http://upscan-initiate-v2.url:11115/upscan/v2/initiate"
       configService.fileUploadConfig.upscanInitiateMaximumFileSize shouldBe 100
       configService.nrsConfig.nrsUrl shouldBe "http://nrs.url:11114/submission"
-
+      configService.fileUploadConfig.ttlInSeconds shouldBe 600
     }
 
     "throw an exception when configuration is invalid, that contains AGGREGATED error messages" in {
@@ -122,7 +123,8 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'fileUpload.fileGroupSize.maximum'
           |Could not find config key 'file-transmission-callback.url'
           |Could not find config file-transmission.host
-          |Service configuration not found for key: file-transmission.context""".stripMargin
+          |Service configuration not found for key: file-transmission.context
+          |Could not find config key 'ttlInSeconds'""".stripMargin
 
       val caught = intercept[IllegalStateException](customsConfigService(emptyServicesConfiguration))
       caught.getMessage shouldBe expectedErrorMessage

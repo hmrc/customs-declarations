@@ -32,7 +32,7 @@ import uk.gov.hmrc.customs.declaration.model.upscan.FileUploadMetadata
 import uk.gov.hmrc.customs.declaration.model.{UpscanInitiateResponsePayload, _}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
-import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, UuidService}
+import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
@@ -55,9 +55,10 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
     protected val mockFileUploadConfig = mock[FileUploadConfig]
     protected val mockConfiguration = mock[DeclarationsConfigService]
     protected val mockUuidService = mock[UuidService]
+    protected val mockDateTimeService = mock[DateTimeService]
 
     protected lazy val service = new FileUploadBusinessService(mockUpscanInitiateConnector,
-      mockFileUploadMetadataRepo, mockUuidService, mockLogger, mockApiSubscriptionFieldsConnector, mockConfiguration)
+      mockFileUploadMetadataRepo, mockUuidService, mockDateTimeService, mockLogger, mockApiSubscriptionFieldsConnector, mockConfiguration)
 
     protected val xmlResponse =
       <FileUploadResponse xmlns="hmrc:fileupload">

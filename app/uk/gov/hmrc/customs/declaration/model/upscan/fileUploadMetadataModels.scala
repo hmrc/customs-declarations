@@ -20,6 +20,7 @@ import java.net.URL
 import java.time.Instant
 import java.util.UUID
 
+import org.joda.time.DateTime
 import play.api.libs.json._
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
@@ -88,9 +89,11 @@ case class FileUploadMetadata(
   csId: SubscriptionFieldsId,
   batchId: BatchId,
   fileCount: Int,
+  createdAt: DateTime,
   files: Seq[BatchFile]
 )
 object FileUploadMetadata {
+  implicit val dateTimeJF = ReactiveMongoFormats.dateTimeFormats
   implicit val format = Json.format[FileUploadMetadata]
   implicit val fileUploadMetadataJF = ReactiveMongoFormats.mongoEntity(Json.format[FileUploadMetadata])
 }

@@ -52,7 +52,6 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   private val upscanInitiateUrlV1 = upscanServiceV1.serviceUrl
   private val upscanInitiateUrlV2 = upscanServiceV2.serviceUrl
-  private val upscanCallbackUrl = root.string("upscan-callback.url")
   private val fileUploadUpscanCallbackUrl = root.string("file-upload-upscan-callback.url")
   private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
   private val fileTransmissionUrl = fileTransmissionService.serviceUrl
@@ -73,7 +72,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     ) mapN NrsConfig
 
   private val validatedFileUploadConfig: CustomsValidatedNel[FileUploadConfig] = (
-    upscanInitiateUrlV1, upscanInitiateUrlV2, upscanCallbackUrl, upscanInitiateMaximumFileSize,
+    upscanInitiateUrlV1, upscanInitiateUrlV2, upscanInitiateMaximumFileSize,
     fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl, ttlInSeconds
   ) mapN FileUploadConfig
 

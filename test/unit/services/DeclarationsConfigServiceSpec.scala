@@ -43,7 +43,6 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
       |declarationStatus.requestDaysLimit=60
-      |upscan-callback.url="http://upscan-callback.url"
       |file-upload-upscan-callback.url="http://file-upload-upscan-callback.url"
       |file-transmission-callback.url="http://some-host3:1113/file-transmission"
       |fileUpload.fileGroupSize.maximum=10
@@ -117,7 +116,6 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: upscan-initiate-v1.context
           |Could not find config upscan-initiate-v2.host
           |Service configuration not found for key: upscan-initiate-v2.context
-          |Could not find config key 'upscan-callback.url'
           |Could not find config key 'fileUpload.fileSize.maximum'
           |Could not find config key 'file-upload-upscan-callback.url'
           |Could not find config key 'fileUpload.fileGroupSize.maximum'

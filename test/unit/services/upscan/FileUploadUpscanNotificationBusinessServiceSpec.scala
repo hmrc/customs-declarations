@@ -65,7 +65,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
   private val fileGroupSizeMaximum = 5
-  private val fileUploadConfig = FileUploadConfig("UPSCAN_INITIATE_V1_URL", "UPSCAN_INITIATE_V2_URL", "UPSCAN_URL_IGNORED", TenMb, "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionServiceURL, 600)
+  private val fileUploadConfig = FileUploadConfig("UPSCAN_INITIATE_V1_URL", "UPSCAN_INITIATE_V2_URL", TenMb, "UPSCAN_URL_IGNORED", fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionServiceURL, 600)
 
   trait SetUp {
     val mockRepo = mock[FileUploadMetadataRepo]

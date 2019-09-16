@@ -30,7 +30,6 @@ case class DeclarationsCircuitBreakerConfig(numberOfCallsToTriggerStateChange: I
 
 case class FileUploadConfig(upscanInitiateV1Url: String,
                             upscanInitiateV2Url: String,
-                            upscanCallbackUrl: String,
                             upscanInitiateMaximumFileSize: Int,
                             fileUploadCallbackUrl: String,
                             fileGroupSizeMaximum: Int,

@@ -44,7 +44,7 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
 
   private def post[A](request: CustomsDeclarationsMetricsRequest, url: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
 
-    logger.debug(s"Sending request to customs declarations metrics service. Url: $url Payload: ${request.toString}")
+    logger.debug(s"Sending request to customs declarations metrics service. Url: $url Payload:\n${request.toString}")
     http.POST[CustomsDeclarationsMetricsRequest, HttpResponse](url, request).map{ _ =>
       logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
       ()

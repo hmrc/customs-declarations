@@ -19,6 +19,7 @@ package uk.gov.hmrc.customs.declaration.services.upscan
 import java.net.URL
 
 import javax.inject.{Inject, Singleton}
+import play.api.libs.json.Json
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -48,6 +49,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
         logger.error(errorMsg)
         Future.failed(new IllegalStateException(errorMsg))
       case Some(metadata) =>
+        logger.debug(s"updated fileUploadMetadata: $metadata")
         maybeFileTransmission(ready, metadata) match {
           case None =>
             val errorMsg = s"database error - can't find file with file reference ${ready.reference}"

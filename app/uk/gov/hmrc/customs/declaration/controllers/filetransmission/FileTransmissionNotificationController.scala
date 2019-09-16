@@ -54,7 +54,7 @@ class FileTransmissionNotificationController @Inject()(callbackToXmlNotification
         FileTransmissionCallbackDecider.parse(js) match {
           case JsSuccess(callbackBody, _) => callbackBody match {
             case notification: FileTransmissionNotification =>
-              cdsLogger.debug(s"Valid JSON success request received. Body=$js headers=${request.headers}")
+              cdsLogger.debug(s"Valid JSON success request received. Body=${Json.prettyPrint(js)} headers=${request.headers}")
               notificationService.sendMessage[FileTransmissionNotification](notification, notification.fileReference, clientSubscriptionId)(callbackToXmlNotification).map { _ =>
                 NoContent
               }.recover {

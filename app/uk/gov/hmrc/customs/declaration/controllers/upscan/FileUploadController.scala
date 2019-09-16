@@ -28,6 +28,7 @@ import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext
+import scala.xml.{PrettyPrinter, TopScope}
 
 @Singleton
 class FileUploadController @Inject()(val common: Common,
@@ -56,7 +57,7 @@ class FileUploadController @Inject()(val common: Common,
     implicit validatedRequest: ValidatedFileUploadPayloadRequest[AnyContent] =>
       val logger = common.logger
 
-      logger.debug(s"File upload initiate request received. Payload=${validatedRequest.body.toString} headers=${validatedRequest.headers.headers}")
+      logger.debug(s"File upload initiate request received. Payload=${{new PrettyPrinter(120, 2).format(validatedRequest.xmlBody.head, TopScope)}} headers=${validatedRequest.headers.headers}")
 
       fileUploadBusinessService.send map {
         case Right(res) =>

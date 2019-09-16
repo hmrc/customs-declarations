@@ -43,11 +43,11 @@ class NrsConnector @Inject()(http: HttpClient,
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    logger.debug(s"Sending request to nrs service. Url: $url Payload: ${Json.prettyPrint(Json.toJson(payload))}")
+    logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
 
     http.POST[NrsPayload, NrSubmissionId](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
       .map { res =>
-        logger.debug(s"Response received from nrs service submission id: $res")
+        logger.debug(s"Response received from nrs service is submission id: ${res}")
         res
       }
       .recoverWith {

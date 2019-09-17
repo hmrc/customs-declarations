@@ -45,7 +45,7 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    logger.debug(s"Sending request to upscan initiate service. Url: $url Payload: ${Json.prettyPrint(Json.toJson(payload))}")
+    logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
     http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
       .map { res: UpscanInitiateResponsePayload =>
         logger.info(s"reference from call to upscan initiate ${res.reference}")

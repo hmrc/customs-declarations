@@ -28,6 +28,7 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationStatusService
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext
+import scala.xml.{PrettyPrinter, TopScope, XML}
 
 @Singleton
 class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction,
@@ -56,7 +57,7 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
               override val conversationId: ConversationId = ar.conversationId
             }
             logger.info(s"Declaration status request processed successfully.")(id)
-            logger.debug(s"Returning filtered declaration status request with status code 200 and body\n ${res.body}")(id)
+            logger.debug(s"Returning filtered declaration status request with status code 200 and body\n${new PrettyPrinter(120, 2).format(scala.xml.XML.loadString(res.body), TopScope)}")(id)
             Ok(res.body).withConversationId(id).as(ContentTypes.XML)
           case Left(errorResult) =>
             errorResult

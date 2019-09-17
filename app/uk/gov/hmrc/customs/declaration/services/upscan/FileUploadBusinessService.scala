@@ -59,7 +59,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
           persist(fileDetails, sfId).map {
             case true =>
               val responseBody = serialize(fileDetails)
-              logger.debug(s"response body to be returned=$responseBody")
+              logger.debug(s"response body to be returned=\n$responseBody")
               Right(responseBody)
             case false => Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
           }

@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.NodeSeq
+import scala.xml.{NodeSeq, PrettyPrinter, TopScope}
 
 @Singleton
 class DeclarationStatusConnector @Inject() (val http: HttpClient,
@@ -72,7 +72,7 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
   }
 
   private def post[A](xml: NodeSeq, url: String, correlationId: CorrelationId)(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier) = {
-    logger.debug(s"Sending request to $url. Headers ${hc.headers} Payload: ${xml.toString()}")
+    logger.debug(s"Sending request to $url. Headers ${hc.headers} Payload:\n${new PrettyPrinter(120, 2).format(xml.head, TopScope)}")
 
     http.POSTString[HttpResponse](url, xml.toString())
       .recoverWith {

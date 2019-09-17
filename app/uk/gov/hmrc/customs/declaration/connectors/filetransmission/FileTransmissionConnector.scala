@@ -44,7 +44,7 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
   }
 
   private def post[A](request: FileTransmission, url: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
-    logger.debug(s"Sending request to file transmission service. Url: $url Payload: ${Json.prettyPrint(Json.toJson(request))}")
+    logger.debug(s"Sending request to file transmission service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(request))}")
     http.POST[FileTransmission, HttpResponse](url, request).map{ _ =>
       logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")
       ()

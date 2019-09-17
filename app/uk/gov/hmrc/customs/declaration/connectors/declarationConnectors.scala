@@ -33,7 +33,7 @@ import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.NodeSeq
+import scala.xml.{NodeSeq, PrettyPrinter, TopScope, XML}
 
 @Singleton
 class MdgWcoDeclarationConnector @Inject()(override val http: HttpClient,
@@ -75,7 +75,9 @@ trait MdgDeclarationConnector extends DeclarationsCircuitBreaker {
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, correlationId), authorization = Some(Authorization(bearerToken)))
     withCircuitBreaker(post(xml, config.url)).map{
-      response => logger.debug(s"Response: ${response.body}")
+      response => {
+        logger.debug(s"Response status ${response.status} and response body ${formatResponseBody(response.body)}")
+      }
       response
     }
   }
@@ -90,7 +92,8 @@ trait MdgDeclarationConnector extends DeclarationsCircuitBreaker {
   }
 
   private def post[A](xml: NodeSeq, url: String)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
-    logger.debug(s"Sending request to $url. Payload: ${xml.toString()}")
+    logger.debug(s"Sending request to $url. Payload:\n${new PrettyPrinter(120, 2).format(xml.head, TopScope)}")
+    
     http.POSTString[HttpResponse](url, xml.toString())
       .recoverWith {
         case httpError: HttpException => Future.failed(new RuntimeException(httpError))
@@ -98,5 +101,13 @@ trait MdgDeclarationConnector extends DeclarationsCircuitBreaker {
           logger.error(s"Call to wco declaration submission failed. url=$url")
           Future.failed(e)
       }
+  }
+
+  private def formatResponseBody(responseBody: String) = {
+    if (responseBody.isEmpty) {
+      "<empty>"
+    } else {
+      new PrettyPrinter(120, 2).format(XML.loadString(responseBody), TopScope)
+    }
   }
 }

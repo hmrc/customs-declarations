@@ -94,20 +94,22 @@ abstract class PayloadValidationAction(val xmlValidationService: XmlValidationSe
 
     def validate(xml: NodeSeq): Future[Either[Result, ValidatedPayloadRequest[A]]] =
       xmlValidationService.validate(xml).map{ _ =>
-        logger.debug("XML payload validated.")
+        logger.debug("XML payload validated")
         Right(ar.toValidatedPayloadRequest(xml))
       }
       .recover {
         case saxe: SAXException =>
+          logger.debug(xml.toString())
           val msg = "Payload did not pass validation against the schema."
-          logger.debug(msg, saxe)
+          logger.debug(s"$msg:\n${xml.toString()}", saxe)
           logger.error(msg)
           Left(ErrorResponse
             .errorBadRequest("Payload is not valid according to schema")
             .withErrors(xmlValidationErrors(saxe): _*).XmlResult.withConversationId)
         case NonFatal(e) =>
+          logger.debug(xml.toString())
           val msg = "Error validating payload."
-          logger.debug(msg, e)
+          logger.debug(s"$msg:\n${xml.toString()}", e)
           logger.error(msg)
           Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
       }

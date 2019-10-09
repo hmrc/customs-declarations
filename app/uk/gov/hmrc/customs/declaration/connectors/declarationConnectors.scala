@@ -93,7 +93,7 @@ trait MdgDeclarationConnector extends DeclarationsCircuitBreaker {
 
   private def post[A](xml: NodeSeq, url: String)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
     logger.debug(s"Sending request to $url. Payload:\n${new PrettyPrinter(120, 2).format(xml.head, TopScope)}")
-    
+
     http.POSTString[HttpResponse](url, xml.toString())
       .recoverWith {
         case httpError: HttpException => Future.failed(new RuntimeException(httpError))

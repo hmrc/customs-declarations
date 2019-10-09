@@ -55,7 +55,7 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, ar.conversationId, correlationId), authorization = Some(Authorization(bearerToken)))
 
     withCircuitBreaker(post(xmlToSend, config.url, correlationId)).map{
-      response => logger.debug(s"Declaration status response: ${response.body}")
+      response => logger.debug(s"Declaration status response code: ${response.status} and response body: ${response.body}")
       response
     }
   }

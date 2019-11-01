@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
+import java.time.LocalDateTime
+
 import com.google.inject._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames._
@@ -53,9 +55,11 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, ar.conversationId, correlationId), authorization = Some(Authorization(bearerToken)))
-
+    val startTime = LocalDateTime.now
     withCircuitBreaker(post(xmlToSend, config.url, correlationId)).map{
-      response => logger.debug(s"Declaration status response code: ${response.status} and response body: ${response.body}")
+      response =>
+        logCallDuration(startTime)
+        logger.debug(s"Declaration status response code: ${response.status} and response body: ${response.body}")
       response
     }
   }

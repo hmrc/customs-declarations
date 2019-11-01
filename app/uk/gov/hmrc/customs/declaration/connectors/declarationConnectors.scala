@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
+import java.time.LocalDateTime
 import java.util.UUID
 
 import com.google.inject._
@@ -74,8 +75,10 @@ trait MdgDeclarationConnector extends DeclarationsCircuitBreaker {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, correlationId), authorization = Some(Authorization(bearerToken)))
+    val startTime = LocalDateTime.now
     withCircuitBreaker(post(xml, config.url)).map{
       response => {
+        logCallDuration(startTime)
         logger.debug(s"Response status ${response.status} and response body ${formatResponseBody(response.body)}")
       }
       response

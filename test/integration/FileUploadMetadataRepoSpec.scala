@@ -177,7 +177,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
       val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
 
       maybeFoundRecordTwo shouldBe Some(FileMetadataWithFileTwo)
-      logVerifier(mockLogger,"debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00.000Z,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
+      logVerifier(mockLogger,"debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00.000Z,Vector(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
     }
 
     "collection should be same size when deleting non-existent record" in new SetUp {

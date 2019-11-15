@@ -37,10 +37,10 @@ import scala.util.Left
   * <li/>OUTPUT - `AuthorisedRequest` - authorised will be `AuthorisedAs.Csp` or `AuthorisedAs.NonCsp`
   * <li/>ERROR -
   * <ul>
-  * <li/>401 if authorised as CSP but badge identifier not present for CSP
-  * <li/>401 if authorised as NON CSP but enrolments does not contain an EORI.
-  * <li/>401 if not authorised as CSP or NON CSP
-  * <li/>500 on any downstream errors it returns 500
+  * <li/>400 if authorised as CSP but badge identifier not present for CSP
+  * <li/>401 if authorised as non-CSP but enrolments does not contain an EORI.
+  * <li/>401 if not authorised as CSP or non-CSP
+  * <li/>500 on any downstream errors returning 500
   * </ul>
   * </ul>
   */
@@ -79,24 +79,24 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
     }
   }
 
-  private def authAsCspWithMandatoryAuthHeaders[A](requestRetrievals: Boolean)(implicit vhr: HasRequest[A] with HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {
+  private def authAsCspWithMandatoryAuthHeaders[A](requestRetrievals: Boolean)
+                                                  (implicit vhr: HasRequest[A] with HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {
 
-    val eventualAuthWithBadgeId: Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = customsAuthService.authAsCsp(requestRetrievals).map{
-      case Right((isCsp, maybeNrsRetrievalData)) =>
-        if (isCsp) {
-          eitherCspAuthData(maybeNrsRetrievalData).right.map(authAsCsp => Some(authAsCsp))
-        } else {
-          Right(None)
-        }
-      case Left(errorResponse) =>
-        Left(errorResponse)
+    val eventualAuthWithBadgeId: Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] =
+      customsAuthService.authAsCsp(requestRetrievals).map {
+        case Right((isCsp, maybeNrsRetrievalData)) =>
+          if (isCsp) {
+            eitherCspAuthData(maybeNrsRetrievalData).right.map(authAsCsp => Some(authAsCsp))
+          } else {
+            Right(None)
+          }
+        case Left(errorResponse) =>
+          Left(errorResponse)
     }
-
     eventualAuthWithBadgeId
   }
 
   protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
-
     eitherBadgeIdentifier.right.map(badgeId => Csp(badgeId, maybeNrsRetrievalData))
   }
 

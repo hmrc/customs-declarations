@@ -42,24 +42,23 @@ class AuthStatusAction @Inject()(override val authConnector: AuthConnector,
   extends ActionRefiner[ValidatedHeadersStatusRequest, AuthorisedRequest] with AuthorisedFunctions  {
 
   protected def executionContext: ExecutionContext = ec
+  private val errorResponseUnauthorisedGeneral = ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
+  private val customsDeclarationEnrolment = "write:customs-declaration"
 
-  private val errorResponseUnauthorisedGeneral =
-    ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
+  override def refine[A](vhsr: ValidatedHeadersStatusRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
+    implicit val implicitVhsr: ValidatedHeadersStatusRequest[A] = vhsr
+    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
 
-    override def refine[A](vhsr: ValidatedHeadersStatusRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
-      implicit val implicitVhsr: ValidatedHeadersStatusRequest[A] = vhsr
-      implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
-
-      authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
-        logger.debug("Authorised as CSP")
-        Future.successful(Right(vhsr.toAuthorisedRequest(Csp(vhsr.badgeIdentifier, None)))) // Simply won't get through if no MRN is specified
-      }.recover{
-        case NonFatal(_: AuthorisationException) =>
-          logger.error("Not authorised")
-          Left(errorResponseUnauthorisedGeneral.XmlResult.withConversationId)
-        case NonFatal(e) =>
-          logger.error("Error authorising CSP", e)
-          Left(ErrorInternalServerError.XmlResult.withConversationId)
-      }
+    authorised(Enrolment(customsDeclarationEnrolment) and AuthProviders(PrivilegedApplication)) {
+      logger.debug(s"Successfully authorised status CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment")
+      Future.successful(Right(vhsr.toAuthorisedRequest(Csp(vhsr.badgeIdentifier, None)))) // Simply won't get through if no MRN is specified
+    }.recover{
+      case NonFatal(ae: AuthorisationException) =>
+        logger.debug(s"No authorisation for status CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment", ae)
+        Left(errorResponseUnauthorisedGeneral.XmlResult.withConversationId)
+      case NonFatal(e) =>
+        logger.error(s"Error when authorising for status CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment", e)
+        Left(ErrorInternalServerError.XmlResult.withConversationId)
     }
+  }
 }

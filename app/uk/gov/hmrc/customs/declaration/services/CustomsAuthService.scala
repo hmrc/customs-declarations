@@ -42,6 +42,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
                                   (implicit ec: ExecutionContext) extends AuthorisedFunctions {
 
   private val hmrcCustomsEnrolment = "HMRC-CUS-ORG"
+  private val customsDeclarationEnrolment = "write:customs-declaration"
 
   private type NrsRetrievalDataType = Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ Option[String] ~
     Option[String] ~ Option[Name] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
@@ -76,7 +77,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   def authAsCsp(requestRetrievals: RequestRetrievals)(implicit vhr: HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] = {
     val eventualAuth: Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] =
       if (requestRetrievals) {
-        authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
+        authorised(Enrolment(customsDeclarationEnrolment) and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
           case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
             credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes =>
             Future.successful {
@@ -84,26 +85,26 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
                 name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
                 itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
 
-              logger.debug("authorised as CSP and requested retrievals")
+              logger.debug(s"Successfully authorised CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment with retrievals")
               Right((true, Some(retrievalData)))
             }
         }
       }
       else {
-        authorised(Enrolment("write:customs-declaration") and AuthProviders(PrivilegedApplication)) {
+        authorised(Enrolment(customsDeclarationEnrolment) and AuthProviders(PrivilegedApplication)) {
           Future.successful[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] {
-            logger.debug("authorised as CSP without retrievals")
+            logger.debug(s"Successfully authorised CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment without retrievals")
             Right((true, None))
           }
         }
       }
 
     eventualAuth.recover{
-      case NonFatal(_: AuthorisationException) =>
-        logger.debug("Not authorised as CSP")
+      case NonFatal(ae: AuthorisationException) =>
+        logger.debug(s"No authorisation for CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment", ae)
         Right((false, None))
       case NonFatal(e) =>
-        logger.error("Error authorising CSP", e)
+        logger.error(s"Error when authorising for CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment", e)
         Left(ErrorInternalServerError)
     }
   }
@@ -122,12 +123,12 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
               name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
               itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
 
-            logger.debug("authorised as non-CSP and requested non-CSP retrievals")
+            logger.debug(s"Successfully authorised non-CSP with $hmrcCustomsEnrolment enrolment and GovernmentGateway non-CSP retrievals pending eori check")
             Future.successful((authorisedEnrolments, Some(retrievalData)))
         }
       } else {
         authorised(Enrolment(hmrcCustomsEnrolment) and AuthProviders(GovernmentGateway)).retrieve(Retrievals.authorisedEnrolments) {
-          logger.debug("authorised as non-CSP and requested authorisedEnrolment retrievals")
+          logger.debug(s"Successfully authorised non-CSP with $hmrcCustomsEnrolment enrolment and GovernmentGateway non-CSP authorisedEnrolment retrievals pending eori check")
           enrolments =>
             Future.successful((enrolments, None))
         }
@@ -137,18 +138,20 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
       val enrolments: Enrolments = enrolmentsAndMaybeNrsData._1
       val maybeNrsData: Option[NrsRetrievalData] = enrolmentsAndMaybeNrsData._2
       val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(enrolments, hc.authorization)
-      logger.debug(s"EORI from Customs enrolment for non-CSP request: $maybeEori")
+      logger.debug(s"eori from $hmrcCustomsEnrolment enrolment for non-CSP request: $maybeEori")
       maybeEori.fold[Either[ErrorResponse, NonCsp]]{
+        logger.debug(s"No authorisation for non-CSP with $hmrcCustomsEnrolment enrolment due to no eori in $hmrcCustomsEnrolment enrolment")
         Left(errorResponseEoriNotFoundInCustomsEnrolment)
       }{ eori =>
-        logger.debug("Authorising as non-CSP")
+        logger.debug(s"Successfully authorised non-CSP with $hmrcCustomsEnrolment and using eori: ${eori.toString}")
         Right(NonCsp(eori, maybeNrsData))
       }
     }.recover{
-      case NonFatal(_: AuthorisationException) =>
+      case NonFatal(ae: AuthorisationException) =>
+        logger.debug(s"No authorisation for non-CSP with $hmrcCustomsEnrolment enrolment", ae)
         Left(errorResponseUnauthorisedGeneral)
       case NonFatal(e) =>
-        logger.error("Error authorising non-CSP", e)
+        logger.error(s"Error when authorising for non-CSP with $hmrcCustomsEnrolment enrolment", e)
         Left(ErrorInternalServerError)
     }
   }
@@ -156,7 +159,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: HasConversationId, hc: HeaderCarrier): Option[Eori] = {
     val maybeCustomsEnrolment = enrolments.getEnrolment(hmrcCustomsEnrolment)
     if (maybeCustomsEnrolment.isEmpty) {
-      logger.warn(s"Customs enrolment $hmrcCustomsEnrolment not retrieved for authorised non-CSP call")
+      logger.warn(s"$hmrcCustomsEnrolment enrolment not retrieved for non-CSP request")
     }
     for {
       customsEnrolment <- maybeCustomsEnrolment

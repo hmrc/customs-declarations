@@ -9,7 +9,7 @@ object AppDependencies {
   private val wireMockVersion = "2.23.2"
   private val customsApiCommonVersion = "1.42.0"
   private val circuitBreakerVersion = "3.3.0"
-  private val playJsonJodaVersion = "2.6.13"
+  private val playJsonJodaVersion = "2.7.4"
   private val simpleReactiveMongoVersion = "7.20.0-play-26"
   private val reactiveMongoTestVersion = "4.15.0-play-26"
   private val testScope = "test,it"

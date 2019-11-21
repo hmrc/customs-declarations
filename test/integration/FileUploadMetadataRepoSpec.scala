@@ -189,5 +189,14 @@ class FileUploadMetadataRepoSpec extends UnitSpec
       collectionSize(repository) shouldBe 1
     }
 
+    "successfully delete all file metadata" in new SetUp {
+      await(repository.create(FileMetadataWithFileOne))
+      await(repository.create(FileMetadataWithFileTwo))
+      collectionSize(repository) shouldBe 2
+
+      await(repository.deleteAll())
+
+      collectionSize(repository) shouldBe 0
+    }
   }
 }

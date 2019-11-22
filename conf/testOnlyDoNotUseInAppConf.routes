@@ -9,6 +9,6 @@
 # !!!WARNING!!! Every route defined in this file MUST be prefixed with "/test-only/". This is because NGINX is blocking every uri containing the string "test-only" in production.
 # Failing to follow this rule may result in test routes deployed in production.
 
-->        /test-only/service    dynamicservice.Routes
-->        /                     prod.Routes
-DELETE    /test-only/all        uk.gov.hmrc.customs.declaration.controllers.TestOnlyController.deleteAll()
+->        /test-only/service                dynamicservice.Routes
+->        /                                 prod.Routes
+DELETE    /file-upload/test-only/all        uk.gov.hmrc.customs.declaration.controllers.TestOnlyController.deleteAll()

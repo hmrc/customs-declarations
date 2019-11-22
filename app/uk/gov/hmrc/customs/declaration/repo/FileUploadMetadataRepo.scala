@@ -43,6 +43,8 @@ trait FileUploadMetadataRepo {
   def delete(clientNotification: FileUploadMetadata)(implicit r: HasConversationId): Future[Unit]
 
   def update(csId: SubscriptionFieldsId, reference: FileReference, callbackFields: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]]
+
+  def deleteAll(): Future[Unit]
 }
 
 @Singleton
@@ -123,6 +125,14 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
           val record = jsonDoc.as[FileUploadMetadata]
           Some(record)
       })
+  }
+
+  override def deleteAll(): Future[Unit] = {
+    logger.debugWithoutRequestContext(s"deleting all file upload metadata")
+
+    removeAll().map {result =>
+      logger.debugWithoutRequestContext(s"deleted ${result.n} file upload metadata")
+    }
   }
 
   private def dropInvalidIndexes: Future[_] =

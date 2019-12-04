@@ -172,7 +172,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Left(errorResponseServiceUnavailable.XmlResult.withNrSubmissionId(nrSubmissionId))
+      result shouldBe Left(errorResponseServiceUnavailable.XmlResult.withNrSubmissionId(nrSubmissionId).withConversationId)
     }
 
     "when NRS disabled should not get a submission id" in new SetUp() {

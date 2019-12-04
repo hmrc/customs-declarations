@@ -132,7 +132,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
     connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(None)).recover {
       case _: UnhealthyServiceException =>
         logger.error("unhealthy state entered")
-        Left(errorResponseServiceUnavailable.XmlResult)
+        Left(errorResponseServiceUnavailable.XmlResult.withConversationId)
       case NonFatal(e) =>
         logger.error(s"submission declaration call failed: ${e.getMessage}", e)
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)

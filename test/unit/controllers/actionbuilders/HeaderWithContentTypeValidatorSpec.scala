@@ -97,7 +97,7 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
       }
     }
 
-    "in validating the eori header" should {
+    "in validating the mandatory eori header" should {
       "not allow an empty header" in new SetUp {
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "")))
 
@@ -110,7 +110,7 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
         value shouldBe Left(errorBadRequest(s"$X_SUBMITTER_IDENTIFIER_NAME header is missing or invalid"))
       }
 
-      "now allow headers longer than 17 characters" in new SetUp {
+      "not allow headers longer than 17 characters" in new SetUp {
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "012345678901234567")))
 
         value shouldBe Left(errorBadRequest(s"$X_SUBMITTER_IDENTIFIER_NAME header is missing or invalid"))
@@ -142,6 +142,65 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
 
       "log info level when valid" in new SetUp {
         validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "ABCABC")))
+
+        PassByNameVerifier(loggerMock, "info")
+          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ABCABC")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
+      }
+    }
+    
+    "in validating the optional eori header" should {
+      "allow a missing header" in new SetUp {
+        private val value = validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 - X_SUBMITTER_IDENTIFIER_NAME))
+
+        value shouldBe Right(None)
+      }
+
+      "allow an empty header" in new SetUp {
+        private val value = validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "")))
+
+        value shouldBe Right(None)
+      }
+
+      "allow only spaces in the header but treat as empty" in new SetUp {
+        private val value = validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "       ")))
+
+        value shouldBe Right(None)
+      }
+
+      "not allow headers longer than 17 characters" in new SetUp {
+        private val value = validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "012345678901234567")))
+
+        value shouldBe Left(errorBadRequest(s"$X_SUBMITTER_IDENTIFIER_NAME header is invalid"))
+      }
+
+      "allow headers with leading spaces" in new SetUp {
+        private val value = validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "  0123456789")))
+
+        value shouldBe Right(Some(Eori("  0123456789")))
+      }
+
+      "allow headers with trailing spaces" in new SetUp {
+        private val value = validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "0123456789    ")))
+
+        value shouldBe Right(Some(Eori("0123456789    ")))
+      }
+
+      "allow headers with embedded spaces" in new SetUp {
+        private val value = validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "01234  56789")))
+
+        value shouldBe Right(Some(Eori("01234  56789")))
+      }
+
+      "allow special characters" in new SetUp {
+        private val value = validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "!£$%^&*()-_=+/<>@")))
+
+        value shouldBe Right(Some(Eori("!£$%^&*()-_=+/<>@")))
+      }
+
+      "log info level when valid" in new SetUp {
+        validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "ABCABC")))
 
         PassByNameVerifier(loggerMock, "info")
           .withByNameParam[String]("X-Submitter-Identifier header passed validation: ABCABC")

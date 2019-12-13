@@ -66,4 +66,16 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
                                           declarationConfigService: DeclarationsConfigService)
                                          (implicit ec: ExecutionContext)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XSubmitterIdentifierHeaderName) {
+
+  override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
+    for {
+      badgeId <- eitherBadgeIdentifier.right
+      eori <- eitherEori.right
+    } yield CspWithMaybeEori(badgeId, eori, maybeNrsRetrievalData)
+  }
+
+  private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
+    headerValidator.eoriMustBeValidIfPresent(XSubmitterIdentifierHeaderName)
+  }
+  
 }

@@ -119,25 +119,25 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
       "allow headers with leading spaces" in new SetUp {
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "  0123456789")))
 
-        value shouldBe Right(Eori("  0123456789"))
+        value shouldBe Right(Some(Eori("  0123456789")))
       }
 
       "allow headers with trailing spaces" in new SetUp {
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "0123456789    ")))
 
-        value shouldBe Right(Eori("0123456789    "))
+        value shouldBe Right(Some(Eori("0123456789    ")))
       }
 
       "allow headers with embedded spaces" in new SetUp {
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "01234  56789")))
 
-        value shouldBe Right(Eori("01234  56789"))
+        value shouldBe Right(Some(Eori("01234  56789")))
       }
 
       "allow special characters" in new SetUp {
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "!£$%^&*()-_=+/<>@")))
 
-        value shouldBe Right(Eori("!£$%^&*()-_=+/<>@"))
+        value shouldBe Right(Some(Eori("!£$%^&*()-_=+/<>@")))
       }
 
       "log info level when valid" in new SetUp {

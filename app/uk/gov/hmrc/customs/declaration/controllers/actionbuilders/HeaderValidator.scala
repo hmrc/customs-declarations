@@ -97,13 +97,13 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 
-  def eoriMustBeValidAndPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
+  def eoriMustBeValidAndPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
 
     maybeEori.filter(InvalidEoriHeaderRegex.findFirstIn(_).isEmpty).map(e =>
       {
         logger.info(s"$eoriHeaderName header passed validation: $e")
-        Eori(e)
+        Some(Eori(e))
       }
     ).toRight{
       logger.error(s"$eoriHeaderName header is invalid or not present for CSP: $maybeEori")
@@ -112,7 +112,7 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   }
 
   private def validEori(eori: String) = InvalidEoriHeaderRegex.findFirstIn(eori).isEmpty
-  
+
   private def convertEmptyHeaderToNone(eori: Option[String]) = {
     if (eori.isDefined && eori.get.trim.isEmpty) {
       eori map (_.trim) filterNot (_.isEmpty)
@@ -120,12 +120,12 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
       eori
     }
   }
-  
+
   def eoriMustBeValidIfPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     val maybeEoriHeader: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
     logger.debug(s"maybeEori => $maybeEoriHeader")
     val maybeEori = convertEmptyHeaderToNone(maybeEoriHeader)
-    
+
     maybeEori match {
       case Some(eori) => if (validEori(eori)) {
         logger.info(s"$eoriHeaderName header passed validation: $eori")

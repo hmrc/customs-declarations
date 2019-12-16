@@ -42,14 +42,16 @@ class MdgPayloadDecorator() {
         {val as = vpr.authorisedAs
 
       as match {
-            case Csp(badgeId, _) => Seq[Node](
-              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>, Text(newLineAndIndentation),
-              <v1:authenticatedPartyID>{sfId.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
             case NonCsp(eori, _) =>
               <v1:authenticatedPartyID>{eori.value}</v1:authenticatedPartyID> // originatingPartyID is only required for CSPs
-            case CspWithEori(badgeId, eori, _) => Seq[Node](
+            case Csp(badgeId, _) => Seq[NodeSeq](
               <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>, Text(newLineAndIndentation),
-              <v1:originatingPartyID>{eori.value}</v1:originatingPartyID>, Text(newLineAndIndentation),
+              <v1:authenticatedPartyID>{sfId.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
+            case CspWithEori(badgeId, eori, _) =>
+              val originatingPartyID: NodeSeq = eori.fold(<v1:originatingPartyID>{badgeId.value}</v1:originatingPartyID>)(e => <v1:originatingPartyID>{e.value}</v1:originatingPartyID>)
+              Seq[NodeSeq](
+              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>, Text(newLineAndIndentation),
+              originatingPartyID, Text(newLineAndIndentation),
               <v1:authenticatedPartyID>{sfId.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
           }
         }

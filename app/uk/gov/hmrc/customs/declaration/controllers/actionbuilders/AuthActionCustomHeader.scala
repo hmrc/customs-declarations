@@ -41,7 +41,7 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
     } yield CspWithEori(badgeId, eori, maybeNrsRetrievalData)
   }
 
-  private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Eori] = {
+  private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     headerValidator.eoriMustBeValidAndPresent(eoriHeaderName)
   }
 
@@ -70,8 +70,8 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     for {
       badgeId <- eitherBadgeIdentifier.right
-      eori <- eitherEori.right
-    } yield CspWithMaybeEori(badgeId, eori, maybeNrsRetrievalData)
+      maybeEori <- eitherEori.right
+    } yield CspWithEori(badgeId, maybeEori, maybeNrsRetrievalData)
   }
 
   private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {

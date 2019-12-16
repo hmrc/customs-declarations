@@ -86,7 +86,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
 
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(CspWithEori(badgeIdentifier, declarantEori, None)))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(CspWithEori(badgeIdentifier, Some(declarantEori), None)))
         verifyNonCspAuthorisationNotCalled
       }
 
@@ -205,7 +205,7 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
         authoriseCsp()
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
-        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(CspWithEori(badgeIdentifier, declarantEori, None)))
+        actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(CspWithEori(badgeIdentifier, Some(declarantEori), None)))
         verifyNonCspAuthorisationNotCalled
       }
 

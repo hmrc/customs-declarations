@@ -88,7 +88,7 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
     "in validating the badge identifier header" should {
       "log at info level" in new SetUp {
 
-        validator.eitherBadgeIdentifier(conversationIdRequest(ValidHeadersV2))
+        validator.eitherBadgeIdentifier(allowNone = false)(conversationIdRequest(ValidHeadersV2))
 
         PassByNameVerifier(loggerMock, "info")
           .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")

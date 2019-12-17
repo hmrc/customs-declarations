@@ -167,11 +167,14 @@ sealed trait AuthorisedAs {
   val retrievalData: Option[NrsRetrievalData]
 }
 sealed trait AuthorisedAsCsp extends AuthorisedAs {
-  val badgeIdentifier: BadgeIdentifier
+  val eori: Option[Eori]
+  val badgeIdentifier: Option[BadgeIdentifier]
   val retrievalData: Option[NrsRetrievalData]
 }
-case class Csp(badgeIdentifier: BadgeIdentifier, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
-case class CspWithEori(badgeIdentifier: BadgeIdentifier, eori: Option[Eori], retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
+case class Csp(eori: Option[Eori], badgeIdentifier: Option[BadgeIdentifier], retrievalData: Option[NrsRetrievalData]) extends AuthorisedAsCsp
+object Csp {
+  def originatingPartyId(csp: Csp): String = csp.eori.fold(csp.badgeIdentifier.get.toString)(e => e.toString)
+}
 case class NonCsp(eori: Eori, retrievalData: Option[NrsRetrievalData]) extends AuthorisedAs
 
 case class UpscanInitiatePayload(callbackUrl: String, maximumFileSize: Int, successRedirect: Option[String], errorRedirect: Option[String]){

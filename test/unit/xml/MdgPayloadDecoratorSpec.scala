@@ -39,39 +39,47 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
   private val dateTime = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, DateTimeZone.UTC)
   private val payloadWrapper = new MdgPayloadDecorator()
 
-  "MdgPayloadDecorator for Csp" should {
-    implicit val implicitPvr = TestCspValidatedPayloadRequest
-    def wrapPayloadWithBadgeIdentifier(): NodeSeq = payloadWrapper.wrap(xml, apiSubscriptionFieldsResponse, dateTime)
+  "MdgPayloadDecorator for Csp with Eori " should {
+    implicit val implicitVpr = TestCspWithEoriNoBadgeIdValidatedPayloadRequest
+    def wrapPayload(): NodeSeq = payloadWrapper.wrap(xml, apiSubscriptionFieldsResponse, dateTime)
 
-    "set the badgeIdentifier when present" in {
-      val result = wrapPayloadWithBadgeIdentifier()
+    "omit the badgeIdentifier" in {
+      val result = wrapPayload()
 
       val rd = result \\ "badgeIdentifier"
 
-      rd.head.text shouldBe badgeIdentifier.value
+      rd shouldBe 'empty
+    }
+
+    "set the originatingPartyID as Eori" in {
+      val result = wrapPayload()
+
+      val rd = result \\ "originatingPartyID"
+
+      rd.head.text shouldBe "ZZ123456789000"
     }
 
     "set the authenticatedPartyID when present" in {
-      val result = wrapPayloadWithBadgeIdentifier()
+      val result = wrapPayload()
 
       val rd = result \\ "authenticatedPartyID"
-      rd.head.text shouldBe declarantEoriValue
+      rd.head.text shouldBe "ZZ123456789000"
     }
   }
 
-  "MdgPayloadDecorator for CspWithEori" should {
-    implicit val implicitPvr = TestCspWithEoriValidatedPayloadRequest
-    def wrapPayloadWithBadgeIdentifier(): NodeSeq = payloadWrapper.wrap(xml, apiSubscriptionFieldsResponse, dateTime)
+  "MdgPayloadDecorator for Csp with BadgeIdentifier" should {
+    implicit val implicitVpr = TestCspWithBadgeIdNoEoriValidatedPayloadRequest
+    def wrapPayload(): NodeSeq = payloadWrapper.wrap(xml, apiSubscriptionFieldsResponse, dateTime)
 
     "wrap passed XML in DMS wrapper" in {
-      val result = wrapPayloadWithBadgeIdentifier()
+      val result = wrapPayload()
 
       val reqDet = result \\ "requestDetail"
       reqDet.head.child.contains(<node1/>) shouldBe true
     }
 
     "set the receipt date in the wrapper" in {
-      val result = wrapPayloadWithBadgeIdentifier()
+      val result = wrapPayload()
 
       val rd = result \\ "receiptDate"
 
@@ -79,7 +87,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
     }
 
     "set the conversationId" in {
-      val result = wrapPayloadWithBadgeIdentifier()
+      val result = wrapPayload()
 
       val rd = result \\ "conversationID"
 
@@ -87,37 +95,37 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
     }
 
     "set the clientId" in {
-      val result = wrapPayloadWithBadgeIdentifier()
+      val result = wrapPayload()
 
       val rd = result \\ "clientID"
 
       rd.head.text shouldBe apiSubscriptionFieldsResponse.fieldsId.toString
     }
 
-    "set the badgeIdentifier when present" in {
-      val result = wrapPayloadWithBadgeIdentifier()
+    "set the badgeIdentifier correctly" in {
+      val result = wrapPayload()
 
       val rd = result \\ "badgeIdentifier"
-      rd.head.text shouldBe badgeIdentifier.value
+      rd.head.text shouldBe "BADGEID123"
     }
 
-    "set the originatingPartyID when present" in {
-      val result = wrapPayloadWithBadgeIdentifier()
+    "set the originatingPartyID as badgeId" in {
+      val result = wrapPayload()
 
       val rd = result \\ "originatingPartyID"
-      rd.head.text shouldBe apiSubscriptionFieldsResponse.fields.authenticatedEori.get
+      rd.head.text shouldBe "BADGEID123"
     }
 
     "set the authenticatedPartyID when present" in {
-      val result = wrapPayloadWithBadgeIdentifier()
+      val result = wrapPayload()
 
       val rd = result \\ "authenticatedPartyID"
-      rd.head.text shouldBe declarantEoriValue
+      rd.head.text shouldBe "ZZ123456789000"
     }
   }
 
   "MdgPayloadDecorator for Non Csp" should {
-    implicit val implicitPvr = TestNonCspValidatedPayloadRequest
+    implicit val implicitVpr = TestNonCspValidatedPayloadRequest
     def wrapPayloadWithoutBadgeIdentifier(): NodeSeq = payloadWrapper.wrap(xml, apiSubscriptionFieldsResponse, dateTime)
 
     "wrap passed XML in DMS wrapper" in {

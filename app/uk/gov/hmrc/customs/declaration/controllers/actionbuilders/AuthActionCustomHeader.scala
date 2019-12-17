@@ -18,6 +18,7 @@ package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -36,9 +37,9 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     for {
-      badgeId <- eitherBadgeIdentifier.right
-      eori <- eitherEori.right
-    } yield CspWithEori(badgeId, eori, maybeNrsRetrievalData)
+      maybeBadgeId <- eitherBadgeIdentifier(allowNone = false).right
+      maybeEori <- eitherEori.right
+    } yield Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
   }
 
   private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
@@ -67,15 +68,24 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
                                          (implicit ec: ExecutionContext)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XSubmitterIdentifierHeaderName) {
 
+  private def errorResponseMissingIdentifiers = errorBadRequest(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName are missing")
+
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
-    for {
-      badgeId <- eitherBadgeIdentifier.right
+    val cpsAuth: Either[ErrorResponse, Csp] = for {
+      maybeBadgeId <- eitherBadgeIdentifier(allowNone = true).right
       maybeEori <- eitherEori.right
-    } yield CspWithEori(badgeId, maybeEori, maybeNrsRetrievalData)
+    } yield Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
+
+    if (cpsAuth.isRight && cpsAuth.right.get.badgeIdentifier.isEmpty && cpsAuth.right.get.eori.isEmpty) {
+      logger.error(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName are missing")
+      Left(errorResponseMissingIdentifiers)
+    } else {
+      cpsAuth
+    }
   }
 
   private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     headerValidator.eoriMustBeValidIfPresent(XSubmitterIdentifierHeaderName)
   }
-  
+
 }

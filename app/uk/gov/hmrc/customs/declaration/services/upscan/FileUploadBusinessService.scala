@@ -170,8 +170,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   private def extractEori(authorisedAs: AuthorisedAs): Option[Eori] = {
     authorisedAs match {
       case nonCsp: NonCsp => Some(nonCsp.eori)
-      case fileUploadCsp: CspWithEori => fileUploadCsp.eori
-      case _: Csp => throw new IllegalStateException("CSP route must be via FileUploadCsp")
+      case fileUploadCsp: Csp => fileUploadCsp.eori
     }
   }
 

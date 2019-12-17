@@ -83,17 +83,21 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 
-  def eitherBadgeIdentifier[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, BadgeIdentifier] = {
+  def eitherBadgeIdentifier[A](allowNone: Boolean)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[BadgeIdentifier]] = {
     val maybeBadgeId: Option[String] = vhr.request.headers.toSimpleMap.get(XBadgeIdentifierHeaderName)
 
-    maybeBadgeId.filter(xBadgeIdentifierRegex.findFirstIn(_).nonEmpty).map(b =>
-    {
-      logger.info(s"$XBadgeIdentifierHeaderName header passed validation: $b")
-      BadgeIdentifier(b)
-    }
-    ).toRight[ErrorResponse]{
-      logger.error(s"$XBadgeIdentifierHeaderName invalid or not present for CSP")
-      errorResponseBadgeIdentifierHeaderMissing
+    if (allowNone && maybeBadgeId.isEmpty) {
+      logger.info(s"$XBadgeIdentifierHeaderName header empty and allowed")
+      Right(None)
+    } else {
+      maybeBadgeId.filter(xBadgeIdentifierRegex.findFirstIn(_).nonEmpty).map(b => {
+        logger.info(s"$XBadgeIdentifierHeaderName header passed validation: $b")
+        Some(BadgeIdentifier(b))
+      }
+      ).toRight[ErrorResponse] {
+        logger.error(s"$XBadgeIdentifierHeaderName invalid or not present for CSP")
+        errorResponseBadgeIdentifierHeaderMissing
+      }
     }
   }
 

@@ -97,11 +97,11 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
   }
 
   protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
-    eitherBadgeIdentifier.right.map(badgeId => Csp(badgeId, maybeNrsRetrievalData))
+    eitherBadgeIdentifier(allowNone = false).right.map(badgeId => Csp(None, badgeId, maybeNrsRetrievalData))
   }
 
-  protected def eitherBadgeIdentifier[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, BadgeIdentifier] = {
-    headerValidator.eitherBadgeIdentifier
+  protected def eitherBadgeIdentifier[A](allowNone: Boolean)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[BadgeIdentifier]] = {
+    headerValidator.eitherBadgeIdentifier(allowNone = allowNone)
   }
 
 }

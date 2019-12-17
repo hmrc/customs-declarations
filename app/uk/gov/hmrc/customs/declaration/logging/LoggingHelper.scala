@@ -59,9 +59,8 @@ object LoggingHelper {
     def authorised = r match {
       case a: HasAuthorisedAs =>
         a.authorisedAs match {
-          case Csp(badgeIdentifier, _) => s"[authorisedAs=Csp($badgeIdentifier)]"
           case NonCsp(eori, _) => s"[authorisedAs=NonCsp($eori)]"
-          case CspWithEori(eori, badgeIdentifier, _) => s"[authorisedAs=CspWithEori($eori, $badgeIdentifier)]"
+          case Csp(eori, badgeIdentifier, _) => s"[authorisedAs=Csp($eori, $badgeIdentifier)]"
         }
       case _ => ""
     }

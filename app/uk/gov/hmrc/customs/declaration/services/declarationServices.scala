@@ -169,7 +169,7 @@ trait ApiSubscriptionFieldsService {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
         vpr.authorisedAs match {
-          case Csp(_, _) | CspWithEori(_, _, _) =>
+          case Csp(_, _, _) =>
             if (response.fields.authenticatedEori.exists(_.trim.nonEmpty)) {
               Right(response)
             } else {

@@ -44,14 +44,11 @@ class MdgPayloadDecorator() {
       as match {
             case NonCsp(eori, _) =>
               <v1:authenticatedPartyID>{eori.value}</v1:authenticatedPartyID> // originatingPartyID is only required for CSPs
-            case Csp(badgeId, _) => Seq[NodeSeq](
-              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>, Text(newLineAndIndentation),
-              <v1:authenticatedPartyID>{sfId.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
-            case CspWithEori(badgeId, eori, _) =>
-              val originatingPartyID: NodeSeq = eori.fold(<v1:originatingPartyID>{badgeId.value}</v1:originatingPartyID>)(e => <v1:originatingPartyID>{e.value}</v1:originatingPartyID>)
+            case Csp(badgeId, eori, _) =>
+              val badgeIdentifierElement: NodeSeq = {as.asInstanceOf[Csp].badgeIdentifier.fold(NodeSeq.Empty)(badge => <v1:badgeIdentifier>{badge.toString}</v1:badgeIdentifier>)}
               Seq[NodeSeq](
-              <v1:badgeIdentifier>{badgeId.value}</v1:badgeIdentifier>, Text(newLineAndIndentation),
-              originatingPartyID, Text(newLineAndIndentation),
+              badgeIdentifierElement, Text(newLineAndIndentation),
+              <v1:originatingPartyID>{Csp.originatingPartyId(as.asInstanceOf[Csp])}</v1:originatingPartyID>, Text(newLineAndIndentation),
               <v1:authenticatedPartyID>{sfId.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
           }
         }
@@ -75,7 +72,7 @@ class MdgPayloadDecorator() {
         <n1:clientID>{sfId.fieldsId.toString}</n1:clientID>
         <n1:conversationID>{ar.conversationId.toString}</n1:conversationID>
         <n1:correlationID>{correlationId.toString}</n1:correlationID>
-        <n1:badgeIdentifier>{ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier.toString}</n1:badgeIdentifier>
+        <n1:badgeIdentifier>{ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier.get.toString}</n1:badgeIdentifier>
         <n1:dateTimeStamp>{date.toString}</n1:dateTimeStamp>
       </n1:requestCommon>
       <n1:requestDetail>

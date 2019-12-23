@@ -59,7 +59,7 @@ class AuthStatusActionSpec extends UnitSpec with MockitoSugar with TableDrivenPr
 
         private val actual = await(authAction.refine(validatedHeadersRequest))
 
-        actual shouldBe Right(validatedHeadersRequest.toAuthorisedRequest(Csp(badgeIdentifier, None)))
+        actual shouldBe Right(validatedHeadersRequest.toAuthorisedRequest(Csp(None, Some(badgeIdentifier), None)))
         verifyCspAuthorisationCalled(1)
       }
 

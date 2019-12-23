@@ -51,7 +51,7 @@ class AuthStatusAction @Inject()(override val authConnector: AuthConnector,
 
     authorised(Enrolment(customsDeclarationEnrolment) and AuthProviders(PrivilegedApplication)) {
       logger.debug(s"Successfully authorised status CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment")
-      Future.successful(Right(vhsr.toAuthorisedRequest(Csp(vhsr.badgeIdentifier, None)))) // Simply won't get through if no MRN is specified
+      Future.successful(Right(vhsr.toAuthorisedRequest(Csp(None, Some(vhsr.badgeIdentifier), None)))) // Simply won't get through if no MRN is specified
     }.recover{
       case NonFatal(ae: AuthorisationException) =>
         logger.debug(s"No authorisation for status CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment", ae)

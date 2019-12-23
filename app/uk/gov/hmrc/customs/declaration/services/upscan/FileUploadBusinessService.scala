@@ -103,7 +103,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
         request.fileUploadRequest.files(index).fileSequenceNo, 1, request.fileUploadRequest.files(index).maybeDocumentType)
     }
 
-    val metadata = FileUploadMetadata(request.fileUploadRequest.declarationId, extractEori(request.authorisedAs), sfId,
+    val metadata = FileUploadMetadata(request.fileUploadRequest.declarationId, extractEori(request.authorisedAs).get, sfId,
       BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, dateTimeService.nowUtc(), batchFiles)
 
     fileUploadMetadataRepo.create(metadata)
@@ -167,11 +167,10 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
       preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)
   }
 
-  private def extractEori(authorisedAs: AuthorisedAs): Eori = {
+  private def extractEori(authorisedAs: AuthorisedAs): Option[Eori] = {
     authorisedAs match {
-      case nonCsp: NonCsp => nonCsp.eori
-      case fileUploadCsp: CspWithEori => fileUploadCsp.eori
-      case _: Csp => throw new IllegalStateException("CSP route must be via FileUploadCsp")
+      case nonCsp: NonCsp => Some(nonCsp.eori)
+      case fileUploadCsp: Csp => fileUploadCsp.eori
     }
   }
 

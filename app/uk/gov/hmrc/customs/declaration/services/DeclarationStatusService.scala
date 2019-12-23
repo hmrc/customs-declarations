@@ -56,7 +56,7 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
         connector.send(declarationStatusPayload, dateTime, correlationId, ar.requestedApiVersion)
           .map(response => {
             val xmlResponseBody = XML.loadString(response.body)
-            statusResponseValidationService.validate(xmlResponseBody, ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier) match {
+            statusResponseValidationService.validate(xmlResponseBody, ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier.get) match {
               case Right(_) => Right(filterResponse(response, xmlResponseBody))
               case Left(errorResponse) =>
                 logError(errorResponse)

@@ -73,7 +73,7 @@ class AmendDeclarationController @Inject()(common: CommonSubmitterHeader,
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
-class ArrivalNotificationDeclarationController @Inject()(common: Common,
+class ArrivalNotificationDeclarationController @Inject()(common: CommonSubmitterHeader,
                                                          businessService: StandardDeclarationSubmissionService,
                                                          payloadValidationAction: ArrivalNotificationPayloadValidationAction,
                                                          conversationIdAction: ConversationIdAction)

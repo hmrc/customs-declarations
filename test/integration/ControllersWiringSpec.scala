@@ -21,11 +21,11 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
 import uk.gov.hmrc.customs.declaration.controllers._
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionSubmitterHeader, HeaderWithContentTypeValidator, _}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.FileUploadPayloadValidationAction
 import uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.services._
+import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, _}
 
 class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar {
 
@@ -42,7 +42,10 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
   private lazy val cancelController = app.injector.instanceOf[CancelDeclarationController]
   private lazy val fileUploadController = app.injector.instanceOf[FileUploadController]
   private lazy val metricsConnector = app.injector.instanceOf[CustomsDeclarationsMetricsConnector]
-
+  private lazy val mockCustomsAuthService = mock[CustomsAuthService]
+  private lazy val mockHeaderWithContentTypeValidator = mock[HeaderWithContentTypeValidator]
+  private lazy val mockDeclarationsConfigService = mock[DeclarationsConfigService]
+  
   "The correct XmlValidationAction" should {
     "be wired into SubmitDeclarationController" in {
       val action = submitController.payloadValidationAction
@@ -73,6 +76,39 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
 
       action.getClass.getSimpleName shouldBe new FileUploadPayloadValidationAction(mockFileUploadXmlValidationService, mockDeclarationsLogger).getClass.getSimpleName
       action.xmlValidationService.schemaPropertyName shouldBe "xsd.locations.fileupload"
+    }
+  }
+
+  "The correct AuthAction class" should {
+    "be wired into SubmitDeclarationController" in {
+      val common = submitController.common
+
+      common.authAction.getClass.getSimpleName shouldBe new AuthActionSubmitterHeader(mockCustomsAuthService,
+        mockHeaderWithContentTypeValidator, mockDeclarationsLogger, mockDeclarationsConfigService).getClass.getSimpleName
+    }
+    "be wired into CancelDeclarationController" in {
+      val common = cancelController.common
+
+      common.authAction.getClass.getSimpleName shouldBe new AuthActionSubmitterHeader(mockCustomsAuthService,
+        mockHeaderWithContentTypeValidator, mockDeclarationsLogger, mockDeclarationsConfigService).getClass.getSimpleName
+    }
+    "be wired into AmendDeclarationController" in {
+      val common = amendController.common
+
+      common.authAction.getClass.getSimpleName shouldBe new AuthActionSubmitterHeader(mockCustomsAuthService,
+        mockHeaderWithContentTypeValidator, mockDeclarationsLogger, mockDeclarationsConfigService).getClass.getSimpleName
+    }
+    "be wired into ArrivalNotificationDeclarationController" in {
+      val common = arrivalNotificationController.common
+
+      common.authAction.getClass.getSimpleName shouldBe new AuthActionSubmitterHeader(mockCustomsAuthService,
+        mockHeaderWithContentTypeValidator, mockDeclarationsLogger, mockDeclarationsConfigService).getClass.getSimpleName
+    }
+    "be wired into FileUploadController" in {
+      val common = fileUploadController.common
+
+      common.authAction.getClass.getSimpleName shouldBe new AuthAction(mockCustomsAuthService,
+        mockHeaderWithContentTypeValidator, mockDeclarationsLogger, mockDeclarationsConfigService).getClass.getSimpleName
     }
   }
 

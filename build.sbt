@@ -7,6 +7,7 @@ import sbt.Tests.{Group, SubProcess}
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, scalaSettings, targetJvm}
 import uk.gov.hmrc.PublishingSettings._
+import uk.gov.hmrc.gitstamp.GitStampPlugin._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning
@@ -14,7 +15,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 import scala.language.postfixOps
 
 name := "customs-declarations"
-
+scalaVersion := "2.12.10"
 targetJvm := "jvm-1.8"
 
 lazy val allResolvers = resolvers ++= Seq(
@@ -95,8 +96,7 @@ lazy val commonSettings: Seq[Setting[_]] = scalaSettings ++
   defaultSettings() ++
   gitStampSettings
 
-lazy val playPublishingSettings: Seq[sbt.Setting[_]] = sbtrelease.ReleasePlugin.releaseSettings ++
-  Seq(credentials += SbtCredentials) ++
+lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(credentials += SbtCredentials) ++
   publishAllArtefacts
 
 lazy val scoverageSettings: Seq[Setting[_]] = Seq(
@@ -116,7 +116,7 @@ scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
 val compileDependencies = Seq(customsApiCommon, circuitBreaker, simpleReactiveMongo, playJsonJoda)
 
-val testDependencies = Seq(hmrcTest, scalaTest, scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
+val testDependencies = Seq(hmrcTest, scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
 
 unmanagedResourceDirectories in Compile += baseDirectory.value / "public"
 (managedClasspath in Runtime) += (packageBin in Assets).value
@@ -141,7 +141,7 @@ zipWcoXsds := { mappings: Seq[PathMapping] =>
         println(s"Created zip $zipFile")
         zipFile
       }
-  zipFiles.pair(relativeTo(targetDir)) ++ mappings
+  zipFiles.pair(Path.relativeTo(targetDir)) ++ mappings
 }
 
 pipelineStages := Seq(zipWcoXsds)

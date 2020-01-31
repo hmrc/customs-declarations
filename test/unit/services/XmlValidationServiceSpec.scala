@@ -18,7 +18,6 @@ package unit.services
 
 import java.io.FileNotFoundException
 
-import org.mockito.ArgumentMatchers.{eq => ameq}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar

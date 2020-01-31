@@ -108,7 +108,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     "process CSP request when call is authorised for CSP" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidDeclarationStatusRequest)
+      awaitSubmit(ValidDeclarationStatusRequest)
 
       verifyCspAuthorisationCalled(numberOfTimes = 1)
       verifyNonCspAuthorisationCalled(numberOfTimes = 0)

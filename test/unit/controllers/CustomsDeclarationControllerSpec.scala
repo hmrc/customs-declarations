@@ -115,7 +115,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "process CSP request when call is authorised for CSP" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionV2Request)
+      awaitSubmit(ValidSubmissionV2Request)
 
       verifyCspAuthorisationCalled(numberOfTimes = 1)
       verifyNonCspAuthorisationCalled(numberOfTimes = 0)
@@ -124,7 +124,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     "process a non-CSP request when call is unauthorised for CSP but authorised for non-CSP" in new SetUp() {
       authoriseNonCsp(Some(declarantEori))
 
-      val result: Result = awaitSubmit(ValidSubmissionV2Request)
+      awaitSubmit(ValidSubmissionV2Request)
 
       verifyCspAuthorisationCalled(numberOfTimes = 1)
       verifyNonCspAuthorisationCalled(numberOfTimes = 1)

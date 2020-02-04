@@ -31,9 +31,6 @@ import uk.gov.hmrc.customs.declaration.services.{DateTimeService, UniqueIdsServi
 import util.TestData.stubUniqueIdsService
 import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig}
 
-import scala.util.control.NonFatal
-import scala.xml.{Node, Utility, XML}
-
 trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
   with BeforeAndAfterAll with BeforeAndAfterEach with Eventually with MockitoSugar {
 

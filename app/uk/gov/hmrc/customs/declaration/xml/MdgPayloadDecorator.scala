@@ -21,7 +21,7 @@ import org.joda.time.format.ISODateTimeFormat
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 
-import scala.xml.{Node, NodeSeq, Text}
+import scala.xml.{NodeSeq, Text}
 
 class MdgPayloadDecorator() {
 
@@ -44,8 +44,8 @@ class MdgPayloadDecorator() {
       as match {
             case NonCsp(eori, _) =>
               <v1:authenticatedPartyID>{eori.value}</v1:authenticatedPartyID> // originatingPartyID is only required for CSPs
-            case Csp(badgeId, eori, _) =>
-              val badgeIdentifierElement: NodeSeq = {as.asInstanceOf[Csp].badgeIdentifier.fold(NodeSeq.Empty)(badge => <v1:badgeIdentifier>{badge.toString}</v1:badgeIdentifier>)}
+            case Csp(_, badgeId, _) =>
+              val badgeIdentifierElement: NodeSeq = {badgeId.fold(NodeSeq.Empty)(badge => <v1:badgeIdentifier>{badge.toString}</v1:badgeIdentifier>)}
               Seq[NodeSeq](
               badgeIdentifierElement, Text(newLineAndIndentation),
               <v1:originatingPartyID>{Csp.originatingPartyId(as.asInstanceOf[Csp])}</v1:originatingPartyID>, Text(newLineAndIndentation),

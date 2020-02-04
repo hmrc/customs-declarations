@@ -68,7 +68,7 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
                                          (implicit ec: ExecutionContext)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XSubmitterIdentifierHeaderName) {
 
-  private def errorResponseMissingIdentifiers = errorBadRequest(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName are missing")
+  private def errorResponseMissingIdentifiers = errorBadRequest(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName headers are missing")
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     val cpsAuth: Either[ErrorResponse, Csp] = for {
@@ -77,7 +77,7 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
     } yield Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
 
     if (cpsAuth.isRight && cpsAuth.right.get.badgeIdentifier.isEmpty && cpsAuth.right.get.eori.isEmpty) {
-      logger.error(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName are missing")
+      logger.error(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName headers are missing")
       Left(errorResponseMissingIdentifiers)
     } else {
       cpsAuth

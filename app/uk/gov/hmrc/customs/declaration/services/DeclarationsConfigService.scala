@@ -47,7 +47,6 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   private val nrsEnabled = root.boolean("nrs.enabled")
   private val nrsApiKey = root.string("nrs.apikey")
-  private val nrsWaitTimeMillis = root.int("nrs.waittime.millis")
   private val nrsUrl = nrsService.serviceUrl
 
   private val upscanInitiateUrlV1 = upscanServiceV1.serviceUrl

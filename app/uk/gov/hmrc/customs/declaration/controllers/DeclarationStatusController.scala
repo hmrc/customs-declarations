@@ -28,7 +28,7 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationStatusService
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext
-import scala.xml.{PrettyPrinter, TopScope, XML}
+import scala.xml.{PrettyPrinter, TopScope}
 
 @Singleton
 class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction,

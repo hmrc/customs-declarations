@@ -173,8 +173,8 @@ trait ApiSubscriptionFieldsService {
             if (response.fields.authenticatedEori.exists(_.trim.nonEmpty)) {
               Right(response)
             } else {
-              logger.error(s"authenticatedEori for CSP not returned from api subscription fields for client id: ${c.value}")
-              Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+              logger.error("authenticatedEori for CSP not returned from api subscription fields")
+              Left(errorInternalServerError("Missing authenticated eori in service lookup").XmlResult.withConversationId)
             }
           case _ =>
             Right(response)

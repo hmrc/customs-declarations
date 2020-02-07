@@ -21,13 +21,12 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
-import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
+import org.mockito.Mockito.{verify, verifyNoInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
 import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorInternalServerError}
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgDeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -42,7 +41,7 @@ import util.CustomsDeclarationsMetricsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
@@ -52,7 +51,8 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
   private val wrappedValidXML = <wrapped></wrapped>
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
-
+  private val errorResponseMissingEori = errorInternalServerError("Missing authenticated eori in service lookup")
+  
   trait SetUp {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockMdgDeclarationConnector: MdgDeclarationConnector = mock[MdgDeclarationConnector]
@@ -73,7 +73,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       val nrsService: NrsService = mockNrsService
       val declarationsConfigService: DeclarationsConfigService = mockDeclarationsConfigService
       val actorSystem: ActorSystem = ActorSystem("DeclarationServiceSpec")
-      override implicit val ec = Helpers.stubControllerComponents().executionContext
+      override implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
     }
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
@@ -143,9 +143,9 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
-      verifyZeroInteractions(mockPayloadDecorator)
-      verifyZeroInteractions(mockMdgDeclarationConnector)
+      result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId)
+      verifyNoInteractions(mockPayloadDecorator)
+      verifyNoInteractions(mockMdgDeclarationConnector)
     }
 
     "return 500 error response when authenticatedEori is blank" in new SetUp() {
@@ -154,9 +154,9 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
-      verifyZeroInteractions(mockPayloadDecorator)
-      verifyZeroInteractions(mockMdgDeclarationConnector)
+      result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
+      verifyNoInteractions(mockPayloadDecorator)
+      verifyNoInteractions(mockMdgDeclarationConnector)
     }
 
     "return 500 error response when MDG call fails" in new SetUp() {
@@ -164,7 +164,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
+      result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
     }
 
     "return 500 error response when MDG circuit breaker trips" in new SetUp() {
@@ -191,9 +191,9 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
-      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
-      verifyZeroInteractions(mockPayloadDecorator)
-      verifyZeroInteractions(mockMdgDeclarationConnector)
+      result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
+      verifyNoInteractions(mockPayloadDecorator)
+      verifyNoInteractions(mockMdgDeclarationConnector)
     }
 
 }

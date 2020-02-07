@@ -128,7 +128,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
       val result: Result = awaitSubmit(ValidDeclarationStatusRequest.withHeaders(ValidDeclarationStatusRequest.headers.remove(X_BADGE_IDENTIFIER_NAME)))
       result shouldBe errorResultBadgeIdentifier
-      verifyZeroInteractions(mockStatusConnector)
+      verifyNoInteractions(mockStatusConnector)
     }
 
     "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
@@ -136,7 +136,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
 
       val result: Result = awaitSubmit(ValidDeclarationStatusRequest.withHeaders(ValidDeclarationStatusRequest.headers.remove(X_CLIENT_ID_NAME)))
       status(result) shouldBe INTERNAL_SERVER_ERROR
-      verifyZeroInteractions(mockStatusConnector)
+      verifyNoInteractions(mockStatusConnector)
     }
 
     "respond with status 400 for a request with an invalid X-Badge-Identifier" in new SetUp() {
@@ -145,7 +145,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
       val result: Result = awaitSubmit(ValidDeclarationStatusRequest.withHeaders((ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS).toSeq: _*))
 
       result shouldBe errorResultBadgeIdentifier
-      verifyZeroInteractions(mockStatusConnector)
+      verifyNoInteractions(mockStatusConnector)
     }
 
     "respond with status 401 and conversationId in header when non-CSP request" in new SetUp() {

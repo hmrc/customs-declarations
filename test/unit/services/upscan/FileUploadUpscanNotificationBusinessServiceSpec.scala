@@ -104,7 +104,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyZeroInteractions(mockConnector)
+      verifyNoInteractions(mockConnector)
     }
 
     "return failed future when file reference not found in returned metadata" in new SetUp {
@@ -118,7 +118,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyZeroInteractions(mockConnector)
+      verifyNoInteractions(mockConnector)
     }
 
     "propagate exception encountered in repo" in new SetUp {
@@ -132,7 +132,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyZeroInteractions(mockConnector)
+      verifyNoInteractions(mockConnector)
     }
 
     "propagate exception encountered in connector" in new SetUp {

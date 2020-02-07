@@ -21,7 +21,7 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
-import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
+import org.mockito.Mockito.{verify, verifyNoInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
@@ -100,7 +100,7 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
         val result: Either[Result, Option[NrSubmissionId]] = send()
         result shouldBe Right(None)
 
-        verifyZeroInteractions(mockNrsService)
+        verifyNoInteractions(mockNrsService)
       }
 
     "should still contain nrs submission id even if call to downstream fails" in new SetUp() {

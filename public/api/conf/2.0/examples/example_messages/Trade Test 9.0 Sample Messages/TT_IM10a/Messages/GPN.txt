@@ -1,0 +1,18 @@
+<md:MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd " xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
+<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+<md:WCOTypeName>DEC</md:WCOTypeName>
+<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+<md:AgencyAssignedCustomizationVersionCode>v2.1 </md:AgencyAssignedCustomizationVersionCode>
+      <Declaration
+        xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+      >
+        <FunctionCode>13</FunctionCode>
+       <FunctionalReferenceID>R260_E2E_TC17_025</FunctionalReferenceID>
+        <ID>20GB0XVF9FMVCFGVR1</ID>
+        <TypeCode>GPR</TypeCode>
+        <Submitter>
+          <ID>GB225456994000</ID>
+        </Submitter>
+      </Declaration>
+    </md:MetaData>

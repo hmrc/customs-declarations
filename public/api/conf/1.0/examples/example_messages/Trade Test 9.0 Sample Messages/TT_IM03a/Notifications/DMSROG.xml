@@ -1,0 +1,19 @@
+<v3:notifyTrader xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/">
+  <_2:MetaData><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response>
+  <!-- This is an example of a DMSROG notification. With this message the submitter is informed that the goods can be released  -->
+      <_2_1:FunctionCode>08</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>3f68ca9895af43a88403192fce21bc9c</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304">20191107153438Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:AdditionalInformation>
+        <_2_1:StatementCode>A1</_2_1:StatementCode>
+        <_2_1:StatementTypeCode>AFB</_2_1:StatementTypeCode>
+      </_2_1:AdditionalInformation>
+      <_2_1:Declaration>
+        <_2_1:FunctionalReferenceID>R251_TC05_1710_007</_2_1:FunctionalReferenceID>
+        <_2_1:ID>19GBCBVIYEAA2X8PR2</_2_1:ID>
+        <_2_1:VersionID>3</_2_1:VersionID>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>
+</v3:notifyTrader>

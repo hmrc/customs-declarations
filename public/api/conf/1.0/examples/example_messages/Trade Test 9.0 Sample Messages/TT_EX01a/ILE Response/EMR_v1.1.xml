@@ -1,0 +1,23 @@
+<ns3:inventoryLinkingMovementTotalsResponse xmlns:ns2="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:ns3="http://gov.uk/customs/inventoryLinking/v1">
+<!-- This is an example of a EMR message, the output response from ILE for a MUCR -->
+    <ns3:messageCode>EMR</ns3:messageCode>
+    <ns3:crc>000</ns3:crc>
+    <!-- ID to give a unique position of the location. DVRDOVDVR Indicating Dover -->
+    <ns3:goodsLocation>GBAUDVRDOVDVR</ns3:goodsLocation>
+    <ns3:masterUCR>GB/123456789012-M1302A</ns3:masterUCR>
+    <ns3:declarationCount>1</ns3:declarationCount>
+    <ns3:goodsArrivalDateTime>2020-02-13T10:11:00.000Z</ns3:goodsArrivalDateTime>
+    <ns3:movementReference>Movement14</ns3:movementReference>
+    <ns3:masterROE>6</ns3:masterROE>
+    <ns3:masterSOE>0</ns3:masterSOE>
+    <ns3:entry>
+        <ns3:ucrBlock>
+            <ns3:ucr>0GB427168118378-D1302A</ns3:ucr>
+            <ns3:ucrType>D</ns3:ucrType>
+        </ns3:ucrBlock>
+        <ns3:entryStatus>
+            <ns3:roe>6</ns3:roe>
+            <ns3:soe>3</ns3:soe>
+        </ns3:entryStatus>
+    </ns3:entry>
+</ns3:inventoryLinkingMovementTotalsResponse>,

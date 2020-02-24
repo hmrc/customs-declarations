@@ -401,6 +401,14 @@ object RequestHeaders {
     X_SUBMITTER_IDENTIFIER_HEADER
   )
 
+  val ValidHeadersV2WithCharset: Map[String, String] = Map(
+    CONTENT_TYPE -> CONTENT_TYPE_CHARSET_VALUE,
+    ACCEPT_HMRC_XML_V2_HEADER,
+    X_CLIENT_ID_HEADER,
+    X_BADGE_IDENTIFIER_HEADER,
+    X_SUBMITTER_IDENTIFIER_HEADER
+  )
+
   val ValidHeadersV3: Map[String, String] = Map(
     CONTENT_TYPE_HEADER,
     ACCEPT_HMRC_XML_V3_HEADER,

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import java.io.{FileNotFoundException, StringReader}
+import java.io.FileNotFoundException
 import java.net.URL
 
 import javax.inject.Inject
@@ -24,10 +24,9 @@ import javax.xml.XMLConstants
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.{Schema, SchemaFactory}
-import org.xml.sax.{ErrorHandler, SAXParseException}
 import play.api.Configuration
+import uk.gov.hmrc.customs.api.common.xml.ValidateXmlAgainstSchema
 
-import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.{NodeSeq, SAXException}
 
@@ -48,45 +47,26 @@ abstract class XmlValidationService @Inject()(val configuration: Configuration, 
 
   private lazy val maxSAXErrors = configuration.getOptional[Int]("xml.max-errors").getOrElse(Int.MaxValue)
 
+  private lazy val validator = new ValidateXmlAgainstSchema(schema)
+
   def validate(xml: NodeSeq)(implicit ec: ExecutionContext): Future[Unit] = {
     Future(doValidate(xml))
   }
 
   private def doValidate(xml: NodeSeq): Unit = {
-    val errorHandler = new AccumulatingSAXErrorHandler(maxSAXErrors)
-    val validator = schema.newValidator()
-    validator.setErrorHandler(errorHandler)
-    validator.validate(new StreamSource(new StringReader(xml.toString)))
-    errorHandler.throwIfErrorsEncountered()
+    val source = ValidateXmlAgainstSchema.getXmlAsSource(xml)
+    validator.validateWithErrors(source, maxSAXErrors) match {
+      case Right(_) => ()
+      case Left(errors) =>
+        stackExceptions(errors).foreach(e => throw e)
+    }
   }
 
-  private class AccumulatingSAXErrorHandler(maxErrors: Int) extends ErrorHandler {
-    self =>
-
-    require(maxErrors > 0, s"maxErrors should be a positive number but $maxErrors was provided instead.")
-
-    private lazy val errors: mutable.Buffer[SAXParseException] = mutable.Buffer.empty
-
-    private def accumulateError(e: SAXParseException): Unit = self.synchronized {
-      errors += e
-      if (errors.lengthCompare(maxErrors) >= 0) throwIfErrorsEncountered()
+  private def stackExceptions(exceptions: Seq[SAXException]) = {
+    exceptions.foldLeft[Option[SAXException]](None) {
+      (acc, nextError) => acc
+          .map( currentError => new SAXException(nextError.getMessage, currentError) )
+          .orElse(Some(nextError))
     }
-
-    def throwIfErrorsEncountered(): Unit = self.synchronized {
-      val maybeTotalException = errors.foldLeft[Option[SAXException]](None) {
-        (acc, nextError) =>
-          acc
-            .map { currentError => new SAXException(nextError.getMessage, currentError) }
-            .orElse(Some(nextError))
-      }
-      maybeTotalException.foreach(e => throw e)
-    }
-
-    override def warning(exception: SAXParseException): Unit = {}
-
-    override def error(exception: SAXParseException): Unit = accumulateError(exception)
-
-    override def fatalError(exception: SAXParseException): Unit = accumulateError(exception)
   }
-
 }

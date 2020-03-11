@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XSubmitterIdentifierHeaderName}
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthAction, AuthActionSubmitterHeader, HeaderWithContentTypeValidator}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthAction, AuthActionRelaxedSubmitterHeader, AuthActionStrictSubmitterHeader, HeaderWithContentTypeValidator}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -79,8 +79,9 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockLogger)
     protected val headerValidator = new HeaderWithContentTypeValidator(mockLogger)
-    val authAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
-    val authActionSubmitterHeader: AuthAction = new AuthActionSubmitterHeader(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
+    val authAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
+    val authActionStrictSubmitterHeader = new AuthActionStrictSubmitterHeader(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
+    val authActionRelaxedSubmitterHeader = new AuthActionRelaxedSubmitterHeader(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
 
@@ -160,7 +161,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "authorise as CSP when authorised by auth API and badge identifier and eori exist" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
+        private val actual = await(authActionStrictSubmitterHeader.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
         actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
       }
@@ -168,7 +169,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "authorise as CSP when authorised by auth API and badge identifier exists and eori does not" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithValidBadgeId))
+        private val actual = await(authActionStrictSubmitterHeader.refine(validatedHeadersRequestWithValidBadgeId))
         actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(Csp(None, Some(badgeIdentifier), Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
       }
@@ -176,7 +177,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "authorise as CSP when authorised by auth API and badge identifier does not exist and eori does" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithValidEoriNoBadgeId))
+        private val actual = await(authActionStrictSubmitterHeader.refine(validatedHeadersRequestWithValidEoriNoBadgeId))
         actual shouldBe Right(validatedHeadersRequestWithValidEoriNoBadgeId.toCspAuthorisedRequest(Csp(Some(declarantEori), None, Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
       }
@@ -184,7 +185,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 400 response when authorised by auth API and badge identifier does not exist and eori does but is too long" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithInvalidEoriNoBadgeId))
+        private val actual = await(authActionStrictSubmitterHeader.refine(validatedHeadersRequestWithInvalidEoriNoBadgeId))
         actual shouldBe Left(errorResponseEoriIdentifierHeaderInvalid.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
       }
@@ -192,7 +193,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 400 response when authorised by auth API and badge identifier is too long and eori exists" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdNoEori))
+        private val actual = await(authActionStrictSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdNoEori))
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
       }
@@ -200,16 +201,25 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 400 response when authorised by auth API but neither badge identifier nor eori exist" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(TestValidatedHeadersRequestNoBadge))
+        private val actual = await(authActionStrictSubmitterHeader.refine(TestValidatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseMissingIdentifiers.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
+        verifyNonCspAuthorisationNotCalled
+      }
+
+      "authorise as CSP when authorised by auth API and neither badge identifier nor eori exist for relaxed auth action" in new NrsEnabled {
+        authoriseCsp()
+
+        private val actual = await(authActionRelaxedSubmitterHeader.refine(TestValidatedHeadersRequestNoBadge))
+
+        actual shouldBe Right(TestValidatedHeadersRequestNoBadge.toCspAuthorisedRequest(Csp(None, None, Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
       }
 
       "Return 400 response when authorised by auth API but badge identifier exists but is too long" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdTooLong))
+        private val actual = await(authActionStrictSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdTooLong))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -218,7 +228,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 400 response when authorised by auth API but badge identifier exists but is too short" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdTooShort))
+        private val actual = await(authActionStrictSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdTooShort))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -227,7 +237,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 400 response when authorised by auth API but badge identifier exists but contains invalid chars" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdInvalidChars))
+        private val actual = await(authActionStrictSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdInvalidChars))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -236,7 +246,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 400 response when authorised by auth API but badge identifier exists but contains all lowercase chars" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdLowerCase))
+        private val actual = await(authActionStrictSubmitterHeader.refine(validatedHeadersRequestWithInvalidBadgeIdLowerCase))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled

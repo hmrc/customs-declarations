@@ -32,7 +32,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ExtractedHeaders, HasAuthorisedAs, HasConversationId, ValidatedPayloadRequest}
-import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
+import uk.gov.hmrc.customs.declaration.xml.BackendPayloadDecorator
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,7 +44,7 @@ import scala.xml.NodeSeq
 class StandardDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
                                                      override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                                      override val connector: MdgWcoDeclarationConnector,
-                                                     override val wrapper: MdgPayloadDecorator,
+                                                     override val wrapper: BackendPayloadDecorator,
                                                      override val dateTimeProvider: DateTimeService,
                                                      override val uniqueIdsService: UniqueIdsService,
                                                      override val nrsService: NrsService,
@@ -56,7 +56,7 @@ class StandardDeclarationSubmissionService @Inject()(override val logger: Declar
 class CancellationDeclarationSubmissionService @Inject()(override val logger: DeclarationsLogger,
                                                          override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                                          override val connector: MdgDeclarationCancellationConnector,
-                                                         override val wrapper: MdgPayloadDecorator,
+                                                         override val wrapper: BackendPayloadDecorator,
                                                          override val dateTimeProvider: DateTimeService,
                                                          override val uniqueIdsService: UniqueIdsService,
                                                          override val nrsService: NrsService,
@@ -68,7 +68,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
 
   def connector: MdgDeclarationConnector
 
-  def wrapper: MdgPayloadDecorator
+  def wrapper: BackendPayloadDecorator
 
   def dateTimeProvider: DateTimeService
 

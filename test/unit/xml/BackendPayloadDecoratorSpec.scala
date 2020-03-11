@@ -18,14 +18,14 @@ package unit.xml
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
+import uk.gov.hmrc.customs.declaration.xml.BackendPayloadDecorator
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
 
 import scala.xml.NodeSeq
 
-class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
+class BackendPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
 
   private val xml: NodeSeq = <node1></node1>
 
@@ -37,9 +37,9 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
   private val secondOfMinute = 0
   private val millisOfSecond = 0
   private val dateTime = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, DateTimeZone.UTC)
-  private val payloadWrapper = new MdgPayloadDecorator()
+  private val payloadWrapper = new BackendPayloadDecorator()
 
-  "MdgPayloadDecorator for Csp with Eori " should {
+  "BackendPayloadDecorator for CSP with Eori " should {
     implicit val implicitVpr = TestCspWithEoriNoBadgeIdValidatedPayloadRequest
     def wrapPayload(): NodeSeq = payloadWrapper.wrap(xml, apiSubscriptionFieldsResponse, dateTime)
 
@@ -67,7 +67,7 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
     }
   }
 
-  "MdgPayloadDecorator for Csp with BadgeIdentifier" should {
+  "BackendPayloadDecorator for CSP with BadgeIdentifier and no eori" should {
     implicit val implicitVpr = TestCspWithBadgeIdNoEoriValidatedPayloadRequest
     def wrapPayload(): NodeSeq = payloadWrapper.wrap(xml, apiSubscriptionFieldsResponse, dateTime)
 
@@ -124,7 +124,35 @@ class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
     }
   }
 
-  "MdgPayloadDecorator for Non Csp" should {
+  "BackendPayloadDecorator for CSP with no BadgeIdentifier and no Eori" should {
+    implicit val implicitVpr = TestCspWithNoBadgeIdNoEoriValidatedPayloadRequest
+
+    def wrapPayload(): NodeSeq = payloadWrapper.wrap(xml, apiSubscriptionFieldsResponse, dateTime)
+
+    "omit the originatingPartyID" in {
+      val result = wrapPayload()
+
+      val rd = result \\ "originatingPartyID"
+      rd shouldBe 'empty
+    }
+
+    "omit the badgeId" in {
+      val result = wrapPayload()
+
+      val rd = result \\ "badgeIdentifier"
+      rd shouldBe 'empty
+    }
+
+    "set the authenticatedPartyID when present" in {
+      val result = wrapPayload()
+
+      val rd = result \\ "authenticatedPartyID"
+      rd.head.text shouldBe "ZZ123456789000"
+    }
+
+  }
+
+  "BackendPayloadDecorator for non-CSP" should {
     implicit val implicitVpr = TestNonCspValidatedPayloadRequest
     def wrapPayloadWithoutBadgeIdentifier(): NodeSeq = payloadWrapper.wrap(xml, apiSubscriptionFieldsResponse, dateTime)
 

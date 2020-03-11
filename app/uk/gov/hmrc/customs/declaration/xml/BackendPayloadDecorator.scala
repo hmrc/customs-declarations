@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, 
 
 import scala.xml.{NodeSeq, Text}
 
-class MdgPayloadDecorator() {
+class BackendPayloadDecorator() {
 
   private val newLineAndIndentation = "\n        "
 
@@ -44,11 +44,16 @@ class MdgPayloadDecorator() {
       as match {
             case NonCsp(eori, _) =>
               <v1:authenticatedPartyID>{eori.value}</v1:authenticatedPartyID> // originatingPartyID is only required for CSPs
-            case Csp(_, badgeId, _) =>
-              val badgeIdentifierElement: NodeSeq = {badgeId.fold(NodeSeq.Empty)(badge => <v1:badgeIdentifier>{badge.toString}</v1:badgeIdentifier>)}
+            case Csp(maybeEori, maybeBadgeId, _) =>
+              val badgeIdentifierElement: NodeSeq = {maybeBadgeId.fold(NodeSeq.Empty)(badge => <v1:badgeIdentifier>{badge.toString}</v1:badgeIdentifier>)}
+              val originatingPartyElement: NodeSeq = if (maybeBadgeId.isEmpty && maybeEori.isEmpty) {
+                NodeSeq.Empty
+              } else {
+                <v1:originatingPartyID>{Csp.originatingPartyId(as.asInstanceOf[Csp])}</v1:originatingPartyID>
+              }
               Seq[NodeSeq](
               badgeIdentifierElement, Text(newLineAndIndentation),
-              <v1:originatingPartyID>{Csp.originatingPartyId(as.asInstanceOf[Csp])}</v1:originatingPartyID>, Text(newLineAndIndentation),
+              originatingPartyElement, Text(newLineAndIndentation),
               <v1:authenticatedPartyID>{sfId.fields.authenticatedEori.get}</v1:authenticatedPartyID>)
           }
         }

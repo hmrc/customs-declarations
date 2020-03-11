@@ -32,7 +32,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, _}
-import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
+import uk.gov.hmrc.customs.declaration.xml.BackendPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
@@ -54,7 +54,7 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockMdgDeclarationConnector: MdgWcoDeclarationConnector = mock[MdgWcoDeclarationConnector]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
-    protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
+    protected val mockPayloadDecorator: BackendPayloadDecorator = mock[BackendPayloadDecorator]
     protected val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
     protected val mockHttpResponse: HttpResponse = mock[HttpResponse]
     protected val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]

@@ -33,7 +33,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
-import uk.gov.hmrc.customs.declaration.xml.BackendPayloadDecorator
+import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
@@ -57,7 +57,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockMdgDeclarationConnector: MdgDeclarationConnector = mock[MdgDeclarationConnector]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
-    protected val mockPayloadDecorator: BackendPayloadDecorator = mock[BackendPayloadDecorator]
+    protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
     protected val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
     protected val mockHttpResponse: HttpResponse = mock[HttpResponse]
     protected val mockNrsService: NrsService = mock[NrsService]
@@ -67,7 +67,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       val logger: DeclarationsLogger = mockLogger
       val connector: MdgDeclarationConnector = mockMdgDeclarationConnector
       val apiSubFieldsConnector: ApiSubscriptionFieldsConnector = mockApiSubscriptionFieldsConnector
-      val wrapper: BackendPayloadDecorator = mockPayloadDecorator
+      val wrapper: MdgPayloadDecorator = mockPayloadDecorator
       val dateTimeProvider: DateTimeService = mockDateTimeProvider
       val uniqueIdsService: UniqueIdsService = stubUniqueIdsService
       val nrsService: NrsService = mockNrsService

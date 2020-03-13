@@ -38,7 +38,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
-import uk.gov.hmrc.customs.declaration.xml.BackendPayloadDecorator
+import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
@@ -59,7 +59,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected implicit val ec = Helpers.stubControllerComponents().executionContext
     protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
     protected val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
-    protected val mockMdgPayloadDecorator: BackendPayloadDecorator = mock[BackendPayloadDecorator]
+    protected val mockMdgPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockCdsLogger: CdsLogger = mock[CdsLogger]

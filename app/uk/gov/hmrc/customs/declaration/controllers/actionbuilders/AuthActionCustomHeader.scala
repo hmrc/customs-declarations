@@ -61,48 +61,31 @@ class AuthActionEoriHeader @Inject()(customsAuthService: CustomsAuthService,
 
 
 @Singleton
-class AuthActionStrictSubmitterHeader @Inject()(customsAuthService: CustomsAuthService,
-                                                headerValidator: HeaderWithContentTypeValidator,
-                                                logger: DeclarationsLogger,
-                                                declarationConfigService: DeclarationsConfigService)
-                                               (implicit ec: ExecutionContext)
+class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService,
+                                          headerValidator: HeaderWithContentTypeValidator,
+                                          logger: DeclarationsLogger,
+                                          declarationConfigService: DeclarationsConfigService)
+                                         (implicit ec: ExecutionContext)
   extends AuthActionCustomHeader(customsAuthService, headerValidator, logger, declarationConfigService, XSubmitterIdentifierHeaderName) {
 
   private def errorResponseMissingIdentifiers = errorBadRequest(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName headers are missing")
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
-    val cspAuth: Either[ErrorResponse, Csp] = for {
+    val cpsAuth: Either[ErrorResponse, Csp] = for {
       maybeBadgeId <- eitherBadgeIdentifier(allowNone = true).right
       maybeEori <- eitherEori.right
     } yield Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
 
-    rejectEmptyIdentifierHeaders(cspAuth)
+    if (cpsAuth.isRight && cpsAuth.right.get.badgeIdentifier.isEmpty && cpsAuth.right.get.eori.isEmpty) {
+      logger.error(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName headers are missing")
+      Left(errorResponseMissingIdentifiers)
+    } else {
+      cpsAuth
+    }
   }
 
   private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     headerValidator.eoriMustBeValidIfPresent(XSubmitterIdentifierHeaderName)
-  }
-
-  protected def rejectEmptyIdentifierHeaders[A](cspAuth: Either[ErrorResponse, Csp])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Csp] = {
-    if (cspAuth.isRight && cspAuth.right.get.badgeIdentifier.isEmpty && cspAuth.right.get.eori.isEmpty) {
-      logger.error(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName headers are missing")
-      Left(errorResponseMissingIdentifiers)
-    } else {
-      cspAuth
-    }
-  }
-}
-
-class AuthActionRelaxedSubmitterHeader @Inject()(customsAuthService: CustomsAuthService,
-                                                 headerValidator: HeaderWithContentTypeValidator,
-                                                 logger: DeclarationsLogger,
-                                                 declarationConfigService: DeclarationsConfigService)
-                                                (implicit ec: ExecutionContext)
-  extends AuthActionStrictSubmitterHeader(customsAuthService, headerValidator, logger, declarationConfigService) {
-
-  override protected def rejectEmptyIdentifierHeaders[A](cspAuth: Either[ErrorResponse, Csp])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Csp] = {
-    logger.debug("skip check and allow empty identifier headers")
-    cspAuth
   }
 
 }

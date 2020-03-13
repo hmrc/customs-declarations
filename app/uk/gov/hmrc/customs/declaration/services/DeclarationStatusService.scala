@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
-import uk.gov.hmrc.customs.declaration.xml.BackendPayloadDecorator
+import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, NotFoundException}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,7 +37,7 @@ import scala.xml.{Elem, PrettyPrinter, TopScope, XML}
 class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger,
                                          override val apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                          connector: DeclarationStatusConnector,
-                                         wrapper: BackendPayloadDecorator,
+                                         wrapper: MdgPayloadDecorator,
                                          dateTimeProvider: DateTimeService,
                                          uniqueIdsService: UniqueIdsService,
                                          statusResponseFilterService: StatusResponseFilterService,

@@ -40,23 +40,15 @@ class Common @Inject() (
 )
 
 @Singleton
-class CommonStrictSubmitterHeader @Inject()(
-  override val authAction: AuthActionStrictSubmitterHeader,
+class CommonSubmitterHeader @Inject()(
+  override val authAction: AuthActionSubmitterHeader,
   validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
   logger: DeclarationsLogger,
   cc: ControllerComponents
 ) extends Common(authAction, validateAndExtractHeadersAction, logger, cc)
 
 @Singleton
-class CommonRelaxedSubmitterHeader @Inject()(
-  override val authAction: AuthActionRelaxedSubmitterHeader,
-  validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
-  logger: DeclarationsLogger,
-  cc: ControllerComponents
-) extends Common(authAction, validateAndExtractHeadersAction, logger, cc)
-
-@Singleton
-class SubmitDeclarationController @Inject()(common: CommonStrictSubmitterHeader,
+class SubmitDeclarationController @Inject()(common: CommonSubmitterHeader,
                                             businessService: StandardDeclarationSubmissionService,
                                             payloadValidationAction: SubmitPayloadValidationAction,
                                             conversationIdAction: ConversationIdAction,
@@ -65,7 +57,7 @@ class SubmitDeclarationController @Inject()(common: CommonStrictSubmitterHeader,
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction, Some(metricsConnector))
 
 @Singleton
-class CancelDeclarationController @Inject()(common: CommonStrictSubmitterHeader,
+class CancelDeclarationController @Inject()(common: CommonSubmitterHeader,
                                             businessService: CancellationDeclarationSubmissionService,
                                             payloadValidationAction: CancelPayloadValidationAction,
                                             conversationIdAction: ConversationIdAction)
@@ -73,7 +65,7 @@ class CancelDeclarationController @Inject()(common: CommonStrictSubmitterHeader,
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
-class AmendDeclarationController @Inject()(common: CommonStrictSubmitterHeader,
+class AmendDeclarationController @Inject()(common: CommonSubmitterHeader,
                                            businessService: StandardDeclarationSubmissionService,
                                            payloadValidationAction: AmendPayloadValidationAction,
                                            conversationIdAction: ConversationIdAction)
@@ -81,7 +73,7 @@ class AmendDeclarationController @Inject()(common: CommonStrictSubmitterHeader,
   extends CustomsDeclarationController(common, businessService, payloadValidationAction, conversationIdAction)
 
 @Singleton
-class ArrivalNotificationDeclarationController @Inject()(common: CommonRelaxedSubmitterHeader,
+class ArrivalNotificationDeclarationController @Inject()(common: CommonSubmitterHeader,
                                                          businessService: StandardDeclarationSubmissionService,
                                                          payloadValidationAction: ArrivalNotificationPayloadValidationAction,
                                                          conversationIdAction: ConversationIdAction)

@@ -32,7 +32,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
-import uk.gov.hmrc.customs.declaration.xml.BackendPayloadDecorator
+import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
@@ -50,11 +50,11 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
 
   protected lazy val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
   protected lazy val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
-  protected lazy val mockMdgPayloadDecorator: BackendPayloadDecorator = mock[BackendPayloadDecorator]
+  protected lazy val mockMdgPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
   protected lazy val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
   protected lazy val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
   protected lazy val mockDeclarationStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
-  protected lazy val mockPayloadDecorator: BackendPayloadDecorator = mock[BackendPayloadDecorator]
+  protected lazy val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
   protected lazy val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
   protected lazy val mockHttpResponse: HttpResponse = mock[HttpResponse]
   protected lazy val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]

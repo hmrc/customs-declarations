@@ -21,7 +21,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
 import uk.gov.hmrc.customs.declaration.controllers._
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionStrictSubmitterHeader, HeaderWithContentTypeValidator, _}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionSubmitterHeader, HeaderWithContentTypeValidator, _}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.FileUploadPayloadValidationAction
 import uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -83,25 +83,25 @@ class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite
     "be wired into SubmitDeclarationController" in {
       val common = submitController.common
 
-      common.authAction.getClass.getSimpleName shouldBe new AuthActionStrictSubmitterHeader(mockCustomsAuthService,
+      common.authAction.getClass.getSimpleName shouldBe new AuthActionSubmitterHeader(mockCustomsAuthService,
         mockHeaderWithContentTypeValidator, mockDeclarationsLogger, mockDeclarationsConfigService).getClass.getSimpleName
     }
     "be wired into CancelDeclarationController" in {
       val common = cancelController.common
 
-      common.authAction.getClass.getSimpleName shouldBe new AuthActionStrictSubmitterHeader(mockCustomsAuthService,
+      common.authAction.getClass.getSimpleName shouldBe new AuthActionSubmitterHeader(mockCustomsAuthService,
         mockHeaderWithContentTypeValidator, mockDeclarationsLogger, mockDeclarationsConfigService).getClass.getSimpleName
     }
     "be wired into AmendDeclarationController" in {
       val common = amendController.common
 
-      common.authAction.getClass.getSimpleName shouldBe new AuthActionStrictSubmitterHeader(mockCustomsAuthService,
+      common.authAction.getClass.getSimpleName shouldBe new AuthActionSubmitterHeader(mockCustomsAuthService,
         mockHeaderWithContentTypeValidator, mockDeclarationsLogger, mockDeclarationsConfigService).getClass.getSimpleName
     }
     "be wired into ArrivalNotificationDeclarationController" in {
       val common = arrivalNotificationController.common
 
-      common.authAction.getClass.getSimpleName shouldBe new AuthActionRelaxedSubmitterHeader(mockCustomsAuthService,
+      common.authAction.getClass.getSimpleName shouldBe new AuthActionSubmitterHeader(mockCustomsAuthService,
         mockHeaderWithContentTypeValidator, mockDeclarationsLogger, mockDeclarationsConfigService).getClass.getSimpleName
     }
     "be wired into FileUploadController" in {

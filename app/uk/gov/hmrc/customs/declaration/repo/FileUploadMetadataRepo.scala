@@ -21,9 +21,10 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import play.api.libs.json.{Format, Json}
 import play.modules.reactivemongo.ReactiveMongoComponent
+import reactivemongo.api.bson.BSONDocument
+import reactivemongo.api.bson.collection.BSONSerializationPack
 import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.{BSONDocument, BSONObjectID}
-import reactivemongo.play.json.JsObjectDocumentWriter
+import reactivemongo.bson.BSONObjectID
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
@@ -63,10 +64,9 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
 
   private val ttlIndexName = "createdAt-Index"
   private val ttlInSeconds = configService.fileUploadConfig.ttlInSeconds
-  private val ttlIndex = Index(
+  private val ttlIndex = createIndex(
     key = Seq("createdAt" -> IndexType.Descending),
     name = Some(ttlIndexName),
-    unique = false,
     options = BSONDocument("expireAfterSeconds" -> ttlInSeconds)
   )
 
@@ -75,12 +75,12 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
   }
 
   override def indexes: Seq[Index] = Seq(
-    Index(
+    createIndex(
       key = Seq("batchId" -> IndexType.Ascending),
       name = Some("batch-id"),
       unique = true
     ),
-    Index(
+    createIndex(
       key = Seq("files.reference" -> IndexType.Ascending, "csId" -> IndexType.Ascending),
       name = Some("csId-and-file-reference"),
       unique = true
@@ -140,7 +140,7 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
       indexes
         .find { index =>
           index.name.contains(ttlIndexName) &&
-            !index.options.getAs[Int]("expireAfterSeconds").contains(ttlInSeconds)
+            !index.expireAfterSeconds.contains(ttlInSeconds)
         }
         .map { _ =>
           logger.debugWithoutRequestContext(s"dropping $ttlIndexName index as ttl value is incorrect")
@@ -149,4 +149,10 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
         .getOrElse(Future.successful(()))
     }
 
+  private def createIndex(key: Seq[(String, IndexType)],
+                          name: Option[String],
+                          unique: Boolean = false,
+                          background: Boolean = false,
+                          options: BSONDocument = BSONDocument.empty) =
+    Index(BSONSerializationPack)(key, name, unique, background, false, false, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, options)
 }

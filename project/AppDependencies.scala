@@ -9,7 +9,7 @@ object AppDependencies {
   private val customsApiCommonVersion = "1.47.0"
   private val circuitBreakerVersion = "3.5.0"
   private val playJsonJodaVersion = "2.8.1"
-  private val simpleReactiveMongoVersion = "7.25.0-play-26"
+  private val simpleReactiveMongoVersion = "7.26.0-play-26"
   private val reactiveMongoTestVersion = "4.16.0-play-26"
   private val testScope = "test,it"
 

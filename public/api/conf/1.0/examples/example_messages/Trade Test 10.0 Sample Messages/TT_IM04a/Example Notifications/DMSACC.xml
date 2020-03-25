@@ -1,0 +1,17 @@
+<v3:notifyTrader xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/">
+  <_2:MetaData><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response>
+      <_2_1:FunctionCode>01</_2_1:FunctionCode>
+      <_2_1:FunctionalReferenceID>94d2467e2fa4458589fc1c0b2c7b86ce</_2_1:FunctionalReferenceID>
+      <_2_1:IssueDateTime>
+        <_2_2:DateTimeString formatCode="304">20200303133834Z</_2_2:DateTimeString>
+      </_2_1:IssueDateTime>
+      <_2_1:Declaration>
+        <_2_1:AcceptanceDateTime>
+          <_2_2:DateTimeString formatCode="304">20200302112547Z</_2_2:DateTimeString>
+        </_2_1:AcceptanceDateTime>
+        <_2_1:FunctionalReferenceID>TC05_010320_003</_2_1:FunctionalReferenceID>
+        <_2_1:ID>20GB2HEJGEYN2FGVR9</_2_1:ID>
+        <_2_1:VersionID>1</_2_1:VersionID>
+      </_2_1:Declaration>
+    </_2_1:Response></_2:MetaData>
+</v3:notifyTrader>

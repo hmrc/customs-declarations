@@ -77,19 +77,22 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "name": "callbackUrl",
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
-          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
+          |            "shortDescription" : "Callback URL"
           |          },
           |          {
           |            "name": "securityToken",
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
-          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk",
+          |            "shortDescription" : "Authorization Token"            
           |          },
           |          {
           |            "name": "authenticatedEori",
           |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
           |            "type": "STRING",
-          |            "hint": "This is your EORI that will associate your application with you as a CSP"
+          |            "hint": "This is your EORI that will associate your application with you as a CSP",
+          |            "shortDescription" : "EORI"            
           |          }
           |        ]
           |      },
@@ -109,19 +112,22 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "name": "callbackUrl",
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
-          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
+          |            "shortDescription" : "Callback URL"            
           |          },
           |          {
           |            "name": "securityToken",
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
-          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk",
+          |            "shortDescription" : "Authorization Token"
           |          },
           |          {
           |            "name": "authenticatedEori",
           |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
           |            "type": "STRING",
-          |            "hint": "This is your EORI that will associate your application with you as a CSP"
+          |            "hint": "This is your EORI that will associate your application with you as a CSP",
+          |            "shortDescription" : "EORI"
           |          }
           |        ]
           |      },
@@ -140,19 +146,22 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "name": "callbackUrl",
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
-          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
+          |            "shortDescription" : "Callback URL"
           |          },
           |          {
           |            "name": "securityToken",
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
-          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk",
+          |            "shortDescription" : "Authorization Token"
           |          },
           |          {
           |            "name": "authenticatedEori",
           |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
           |            "type": "STRING",
-          |            "hint": "This is your EORI that will associate your application with you as a CSP"
+          |            "hint": "This is your EORI that will associate your application with you as a CSP",
+          |            "shortDescription" : "EORI"
           |          }
           |        ]
           |      }
@@ -213,19 +222,22 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |            "name": "callbackUrl",
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
-          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
+          |            "shortDescription" : "Callback URL"
           |          },
           |          {
           |            "name": "securityToken",
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
-          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk",
+          |            "shortDescription" : "Authorization Token"
           |          },
           |          {
           |            "name": "authenticatedEori",
           |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
           |            "type": "STRING",
-          |            "hint": "This is your EORI that will associate your application with you as a CSP"
+          |            "hint": "This is your EORI that will associate your application with you as a CSP",
+          |            "shortDescription" : "EORI"
           |          }
           |        ]
           |      },
@@ -241,19 +253,22 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |            "name": "callbackUrl",
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
-          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
+          |            "shortDescription" : "Callback URL"
           |          },
           |          {
           |            "name": "securityToken",
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
-          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk",
+          |            "shortDescription" : "Authorization Token"
           |          },
           |          {
           |            "name": "authenticatedEori",
           |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
           |            "type": "STRING",
-          |            "hint": "This is your EORI that will associate your application with you as a CSP"
+          |            "hint": "This is your EORI that will associate your application with you as a CSP",
+          |            "shortDescription" : "EORI"
           |          }
           |        ]
           |      },
@@ -272,19 +287,22 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |            "name": "callbackUrl",
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
-          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443"
+          |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
+          |            "shortDescription" : "Callback URL"
           |          },
           |          {
           |            "name": "securityToken",
           |            "description": "What's the value of the HTTP Authorization header we should use to notify you?",
           |            "type": "SecureToken",
-          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |            "hint": "For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk",
+          |            "shortDescription" : "Authorization Token"
           |          },
           |          {
           |            "name": "authenticatedEori",
           |            "description": "What's your Economic Operator Registration and Identification (EORI) number?",
           |            "type": "STRING",
-          |            "hint": "This is your EORI that will associate your application with you as a CSP"
+          |            "hint": "This is your EORI that will associate your application with you as a CSP",
+          |            "shortDescription" : "EORI"
           |          }
           |        ]
           |      }

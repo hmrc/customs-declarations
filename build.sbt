@@ -100,7 +100,7 @@ def unitTestFilter(name: String): Boolean = name startsWith "unit"
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
-val compileDependencies = Seq(customsApiCommon, circuitBreaker, simpleReactiveMongo, playJsonJoda)
+val compileDependencies = Seq(customsApiCommon, simpleReactiveMongo, playJsonJoda)
 
 val testDependencies = Seq(hmrcTest, scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
 

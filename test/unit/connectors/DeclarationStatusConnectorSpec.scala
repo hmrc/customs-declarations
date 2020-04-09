@@ -18,6 +18,7 @@ package unit.connectors
 
 import java.util.UUID
 
+import akka.actor.ActorSystem
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -27,6 +28,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{AnyContent, AnyContentAsJson, Request}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
@@ -49,10 +51,12 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private val mockLogger = stubDeclarationsLogger
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
+  private val cdsLogger = mock[CdsLogger]
+  private val actorSystem = ActorSystem("mockActorSystem")
 
   private val declarationsCircuitBreakerConfig = DeclarationsCircuitBreakerConfig(50, 1000, 10000)
 
-  private val connector = new DeclarationStatusConnector(mockWsPost, mockLogger, mockServiceConfigProvider, mockDeclarationsConfigService)
+  private val connector = new DeclarationStatusConnector(mockWsPost, mockLogger, mockServiceConfigProvider, mockDeclarationsConfigService, cdsLogger, actorSystem)
 
   private val v2Config = ServiceConfig("v2-url", Some("v2-bearer"), "v2-default")
   private val v3Config = ServiceConfig("v3-url", Some("v3-bearer"), "v3-default")

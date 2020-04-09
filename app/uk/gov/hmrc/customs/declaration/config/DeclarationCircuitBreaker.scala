@@ -19,35 +19,22 @@ package uk.gov.hmrc.customs.declaration.config
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-import uk.gov.hmrc.circuitbreaker.{CircuitBreakerConfig, UsingCircuitBreaker}
-import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
+import uk.gov.hmrc.customs.api.common.connectors.CircuitBreakerConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{BadRequestException, NotFoundException, Upstream4xxResponse}
 
-trait DeclarationsCircuitBreaker extends UsingCircuitBreaker {
+trait DeclarationCircuitBreaker extends CircuitBreakerConnector {
 
-  def serviceConfigProvider: ServiceConfigProvider
-  def config: DeclarationsConfigService
-  def configKey: String
   def logger: DeclarationsLogger
-
-  override protected def circuitBreakerConfig: CircuitBreakerConfig =
-    CircuitBreakerConfig(
-      serviceName = configKey,
-      numberOfCallsToTriggerStateChange = config.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange,
-      unavailablePeriodDuration = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis,
-      unstablePeriodDuration = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
-    )
-
-  override protected def breakOnException(t: Throwable): Boolean = t match {
-    case _: BadRequestException | _: NotFoundException | _: Upstream4xxResponse => false
-    case _ => true
-  }
 
   protected def logCallDuration(startTime: LocalDateTime)(implicit r: HasConversationId): Unit ={
     val callDuration = ChronoUnit.MILLIS.between(startTime, LocalDateTime.now)
     logger.info(s"Outbound call duration was ${callDuration} ms")
+  }
+
+  override protected def breakOnException(t: Throwable): Boolean = t match {
+    case _: BadRequestException | _: NotFoundException | _: Upstream4xxResponse => false
+    case _ => true
   }
 }

@@ -18,6 +18,7 @@ package integration
 
 import java.util.UUID
 
+import akka.pattern.CircuitBreakerOpenException
 import org.joda.time.DateTime
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
@@ -26,8 +27,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
-import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
-import uk.gov.hmrc.customs.declaration.connectors.MdgWcoDeclarationConnector
+import uk.gov.hmrc.customs.declaration.connectors.DeclarationSubmitionConnector
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._
@@ -41,7 +41,7 @@ import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with MdgWcoDecService {
 
-  private lazy val connector = app.injector.instanceOf[MdgWcoDeclarationConnector]
+  private lazy val connector = app.injector.instanceOf[DeclarationSubmitionConnector]
 
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
@@ -96,8 +96,7 @@ class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAp
       }
 
       1 to 3 foreach { _ =>
-        val k = intercept[UnhealthyServiceException](await(sendValidXml()))
-        k.getMessage shouldBe "wco-declaration"
+        val k = intercept[CircuitBreakerOpenException](await(sendValidXml()))
       }
 
       resetMockServer()

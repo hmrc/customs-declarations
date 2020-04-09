@@ -16,6 +16,7 @@
 
 package integration
 
+import akka.pattern.CircuitBreakerOpenException
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
@@ -24,7 +25,6 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{AnyContent, Request}
 import play.api.test.Helpers._
-import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
@@ -92,8 +92,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
       }
 
       1 to 3 foreach { _ =>
-        val k = intercept[UnhealthyServiceException](await(sendValidXml()))
-        k.getMessage shouldBe "declaration-status"
+        val k = intercept[CircuitBreakerOpenException](await(sendValidXml()))
       }
 
       resetMockServer()

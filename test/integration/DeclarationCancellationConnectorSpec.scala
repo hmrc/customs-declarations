@@ -76,7 +76,10 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with Guic
       "microservice.services.declaration-cancellation.bearer-token" -> AuthToken
     )).build()
 
-  "MdgWcoDeclarationConnector" should {
+  "DeclarationCancellationConnector" should {
+
+    //wait to clear the circuit breaker state that may of been tripped by previous tests
+    Thread.sleep(unavailablePeriodDurationInMillis)
 
     "make a correct request" in {
       startMdgCancellationV1Service(ACCEPTED)

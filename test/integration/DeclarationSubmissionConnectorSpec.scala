@@ -27,7 +27,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
-import uk.gov.hmrc.customs.declaration.connectors.DeclarationSubmitionConnector
+import uk.gov.hmrc.customs.declaration.connectors.DeclarationSubmissionConnector
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._
@@ -41,7 +41,7 @@ import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with MdgWcoDecService {
 
-  private lazy val connector = app.injector.instanceOf[DeclarationSubmitionConnector]
+  private lazy val connector = app.injector.instanceOf[DeclarationSubmissionConnector]
 
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"

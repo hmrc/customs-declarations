@@ -39,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.{NodeSeq, PrettyPrinter, TopScope, XML}
 
 @Singleton
-class DeclarationSubmitionConnector @Inject()(override val http: HttpClient,
+class DeclarationSubmissionConnector @Inject()(override val http: HttpClient,
                                          override val logger: DeclarationsLogger,
                                          override val serviceConfigProvider: ServiceConfigProvider,
                                          override val config: DeclarationsConfigService,

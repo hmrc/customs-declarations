@@ -26,7 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationSubmitionConnector}
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationSubmissionConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -52,7 +52,7 @@ class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSuga
 
   trait SetUp {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    protected val mockMdgDeclarationConnector: DeclarationSubmitionConnector = mock[DeclarationSubmitionConnector]
+    protected val mockMdgDeclarationConnector: DeclarationSubmissionConnector = mock[DeclarationSubmissionConnector]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
     protected val mockDateTimeProvider: DateTimeService = mock[DateTimeService]

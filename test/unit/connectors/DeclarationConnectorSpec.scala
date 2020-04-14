@@ -32,7 +32,7 @@ import play.api.test.Helpers
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.connectors.EisDeclarationConnector
+import uk.gov.hmrc.customs.declaration.connectors.DeclarationConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -44,7 +44,7 @@ import util.TestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class  DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
+class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
 
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]
@@ -64,7 +64,7 @@ class  DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAn
       override val config: DeclarationsConfigService,
       override val cdsLogger: CdsLogger,
       override val actorSystem: ActorSystem)
-    (implicit val ec: ExecutionContext) extends EisDeclarationConnector {
+    (implicit val ec: ExecutionContext) extends DeclarationConnector {
     override val configKey = "wco-declaration"
   }
 

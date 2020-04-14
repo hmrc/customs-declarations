@@ -28,7 +28,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorInternalServerError}
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, EisDeclarationConnector}
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -57,7 +57,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
   
   trait SetUp {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    protected val mockMdgDeclarationConnector: EisDeclarationConnector = mock[EisDeclarationConnector]
+    protected val mockMdgDeclarationConnector: DeclarationConnector = mock[DeclarationConnector]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
     protected val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
@@ -67,7 +67,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
     protected lazy val service: DeclarationService = new DeclarationService {
       val logger: DeclarationsLogger = mockLogger
-      val connector: EisDeclarationConnector = mockMdgDeclarationConnector
+      val connector: DeclarationConnector = mockMdgDeclarationConnector
       val apiSubFieldsConnector: ApiSubscriptionFieldsConnector = mockApiSubscriptionFieldsConnector
       val wrapper: MdgPayloadDecorator = mockPayloadDecorator
       val dateTimeProvider: DateTimeService = mockDateTimeProvider

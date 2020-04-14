@@ -46,7 +46,7 @@ class DeclarationSubmitionConnector @Inject()(override val http: HttpClient,
                                          override val cdsLogger: CdsLogger,
                                          override val actorSystem: ActorSystem)
                                         (implicit val ec: ExecutionContext)
-  extends EisDeclarationConnector {
+  extends DeclarationConnector {
 
   override val configKey = "wco-declaration"
 }
@@ -59,12 +59,12 @@ class DeclarationCancellationConnector @Inject()(override val http: HttpClient,
                                                     override val cdsLogger: CdsLogger,
                                                     override val actorSystem: ActorSystem)
                                                    (implicit val ec: ExecutionContext)
-  extends EisDeclarationConnector {
+  extends DeclarationConnector {
 
   override val configKey = "declaration-cancellation"
 }
 
-trait EisDeclarationConnector extends DeclarationCircuitBreaker {
+trait DeclarationConnector extends DeclarationCircuitBreaker {
 
   def http: HttpClient
 

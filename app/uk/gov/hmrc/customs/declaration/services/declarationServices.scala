@@ -27,7 +27,7 @@ import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationCancellationConnector, EisDeclarationConnector, DeclarationSubmitionConnector}
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationCancellationConnector, DeclarationConnector, DeclarationSubmitionConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -66,7 +66,7 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
 }
 trait DeclarationService extends ApiSubscriptionFieldsService {
 
-  def connector: EisDeclarationConnector
+  def connector: DeclarationConnector
 
   def wrapper: MdgPayloadDecorator
 

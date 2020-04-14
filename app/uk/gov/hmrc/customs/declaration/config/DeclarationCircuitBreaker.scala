@@ -28,13 +28,13 @@ trait DeclarationCircuitBreaker extends CircuitBreakerConnector {
 
   def logger: DeclarationsLogger
 
-  protected def logCallDuration(startTime: LocalDateTime)(implicit r: HasConversationId): Unit ={
-    val callDuration = ChronoUnit.MILLIS.between(startTime, LocalDateTime.now)
-    logger.info(s"Outbound call duration was ${callDuration} ms")
-  }
-
   override protected def breakOnException(t: Throwable): Boolean = t match {
     case _: BadRequestException | _: NotFoundException | _: Upstream4xxResponse => false
     case _ => true
+  }
+
+  protected def logCallDuration(startTime: LocalDateTime)(implicit r: HasConversationId): Unit ={
+    val callDuration = ChronoUnit.MILLIS.between(startTime, LocalDateTime.now)
+    logger.info(s"Outbound call duration was ${callDuration} ms")
   }
 }

@@ -79,7 +79,10 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec with GuiceO
       "microservice.services.wco-declaration.bearer-token" -> AuthToken
     )).build()
 
-  "MdgWcoDeclarationConnector" should {
+  "DeclarationSubmissionConnector" should {
+
+    //wait to clear the circuit breaker state that may of been tripped by previous tests
+    Thread.sleep(unavailablePeriodDurationInMillis)
 
     "make a correct request" in {
       setupMdgWcoDecServiceToReturn(ACCEPTED)

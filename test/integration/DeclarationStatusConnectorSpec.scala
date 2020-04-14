@@ -77,6 +77,9 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
 
   "DeclarationStatusConnector" should {
 
+    //wait to clear the circuit breaker state that may of been tripped by previous tests
+    Thread.sleep(unavailablePeriodDurationInMillis)
+
     "make a correct request" in {
       startMdgStatusV2Service()
       await(sendValidXml())

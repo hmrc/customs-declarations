@@ -18,12 +18,14 @@ package uk.gov.hmrc.customs.declaration.connectors
 
 import java.time.LocalDateTime
 
+import akka.actor.ActorSystem
 import com.google.inject._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
-import uk.gov.hmrc.customs.declaration.config.DeclarationsCircuitBreaker
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.config.DeclarationCircuitBreaker
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XConversationIdHeaderName, XCorrelationIdHeaderName}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -39,12 +41,18 @@ import scala.xml.{NodeSeq, PrettyPrinter, TopScope}
 @Singleton
 class DeclarationStatusConnector @Inject() (val http: HttpClient,
                                             val logger: DeclarationsLogger,
-                                            override val serviceConfigProvider: ServiceConfigProvider,
-                                            override val config: DeclarationsConfigService)
-                                           (implicit ec: ExecutionContext)
-  extends DeclarationsCircuitBreaker {
+                                            val serviceConfigProvider: ServiceConfigProvider,
+                                            val config: DeclarationsConfigService,
+                                            override val cdsLogger: CdsLogger,
+                                            override val actorSystem: ActorSystem)
+                                           (implicit val ec: ExecutionContext)
+  extends DeclarationCircuitBreaker {
 
   override val configKey = "declaration-status"
+
+  override lazy val numberOfCallsToTriggerStateChange = config.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange
+  override lazy val unstablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
+  override lazy val unavailablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
 
   def send[A](xmlToSend: NodeSeq,
               date: DateTime,

@@ -18,6 +18,7 @@ package integration
 
 import java.util.UUID
 
+import akka.pattern.CircuitBreakerOpenException
 import org.joda.time.DateTime
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
@@ -26,8 +27,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
-import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
-import uk.gov.hmrc.customs.declaration.connectors.MdgDeclarationCancellationConnector
+import uk.gov.hmrc.customs.declaration.connectors.DeclarationCancellationConnector
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._
@@ -41,7 +41,7 @@ import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with MdgCancellationDeclarationService {
 
-  private lazy val connector = app.injector.instanceOf[MdgDeclarationCancellationConnector]
+  private lazy val connector = app.injector.instanceOf[DeclarationCancellationConnector]
 
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
@@ -93,8 +93,7 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with Guic
       }
 
       1 to 3 foreach { _ =>
-        val k = intercept[UnhealthyServiceException](await(sendValidXml()))
-        k.getMessage shouldBe "declaration-cancellation"
+        val k = intercept[CircuitBreakerOpenException](await(sendValidXml()))
       }
 
       resetMockServer()

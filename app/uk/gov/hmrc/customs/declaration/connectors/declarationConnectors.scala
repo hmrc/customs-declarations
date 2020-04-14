@@ -19,12 +19,14 @@ package uk.gov.hmrc.customs.declaration.connectors
 import java.time.LocalDateTime
 import java.util.UUID
 
+import akka.actor.ActorSystem
 import com.google.inject._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE, DATE, X_FORWARDED_HOST}
 import play.api.http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
-import uk.gov.hmrc.customs.declaration.config.DeclarationsCircuitBreaker
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.config.DeclarationCircuitBreaker
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.ApiVersion
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -37,27 +39,32 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.{NodeSeq, PrettyPrinter, TopScope, XML}
 
 @Singleton
-class MdgWcoDeclarationConnector @Inject()(override val http: HttpClient,
+class DeclarationSubmissionConnector @Inject()(override val http: HttpClient,
                                          override val logger: DeclarationsLogger,
                                          override val serviceConfigProvider: ServiceConfigProvider,
-                                         override val config: DeclarationsConfigService)(implicit val ec: ExecutionContext)
-  extends MdgDeclarationConnector with DeclarationsCircuitBreaker {
+                                         override val config: DeclarationsConfigService,
+                                         override val cdsLogger: CdsLogger,
+                                         override val actorSystem: ActorSystem)
+                                        (implicit val ec: ExecutionContext)
+  extends DeclarationConnector {
 
   override val configKey = "wco-declaration"
 }
 
 @Singleton
-class MdgDeclarationCancellationConnector @Inject()(override val http: HttpClient,
+class DeclarationCancellationConnector @Inject()(override val http: HttpClient,
                                                     override val logger: DeclarationsLogger,
                                                     override val serviceConfigProvider: ServiceConfigProvider,
-                                                    override val config: DeclarationsConfigService)
+                                                    override val config: DeclarationsConfigService,
+                                                    override val cdsLogger: CdsLogger,
+                                                    override val actorSystem: ActorSystem)
                                                    (implicit val ec: ExecutionContext)
-  extends MdgDeclarationConnector with DeclarationsCircuitBreaker {
+  extends DeclarationConnector {
 
   override val configKey = "declaration-cancellation"
 }
 
-trait MdgDeclarationConnector extends DeclarationsCircuitBreaker {
+trait DeclarationConnector extends DeclarationCircuitBreaker {
 
   def http: HttpClient
 
@@ -67,9 +74,9 @@ trait MdgDeclarationConnector extends DeclarationsCircuitBreaker {
 
   def config: DeclarationsConfigService
 
-  def configKey: String
-
-  implicit def ec: ExecutionContext
+  override lazy val numberOfCallsToTriggerStateChange = config.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange
+  override lazy val unstablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
+  override lazy val unavailablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
 
   def send[A](xml: NodeSeq, date: DateTime, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))

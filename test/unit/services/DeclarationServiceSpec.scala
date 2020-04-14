@@ -17,17 +17,18 @@
 package unit.services
 
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 import akka.actor.ActorSystem
+import akka.pattern.CircuitBreakerOpenException
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyNoInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
-import uk.gov.hmrc.circuitbreaker.UnhealthyServiceException
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorInternalServerError}
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, MdgDeclarationConnector}
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -41,6 +42,7 @@ import util.CustomsDeclarationsMetricsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
+import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
@@ -55,7 +57,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
   
   trait SetUp {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    protected val mockMdgDeclarationConnector: MdgDeclarationConnector = mock[MdgDeclarationConnector]
+    protected val mockMdgDeclarationConnector: DeclarationConnector = mock[DeclarationConnector]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
     protected val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
@@ -65,7 +67,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
 
     protected lazy val service: DeclarationService = new DeclarationService {
       val logger: DeclarationsLogger = mockLogger
-      val connector: MdgDeclarationConnector = mockMdgDeclarationConnector
+      val connector: DeclarationConnector = mockMdgDeclarationConnector
       val apiSubFieldsConnector: ApiSubscriptionFieldsConnector = mockApiSubscriptionFieldsConnector
       val wrapper: MdgPayloadDecorator = mockPayloadDecorator
       val dateTimeProvider: DateTimeService = mockDateTimeProvider
@@ -168,7 +170,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     "return 500 error response when MDG circuit breaker trips" in new SetUp() {
-      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new UnhealthyServiceException("wco-declaration")))
+      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new CircuitBreakerOpenException(FiniteDuration(10, TimeUnit.SECONDS))))
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 

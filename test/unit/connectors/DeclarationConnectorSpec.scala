@@ -18,6 +18,7 @@ package unit.connectors
 
 import java.util.UUID
 
+import akka.actor.ActorSystem
 import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
@@ -30,7 +31,8 @@ import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
-import uk.gov.hmrc.customs.declaration.connectors.MdgDeclarationConnector
+import uk.gov.hmrc.customs.api.common.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.connectors.DeclarationConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -52,15 +54,21 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val numberOfCallsToTriggerStateChange = 5
   private val unavailablePeriodDurationInMillis = 1000
   private val unstablePeriodDurationInMillis = 10000
+  private val mockCdsLogger = mock[CdsLogger]
+  private val mockActorSystem = ActorSystem("mockActorSystem")
 
-  private val connector = new MdgDeclarationConnector {
-    val http = mockWsPost
-    val logger = mockLogger
-    val serviceConfigProvider = mockServiceConfigProvider
-    val config = mockDeclarationsConfigService
-    val configKey = "wco-declaration"
-    override implicit val ec = Helpers.stubControllerComponents().executionContext
+  class DummyDeclarationCancellationConnector (
+      override val http: HttpClient,
+      override val logger: DeclarationsLogger,
+      override val serviceConfigProvider: ServiceConfigProvider,
+      override val config: DeclarationsConfigService,
+      override val cdsLogger: CdsLogger,
+      override val actorSystem: ActorSystem)
+    (implicit val ec: ExecutionContext) extends DeclarationConnector {
+    override val configKey = "wco-declaration"
   }
+
+  lazy val connector = new DummyDeclarationCancellationConnector(mockWsPost, mockLogger, mockServiceConfigProvider, mockDeclarationsConfigService, mockCdsLogger, mockActorSystem)(Helpers.stubControllerComponents().executionContext)
 
   private val v1Config = ServiceConfig("v1-url", Some("v1-bearer-token"), "v1-default")
   private val v2Config = ServiceConfig("v2-url", Some("v2-bearer-token"), "v2-default")
@@ -101,7 +109,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       "ensure URL is retrieved from config" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
-        awaitRequest
+        awaitRequest()
 
         verify(mockWsPost).POSTString(ameq(v2Config.url), anyString, any[SeqOfHeader])(
           any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
@@ -110,7 +118,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       "ensure xml payload is included in the MDG request body" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
-        awaitRequest
+        awaitRequest()
 
         verify(mockWsPost).POSTString(anyString, ameq(xml.toString()), any[SeqOfHeader])(
           any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
@@ -119,7 +127,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       "ensure the content type header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
-        awaitRequest
+        awaitRequest()
 
         val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
         verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
@@ -130,7 +138,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       "ensure the accept header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
-        awaitRequest
+        awaitRequest()
 
         val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
         verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
@@ -141,7 +149,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       "ensure the date header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
-        awaitRequest
+        awaitRequest()
 
         val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
         verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
@@ -152,7 +160,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       "ensure the X-FORWARDED_HOST header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
-        awaitRequest
+        awaitRequest()
 
         val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
         verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
@@ -163,7 +171,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       "ensure the X-Correlation-Id header in passed through in MDG request" in {
         returnResponseForRequest(Future.successful(mock[HttpResponse]))
 
-        awaitRequest
+        awaitRequest()
 
         val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
         verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
@@ -193,7 +201,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
         returnResponseForRequest(Future.failed(TestData.emulatedServiceFailure))
 
         val caught = intercept[TestData.EmulatedServiceFailure] {
-          awaitRequest
+          awaitRequest()
         }
         caught shouldBe TestData.emulatedServiceFailure
       }
@@ -202,7 +210,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
         returnResponseForRequest(Future.failed(httpException))
 
         val caught = intercept[RuntimeException] {
-          awaitRequest
+          awaitRequest()
         }
         caught.getCause shouldBe httpException
       }
@@ -213,14 +221,14 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
         when(mockServiceConfigProvider.getConfig("v2.wco-declaration")).thenReturn(null)
 
         val caught = intercept[IllegalArgumentException] {
-          awaitRequest
+          awaitRequest()
         }
         caught.getMessage shouldBe "config not found"
       }
     }
   }
 
-  private def awaitRequest = {
+  private def awaitRequest() = {
     await(connector.send(xml, date, correlationId, VersionTwo))
   }
 

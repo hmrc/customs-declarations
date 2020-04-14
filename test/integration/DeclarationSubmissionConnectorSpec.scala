@@ -38,7 +38,7 @@ import util.TestXMLData.ValidSubmissionXML
 import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
-class MdgWcoDeclarationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
+class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with MdgWcoDecService {
 
   private lazy val connector = app.injector.instanceOf[DeclarationSubmitionConnector]

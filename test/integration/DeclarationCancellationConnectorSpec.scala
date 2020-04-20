@@ -38,8 +38,12 @@ import util.TestXMLData.ValidSubmissionXML
 import util.externalservices.MdgCancellationDeclarationService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
-class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
-  with BeforeAndAfterAll with MdgCancellationDeclarationService {
+class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
+  with CircuitBreakerTestSpec
+  with GuiceOneAppPerSuite
+  with MockitoSugar
+  with BeforeAndAfterAll
+  with MdgCancellationDeclarationService {
 
   private lazy val connector = app.injector.instanceOf[DeclarationCancellationConnector]
 
@@ -79,7 +83,7 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec with Guic
   "DeclarationCancellationConnector" should {
 
     //wait to clear the circuit breaker state that may of been tripped by previous tests
-    Thread.sleep(unavailablePeriodDurationInMillis)
+    Thread.sleep(unavailablePeriodDurationInMillis * preTestWaitFactor)
 
     "make a correct request" in {
       startMdgCancellationV1Service(ACCEPTED)

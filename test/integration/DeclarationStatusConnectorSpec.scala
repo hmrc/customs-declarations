@@ -16,7 +16,6 @@
 
 package integration
 
-import akka.pattern.CircuitBreakerOpenException
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
@@ -38,7 +37,6 @@ import util._
 import util.externalservices.MdgStatusDeclarationService
 
 class DeclarationStatusConnectorSpec extends IntegrationTestSpec
-  with CircuitBreakerTestSpec
   with GuiceOneAppPerSuite
   with MockitoSugar
   with BeforeAndAfterAll
@@ -47,8 +45,6 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   private lazy val connector = app.injector.instanceOf[DeclarationStatusConnector]
 
   private val incomingAuthToken = s"Bearer ${ExternalServicesConfig.AuthToken}"
-  private val numberOfCallsToTriggerStateChange = 5
-  private val unavailablePeriodDurationInMillis = 1000
   private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo, ApiSubscriptionFieldsTestData.clientId, Csp(None, Some(badgeIdentifier), None), mock[Request[AnyContent]])
   private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
 
@@ -78,38 +74,10 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
 
   "DeclarationStatusConnector" should {
 
-    //wait to clear the circuit breaker state that may of been tripped by previous tests
-    Thread.sleep(unavailablePeriodDurationInMillis * preTestWaitFactor)
-
     "make a correct request" in {
       startMdgStatusV2Service()
       await(sendValidXml())
       verifyMdgStatusDecServiceWasCalledWith(requestBody = expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
-    }
-
-    "circuit breaker trips after specified number of failures" in {
-      startMdgStatusV2Service(INTERNAL_SERVER_ERROR)
-
-      1 to numberOfCallsToTriggerStateChange foreach { _ =>
-        val k = intercept[Upstream5xxResponse](await(sendValidXml()))
-        k.reportAs shouldBe BAD_GATEWAY
-      }
-
-      1 to 3 foreach { _ =>
-        val k = intercept[CircuitBreakerOpenException](await(sendValidXml()))
-      }
-
-      resetMockServer()
-      startMdgStatusV2Service(ACCEPTED)
-
-      Thread.sleep(unavailablePeriodDurationInMillis)
-
-      1 to 5 foreach { _ =>
-        resetMockServer()
-        startMdgStatusV2Service(ACCEPTED)
-        await(sendValidXml())
-        verifyMdgStatusDecServiceWasCalledWith(requestBody = expectedDeclarationStatusPayload.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
-      }
     }
 
     "return a failed future when external service returns 404" in {

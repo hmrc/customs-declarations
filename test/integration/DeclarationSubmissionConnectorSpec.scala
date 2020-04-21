@@ -18,7 +18,6 @@ package integration
 
 import java.util.UUID
 
-import akka.pattern.CircuitBreakerOpenException
 import org.joda.time.DateTime
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
@@ -39,7 +38,6 @@ import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
-  with CircuitBreakerTestSpec
   with GuiceOneAppPerSuite
   with MockitoSugar
   with BeforeAndAfterAll
@@ -49,8 +47,6 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
 
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
-  private val numberOfCallsToTriggerStateChange = 5
-  private val unavailablePeriodDurationInMillis = 1000
   private val correlationId = UUID.randomUUID()
   private implicit val vpr = TestData.TestCspValidatedPayloadRequest
 
@@ -85,38 +81,10 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
 
   "DeclarationSubmissionConnector" should {
 
-    //wait to clear the circuit breaker state that may of been tripped by previous tests
-    Thread.sleep(unavailablePeriodDurationInMillis * preTestWaitFactor)
-
     "make a correct request" in {
       setupMdgWcoDecServiceToReturn(ACCEPTED)
       await(sendValidXml())
       verifyMdgWcoDecServiceWasCalledWithV2(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
-    }
-
-    "circuit breaker trips after specified number of failures" in {
-      setupMdgWcoDecServiceToReturn(INTERNAL_SERVER_ERROR)
-
-      1 to numberOfCallsToTriggerStateChange foreach { _ =>
-        val k = intercept[Upstream5xxResponse](await(sendValidXml()))
-        k.reportAs shouldBe BAD_GATEWAY
-      }
-
-      1 to 3 foreach { _ =>
-        val k = intercept[CircuitBreakerOpenException](await(sendValidXml()))
-      }
-
-      resetMockServer()
-      setupMdgWcoDecServiceToReturn(ACCEPTED)
-
-      Thread.sleep(unavailablePeriodDurationInMillis)
-
-      1 to 5 foreach { _ =>
-        resetMockServer()
-        setupMdgWcoDecServiceToReturn(ACCEPTED)
-        await(sendValidXml())
-        verifyMdgWcoDecServiceWasCalledWithV2(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
-      }
     }
 
     "return a failed future when external service returns 404" in {

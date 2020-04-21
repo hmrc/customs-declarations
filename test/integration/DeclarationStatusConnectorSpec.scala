@@ -38,6 +38,7 @@ import util._
 import util.externalservices.MdgStatusDeclarationService
 
 class DeclarationStatusConnectorSpec extends IntegrationTestSpec
+  with CircuitBreakerTestSpec
   with GuiceOneAppPerSuite
   with MockitoSugar
   with BeforeAndAfterAll
@@ -78,7 +79,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   "DeclarationStatusConnector" should {
 
     //wait to clear the circuit breaker state that may of been tripped by previous tests
-    Thread.sleep(unavailablePeriodDurationInMillis)
+    Thread.sleep(unavailablePeriodDurationInMillis * preTestWaitFactor)
 
     "make a correct request" in {
       startMdgStatusV2Service()

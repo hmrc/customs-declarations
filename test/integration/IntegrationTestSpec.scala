@@ -34,3 +34,7 @@ case class IntegrationTestModule(mockLogger: DeclarationsLogger) extends Abstrac
 trait IntegrationTestSpec extends UnitSpec
   with BeforeAndAfterEach with BeforeAndAfterAll with Eventually
 
+trait CircuitBreakerTestSpec {
+  val preTestWaitFactor = 2
+}
+

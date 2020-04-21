@@ -38,8 +38,12 @@ import util.TestXMLData.ValidSubmissionXML
 import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
-class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
-  with BeforeAndAfterAll with MdgWcoDecService {
+class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
+  with CircuitBreakerTestSpec
+  with GuiceOneAppPerSuite
+  with MockitoSugar
+  with BeforeAndAfterAll
+  with MdgWcoDecService {
 
   private lazy val connector = app.injector.instanceOf[DeclarationSubmissionConnector]
 
@@ -82,7 +86,7 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec with GuiceO
   "DeclarationSubmissionConnector" should {
 
     //wait to clear the circuit breaker state that may of been tripped by previous tests
-    Thread.sleep(unavailablePeriodDurationInMillis)
+    Thread.sleep(unavailablePeriodDurationInMillis * preTestWaitFactor)
 
     "make a correct request" in {
       setupMdgWcoDecServiceToReturn(ACCEPTED)

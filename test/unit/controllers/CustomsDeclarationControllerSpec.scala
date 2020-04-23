@@ -36,7 +36,7 @@ import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.AuthConnectorStubbing
 import util.CustomsDeclarationsMetricsTestData._
 import util.FakeRequests._

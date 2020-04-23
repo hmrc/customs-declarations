@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.ConversationId
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.customs.declaration.services.DateTimeService
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData.{conversationId, stubUniqueIdsService}
 

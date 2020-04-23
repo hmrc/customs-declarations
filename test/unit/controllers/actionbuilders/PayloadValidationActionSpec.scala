@@ -27,7 +27,7 @@ import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
 

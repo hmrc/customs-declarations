@@ -33,7 +33,7 @@ import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionF
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, FileReference}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import unit.services.filetransmission.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData

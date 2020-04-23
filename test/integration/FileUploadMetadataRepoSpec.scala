@@ -34,10 +34,10 @@ import uk.gov.hmrc.customs.declaration.repo.{FileUploadMetadataMongoRepo, FileUp
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.{MongoConnector, MongoSpecSupport}
-import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.{FileMetadataWithFileOne, _}
+import util.UnitSpec
 
 import scala.concurrent.ExecutionContext
 import scala.language.postfixOps

@@ -28,7 +28,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, _}
 import uk.gov.hmrc.customs.declaration.services.{AuditingService, DateTimeService, NrsService}
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.TestData._
 
 import scala.concurrent.Future

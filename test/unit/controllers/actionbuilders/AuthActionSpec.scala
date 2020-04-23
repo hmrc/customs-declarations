@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData._
 import util.RequestHeaders.{X_CONVERSATION_ID_NAME, X_SUBMITTER_IDENTIFIER_NAME}
 import util.TestData._

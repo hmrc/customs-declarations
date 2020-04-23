@@ -34,7 +34,7 @@ import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
 

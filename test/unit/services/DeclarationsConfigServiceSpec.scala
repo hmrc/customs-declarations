@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.api.common.config.ConfigValidatedNelAdaptor
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
 
 class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {

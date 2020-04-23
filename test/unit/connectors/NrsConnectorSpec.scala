@@ -33,7 +33,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData
 import util.TestData.{fileUploadConfig, nrsConfigEnabled}

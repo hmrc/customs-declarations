@@ -21,7 +21,7 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import play.api.inject.guice.GuiceableModule
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 
 case class IntegrationTestModule(mockLogger: DeclarationsLogger) extends AbstractModule {
   def configure(): Unit = {

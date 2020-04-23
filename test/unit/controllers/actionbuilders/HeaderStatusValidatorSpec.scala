@@ -26,7 +26,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderStatusVa
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ExtractedHeaders, ExtractedStatusHeadersImpl}
 import uk.gov.hmrc.customs.declaration.model.{VersionThree, VersionTwo}
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ValidHeadersV2, _}
 import util.TestData.badgeIdentifier

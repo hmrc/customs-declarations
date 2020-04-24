@@ -110,7 +110,7 @@ abstract class PayloadValidationAction(val xmlValidationService: XmlValidationSe
         case NonFatal(e) =>
           val msg = "Error validating payload."
           logger.debug(s"$msg:\n${xml.toString()}", e)
-          logger.warn(s"$msg")
+          logger.warn(msg)
           Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
       }
   }
@@ -129,7 +129,7 @@ abstract class PayloadValidationAction(val xmlValidationService: XmlValidationSe
   }
 
   private def errorResponse[A](msg: String, contents: ResponseContents*)(implicit ar: AuthorisedRequest[A]): Result = {
-    logger.warn(s"$msg")
+    logger.warn(msg)
     ErrorResponse.errorBadRequest(msg)
       .withErrors(contents: _*)
       .XmlResult

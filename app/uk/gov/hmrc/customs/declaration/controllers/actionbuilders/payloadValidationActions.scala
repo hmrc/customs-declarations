@@ -106,10 +106,11 @@ abstract class PayloadValidationAction(val xmlValidationService: XmlValidationSe
         case saxe: SAXException =>
           val msg = "Payload is not valid according to schema"
           logger.debug(s"$msg:\n${xml.toString()}", saxe)
-          Left(errorResponse(s"$msg", xmlValidationErrors(saxe): _*))
+          Left(errorResponse(msg, xmlValidationErrors(saxe): _*))
         case NonFatal(e) =>
           val msg = "Error validating payload."
           logger.debug(s"$msg:\n${xml.toString()}", e)
+          logger.warn(s"$msg")
           Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
       }
   }

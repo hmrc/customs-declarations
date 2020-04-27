@@ -22,7 +22,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 
 import scala.xml.{Elem, Node, SAXException}
 

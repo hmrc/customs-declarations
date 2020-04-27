@@ -19,7 +19,7 @@ package unit.model
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest._
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData._
 import util.TestData.conversationId
 

@@ -20,7 +20,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import reactivemongo.api.commands.{DefaultWriteResult, WriteConcernError, WriteError}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepoErrorHandler
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.TestData.TestValidatedHeadersRequest
 
 class FileUploadMetadataRepositoryErrorHandlerSpec extends UnitSpec with MockitoSugar {

@@ -17,10 +17,8 @@
 package unit.model.filetransmission
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.FileTransmissionTestData._
-
-
 
 class FileTransmissionModelSpec extends UnitSpec {
 

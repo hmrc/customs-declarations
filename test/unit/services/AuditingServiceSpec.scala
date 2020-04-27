@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.services.{AuditingService, DeclarationsCo
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import unit.logging.StubDeclarationsLogger
 import util.TestData.{TestCspValidatedPayloadRequest, nrsConfigEnabled, nrsPayload}
 

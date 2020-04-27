@@ -19,7 +19,7 @@ package unit.services
 import play.api.http.MimeTypes
 import uk.gov.hmrc.customs.declaration.model.RequestedVersion
 import uk.gov.hmrc.customs.declaration.services.RequestedVersionService
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 
 class RequestedVersionServiceSpec extends UnitSpec {
 

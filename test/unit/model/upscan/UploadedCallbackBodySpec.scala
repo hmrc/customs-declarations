@@ -16,10 +16,10 @@
 
 package unit.model.upscan
 
+import util.UnitSpec
 import util.UpscanNotifyTestData._
 import play.api.libs.json._
 import uk.gov.hmrc.customs.declaration.model.upscan.UploadedReadyCallbackBody._
-import uk.gov.hmrc.play.test.UnitSpec
 
 class UploadedCallbackBodySpec extends UnitSpec {
   "UploadedCallbackBody model" can {

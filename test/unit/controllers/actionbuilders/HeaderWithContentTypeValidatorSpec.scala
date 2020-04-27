@@ -28,7 +28,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderWithCont
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, _}
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders.{ValidHeadersV2, _}

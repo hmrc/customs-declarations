@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, DeclarationsConfig}
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseValidationService}
-import uk.gov.hmrc.play.test.UnitSpec
+import util.UnitSpec
 import util.StatusTestXMLData._
 import util.TestData.{badgeIdentifier, invalidBadgeIdentifier}
 

@@ -1,0 +1,16 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+      <!-- This is an example of a DMSREQ notificaiton. With this message the submitter is informed of the acceptance of the submitted cancellation request. -->
+	  <FunctionCode>11</FunctionCode>
+      <FunctionalReferenceID>6f07f4b536c94c118d25da1d64b0a834</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20200211161115Z</DateTimeString>
+      </IssueDateTime>
+      <Status>
+        <NameCode>39</NameCode>
+      </Status>
+      <Declaration>
+        <FunctionalReferenceID>R260_E2E_1102_02</FunctionalReferenceID>
+        <ID>20GB1NJPYIQW9FGVR5</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

@@ -1,0 +1,25 @@
+
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+  <!-- This is an example of a DMSEOG notification. Function code 16 indicates the goods have exited the customs union -->
+      <FunctionCode>16</FunctionCode>
+      <FunctionalReferenceID>2ff47547c99f41efb613b3422b88d459</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20190702092441Z</DateTimeString>
+      </IssueDateTime>
+      <AdditionalInformation>
+        <StatementCode></StatementCode>
+        <StatementDescription>GB000014</StatementDescription>
+        <StatementTypeCode>CEX</StatementTypeCode>
+      </AdditionalInformation>
+      <Status>
+        <EffectiveDateTime>
+          <DateTimeString>Tue Jul 02 00:00:00 UTC 2019</DateTimeString>
+        </EffectiveDateTime>
+        <NameCode>A1</NameCode>
+      </Status>
+      <Declaration>
+        <FunctionalReferenceID>E3.4sc1.3_JF_01</FunctionalReferenceID>
+        <ID>19GB78LZCKGGZX8PA1</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

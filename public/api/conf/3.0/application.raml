@@ -37,7 +37,6 @@ documentation:
           example: application/vnd.hmrc.3.0+xml
         Content-Type:
           description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
           type: string
           required: true
           example: application/xml; charset=UTF-8
@@ -66,7 +65,7 @@ documentation:
       body:
         application/xml:
           type: !include schemas/customs/wrapper_submit.xsd
-          example: !include examples/example_submission_declaration_202.xml
+          example: !include examples/example_messages/Trade%20Test%2010.3%20Sample%20Messages/TT_EX01a/TT_EX01a_V1.3.xml
       responses:
         202:
         400:
@@ -110,7 +109,6 @@ documentation:
             example: application/vnd.hmrc.3.0+xml
           Content-Type:
             description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-             Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
             type: string
             required: true
             example: application/xml; charset=UTF-8
@@ -198,7 +196,6 @@ documentation:
             example: application/vnd.hmrc.3.0+xml
           Content-Type:
             description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-             Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
             type: string
             required: true
             example: application/xml; charset=UTF-8
@@ -277,7 +274,6 @@ documentation:
           example: application/vnd.hmrc.3.0+xml
         Content-Type:
           description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
-           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
           type: string
           required: true
           example: application/xml; charset=UTF-8
@@ -345,7 +341,6 @@ documentation:
       headers:
         Accept:
           description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
-           Download [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip).
           type: string
           required: true
           example: application/vnd.hmrc.3.0+xml

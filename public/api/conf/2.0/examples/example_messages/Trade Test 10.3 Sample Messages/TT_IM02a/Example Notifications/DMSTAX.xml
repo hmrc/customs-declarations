@@ -1,0 +1,50 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+  <!-- This is an example of a DMSTAX notification. Function code 13. Message by which the submitter is informed about the details of the customs debt, the aggregated customs debt on declaration level and the difference between a possible earlier calculation. In case of cash payment, this message also functions as payment instruction and will include the payment reference to be used by the trader.-->
+      <FunctionCode>13</FunctionCode>
+      <FunctionalReferenceID>26ea5d455e054f7fabeefc6e8df03ef1</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20191112152002Z</DateTimeString>
+      </IssueDateTime>
+      <Bank>
+        <ReferenceID>CITIGB2LLON</ReferenceID>
+        <ID>GB25CITI08320011963155</ID>
+      </Bank>
+      <Status>
+        <NameCode>4</NameCode>
+      </Status>
+      <Declaration>
+        <FunctionalReferenceID>IMZEKZROGVX81-PC8</FunctionalReferenceID>
+        <ID>19GBCJ06D67PBX8PR7</ID>
+        <VersionID>1</VersionID>
+        <GoodsShipment>
+          <GovernmentAgencyGoodsItem>
+            <SequenceNumeric>1</SequenceNumeric>
+            <Commodity>
+              <DutyTaxFee>
+                <AdValoremTaxBaseAmount currencyID="GBP">1077.00</AdValoremTaxBaseAmount>
+                <DeductAmount>0.00</DeductAmount>
+                <DutyRegimeCode>100</DutyRegimeCode>
+                <TaxRateNumeric>0.00</TaxRateNumeric>
+                <TypeCode>B00</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount>0.00</TaxAssessedAmount>
+                  <PaymentAmount>0.00</PaymentAmount>
+                </Payment>
+              </DutyTaxFee>
+              <DutyTaxFee>
+                <AdValoremTaxBaseAmount currencyID="GBP">1000.00</AdValoremTaxBaseAmount>
+                <DeductAmount>0.00</DeductAmount>
+                <DutyRegimeCode>100</DutyRegimeCode>
+                <TaxRateNumeric>7.70</TaxRateNumeric>
+                <!--This references Tax type. In this scenario, A00 indicating Customs Duty -->
+                <TypeCode>A00</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount>77.00</TaxAssessedAmount>
+                  <PaymentAmount>77.00</PaymentAmount>
+                </Payment>
+              </DutyTaxFee>
+            </Commodity>
+          </GovernmentAgencyGoodsItem>
+        </GoodsShipment>
+      </Declaration>
+    </Response></MetaData>

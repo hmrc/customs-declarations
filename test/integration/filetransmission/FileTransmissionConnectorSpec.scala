@@ -23,9 +23,10 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
+import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, MULTIPLE_CHOICES}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
+import uk.gov.hmrc.customs.declaration.http.Non2xxHttpResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.http._
@@ -41,7 +42,6 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
   private lazy val connector = app.injector.instanceOf[FileTransmissionConnector]
   private implicit val mockCdsLogger: CdsLogger = mock[CdsLogger]
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
   private implicit val conversationIdRequest = TestData.TestConversationIdRequest
 
@@ -82,28 +82,36 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
       verifyFileTransmissionServiceWasCalledWith(FileTransmissionRequest)
     }
 
+    "return a failed future when external service returns 300" in {
+      setupFileTransmissionToReturn(MULTIPLE_CHOICES)
+
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxHttpResponse]
+
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=300, Error=Received a non 2XX response")
+    }
+
     "return a failed future when external service returns 404" in {
       setupFileTransmissionToReturn(NOT_FOUND)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[NotFoundException]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxHttpResponse]
 
-      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=404, Error=POST of 'http://localhost:11111/file/transmission' returned 404 (Not Found). Response body: ''")
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=404, Error=Received a non 2XX response")
     }
 
     "return a failed future when external service returns 400" in {
       setupFileTransmissionToReturn(BAD_REQUEST)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[BadRequestException]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxHttpResponse]
 
-      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=400, Error=POST of 'http://localhost:11111/file/transmission' returned 400 (Bad Request). Response body ''")
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=400, Error=Received a non 2XX response")
     }
 
     "return a failed future when external service returns 500" in {
       setupFileTransmissionToReturn(INTERNAL_SERVER_ERROR)
 
-      intercept[Upstream5xxResponse](await(sendValidRequest))
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxHttpResponse]
 
-      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission")
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=500, Error=Received a non 2XX response")
     }
 
     "return a failed future when fail to connect the external service" in {
@@ -121,5 +129,4 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
   private def sendValidRequest(implicit hasConversationId: HasConversationId) = {
     connector.send(FileTransmissionRequest)
   }
-
 }

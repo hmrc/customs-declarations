@@ -29,7 +29,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.http._
 import util.CustomsDeclarationsMetricsTestData._
 import util.ExternalServicesConfig.{Host, Port}
-import util.VerifyLogging.{verifyDeclarationsLoggerError, verifyDeclarationsLoggerWarn}
+import util.VerifyLogging.{verifyDeclarationsLoggerError}
 import util.externalservices.{AuditService, CustomsDeclarationsMetricsService}
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
@@ -38,8 +38,6 @@ class CustomsDeclarationsMetricsConnectorSpec extends IntegrationTestSpec with G
 with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService {
 
   private lazy val connector = app.injector.instanceOf[CustomsDeclarationsMetricsConnector]
-
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
   private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
@@ -82,37 +80,35 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
     "return a failed future when external service returns 404" in {
       setupCustomsDeclarationsMetricsServiceToReturn(NOT_FOUND)
 
-      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[NotFoundException]
+      await(sendValidRequest()) shouldBe (())
       verifyAuditServiceWasNotCalled()
-      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=404, Error=POST of 'http://localhost:11111/log-times' returned 404 (Not Found). Response body: ''")
+      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=404, Error=Received a non 2XX response")
     }
 
     "return a failed future when external service returns 400" in {
       setupCustomsDeclarationsMetricsServiceToReturn(BAD_REQUEST)
 
-      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadRequestException]
+      await(sendValidRequest()) shouldBe (())
       verifyAuditServiceWasNotCalled()
-      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=400, Error=POST of 'http://localhost:11111/log-times' returned 400 (Bad Request). Response body ''")
+      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=400, Error=Received a non 2XX response")
     }
 
     "return a failed future when external service returns 500" in {
       setupCustomsDeclarationsMetricsServiceToReturn(INTERNAL_SERVER_ERROR)
 
-      intercept[Upstream5xxResponse](await(sendValidRequest()))
+      await(sendValidRequest()) shouldBe (())
       verifyAuditServiceWasNotCalled()
-      verifyDeclarationsLoggerWarn("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times")
+      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=500, Error=Received a non 2XX response")
     }
 
     "return a failed future when fail to connect the external service" in {
       stopMockServer()
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadGatewayException]
-
       verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=502, Error=POST of 'http://localhost:11111/log-times' failed. Caused by: 'Connection refused: localhost/127.0.0.1:11111'")
 
       startMockServer()
     }
-
   }
 
   private def sendValidRequest() = {

@@ -27,6 +27,7 @@ import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.config.DeclarationCircuitBreaker
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XConversationIdHeaderName, XCorrelationIdHeaderName}
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
@@ -34,6 +35,7 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.{NodeSeq, PrettyPrinter, TopScope}
@@ -46,7 +48,7 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
                                             override val cdsLogger: CdsLogger,
                                             override val actorSystem: ActorSystem)
                                            (implicit val ec: ExecutionContext)
-  extends DeclarationCircuitBreaker {
+  extends DeclarationCircuitBreaker with HttpErrorFunctions {
 
   override val configKey = "declaration-status"
 
@@ -86,7 +88,15 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
   private def post[A](xml: NodeSeq, url: String, correlationId: CorrelationId)(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier) = {
     logger.debug(s"Sending request to $url. Headers ${hc.headers} Payload:\n${new PrettyPrinter(120, 2).format(xml.head, TopScope)}")
 
-    http.POSTString[HttpResponse](url, xml.toString())
+    http.POSTString[HttpResponse](url, xml.toString()).map { response =>
+      response.status match {
+        case status if is2xx(status) =>
+          response
+
+        case status => //1xx, 3xx, 4xx, 5xx
+          throw new Non2xxResponseException(status)
+      }
+    }
       .recoverWith {
         case httpError: HttpException =>
           logger.error(s"Call to declaration status failed. url=$url")

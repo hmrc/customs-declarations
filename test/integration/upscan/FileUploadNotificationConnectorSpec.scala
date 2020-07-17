@@ -22,8 +22,9 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
+import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, MULTIPLE_CHOICES}
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadCustomsNotification
 import uk.gov.hmrc.http._
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
@@ -77,22 +78,28 @@ class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with Guice
       verifyWasCalledWith(xml.toString)
     }
 
+    "return a failed future when external service returns 300" in {
+      setupCustomsNotificationToReturn(MULTIPLE_CHOICES)
+
+      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[Non2xxResponseException]
+    }
+
     "return a failed future when external service returns 404" in {
       setupCustomsNotificationToReturn(NOT_FOUND)
 
-      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[NotFoundException]
+      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when external service returns 400" in {
       setupCustomsNotificationToReturn(BAD_REQUEST)
 
-      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[BadRequestException]
+      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when external service returns 500" in {
       setupCustomsNotificationToReturn(INTERNAL_SERVER_ERROR)
 
-      intercept[Upstream5xxResponse](awaitSendValidRequest())
+      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when fail to connect the external service" in {

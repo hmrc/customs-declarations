@@ -16,33 +16,28 @@
 
 package unit.connectors
 
-import java.util.UUID
-
 import akka.actor.ActorSystem
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.json.Json
-import play.api.mvc.{AnyContent, AnyContentAsJson, Request}
-import play.api.test.{FakeRequest, Helpers}
+import play.api.mvc.{AnyContent, Request}
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData._
-import util.{ApiSubscriptionFieldsTestData, StatusTestXMLData, TestData}
+import util.{ApiSubscriptionFieldsTestData, StatusTestXMLData, TestData, UnitSpec}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.NodeSeq
 
 class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
 
@@ -61,19 +56,8 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private val v2Config = ServiceConfig("v2-url", Some("v2-bearer"), "v2-default")
   private val v3Config = ServiceConfig("v3-url", Some("v3-bearer"), "v3-default")
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
     ApiSubscriptionFieldsTestData.clientId, Csp(None, Some(badgeIdentifier), None), mock[Request[AnyContent]])
-
-  private implicit val jsonRequest: ValidatedPayloadRequest[AnyContentAsJson] =  ValidatedPayloadRequest(
-    ConversationId(UUID.randomUUID()),
-    EventStart,
-    VersionTwo,
-    ClientId("ABC"),
-    NonCsp(Eori("123"), Some(TestData.nrsRetrievalValues)),
-    NodeSeq.Empty,
-    FakeRequest().withJsonBody(Json.obj("fake" -> "request"))
-  )
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
 
@@ -84,12 +68,14 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
     when(mockDeclarationsConfigService.declarationsCircuitBreakerConfig).thenReturn(declarationsCircuitBreakerConfig)
   }
 
+  val successfulResponse = HttpResponse(200,"")
+
   "DeclarationStatusConnector" can {
 
     "when making a successful request" should {
 
       "pass URL from config" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulResponse))
 
         awaitRequest
 
@@ -98,7 +84,7 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
       }
 
       "pass in the body" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulResponse))
 
         awaitRequest
 
@@ -107,7 +93,7 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
       }
 
       "prefix the config key with the prefix if passed" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulResponse))
 
         awaitRequest
 

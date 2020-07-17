@@ -28,7 +28,7 @@ import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.{AuditingService, DeclarationsConfigService}
-import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, Upstream5xxResponse}
+import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, UpstreamErrorResponse}
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
 import util.UnitSpec
@@ -97,7 +97,7 @@ class AuditingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       when(mockAuditConnector.sendExtendedEvent(any[ExtendedDataEvent])(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(mockAuditResult))
       when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
 
-      auditingService.auditFailedNrs(nrsPayload, Upstream5xxResponse("internal server", 500, 502))
+      auditingService.auditFailedNrs(nrsPayload, UpstreamErrorResponse("internal server", 500, 502))
 
       eventually {
         verify(mockAuditConnector).sendExtendedEvent(captor.capture())(any[HeaderCarrier], any[ExecutionContext])

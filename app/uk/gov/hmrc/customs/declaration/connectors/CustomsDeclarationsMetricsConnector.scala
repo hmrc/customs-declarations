@@ -19,12 +19,13 @@ package uk.gov.hmrc.customs.declaration.connectors
 import javax.inject.{Inject, Singleton}
 import play.mvc.Http.HeaderNames.{ACCEPT, CONTENT_TYPE}
 import play.mvc.Http.MimeTypes.JSON
-import uk.gov.hmrc.customs.declaration.http.NoAuditHttpClient
+import uk.gov.hmrc.customs.declaration.http.{NoAuditHttpClient, Non2xxResponseException}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
                                                      logger: DeclarationsLogger,
                                                      config: DeclarationsConfigService)
-                                                    (implicit ec: ExecutionContext) {
+                                                    (implicit ec: ExecutionContext) extends HttpErrorFunctions {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON)
@@ -45,8 +46,14 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
   private def post[A](request: CustomsDeclarationsMetricsRequest, url: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
 
     logger.debug(s"Sending request to customs declarations metrics service. Url: $url Payload:\n${request.toString}")
-    http.POST[CustomsDeclarationsMetricsRequest, HttpResponse](url, request).map{ _ =>
-      logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
+    http.POST[CustomsDeclarationsMetricsRequest, HttpResponse](url, request).map{ response =>
+      response.status match {
+        case status if is2xx(status) =>
+          logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
+
+        case status => //1xx, 3xx, 4xx, 5xx
+          logger.error(s"Call to customs declarations metrics service failed. url=$url, HttpStatus=${status}, Error=Received a non 2XX response")
+      }
       ()
     }.recoverWith {
       case httpError: HttpException =>

@@ -22,7 +22,8 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, Upstream5xxResponse}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,19 +45,12 @@ class NrsConnector @Inject()(http: HttpClient,
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
-
     http.POST[NrsPayload, NrSubmissionId](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
       .map { res =>
         logger.debug(s"Response received from nrs service is submission id: ${res}")
         res
       }
       .recoverWith {
-        case e: HttpException =>
-          logger.error(s"Call to nrs service failed url=$url, HttpException=$e")
-          Future.failed(e)
-        case e: Upstream5xxResponse =>
-          logger.error(s"Call to nrs service failed url=$url, Upstream5xxResponse=$e")
-          Future.failed(e)
         case e: Throwable =>
           logger.error(s"Call to nrs service failed url=$url, exception=$e")
           Future.failed(e)

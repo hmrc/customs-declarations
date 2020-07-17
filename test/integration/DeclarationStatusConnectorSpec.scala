@@ -25,10 +25,10 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{AnyContent, Request}
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.logging.Authorization
 import util.CustomsDeclarationsMetricsTestData._
 import util.ExternalServicesConfig.{AuthToken, Host, Port}
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
@@ -46,7 +46,6 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
 
   private val incomingAuthToken = s"Bearer ${ExternalServicesConfig.AuthToken}"
   private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo, ApiSubscriptionFieldsTestData.clientId, Csp(None, Some(badgeIdentifier), None), mock[Request[AnyContent]])
-  private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
 
   override protected def beforeAll() {
     startMockServer()
@@ -82,17 +81,17 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
 
     "return a failed future when external service returns 404" in {
       startMdgStatusV2Service(NOT_FOUND)
-      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[NotFoundException]
+      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when external service returns 400" in {
       startMdgStatusV2Service(BAD_REQUEST)
-      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[BadRequestException]
+      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when external service returns 500" in {
       startMdgStatusV2Service(INTERNAL_SERVER_ERROR)
-      intercept[Upstream5xxResponse](await(sendValidXml()))
+      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when fail to connect the external service" in {

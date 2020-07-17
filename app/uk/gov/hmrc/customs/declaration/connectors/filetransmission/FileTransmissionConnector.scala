@@ -20,12 +20,14 @@ import com.google.inject._
 import play.api.libs.json.Json
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes.JSON
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmission
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class FileTransmissionConnector @Inject()(http: HttpClient,
                                           logger: DeclarationsLogger,
                                           config: DeclarationsConfigService)
-                                         (implicit ec: ExecutionContext) {
+                                         (implicit ec: ExecutionContext) extends HttpErrorFunctions {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON, USER_AGENT -> "customs-declarations")
@@ -45,9 +47,15 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
 
   private def post[A](request: FileTransmission, url: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
     logger.debug(s"Sending request to file transmission service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(request))}")
-    http.POST[FileTransmission, HttpResponse](url, request).map{ _ =>
-      logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")
-      ()
+    http.POST[FileTransmission, HttpResponse](url, request).map{ response =>
+      response.status match {
+        case status if is2xx(status) =>
+          logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")
+          ()
+
+        case status => //1xx, 3xx, 4xx, 5xx
+          throw new Non2xxResponseException(status)
+      }
     }.recoverWith {
         case httpError: HttpException =>
           logger.error(s"Call to file transmission failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
@@ -57,5 +65,4 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
           Future.failed(e)
       }
   }
-
 }

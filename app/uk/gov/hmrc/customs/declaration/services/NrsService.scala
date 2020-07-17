@@ -30,7 +30,7 @@ import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.Authorizati
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, Upstream5xxResponse}
+import uk.gov.hmrc.http._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,7 +39,7 @@ class NrsService @Inject()(logger: DeclarationsLogger,
                            nrsConnector: NrsConnector,
                            auditingService: AuditingService,
                            dateTimeService: DateTimeService)
-                          (implicit ec: ExecutionContext) {
+                          (implicit ec: ExecutionContext) extends HttpErrorFunctions {
 
   private val conversationIdKey = "conversationId"
   private val applicationXml = "application/xml"
@@ -71,17 +71,14 @@ class NrsService @Inject()(logger: DeclarationsLogger,
             auditingService.auditFailedNrs(nrsPayload, e)
           }
           Future.failed(e)
-        case e: Upstream5xxResponse =>
-          logger.info(s"Error occurred while submitting NRS payload got Upstream5xxResponse status: ${e.upstreamResponseCode} error message: ${e.message}")
-          if (is5xx(e.upstreamResponseCode)) {
+
+        case e: UpstreamErrorResponse =>
+          logger.info(s"Error occurred while submitting NRS payload got UpstreamErrorResponse status: ${e.statusCode} error message: ${e.message}")
+          if (is5xx(e.statusCode)) {
             auditingService.auditFailedNrs(nrsPayload, e)
           }
           Future.failed(e)
       }
-  }
-
-  private def is5xx(statusCode: Int): Boolean ={
-    statusCode >= 500 & statusCode < 600
   }
 
   private def sha256Hash(text: String) : String =  {

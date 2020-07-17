@@ -20,7 +20,7 @@ import com.google.inject._
 import play.api.libs.json.Json
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes.JSON
-import uk.gov.hmrc.customs.declaration.http.Non2xxHttpResponse
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmission
@@ -54,7 +54,7 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
           ()
 
         case status => //1xx, 3xx, 4xx, 5xx
-          throw new Non2xxHttpResponse(status)
+          throw new Non2xxResponseException(status)
       }
     }.recoverWith {
         case httpError: HttpException =>

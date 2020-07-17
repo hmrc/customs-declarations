@@ -20,7 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.http.Non2xxHttpResponse
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadCustomsNotification
 import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse}
@@ -59,7 +59,7 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
           ()
 
         case status => //1xx, 3xx, 4xx, 5xx
-          throw new Non2xxHttpResponse(status)
+          throw new Non2xxResponseException(status)
       }
     }).recoverWith {
       case httpError: HttpException =>

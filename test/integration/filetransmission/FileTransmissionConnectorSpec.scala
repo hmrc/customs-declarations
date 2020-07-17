@@ -26,7 +26,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, MULTIPLE_CHOICES}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
-import uk.gov.hmrc.customs.declaration.http.Non2xxHttpResponse
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.http._
@@ -85,7 +85,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when external service returns 300" in {
       setupFileTransmissionToReturn(MULTIPLE_CHOICES)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxHttpResponse]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
       verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=300, Error=Received a non 2XX response")
     }
@@ -93,7 +93,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when external service returns 404" in {
       setupFileTransmissionToReturn(NOT_FOUND)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxHttpResponse]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
       verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=404, Error=Received a non 2XX response")
     }
@@ -101,7 +101,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when external service returns 400" in {
       setupFileTransmissionToReturn(BAD_REQUEST)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxHttpResponse]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
       verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=400, Error=Received a non 2XX response")
     }
@@ -109,7 +109,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when external service returns 500" in {
       setupFileTransmissionToReturn(INTERNAL_SERVER_ERROR)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxHttpResponse]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
       verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=500, Error=Received a non 2XX response")
     }

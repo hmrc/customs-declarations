@@ -23,7 +23,7 @@ import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.NrsPayload
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.http.{HttpException, Upstream5xxResponse}
+import uk.gov.hmrc.http.{HttpException, UpstreamErrorResponse}
 import uk.gov.hmrc.play.audit.EventKeys.{Path, TransactionName}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
@@ -56,8 +56,8 @@ class AuditingService @Inject()(logger: DeclarationsLogger,
   private val xForwardedForHeaderName = "X-Forwarded-For"
   private val xForwardedPortHeaderName = "X-Forwarded-Port"
 
-  def auditFailedNrs[A](nrsPayload: NrsPayload, upstream5xxResponse: Upstream5xxResponse)(implicit vpr: ValidatedPayloadRequest[A]): Unit = {
-    auditFailedNrs(nrsPayload, upstream5xxResponse.upstreamResponseCode, upstream5xxResponse.message)
+  def auditFailedNrs[A](nrsPayload: NrsPayload, upstreamErrorResponse: UpstreamErrorResponse)(implicit vpr: ValidatedPayloadRequest[A]): Unit = {
+    auditFailedNrs(nrsPayload, upstreamErrorResponse.statusCode, upstreamErrorResponse.message)
   }
 
   def auditFailedNrs[A](nrsPayload: NrsPayload, httpException: HttpException)(implicit vpr: ValidatedPayloadRequest[A]): Unit = {

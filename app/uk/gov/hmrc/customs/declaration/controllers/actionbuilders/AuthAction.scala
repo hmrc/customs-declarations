@@ -19,6 +19,7 @@ package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{ActionRefiner, RequestHeader, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.XBadgeIdentifierHeaderName
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -97,7 +98,11 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
   }
 
   protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
-    eitherBadgeIdentifier(allowNone = false).right.map(badgeId => Csp(None, badgeId, maybeNrsRetrievalData))
+    eitherBadgeIdentifier(allowNone = false).right map {
+      badgeId =>
+        logger.info(headerValidator.logBadgeIdHeader(badgeId))
+        Csp(None, badgeId, maybeNrsRetrievalData)
+    }
   }
 
   protected def eitherBadgeIdentifier[A](allowNone: Boolean)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[BadgeIdentifier]] = {

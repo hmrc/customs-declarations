@@ -16,6 +16,7 @@
 
 package unit.controllers.actionbuilders
 
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
@@ -29,10 +30,11 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthAction, A
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, HasConversationId}
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData._
+import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders.{X_CONVERSATION_ID_NAME, X_SUBMITTER_IDENTIFIER_NAME}
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing}
@@ -99,6 +101,11 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
         actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(Csp(None, Some(badgeIdentifier), Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
+
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
       }
 
       "Return 400 response when authorised by auth API but badge identifier does not exist" in new NrsEnabled {
@@ -163,6 +170,17 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithValidBadgeIdEoriPair))
         actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
+
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
+
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ZZ123456789000")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
+
       }
 
       "authorise as CSP when authorised by auth API and badge identifier exists and eori does not" in new NrsEnabled {
@@ -171,6 +189,16 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithValidBadgeId))
         actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(Csp(None, Some(badgeIdentifier), Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
+
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
+
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("X-Submitter-Identifier header not present or is empty")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
       }
 
       "authorise as CSP when authorised by auth API and badge identifier does not exist and eori does" in new NrsEnabled {
@@ -179,6 +207,16 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestWithValidEoriNoBadgeId))
         actual shouldBe Right(validatedHeadersRequestWithValidEoriNoBadgeId.toCspAuthorisedRequest(Csp(Some(declarantEori), None, Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
+
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("X-Badge-Identifier header empty and allowed")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
+
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ZZ123456789000")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
       }
 
       "Return 400 response when authorised by auth API and badge identifier does not exist and eori does but is too long" in new NrsEnabled {
@@ -250,6 +288,11 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
         actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(Csp(None, Some(badgeIdentifier), None)))
         verifyNonCspAuthorisationNotCalled
+
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
       }
 
       "Return 401 response when authorised by auth API but badge identifier does not exists" in new NrsDisabled {

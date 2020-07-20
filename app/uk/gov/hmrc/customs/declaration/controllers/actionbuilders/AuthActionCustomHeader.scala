@@ -39,7 +39,10 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
     for {
       maybeBadgeId <- eitherBadgeIdentifier(allowNone = false).right
       maybeEori <- eitherEori.right
-    } yield Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
+    } yield {
+      headerValidator.logValidHeaders(eoriHeaderName, maybeBadgeId, maybeEori)
+      Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
+    }
   }
 
   private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
@@ -74,7 +77,10 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
     val cpsAuth: Either[ErrorResponse, Csp] = for {
       maybeBadgeId <- eitherBadgeIdentifier(allowNone = true).right
       maybeEori <- eitherEori.right
-    } yield Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
+    } yield {
+      headerValidator.logValidHeaders(XSubmitterIdentifierHeaderName, maybeBadgeId, maybeEori)
+      Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
+    }
 
     if (cpsAuth.isRight && cpsAuth.right.get.badgeIdentifier.isEmpty && cpsAuth.right.get.eori.isEmpty) {
       logger.error(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName headers are missing")

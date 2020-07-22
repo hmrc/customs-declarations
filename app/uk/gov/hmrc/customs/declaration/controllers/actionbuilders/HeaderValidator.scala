@@ -36,13 +36,6 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     "application/vnd.hmrc.3.0+xml" -> VersionThree
   )
 
-  protected val acceptHeaderByVersion: Map[ApiVersion, String] = Map(
-    VersionOne -> "application/vnd.hmrc.1.0+xml" ,
-    VersionTwo -> "application/vnd.hmrc.2.0+xml",
-    VersionThree -> "application/vnd.hmrc.3.0+xml"
-  )
-
-
   private lazy val xClientIdRegex: Regex = "^\\S+$".r
   private lazy val xBadgeIdentifierRegex: Regex = "^[0-9A-Z]{6,12}$".r
   private lazy val InvalidEoriHeaderRegex: Regex = "(^[\\s]*$|^.{18,}$)".r
@@ -71,7 +64,7 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   }
 
   def logAcceptAndClientIdHeaderText[A](apiVersion: ApiVersion, clientId: ClientId): String = {
-    s"\n$ACCEPT header passed validation: ${acceptHeaderByVersion.get(apiVersion)}" +
+    s"\n$ACCEPT header passed validation: ${versionsByAcceptHeader.valuesIterator.find(version => version == apiVersion).get}" +
     s"\n$XClientIdHeaderName header passed validation: ${clientId.value}"
   }
 
@@ -114,7 +107,7 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   def eoriMustBeValidAndPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
 
-    maybeEori.filter(InvalidEoriHeaderRegex.findFirstIn(_).isEmpty).map(e => //TODO: replace this with validEori(xxxx)
+    maybeEori.filter(validEori).map(e =>
       Some(Eori(e))
     ).toRight{
       logger.error(s"$eoriHeaderName header is invalid or not present for CSP: $maybeEori")

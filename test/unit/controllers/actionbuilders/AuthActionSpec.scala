@@ -172,15 +172,9 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         verifyNonCspAuthorisationNotCalled
 
         PassByNameVerifier(mockLogger, "info")
-          .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")
+          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ZZ123456789000\nX-Badge-Identifier header passed validation: BADGEID123")
           .withParamMatcher[HasConversationId](any[HasConversationId])
           .verify()
-
-        PassByNameVerifier(mockLogger, "info")
-          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ZZ123456789000")
-          .withParamMatcher[HasConversationId](any[HasConversationId])
-          .verify()
-
       }
 
       "authorise as CSP when authorised by auth API and badge identifier exists and eori does not" in new NrsEnabled {
@@ -191,12 +185,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         verifyNonCspAuthorisationNotCalled
 
         PassByNameVerifier(mockLogger, "info")
-          .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")
-          .withParamMatcher[HasConversationId](any[HasConversationId])
-          .verify()
-
-        PassByNameVerifier(mockLogger, "info")
-          .withByNameParam[String]("X-Submitter-Identifier header not present or is empty")
+          .withByNameParam[String]("X-Submitter-Identifier header not present or is empty\nX-Badge-Identifier header passed validation: BADGEID123")
           .withParamMatcher[HasConversationId](any[HasConversationId])
           .verify()
       }
@@ -209,12 +198,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
         verifyNonCspAuthorisationNotCalled
 
         PassByNameVerifier(mockLogger, "info")
-          .withByNameParam[String]("X-Badge-Identifier header empty and allowed")
-          .withParamMatcher[HasConversationId](any[HasConversationId])
-          .verify()
-
-        PassByNameVerifier(mockLogger, "info")
-          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ZZ123456789000")
+          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ZZ123456789000\nX-Badge-Identifier header empty and allowed")
           .withParamMatcher[HasConversationId](any[HasConversationId])
           .verify()
       }

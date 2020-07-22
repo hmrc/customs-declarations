@@ -40,7 +40,7 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
       maybeBadgeId <- eitherBadgeIdentifier(allowNone = false).right
       maybeEori <- eitherEori.right
     } yield {
-      headerValidator.logValidHeaders(eoriHeaderName, maybeBadgeId, maybeEori)
+      logger.info(headerValidator.logEoriAndBadgeIdHeaderText(eoriHeaderName, maybeBadgeId, maybeEori))
       Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
     }
   }
@@ -78,7 +78,7 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
       maybeBadgeId <- eitherBadgeIdentifier(allowNone = true).right
       maybeEori <- eitherEori.right
     } yield {
-      headerValidator.logValidHeaders(XSubmitterIdentifierHeaderName, maybeBadgeId, maybeEori)
+      logger.info(headerValidator.logEoriAndBadgeIdHeaderText(XSubmitterIdentifierHeaderName, maybeBadgeId, maybeEori))
       Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
     }
 

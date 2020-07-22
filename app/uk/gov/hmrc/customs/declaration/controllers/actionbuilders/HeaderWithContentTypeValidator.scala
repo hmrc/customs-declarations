@@ -41,7 +41,8 @@ class HeaderWithContentTypeValidator @Inject()(logger: DeclarationsLogger) exten
         val theResult: Either[ErrorResponse, ExtractedHeaders] = for {
           hasContentType <- hasContentType.right
         } yield {
-          logger.debug(s"$CONTENT_TYPE header passed validation: $hasContentType")
+          logger.debug(s"${logAcceptAndClientIdHeaderText(b.requestedApiVersion, b.clientId)}" +
+            s"\n$CONTENT_TYPE header passed validation: $hasContentType")
           b
         }
         theResult

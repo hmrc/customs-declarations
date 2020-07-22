@@ -36,6 +36,13 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     "application/vnd.hmrc.3.0+xml" -> VersionThree
   )
 
+  protected val acceptHeaderByVersion: Map[ApiVersion, String] = Map(
+    VersionOne -> "application/vnd.hmrc.1.0+xml" ,
+    VersionTwo -> "application/vnd.hmrc.2.0+xml",
+    VersionThree -> "application/vnd.hmrc.3.0+xml"
+  )
+
+
   private lazy val xClientIdRegex: Regex = "^\\S+$".r
   private lazy val xBadgeIdentifierRegex: Regex = "^[0-9A-Z]{6,12}$".r
   private lazy val InvalidEoriHeaderRegex: Regex = "(^[\\s]*$|^.{18,}$)".r
@@ -55,16 +62,21 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
       acceptValue <- hasAccept.right
       xClientIdValue <- hasXClientId.right
     } yield {
-      logger.debug(
-        s"\n$ACCEPT header passed validation: $acceptValue"
-      + s"\n$XClientIdHeaderName header passed validation: $xClientIdValue")
-      ExtractedHeadersImpl(versionsByAcceptHeader(acceptValue), ClientId(xClientIdValue))
+      val apiVersion = versionsByAcceptHeader(acceptValue)
+      val clientId = ClientId(xClientIdValue)
+      logger.debug(logAcceptAndClientIdHeaderText(apiVersion, clientId))
+      ExtractedHeadersImpl(apiVersion, clientId)
     }
     theResult
   }
 
+  def logAcceptAndClientIdHeaderText[A](apiVersion: ApiVersion, clientId: ClientId): String = {
+    s"\n$ACCEPT header passed validation: ${acceptHeaderByVersion.get(apiVersion)}" +
+    s"\n$XClientIdHeaderName header passed validation: ${clientId.value}"
+  }
+
   protected def validateHeader[A](headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)
-                               (implicit conversationIdRequest: ConversationIdRequest[A], h: Headers): Either[ErrorResponse, String] = {
+                                 (implicit conversationIdRequest: ConversationIdRequest[A], h: Headers): Either[ErrorResponse, String] = {
     val left = Left(errorResponse)
     def leftWithLog(headerName: String) = {
       logger.error(s"Error - header '$headerName' not present")
@@ -138,20 +150,19 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 
-  def logValidHeaders[A](eoriHeaderName: String, maybeBadgeId: Option[BadgeIdentifier], maybeEori: Option[Eori])(implicit vhr: HasRequest[A] with HasConversationId): Unit = {
-    logger.info(
-      s"${logEoriHeader(eoriHeaderName, maybeEori)}" +
-      s"\n${logBadgeIdHeader(maybeBadgeId)}")
+  def logEoriAndBadgeIdHeaderText[A](eoriHeaderName: String, maybeBadgeId: Option[BadgeIdentifier], maybeEori: Option[Eori]): String = {
+      s"${logEoriHeaderText(eoriHeaderName, maybeEori)}" +
+      s"\n${logBadgeIdHeaderText(maybeBadgeId)}"
   }
 
-  def logEoriHeader[A](eoriHeaderName: String, maybeEori: Option[Eori])(implicit vhr: HasRequest[A] with HasConversationId): String = {
+  def logEoriHeaderText[A](eoriHeaderName: String, maybeEori: Option[Eori]): String = {
     maybeEori match {
       case None => s"$eoriHeaderName header not present or is empty"
       case Some(eori) => s"$eoriHeaderName header passed validation: $eori"
     }
   }
 
-  def logBadgeIdHeader[A](maybeBadgeId: Option[BadgeIdentifier])(implicit vhr: HasRequest[A] with HasConversationId): String = {
+  def logBadgeIdHeaderText[A](maybeBadgeId: Option[BadgeIdentifier]): String = {
     maybeBadgeId match {
       case None => s"$XBadgeIdentifierHeaderName header empty and allowed"
       case Some(badgeId) => s"$XBadgeIdentifierHeaderName header passed validation: $badgeId"

@@ -100,7 +100,7 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
   protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     eitherBadgeIdentifier(allowNone = false).right map {
       badgeId =>
-        logger.info(headerValidator.logBadgeIdHeader(badgeId))
+        logger.info(headerValidator.logBadgeIdHeaderText(badgeId))
         Csp(None, badgeId, maybeNrsRetrievalData)
     }
   }

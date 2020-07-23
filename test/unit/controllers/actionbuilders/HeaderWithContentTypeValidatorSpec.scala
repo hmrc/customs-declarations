@@ -85,18 +85,6 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
       }
     }
 
-    "in validating the badge identifier header" should {
-      "log at info level" in new SetUp {
-
-        validator.eitherBadgeIdentifier(allowNone = false)(conversationIdRequest(ValidHeadersV2))
-
-        PassByNameVerifier(loggerMock, "info")
-          .withByNameParam[String]("X-Badge-Identifier header passed validation: BADGEID123")
-          .withParamMatcher[HasConversationId](any[HasConversationId])
-          .verify()
-      }
-    }
-
     "in validating the mandatory eori header" should {
       "not allow an empty header" in new SetUp {
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "")))
@@ -138,15 +126,6 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
         private val value = validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "!£$%^&*()-_=+/<>@")))
 
         value shouldBe Right(Some(Eori("!£$%^&*()-_=+/<>@")))
-      }
-
-      "log info level when valid" in new SetUp {
-        validator.eoriMustBeValidAndPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "ABCABC")))
-
-        PassByNameVerifier(loggerMock, "info")
-          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ABCABC")
-          .withParamMatcher[HasConversationId](any[HasConversationId])
-          .verify()
       }
     }
     
@@ -197,15 +176,6 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
         private val value = validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "!£$%^&*()-_=+/<>@")))
 
         value shouldBe Right(Some(Eori("!£$%^&*()-_=+/<>@")))
-      }
-
-      "log info level when valid" in new SetUp {
-        validator.eoriMustBeValidIfPresent(X_SUBMITTER_IDENTIFIER_NAME)(conversationIdRequest(ValidHeadersV2 + (X_SUBMITTER_IDENTIFIER_NAME -> "ABCABC")))
-
-        PassByNameVerifier(loggerMock, "info")
-          .withByNameParam[String]("X-Submitter-Identifier header passed validation: ABCABC")
-          .withParamMatcher[HasConversationId](any[HasConversationId])
-          .verify()
       }
     }
   }

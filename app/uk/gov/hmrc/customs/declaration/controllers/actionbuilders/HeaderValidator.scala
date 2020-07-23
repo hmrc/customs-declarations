@@ -55,16 +55,21 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
       acceptValue <- hasAccept.right
       xClientIdValue <- hasXClientId.right
     } yield {
-      logger.debug(
-        s"\n$ACCEPT header passed validation: $acceptValue"
-      + s"\n$XClientIdHeaderName header passed validation: $xClientIdValue")
-      ExtractedHeadersImpl(versionsByAcceptHeader(acceptValue), ClientId(xClientIdValue))
+      val apiVersion = versionsByAcceptHeader(acceptValue)
+      val clientId = ClientId(xClientIdValue)
+      logger.debug(logAcceptAndClientIdHeaderText(apiVersion, clientId))
+      ExtractedHeadersImpl(apiVersion, clientId)
     }
     theResult
   }
 
+  def logAcceptAndClientIdHeaderText[A](apiVersion: ApiVersion, clientId: ClientId): String = {
+    s"\n$ACCEPT header passed validation: ${versionsByAcceptHeader.valuesIterator.find(version => version == apiVersion).get}" +
+    s"\n$XClientIdHeaderName header passed validation: ${clientId.value}"
+  }
+
   protected def validateHeader[A](headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)
-                               (implicit conversationIdRequest: ConversationIdRequest[A], h: Headers): Either[ErrorResponse, String] = {
+                                 (implicit conversationIdRequest: ConversationIdRequest[A], h: Headers): Either[ErrorResponse, String] = {
     val left = Left(errorResponse)
     def leftWithLog(headerName: String) = {
       logger.error(s"Error - header '$headerName' not present")
@@ -87,11 +92,9 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     val maybeBadgeId: Option[String] = vhr.request.headers.toSimpleMap.get(XBadgeIdentifierHeaderName)
 
     if (allowNone && maybeBadgeId.isEmpty) {
-      logger.info(s"$XBadgeIdentifierHeaderName header empty and allowed")
       Right(None)
     } else {
       maybeBadgeId.filter(xBadgeIdentifierRegex.findFirstIn(_).nonEmpty).map(b => {
-        logger.info(s"$XBadgeIdentifierHeaderName header passed validation: $b")
         Some(BadgeIdentifier(b))
       }
       ).toRight[ErrorResponse] {
@@ -104,11 +107,8 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   def eoriMustBeValidAndPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
 
-    maybeEori.filter(InvalidEoriHeaderRegex.findFirstIn(_).isEmpty).map(e =>
-      {
-        logger.info(s"$eoriHeaderName header passed validation: $e")
-        Some(Eori(e))
-      }
+    maybeEori.filter(validEori).map(e =>
+      Some(Eori(e))
     ).toRight{
       logger.error(s"$eoriHeaderName header is invalid or not present for CSP: $maybeEori")
       errorResponseEoriIdentifierHeaderMissingOrInvalid(eoriHeaderName)
@@ -131,16 +131,34 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     val maybeEori = convertEmptyHeaderToNone(maybeEoriHeader)
 
     maybeEori match {
-      case Some(eori) => if (validEori(eori)) {
-        logger.info(s"$eoriHeaderName header passed validation: $eori")
-        Right(Some(Eori(eori)))
-      } else {
-        logger.error(s"$eoriHeaderName header is invalid for CSP: $eori")
-        Left(errorResponseEoriIdentifierHeaderInvalid(eoriHeaderName))
-      }
+      case Some(eori) =>
+        if (validEori(eori)) {
+          Right(Some(Eori(eori)))
+        } else {
+          logger.error(s"$eoriHeaderName header is invalid for CSP: $eori")
+          Left(errorResponseEoriIdentifierHeaderInvalid(eoriHeaderName))
+        }
       case None =>
-        logger.info(s"$eoriHeaderName header not present or is empty")
         Right(None)
+    }
+  }
+
+  def logEoriAndBadgeIdHeaderText[A](eoriHeaderName: String, maybeBadgeId: Option[BadgeIdentifier], maybeEori: Option[Eori]): String = {
+      s"${logEoriHeaderText(eoriHeaderName, maybeEori)}" +
+      s"\n${logBadgeIdHeaderText(maybeBadgeId)}"
+  }
+
+  def logEoriHeaderText[A](eoriHeaderName: String, maybeEori: Option[Eori]): String = {
+    maybeEori match {
+      case None => s"$eoriHeaderName header not present or is empty"
+      case Some(eori) => s"$eoriHeaderName header passed validation: $eori"
+    }
+  }
+
+  def logBadgeIdHeaderText[A](maybeBadgeId: Option[BadgeIdentifier]): String = {
+    maybeBadgeId match {
+      case None => s"$XBadgeIdentifierHeaderName header empty and allowed"
+      case Some(badgeId) => s"$XBadgeIdentifierHeaderName header passed validation: $badgeId"
     }
   }
 }

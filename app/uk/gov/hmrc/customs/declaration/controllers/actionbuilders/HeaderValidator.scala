@@ -57,7 +57,6 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     } yield {
       val apiVersion = versionsByAcceptHeader(acceptValue)
       val clientId = ClientId(xClientIdValue)
-      logger.debug(logAcceptAndClientIdHeaderText(apiVersion, clientId))
       ExtractedHeadersImpl(apiVersion, clientId)
     }
     theResult
@@ -127,7 +126,7 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
 
   def eoriMustBeValidIfPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     val maybeEoriHeader: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
-    logger.debug(s"maybeEori => $maybeEoriHeader")
+
     val maybeEori = convertEmptyHeaderToNone(maybeEoriHeader)
 
     maybeEori match {

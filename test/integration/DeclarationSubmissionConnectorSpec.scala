@@ -31,7 +31,6 @@ import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.logging.Authorization
 import util.ExternalServicesConfig.{AuthToken, Host, Port}
 import util.TestData._
 import util.TestXMLData.ValidSubmissionXML
@@ -50,8 +49,6 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
   private val correlationId = UUID.randomUUID()
   private implicit val vpr = TestData.TestCspValidatedPayloadRequest
-
-  private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
 
   override protected def beforeAll() {
     startMockServer()
@@ -90,17 +87,17 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
 
     "return a failed future when external service returns 404" in {
       setupMdgWcoDecServiceToReturn(NOT_FOUND)
-      intercept[Non2xxResponseException](await(sendValidXml()))
+      checkCaughtException(NOT_FOUND)
     }
 
     "return a failed future when external service returns 400" in {
       setupMdgWcoDecServiceToReturn(BAD_REQUEST)
-      intercept[Non2xxResponseException](await(sendValidXml()))
+      checkCaughtException(BAD_REQUEST)
     }
 
     "return a failed future when external service returns 500" in {
       setupMdgWcoDecServiceToReturn(INTERNAL_SERVER_ERROR)
-      intercept[Non2xxResponseException](await(sendValidXml()))
+      checkCaughtException(INTERNAL_SERVER_ERROR)
     }
 
     "return a failed future when fail to connect the external service" in {
@@ -112,5 +109,10 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
 
   private def sendValidXml()(implicit vpr: ValidatedPayloadRequest[_]) = {
     connector.send(ValidSubmissionXML, new DateTime(), correlationId, VersionOne)
+  }
+
+  private def checkCaughtException(status: Int) {
+    val exception = intercept[Non2xxResponseException](await(sendValidXml()))
+    exception.responseCode shouldBe status
   }
 }

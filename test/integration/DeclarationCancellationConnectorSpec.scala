@@ -51,8 +51,6 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
   private val correlationId = UUID.randomUUID()
   private implicit val vpr = TestData.TestCspValidatedPayloadRequest
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(incomingAuthToken)))
-
   override protected def beforeAll() {
     startMockServer()
   }
@@ -87,17 +85,17 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
 
     "return a failed future when external service returns 404" in {
       startMdgCancellationV1Service(NOT_FOUND)
-      intercept[Non2xxResponseException](await(sendValidXml()))
+      checkCaughtException(NOT_FOUND)
     }
 
     "return a failed future when external service returns 400" in {
       startMdgCancellationV1Service(BAD_REQUEST)
-      intercept[Non2xxResponseException](await(sendValidXml()))
+      checkCaughtException(BAD_REQUEST)
     }
 
     "return a failed future when external service returns 500" in {
       startMdgCancellationV1Service(INTERNAL_SERVER_ERROR)
-      intercept[Non2xxResponseException](await(sendValidXml()))
+      checkCaughtException(INTERNAL_SERVER_ERROR)
     }
 
     "return a failed future when fail to connect the external service" in {
@@ -109,5 +107,10 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
 
   private def sendValidXml()(implicit vpr: ValidatedPayloadRequest[_]) = {
     connector.send(ValidSubmissionXML, new DateTime(), correlationId, VersionOne)
+  }
+
+  private def checkCaughtException(status: Int) {
+    val exception = intercept[Non2xxResponseException](await(sendValidXml()))
+    exception.responseCode shouldBe status
   }
 }

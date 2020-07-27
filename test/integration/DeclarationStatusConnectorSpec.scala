@@ -81,17 +81,17 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
 
     "return a failed future when external service returns 404" in {
       startMdgStatusV2Service(NOT_FOUND)
-      intercept[Non2xxResponseException](await(sendValidXml()))
+      checkCaughtException(NOT_FOUND)
     }
 
     "return a failed future when external service returns 400" in {
       startMdgStatusV2Service(BAD_REQUEST)
-      intercept[Non2xxResponseException](await(sendValidXml()))
+      checkCaughtException(BAD_REQUEST)
     }
 
     "return a failed future when external service returns 500" in {
       startMdgStatusV2Service(INTERNAL_SERVER_ERROR)
-      intercept[Non2xxResponseException](await(sendValidXml()))
+      checkCaughtException(INTERNAL_SERVER_ERROR)
     }
 
     "return a failed future when fail to connect the external service" in {
@@ -103,5 +103,10 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
 
   private def sendValidXml() = {
     connector.send(expectedDeclarationStatusPayload, date, correlationId, VersionTwo)
+  }
+
+  private def checkCaughtException(status: Int) {
+    val exception = intercept[Non2xxResponseException](await(sendValidXml()))
+    exception.responseCode shouldBe status
   }
 }

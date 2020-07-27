@@ -99,8 +99,8 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
     }
       .recoverWith {
         case httpError: HttpException =>
-          logger.error(s"Call to declaration status failed. url=$url")
-          Future.failed(new RuntimeException(httpError))
+          logger.error(s"Call to declaration status failed. url=$url status=${httpError.responseCode}")
+          Future.failed(httpError)
         case e: Throwable =>
           logger.error(s"Call to declaration status failed. url=$url")
           Future.failed(e)

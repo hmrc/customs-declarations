@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
+import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
@@ -61,7 +61,7 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
     FakeRequest().withJsonBody(Json.obj("fake" -> "request"))
   )
 
-  private val httpException = new NotFoundException("Emulated 404 response from a web call")
+  private val httpException =  UpstreamErrorResponse("Emulated 404 response from a web call", 404)
 
   override protected def beforeEach() {
     reset(mockWsPost, mockLogger)
@@ -105,7 +105,7 @@ class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEac
       "wrap an underlying error when nrs service call fails with an http exception" in {
         returnResponseForRequest(Future.failed(httpException))
 
-        val caught = intercept[NotFoundException] {
+        val caught = intercept[UpstreamErrorResponse] {
           awaitRequest
         }
         caught shouldBe httpException

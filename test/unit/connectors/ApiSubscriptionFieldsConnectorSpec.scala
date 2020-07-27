@@ -26,7 +26,7 @@ import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import util.UnitSpec
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
@@ -51,7 +51,7 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
 
   private val connector = new ApiSubscriptionFieldsConnector(mockWSGetImpl, mockLogger, mockDeclarationsConfigService)
 
-  private val httpException = new NotFoundException("Emulated 404 response from a web call")
+  private val httpException = UpstreamErrorResponse("Emulated 404 response from a web call", 404)
   private val expectedUrl = s"http://$Host:$Port$ApiSubscriptionFieldsContext/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0"
 
   override protected def beforeEach() {
@@ -82,16 +82,6 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
         }
 
         caught shouldBe TestData.emulatedServiceFailure
-      }
-
-      "wrap an underlying error when api subscription fields call fails with an http exception" in {
-        returnResponseForRequest(Future.failed(httpException))
-
-        val caught = intercept[RuntimeException] {
-          awaitRequest
-        }
-
-        caught.getCause shouldBe httpException
       }
     }
   }

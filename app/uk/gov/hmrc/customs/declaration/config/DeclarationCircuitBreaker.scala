@@ -20,16 +20,22 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 import uk.gov.hmrc.customs.api.common.connectors.CircuitBreakerConnector
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.http.{BadRequestException, NotFoundException, Upstream4xxResponse}
+import uk.gov.hmrc.http.UpstreamErrorResponse
 
 trait DeclarationCircuitBreaker extends CircuitBreakerConnector {
 
   def logger: DeclarationsLogger
 
   override protected def breakOnException(t: Throwable): Boolean = t match {
-    case _: BadRequestException | _: NotFoundException | _: Upstream4xxResponse => false
+    case e: UpstreamErrorResponse if e.statusCode < 500 => false //any 4XX error
+    case e: Non2xxResponseException => e.responseCode match {
+      case 400 => false //BadRequest
+      case 404 => false //NotFound
+      case _ => true
+    }
     case _ => true
   }
 

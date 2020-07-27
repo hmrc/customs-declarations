@@ -25,11 +25,12 @@ import play.api.libs.json.Writes
 import play.api.mvc.AnyContentAsJson
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import util.UnitSpec
 import util.TestData.{EmulatedServiceFailure, ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles, emulatedServiceFailure, fileUploadConfig}
@@ -47,7 +48,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  private val httpException = new NotFoundException("Emulated 404 response from a web call")
+  private val httpException = new Non2xxResponseException(404)
   private val tenThousand = 10000
   private val upscanInitiatePayloadV1WithNoRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, None)
   private val upscanInitiatePayloadV1WithSuccessRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), None)

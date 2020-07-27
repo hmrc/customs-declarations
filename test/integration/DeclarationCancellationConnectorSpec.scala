@@ -27,6 +27,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationCancellationConnector
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._
@@ -86,17 +87,17 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
 
     "return a failed future when external service returns 404" in {
       startMdgCancellationV1Service(NOT_FOUND)
-      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[NotFoundException]
+      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when external service returns 400" in {
       startMdgCancellationV1Service(BAD_REQUEST)
-      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[BadRequestException]
+      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when external service returns 500" in {
       startMdgCancellationV1Service(INTERNAL_SERVER_ERROR)
-      intercept[Upstream5xxResponse](await(sendValidXml()))
+      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when fail to connect the external service" in {

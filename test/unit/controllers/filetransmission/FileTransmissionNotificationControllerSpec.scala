@@ -32,6 +32,7 @@ import util.ApiSubscriptionFieldsTestData.{subscriptionFieldsId, subscriptionFie
 import util.FileTransmissionTestData._
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData
+import util.TestData.emulatedServiceFailure
 
 import scala.concurrent.Future
 
@@ -109,6 +110,10 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
       status(result) mustBe INTERNAL_SERVER_ERROR
       contentAsString(result) mustBe InternalErrorResponseJson
       verify(mockService).sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)
+      PassByNameVerifier(mockCdsLogger, "error")
+        .withByNameParam[String]("[conversationId=31400000-8ce0-11bd-b23e-10b96e4ef00f][clientSubscriptionId=327d9145-4965-4d28-a2c5-39dedee50334] file transmission notification service request to customs notification failed.")
+        .withByNameParam(emulatedServiceFailure)
+        .verify()
     }
 
   }

@@ -118,7 +118,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
       .recoverWith {
         case httpError: HttpException =>
           logger.error(s"Call to url=$url failed, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
-          Future.failed(new RuntimeException(httpError))
+          Future.failed(httpError)
         case e: Throwable =>
           logger.error(s"Call to wco declaration submission failed. url=$url")
           Future.failed(e)

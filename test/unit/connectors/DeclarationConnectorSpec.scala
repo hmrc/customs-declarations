@@ -33,7 +33,6 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationConnector
-import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
@@ -78,7 +77,6 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val xml = <xml></xml>
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  private val httpException = new Non2xxResponseException(404)
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
 
   override protected def beforeEach() {
@@ -206,15 +204,6 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
           awaitRequest()
         }
         caught shouldBe TestData.emulatedServiceFailure
-      }
-
-      "wrap an underlying error when MDG call fails with an http exception" in {
-        returnResponseForRequest(Future.failed(httpException))
-
-        val caught = intercept[RuntimeException] {
-          awaitRequest()
-        }
-        caught.getCause shouldBe httpException
       }
     }
 

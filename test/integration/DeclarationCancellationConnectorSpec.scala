@@ -87,22 +87,22 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
 
     "return a failed future when external service returns 404" in {
       startMdgCancellationV1Service(NOT_FOUND)
-      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[Non2xxResponseException]
+      intercept[Non2xxResponseException](await(sendValidXml()))
     }
 
     "return a failed future when external service returns 400" in {
       startMdgCancellationV1Service(BAD_REQUEST)
-      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[Non2xxResponseException]
+      intercept[Non2xxResponseException](await(sendValidXml()))
     }
 
     "return a failed future when external service returns 500" in {
       startMdgCancellationV1Service(INTERNAL_SERVER_ERROR)
-      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[Non2xxResponseException]
+      intercept[Non2xxResponseException](await(sendValidXml()))
     }
 
     "return a failed future when fail to connect the external service" in {
       stopMockServer()
-      intercept[RuntimeException](await(sendValidXml())).getCause.getClass shouldBe classOf[BadGatewayException]
+      intercept[BadGatewayException](await(sendValidXml()))
       startMockServer()
     }
   }

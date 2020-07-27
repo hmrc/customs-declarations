@@ -26,7 +26,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
@@ -66,7 +66,7 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
                 Left(ErrorGenericBadRequest.XmlResult.withConversationId)
             }
           }).recover{
-          case e: RuntimeException if e.getCause.isInstanceOf[NotFoundException] =>
+          case e: HttpException if e.responseCode == 404 =>
             logger.warn(s"declaration status call failed with 404: ${e.getMessage}")
             Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)
           case NonFatal(e) =>

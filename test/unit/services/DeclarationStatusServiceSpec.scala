@@ -27,13 +27,14 @@ import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
@@ -65,7 +66,7 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
     when(mockDeclarationStatusConnector.send(any[NodeSeq], any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
       any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockHttpResponse.body).thenReturn("<xml>some xml</xml>")
-    when(mockHttpResponse.allHeaders).thenReturn(any[Map[String, Seq[String]]])
+    when(mockHttpResponse.headers).thenReturn(any[Map[String, Seq[String]]])
     when(mockStatusResponseFilterService.transform(<xml>backendXml</xml>)).thenReturn(<xml>transformed</xml>)
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
 
@@ -100,7 +101,7 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
       when(mockDeclarationStatusConnector.send(any[NodeSeq],
         any[DateTime],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new RuntimeException(new NotFoundException("nothing here"))))
+        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(404)))
       val result: Either[Result, HttpResponse] = send()
 
       result shouldBe Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)

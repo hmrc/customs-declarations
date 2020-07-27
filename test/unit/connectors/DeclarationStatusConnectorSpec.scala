@@ -27,10 +27,11 @@ import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
@@ -58,8 +59,6 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
 
   private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
     ApiSubscriptionFieldsTestData.clientId, Csp(None, Some(badgeIdentifier), None), mock[Request[AnyContent]])
-
-  private val httpException = new NotFoundException("Emulated 404 response from a web call")
 
   override protected def beforeEach() {
     reset(mockWsPost, mockServiceConfigProvider)
@@ -109,15 +108,6 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
           awaitRequest
         }
         caught shouldBe TestData.emulatedServiceFailure
-      }
-
-      "wrap an underlying error when nrs service call fails with an http exception" in {
-        returnResponseForRequest(Future.failed(httpException))
-
-        val caught = intercept[RuntimeException] {
-          awaitRequest
-        }
-        caught.getCause shouldBe httpException
       }
     }
 

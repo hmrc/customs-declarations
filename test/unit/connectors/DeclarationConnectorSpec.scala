@@ -37,7 +37,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import util.UnitSpec
 import util.TestData
@@ -77,7 +77,6 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val xml = <xml></xml>
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  private val httpException = new NotFoundException("Emulated 404 response from a web call")
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
 
   override protected def beforeEach() {
@@ -101,13 +100,14 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val httpFormattedDate = "Tue, 04 Jul 2017 13:45:00 UTC"
 
   private val correlationId = UUID.randomUUID()
+  private val successfulHttpResponse = HttpResponse(200, "")
 
   "MdgWcoDeclarationConnector" can {
 
     "when making a successful request" should {
 
       "ensure URL is retrieved from config" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulHttpResponse))
 
         awaitRequest()
 
@@ -116,7 +116,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       }
 
       "ensure xml payload is included in the MDG request body" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulHttpResponse))
 
         awaitRequest()
 
@@ -125,7 +125,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       }
 
       "ensure the content type header in passed through in MDG request" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulHttpResponse))
 
         awaitRequest()
 
@@ -136,7 +136,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       }
 
       "ensure the accept header in passed through in MDG request" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulHttpResponse))
 
         awaitRequest()
 
@@ -147,7 +147,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       }
 
       "ensure the date header in passed through in MDG request" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulHttpResponse))
 
         awaitRequest()
 
@@ -158,7 +158,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       }
 
       "ensure the X-FORWARDED_HOST header in passed through in MDG request" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulHttpResponse))
 
         awaitRequest()
 
@@ -169,7 +169,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       }
 
       "ensure the X-Correlation-Id header in passed through in MDG request" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulHttpResponse))
 
         awaitRequest()
 
@@ -180,7 +180,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
       }
 
       "Ensure routing is working for the config location which will ensure version specific config values are loaded correctly" in {
-        returnResponseForRequest(Future.successful(mock[HttpResponse]))
+        returnResponseForRequest(Future.successful(successfulHttpResponse))
 
         await(connector.send(xml, date, correlationId, VersionThree))
 
@@ -204,15 +204,6 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
           awaitRequest()
         }
         caught shouldBe TestData.emulatedServiceFailure
-      }
-
-      "wrap an underlying error when MDG call fails with an http exception" in {
-        returnResponseForRequest(Future.failed(httpException))
-
-        val caught = intercept[RuntimeException] {
-          awaitRequest()
-        }
-        caught.getCause shouldBe httpException
       }
     }
 

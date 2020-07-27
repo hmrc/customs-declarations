@@ -67,7 +67,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected val mockResult: Result = mock[Result]
     protected val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
 
-    protected val stubHttpResponse = HttpResponse(responseStatus = Status.OK, responseJson = None, responseString = Some(StatusTestXMLData.generateDeclarationStatusResponse().toString))
+    protected val stubHttpResponse = HttpResponse(Status.OK, StatusTestXMLData.generateDeclarationStatusResponse().toString)
 
     protected val mockStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]

@@ -60,8 +60,6 @@ class DeclarationStatusConnectorSpec extends UnitSpec with MockitoSugar with Bef
   private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
     ApiSubscriptionFieldsTestData.clientId, Csp(None, Some(badgeIdentifier), None), mock[Request[AnyContent]])
 
-  private val httpException = new Non2xxResponseException(404)
-
   override protected def beforeEach() {
     reset(mockWsPost, mockServiceConfigProvider)
     when(mockServiceConfigProvider.getConfig("v2.declaration-status")).thenReturn(v2Config)

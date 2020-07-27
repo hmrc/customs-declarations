@@ -90,7 +90,7 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
 
       result shouldBe a[Exception]
       verify(mockAuditingService).auditFailedNrs(any[NrsPayload], any[HttpException])(any[ValidatedPayloadRequest[AnyContent]])
-      verify(mockAuditingService, times(0)).auditFailedNrs(any[NrsPayload], any[Upstream5xxResponse])(any[ValidatedPayloadRequest[AnyContent]])
+      verify(mockAuditingService, times(0)).auditFailedNrs(any[NrsPayload], any[UpstreamErrorResponse])(any[ValidatedPayloadRequest[AnyContent]])
     }
 
     "DO NOT audit when nrs returns 4xx error response" in new SetUp() {
@@ -100,7 +100,7 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
 
       result shouldBe a[Exception]
       verify(mockAuditingService, times(0)).auditFailedNrs(any[NrsPayload], any[HttpException])(any[ValidatedPayloadRequest[AnyContent]])
-      verify(mockAuditingService, times(0)).auditFailedNrs(any[NrsPayload], any[Upstream5xxResponse])(any[ValidatedPayloadRequest[AnyContent]])
+      verify(mockAuditingService, times(0)).auditFailedNrs(any[NrsPayload], any[UpstreamErrorResponse])(any[ValidatedPayloadRequest[AnyContent]])
     }
   }
 }

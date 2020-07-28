@@ -47,12 +47,9 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
       ACCEPT -> MimeTypes.XML,
       AUTHORIZATION -> s"Basic ${config.declarationsConfig.customsNotificationBearerToken}")
 
+    val url = config.declarationsConfig.customsNotificationBaseBaseUrl
 
-    (http.POSTString[HttpResponse](
-      config.declarationsConfig.customsNotificationBaseBaseUrl,
-      XMLHeader + notification.payload.toString(),
-      headers.toSeq
-    ) map { response =>
+    http.POSTString[HttpResponse](url, XMLHeader + notification.payload.toString(), headers.toSeq).map { response =>
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: notification sent successfully. url=${config.declarationsConfig.customsNotificationBaseBaseUrl}")
@@ -61,8 +58,9 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
         case status => //1xx, 3xx, 4xx, 5xx
           throw new Non2xxResponseException(status)
       }
-    }).recoverWith {
+    }.recoverWith {
       case httpError: HttpException =>
+        logger.error(s"Call to customs notification service failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
         Future.failed(new RuntimeException(httpError))
 
       case e: Throwable =>

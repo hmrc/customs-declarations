@@ -7,8 +7,8 @@ object AppDependencies {
   private val wireMockVersion = "2.26.3"
   private val customsApiCommonVersion = "1.51.0"
   private val playJsonJodaVersion = "2.8.1"
-  private val simpleReactiveMongoVersion = "7.26.0-play-26"
-  private val reactiveMongoTestVersion = "4.16.0-play-26"
+  private val simpleReactiveMongoVersion = "7.30.0-play-26"
+  private val reactiveMongoTestVersion = "4.21.0-play-26"
   private val testScope = "test,it"
 
   val scalaTestPlusPlay = "org.scalatestplus.play" %% "scalatestplus-play" % scalatestplusVersion % testScope

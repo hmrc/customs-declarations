@@ -39,6 +39,12 @@
             "type": "URL",
             "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
             "shortDescription" : "Callback URL"
+            "validation" : {
+              "errorMessage" : "Enter a URL in the correct format, like 'https://your.domain.name/some/path' ",
+              "rules" : [{
+                "UrlValidationRule" : {}
+              }]
+            }
           },
           {
             "name": "securityToken",
@@ -75,6 +81,12 @@
             "type": "URL",
             "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
             "shortDescription" : "Callback URL"
+            "validation" : {
+              "errorMessage" : "Enter a URL in the correct format, like 'https://your.domain.name/some/path' ",
+              "rules" : [{
+                "UrlValidationRule" : {}
+              }]
+            }
           },
           {
             "name": "securityToken",
@@ -107,6 +119,12 @@
             "type": "URL",
             "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
             "shortDescription" : "Callback URL"
+            "validation" : {
+              "errorMessage" : "Enter a URL in the correct format, like 'https://your.domain.name/some/path' ",
+              "rules" : [{
+                "UrlValidationRule" : {}
+              }]
+            }
           },
           {
             "name": "securityToken",

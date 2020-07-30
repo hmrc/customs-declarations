@@ -78,7 +78,13 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
           |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
-          |            "shortDescription" : "Callback URL"
+          |            "shortDescription" : "Callback URL",
+          |            "validation" : {
+          |              "errorMessage" : "Enter a URL in the correct format, like 'https://your.domain.name/some/path' ",
+          |                "rules" : [{
+          |                  "UrlValidationRule" : {}
+          |                }]
+          |            }
           |          },
           |          {
           |            "name": "securityToken",
@@ -113,7 +119,13 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
           |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
-          |            "shortDescription" : "Callback URL"            
+          |            "shortDescription" : "Callback URL",
+          |            "validation" : {
+          |              "errorMessage" : "Enter a URL in the correct format, like 'https://your.domain.name/some/path' ",
+          |                "rules" : [{
+          |                  "UrlValidationRule" : {}
+          |                }]
+          |            }
           |          },
           |          {
           |            "name": "securityToken",
@@ -147,7 +159,13 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
           |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
-          |            "shortDescription" : "Callback URL"
+          |            "shortDescription" : "Callback URL",
+          |            "validation" : {
+          |              "errorMessage" : "Enter a URL in the correct format, like 'https://your.domain.name/some/path' ",
+          |                "rules" : [{
+          |                  "UrlValidationRule" : {}
+          |                }]
+          |            }
           |          },
           |          {
           |            "name": "securityToken",
@@ -223,7 +241,13 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
           |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
-          |            "shortDescription" : "Callback URL"
+          |            "shortDescription" : "Callback URL",
+          |            "validation" : {
+          |              "errorMessage" : "Enter a URL in the correct format, like 'https://your.domain.name/some/path' ",
+          |                "rules" : [{
+          |                  "UrlValidationRule" : {}
+          |                }]
+          |            }
           |          },
           |          {
           |            "name": "securityToken",
@@ -254,7 +278,13 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
           |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
-          |            "shortDescription" : "Callback URL"
+          |            "shortDescription" : "Callback URL",
+          |            "validation" : {
+          |              "errorMessage" : "Enter a URL in the correct format, like 'https://your.domain.name/some/path' ",
+          |                "rules" : [{
+          |                  "UrlValidationRule" : {}
+          |                }]
+          |            }
           |          },
           |          {
           |            "name": "securityToken",
@@ -288,7 +318,13 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |            "description": "What's your callback URL for declaration submissions?",
           |            "type": "URL",
           |            "hint": "This is how we'll notify you when we've processed them. It must include https and port 443",
-          |            "shortDescription" : "Callback URL"
+          |            "shortDescription" : "Callback URL",
+          |            "validation" : {
+          |              "errorMessage" : "Enter a URL in the correct format, like 'https://your.domain.name/some/path' ",
+          |                "rules" : [{
+          |                  "UrlValidationRule" : {}
+          |                }]
+          |            }
           |          },
           |          {
           |            "name": "securityToken",

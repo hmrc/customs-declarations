@@ -1,0 +1,15 @@
+<MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+      <FunctionCode>01</FunctionCode>
+      <FunctionalReferenceID>e79e4a6e80c744c0825e2d22f1a0c886</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20200124170300Z</DateTimeString>
+      </IssueDateTime>
+      <Declaration>
+        <AcceptanceDateTime>
+          <DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20200124170258Z</DateTimeString>
+        </AcceptanceDateTime>
+        <FunctionalReferenceID>R260_E2E_TC17_025</FunctionalReferenceID>
+        <ID>20GB0XVF9FMVCFGVR1</ID>
+        <VersionID>2</VersionID>
+      </Declaration>
+    </Response></MetaData>

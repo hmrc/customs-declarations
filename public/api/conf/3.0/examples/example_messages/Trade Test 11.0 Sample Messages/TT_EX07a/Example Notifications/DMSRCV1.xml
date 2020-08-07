@@ -1,0 +1,12 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+      <FunctionCode>02</FunctionCode>
+      <FunctionalReferenceID>8c177c88c4954f3181f2a9488d4b11e2</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20200123162051Z</DateTimeString>
+      </IssueDateTime>
+      <Declaration>
+        <FunctionalReferenceID>EX_3.6_TC07_23PST1</FunctionalReferenceID>
+        <ID>20GB0WEQ3URNFFGV06</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

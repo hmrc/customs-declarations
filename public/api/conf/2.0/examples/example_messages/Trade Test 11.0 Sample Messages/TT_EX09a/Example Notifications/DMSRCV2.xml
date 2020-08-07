@@ -1,0 +1,13 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+      <FunctionCode>02</FunctionCode>
+      <FunctionalReferenceID>152f95a85e9948a79a35e4fee0a6fb1f</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20200714143607Z</DateTimeString>
+      </IssueDateTime>
+      <Declaration>
+        <FunctionalReferenceID>Movement14</FunctionalReferenceID>
+        <ID>20GB7RHTNEE7WVYPA8</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response>
+  </MetaData>

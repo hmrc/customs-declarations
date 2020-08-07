@@ -1,0 +1,13 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+  <!-- This is an example of a DMSRCV notificaiton. Function code of 2 indicates that a received message (declaration, notification or request) is registered and the Declaration has been accepted -->
+      <FunctionCode>02</FunctionCode>
+      <FunctionalReferenceID>38805c5941954bb3b3ccbd64226383a0</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20191112151207Z</DateTimeString>
+      </IssueDateTime>
+      <Declaration>
+        <FunctionalReferenceID>Amendment_TC01_v1</FunctionalReferenceID>
+        <ID>19GBCJ085GLPFFGVR3</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

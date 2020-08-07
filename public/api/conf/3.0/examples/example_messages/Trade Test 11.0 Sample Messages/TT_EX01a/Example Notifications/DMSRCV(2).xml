@@ -1,0 +1,14 @@
+<MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+<!-- This is an example of a DMSRCV notificaiton. Function code of 2 indicates that a received message (declaration, notification or request) is registered and the Declaration has been accepted -->
+      <FunctionCode>02</FunctionCode>
+      <FunctionalReferenceID>aee6af0d791e46428f56422679a01c76</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20191113172215Z</DateTimeString>
+      </IssueDateTime>
+      <Declaration>
+        <!-- The Functional Reference refers to the EAL reference. This must be unique to the transaction -->
+        <FunctionalReferenceID>Movement14</FunctionalReferenceID>
+        <ID>19GBCKKCQSXV2FGVA8</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

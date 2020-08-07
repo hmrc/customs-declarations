@@ -1,0 +1,16 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+      <FunctionCode>08</FunctionCode>
+      <FunctionalReferenceID>f39e246fe608403aa82dab6c2f8bca1d</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20200303134842Z</DateTimeString>
+      </IssueDateTime>
+      <AdditionalInformation>
+        <StatementCode>A2</StatementCode>
+        <StatementTypeCode>AFB</StatementTypeCode>
+      </AdditionalInformation>
+      <Declaration>
+        <FunctionalReferenceID>TC05_010320_003</FunctionalReferenceID>
+        <ID>20GB2HEJGEYN2FGVR9</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

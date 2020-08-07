@@ -1,0 +1,17 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+  <!-- This is an example of a DMSACC notification. Function code 01 indicates that the declaration has been legally accepted -->
+
+      <FunctionCode>01</FunctionCode>
+      <FunctionalReferenceID>3b1c44a5026f402d85a61ee53fcc0c65</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20191107153437Z</DateTimeString>
+      </IssueDateTime>
+      <Declaration>
+        <AcceptanceDateTime>
+          <DateTimeString formatCode="304">20191107153241Z</DateTimeString>
+        </AcceptanceDateTime>
+        <FunctionalReferenceID>R251_TC05_1710_007</FunctionalReferenceID>
+        <ID>19GBCBVIYEAA2X8PR2</ID>
+        <VersionID>3</VersionID>
+      </Declaration>
+    </Response></MetaData>

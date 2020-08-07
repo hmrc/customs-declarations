@@ -1,0 +1,49 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+      <FunctionCode>13</FunctionCode>
+      <FunctionalReferenceID>60870e0b761d492688915cb17aaa2bb1</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20200506120034Z</DateTimeString>
+      </IssueDateTime>
+      <Bank>
+        <ReferenceID>CITIGB2LLON</ReferenceID>
+        <ID>GB25CITI08320011963155</ID>
+      </Bank>
+      <Status>
+        <NameCode>4</NameCode>
+      </Status>
+      <Declaration>
+        <FunctionalReferenceID>R280_E2E_TC02_0605_002</FunctionalReferenceID>
+        <ID>20GB50R7X2W6KFGVR4</ID>
+        <VersionID>1</VersionID>
+        <GoodsShipment>
+          <GovernmentAgencyGoodsItem>
+            <SequenceNumeric>1</SequenceNumeric>
+            <Commodity>
+              <DutyTaxFee>
+                <AdValoremTaxBaseAmount currencyID="GBP">10000.00</AdValoremTaxBaseAmount>
+                <DeductAmount currencyID="GBP">0.00</DeductAmount>
+                <DutyRegimeCode>100</DutyRegimeCode>
+                <TaxRateNumeric>2.70</TaxRateNumeric>
+                <TypeCode>A00</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount currencyID="GBP">270.00</TaxAssessedAmount>
+                  <PaymentAmount currencyID="GBP">270.00</PaymentAmount>
+                </Payment>
+              </DutyTaxFee>
+              <DutyTaxFee>
+                <AdValoremTaxBaseAmount currencyID="GBP">10270.00</AdValoremTaxBaseAmount>
+                <DeductAmount currencyID="GBP">0.00</DeductAmount>
+                <DutyRegimeCode>100</DutyRegimeCode>
+                <TaxRateNumeric>20.00</TaxRateNumeric>
+                <TypeCode>B00</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount currencyID="GBP">2054.00</TaxAssessedAmount>
+                  <PaymentAmount currencyID="GBP">2054.00</PaymentAmount>
+                </Payment>
+              </DutyTaxFee>
+            </Commodity>
+          </GovernmentAgencyGoodsItem>
+        </GoodsShipment>
+      </Declaration>
+    </Response>
+  </MetaData>

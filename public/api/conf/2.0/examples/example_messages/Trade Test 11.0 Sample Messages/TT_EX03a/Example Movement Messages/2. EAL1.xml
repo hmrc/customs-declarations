@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EAL – Movement message notification format for Entry arriving at location (Arrivals) -->
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EAL</inv:messageCode>
+	<inv:agentDetails>
+		<!-- EORI number of the Community Systems Providers (CSPs). -->
+		<inv:EORI>GB239355053000</inv:EORI>
+	</inv:agentDetails>
+	<inv:ucrBlock>
+	  <!--DUCR assigned to the consignment. Arriving at DUCR level. This value has come from Declaration -->
+		<inv:ucr>9GB417869120000-HMUT377</inv:ucr>
+		<inv:ucrType>D</inv:ucrType>
+	</inv:ucrBlock>
+	<!-- ID to give a unique position of the location. LHRLHR Indicating London Heathrow. ANS Indicating shed ID -->
+	<inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
+	<!-- This should be today's Date. Please note that this time is the earliest out of the movement messages -->
+	<inv:goodsArrivalDateTime>2020-03-04T10:00:00</inv:goodsArrivalDateTime>
+	<inv:movementReference>Movement14</inv:movementReference>
+	<inv:transportDetails>
+		<inv:transportID>11CSCLGLOBE</inv:transportID>
+		<inv:transportMode>1</inv:transportMode>
+		<inv:transportNationality>GB</inv:transportNationality>
+	</inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>

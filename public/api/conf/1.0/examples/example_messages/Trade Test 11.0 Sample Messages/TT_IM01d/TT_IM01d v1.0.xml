@@ -1,29 +1,16 @@
-<v1:submitDeclarationRequest
-  xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1"
-  xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2"
-  xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-  xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-  xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-  xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-  xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-  xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<v1:requestCommon>
-		<v1:regime>CDS</v1:regime>
-		<v1:receiptDate>${=import java.text.SimpleDateFormat ; new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'+01:00'").format(new Date())}</v1:receiptDate>
-		<v1:clientID>fa3fe3c5-60c5-48d1-a89b-5ba19a83556b</v1:clientID>
-		<v1:conversationID>a0b62e47-edb6-4293-b898-2130073289c6</v1:conversationID>
-		<v1:originatingPartyID>GB553202734852</v1:originatingPartyID>
-		<v1:authenticatedPartyID>GB553202734852</v1:authenticatedPartyID>
-	</v1:requestCommon>
-	<v1:requestDetail>
-
-		<md:MetaData xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd " xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
-			<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
-			<md:WCOTypeName>DEC</md:WCOTypeName>
-			<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
-			<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
-			<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+    <md:MetaData
+      xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+      xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+      xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+      xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+    >
+  		<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+  		<md:WCOTypeName>DEC</md:WCOTypeName>
+  		<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+  		<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+  		<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 			<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 
 			<!--SCENARIO
@@ -611,5 +598,3 @@
 				</SupervisingOffice>
 			</Declaration>
 		</md:MetaData>
-	</v1:requestDetail>
-</v1:submitDeclarationRequest>

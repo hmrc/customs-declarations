@@ -1,5 +1,5 @@
-<MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
-<!-- This is an example of a DMSCLE, when the declaration have been cleared and the submitter has been informed. Function code 09 indicates this clearance -->
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+      <!-- This is an example of a DMSCLE, when the declaration have been cleared and the submitter has been informed. Function code 09 indicates this clearance -->
       <FunctionCode>09</FunctionCode>
       <FunctionalReferenceID>88ba5ba638f44b139796c60d198a8a43</FunctionalReferenceID>
       <IssueDateTime>

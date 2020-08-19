@@ -1,12 +1,16 @@
 <FileUploadRequest xmlns="hmrc:fileupload" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <DeclarationID>DEC123</DeclarationID>
-<FileGroupSize>1</FileGroupSize>
+<FileGroupSize>2</FileGroupSize>
 <Files>
   <File>
     <FileSequenceNo>1</FileSequenceNo>
-    <DocumentType>document type 1</DocumentType>
+    <DocumentType>Certificate of Origin</DocumentType>
     <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
     <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
+  </File>
+  <File>
+    <FileSequenceNo>2</FileSequenceNo>
+    <DocumentType>Licence</DocumentType>
   </File>
 </Files>
 </FileUploadRequest>

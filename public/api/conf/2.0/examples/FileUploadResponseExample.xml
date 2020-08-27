@@ -17,7 +17,7 @@
           <acl>private</acl>
           <x-amz-signature>4555a985f7651112ed7de834b534ff495f7ea001df3f741a344bfa55aef3ffda</x-amz-signature>
           <x-amz-meta-session-id>n/a</x-amz-meta-session-id>
-          <x-amz-meta-consuming-service>customs-declarations</x-amz-meta-consuming-service>
+          <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
           <policy>eyJleHBpcmF0aW9uIjoiMjAyMC0wOC=</policy>
           <success_action_redirect>https://success-redirect.com</success_action_redirect>
           <error_action_redirect>https://error-redirect.com</error_action_redirect>

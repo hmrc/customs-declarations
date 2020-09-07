@@ -101,7 +101,7 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
       when(mockDeclarationStatusConnector.send(any[NodeSeq],
         any[DateTime],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(404)))
+        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(mockHttpResponse, 404)))
       val result: Either[Result, HttpResponse] = send()
 
       result shouldBe Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)

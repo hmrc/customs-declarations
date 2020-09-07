@@ -24,10 +24,12 @@ import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
 import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
+import play.api.http.Status.SERVICE_UNAVAILABLE
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationCancellationConnector, DeclarationConnector, DeclarationSubmissionConnector}
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -83,6 +85,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
   implicit def ec: ExecutionContext
 
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
+  private val errorResponseServiceShuttered = ErrorResponse(SERVICE_UNAVAILABLE, "SERVER_ERROR", "The 'customs/declarations' API is currently unavailable")
 
   def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     futureApiSubFieldsId(vpr.clientId) flatMap {
@@ -130,6 +133,9 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
     val xmlToSend = preparePayload(vpr.xmlBody, asfr, dateTime)
 
     connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(None)).recover {
+      case e: Non2xxResponseException if e.responseCode == SERVICE_UNAVAILABLE =>
+        logger.error(s"service unavailable: response status code ${e.response.status} response body ${e.response.body}")
+        Left(errorResponseServiceShuttered.XmlResult)
       case _: CircuitBreakerOpenException =>
         logger.error("unhealthy state entered")
         Left(errorResponseServiceUnavailable.XmlResult.withConversationId)

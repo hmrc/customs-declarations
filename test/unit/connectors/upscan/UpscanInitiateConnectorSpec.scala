@@ -40,6 +40,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
 
   private val mockWsPost = mock[HttpClient]
+  private val mockHttpResponse: HttpResponse = mock[HttpResponse]
   private val mockLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private implicit val ec = Helpers.stubControllerComponents().executionContext
@@ -48,7 +49,7 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  private val httpException = new Non2xxResponseException(404)
+  private val httpException = new Non2xxResponseException(mockHttpResponse, 404)
   private val tenThousand = 10000
   private val upscanInitiatePayloadV1WithNoRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, None)
   private val upscanInitiatePayloadV1WithSuccessRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), None)

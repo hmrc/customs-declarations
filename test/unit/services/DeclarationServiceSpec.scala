@@ -25,10 +25,13 @@ import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyNoInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.http.Status.SERVICE_UNAVAILABLE
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
+import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorInternalServerError}
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -36,11 +39,10 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, 
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
-import util.CustomsDeclarationsMetricsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
+import util.{CustomsDeclarationsMetricsTestData, UnitSpec}
 
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future}
@@ -53,6 +55,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
   private val wrappedValidXML = <wrapped></wrapped>
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
+  private val errorResponseServiceShuttered = ErrorResponse(SERVICE_UNAVAILABLE, "SERVER_ERROR", "The 'customs/declarations' API is currently unavailable")
   private val errorResponseMissingEori = errorInternalServerError("Missing authenticated eori in service lookup")
   
   trait SetUp {
@@ -169,7 +172,15 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
     }
 
-    "return 500 error response when MDG circuit breaker trips" in new SetUp() {
+  "return 503 error response when backend returns 503" in new SetUp() {
+    when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(mockHttpResponse, SERVICE_UNAVAILABLE)))
+
+    val result: Either[Result, Option[NrSubmissionId]] = send()
+
+    result shouldBe Left(errorResponseServiceShuttered.XmlResult.withNrSubmissionId(nrSubmissionId))
+  }
+
+  "return 500 error response when MDG circuit breaker trips" in new SetUp() {
       when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new CircuitBreakerOpenException(FiniteDuration(10, TimeUnit.SECONDS))))
 
       val result: Either[Result, Option[NrSubmissionId]] = send()

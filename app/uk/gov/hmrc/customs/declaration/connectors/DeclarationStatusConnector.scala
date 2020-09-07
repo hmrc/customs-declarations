@@ -94,7 +94,7 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
           response
 
         case status => //1xx, 3xx, 4xx, 5xx
-          throw new Non2xxResponseException(status)
+          throw new Non2xxResponseException(response, status)
       }
     }
       .recoverWith {

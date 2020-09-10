@@ -19,6 +19,7 @@ package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 import javax.inject.Inject
 import play.api.http.HeaderNames._
 import play.api.mvc.Headers
+import play.api.http.Status.SERVICE_UNAVAILABLE
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
@@ -44,31 +45,27 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   private def errorResponseEoriIdentifierHeaderMissingOrInvalid(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is missing or invalid")
   private def errorResponseEoriIdentifierHeaderInvalid(eoriHeaderName: String) = errorBadRequest(s"$eoriHeaderName header is invalid")
 
-  def validateHeaders[A](implicit conversationIdRequest: ConversationIdRequest[A]): Either[ErrorResponse, ExtractedHeaders] = {
-    implicit val headers: Headers = conversationIdRequest.headers
-
-    def hasAccept = validateHeader(ACCEPT, versionsByAcceptHeader.keySet.contains(_), ErrorAcceptHeaderInvalid)
+  def validateHeaders[A](implicit apiVersionRequest: ApiVersionRequest[A]): Either[ErrorResponse, ExtractedHeaders] = {
+    implicit val headers: Headers = apiVersionRequest.headers
 
     def hasXClientId = validateHeader(XClientIdHeaderName, xClientIdRegex.findFirstIn(_).nonEmpty, ErrorInternalServerError)
 
     val theResult: Either[ErrorResponse, ExtractedHeaders] = for {
-      acceptValue <- hasAccept.right
       xClientIdValue <- hasXClientId.right
     } yield {
-      val apiVersion = versionsByAcceptHeader(acceptValue)
       val clientId = ClientId(xClientIdValue)
-      ExtractedHeadersImpl(apiVersion, clientId)
+      ExtractedHeadersImpl(clientId)
     }
     theResult
   }
 
-  def logAcceptAndClientIdHeaderText[A](apiVersion: ApiVersion, clientId: ClientId): String = {
-    s"\n$ACCEPT header passed validation: ${versionsByAcceptHeader.valuesIterator.find(version => version == apiVersion).get}" +
+  def logAcceptAndClientIdHeaderText[A](clientId: ClientId): String = {
+//    s"\n$ACCEPT header passed validation: ${versionsByAcceptHeader.valuesIterator.find(version => version == apiVersion).get}" +
     s"\n$XClientIdHeaderName header passed validation: ${clientId.value}"
   }
 
   protected def validateHeader[A](headerName: String, rule: String => Boolean, errorResponse: ErrorResponse)
-                                 (implicit conversationIdRequest: ConversationIdRequest[A], h: Headers): Either[ErrorResponse, String] = {
+                                 (implicit conversationIdRequest: ApiVersionRequest[A], h: Headers): Either[ErrorResponse, String] = {
     val left = Left(errorResponse)
     def leftWithLog(headerName: String) = {
       logger.error(s"Error - header '$headerName' not present")
@@ -161,4 +158,3 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 }
-

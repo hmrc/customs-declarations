@@ -20,7 +20,7 @@ import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE}
 import play.api.mvc.Request
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ExtractedHeaders, HasAuthorisedAs, HasConversationId}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ExtractedHeaders, HasApiVersion, HasAuthorisedAs, HasConversationId}
 
 object LoggingHelper {
   private val headerSet = Set(CONTENT_TYPE.toLowerCase, ACCEPT.toLowerCase, XConversationIdHeaderName.toLowerCase, XClientIdHeaderName.toLowerCase, XBadgeIdentifierHeaderName.toLowerCase)
@@ -52,8 +52,12 @@ object LoggingHelper {
   private def format(r: HasConversationId): String = {
     def conversationId = s"[conversationId=${r.conversationId}]"
 
+    def apiVersion = r match {
+      case a: HasApiVersion => s"[requestedApiVersion=${a.requestedApiVersion}]"
+      case _ => ""
+    }
     def extractedHeaders = r match {
-      case h: ExtractedHeaders => s"[clientId=${h.clientId}][requestedApiVersion=${h.requestedApiVersion}]"
+      case h: ExtractedHeaders => s"[clientId=${h.clientId}]"
       case _ => ""
     }
     def authorised = r match {
@@ -64,7 +68,7 @@ object LoggingHelper {
         }
       case _ => ""
     }
-    s"$conversationId$extractedHeaders$authorised"
+    s"$conversationId$extractedHeaders$apiVersion$authorised"
   }
 
   def formatMessageFull(msg: String, r: HasConversationId with Request[_]): String = {

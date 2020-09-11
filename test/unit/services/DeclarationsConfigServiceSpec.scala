@@ -110,9 +110,6 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: customs-declarations-metrics.context
           |Service configuration not found for key: customs-notification.bearer-token
           |Could not find config key 'declarationStatus.requestDaysLimit'
-          |Could not find config key 'shutter.v1'
-          |Could not find config key 'shutter.v2'
-          |Could not find config key 'shutter.v3'
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'

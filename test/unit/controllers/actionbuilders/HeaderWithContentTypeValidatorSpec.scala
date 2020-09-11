@@ -63,18 +63,20 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
       }
     }
     "in unhappy path, validation" should {
-      "fail when request is missing accept header" in new SetUp {
-        validate(apiVersionRequest(ValidHeadersV2 - ACCEPT)) shouldBe Left(ErrorAcceptHeaderInvalid)
-      }
+      //TODO should be moved to ShutterCheckActionSpec
+//      "fail when request is missing accept header" in new SetUp {
+//        validate(apiVersionRequest(ValidHeadersV2 - ACCEPT)) shouldBe Left(ErrorAcceptHeaderInvalid)
+//      }
       "fail when request is missing content type header" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2 - CONTENT_TYPE)) shouldBe Left(ErrorContentTypeHeaderInvalid)
       }
       "fail when request is missing X-Client-ID header" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2 - XClientIdHeaderName)) shouldBe Left(ErrorInternalServerError)
       }
-      "fail when request has invalid accept header" in new SetUp {
-        validate(apiVersionRequest(ValidHeadersV2 + ACCEPT_HEADER_INVALID)) shouldBe Left(ErrorAcceptHeaderInvalid)
-      }
+      //TODO should be moved to ShutterCheckActionSpec
+//      "fail when request has invalid accept header" in new SetUp {
+//        validate(apiVersionRequest(ValidHeadersV2 + ACCEPT_HEADER_INVALID)) shouldBe Left(ErrorAcceptHeaderInvalid)
+//      }
       "fail when request has invalid content type header (for JSON)" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2 + CONTENT_TYPE_HEADER_INVALID)) shouldBe Left(ErrorContentTypeHeaderInvalid)
       }

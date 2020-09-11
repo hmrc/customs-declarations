@@ -58,9 +58,10 @@ class HeaderStatusValidatorSpec extends UnitSpec with TableDrivenPropertyChecks 
     }
     "in unhappy path, validation" should {
 
-      "fail when request is for V1" in new SetUp {
-        validate(apiVersionRequest(ValidHeadersV1)) shouldBe Left(ErrorAcceptHeaderInvalid)
-      }
+      //TODO should be moved to ShutterCheckActionSpec
+//      "fail when request is for V1" in new SetUp {
+//        validate(apiVersionRequest(ValidHeadersV1)) shouldBe Left(ErrorAcceptHeaderInvalid)
+//      }
       "fail when request has invalid X-Badge-Identifier header" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_SHORT)) shouldBe Left(ErrorInvalidBadgeIdentifierHeader)
       }

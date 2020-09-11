@@ -112,7 +112,9 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 400 response when authorised by auth API but badge identifier does not exist" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
+        val validatedHeadersRequestNoBadge = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
+        
+        private val actual = await(authAction.refine(validatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -222,8 +224,9 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
       "Return 400 response when authorised by auth API but neither badge identifier nor eori exist" in new NrsEnabled {
         authoriseCsp()
+        val validatedHeadersRequestNoBadge = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
 
-        private val actual = await(authActionSubmitterHeader.refine(TestValidatedHeadersRequestNoBadge))
+        private val actual = await(authActionSubmitterHeader.refine(validatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseMissingIdentifiers.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -282,8 +285,9 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
       "Return 401 response when authorised by auth API but badge identifier does not exists" in new NrsDisabled {
         authoriseCsp()
+        val validatedHeadersRequestNoBadge = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
 
-        private val actual = await(authAction.refine(TestValidatedHeadersRequestNoBadge))
+        private val actual = await(authAction.refine(validatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled

@@ -57,8 +57,8 @@ class ShutterCheckAction @Inject()(logger: DeclarationsLogger,
   )
   
   override def executionContext: ExecutionContext = ec
-  override def refine[A](cr: ConversationIdRequest[A]): Future[Either[Result, ApiVersionRequest[A]]] = Future.successful {
-    implicit val id: ConversationIdRequest[A] = cr
+  override def refine[A](cir: ConversationIdRequest[A]): Future[Either[Result, ApiVersionRequest[A]]] = Future.successful {
+    implicit val id: ConversationIdRequest[A] = cir
     versionShuttered()
   }
 

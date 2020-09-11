@@ -35,9 +35,8 @@ import play.api.test.Helpers.CONTENT_TYPE
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core.ConfidenceLevel.L500
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.{AgentInformation, Credentials, ItmpAddress, ItmpName, LoginTimes, MdtpInformation, Name, ~}
-import uk.gov.hmrc.auth.core.retrieve.v2._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
+import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -79,6 +78,11 @@ object TestData {
   val nrSubmissionId = NrSubmissionId(conversationId.uuid)
   val nrsConfigEnabled = NrsConfig(nrsEnabled = true, "nrs-api-key", "nrs.url")
   val nrsConfigDisabled = NrsConfig(nrsEnabled = false, "nrs-api-key",  "nrs.url")
+  
+  val allVersionsShuttered = DeclarationsShutterConfig(Some(true), Some(true), Some(true))
+  val allVersionsUnshuttered = DeclarationsShutterConfig(Some(false), Some(false), Some(false))
+  val versionOneShuttered = DeclarationsShutterConfig(Some(true), Some(false), Some(false))
+  val allVersionsShutteredUnspecified = DeclarationsShutterConfig(None, None, None)
 
   val TenMb = 10485760
   val fileUploadConfig = FileUploadConfig("upscan-initiate-v1.url", "upscan-initiate-v2.url", 10485760, "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl", 600)
@@ -299,24 +303,31 @@ object TestData {
   def testFakeRequestWithHeader(header: String, headerValue: String): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(header -> headerValue)
 
-  // For Status endpoint
-  val TestConversationIdStatusRequest = ConversationIdRequest(conversationId, EventStart, TestFakeRequest)
-  val TestExtractedStatusHeaders = ExtractedStatusHeadersImpl(VersionTwo, badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
-  val TestValidatedHeadersStatusRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestConversationIdStatusRequest.toValidatedHeadersStatusRequest(TestExtractedStatusHeaders)
-  val TestAuthorisedStatusRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest.toAuthorisedRequest(Csp(None, Some(badgeIdentifier), None))
-
   val TestConversationIdRequest = ConversationIdRequest(conversationId, EventStart, TestFakeRequest)
+  val TestConversationIdRequestMultipleHeaderValues = ConversationIdRequest(conversationId, EventStart, TestFakeRequestMultipleHeaderValues)
   val TestConversationIdRequestWithBadgeIdAndNoEori = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithBadgeIdAndNoEori)
   val TestConversationIdRequestWithEoriAndNoBadgeId = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithEoriAndNoBadgeId)
-  val TestConversationIdRequestMultipleHeaderValues = ConversationIdRequest(conversationId, EventStart, TestFakeRequestMultipleHeaderValues)
-  val TestExtractedHeaders = ExtractedHeadersImpl(VersionOne, ApiSubscriptionFieldsTestData.clientId)
-  val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
+  val TestApiVersionRequestV1 = TestConversationIdRequest.toApiVersionRequest(VersionOne)
+  val TestApiVersionRequestV2 = TestConversationIdRequest.toApiVersionRequest(VersionTwo)
+  val TestApiVersionRequestV3 = TestConversationIdRequest.toApiVersionRequest(VersionThree)
+  val TestApiVersionRequestMultipleHeaderValues = TestConversationIdRequestMultipleHeaderValues.toApiVersionRequest(VersionOne)
+  val TestApiVersionRequestWithBadgeIdAndNoEori = TestConversationIdRequestWithBadgeIdAndNoEori.toApiVersionRequest(VersionOne)
+  val TestApiVersionRequestWithEoriAndNoBadgeId = TestConversationIdRequestWithEoriAndNoBadgeId.toApiVersionRequest(VersionOne)
+  
+  // For Status endpoint
+  val TestConversationIdStatusRequest = ConversationIdRequest(conversationId, EventStart, TestFakeRequest)
+  val TestExtractedStatusHeaders = ExtractedStatusHeadersImpl(badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
+  val TestValidatedHeadersStatusRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestApiVersionRequestV1.toValidatedHeadersStatusRequest(TestExtractedStatusHeaders)
+  val TestAuthorisedStatusRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest.toAuthorisedRequest(Csp(None, Some(badgeIdentifier), None))
 
-  val TestValidatedHeadersRequestMultipleHeaderValues: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestMultipleHeaderValues.toValidatedHeadersRequest(TestExtractedHeaders)
+  val TestExtractedHeaders = ExtractedHeadersImpl(ApiSubscriptionFieldsTestData.clientId)
+  val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestApiVersionRequestV1.toValidatedHeadersRequest(TestExtractedHeaders)
+
+  val TestValidatedHeadersRequestMultipleHeaderValues: ValidatedHeadersRequest[AnyContentAsXml] = TestApiVersionRequestMultipleHeaderValues.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestCspAuthorisedRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), Some(nrsRetrievalValues)))
-  val TestValidatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestValidatedHeadersRequestWithBadgeIdAndNoEori: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithBadgeIdAndNoEori.toValidatedHeadersRequest(TestExtractedHeaders)
-  val TestValidatedHeadersRequestWithEoriAndNoBadgeId: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequestWithEoriAndNoBadgeId.toValidatedHeadersRequest(TestExtractedHeaders)
+  val TestValidatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestApiVersionRequestV1.toValidatedHeadersRequest(TestExtractedHeaders)
+  val TestValidatedHeadersRequestWithBadgeIdAndNoEori: ValidatedHeadersRequest[AnyContentAsXml] = TestApiVersionRequestWithBadgeIdAndNoEori.toValidatedHeadersRequest(TestExtractedHeaders)
+  val TestValidatedHeadersRequestWithEoriAndNoBadgeId: ValidatedHeadersRequest[AnyContentAsXml] = TestApiVersionRequestWithEoriAndNoBadgeId.toValidatedHeadersRequest(TestExtractedHeaders)
   val TestCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
   val TestCspWithBadgeIdNoEoriValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(Csp(None, Some(badgeIdentifier), Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
   val TestCspWithEoriNoBadgeIdValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toCspAuthorisedRequest(Csp(Some(declarantEori), None, Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)

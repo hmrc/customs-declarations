@@ -42,7 +42,8 @@ class HeaderStatusValidator @Inject()(logger: DeclarationsLogger) extends Header
 
     implicit val headers: Headers = apiVersionRequest.headers
 
-    def hasBadgeIdentifier = validateHeader(XBadgeIdentifierHeaderName, xBadgeIdentifierRegex.findFirstIn(_).nonEmpty, ErrorResponse(BAD_REQUEST, BadRequestCode, s"$XBadgeIdentifierHeaderName header is missing or invalid"))
+    def hasBadgeIdentifier = validateHeader(XBadgeIdentifierHeaderName, xBadgeIdentifierRegex.findFirstIn(_).nonEmpty,
+      ErrorResponse(BAD_REQUEST, BadRequestCode, s"$XBadgeIdentifierHeaderName header is missing or invalid"))
 
     super.validateHeaders match {
       case Right(b) =>

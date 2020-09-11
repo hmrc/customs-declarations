@@ -69,6 +69,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockLogger)
     protected val headerValidator = new HeaderWithContentTypeValidator(mockLogger)
+    protected val stubShutterCheckAction = new ShutterCheckAction(mockLogger, mockDeclarationConfigService)
     protected val stubAuthAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
     protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderWithContentTypeValidator(mockLogger), mockLogger)
     
@@ -76,7 +77,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       override def executionContext: ExecutionContext = ec
     }
 
-    protected val common = new Common(stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger, Helpers.stubControllerComponents())
+    protected val common = new Common(stubShutterCheckAction, stubAuthAction, stubValidateAndExtractHeadersAction, mockLogger, Helpers.stubControllerComponents())
 
     protected val controller: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, conversationIdAction, Some(mockMetricsConnector)) {}
     protected val controllerWithoutMetrics: CustomsDeclarationController = new CustomsDeclarationController(common, mockBusinessService, stubPayloadValidationAction, conversationIdAction, None) {}
@@ -101,6 +102,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(Future.successful(()))
     when(mockBusinessService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(Right(Some(nrSubmissionId))))
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
+    when(mockDeclarationConfigService.declarationsShutterConfig).thenReturn(allVersionsUnshuttered)
   }
 
   private val errorResultEoriNotFoundInCustomsEnrolment = ErrorResponse(UNAUTHORIZED, errorCode = "UNAUTHORIZED",

@@ -23,20 +23,20 @@ import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.PayloadValidationAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
-import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
+import util.UnitSpec
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.SAXException
 
 class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private implicit val forConversions: ConversationIdRequest[AnyContentAsXml] = TestConversationIdRequest
   private val saxException = new SAXException("Boom!")
   private val expectedXmlSchemaErrorResult = ErrorResponse
@@ -59,7 +59,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       actual shouldBe Right(TestCspValidatedPayloadRequest)
     }
 
-    "return 400 error response when XML is not well formed  (and send GA request)" in new SetUp {
+    "return 400 error response when XML is not well formed" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.failed(saxException))
 
       private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))
@@ -67,10 +67,10 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       actual shouldBe Left(expectedXmlSchemaErrorResult)
     }
 
-    "return 400 error response when XML validation fails (and send GA request)" in new SetUp {
+    "return 400 error response when XML validation fails" in new SetUp {
       private val errorMessage = "Request body does not contain a well-formed XML document."
       private val errorNotWellFormed = ErrorResponse.errorBadRequest(errorMessage).XmlResult.withConversationId
-      private val authorisedRequestWithNonWellFormedXml = ConversationIdRequest(conversationId, EventStart, FakeRequest().withTextBody("<foo><foo>"))
+      private val authorisedRequestWithNonWellFormedXml = ApiVersionRequest(conversationId, EventStart, VersionOne, FakeRequest().withTextBody("<foo><foo>"))
         .toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest(Csp(None, Some(badgeIdentifier), Some(nrsRetrievalValues)))
 
       private val actual = await(payloadValidationAction.refine(authorisedRequestWithNonWellFormedXml))
@@ -78,7 +78,7 @@ class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
       actual shouldBe Left(errorNotWellFormed)
     }
 
-    "propagates downstream errors by returning a 500 error response (and doesn't send GA request)" in new SetUp {
+    "propagates downstream errors by returning a 500 error response" in new SetUp {
       when(mockXmlValidationService.validate(TestCspValidatedPayloadRequest.body.asXml.get)).thenReturn(Future.failed(emulatedServiceFailure))
 
       private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))

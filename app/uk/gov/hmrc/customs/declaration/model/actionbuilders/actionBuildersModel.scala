@@ -39,7 +39,16 @@ object ActionBuilderModelHelper {
     }
   }
 
-  implicit class CorrelationIdsRequestOps[A](val avr: ApiVersionRequest[A]) extends AnyVal {
+  implicit class ConversationIdRequestOps[A](val cir: ConversationIdRequest[A]) extends AnyVal {
+    def toApiVersionRequest(apiVersion: ApiVersion): ApiVersionRequest[A] = ApiVersionRequest(
+      cir.conversationId,
+      cir.start,
+      apiVersion,
+      cir.request
+    )
+  }
+  
+  implicit class ApiVersionRequestOps[A](val avr: ApiVersionRequest[A]) extends AnyVal {
     def toValidatedHeadersRequest(eh: ExtractedHeaders): ValidatedHeadersRequest[A] = ValidatedHeadersRequest(
       avr.conversationId,
       avr.start,
@@ -48,7 +57,7 @@ object ActionBuilderModelHelper {
       avr.request
     )
 
-    def toValidatedHeadersStatusRequest(avr: ApiVersionRequest[A], eh: ExtractedStatusHeaders): ValidatedHeadersStatusRequest[A] = ValidatedHeadersStatusRequest(
+    def toValidatedHeadersStatusRequest(eh: ExtractedStatusHeaders): ValidatedHeadersStatusRequest[A] = ValidatedHeadersStatusRequest(
       avr.conversationId,
       avr.start,
       avr.requestedApiVersion,

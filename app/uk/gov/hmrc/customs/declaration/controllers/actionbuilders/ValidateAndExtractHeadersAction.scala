@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 @Singleton
 class ValidateAndExtractHeadersAction @Inject()(validator: HeaderWithContentTypeValidator,
-                                                logger: DeclarationsLogger)
+                                                logger: DeclarationsLogger) //TODO remove injected logger
                                                (implicit ec: ExecutionContext)
   extends ActionRefiner[ApiVersionRequest, ValidatedHeadersRequest] with HttpErrorFunctions {
     actionName =>

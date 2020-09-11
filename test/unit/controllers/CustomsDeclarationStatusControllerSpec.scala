@@ -73,12 +73,14 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
     protected val dateTime = new DateTime()
 
+    protected val stubShutterCheckAction = new ShutterCheckAction(mockDeclarationsLogger, mockDeclarationConfigService)
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger)
     protected val stubDeclarationStatusService = new DeclarationStatusService(mockDeclarationsLogger, mockApiSubscriptionFieldsConnector, mockStatusConnector, mockMdgPayloadDecorator, mockDateTimeService, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService)
     protected val stubConversationIdAction = new ConversationIdAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(
+      stubShutterCheckAction,
       stubValidateAndExtractHeadersStatusAction,
       stubAuthStatusAction,
       stubConversationIdAction,
@@ -98,6 +100,7 @@ class CustomsDeclarationStatusControllerSpec extends UnitSpec
     when(mockDateTimeService.nowUtc()).thenReturn(dateTime)
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
+    when(mockDeclarationConfigService.declarationsShutterConfig).thenReturn(allVersionsUnshuttered)
     when(mockStatusResponseFilterService.transform(any[NodeSeq])).thenReturn(<xml>some xml</xml>)
     when(mockStatusResponseValidationService.validate(any[NodeSeq],meq(validBadgeIdentifierValue).asInstanceOf[BadgeIdentifier])).thenReturn(Right(true))
   }

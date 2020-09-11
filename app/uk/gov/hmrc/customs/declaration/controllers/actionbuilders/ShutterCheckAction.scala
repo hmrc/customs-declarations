@@ -23,10 +23,10 @@ import play.api.mvc.{ActionRefiner, _}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorAcceptHeaderInvalid
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{ApiVersion, VersionOne, VersionThree, VersionTwo}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ConversationIdRequest}
-import uk.gov.hmrc.http.HttpErrorFunctions
+import uk.gov.hmrc.customs.declaration.model.{ApiVersion, VersionOne, VersionThree, VersionTwo}
+import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,16 +34,21 @@ import scala.concurrent.{ExecutionContext, Future}
   * <ol>
   * <li/>Input - `ConversationIdRequest`
   * <li/>Output - `ApiVersionRequest`
-  * <li/>Error - 503 Result if requested version is shuttered, or version unknown and any version is shuttered. This terminates the action builder pipeline.
+  * <li/>Error - If Accept header is missing or invalid then return a 406. If requested version is shuttered then return a 503. This terminates the action builder pipeline.
   * </ol>
   */
 @Singleton
-class ShutterCheckAction @Inject()(logger: DeclarationsLogger)
+class ShutterCheckAction @Inject()(logger: DeclarationsLogger,
+                                   config: DeclarationsConfigService)
                                   (implicit ec: ExecutionContext)
-  extends ActionRefiner[ConversationIdRequest, ApiVersionRequest] with HttpErrorFunctions {
+  extends ActionRefiner[ConversationIdRequest, ApiVersionRequest] {
     actionName =>
 
   private val errorResponseVersionShuttered: Result = ErrorResponse(SERVICE_UNAVAILABLE, "SERVER_ERROR", "The 'customs/declarations' API is currently unavailable").XmlResult
+
+  private lazy val v1Shuttered: Boolean = config.declarationsShutterConfig.v1Shuttered.getOrElse(false)
+  private lazy val v2Shuttered: Boolean = config.declarationsShutterConfig.v2Shuttered.getOrElse(false)
+  private lazy val v3Shuttered: Boolean = config.declarationsShutterConfig.v3Shuttered.getOrElse(false)
 
   protected val versionsByAcceptHeader: Map[String, ApiVersion] = Map(
     "application/vnd.hmrc.1.0+xml" -> VersionOne,
@@ -51,10 +56,6 @@ class ShutterCheckAction @Inject()(logger: DeclarationsLogger)
     "application/vnd.hmrc.3.0+xml" -> VersionThree
   )
   
-  //TODO load from config
-  private lazy val v1Shuttered = true
-  private lazy val v2Shuttered = false
-  private lazy val v3Shuttered = false
   override def executionContext: ExecutionContext = ec
   override def refine[A](cr: ConversationIdRequest[A]): Future[Either[Result, ApiVersionRequest[A]]] = Future.successful {
     implicit val id: ConversationIdRequest[A] = cr
@@ -63,35 +64,26 @@ class ShutterCheckAction @Inject()(logger: DeclarationsLogger)
 
   //TODO optimize/simplify
   def versionShuttered[A]()(implicit conversationIdRequest: ConversationIdRequest[A]): Either[Result, ApiVersionRequest[A]] = {
-    val anyVersionShuttered = v1Shuttered || v2Shuttered || v3Shuttered
+    val acceptErrorResult = Left(ErrorAcceptHeaderInvalid.XmlResult.withConversationId)
+    val serviceUnavailableResult = Left(errorResponseVersionShuttered)
 
     conversationIdRequest.request.headers.get(ACCEPT) match {
       case None =>
-        if (anyVersionShuttered) {
-          logger.errorWithoutRequestContext(s"Error - header '$ACCEPT' not present and a version is shuttered, returning unavailable error")
-          Left(errorResponseVersionShuttered)
-        } else {
-          logger.errorWithoutRequestContext(s"Error - header '$ACCEPT' not present")
-          Left(ErrorAcceptHeaderInvalid.XmlResult.withConversationId)
-        }
+        logger.error(s"Error - header '$ACCEPT' not present")
+        acceptErrorResult
       case Some(v) =>
         if (!versionsByAcceptHeader.keySet.contains(v)) {
-          if (anyVersionShuttered) {
-            logger.errorWithoutRequestContext(s"Error - header '$ACCEPT' value '$v' is not valid")
-            Left(errorResponseVersionShuttered)
-          } else {
-            logger.errorWithoutRequestContext(s"Error - header '$ACCEPT' value '$v' is not valid")
-            Left(ErrorAcceptHeaderInvalid.XmlResult.withConversationId)
-          }
+          logger.error(s"Error - header '$ACCEPT' value '$v' is not valid")
+          acceptErrorResult
         } else {
           val apiVersion: ApiVersion = versionsByAcceptHeader(v)
           apiVersion match {
             case VersionOne if v1Shuttered =>
-              Left(errorResponseVersionShuttered)
+              serviceUnavailableResult
             case VersionTwo if v2Shuttered =>
-              Left(errorResponseVersionShuttered)
+              serviceUnavailableResult
             case VersionThree if v3Shuttered =>
-              Left(errorResponseVersionShuttered)
+              serviceUnavailableResult
             case _ =>
               Right(ApiVersionRequest(conversationIdRequest.conversationId, conversationIdRequest.start, apiVersion, conversationIdRequest.request))
           }

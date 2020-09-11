@@ -28,16 +28,17 @@ import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XSubmitterIdentifierHeaderName}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthAction, AuthActionSubmitterHeader, HeaderWithContentTypeValidator}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, HasConversationId}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, HasConversationId}
+import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
-import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData._
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders.{X_CONVERSATION_ID_NAME, X_SUBMITTER_IDENTIFIER_NAME}
 import util.TestData._
-import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing}
+import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, UnitSpec}
+
+import scala.concurrent.ExecutionContext
 
 class AuthActionSpec extends UnitSpec with MockitoSugar {
 
@@ -54,28 +55,28 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
 
   
   private lazy val validatedHeadersRequestWithValidBadgeId =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeId()).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeId()).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithValidBadgeIdEoriPair =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriHeaderName = X_SUBMITTER_IDENTIFIER_NAME)).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair(eoriHeaderName = X_SUBMITTER_IDENTIFIER_NAME)).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithValidEoriNoBadgeId =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithEoriNoBadgeId(eoriHeaderName = X_SUBMITTER_IDENTIFIER_NAME)).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithEoriNoBadgeId(eoriHeaderName = X_SUBMITTER_IDENTIFIER_NAME)).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidEoriNoBadgeId =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithInvalidEoriNoBadgeId(eoriHeaderName = X_SUBMITTER_IDENTIFIER_NAME)).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithInvalidEoriNoBadgeId(eoriHeaderName = X_SUBMITTER_IDENTIFIER_NAME)).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdNoEori =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithInvalidBadgeIdNoEori()).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithInvalidBadgeIdNoEori()).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdTooLong =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeId(badgeIdString = "INVALID_BADGE_IDENTIFIER_TO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeId(badgeIdString = "INVALID_BADGE_IDENTIFIER_TO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdLowerCase =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeId(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeId(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdTooShort =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeId(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeId(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdInvalidChars =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeId(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeId(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
 
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
-    protected implicit val ec = Helpers.stubControllerComponents().executionContext
+    protected implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   }
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {

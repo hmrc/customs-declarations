@@ -39,6 +39,8 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.customs-declarations-metrics.host=some-host3
       |microservice.services.customs-declarations-metrics.port=1113
       |microservice.services.customs-declarations-metrics.context=/some-context3
+      |shutter.v1=true
+      |shutter.v2=false
       |circuitBreaker.numberOfCallsToTriggerStateChange=5
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
@@ -82,6 +84,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.declarationsConfig.customsNotificationBaseBaseUrl shouldBe "http://some-host2:1112/some-context2"
       configService.declarationsConfig.customsDeclarationsMetricsBaseBaseUrl shouldBe "http://some-host3:1113/some-context3"
       configService.declarationsConfig.customsNotificationBearerToken shouldBe "some-token"
+      configService.declarationsShutterConfig.v1Shuttered shouldBe Some(true)
+      configService.declarationsShutterConfig.v2Shuttered shouldBe Some(false)
+      configService.declarationsShutterConfig.v3Shuttered shouldBe None
       configService.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange shouldBe 5
       configService.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis shouldBe 1000
       configService.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis shouldBe 1000
@@ -105,6 +110,9 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: customs-declarations-metrics.context
           |Service configuration not found for key: customs-notification.bearer-token
           |Could not find config key 'declarationStatus.requestDaysLimit'
+          |Could not find config key 'shutter.v1'
+          |Could not find config key 'shutter.v2'
+          |Could not find config key 'shutter.v3'
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'

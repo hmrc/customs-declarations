@@ -21,20 +21,20 @@ import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ConversationIdRequest}
-import util.UnitSpec
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, AuthorisedRequest}
+import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
+import util.UnitSpec
 
 class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
     val mockCdsLogger: CdsLogger = mock[CdsLogger]
     val logger = new DeclarationsLogger(mockCdsLogger)
-    implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, FakeRequest()
+    implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = ApiVersionRequest(conversationId, EventStart, VersionOne, FakeRequest()
       .withXmlBody(TestXmlPayload).withHeaders("Content-Type" -> "Some-Content-Type"))
       .toValidatedHeadersRequest(TestExtractedHeaders)
       .toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), Some(nrsRetrievalValues)))

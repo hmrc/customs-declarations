@@ -30,7 +30,7 @@ import uk.gov.hmrc.customs.declaration.model.{ApiVersion, _}
 import uk.gov.hmrc.customs.declaration.services.{AuditingService, DateTimeService, NrsService}
 import uk.gov.hmrc.http._
 import util.UnitSpec
-import util.TestData._
+import util.TestData.{TestCspValidatedPayloadRequest, _}
 
 import scala.concurrent.Future
 
@@ -58,12 +58,14 @@ class NrsServiceSpec extends UnitSpec with MockitoSugar {
 
   "NrsService" should {
     "send CSP payload to connector" in new SetUp() {
-      //TODO tidy this up
-      val x = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders).toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
+      val testCspValidatedPayloadRequestWithMinimalHeaders = TestConversationIdRequest.toApiVersionRequest(VersionOne)
+        .toValidatedHeadersRequest(TestExtractedHeaders)
+        .toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), Some(nrsRetrievalValues)))
+        .toValidatedPayloadRequest(xmlBody = TestXmlPayload)
       
       when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(cspResponsePayload))
 
-      val result = send(x)
+      val result = send(testCspValidatedPayloadRequestWithMinimalHeaders)
 
       result shouldBe cspResponsePayload
 

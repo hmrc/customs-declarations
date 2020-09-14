@@ -18,7 +18,6 @@ package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{ActionRefiner, _}
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.http.HttpErrorFunctions
@@ -33,8 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * </ol>
   */
 @Singleton
-class ValidateAndExtractHeadersAction @Inject()(validator: HeaderWithContentTypeValidator,
-                                                logger: DeclarationsLogger) //TODO remove injected logger
+class ValidateAndExtractHeadersAction @Inject()(validator: HeaderWithContentTypeValidator)
                                                (implicit ec: ExecutionContext)
   extends ActionRefiner[ApiVersionRequest, ValidatedHeadersRequest] with HttpErrorFunctions {
     actionName =>

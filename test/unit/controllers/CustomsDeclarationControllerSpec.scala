@@ -71,7 +71,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
     protected val headerValidator = new HeaderWithContentTypeValidator(mockLogger)
     protected val stubShutterCheckAction = new ShutterCheckAction(mockLogger, mockDeclarationConfigService)
     protected val stubAuthAction: AuthAction = new AuthAction(customsAuthService, headerValidator, mockLogger, mockDeclarationConfigService)
-    protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderWithContentTypeValidator(mockLogger), mockLogger)
+    protected val stubValidateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(new HeaderWithContentTypeValidator(mockLogger))
     
     protected val stubPayloadValidationAction: PayloadValidationAction = new PayloadValidationAction(mockXmlValidationService, mockLogger) {
       override def executionContext: ExecutionContext = ec

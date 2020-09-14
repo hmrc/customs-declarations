@@ -33,10 +33,7 @@ import util.{ApiSubscriptionFieldsTestData, TestData, UnitSpec}
 
 class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
 
-  //TODO move these tests based on apiversion elsewhere
   private val extractedHeadersWithBadgeIdentifierV1 = ExtractedHeadersImpl(ApiSubscriptionFieldsTestData.clientId)
-//  private val extractedHeadersWithBadgeIdentifierV2 = extractedHeadersWithBadgeIdentifierV1.copy(requestedApiVersion = VersionTwo)
-//  private val extractedHeadersWithBadgeIdentifierV3 = extractedHeadersWithBadgeIdentifierV1.copy(requestedApiVersion = VersionThree)
 
   trait SetUp {
     val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
@@ -49,34 +46,17 @@ class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenProper
 
   "HeaderWithContentTypeValidator" can {
     "in happy path, validation" should {
-      "be successful for a valid request with accept header for V1" in new SetUp {
-        validate(apiVersionRequest(ValidHeadersV1)) shouldBe Right(extractedHeadersWithBadgeIdentifierV1)
-      }
-      "be successful for a valid request with accept header for V2" in new SetUp {
-//        validate(apiVersionRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
-      }
-      "be successful for a valid request with accept header for V3" in new SetUp {
-//        validate(apiVersionRequest(ValidHeadersV3)) shouldBe Right(extractedHeadersWithBadgeIdentifierV3)
-      }
       "be successful for content type XML with no space header" in new SetUp {
-//        validate(apiVersionRequest(ValidHeadersV2 + (CONTENT_TYPE -> "application/xml;charset=utf-8"))) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+        validate(apiVersionRequest(ValidHeadersV1 + (CONTENT_TYPE -> "application/xml;charset=utf-8"))) shouldBe Right(extractedHeadersWithBadgeIdentifierV1)
       }
     }
     "in unhappy path, validation" should {
-      //TODO should be moved to ShutterCheckActionSpec
-//      "fail when request is missing accept header" in new SetUp {
-//        validate(apiVersionRequest(ValidHeadersV2 - ACCEPT)) shouldBe Left(ErrorAcceptHeaderInvalid)
-//      }
       "fail when request is missing content type header" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2 - CONTENT_TYPE)) shouldBe Left(ErrorContentTypeHeaderInvalid)
       }
       "fail when request is missing X-Client-ID header" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2 - XClientIdHeaderName)) shouldBe Left(ErrorInternalServerError)
       }
-      //TODO should be moved to ShutterCheckActionSpec
-//      "fail when request has invalid accept header" in new SetUp {
-//        validate(apiVersionRequest(ValidHeadersV2 + ACCEPT_HEADER_INVALID)) shouldBe Left(ErrorAcceptHeaderInvalid)
-//      }
       "fail when request has invalid content type header (for JSON)" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2 + CONTENT_TYPE_HEADER_INVALID)) shouldBe Left(ErrorContentTypeHeaderInvalid)
       }

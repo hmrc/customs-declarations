@@ -25,17 +25,13 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderStatusValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.VersionOne
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders, ExtractedStatusHeadersImpl}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders}
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ValidHeadersV2, _}
-import util.TestData.badgeIdentifier
-import util.{ApiSubscriptionFieldsTestData, TestData, UnitSpec}
+import util.{TestData, UnitSpec}
 
 class HeaderStatusValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
 
-  //TODO move these tests based on apiversion elsewhere
-  private val extractedHeadersWithBadgeIdentifierV2 = ExtractedStatusHeadersImpl(badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
-//  private val extractedHeadersWithBadgeIdentifierV3 = extractedHeadersWithBadgeIdentifierV2.copy(requestedApiVersion = VersionThree)
   private val ErrorInvalidBadgeIdentifierHeader: ErrorResponse = ErrorResponse(BAD_REQUEST, BadRequestCode, s"X-Badge-Identifier header is missing or invalid")
 
   trait SetUp {
@@ -48,20 +44,7 @@ class HeaderStatusValidatorSpec extends UnitSpec with TableDrivenPropertyChecks 
   }
 
   "HeaderValidator" can {
-    "in happy path, validation" should {
-      "be successful for a valid request with accept header for V2" in new SetUp {
-        validate(apiVersionRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
-      }
-      "be successful for a valid request with accept header for V3" in new SetUp {
-//        validate(apiVersionRequest(ValidHeadersV3)) shouldBe Right(extractedHeadersWithBadgeIdentifierV3)
-      }
-    }
     "in unhappy path, validation" should {
-
-      //TODO should be moved to ShutterCheckActionSpec
-//      "fail when request is for V1" in new SetUp {
-//        validate(apiVersionRequest(ValidHeadersV1)) shouldBe Left(ErrorAcceptHeaderInvalid)
-//      }
       "fail when request has invalid X-Badge-Identifier header" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_TOO_SHORT)) shouldBe Left(ErrorInvalidBadgeIdentifierHeader)
       }

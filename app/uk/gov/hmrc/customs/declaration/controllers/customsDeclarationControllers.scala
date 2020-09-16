@@ -24,7 +24,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.{CancellationDeclarationSubmissionService, DeclarationService, StandardDeclarationSubmissionService}
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 

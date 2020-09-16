@@ -17,9 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
 import javax.inject.Inject
-import play.api.http.HeaderNames._
 import play.api.mvc.Headers
-import play.api.http.Status.SERVICE_UNAVAILABLE
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
@@ -60,7 +58,6 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
   }
 
   def logAcceptAndClientIdHeaderText[A](clientId: ClientId): String = {
-//    s"\n$ACCEPT header passed validation: ${versionsByAcceptHeader.valuesIterator.find(version => version == apiVersion).get}" +
     s"\n$XClientIdHeaderName header passed validation: ${clientId.value}"
   }
 

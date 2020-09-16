@@ -230,7 +230,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
   feature("Declaration API returns unavailable when a version is shuttered") {
     scenario("An authorised CSP fails to submit a customs declaration to a shuttered version") {
       Given("A CSP wants to submit a valid customs declaration to a shuttered version")
-      implicit lazy val app: Application = super.app(configValues + ("shutter.v2" -> "true"))
+      implicit lazy val app: Application = super.app(configMap + ("shutter.v2" -> "true"))
       
       startMdgWcoDecServiceV2()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)

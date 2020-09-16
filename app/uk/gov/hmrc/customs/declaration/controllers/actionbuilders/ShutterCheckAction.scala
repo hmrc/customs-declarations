@@ -44,50 +44,59 @@ class ShutterCheckAction @Inject()(logger: DeclarationsLogger,
   extends ActionRefiner[ConversationIdRequest, ApiVersionRequest] {
     actionName =>
 
-  private val errorResponseVersionShuttered: Result = ErrorResponse(SERVICE_UNAVAILABLE, "SERVER_ERROR", "The 'customs/declarations' API is currently unavailable").XmlResult
-
-  private lazy val v1Shuttered: Boolean = config.declarationsShutterConfig.v1Shuttered.getOrElse(false)
-  private lazy val v2Shuttered: Boolean = config.declarationsShutterConfig.v2Shuttered.getOrElse(false)
-  private lazy val v3Shuttered: Boolean = config.declarationsShutterConfig.v3Shuttered.getOrElse(false)
-
-  protected val versionsByAcceptHeader: Map[String, ApiVersion] = Map(
-    "application/vnd.hmrc.1.0+xml" -> VersionOne,
-    "application/vnd.hmrc.2.0+xml" -> VersionTwo,
-    "application/vnd.hmrc.3.0+xml" -> VersionThree
-  )
+    private val errorResponseVersionShuttered: Result = ErrorResponse(SERVICE_UNAVAILABLE, "SERVER_ERROR", "The 'customs/declarations' API is currently unavailable").XmlResult
   
-  override def executionContext: ExecutionContext = ec
-  override def refine[A](cir: ConversationIdRequest[A]): Future[Either[Result, ApiVersionRequest[A]]] = Future.successful {
-    implicit val id: ConversationIdRequest[A] = cir
-    versionShuttered()
+    private lazy val v1Shuttered: Boolean = config.declarationsShutterConfig.v1Shuttered.getOrElse(false)
+    private lazy val v2Shuttered: Boolean = config.declarationsShutterConfig.v2Shuttered.getOrElse(false)
+    private lazy val v3Shuttered: Boolean = config.declarationsShutterConfig.v3Shuttered.getOrElse(false)
+  
+    protected val versionsByAcceptHeader: Map[String, ApiVersion] = Map(
+      "application/vnd.hmrc.1.0+xml" -> VersionOne,
+      "application/vnd.hmrc.2.0+xml" -> VersionTwo,
+      "application/vnd.hmrc.3.0+xml" -> VersionThree
+    )
+  
+    override def executionContext: ExecutionContext = ec
+  
+    override def refine[A](cir: ConversationIdRequest[A]): Future[Either[Result, ApiVersionRequest[A]]] = Future.successful {
+     implicit val id: ConversationIdRequest[A] = cir
+     val acceptErrorResult = Left(ErrorAcceptHeaderInvalid.XmlResult.withConversationId)
+  
+     cir.request.headers.get(ACCEPT) match {
+       case None =>
+         logger.error(s"Error - header '$ACCEPT' not present")
+         acceptErrorResult
+       case Some(v) =>
+         if (!versionsByAcceptHeader.keySet.contains(v)) {
+           logger.error(s"Error - header '$ACCEPT' value '$v' is not valid")
+           acceptErrorResult
+         } else {
+           val apiVersion: ApiVersion = versionsByAcceptHeader(v)
+           versionShuttered(apiVersion)
+         }
+     }
   }
 
-  //TODO optimize/simplify
-  def versionShuttered[A]()(implicit conversationIdRequest: ConversationIdRequest[A]): Either[Result, ApiVersionRequest[A]] = {
-    val acceptErrorResult = Left(ErrorAcceptHeaderInvalid.XmlResult.withConversationId)
+  private def versionShuttered[A](apiVersion: ApiVersion)(implicit cir: ConversationIdRequest[A]): Either[Result, ApiVersionRequest[A]] = {
+
     val serviceUnavailableResult = Left(errorResponseVersionShuttered)
 
-    conversationIdRequest.request.headers.get(ACCEPT) match {
-      case None =>
-        logger.error(s"Error - header '$ACCEPT' not present")
-        acceptErrorResult
-      case Some(v) =>
-        if (!versionsByAcceptHeader.keySet.contains(v)) {
-          logger.error(s"Error - header '$ACCEPT' value '$v' is not valid")
-          acceptErrorResult
-        } else {
-          val apiVersion: ApiVersion = versionsByAcceptHeader(v)
-          apiVersion match {
-            case VersionOne if v1Shuttered =>
-              serviceUnavailableResult
-            case VersionTwo if v2Shuttered =>
-              serviceUnavailableResult
-            case VersionThree if v3Shuttered =>
-              serviceUnavailableResult
-            case _ =>
-              Right(ApiVersionRequest(conversationIdRequest.conversationId, conversationIdRequest.start, apiVersion, conversationIdRequest.request))
-          }
-        }
+    def unavailableWithLog(apiVersion: ApiVersion) = {
+      logger.warn(s"version ${apiVersion.toString} requested but is shuttered")
+      serviceUnavailableResult
+    }
+    
+    apiVersion match {
+      case VersionOne if v1Shuttered =>
+        unavailableWithLog(VersionOne)
+      case VersionTwo if v2Shuttered =>
+        unavailableWithLog(VersionTwo)
+      case VersionThree if v3Shuttered =>
+        unavailableWithLog(VersionThree)
+      case _ =>
+        logger.debug(s"$ACCEPT header passed validation with: $apiVersion")
+        Right(ApiVersionRequest(cir.conversationId, cir.start, apiVersion, cir.request))
     }
   }
+
 }

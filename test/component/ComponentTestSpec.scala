@@ -41,10 +41,7 @@ trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppP
   when(mockDateTimeService.nowUtc()).thenReturn(new DateTime(dateTime, DateTimeZone.UTC))
   when(mockDateTimeService.zonedDateTimeUtc).thenReturn(ZonedDateTime.ofInstant(Instant.ofEpochMilli(dateTime), ZoneId.of("UTC")))
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
-    .overrides(bind[DateTimeService].toInstance(mockDateTimeService))
-    .overrides(bind[UniqueIdsService].toInstance(stubUniqueIdsService))
-    .configure(Map(
+  protected val configValues: Map[String, Any] = Map(
     "xml.max-errors" -> 2,
     "metrics.jvm" -> false,
     "microservice.services.auth.host" -> ExternalServicesConfig.Host,
@@ -109,6 +106,12 @@ trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppP
     "microservice.services.customs-declarations-metrics.host" -> ExternalServicesConfig.Host,
     "microservice.services.customs-declarations-metrics.port" -> ExternalServicesConfig.Port,
     "microservice.services.customs-declarations-metrics.context" -> CustomsDeclarationsExternalServicesConfig.CustomsDeclarationsMetricsContext
-  )).build()
+  )
+  
+  def app(values: Map[String, Any] = configValues): Application = new GuiceApplicationBuilder()
+    .overrides(bind[DateTimeService].toInstance(mockDateTimeService))
+    .overrides(bind[UniqueIdsService].toInstance(stubUniqueIdsService))
+    .configure(values).build()
 
+  override implicit lazy val app: Application = app()
 }

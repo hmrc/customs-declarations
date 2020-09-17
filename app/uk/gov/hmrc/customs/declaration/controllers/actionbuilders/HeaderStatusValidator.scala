@@ -38,20 +38,21 @@ class HeaderStatusValidator @Inject()(logger: DeclarationsLogger) extends Header
     "application/vnd.hmrc.3.0+xml" -> VersionThree
   )
 
-  override def validateHeaders[A](implicit conversationIdRequest: ConversationIdRequest[A]): Either[ErrorResponse, ExtractedStatusHeaders] = {
+  override def validateHeaders[A](implicit apiVersionRequest: ApiVersionRequest[A]): Either[ErrorResponse, ExtractedStatusHeaders] = {
 
-    implicit val headers: Headers = conversationIdRequest.headers
+    implicit val headers: Headers = apiVersionRequest.headers
 
-    def hasBadgeIdentifier = validateHeader(XBadgeIdentifierHeaderName, xBadgeIdentifierRegex.findFirstIn(_).nonEmpty, ErrorResponse(BAD_REQUEST, BadRequestCode, s"$XBadgeIdentifierHeaderName header is missing or invalid"))
+    def hasBadgeIdentifier = validateHeader(XBadgeIdentifierHeaderName, xBadgeIdentifierRegex.findFirstIn(_).nonEmpty,
+      ErrorResponse(BAD_REQUEST, BadRequestCode, s"$XBadgeIdentifierHeaderName header is missing or invalid"))
 
     super.validateHeaders match {
       case Right(b) =>
         val theResult: Either[ErrorResponse, ExtractedStatusHeaders] = for {
         badgeIdentifier <- hasBadgeIdentifier.right
         } yield {
-          logger.debug(s"${logAcceptAndClientIdHeaderText(b.requestedApiVersion, b.clientId)}" +
+          logger.debug(s"${logAcceptAndClientIdHeaderText(b.clientId)}" +
             s"$XBadgeIdentifierHeaderName header passed validation: $badgeIdentifier")
-          ExtractedStatusHeadersImpl(b.requestedApiVersion, BadgeIdentifier(badgeIdentifier), b.clientId)
+          ExtractedStatusHeadersImpl(BadgeIdentifier(badgeIdentifier), b.clientId)
         }
         theResult
       case Left(a) => Left(a)

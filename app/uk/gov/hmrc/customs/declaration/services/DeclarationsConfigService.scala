@@ -34,6 +34,10 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val fileTransmissionService = configValidatedNel.service("file-transmission")
   private val customsDeclarationsMetricsService = configValidatedNel.service("customs-declarations-metrics")
 
+  private val v1ShutteredNel = root.maybeBoolean("shutter.v1")
+  private val v2ShutteredNel = root.maybeBoolean("shutter.v2")
+  private val v3ShutteredNel = root.maybeBoolean("shutter.v3")
+  
   private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
   private val unstablePeriodDurationInMillisNel = root.int("circuitBreaker.unstablePeriodDurationInMillis")
@@ -62,6 +66,10 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, customsDeclarationsMetricsServiceUrlNel, bearerTokenNel, declarationStatusRequestDaysLimit
     ) mapN DeclarationsConfig
 
+  private val validatedDeclarationsShutterConfig: CustomsValidatedNel[DeclarationsShutterConfig] = (
+    v1ShutteredNel, v2ShutteredNel, v3ShutteredNel
+  ) mapN DeclarationsShutterConfig
+  
   private val validatedDeclarationsCircuitBreakerConfig: CustomsValidatedNel[DeclarationsCircuitBreakerConfig] = (
     numberOfCallsToTriggerStateChangeNel, unavailablePeriodDurationInMillisNel, unstablePeriodDurationInMillisNel
     ) mapN DeclarationsCircuitBreakerConfig
@@ -77,6 +85,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   private val customsConfigHolder =
     (validatedDeclarationsConfig,
+      validatedDeclarationsShutterConfig,
       validatedDeclarationsCircuitBreakerConfig,
       validatedNrsConfig,
       validatedFileUploadConfig
@@ -92,6 +101,8 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   val declarationsConfig: DeclarationsConfig = customsConfigHolder.declarationsConfig
 
+  val declarationsShutterConfig: DeclarationsShutterConfig = customsConfigHolder.declarationsShutterConfig
+  
   val declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig = customsConfigHolder.declarationsCircuitBreakerConfig
 
   val nrsConfig: NrsConfig = customsConfigHolder.validatedNrsConfig
@@ -99,6 +110,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   val fileUploadConfig: FileUploadConfig = customsConfigHolder.validatedFileUploadConfig
 
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
+                                         declarationsShutterConfig: DeclarationsShutterConfig,
                                          declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,
                                          validatedNrsConfig: NrsConfig,
                                          validatedFileUploadConfig: FileUploadConfig)

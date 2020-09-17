@@ -23,6 +23,7 @@ import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.http.Status.NOT_FOUND
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
@@ -40,13 +41,13 @@ import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData.{correlationId, _}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private implicit val ar: AuthorisedRequest[AnyContentAsXml] = util.TestData.TestAuthorisedStatusRequest
 
   protected lazy val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
@@ -59,7 +60,7 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
   protected lazy val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
   protected lazy val mockHttpResponse: HttpResponse = mock[HttpResponse]
   protected lazy val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
-  protected val mrn = Mrn("theMrn")
+  protected val mrn: Mrn = Mrn("theMrn")
 
   trait SetUp {
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
@@ -94,14 +95,14 @@ class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with Befor
 
       val result: Either[Result, HttpResponse] = send()
       result.right.get.body shouldBe "<xml>transformed</xml>"
-      verify(mockDeclarationStatusConnector).send(expectedDeclarationStatusPayload, dateTime, correlationId, VersionTwo)(TestAuthorisedStatusRequest)
+      verify(mockDeclarationStatusConnector).send(expectedDeclarationStatusPayload, dateTime, correlationId, VersionOne)(TestAuthorisedStatusRequest)
     }
 
     "return 404 error response when MDG call fails with 404" in new SetUp() {
       when(mockDeclarationStatusConnector.send(any[NodeSeq],
         any[DateTime],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(404)))
+        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(NOT_FOUND)))
       val result: Either[Result, HttpResponse] = send()
 
       result shouldBe Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)

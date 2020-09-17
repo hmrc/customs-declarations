@@ -31,7 +31,8 @@ import scala.concurrent.ExecutionContext
 import scala.xml.{PrettyPrinter, TopScope}
 
 @Singleton
-class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction,
+class DeclarationStatusController @Inject()(val shutterCheckAction: ShutterCheckAction,
+                                            val validateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction,
                                             val authAction: AuthStatusAction,
                                             val conversationIdAction: ConversationIdAction,
                                             val declarationStatusService: DeclarationStatusService,
@@ -43,6 +44,7 @@ class DeclarationStatusController @Inject()(val validateAndExtractHeadersStatusA
   def get(mrn: String): Action[AnyContent] = (
     Action andThen
       conversationIdAction andThen
+      shutterCheckAction andThen
       validateAndExtractHeadersStatusAction andThen
       authAction
     ).async {

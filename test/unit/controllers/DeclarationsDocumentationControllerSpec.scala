@@ -39,7 +39,6 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
     "api.access.version-2.0.whitelistedApplicationIds.0" -> "v2AppId-1",
     "api.access.version-2.0.whitelistedApplicationIds.1" -> "v2AppId-2")
 
-
   private val v3WhitelistedAppIdsConfigs = Map(
     "api.access.version-3.0.whitelistedApplicationIds.0" -> "v3AppId-1",
     "api.access.version-3.0.whitelistedApplicationIds.1" -> "v3AppId-2")

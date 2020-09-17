@@ -23,14 +23,15 @@ import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalSe
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XEoriIdentifierHeaderName}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, HeaderWithContentTypeValidator}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
-import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
-import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
+import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders, UnitSpec}
+
+import scala.concurrent.ExecutionContext
 
 class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
@@ -40,28 +41,28 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
     errorBadRequest(s"$XEoriIdentifierHeaderName header is missing or invalid")
 
   private lazy val validatedHeadersRequestWithValidBadgeIdEoriPair =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair()).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair()).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdEoriPair =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "", badgeIdString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair(eoriString = "", badgeIdString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithValidBadgeIdAndEmptyEori =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair(eoriString = "")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithValidBadgeIdAndEoriTooLong =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "INVALID_EORI_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair(eoriString = "INVALID_EORI_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidEoriInvalidChars =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(eoriString = "     ")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair(eoriString = "     ")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdTooLong =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "INVALID_BADGE_IDENTIFIER_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "INVALID_BADGE_IDENTIFIER_TOO_LONG")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdLowerCase =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "lowercase")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdTooShort =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "SHORT")).toValidatedHeadersRequest(TestExtractedHeaders)
   private lazy val validatedHeadersRequestWithInvalidBadgeIdInvalidChars =
-    ConversationIdRequest(conversationId, EventStart, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
+    ApiVersionRequest(conversationId, EventStart, VersionOne, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
 
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockDeclarationConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
-    protected implicit val ec = Helpers.stubControllerComponents().executionContext
+    protected implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   }
 
   trait NrsEnabled extends AuthConnectorStubbing with SetUp {
@@ -102,7 +103,9 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier does not exist" in new NrsEnabled {
         authoriseCspButDontFetchRetrievals()
 
-        private val actual = await(fileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
+        val validatedHeadersRequestNoBadge = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
+
+        private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -212,7 +215,8 @@ class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
       "Return 401 response when authorised by auth API but badge identifier does not exist" in new NrsDisabled {
         authoriseCsp()
 
-        private val actual = await(fileUploadAuthAction.refine(TestValidatedHeadersRequestNoBadge))
+        val validatedHeadersRequestNoBadge = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
+        private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled

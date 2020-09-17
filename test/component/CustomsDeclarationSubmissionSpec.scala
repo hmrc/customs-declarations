@@ -18,6 +18,7 @@ package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import play.api.Application
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
@@ -226,9 +227,32 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
   }
 
+  feature("Declaration API returns unavailable when a version is shuttered") {
+    scenario("An authorised CSP fails to submit a customs declaration to a shuttered version") {
+      Given("A CSP wants to submit a valid customs declaration to a shuttered version")
+      implicit lazy val app: Application = super.app(configMap + ("shutter.v2" -> "true"))
+      
+      startMdgWcoDecServiceV2()
+      startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
 
+      val request: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request.fromCsp.postTo(endpoint)
+
+      And("the CSP is authorised with its privileged application")
+      authServiceAuthorizesCSP()
+
+      When("a POST request with data is sent to the API")
+      val result: Future[Result] = route(app = app, request).value
+
+      Then("a response with a 503 (SERVICE_UNAVAILABLE) status is received")
+      status(result) shouldBe SERVICE_UNAVAILABLE
+
+      And("the response body is empty")
+      stringToXml(contentAsString(result)) shouldBe stringToXml(ServiceUnavailableError)
+    }
+
+  }
+  
   feature("Declaration API handles submission errors from CSPs as expected") {
-
     scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")
       val request = InvalidSubmissionRequestWith2Errors.fromCsp.postTo(endpoint)

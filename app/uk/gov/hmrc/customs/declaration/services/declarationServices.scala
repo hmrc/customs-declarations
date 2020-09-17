@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnecto
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ExtractedHeaders, HasAuthorisedAs, HasConversationId, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ExtractedHeaders, HasApiVersion, HasAuthorisedAs, HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -165,7 +165,7 @@ trait ApiSubscriptionFieldsService {
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
   def futureApiSubFieldsId[A](c: ClientId)
-                             (implicit vpr: HasConversationId with HasAuthorisedAs with ExtractedHeaders, hc: HeaderCarrier): Future[Either[Result, ApiSubscriptionFieldsResponse]] = {
+                             (implicit vpr: HasConversationId with HasApiVersion with HasAuthorisedAs with ExtractedHeaders, hc: HeaderCarrier): Future[Either[Result, ApiSubscriptionFieldsResponse]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
         vpr.authorisedAs match {

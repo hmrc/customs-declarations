@@ -33,6 +33,7 @@ import scala.xml.{PrettyPrinter, TopScope}
 
 @Singleton
 class Common @Inject() (
+  val shutterCheckAction: ShutterCheckAction,
   val authAction: AuthAction,
   val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
   val logger: DeclarationsLogger,
@@ -41,11 +42,12 @@ class Common @Inject() (
 
 @Singleton
 class CommonSubmitterHeader @Inject()(
+  shutterCheckAction: ShutterCheckAction,
   override val authAction: AuthActionSubmitterHeader,
   validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
   logger: DeclarationsLogger,
   cc: ControllerComponents
-) extends Common(authAction, validateAndExtractHeadersAction, logger, cc)
+) extends Common(shutterCheckAction, authAction, validateAndExtractHeadersAction, logger, cc)
 
 @Singleton
 class SubmitDeclarationController @Inject()(common: CommonSubmitterHeader,
@@ -98,6 +100,7 @@ abstract class CustomsDeclarationController(val common: Common,
   def post(): Action[AnyContent] = (
     Action andThen
       conversationIdAction andThen
+      common.shutterCheckAction andThen
       common.validateAndExtractHeadersAction andThen
       common.authAction andThen
       payloadValidationAction

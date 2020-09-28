@@ -38,7 +38,7 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
                                          (implicit ec: ExecutionContext) extends HttpErrorFunctions {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier(
-    extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON, USER_AGENT -> "customs-declarations")
+    extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON) // http-verbs will implicitly add user agent header
   )
 
   def send[A](request: FileTransmission)(implicit hasConversationId: HasConversationId): Future[Unit] = {

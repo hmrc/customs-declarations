@@ -32,12 +32,6 @@ class HeaderStatusValidator @Inject()(logger: DeclarationsLogger) extends Header
 
   private lazy val xBadgeIdentifierRegex = "^[0-9A-Z]{6,12}$".r
 
-  // Not V1
-  override val versionsByAcceptHeader: Map[String, ApiVersion] = Map(
-    "application/vnd.hmrc.2.0+xml" -> VersionTwo,
-    "application/vnd.hmrc.3.0+xml" -> VersionThree
-  )
-
   override def validateHeaders[A](implicit apiVersionRequest: ApiVersionRequest[A]): Either[ErrorResponse, ExtractedStatusHeaders] = {
 
     implicit val headers: Headers = apiVersionRequest.headers

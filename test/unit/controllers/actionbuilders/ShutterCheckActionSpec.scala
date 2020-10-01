@@ -42,7 +42,7 @@ class ShutterCheckActionSpec extends UnitSpec with MockitoSugar {
     protected implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
     val mockConfigService = mock[DeclarationsConfigService]
     private val mockLogger = mock[DeclarationsLogger]
-    val errorResponseVersionShuttered: Result = ErrorResponse(SERVICE_UNAVAILABLE, "SERVER_ERROR", "The 'customs/declarations' API is currently unavailable").XmlResult
+    val errorResponseVersionShuttered: Result = ErrorResponse(SERVICE_UNAVAILABLE, "SERVER_ERROR", "Service Unavailable").XmlResult
 
     val allVersionsShuttered = DeclarationsShutterConfig(Some(true), Some(true), Some(true))
     val versionOneShuttered = DeclarationsShutterConfig(Some(true), Some(false), Some(false))

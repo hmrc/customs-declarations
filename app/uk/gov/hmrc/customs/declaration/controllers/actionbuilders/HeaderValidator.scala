@@ -29,12 +29,6 @@ import scala.util.matching.Regex
 
 abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
 
-  protected val versionsByAcceptHeader: Map[String, ApiVersion] = Map(
-    "application/vnd.hmrc.1.0+xml" -> VersionOne,
-    "application/vnd.hmrc.2.0+xml" -> VersionTwo,
-    "application/vnd.hmrc.3.0+xml" -> VersionThree
-  )
-
   private lazy val xClientIdRegex: Regex = "^\\S+$".r
   private lazy val xBadgeIdentifierRegex: Regex = "^[0-9A-Z]{6,12}$".r
   private lazy val InvalidEoriHeaderRegex: Regex = "(^[\\s]*$|^.{18,}$)".r

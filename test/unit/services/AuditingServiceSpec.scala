@@ -85,7 +85,7 @@ class AuditingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         (actualExtendedDataEvent.detail \ "userSubmissionTimestamp" ).as[String] shouldBe nrsPayload.metadata.userSubmissionTimestamp
         (actualExtendedDataEvent.detail \ "identityData" ).as[JsValue] shouldBe Json.toJson(nrsPayload.metadata.identityData)
         actualExtendedDataEvent.eventId should fullyMatch regex """[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"""
-        actualExtendedDataEvent.generatedAt.toString() should have size 24
+        actualExtendedDataEvent.generatedAt.toString() should not be empty
       }
     }
 
@@ -117,7 +117,7 @@ class AuditingServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
         (actualExtendedDataEvent.detail \ "userSubmissionTimestamp" ).as[String] shouldBe nrsPayload.metadata.userSubmissionTimestamp
         (actualExtendedDataEvent.detail \ "identityData" ).as[JsValue] shouldBe Json.toJson(nrsPayload.metadata.identityData)
         actualExtendedDataEvent.eventId should fullyMatch regex """[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"""
-        actualExtendedDataEvent.generatedAt.toString() should have size 24
+        actualExtendedDataEvent.generatedAt.toString() should not be empty
       }
     }
   }

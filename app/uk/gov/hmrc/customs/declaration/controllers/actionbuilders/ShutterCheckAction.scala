@@ -44,7 +44,7 @@ class ShutterCheckAction @Inject()(logger: DeclarationsLogger,
   extends ActionRefiner[ConversationIdRequest, ApiVersionRequest] {
     actionName =>
 
-    private val errorResponseVersionShuttered: Result = ErrorResponse(SERVICE_UNAVAILABLE, "SERVER_ERROR", "The 'customs/declarations' API is currently unavailable").XmlResult
+    private val errorResponseVersionShuttered: Result = ErrorResponse(SERVICE_UNAVAILABLE, "SERVER_ERROR", "Service Unavailable").XmlResult
   
     private lazy val v1Shuttered: Boolean = config.declarationsShutterConfig.v1Shuttered.getOrElse(false)
     private lazy val v2Shuttered: Boolean = config.declarationsShutterConfig.v2Shuttered.getOrElse(false)

@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEor
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.ExecutionContext
 import scala.xml.{PrettyPrinter, TopScope}

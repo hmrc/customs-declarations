@@ -18,13 +18,13 @@ package unit.services
 
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.{Configuration, Mode}
+import play.api.Configuration
 import uk.gov.hmrc.customs.api.common.config.ConfigValidatedNelAdaptor
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
-import util.UnitSpec
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import util.MockitoPassByNameHelper.PassByNameVerifier
+import util.UnitSpec
 
 class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
   private val validAppConfig: Config = ConfigFactory.parseString(
@@ -102,11 +102,11 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
     "throw an exception when configuration is invalid, that contains AGGREGATED error messages" in {
       val expectedErrorMessage =
         """
-          |Could not find config api-subscription-fields.host
+          |Could not find config key 'api-subscription-fields.host'
           |Service configuration not found for key: api-subscription-fields.context
-          |Could not find config customs-notification.host
+          |Could not find config key 'customs-notification.host'
           |Service configuration not found for key: customs-notification.context
-          |Could not find config customs-declarations-metrics.host
+          |Could not find config key 'customs-declarations-metrics.host'
           |Service configuration not found for key: customs-declarations-metrics.context
           |Service configuration not found for key: customs-notification.bearer-token
           |Could not find config key 'declarationStatus.requestDaysLimit'
@@ -115,17 +115,17 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'
           |Could not find config key 'nrs.enabled'
           |Could not find config key 'nrs.apikey'
-          |Could not find config nrs.host
+          |Could not find config key 'nrs.host'
           |Service configuration not found for key: nrs.context
-          |Could not find config upscan-initiate-v1.host
+          |Could not find config key 'upscan-initiate-v1.host'
           |Service configuration not found for key: upscan-initiate-v1.context
-          |Could not find config upscan-initiate-v2.host
+          |Could not find config key 'upscan-initiate-v2.host'
           |Service configuration not found for key: upscan-initiate-v2.context
           |Could not find config key 'fileUpload.fileSize.maximum'
           |Could not find config key 'file-upload-upscan-callback.url'
           |Could not find config key 'fileUpload.fileGroupSize.maximum'
           |Could not find config key 'file-transmission-callback.url'
-          |Could not find config file-transmission.host
+          |Could not find config key 'file-transmission.host'
           |Service configuration not found for key: file-transmission.context
           |Could not find config key 'ttlInSeconds'""".stripMargin
 
@@ -138,5 +138,5 @@ class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
     }
   }
 
-  private def testServicesConfig(configuration: Configuration) = new ServicesConfig(configuration, new RunMode(configuration, Mode.Test)) {}
+  private def testServicesConfig(configuration: Configuration) = new ServicesConfig(configuration) {}
 }

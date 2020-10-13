@@ -260,7 +260,7 @@ object TestData {
   lazy val stubDeclarationsLogger = new StubDeclarationsLogger(mock[CdsLogger])
 
   object TestModule extends AbstractModule {
-    def configure(): Unit = {
+    override def configure(): Unit = {
       bind(classOf[UuidService]) toInstance mockUuidService
     }
 

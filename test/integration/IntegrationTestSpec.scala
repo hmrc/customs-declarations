@@ -24,7 +24,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import util.UnitSpec
 
 case class IntegrationTestModule(mockLogger: DeclarationsLogger) extends AbstractModule {
-  def configure(): Unit = {
+  override def configure(): Unit = {
     bind(classOf[DeclarationsLogger]) toInstance mockLogger
   }
 

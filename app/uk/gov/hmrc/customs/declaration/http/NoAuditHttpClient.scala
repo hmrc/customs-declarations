@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.hooks.HttpHook
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.play.http.ws._
 
 @Singleton

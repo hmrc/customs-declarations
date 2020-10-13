@@ -47,7 +47,7 @@ object ActionBuilderModelHelper {
       cir.request
     )
   }
-  
+
   implicit class ApiVersionRequestOps[A](val avr: ApiVersionRequest[A]) extends AnyVal {
     def toValidatedHeadersRequest(eh: ExtractedHeaders): ValidatedHeadersRequest[A] = ValidatedHeadersRequest(
       avr.conversationId,

@@ -37,7 +37,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val v1ShutteredNel = root.maybeBoolean("shutter.v1")
   private val v2ShutteredNel = root.maybeBoolean("shutter.v2")
   private val v3ShutteredNel = root.maybeBoolean("shutter.v3")
-  
+
   private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
   private val unstablePeriodDurationInMillisNel = root.int("circuitBreaker.unstablePeriodDurationInMillis")
@@ -69,7 +69,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val validatedDeclarationsShutterConfig: CustomsValidatedNel[DeclarationsShutterConfig] = (
     v1ShutteredNel, v2ShutteredNel, v3ShutteredNel
   ) mapN DeclarationsShutterConfig
-  
+
   private val validatedDeclarationsCircuitBreakerConfig: CustomsValidatedNel[DeclarationsCircuitBreakerConfig] = (
     numberOfCallsToTriggerStateChangeNel, unavailablePeriodDurationInMillisNel, unstablePeriodDurationInMillisNel
     ) mapN DeclarationsCircuitBreakerConfig
@@ -102,7 +102,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   val declarationsConfig: DeclarationsConfig = customsConfigHolder.declarationsConfig
 
   val declarationsShutterConfig: DeclarationsShutterConfig = customsConfigHolder.declarationsShutterConfig
-  
+
   val declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig = customsConfigHolder.declarationsCircuitBreakerConfig
 
   val nrsConfig: NrsConfig = customsConfigHolder.validatedNrsConfig

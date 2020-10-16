@@ -1,0 +1,12 @@
+﻿  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+      <FunctionCode>02</FunctionCode>
+      <FunctionalReferenceID>57d1621f06984f23b1a7fab4c314be6e</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20200928140034Z</DateTimeString>
+      </IssueDateTime>
+      <Declaration>
+        <FunctionalReferenceID>R30_E2E_TC09_001</FunctionalReferenceID>
+        <ID>20GBAS22WRSX2ST3R6</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

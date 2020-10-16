@@ -1,0 +1,64 @@
+  <MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+      <FunctionCode>13</FunctionCode>
+      <FunctionalReferenceID>88e8fd2e6d3241c99e2f8c2bb9d32739</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20201002100409Z</DateTimeString>
+      </IssueDateTime>
+      <Bank>
+        <ReferenceID>CITIGB2LLON</ReferenceID>
+        <ID>GB25CITI08320011963155</ID>
+      </Bank>
+      <Status>
+        <NameCode>4</NameCode>
+      </Status>
+      <Declaration>
+        <FunctionalReferenceID>CDSP-7101_0210_001</FunctionalReferenceID>
+        <ID>20GBAXJB9GD3VZ1MR0</ID>
+        <VersionID>2</VersionID>
+        <GoodsShipment>
+          <GovernmentAgencyGoodsItem>
+            <SequenceNumeric>1</SequenceNumeric>
+            <Commodity>
+              <DutyTaxFee>
+                <DutyRegimeCode>100</DutyRegimeCode>
+                <SpecificTaxBaseQuantity unitCode="GBP">1000.000000</SpecificTaxBaseQuantity>
+                <TypeCode>A00</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount currencyID="GBP">204.40</TaxAssessedAmount>
+                  <PaymentAmount currencyID="GBP">204.40</PaymentAmount>
+                </Payment>
+              </DutyTaxFee>
+              <DutyTaxFee>
+                <DutyRegimeCode>100</DutyRegimeCode>
+                <SpecificTaxBaseQuantity unitCode="GBP">1000.000000</SpecificTaxBaseQuantity>
+                <TypeCode>B00</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount currencyID="GBP">22.00</TaxAssessedAmount>
+                  <PaymentAmount currencyID="GBP">22.00</PaymentAmount>
+                </Payment>
+              </DutyTaxFee>
+              <DutyTaxFee>
+                <TypeCode>MOD</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount currencyID="GBP">1100.00</TaxAssessedAmount>
+                </Payment>
+              </DutyTaxFee>
+              <DutyTaxFee>
+                <TypeCode>MOD</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount currencyID="GBP">1000.00</TaxAssessedAmount>
+                </Payment>
+              </DutyTaxFee>
+            </Commodity>
+          </GovernmentAgencyGoodsItem>
+        </GoodsShipment>
+      </Declaration>
+    </Response>
+  </MetaData>

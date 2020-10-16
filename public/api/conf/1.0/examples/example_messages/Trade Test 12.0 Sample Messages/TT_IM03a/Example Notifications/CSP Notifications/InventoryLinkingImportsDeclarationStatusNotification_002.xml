@@ -1,0 +1,13 @@
+[conversationId=ae9bccb1-3098-4452-a028-81aada96713c][clientId=2p35gmJrzxhMK3sSpkJlu5pUVsMa][fieldsId=cd1dcbd8-5763-4d3b-be91-d354c9cc53f1][requestId=f1cd1221-7970-4e8e-8977-a06009b6b8ed][notificationId=08920dc4-c153-4b19-9b00-845a58e5576d][badgeId=GAU577] successfully pushed NotificationWorkItem(cd1dcbd8-5763-4d3b-be91-d354c9cc53f1,2p35gmJrzxhMK3sSpkJlu5pUVsMa,Some(2020-03-31T16:32:58.712Z),Notification(Some(08920dc4-c153-4b19-9b00-845a58e5576d),ae9bccb1-3098-4452-a028-81aada96713c,List(Header(X-Badge-Identifier,GAU577)),
+  <n1:InventoryLinkingImportsDeclarationStatusNotification
+    xmlns:n1="http://gov.uk/customs/inventoryLinkingImport/v1">
+    <n1:declarationMethod>2</n1:declarationMethod>
+    <n1:dateOfEntry>2020-03-31T16:26:17.000Z</n1:dateOfEntry>
+    <n1:entryNumber>20GB3LKV23933FGVR9</n1:entryNumber>
+    <n1:entryVersionNumber>2</n1:entryVersionNumber>
+    <n1:goodsArrivalDeclaration>N</n1:goodsArrivalDeclaration>
+    <n1:ics>14</n1:ics>
+    <n1:inventoryConsignmentReference>GB/1234-:3333HB</n1:inventoryConsignmentReference>
+    <n1:roe>H3</n1:roe>
+    <n1:totalPackages>1</n1:totalPackages> 
+  </n1:InventoryLinkingImportsDeclarationStatusNotification>,application/xml))

@@ -94,8 +94,8 @@
 						</TransportEquipment>
 					</Consignment>
 					<!--DE 5/14: Country code of the dispatch country: US.
-						N.B: This field is currently declared at both header and item level as a workaround. See KEL ID #176. -->
-					<ExportCountry>
+					N.B: This field is declared at both header and item level as a workaround for KEL-176, which has now been resolved. -->
+			        <ExportCountry>
 						<ID>US</ID>
 					</ExportCountry>
 
@@ -116,7 +116,7 @@
 							</GoodsMeasure>
 						</Commodity >
 						<!--DE 5/14: Country code of the dispatch country: US.
-							N.B: This field is currently declared at both header and item level as a workaround. See KEL ID #176. -->
+						N.B: This field is declared at both header and item level as a workaround for KEL-176, which has now been resolved. -->
 						<ExportCountry>
 							<ID>US</ID>
 						</ExportCountry>

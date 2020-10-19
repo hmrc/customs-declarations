@@ -134,8 +134,8 @@ Document code of AC in this scenario indicates Document attached for certificati
 <TypeCode>935</TypeCode>
 <LPCOExemptionCode>AC</LPCOExemptionCode>
 </AdditionalDocument>
-<!--DE 2/3: A document code of N990 indicates End-Use authorisation with Simplified Authorisation statement for AbD (N990 refers to end-use authorisation other than for ships and platforms).
-In this scenaria, a document code of XW indicates Waiver claimed-->
+<!--DE 2/3: A document code of N990 indicates End-Use authorisation with Simplified Authorisation statement for AD (N990 refers to end-use
+ authorisation other than for ships and platforms). -->
 <AdditionalDocument>
 <CategoryCode>N</CategoryCode>
 <ID>GBEUS02111123600020200828141500</ID>

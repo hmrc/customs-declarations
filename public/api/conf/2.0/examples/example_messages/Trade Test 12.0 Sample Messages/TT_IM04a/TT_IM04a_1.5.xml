@@ -19,7 +19,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
 
-				<!-- SCENARIO
+		<!-- SCENARIO
         Scenario: Type A Import of goods liable to Customs Duty, VAT and Excise Duty, being removed from a Customs Warehouse.
         Goods subject to Quota
 
@@ -321,7 +321,7 @@
 							<TypeCode>2</TypeCode>
 						</Origin>
 
-						<!-- DE 5/15- Note: See KEL ID#239. This Data Element has been added otherwise declaration is rejected with BR675_1328 and BR675_1332-->
+						<!-- DE 5/15- Note: See KEL-239. This Data Element has been added otherwise declaration is rejected with BR675_1328 and BR675_1332-->
 						<Origin>
 							<CountryCode>ME</CountryCode>
 							<TypeCode>1</TypeCode>

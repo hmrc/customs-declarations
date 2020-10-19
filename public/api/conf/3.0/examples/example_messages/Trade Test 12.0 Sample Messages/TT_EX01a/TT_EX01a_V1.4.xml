@@ -37,11 +37,15 @@
 
 				<!--DE 6/18: Total packages -->
 				<TotalPackageQuantity>10</TotalPackageQuantity>
-								<!--DE 2/2: Additional information. CDSRSS-2 Header Level 2/2 RRS01 -->
-<AdditionalInformation>
-<StatementCode>RRS01</StatementCode>
-<StatementDescription>TC12 Haulage Services Limited</StatementDescription>
-</AdditionalInformation>
+				
+				<!--DE 2/2: Additional information. The AI code of RRS01 indicates that the port & declaration is GVMS interested. 
+				This code must be declared in Data Element (D.E) 2/2 on all Import or Export Declarations being moved through a port
+				utilising HMRC’s Goods Vehicle Movement System (GVMS) identifiable in Appendix X of D.E. 5/23. -->
+					<AdditionalInformation>
+					<StatementCode>RRS01</StatementCode>
+					<StatementDescription>TC12 Haulage Services Limited</StatementDescription>
+				</AdditionalInformation>
+				
 				<!--DE 7/14: Identity of active means of transport crossing the border.-->
 				<BorderTransportMeans>
 					<ID>CSCLGLOBE</ID>

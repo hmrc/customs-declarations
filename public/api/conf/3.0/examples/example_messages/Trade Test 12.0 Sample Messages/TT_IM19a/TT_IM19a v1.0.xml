@@ -21,7 +21,7 @@
 				GB Special 5% beer, 1000 bottles, 10 per box, 100 boxes, 10 boxes per pallet, 10 pallets
 				Standard frontier Declaration Type A which derives a H1 Declaration Category data set
 				Deferred Payment is used with specific authority. Importer's DAN is being used.
-				Goods presented at Wallasea Island on arrival.
+				Goods presented at Port of Belfast on arrival.
 				AI code 'NIDOM' entered at Item Level.
 				AI code 'NIREM' entered at Item Level to signify that goods have been de-risked by the trader.
 			-->
@@ -37,9 +37,9 @@
 			<GoodsItemQuantity>1</GoodsItemQuantity>
 			<!--DE 6/18: Total packages - 100. Note that this matches DE 6/10 as this is a single item declaration.-->
 			<TotalPackageQuantity>100</TotalPackageQuantity>
-			<!--DE 2/2: Additional information. CDSRSS-2 Header Level 2/2 RRS01.
-			This code must be declared in Data Element (D.E) 2/2 on all Import or Export Declarations being moved through a port utilising
-			HMRC’s Goods Vehicle Movement System (GVMS) identifiable in Appendix X of D.E. 5/23.-->
+			<!--DE 2/2: Additional information. The AI code of RRS01 indicates that the port & declaration is GVMS interested. 
+			This code must be declared in Data Element (D.E) 2/2 on all Import or Export Declarations being moved through a port
+			utilising HMRC’s Goods Vehicle Movement System (GVMS) identifiable in Appendix X of D.E. 5/23. -->
 			<AdditionalInformation>
 				<StatementCode>RRS01</StatementCode>
 				<StatementDescription>RRS01 Haulage Services Limited</StatementDescription>
@@ -61,22 +61,22 @@
 			</Exporter>
 			<GoodsShipment>
 				<!--DE 8/5: Nature of transaction:
-					1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation
-					9 to indicate Other transactions which cannot be classified under other codes  -->
+				1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation
+				9 to indicate Other transactions which cannot be classified under other codes  -->
 				<TransactionNatureCode>9</TransactionNatureCode>
 				<Consignment>
 					<!--DE 7/2: Indicator to show if goods are packed in a container or not.
-				1 indicates that goods are transported in containers.
-				Note: Unlike CHIEF this must now be completed.-->
+					1 indicates that goods are transported in containers.
+					Note: Unlike CHIEF this must now be completed.-->
 					<ContainerCode>1</ContainerCode>
 					<!--DE 7/9: Identity of the means of transport on arrival. Example number representing IMO ship
-				  identification number: '10', and 5 digits for the identification number: '12345'.-->
+					identification number: '10', and 5 digits for the identification number: '12345'.-->
 					<ArrivalTransportMeans>
 						<ID>12345</ID>
 						<IdentificationTypeCode>10</IdentificationTypeCode>
 					</ArrivalTransportMeans>
 					<!--DE 5/23: The location code for Port of Belfast
-							Goods moved via shipping container from GB to NI via port of Belfast -->
+					Goods moved via shipping container from GB to NI via port of Belfast -->
 					<GoodsLocation>
 						<!--DE 5/23: ID to give a unique position of the location BELBELBEL -->
 						<Name>BELBELBEL</Name>
@@ -92,11 +92,11 @@
 						</Address>
 					</GoodsLocation>
 					<!--DE 7/10: Container identification number. This is alpha-numeric with up to 17 characters.
-						   For containers covered by the standard ISO 6346, the identifier (prefix) allocated
-						   by the International Bureau of Containers and Intermodal Transport (BIC) shall
-						   also be provided in addition to the container identification number.
-						   For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as
-						   introduced by the European EN 13044 shall be used.-->
+					For containers covered by the standard ISO 6346, the identifier (prefix) allocated
+					by the International Bureau of Containers and Intermodal Transport (BIC) shall
+					also be provided in addition to the container identification number.
+					For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as
+					introduced by the European EN 13044 shall be used.-->
 					<TransportEquipment>
 						<SequenceNumeric>1</SequenceNumeric>
 						<ID>BG1234</ID>
@@ -112,7 +112,7 @@
 					<!-- DE 8/6: Statistical Value -->
 					<StatisticalValueAmount currencyID="GBP">10000</StatisticalValueAmount>
 					<!--DE 2/3: Y929 indicates Excluded from Reg 834/2007  - Authorisation for Denoting
-								the goods are not organic/do not meet terms to be classed as organic.-->
+					the goods are not organic/do not meet terms to be classed as organic.-->
 					<AdditionalDocument>
 						<CategoryCode>Y</CategoryCode>
 						<ID>Excluded from Reg 834/2007</ID>
@@ -189,9 +189,8 @@
 					<ExportCountry>
 						<ID>GB</ID>
 					</ExportCountry>
-					<!--DE 1/10: Requested Procedure of 40 indicating entry for free circulation
-				and home use of goods.
-				DE 1/10: Previous Procedure of 00 indicating there is no previous procedure.-->
+					<!--DE 1/10: Requested Procedure of 40 indicating entry for free circulation and home use of goods.
+					DE 1/10: Previous Procedure of 00 indicating there is no previous procedure.-->
 					<GovernmentProcedure>
 						<CurrentCode>40</CurrentCode>
 						<PreviousCode>00</PreviousCode>
@@ -200,9 +199,9 @@
 					<GovernmentProcedure>
 						<CurrentCode>000</CurrentCode>
 					</GovernmentProcedure>
-					<!--DE 5/15: TypeCode of 1 to represent non-preferential origin. Where
-				preference in DE 4/17 begins with '1', this must be completed.
-				CountryCode cotains the code for the country from which the originated, in this case GB -->
+					<!--DE 5/15: TypeCode of 1 to represent non-preferential origin. 
+					Where preference in DE 4/17 begins with '1', this must be completed.
+					CountryCode cotains the code for the country from which the originated, in this case GB -->
 					<Origin>
 						<CountryCode>CN</CountryCode>
 						<TypeCode>1</TypeCode>
@@ -221,10 +220,10 @@
 				<Importer>
 					<ID>GB553202734852</ID>
 				</Importer>
-				<!--DE 2/1: Previous document of Z355 to show the MRN for the
-					entry summary declaration. This is a mandatory field. To denote the inventory
-					reference number. Note: As this is for a single item declaration, this should
-					all be declared at header level-->
+				<!--DE 2/1: Previous document of Z355 to show the MRN for the entry summary declaration. 
+				This is a mandatory field. 
+				To denote the inventory reference number. 
+				Note: As this is for a single item declaration, this should all be declared at header level-->
 				<PreviousDocument>
 					<CategoryCode>Z</CategoryCode>
 					<ID>20GB34F7Y1O2CX8PT4</ID>

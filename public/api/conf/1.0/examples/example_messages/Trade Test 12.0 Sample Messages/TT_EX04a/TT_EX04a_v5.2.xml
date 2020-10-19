@@ -43,14 +43,17 @@
 				<InvoiceAmount currencyID="GBP">100000</InvoiceAmount>
 				<!--DE 6/18: Total packages -->
 				<TotalPackageQuantity>2</TotalPackageQuantity>
+				
+				<!--DE 2/2: Additional information. The AI code of RRS01 indicates that the port & declaration is GVMS interested. 
+				This code must be declared in Data Element (D.E) 2/2 on all Import or Export Declarations being moved through a port
+				utilising HMRC’s Goods Vehicle Movement System (GVMS) identifiable in Appendix X of D.E. 5/23. -->
+				<AdditionalInformation>
+					<StatementCode>RRS01</StatementCode>
+					<StatementDescription>TC12 Haulage Services Limited</StatementDescription>
+				</AdditionalInformation>
+
 				<!--DE 3/20: Representative ID -->
 				<!--DE 3/21: Representative status code 3 indicating Indirect Export-->
-				<!--DE 2/2: Additional information. CDSRSS-2 Header Level 2/2 RRS01 -->
-<AdditionalInformation>
-<StatementCode>RRS01</StatementCode>
-<StatementDescription>TC12 Haulage Services Limited</StatementDescription>
-</AdditionalInformation>
-
 				<Agent>
 					<ID>GB150454489082</ID>
 					<FunctionCode>3</FunctionCode>

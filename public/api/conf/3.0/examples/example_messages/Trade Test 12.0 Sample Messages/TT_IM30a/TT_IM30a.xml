@@ -20,25 +20,25 @@
 			xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
 
 		<!--
-					Scenario:
-					A self-representing frontier declaration: H1 additional declaration Type Y (Supplementary) declaration
-					Goods being imported from GB to NI
-					Goods are deemed to be 'At Risk'
-					Valuation Method 4 without Item Price declared; Additional Procedure Code E02 declared
-					EU Preference has been claimed, however, the Trader has indicated that preference documentation is not available.
-					Customs Duty is calculated at the EU Tariff preferential rate, according to the preference code entered
-					A security deposit is charged equal to the difference between the preferential and non-preferential rates
+			Scenario:
+			A self-representing frontier declaration: H1 additional declaration Type Y (Supplementary) declaration
+			Goods being imported from GB to NI
+			Goods are deemed to be 'At Risk'
+			Valuation Method 4 without Item Price declared; Additional Procedure Code E02 declared
+			EU Preference has been claimed, however, the Trader has indicated that preference documentation is not available.
+			Customs Duty is calculated at the EU Tariff preferential rate, according to the preference code entered
+			A security deposit is charged equal to the difference between the preferential and non-preferential rates
 
-					AI code 'NIIMP' entered at Item Level
-					CDS validates the declaration against EU Tariff
-					CDS calculates Customs Duties using the EU Tariff rate, based on the SIV price
-					CDS notifies the Trader via DMSTAX of the duties payable
+			AI code 'NIIMP' entered at Item Level
+			CDS validates the declaration against EU Tariff
+			CDS calculates Customs Duties using the EU Tariff rate, based on the SIV price
+			CDS notifies the Trader via DMSTAX of the duties payable
 
-					Procedure code 4000 Additional Procedure code E02
-					Goods: Fresh courgettes from Egypt, 15,000kg
-					Importer is an AEO authorisation holder, DAN holder, and SDE authorised party
-					Deferment used for payment of duty & security
-					Goods presented at Warren Point, Belfast, Northern Ireland, UK
+			Procedure code 4000 Additional Procedure code E02
+			Goods: Fresh courgettes from Egypt, 15,000kg
+			Importer is an AEO authorisation holder, DAN holder, and SDE authorised party
+			Deferment used for payment of duty & security
+			Goods presented at Warren Point, Belfast, Northern Ireland, UK
 		-->
 
 		<!-- Acceptance Date is present on all supplementary declarations, and will match the CLE date listed in 2/1.-->
@@ -63,7 +63,10 @@
 			<ID>1108654</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
-		<!--DE 2/2: Additional information. CDSRSS-2 Header Level 2/2 RRS01  -->
+		
+		<!--DE 2/2: Additional information. The AI code of RRS01 indicates that the port & declaration is GVMS interested. 
+		This code must be declared in Data Element (D.E) 2/2 on all Import or Export Declarations being moved through a port
+		utilising HMRC’s Goods Vehicle Movement System (GVMS) identifiable in Appendix X of D.E. 5/23. -->
 		<AdditionalInformation>
 			<StatementCode>RRS01</StatementCode>
 			<StatementDescription>TC05 Haulage Services Limited</StatementDescription>

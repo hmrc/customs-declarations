@@ -35,12 +35,12 @@
 				<GoodsItemQuantity>1</GoodsItemQuantity>
 				<!--DE 6/18: Total packages - 20. Note that this matches DE 6/10 because this is a single item declaration.-->
 				<TotalPackageQuantity>20</TotalPackageQuantity>
-				<!--DE 2/2: Additional information. CDSRSS-2 Header Level 2/2 RRS01.
-				This code must be declared in Data Element (D.E) 2/2 on all Import or Export Declarations being moved through a port utilising
-				HMRC’s Goods Vehicle Movement System (GVMS) identifiable in Appendix X of D.E. 5/23.-->
+				<!--DE 2/2: Additional information. The AI code of RRS01 indicates that the port & declaration is GVMS interested. 
+				This code must be declared in Data Element (D.E) 2/2 on all Import or Export Declarations being moved through a port
+				utilising HMRC’s Goods Vehicle Movement System (GVMS) identifiable in Appendix X of D.E. 5/23. -->
 				<AdditionalInformation>
-				<StatementCode>RRS01</StatementCode>
-				<StatementDescription>TC12 Haulage Services Limited</StatementDescription>
+					<StatementCode>RRS01</StatementCode>
+					<StatementDescription>TC12 Haulage Services Limited</StatementDescription>
 				</AdditionalInformation>
 				<!--DE 3/39: An Authorisation type of EIR indicates Authorisation for the use of customs declaration through an entry of data in the declarants records. 
 				The ID is the EORI number of the EIDR authorisation holder -->

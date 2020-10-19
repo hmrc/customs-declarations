@@ -100,7 +100,7 @@ number has been entered into DE 3/2 -->
 				</TransportEquipment>
                   </Consignment>
                   <!--DE 5/14: Country code of the dispatch country: US.
-                    N.B: This field is currently declared at both header and item level as a workaround. See KEL ID #176. -->
+                    N.B: This field is declared at both header and item level as a workaround for KEL-176, which has now been resolved. -->
 			            <ExportCountry>
                      <ID>US</ID>
                   </ExportCountry>
@@ -123,8 +123,8 @@ number has been entered into DE 3/2 -->
                            </GoodsMeasure>
                      </Commodity >
                      <!--DE 5/14: Country code of the dispatch country: US.
-                      N.B: This field is currently declared at both header and item level as a workaround. See KEL ID #176. -->
-                     <ExportCountry>
+                     N.B: This field is declared at both header and item level as a workaround for KEL-176, which has now been resolved. -->
+			         <ExportCountry>
                        <ID>US</ID>
                      </ExportCountry>
                      <!--DE 1/10: 00 02 indicating Home use and free circulation, with no previous procedure

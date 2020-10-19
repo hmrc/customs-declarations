@@ -38,7 +38,8 @@
 				<GoodsItemQuantity>1</GoodsItemQuantity>
 				<!--6/18: Total packages -  10 note that this matches DE 6/10 because this is a single item declaration.-->
 				<TotalPackageQuantity>10</TotalPackageQuantity>
-				<!--DE 2/6: The DAN account used for deferred payment of duty in this scenario This declared DAN belongs to the importer declared on the declaration.-->
+				<!--DE 2/6: The DAN account used for deferred payment of duty in this scenario This declared DAN belongs to 
+				the importer declared on the declaration.-->
 				<AdditionalDocument>
 					<CategoryCode>1</CategoryCode>
 					<ID>1108654</ID>
@@ -51,7 +52,8 @@
 					<CategoryCode>DPO</CategoryCode>
 				</AuthorisationHolder>
 				<!--DE 3/39: An authorisation type code of CGU is required where CCG authorisation is being declared or a waiver is being claimed.
-				In this scenario, a waiver is being claimed. See DE 2/3 where a document code of C505 has been entered. The ID here is the EORI of the CCG authorised party.-->
+				In this scenario, a waiver is being claimed. See DE 2/3 where a document code of C505 has been entered. 
+				The ID here is the EORI of the CCG authorised party.-->
 				<AuthorisationHolder>
 					<ID>GB553202734852</ID>
 					<CategoryCode>CGU</CategoryCode>
@@ -62,7 +64,8 @@
 					<RegistrationNationalityCode>RU</RegistrationNationalityCode>
 					<ModeCode>1</ModeCode>
 				</BorderTransportMeans>
-				<!--DE 3/18: The EORI number of the agent entering the declaration. The UK requires an EORI to be provided for the declarant. In this scenario, the same as the EORI of the Agent -->
+				<!--DE 3/18: The EORI number of the agent entering the declaration. The UK requires an EORI to be provided for the declarant. 
+				In this scenario, the same as the EORI of the Agent -->
 				<Declarant>
 					<ID>GB553202734852</ID>
 				</Declarant>
@@ -76,21 +79,26 @@
 						<PostcodeID>10310</PostcodeID>
 					</Address>
 				</Exporter>
-				<!--DE 8/5: Nature of transaction: 1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation.-->
+				<!--DE 8/5: Nature of transaction: 1 to indicate transactions involving actual or intended transfer of ownership 
+				from residents to non-residents against financial or other compensation.-->
 				<GoodsShipment>
 					<TransactionNatureCode>1</TransactionNatureCode>
 					<Consignment>
-						<!--DE 7/2:  Indicator to show if goods are packed in a container or not. 1 indicates that goods are transported in containers. Note: Unlike CHIEF this must now be completed-->
+						<!--DE 7/2:  Indicator to show if goods are packed in a container or not. 
+						1 indicates that goods are transported in containers. Note: Unlike CHIEF this must now be completed-->
 						<ContainerCode>1</ContainerCode>
-						<!--DE 7/9:  Identity of means of transport on arrival. Example number representing IMO ship identification number: 10, and 5 digits for the identification number: 12345.-->
+						<!--DE 7/9:  Identity of means of transport on arrival. 
+						Example number representing IMO ship identification number: 10, and 5 digits for the identification number: 12345.-->
 						<ArrivalTransportMeans>
 							<ID>12345</ID>
 							<IdentificationTypeCode>10</IdentificationTypeCode>
-							<!--DE 7/5: Inland Mode of Transport - 3 to represent Road Transport. This is required as customs procedures are completed away from the border.-->
+							<!--DE 7/5: Inland Mode of Transport - 3 to represent Road Transport. 
+							This is required as customs procedures are completed away from the border.-->
 							<ModeCode>3</ModeCode>
 						</ArrivalTransportMeans>
 						<GoodsLocation>
-							<!--DE 5/23: The location code for Internal Temporary Storage Facility. BELBELBTC1 indicates the Belfast Container Terminal (BCT) Limited -->
+							<!--DE 5/23: The location code for Internal Temporary Storage Facility. 
+							BELBELBTC1 indicates the Belfast Container Terminal (BCT) Limited -->
 							<Name>BELBELBTC1</Name>
 							<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
 							<TypeCode>A</TypeCode>
@@ -101,7 +109,8 @@
 								<CountryCode>GB</CountryCode>
 							</Address>
 						</GoodsLocation>
-						<!--DE 7/10:  Container identification number. This is required where the container code in DE 7/2 is 1, indicating containerised traffic.
+						<!--DE 7/10:  Container identification number. This is required where the container code in DE 7/2 is 1, 
+						indicating containerised traffic.
 						Example container identification number: alpha numeric to a total of 17 characters.-->
 						<TransportEquipment>
 							<SequenceNumeric>1</SequenceNumeric>
@@ -119,7 +128,8 @@
 					<GovernmentAgencyGoodsItem>
 						<!--DE 1/6: Sequential number of the goods item.-->
 						<SequenceNumeric>1</SequenceNumeric>
-						<!--C506 indicates DPO - Authorisation for the deferment of payment.  Provide the authorisation decision number for the deferment of payment authorisation in the format:
+						<!--C506 indicates DPO - Authorisation for the deferment of payment.  Provide the authorisation decision number 
+						for the deferment of payment authorisation in the format:
 							 - 2 digit code identifying the member state of authorisation, for example, GB
 							 - 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
 							 - followed by the authorisation reference number. No document status code is required.-->
@@ -128,9 +138,12 @@
 							<ID>GBDPO1108654</ID>
 							<TypeCode>506</TypeCode>
 						</AdditionalDocument>
-						<!-- DE 2/3: Documents produced, certificates and authorisations, additional references. This field is mandatory if the codes are required.
-						A document code of C505 indicates CGU - Authorisation for the provision of a customs comprehensive guarantee, including possible reduction or waiver.
-						In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of CC), and therefore the ID also indicates that a waiver is being used.
+						<!-- DE 2/3: Documents produced, certificates and authorisations, additional references. 
+						This field is mandatory if the codes are required.
+						A document code of C505 indicates CGU - Authorisation for the provision of a customs comprehensive guarantee, 
+						including possible reduction or waiver.
+						In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of CC), 
+						and therefore the ID also indicates that a waiver is being used.
 						LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code – CCG not required. -->
 						<AdditionalDocument>
 							<CategoryCode>C</CategoryCode>
@@ -156,7 +169,8 @@
 							<TypeCode>672</TypeCode>
 							<LPCOExemptionCode>AC</LPCOExemptionCode>
 						</AdditionalDocument>
-						<!-- DE 2/3:	A document code of 9120 indicates: Importation of animal pathogens Licence under the Importation of Animal pathogens Order 1980 (IAPO).
+						<!-- DE 2/3:	A document code of 9120 indicates: Importation of animal pathogens Licence under 
+						the Importation of Animal pathogens Order 1980 (IAPO).
 						Document code of XX in this scenario indicates Ex-heading goods for which the document doesn’t apply -->
 						<AdditionalDocument>
 							<CategoryCode>9</CategoryCode>
@@ -164,15 +178,18 @@
 							<TypeCode>120</TypeCode>
 							<LPCOExemptionCode>XX</LPCOExemptionCode>
 						</AdditionalDocument>
-						<!--DE 2/2: Additional Information. This field is mandatory, this represents goods are imported from ROW into Northern Ireland. -->
-            <AdditionalInformation>
+						<!--DE 2/2: Additional Information. 
+						This field is mandatory, this represents goods are imported from ROW into Northern Ireland. -->
+						<AdditionalInformation>
 							<StatementCode>NIIMP</StatementCode>
 						</AdditionalInformation>
 						<Commodity>
-							<!--DE 6/8:  Description of the goods specific enough to enable classification without repeating the CN code description in the Tariff.-->
+							<!--DE 6/8:  Description of the goods specific enough to enable classification without repeating 
+							the CN code description in the Tariff.-->
 							<Description>Vegetable fats and oils and their fractions</Description>
 							<Classification>
-								<!--DE 6/14: Commodity code - combined nomenclature code. IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used-->
+								<!--DE 6/14: Commodity code - combined nomenclature code. IdentificationTypeCode of TSP indicates 
+								that a Transitional Simplified Procedure has been used-->
 								<ID>15162098</ID>
 								<IdentificationTypeCode>TSP</IdentificationTypeCode>
 							</Classification>
@@ -189,7 +206,7 @@
 							<DutyTaxFee>
 								<!--DE 4/17: Preference Type of 100 represents no preference being claimed. -->
 								<DutyRegimeCode>100</DutyRegimeCode>
-								<!--DE 4/4: Calculation of taxes - Tax Base. In this scenario, TNE#I indicating the Tonne of biodiesel content -->
+								<!--DE 4/4: Calculation of taxes - Tax Base. In this scenario, TNE#I indicating the Tonne of biodiesel content. -->
 								<SpecificTaxBaseQuantity unitCode="TNE#I">2</SpecificTaxBaseQuantity>
 								<!--DE 4/3: Tax Type of A50 represents EU Customs duty-->
 								<TypeCode>A50</TypeCode>
@@ -240,10 +257,10 @@
 							<CurrentCode>000</CurrentCode>
 						</GovernmentProcedure>
 						<!--DE 5/15: TypeCode of 1 to represent non-preferential origin.
-										Where preference in D.E. 4/17 begins with 1, this must be completed.
-										CountryCode contains the code for the country from which the goods originated.
-										It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/15 (from DE 5/16).
-										It is not a part of the UCC or Tariff completion requirements.-->
+						Where preference in D.E. 4/17 begins with 1, this must be completed.
+						CountryCode contains the code for the country from which the goods originated.
+						It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/15 (from DE 5/16).
+						It is not a part of the UCC or Tariff completion requirements.-->
 						<Origin>
 							<CountryCode>ID</CountryCode>
 							<TypeCode>1</TypeCode>
@@ -259,9 +276,12 @@
 						</Packaging>
 						<!--DE 4/13: Valuation indicator - mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
 						First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
-						Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
-						Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
-						Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller.-->
+						Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance 
+						with Article 70(3)(a) of the Code.
+						Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance 
+						with Article 70(3)(b) of the Code.
+						Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, 
+						disposal or use accrues directly or indirectly to the seller.-->
 						<ValuationAdjustment>
 							<AdditionCode>0000</AdditionCode>
 						</ValuationAdjustment>
@@ -276,18 +296,22 @@
 						<TypeCode>DCR</TypeCode>
 						<LineNumeric>1</LineNumeric>
 					</PreviousDocument>
-					<!--DE 4/1: Mandatory as method 1 is being used in DE 4/16. CIF to indicate Cost, Insurance and Freight. GBWLA to represent the named port of destination Wallasea Island, Baltic Wharf, UK.-->
+					<!--DE 4/1: Mandatory as method 1 is being used in DE 4/16. CIF to indicate Cost, Insurance and Freight. 
+					GBWLA to represent the named port of destination Wallasea Island, Baltic Wharf, UK.-->
 					<TradeTerms>
 						<ConditionCode>CIF</ConditionCode>
 						<LocationID>GBWLA</LocationID>
 					</TradeTerms>
 				</GoodsShipment>
 				<ObligationGuarantee>
-					<!--DE 8/3:  Guarantee reference number. Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation),
+					<!--DE 8/3:  Guarantee reference number. Where document code C505 is declared in DE 2/3 (Document Codes) 
+					and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation),
 					then this data element is mandatory ID indicates that the guarantee is not required, as stated in DE 8/2-->
 					<ID>Guaranteenotrequired</ID>
-					<!--DE 8/2:  Guarantee type.  0 to represent that a customs comprehensive guarantee is being waived for the deferment of customs duty. Where document code C505 is declared in DE 2/3 (Document Codes) and
-                   authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code 0 or 1 must be declared in this data element-->
+					<!--DE 8/2:  Guarantee type.  0 to represent that a customs comprehensive guarantee is being waived for the 
+					deferment of customs duty. Where document code C505 is declared in DE 2/3 (Document Codes) and
+                   authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code 0 or 1 must be 
+				   declared in this data element-->
 					<SecurityDetailsCode>0</SecurityDetailsCode>
 				</ObligationGuarantee>
 			</Declaration>

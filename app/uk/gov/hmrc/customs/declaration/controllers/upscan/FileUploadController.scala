@@ -62,7 +62,7 @@ class FileUploadController @Inject()(val common: Common,
 
       fileUploadBusinessService.send map {
         case Right(res) =>
-          logger.info("Upload initiate request processed successfully")
+            logger.info("Upload initiate request processed successfully")
           Ok(res).withConversationId.as(ContentTypes.XML)
         case Left(errorResult) =>
           errorResult

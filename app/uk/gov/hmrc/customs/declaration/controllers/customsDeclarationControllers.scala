@@ -29,7 +29,6 @@ import uk.gov.hmrc.customs.declaration.services.{CancellationDeclarationSubmissi
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.ExecutionContext
-import scala.xml.{PrettyPrinter, TopScope}
 
 @Singleton
 class Common @Inject() (
@@ -110,7 +109,7 @@ abstract class CustomsDeclarationController(val common: Common,
       implicit vpr: ValidatedPayloadRequest[AnyContent] =>
         val logger = common.logger
 
-        logger.debug(s"Request received. Payload = \n${new PrettyPrinter(120, 2).format(vpr.xmlBody.head, TopScope)} headers = ${vpr.headers.headers}")
+        logger.debug(s"Request received. Payload = \n${vpr.xmlBody} headers = ${vpr.headers.headers}")
 
         businessService.send map {
           case Right(maybeNrSubmissionId) =>

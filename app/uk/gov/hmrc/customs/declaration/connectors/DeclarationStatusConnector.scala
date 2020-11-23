@@ -32,13 +32,12 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.logging.Authorization
-import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.logging.Authorization
+import uk.gov.hmrc.http.{HttpClient, _}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.{NodeSeq, PrettyPrinter, TopScope}
+import scala.xml.NodeSeq
 
 @Singleton
 class DeclarationStatusConnector @Inject() (val http: HttpClient,
@@ -66,7 +65,7 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, ar.conversationId, correlationId), authorization = Some(Authorization(bearerToken)))
     val startTime = LocalDateTime.now
-    withCircuitBreaker(post(xmlToSend, config.url, correlationId)).map{
+    withCircuitBreaker(post(xmlToSend, config.url)).map{
       response =>
         logCallDuration(startTime)
         logger.debug(s"Declaration status response code: ${response.status} and response body: ${response.body}")
@@ -85,8 +84,8 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
     )
   }
 
-  private def post[A](xml: NodeSeq, url: String, correlationId: CorrelationId)(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier) = {
-    logger.debug(s"Sending request to $url. Headers ${hc.headers} Payload:\n${new PrettyPrinter(120, 2).format(xml.head, TopScope)}")
+  private def post[A](xml: NodeSeq, url: String)(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier) = {
+    logger.debug(s"Sending request to $url. Headers ${hc.headers} Payload:\n$xml")
 
     http.POSTString[HttpResponse](url, xml.toString()).map { response =>
       response.status match {

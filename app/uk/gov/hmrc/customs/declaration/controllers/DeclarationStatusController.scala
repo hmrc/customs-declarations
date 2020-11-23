@@ -28,7 +28,6 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationStatusService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.ExecutionContext
-import scala.xml.{PrettyPrinter, TopScope}
 
 @Singleton
 class DeclarationStatusController @Inject()(val shutterCheckAction: ShutterCheckAction,
@@ -59,7 +58,7 @@ class DeclarationStatusController @Inject()(val shutterCheckAction: ShutterCheck
               override val conversationId: ConversationId = ar.conversationId
             }
             logger.info(s"Declaration status request processed successfully.")(id)
-            logger.debug(s"Returning filtered declaration status request with status code 200 and body\n${new PrettyPrinter(120, 2).format(scala.xml.XML.loadString(res.body), TopScope)}")(id)
+            logger.debug(s"Returning filtered declaration status request with status code 200 and body\n${res.body}")(id)
             Ok(res.body).withConversationId(id).as(ContentTypes.XML)
           case Left(errorResult) =>
             errorResult

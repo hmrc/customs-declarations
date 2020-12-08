@@ -93,6 +93,7 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
           response
 
         case status => //1xx, 3xx, 4xx, 5xx
+          logger.error(s"Failed status backend call response body=${response.body}")
           throw new Non2xxResponseException(status)
       }
     }

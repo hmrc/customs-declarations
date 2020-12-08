@@ -82,7 +82,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
 
       await(sendValidRequest()) shouldBe (())
       verifyAuditServiceWasNotCalled()
-      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=404, Error=Received a non 2XX response")
+      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=404, Error=Received a non 2XX response, response body=")
     }
 
     "return a failed future when external service returns 400" in {
@@ -90,7 +90,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
 
       await(sendValidRequest()) shouldBe (())
       verifyAuditServiceWasNotCalled()
-      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=400, Error=Received a non 2XX response")
+      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=400, Error=Received a non 2XX response, response body=")
     }
 
     "return a failed future when external service returns 500" in {
@@ -98,7 +98,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
 
       await(sendValidRequest()) shouldBe (())
       verifyAuditServiceWasNotCalled()
-      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=500, Error=Received a non 2XX response")
+      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=500, Error=Received a non 2XX response, response body=")
     }
 
     "return a failed future when fail to connect the external service" in {

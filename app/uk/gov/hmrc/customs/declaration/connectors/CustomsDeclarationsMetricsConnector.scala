@@ -52,7 +52,7 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
           logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
 
         case status => //1xx, 3xx, 4xx, 5xx
-          logger.error(s"Call to customs declarations metrics service failed. url=$url, HttpStatus=${status}, Error=Received a non 2XX response")
+          logger.error(s"Call to customs declarations metrics service failed. url=$url, HttpStatus=$status, Error=Received a non 2XX response, response body=${response.body}")
       }
       ()
     }.recoverWith {

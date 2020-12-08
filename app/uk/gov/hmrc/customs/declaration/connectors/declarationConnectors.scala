@@ -103,7 +103,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   }
 
   private def post[A](xml: NodeSeq, url: String)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
-    logger.debug(s"Sending request to $url.\n Headers:\n ${hc}\n Payload:\n$xml")
+    logger.debug(s"Sending request to $url.\n Headers:\n $hc\n Payload:\n$xml")
 
     http.POSTString[HttpResponse](url, xml.toString()).map{ response =>
       response.status match {
@@ -111,15 +111,16 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
           response
 
         case status => //1xx, 3xx, 4xx, 5xx
+          logger.error(s"Failed backend call response body=${formatResponseBody(response.body)}")
           throw new Non2xxResponseException(status)
       }
     }
       .recoverWith {
         case httpError: HttpException =>
-          logger.error(s"Call to url=$url failed, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
+          logger.error(s"Failed call to url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
           Future.failed(httpError)
         case e: Throwable =>
-          logger.error(s"Call to wco declaration submission failed. url=$url")
+          logger.error(s"Call to declaration submission failed. url=$url")
           Future.failed(e)
       }
   }

@@ -1,0 +1,48 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+      <FunctionCode>13</FunctionCode>
+      <FunctionalReferenceID>75ddf30808eb4b06ad4afe598271c956</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20200128115749Z</DateTimeString>
+      </IssueDateTime>
+      <Bank>
+        <ReferenceID>CITIGB2LLON</ReferenceID>
+        <ID>GB25CITI08320011963155</ID>
+      </Bank>
+      <Status>
+        <NameCode>4</NameCode>
+      </Status>
+      <Declaration>
+        <FunctionalReferenceID>IMZEKZROGVX81-PC3_009</FunctionalReferenceID>
+        <ID>20GB13A64EOA7FGVR3</ID>
+        <VersionID>2</VersionID>
+        <GoodsShipment>
+          <GovernmentAgencyGoodsItem>
+            <SequenceNumeric>1</SequenceNumeric>
+            <Commodity>
+              <DutyTaxFee>
+                <AdValoremTaxBaseAmount currencyID="GBP">999.00</AdValoremTaxBaseAmount>
+                <DeductAmount currencyID="GBP">0.00</DeductAmount>
+                <DutyRegimeCode>100</DutyRegimeCode>
+                <TaxRateNumeric>7.70</TaxRateNumeric>
+                <TypeCode>A00</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount currencyID="GBP">76.92</TaxAssessedAmount>
+                  <PaymentAmount currencyID="GBP">76.92</PaymentAmount>
+                </Payment>
+              </DutyTaxFee>
+              <DutyTaxFee>
+                <AdValoremTaxBaseAmount currencyID="GBP">1075.92</AdValoremTaxBaseAmount>
+                <DeductAmount currencyID="GBP">0.00</DeductAmount>
+                <DutyRegimeCode>100</DutyRegimeCode>
+                <TaxRateNumeric>0.00</TaxRateNumeric>
+                <TypeCode>B00</TypeCode>
+                <Payment>
+                  <TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+                  <PaymentAmount currencyID="GBP">0.00</PaymentAmount>
+                </Payment>
+              </DutyTaxFee>
+            </Commodity>
+          </GovernmentAgencyGoodsItem>
+        </GoodsShipment>
+      </Declaration>
+    </Response></MetaData>

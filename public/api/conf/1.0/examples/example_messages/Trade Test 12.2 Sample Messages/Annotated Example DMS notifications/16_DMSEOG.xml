@@ -1,0 +1,27 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/>
+    <Response>
+      <!-- This is an example of a DMSEOG notification. Function code 16 means that this is a notification with which the submitter is informed that the goods have exited the community -->
+      <FunctionCode>16</FunctionCode>
+      <FunctionalReferenceID>fb2794252d6b45e6b5def84d53bb969f</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20191113172408Z</DateTimeString>
+      </IssueDateTime>
+      <AdditionalInformation>
+        <StatementCode></StatementCode>
+        <!-- This references DE 5/12: Customs office of exit -->
+        <StatementDescription>GB000041</StatementDescription>
+        <StatementTypeCode>CEX</StatementTypeCode>
+      </AdditionalInformation>
+      <Status>
+        <EffectiveDateTime>
+          <DateTimeString>Wed Nov 13 00:00:00 UTC 2019</DateTimeString>
+        </EffectiveDateTime>
+        <NameCode>A1</NameCode>
+      </Status>
+      <Declaration>
+        <FunctionalReferenceID>3.1_P1_TT_1311RM41</FunctionalReferenceID>
+        <ID>19GBCKKCQSXV2FGVA8</ID>
+        <VersionID>2</VersionID>
+      </Declaration>
+    </Response>
+  </MetaData>

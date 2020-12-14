@@ -1,0 +1,353 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "    >
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+           		xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+           		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
+		<!--
+			A Type Y declaration for goods imported from the Rest of the World to Northern Ireland, 
+			where the goods are 'At Risk' of onward transport to the EU. EU Specific requested procedure code declared is '42' 
+			and Additional Information code 'NIIMP' has been declared.
+		Procedure code: 5100 Additional Procedure code: 000 
+			Goods: 6203423500 (200 pairs of Men's brown trousers, made of cotton, in various sizes and lengths)
+			Supplementary declaration: H1 additional declaration type Y
+			Agent is same as Declarant with EORI = GB603202734852 and Function code = 3
+			Goods presented at the port of Belfast
+			Expected Notifications: DMSACC, DMSTAX(1), DMSTAX(2), DMSCLE
+		-->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20201122010000+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<!--Function Code of 9 to represent an original declaration-->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: Traders own reference number: this must be unique to the transaction-->
+		<FunctionalReferenceID>R310_E2E_TC21_2511_001</FunctionalReferenceID>
+		<!-- DE 1/1: Declaration Type. Mandatory field. First two characters IM to represent an import declaration.	-->
+		<!-- DE 1/2: Additional Declaration Type. Mandatory field. Third character Y represents a supplementary declaration -->
+		<TypeCode>IMY</TypeCode>
+		<!--DE 1/9: Total number of goods items on the declaration - single item declaration.-->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--6/18: Total packages - 200. Note that this matches DE 6/10 because this is a single item declaration.-->
+		<TotalPackageQuantity>200</TotalPackageQuantity>
+		<!--DE 2/6: The DAN account used for deferred payment (of third country duty in this scenario)
+        This declared DAN belongs to the importer declared on the declaration.-->
+		<AdditionalDocument>
+			<CategoryCode>1</CategoryCode>
+			<ID>1108654</ID>
+			<TypeCode>DAN</TypeCode>
+		</AdditionalDocument>
+		<Agent>
+			<!--DE 3/20: ID of the representative. When declared, the UK requires an EORI to be provided for the representative.
+            Note that DE 3/20 was included in this sample before KEL-038 was resolved. For cases where direct or indirect
+              representation is used, DE 3/20 is not required when the Agent is the same as the Declarant in DE 3/18. -->
+			<ID>GB603202734852</ID>
+			<!--DE 3/21: FunctionCode of 2 indicating agent acting in direct representation for the importer (holding written instruction to do so).-->
+			<FunctionCode>3</FunctionCode>
+		</Agent>
+		<!--DE 3/39: An authorisation type code of DPO indicates Deferment of payment authorisation. (See DE 2/3 where a document code of C506 has been
+        entered). The ID here is the EORI of the DPO authorised party. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>DPO</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: An authorisation type code of SDE indicates Simplified Declaration authorisation. (See DE 2/3 where a document code of C512 has been
+        entered). The ID here is the EORI of the SDE authorised party. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>SDE</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: An authorisation type code of CGU is required as CCG authorisation is being declared (see DE 2/3 where a document code of C505 has been entered).
+		The ID here is the EORI of the CCG authorised party.-->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>CGU</CategoryCode>
+		</AuthorisationHolder>
+		<BorderTransportMeans>
+			<!--DE 7/15: Country code of the nationality of the active means of transport crossing 
+		the border, in this case US.-->
+			<RegistrationNationalityCode>US</RegistrationNationalityCode>
+			<!--DE 7/4: ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border-->
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: The EORI number of the agent entering the declaration. The UK requires an EORI to be provided for the declarant. -->
+		<Declarant>
+			<ID>GB603202734852</ID>
+		</Declarant>
+		<!--DE 3/1: Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2.-->
+		<Exporter>
+			<Name>US Cloth Co.</Name>
+			<Address>
+				<CityName>New York</CityName>
+				<CountryCode>US</CountryCode>
+				<Line>1 Apparel Avenue</Line>
+				<PostcodeID>NY2 345</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 8/5: Nature of transaction: 1 to indicate transactions involving actual or intended transfer of ownership from residents 
+		to non-residents against financial or other compensation.-->
+			<TransactionNatureCode>1</TransactionNatureCode>
+			<Consignment>
+				<!--DE 7/2: Indicator to show if goods are packed in a container or not. 1 indicates that goods are transported in containers.
+		Note: Unlike CHIEF this must now be completed.-->
+				<ContainerCode>1</ContainerCode>
+				<ArrivalTransportMeans>
+					<!--DE 7/9: Identity of the means of transport on arrival. 
+						Example number representing IMO ship identification number: '10', 
+						and 5 digits for the identification number: '12345'.-->
+					<ID>12345</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+				</ArrivalTransportMeans>
+				<!--DE 5/23: ID to give a unique position of the location.
+					BELBELBTC1 indicates the Belfast Container Terminal (BCT) Limited.
+					Goods moved via shipping container from GB to NI via port of Belfast -->
+				<GoodsLocation>
+					<Name>BELBELBTC1</Name>
+					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE.-->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Country code of the country where the goods may be examined, GB in this scenario.-->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<!--DE 7/10: Container identification number. This is alpha-numeric with up to 17 characters.
+					For containers covered by the standard ISO 6346, the identifier (prefix) allocated
+					by the International Bureau of Containers and Intermodal Transport (BIC) shall
+					also be provided in addition to the container identification number.
+					For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as
+					introduced by the European EN 13044 shall be used.-->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>DM1234</ID>
+				</TransportEquipment>
+			</Consignment>
+			<!--DE 5/8: Country code of the destination country: GB.-->
+			<Destination>
+				<CountryCode>GB</CountryCode>
+			</Destination>
+			<!--DE 5/14: Country code of the dispatch country: US.-->
+			<ExportCountry>
+				<ID>US</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Sequential number of the goods item.-->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 8/6: Statistical Value: Enter the statistical value for the goods item in GBP, irrespective of the currency used in Invoice Currency. -->
+				<StatisticalValueAmount currencyID="GBP">1000</StatisticalValueAmount>
+				<!--DE 2/3: A document code of C512 indicates SDE - Authorisation to use simplified declaration (Column 7a, Annex A of Delegated Regulation (EU) 2015/2446).-->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBSDE553202734852</ID>
+					<TypeCode>512</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: C506 indicates DPO - Authorisation for the deferment of payment. Provide the authorisation decision number for the deferment of payment
+		authorisation in format:
+		- 2 digit code identifying the member state of authorisation, for example, GB
+		- 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO.
+		- Followed by the authorisation reference number. No document status code is required. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBDPO1108654</ID>
+					<TypeCode>506</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of C505 indicates CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
+		In this scenario, a waiver to the CCG authorisation is being used and therefore the ID also indicates that a waiver is being used.
+		LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code – CCG not required. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCGUGuaranteenotrequired</ID>
+					<TypeCode>505</TypeCode>
+					<LPCOExemptionCode>CC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of N935 indicates: the invoice on the basis of which the customs value of the goods is declared.
+		This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16.
+		Document status code of AC in this scenario indicates Document attached for certification by customs.-->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>12345/10.01.2019</ID>
+					<TypeCode>935</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of 9120 indicates the Importation of animal pathogens Licence under the Importation of Animal pathogens Order 1980 (IAPO).
+		Document status code of XX in this scenario indicates the goods are not subject to any licences other than those declared.-->
+				<AdditionalDocument>
+					<CategoryCode>9</CategoryCode>
+					<ID>GBAHC12345678</ID>
+					<TypeCode>120</TypeCode>
+					<LPCOExemptionCode>XX</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of C679 indicates Attesting Document (seal product), issued by a recognised body in accordance with either - 
+		Regulation (EU) No 737/2010 (on condition that the attesting document was issued prior to 18 October 2015) or, 
+		COMMISSION IMPLEMENTING REGULATION (EU) 2015/1850, laying down detailed rules for the implementation of Regulation 
+		(EC) No 1007/2009 of the European Parliament and of the Council on trade in seal products..
+		Document status code of XB in this scenario indicates Document not required – quantity below ‘de minimus’.-->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>0054037-0054047</ID>
+					<TypeCode>679</TypeCode>
+					<LPCOExemptionCode>XB</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of Y922 indicates Other than cats and dogs fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance).-->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>0054037-0054047</ID>
+					<Name>Reason for waiver - BR343_140</Name>
+					<TypeCode>922</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional information. OSR42 - Onward Supply Relief using Requested Procedure Code 42.
+		Enter the Name and Address details of the party to whom the goods are being supplied.  
+		Enter the country of destination as a suffix to the address separated by ‘-‘-->
+				<AdditionalInformation>
+					<StatementCode>OSR42</StatementCode>
+					<StatementDescription>French Clothing Co, 1 Rue de Vetements, Paris P12 345-FR</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional Information. This field is mandatory, this represents goods are Imported from ROW into Northern Ireland. -->
+				<AdditionalInformation>
+					<StatementCode>NIIMP</StatementCode>
+				</AdditionalInformation>
+				<Commodity>
+					<!--DE 6/8:  Description of the goods specific enough to enable classification – without repeating the CN code description in the Tariff.-->
+					<Description>200 pairs of Men's brown trousers, made of cotton, in various sizes and lengths</Description>
+					<Classification>
+						<!--DE 6/14: Commodity code - combined nomenclature code. IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used-->
+						<ID>62034235</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/15: Commodity code - The TARIC code (two characters for the application of specific Union measures in respect of 
+		formalities to be completed at destination). -->
+						<ID>00</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
+					<DutyTaxFee>
+						<!--DE 4/17: Preference Type of 100 represents no preference being claimed-->
+						<DutyRegimeCode>100</DutyRegimeCode>
+						<Payment>
+							<!--DE 4/8: MethodCode of E to indicate Deferment used for import .-->
+							<MethodCode>E</MethodCode>
+						</Payment>
+					</DutyTaxFee>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
+						<GrossMassMeasure>150</GrossMassMeasure>
+						<!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
+						<NetNetWeightMeasure>100</NetNetWeightMeasure>
+						<!--DE 6/2: TariffQuantity - Quantity of the goods in the unit as required by Customs for tariff, statistical or fiscal purposes.-->
+						<TariffQuantity>200</TariffQuantity>
+					</GoodsMeasure>
+					<!--DE 4/14: ItemChargeAmount - Item price amount, the invoice was issued with a value of 1000 and the currency was in GBP.-->
+					<InvoiceLine>
+						<ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+				<!--DE 4/16: MethodCode - Valuation method: 1 to indicate the method is transaction value of the imported goods.-->
+				<CustomsValuation>
+					<MethodCode>1</MethodCode>
+				</CustomsValuation>
+				<!--D.E. 3/40 Role Code FR1 - the VAT identification number issued in the member state of importation for the importer -->
+				<DomesticDutyTaxParty>
+					<ID>GB553202734</ID>
+					<RoleCode>FR1</RoleCode>
+				</DomesticDutyTaxParty>
+				<!--D.E. 3/40 Role Code FR2 - the VAT identification number of the customer who is liable for the VAT 
+		on the intra-community acquisition of goods -->
+				<DomesticDutyTaxParty>
+					<ID>FR123457845</ID>
+					<RoleCode>FR2</RoleCode>
+				</DomesticDutyTaxParty>
+				<!--DE 1/10: Requested Procedure of 42 indicating Free circulation with onward supply -->
+				<!--DE 1/10: PreviousCode - Previous Procedure of 00 indicating there is no previous procedure.-->
+				<GovernmentProcedure>
+					<CurrentCode>42</CurrentCode>
+					<PreviousCode>00</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: GovernmentProcedure - 000 to indicate no additional procedure.-->
+				<GovernmentProcedure>
+					<CurrentCode>000</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 5/15: TypeCode of 1 to represent non-preferential origin. Where preference in DE 4/17 begins with '1', this must be completed.
+		CountryCode cotains the code for the country from which the goods originated, in this case US.-->
+				<Origin>
+					<CountryCode>US</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping marks on the packages.-->
+					<MarksNumbersID>TTM6SCENARIO3</MarksNumbersID>
+					<!--DE 6/10: Number of packages, in this case 200.-->
+					<QuantityQuantity>200</QuantityQuantity>
+					<!--DE 6/9: Type of packages - CT to represent Carton.-->
+					<TypeCode>CT</TypeCode>
+				</Packaging>
+				<!--DE 2/1: Previous Document YSDE to show the Simplified declaration procedure document number. -->
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>18GBJJR7T7G1A6D5R6</ID>
+					<TypeCode>SDE</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<!--DE 4/13: Valuation indicator - mandatory in this scenario as a
+                     valuation method of 1 has been used in DE 4/16.
+                     First digit: 0 = there is no price influence as a result of a
+                     Party Relationship between the buyer and seller.
+                     Second digit: 0 = there are no restrictions as to the disposal
+                     or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+                     Third digit: 0 = the sale or price is not subject to some condition
+                     or consideration in accordance with Article 70(3)(b) of the Code.
+                     Fourth digit: 0 = the sale is not subject to an arrangement under
+                     which part of the proceeds of any subsequent resale, disposal or use
+                     accrues directly or indirectly to the seller.-->
+				<ValuationAdjustment>
+					<AdditionCode>0000</AdditionCode>
+				</ValuationAdjustment>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 3/16: EORI number of the Importer.-->
+			<Importer>
+				<ID>GB553202734852</ID>
+			</Importer>
+			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment. This is a mandatory field-->
+			<PreviousDocument>
+				<CategoryCode>Y</CategoryCode>
+				<ID>8GB123456789101-12345</ID>
+				<TypeCode>DCR</TypeCode>
+			</PreviousDocument>
+			<!--DE 4/1: Mandatory as method 1 is being used in DE 4/16.
+			CIF to indicate Cost, Insurance and Freight.
+			GBBEL to represent the named port of destination: Belfast, NI -->
+			<TradeTerms>
+				<ConditionCode>CIF</ConditionCode>
+				<LocationID>GBBEL</LocationID>
+			</TradeTerms>
+		</GoodsShipment>
+		<ObligationGuarantee>
+			<!--DE 8/3:  Guarantee reference number.
+                  Where document code C505 is declared in DE 2/3 (Document Codes)
+                  and authorisation type code CGU is declared in DE 3/39
+                  (Holder of the Authorisation), then this data element is mandatory
+                  ID indicates that the guarantee is not required, as stated in DE 8/2-->
+			<ID>Guaranteenotrequired</ID>
+			<!--DE 8/2:  Guarantee type.  0 to represent that a customs
+                  comprehensive guarantee is being waived for the deferment of customs duty.
+                  Where document code C505 is declared in DE 2/3 (Document Codes) and
+                  authorisation type code CGU is declared in DE 3/39
+                  (Holder of the Authorisation), then code ‘0’ or ‘1’ must be declared
+                  in this data element-->
+			<SecurityDetailsCode>0</SecurityDetailsCode>
+		</ObligationGuarantee>
+	</Declaration>
+</md:MetaData>

@@ -1,0 +1,12 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+      <FunctionCode>02</FunctionCode>
+      <FunctionalReferenceID>83c943b7beb744b3b6302f083049f82d</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20201002110431Z</DateTimeString>
+      </IssueDateTime>
+      <Declaration>
+        <FunctionalReferenceID>TC03_RoRo_Test_IN02</FunctionalReferenceID>
+        <ID>20GBAXLTSCI4A9KVA5</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

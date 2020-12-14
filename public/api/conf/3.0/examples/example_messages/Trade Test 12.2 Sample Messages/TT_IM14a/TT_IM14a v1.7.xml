@@ -1,0 +1,370 @@
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+           	xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1
+	</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+           		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--Scenario:
+			Import of goods going into free circulation where item price is not declared and SPV applied at the time of submission.
+			Procedure code 4000, with E01 additional procedure codes.
+			Standard declaration: H1 additional declaration type Y – Release for Free Circulation
+			Importer is an AEO authorization holder, holds DAN
+			Importer EORI number: GB553202734852
+			No licence required for this commodity
+			Self-representation used by the importer
+
+			Commodity Code: 0703200000 (Garlic)
+			Country of Origin : Israel
+			Valuation Method: 4 – SPV without item Price
+			Net Mass: 1000kg
+
+			Note: Data elements 6/14 to 6/17 and 4/17 use Tariff codes for fresh fruit and vegetables. Many of these Tariff codes are seasonal and the associated preference/SIV/SPV measures may change or expire. The declaration may be rejected if a code entered is not active on the acceptance date. 
+		-->
+		<!-- Acceptance Date is present on all supplementary declarations, and will match the CLE date listed in 2/1.-->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20200401010000+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<!-- Function Code of 9 to represent an original declaration -->
+		<FunctionCode>9</FunctionCode>
+		<!-- DE 2/5: Traders own reference number – this must be unique to the transaction -->
+		<FunctionalReferenceID>TT_IM14a_SPV_1706_001</FunctionalReferenceID>
+		<!--DE 1/1: IM to represent an import declaration.-->
+		<!--DE 1/2: Y to represent a supplementary declaration under SDP.-->
+		<TypeCode>IMY</TypeCode>
+		<!--DE 1/9: Total number of goods items on the declaration - single item declaration.-->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--6/18: Total packages - 10. Note that this matches DE 6/10 because this is a single item declaration.-->
+		<TotalPackageQuantity>10</TotalPackageQuantity>
+		<!--DE 2/6: The DAN account used for deferred payment (of third country duty in this scenario)
+			This declared DAN belongs to the importer declared on the declaration.-->
+		<AdditionalDocument>
+			<CategoryCode>1</CategoryCode>
+			<ID>1108654</ID>
+			<TypeCode>DAN</TypeCode>
+		</AdditionalDocument>
+		<!--DE 3/39: An authorisation type code of DPO indicates Deferment of payment authorisation. 
+			See DE 2/3 where a document code of C506 has been entered. 
+			The ID here is the EORI of the DPO authorised party. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>DPO</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: Holder of the authorisation ID number. 
+			Mandatory if authorisation is required to declare goods to procedure.
+			Type code of AEOC indicates this is the EORI number of the Authorised Economic Operator — 
+			Customs simplifications. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>AEOC</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: An authorisation type code of SDE is required where SDP authorisation is being declared. 
+			In this scenario, a waiver is being claimed. 
+			See DE 2/3 where a document code of C512 has been entered.
+            The ID here is the EORI of the SDE authorised party.-->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>SDE</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: An authorisation type code of CGU is required where CCG authorisation is being declared 
+			or a waiver is being claimed. 
+			In this scenario, a waiver is being claimed. See DE 2/3 where a document code of C505 has been entered.
+			The ID here is the EORI of the CCG authorised party.-->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>CGU</CategoryCode>
+		</AuthorisationHolder>
+		<BorderTransportMeans>
+			<!--DE 7/15: Country code of the nationality of the active means of transport crossing the border, 
+				in this case GB.-->
+			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
+			<!--DE 7/4: ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border. -->
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: The EORI number of the agent entering the declaration
+            The UK requires an EORI to be provided for the declarant-->
+		<Declarant>
+			<ID>GB553202734852</ID>
+		</Declarant>
+		<!--DE 3/1: Exporter name and address is mandatory where no recognised EORI number has been entered 
+			into DE 3/2-->
+		<Exporter>
+			<Name>The Israel Garlic Corporation Ltd</Name>
+			<Address>
+				<CityName>Tel Aviv</CityName>
+				<CountryCode>IL</CountryCode>
+				<Line>1 Trade Street</Line>
+				<PostcodeID>TA1 234</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 8/5: Nature of transaction. 
+				1 to indicate transactions involving actual or intended transfer of ownership from 
+				residents to non-residents against financial or other compensation.-->
+			<TransactionNatureCode>1</TransactionNatureCode>
+			<Consignment>
+				<!--DE 7/2: Indicator to show if goods are packed in a container or not.
+                    1 indicates that goods are transported in containers
+                    Note: Unlike CHIEF this must now be completed-->
+				<ContainerCode>1</ContainerCode>
+				<!--DE 7/9: Identity of means of transport on arrival.
+                      Example number representing IMO ship identification number: ‘10’, and 5 digits 
+					  for the identification number: ‘12345’.-->
+				<ArrivalTransportMeans>
+					<ID>12345</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+				</ArrivalTransportMeans>
+				<!--DE 5/23:ID to give a unique position of the location -->
+				<GoodsLocation>
+					<Name>TILLONTIL</Name>
+					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE.-->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Country code of the country where the goods may be examined,
+                           GB in this scenario.-->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<!--DE 7/10:  Container identification number. 
+					This is alpha-numeric up to a total of 17 characters.
+					This is required where the container code in DE 7/2 is '1', indicating containerised traffic.
+					For containers covered by the standard ISO 6346, the identifier (prefix) allocated by 
+					the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided 
+					in addition to the container identification number.
+					For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by 
+					the European EN 13044 shall be used.-->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>AD12345</ID>
+				</TransportEquipment>
+			</Consignment>
+			<!--DE 5/8: Country code of the destination country, in this case GB.-->
+			<Destination>
+				<CountryCode>GB</CountryCode>
+			</Destination>
+			<!--DE 5/14: Country code for the country from which the goods were originally dispatched, 
+				in this case Israel.-->
+			<ExportCountry>
+				<ID>IL</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Sequential number of the goods item.-->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 8/6: Statistical Value: Enter the statistical value for the goods item in GBP,
+					irrespective of the currency used in Invoice Currency. -->
+				<StatisticalValueAmount currencyID="GBP">1000</StatisticalValueAmount>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					This field is mandatory if the codes are required.
+					A document code of C501 indicates AEOC - Authorisation for the status of Authorised 
+					Economic Operator - Customs Simplifications -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GB AEOC 4274/19</ID>
+					<TypeCode>501</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of C512 indicates SDE - Authorisation to use simplified declaration 
+					(Column 7a, Annex A of Delegated Regulation (EU) 2015/2446).-->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBSDE553202734852I</ID>
+					<TypeCode>512</TypeCode>
+				</AdditionalDocument>
+				<!--C506 indicates DPO - Authorisation for the deferment of payment.  
+					Provide the authorisation decision number for the deferment of payment authorisation 
+					in the format:
+					- 2 digit code identifying the member state of authorisation, for example, GB
+					- 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
+					- followed by the authorisation reference number. No document status code is required.-->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBDPO1108654</ID>
+					<TypeCode>506</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of C505 indicates ‘CGU - Authorisation for the provision of a
+					comprehensive guarantee, including possible reduction or waiver.
+					In this scenario, a waiver to the CCG authorisation is being used (indicated by
+					the status code of "CC"), and therefore the ID also indicates that a waiver is being used.-->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCGUGuaranteenotrequired</ID>
+					<TypeCode>505</TypeCode>
+					<LPCOExemptionCode>CC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of Y023 for the Importer AEO certificate number.
+                    ID contains the reference number of the certificate.-->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>GB AEOC 4274/19</ID>
+					<TypeCode>023</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of Y024 for the Declarant AEO certificate number.
+                    ID contains the reference number of the certificate.-->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>GB AEOC 4274/19</ID>
+					<TypeCode>024</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3:	A document code of Y929 indicates: Goods not concerned by Regulation (EC) No 834/2007 
+					(organic products) Council Regulation (EC) No 834/2007 on organic production and labelling of 
+					organic products and repealing Regulation (EEC) No 2092/91.
+					Document code of XX in this scenario indicates Ex-heading goods for which the document doesn’t apply -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>Excluded from Reg 834/2007</ID>
+					<Name>Reason for Waiver</Name>
+					<TypeCode>929</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional information. 00500 - Identity between declarant and importer. 
+					Indicating self-representation  -->
+				<AdditionalInformation>
+					<StatementCode>00500</StatementCode>
+					<StatementDescription>IMPORTER</StatementDescription>
+				</AdditionalInformation>
+				<Commodity>
+					<!--DE 6/8:  Description of the goods specific enough to enable
+                        classification – without repeating the CN code description in the Tariff.-->
+					<Description>Israel origin fresh garlic bulbs, 1000kg</Description>
+					<Classification>
+						<!--DE 6/14: Commodity code - combined nomenclature code. 
+						IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used.
+						Note: Many Tariff codes for fresh fruit and vegetables are seasonal and the 
+						preference/SIV/SPV measures associated may change or expire. 
+						The declaration may be rejected if a code entered is not active on the acceptance date. -->
+						<ID>07032000</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/15: Commodity code - TARIC code.
+							Note: Many Tariff codes for fresh fruit and vegetables are seasonal and the 
+							preference/SIV/SPV measures associated may change or expire. 
+							The declaration may be rejected if a code entered is not active on the acceptance date. -->
+						<ID>00</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/17: Commodity code – national additional codes. 
+							VATZ to represent VAT 0% duty rate.
+							Note: Many Tariff codes for fresh fruit and vegetables are seasonal and the 
+							preference/SIV/SPV measures associated may change or expire. 
+							The declaration may be rejected if a code entered is not active on the acceptance date. -->
+						<ID>VATZ</ID>
+						<IdentificationTypeCode>TRA</IdentificationTypeCode>
+					</Classification>
+					<!--DE 4/3: Calculation of taxes - tax type. Mandatory if revenue to pay/ secure. 
+						A00 indicating customs duty-->
+					<DutyTaxFee>
+						<TypeCode>A00</TypeCode>
+						<Payment>
+							<MethodCode>E</MethodCode>
+						</Payment>
+					</DutyTaxFee>
+					<DutyTaxFee>
+						<!--DE 4/17: Preference Type of 100 represents no preference being claimed.
+							Note: Many Tariff codes for fresh fruit and vegetables are seasonal and the 
+							preference/SIV/SPV measures associated may change or expire. 
+							The declaration may be rejected if a code entered is not active on the acceptance date. -->
+						<DutyRegimeCode>100</DutyRegimeCode>
+						<Payment>
+							<!--DE 4/8: MethodCode of E to indicate Deferment used for customs duty .-->
+							<MethodCode>E</MethodCode>
+						</Payment>
+					</DutyTaxFee>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
+						<GrossMassMeasure>1080</GrossMassMeasure>
+						<!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
+						<NetNetWeightMeasure>1000</NetNetWeightMeasure>
+					</GoodsMeasure>
+				</Commodity>
+				<!--DE 4/16: Valuation method: 4 to indicate the Deductive method.(Must be used when E01 
+					addtional Procedure code is used)-->
+				<CustomsValuation>
+					<MethodCode>4</MethodCode>
+				</CustomsValuation>
+				<GovernmentProcedure>
+					<!--DE 1/10: Requested Procedure of 40 indicating entry for free circulation
+                     		and home use of goods.  Mandatory field.-->
+					<CurrentCode>40</CurrentCode>
+					<!--DE 1/10: Previous Procedure of 00 indicating there were no previous
+                        Procedures.  Mandatory field.-->
+					<PreviousCode>00</PreviousCode>
+				</GovernmentProcedure>
+				<GovernmentProcedure>
+					<!--DE 1/11: Additional Procedure. Mandatory field. 
+						E01 to indicate Simplified Procedure Value (SPV). 
+						Use of the Unit Price for the Determination of the Customs Value for 
+						Certain Perishable Goods -->
+					<CurrentCode>E01</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 5/15: TypeCode of 1 to represent non-preferential origin.
+                     Where preference in D.E. 4/17 begins with ‘1’, this must be completed .
+                     CountryCode contains the code for the country from which the goods originated,
+                     in this case Israel.
+                     It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/15
+                     (from DE 5/16). It is not a part of the UCC or Tariff completion requirements.-->
+				<Origin>
+					<CountryCode>IL</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping marks on the packages.-->
+					<MarksNumbersID>CDSPDOEU987654</MarksNumbersID>
+					<!--DE 6/10: Number of packages, in this case 10.-->
+					<QuantityQuantity>10</QuantityQuantity>
+					<!--DE 6/9: Type of packages - BX to represent 'Box'.-->
+					<TypeCode>BX</TypeCode>
+				</Packaging>
+				<!--DE 2/1 : Previous Documents. 
+					Mandatory field. 
+					YSDE to show the MRN for the previous simplified declaration -->
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>19GBCDS123456789R1</ID>
+					<TypeCode>SDE</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 3/16: EORI number of the Importer.-->
+			<Importer>
+				<ID>GB553202734852</ID>
+			</Importer>
+			<!--DE 2/1 : Previous Documents. Mandatory field. 
+				The Trader's DUCR assigned to the consignment
+				Note: document class Y used for DUCR as sup dec.
+				As this is for a single item declaration, this should all be declared at header level.
+				In CDS, the MUCR (MCR) is not required on a sup dec.-->
+			<PreviousDocument>
+				<CategoryCode>Y</CategoryCode>
+				<ID>9GB553202734852-12345</ID>
+				<TypeCode>DCR</TypeCode>
+			</PreviousDocument>
+		</GoodsShipment>
+		<ObligationGuarantee>
+			<!--DE 8/3:  Guarantee reference number.
+				Where document code C505 is declared in DE 2/3 (Document Codes)
+				and authorisation type code CGU is declared in DE 3/39
+				(Holder of the Authorisation), then this data element is mandatory
+				ID indicates that the guarantee is not required, as stated in DE 8/2-->
+			<ID>Guaranteenotrequired</ID>
+			<!--DE 8/2:  Guarantee type.  0 to represent that a customs
+				comprehensive guarantee is being waived for the deferment of customs duty.
+				Where document code C505 is declared in DE 2/3 (Document Codes) and
+				authorisation type code CGU is declared in DE 3/39
+				(Holder of the Authorisation), then code ‘0’ or ‘1’ must be declared
+				in this data element-->
+			<SecurityDetailsCode>0</SecurityDetailsCode>
+		</ObligationGuarantee>
+	</Declaration>
+</md:MetaData>

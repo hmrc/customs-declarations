@@ -1,0 +1,50 @@
+	<MetaData>
+		<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+		<WCOTypeName>RES</WCOTypeName>
+		<ResponsibleCountryCode/>
+		<ResponsibleAgencyName/>
+		<AgencyAssignedCustomizationCode/>
+		<AgencyAssignedCustomizationVersionCode/>
+		<Response>
+			<FunctionCode>01</FunctionCode>
+			<FunctionalReferenceID>55922b1f6ed74be78b44b19cb691f5a7</FunctionalReferenceID>
+			<IssueDateTime>
+				<DateTimeString formatCode="304">20200928091644Z</DateTimeString>
+			</IssueDateTime>
+			<AdditionalInformation>
+				<StatementCode>smartErrorMsg</StatementCode>
+				<StatementDescription>Value per kilo appears too low for this commodity</StatementDescription>
+				<StatementTypeCode>1</StatementTypeCode>
+				<Pointer>
+					<SequenceNumeric>1</SequenceNumeric>
+					<DocumentSectionCode>07B</DocumentSectionCode>
+				</Pointer>
+				<Pointer>
+					<SequenceNumeric>1</SequenceNumeric>
+					<DocumentSectionCode>53A</DocumentSectionCode>
+				</Pointer>
+			</AdditionalInformation>
+			<Error>
+				<Description>Value per kilo appears too low for this commodity</Description>
+				<ValidationCode>DMS13000</ValidationCode>
+				<Pointer>
+					<DocumentSectionCode>42A</DocumentSectionCode>
+				</Pointer>
+				<Pointer>
+					<DocumentSectionCode>67A</DocumentSectionCode>
+				</Pointer>
+				<Pointer>
+					<SequenceNumeric>1</SequenceNumeric>
+					<DocumentSectionCode>68A</DocumentSectionCode>
+				</Pointer>
+			</Error>
+			<Declaration>
+				<AcceptanceDateTime>
+					<DateTimeString formatCode="304">20200928091641Z</DateTimeString>
+				</AcceptanceDateTime>
+				<FunctionalReferenceID>R30_TC10_2809_001</FunctionalReferenceID>
+				<ID>20GBARS7RMXAJH6UR0</ID>
+				<VersionID>1</VersionID>
+			</Declaration>
+		</Response>
+	</MetaData>

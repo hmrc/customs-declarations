@@ -1,0 +1,34 @@
+<MetaData>
+		<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+		<WCOTypeName>RES</WCOTypeName>
+		<ResponsibleCountryCode/>
+		<ResponsibleAgencyName/>
+		<AgencyAssignedCustomizationCode/>
+		<AgencyAssignedCustomizationVersionCode/>
+		<Response>
+		<!-- This is an example of a DMSCPR notification. With this message the submitter is sent a reminder regarding the need to take action on the 
+		insufficient balance against a deferred method of payment OR to make an immediate payment. -->
+			<FunctionCode>15</FunctionCode>
+			<FunctionalReferenceID>bee6c4091dd14ef2a058c73398029611</FunctionalReferenceID>
+			<IssueDateTime>
+				<DateTimeString formatCode="304">20200708135808Z</DateTimeString>
+			</IssueDateTime>
+			<Bank>
+				<ReferenceID>CITIGB2LLON</ReferenceID>
+				<ID>GB25CITI08320011963155</ID>
+			</Bank>
+			<Declaration>
+				<FunctionalReferenceID>TT_IM01a_CPI_0707_09</FunctionalReferenceID>
+				<ID>20GB7HGPXUC5DFGVR2</ID>
+				<VersionID>1</VersionID>
+				<DutyTaxFee>
+					<Payment>
+						<PaymentAmount>226.40</PaymentAmount>
+						<ObligationGuarantee>
+							<ReferenceID>1909241</ReferenceID>
+						</ObligationGuarantee>
+					</Payment>
+				</DutyTaxFee>
+			</Declaration>
+		</Response>
+	</MetaData>

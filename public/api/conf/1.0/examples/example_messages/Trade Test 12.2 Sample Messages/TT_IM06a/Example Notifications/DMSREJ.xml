@@ -1,0 +1,44 @@
+﻿<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>03</FunctionCode>
+		<FunctionalReferenceID>e11d5aaf775e496d8ebee2f60c514941</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20201209154323Z</DateTimeString>
+		</IssueDateTime>
+		<Error>
+			<ValidationCode>DMS12144</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>23A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>2</SequenceNumeric>
+				<DocumentSectionCode>50A</DocumentSectionCode>
+				<TagID>401</TagID>
+			</Pointer>
+		</Error>
+		<Declaration>
+			<FunctionalReferenceID>R260_E2E_TC13_1903_05</FunctionalReferenceID>
+			<ID>20GBDN1QAMTATMTVR8</ID>
+			<RejectionDateTime>
+				<DateTimeString formatCode="304">20201209154323Z</DateTimeString>
+			</RejectionDateTime>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+	<MetaData>
+		<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+		<WCOTypeName>RES</WCOTypeName>
+		<ResponsibleCountryCode/>
+		<ResponsibleAgencyName/>
+		<AgencyAssignedCustomizationCode/>
+		<AgencyAssignedCustomizationVersionCode/>
+		<Response>
+		<!-- This is an example of a DMSREQ notificaiton. With this message the submitter is informed of the acceptance of the second submitted amendment request-->
+			<FunctionCode>11</FunctionCode>
+			<FunctionalReferenceID>1fb901d91b154d24a441b93a144f7fe8</FunctionalReferenceID>
+			<IssueDateTime>
+				<DateTimeString formatCode="304">20200703142538Z</DateTimeString>
+			</IssueDateTime>
+			<Status>
+				<NameCode>39</NameCode>
+			</Status>
+			<Declaration>
+				<FunctionalReferenceID>TT_IM02c_0307_886</FunctionalReferenceID>
+				<ID>20GB7BRTHX91NFGVR3</ID>
+				<VersionID>2</VersionID>
+			</Declaration>
+		</Response>
+	</MetaData>

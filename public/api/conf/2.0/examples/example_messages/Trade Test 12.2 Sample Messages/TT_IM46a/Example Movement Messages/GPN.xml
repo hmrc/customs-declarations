@@ -1,0 +1,23 @@
+<MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+        	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+        	schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+        	>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>DEC</WCOTypeName>
+	<ResponsibleCountryCode>GB</ResponsibleCountryCode>
+	<ResponsibleAgencyName>HMRC</ResponsibleAgencyName>
+	<AgencyAssignedCustomizationVersionCode>v2.1</AgencyAssignedCustomizationVersionCode>
+	<Declaration schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+           		>
+		<AcceptanceDateTime>
+			<DateTimeString formatCode="304">${#TestCase#AcceptanceDate}</DateTimeString>
+		</AcceptanceDateTime>
+		<FunctionCode>13</FunctionCode>
+		<FunctionalReferenceID>R30_E2E_TC09_001</FunctionalReferenceID>
+		<ID>20GBD43CK9B2VWF7R1</ID>
+		<TypeCode>GPR</TypeCode>
+		<Submitter>
+			<ID>GB575456994000</ID>
+		</Submitter>
+	</Declaration>
+</MetaData>

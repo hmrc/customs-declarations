@@ -1,0 +1,48 @@
+	<?xml version="1.0"?>
+	<MetaData>
+		<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+		<WCOTypeName>RES</WCOTypeName>
+		<ResponsibleCountryCode/>
+		<ResponsibleAgencyName/>
+		<AgencyAssignedCustomizationCode/>
+		<AgencyAssignedCustomizationVersionCode/>
+		<Response>
+		<!-- This is an example of a DMSRCV notificaiton. Function code of 2 indicates that a received message (declaration, notification or request) is registered and the Declaration has been accepted -->
+			<FunctionCode>02</FunctionCode>
+			<FunctionalReferenceID>c3ef4d607c904bf583036c50a447a424</FunctionalReferenceID>
+			<IssueDateTime>
+				<DateTimeString formatCode="304">20200703142427Z</DateTimeString>
+			</IssueDateTime>
+			<AdditionalInformation>
+				<StatementCode>smartErrorMsg</StatementCode>
+				<StatementDescription>Value per kilo appears too high for this commodity</StatementDescription>
+				<StatementTypeCode>1</StatementTypeCode>
+				<Pointer>
+					<SequenceNumeric>1</SequenceNumeric>
+					<DocumentSectionCode>07B</DocumentSectionCode>
+				</Pointer>
+				<Pointer>
+					<SequenceNumeric>1</SequenceNumeric>
+					<DocumentSectionCode>53A</DocumentSectionCode>
+				</Pointer>
+			</AdditionalInformation>
+			<Error>
+				<ValidationCode>DMS13000</ValidationCode>
+				<Pointer>
+					<DocumentSectionCode>42A</DocumentSectionCode>
+				</Pointer>
+				<Pointer>
+					<DocumentSectionCode>67A</DocumentSectionCode>
+				</Pointer>
+				<Pointer>
+					<SequenceNumeric>1</SequenceNumeric>
+					<DocumentSectionCode>68A</DocumentSectionCode>
+				</Pointer>
+			</Error>
+			<Declaration>
+				<FunctionalReferenceID>TT_IM02b_0307_001</FunctionalReferenceID>
+				<ID>20GB7BRTHX91NFGVR3</ID>
+				<VersionID>1</VersionID>
+			</Declaration>
+		</Response>
+	</MetaData>

@@ -3,7 +3,7 @@
   <xs:element name="errorResponse" type="errorResponseType"/>
   <xs:complexType name="errorsType">
     <xs:sequence>
-      <xs:element type="errorType" name="error"/>
+      <xs:element type="errorType" name="error" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="errorResponseType">

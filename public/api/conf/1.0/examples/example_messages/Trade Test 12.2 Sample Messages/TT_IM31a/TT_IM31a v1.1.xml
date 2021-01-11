@@ -234,7 +234,10 @@
 					<ID>GBSDE553202734852I</ID>
 					<TypeCode>512</TypeCode>
 				</AdditionalDocument>
-
+				<!--DE 2/3 Additional Document: A document code of C014 indicates V I 1 document.  
+					EC REG 555/2008 laying down detailed rules for the application of Regulation (EC) 479/2008 
+					of the relative Council, to the common organization of the wine market, with regard to support 
+					programs to trade with third countries production potential and controls in the wine sector. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>C014-001</ID>

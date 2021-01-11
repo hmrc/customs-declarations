@@ -1,3 +1,5 @@
+<!-- N.B: This sample is impacted by KEL-349 - CDS is not returning any DMSTAX notifications on Type C and F declarations. -->
+
 <MetaData xmlns="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
 	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
 	<WCOTypeName>RES</WCOTypeName>

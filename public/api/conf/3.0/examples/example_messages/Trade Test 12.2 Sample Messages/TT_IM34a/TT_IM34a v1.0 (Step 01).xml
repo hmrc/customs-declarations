@@ -18,8 +18,8 @@
 			CSP submits an inventory-linked Type D PreLodged ALVS declaration where "ttalvsHMI" is 
 			entered in the goods description field (D.E. 6/8) on the goods item. 
 			Import of goods liable to Customs Duty & VAT, with no previous procedure
-			Goods: Shavers, hair clippers and hair-removing appliances, with self-contained electric motor
-			Standard frontier Declaration Type A which derives a H1 Declaration Category data set
+			Goods: ttalvsHMI
+			Category: H1 Declaration Category data set
 			Deferred Payment is used with specific authority. Importer's DAN is being used.
 			Goods presented at Wallasea Island on arrival.
 		-->

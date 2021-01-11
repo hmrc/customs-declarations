@@ -86,21 +86,20 @@
 			Note the second digit is not mandatory. -->
 			<TransactionNatureCode>1</TransactionNatureCode>
 			<Consignment>
-			<!-- DE 7/2: Container. Mandatory field. Indicator to show if goods are packed in a container or not. 
-			Code 0 indicates that goods are NOT transported in containers. Note: Unlike CHIEF this must now be completed. -->
+			<!--DE 7/2: Container. Mandatory field. Indicator to show if goods are packed in a container or not. 
+				Code 0 indicates that goods are NOT transported in containers. Note: Unlike CHIEF this must now be completed. -->
 				<ContainerCode>0</ContainerCode>
 			<!--DE 7/9: Identity of the means of transport on arrival.
-			Number '40' representing IATA Flight number: and 5 digits for the identification number: 'BA998'.-->
+				Number '40' representing IATA Flight number: and 5 digits for the identification number: 'BA998'.-->
 				<ArrivalTransportMeans>
 					<ID>BA998</ID>
 					<IdentificationTypeCode>40</IdentificationTypeCode>
 				</ArrivalTransportMeans>
-			<!-- DE 5/23: Location of goods. Mandatory field. Goods arriving at London Heathrow Airport, UK.
-					Name: An alphanumeric identifier to give a unique position of the location.
-					TypeCode: Type of Location, A indicates frontier or frontier linked location.
-					Address TypeCode: Type of ID of the Location, U in this scenario for UN/LOCODE.
-					Address CountryCode: Country code of the country where the goods may be examined, GB in this scenario.
-					-->
+			<!--DE 5/23: Location of goods. Mandatory field. Goods arriving at London Heathrow Airport, UK.
+				Name: An alphanumeric identifier to give a unique position of the location.
+				TypeCode: Type of Location, A indicates frontier or frontier linked location.
+				Address TypeCode: Type of ID of the Location, U in this scenario for UN/LOCODE.
+				Address CountryCode: Country code of the country where the goods may be examined, GB in this scenario. -->
 				<GoodsLocation>
 					<Name>LHRLHRLHR</Name>
 					<ID>Heathrow</ID>

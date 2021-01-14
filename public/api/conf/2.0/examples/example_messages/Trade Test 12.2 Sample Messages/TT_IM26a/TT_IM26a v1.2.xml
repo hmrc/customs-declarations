@@ -97,8 +97,8 @@
 					<IdentificationTypeCode>10</IdentificationTypeCode>
 				</ArrivalTransportMeans>
 
-				<!--DE 5/23: The location code for Warrenpoint, GB005160
-								Goods moved via shipping container from GB to NI via port of Warrenpoint -->
+				<!--DE 5/23: The location code for Warrenpoint, GB005160.
+					Goods moved via shipping container from GB to NI via port of Warrenpoint. -->
 				<GoodsLocation>
 					<!--DE 5/23: ID to give a unique position of the location WPTWPTWPT -->
 					<Name>WPTWPTWPT</Name>

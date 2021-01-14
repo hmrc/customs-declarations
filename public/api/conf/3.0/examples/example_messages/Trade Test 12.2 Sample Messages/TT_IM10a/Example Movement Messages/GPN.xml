@@ -1,27 +1,21 @@
-    <md:MetaData
-      xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-      xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-      xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
-    >
-      <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
-      <md:WCOTypeName>DEC</md:WCOTypeName>
-      <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
-      <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
-      <md:AgencyAssignedCustomizationVersionCode>v2.1
-      </md:AgencyAssignedCustomizationVersionCode>
-      <Declaration
-        xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
-      >
-        <AcceptanceDateTime>
-         <p1:DateTimeString formatCode="304">20201211124156Z</p1:DateTimeString>
-        </AcceptanceDateTime>
-        <FunctionCode>13</FunctionCode>
-       <FunctionalReferenceID>TT_IM10a_1112_01</FunctionalReferenceID>
-        <ID>20GBDPQ18IZWWMQYR2</ID>
-        <TypeCode>GPR</TypeCode>
-        <Submitter>
-          <ID>GB553202734852</ID>
-        </Submitter>
-
-      </Declaration>
-    </md:MetaData>
+<md:MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+           	xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1
+	</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<FunctionCode>13</FunctionCode>
+		<FunctionalReferenceID>TT_IM10a_1112_01</FunctionalReferenceID>
+		<ID>20GBDPQ18IZWWMQYR2</ID>
+		<TypeCode>GPR</TypeCode>
+		<Submitter>
+			<ID>GB553202734852</ID>
+		</Submitter>
+	</Declaration>
+</md:MetaData>

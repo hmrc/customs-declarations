@@ -86,7 +86,7 @@
 					<IdentificationTypeCode>10</IdentificationTypeCode>
 				</ArrivalTransportMeans>
 				<GoodsLocation>
-					<!--DE 5/23: The location code for goods moved via shipping container from GB to NI via port of Warrenpoint -->
+					<!--DE 5/23: The location code for goods moved via shipping container from GB to NI via port of Warrenpoint. -->
 					<Name>WPTWPTWPT</Name>
 					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
 					<TypeCode>A</TypeCode>

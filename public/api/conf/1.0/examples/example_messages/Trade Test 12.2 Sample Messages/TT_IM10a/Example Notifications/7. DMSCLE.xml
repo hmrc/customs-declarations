@@ -1,18 +1,24 @@
-<v3:notifyTrader xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/">
-  <_2:MetaData><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response>
-      <_2_1:FunctionCode>09</_2_1:FunctionCode>
-      <_2_1:FunctionalReferenceID>1ce42c3fef3b497b8511d778d3b47b64</_2_1:FunctionalReferenceID>
-      <_2_1:IssueDateTime>
-        <_2_2:DateTimeString formatCode="304">20201211124200Z</_2_2:DateTimeString>
-      </_2_1:IssueDateTime>
-      <_2_1:AdditionalInformation>
-        <_2_1:StatementCode>A2</_2_1:StatementCode>
-        <_2_1:StatementTypeCode>AFB</_2_1:StatementTypeCode>
-      </_2_1:AdditionalInformation>
-      <_2_1:Declaration>
-        <_2_1:FunctionalReferenceID>TT_IM10a_1112_01</_2_1:FunctionalReferenceID>
-        <_2_1:ID>20GBDPQ18IZWWMQYR2</_2_1:ID>
-        <_2_1:VersionID>2</_2_1:VersionID>
-      </_2_1:Declaration>
-    </_2_1:Response></_2:MetaData>
-</v3:notifyTrader>
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>09</FunctionCode>
+		<FunctionalReferenceID>1ce42c3fef3b497b8511d778d3b47b64</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20201211124200Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>A2</StatementCode>
+			<StatementTypeCode>AFB</StatementTypeCode>
+		</AdditionalInformation>
+		<Declaration>
+			<FunctionalReferenceID>TT_IM10a_1112_01</FunctionalReferenceID>
+			<ID>20GBDPQ18IZWWMQYR2</ID>
+			<VersionID>2</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

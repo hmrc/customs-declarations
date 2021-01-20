@@ -22,6 +22,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionVal
 import play.api.libs.json.Json
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{ACCEPT, AUTHORIZATION, CONTENT_TYPE, contentAsString, route, status, _}
+import uk.gov.hmrc.customs.api.common.xml.ValidateXmlAgainstSchema
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataMongoRepo
@@ -32,6 +33,9 @@ import util.TestData._
 import util.XmlOps.stringToXml
 import util.externalservices.CustomsNotificationService
 
+import java.io.StringReader
+import javax.xml.transform.stream.StreamSource
+import javax.xml.validation.Schema
 import scala.xml.Utility.trim
 
 class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTestResponses
@@ -46,6 +50,8 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val endpoint = s"/file-transmission-notify/clientSubscriptionId/$subscriptionFieldsIdString"
+
+  private val schemaFileUploadNotificationLocationV1: Schema = ValidateXmlAgainstSchema.getSchema(xsdFileUploadNotificationLocationV1).get
 
   override protected def beforeAll() {
     await(repo.drop)
@@ -109,6 +115,7 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
 
       And("The request XML payload contains details of the scan outcome")
       trim(stringToXml(requestPayload)) shouldBe trim(FileTransmissionSuccessCustomsNotificationXml)
+      schemaFileUploadNotificationLocationV1.newValidator().validate(new StreamSource(new StringReader(requestPayload)))
     }
 
     scenario("Response status 400 when File Transmission service sends invalid payload") {

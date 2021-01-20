@@ -18,6 +18,11 @@ package component
 
 trait ExpectedTestResponses {
 
+  protected val xsdErrorLocationV1: String = "/api/conf/1.0/schemas/customs/error.xsd"
+  protected val xsdFileUploadNotificationLocationV1: String = "/api/conf/1.0/schemas/wco/fileupload/FileUploadNotification.xsd"
+  protected val xsdFileUploadRequestLocationV1: String = "/api/conf/1.0/schemas/wco/fileupload/FileUploadRequest.xsd"
+  protected val xsdFileUploadResponseLocationV1: String = "/api/conf/1.0/schemas/wco/fileupload/FileUploadResponse.xsd"
+
   protected val BadRequestErrorWith2Errors: String =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>

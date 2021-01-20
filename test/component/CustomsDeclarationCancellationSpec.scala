@@ -21,6 +21,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionVal
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
+import uk.gov.hmrc.customs.api.common.xml.ValidateXmlAgainstSchema
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
@@ -28,6 +29,9 @@ import util.XmlOps.stringToXml
 import util.externalservices._
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, TestXMLData}
 
+import java.io.StringReader
+import javax.xml.transform.stream.StreamSource
+import javax.xml.validation.Schema
 import scala.concurrent.Future
 
 class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
@@ -47,6 +51,8 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
   private val apiSubscriptionKeyForXClientIdV3 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionThree)
+
+  private val schemaErrorV1: Schema = ValidateXmlAgainstSchema.getSchema(xsdErrorLocationV1).get
 
   override protected def beforeAll() {
     startMockServer()
@@ -182,6 +188,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
       And("the response body is a \"invalid xml\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(BadRequestErrorWith2Errors)
+      schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadRequestErrorWith2Errors)))
     }
 
   }

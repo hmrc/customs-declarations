@@ -23,6 +23,7 @@ import org.scalatest._
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
+import uk.gov.hmrc.customs.api.common.xml.ValidateXmlAgainstSchema
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.{ValidHeadersV2, ValidHeadersV3}
@@ -30,6 +31,9 @@ import util.XmlOps.stringToXml
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgStatusDeclarationService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTestXMLData}
 
+import java.io.StringReader
+import javax.xml.transform.stream.StreamSource
+import javax.xml.validation.Schema
 import scala.concurrent.Future
 
 class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
@@ -52,6 +56,8 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
   private val apiSubscriptionKeyForXClientIdV3 = apiSubscriptionKeyForXClientIdV2.copy(version = VersionThree)
+
+  private val schemaErrorV1: Schema = ValidateXmlAgainstSchema.getSchema(xsdErrorLocationV1).get
 
   private def validResponse(acceptanceDateVal : String) =
     raw"""<v1:DeclarationStatusResponse xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/status/v1 ../Schemas/declarationInformationRetrievalStatusResponse.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:_3="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:_2="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:v1="http://gov.uk/customs/declarationInformationRetrieval/status/v1">
@@ -160,6 +166,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
       And("the response body is a \"invalid xml\" XML")
       stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorInvalidDate)
+      schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadStatusResponseErrorInvalidDate)))
     }
 
     scenario("Response status 400 when Declaration Management Information Response does not contain a valid communicationAddress") {
@@ -178,6 +185,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
       And("the response body is a \"invalid xml\" XML")
       stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
+      schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadStatusResponseErrorBadgeIdMissingOrInvalid)))
     }
 
     scenario("Response status 400 when Declaration Management Information Response does contains different Badge Identifier") {
@@ -196,6 +204,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
       And("the response body is a \"invalid xml\" XML")
       stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
+      schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadStatusResponseErrorBadgeIdMissingOrInvalid)))
     }
   }
 

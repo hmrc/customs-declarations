@@ -22,6 +22,7 @@ import play.api.libs.json.{JsObject, JsString}
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
+import uk.gov.hmrc.customs.api.common.xml.ValidateXmlAgainstSchema
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
@@ -30,6 +31,9 @@ import util.XmlOps.stringToXml
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, UpscanInitiateService}
 import util.{AuditService, TestData}
 
+import java.io.StringReader
+import javax.xml.transform.stream.StreamSource
+import javax.xml.validation.Schema
 import scala.concurrent.Future
 
 class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
@@ -43,6 +47,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
   with AuditService {
 
   private val endpoint = "/file-upload"
+  private val schemaFileUploadResponseLocationV1: Schema = ValidateXmlAgainstSchema.getSchema(xsdFileUploadResponseLocationV1).get
 
   private val apiSubscriptionKeyForXClientIdV1 =
     ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
@@ -75,6 +80,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       status(result) shouldBe OK
 
       headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      schemaFileUploadResponseLocationV1.newValidator().validate(new StreamSource(new StringReader(contentAsString(result))))
     }
   }
 

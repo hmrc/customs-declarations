@@ -22,6 +22,7 @@ import play.api.Application
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
+import uk.gov.hmrc.customs.api.common.xml.ValidateXmlAgainstSchema
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
@@ -29,6 +30,9 @@ import util.XmlOps.stringToXml
 import util.externalservices._
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, TestXMLData}
 
+import java.io.StringReader
+import javax.xml.transform.stream.StreamSource
+import javax.xml.validation.Schema
 import scala.concurrent.Future
 
 class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
@@ -50,6 +54,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
   private val apiSubscriptionKeyForXClientIdV3 = apiSubscriptionKeyForXClientIdV2.copy(version = VersionThree)
+
+  private val schemaErrorV1: Schema = ValidateXmlAgainstSchema.getSchema(xsdErrorLocationV1).get
 
   protected override val BadRequestErrorWith2Errors: String =
     """<?xml version="1.0" encoding="UTF-8"?>
@@ -153,6 +159,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("the response body is a \"malformed xml body\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(MalformedXmlBodyError)
+      schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(MalformedXmlBodyError)))
     }
 
   }
@@ -248,6 +255,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("the response body is empty")
       stringToXml(contentAsString(result)) shouldBe stringToXml(ServiceUnavailableError)
+      schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(ServiceUnavailableError)))
     }
 
   }
@@ -271,6 +279,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("the response body is a \"invalid xml\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(BadRequestErrorWith2Errors)
+      schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadRequestErrorWith2Errors)))
     }
 
   }

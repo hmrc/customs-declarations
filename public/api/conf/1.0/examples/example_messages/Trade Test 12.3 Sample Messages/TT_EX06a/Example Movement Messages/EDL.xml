@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+                   <inv:messageCode>EDL</inv:messageCode>
+								<inv:agentDetails>
+                    <inv:EORI>GB025115166433</inv:EORI>
+                    <inv:agentLocation>a</inv:agentLocation>
+                     <inv:agentRole>a</inv:agentRole>
+                   </inv:agentDetails>
+                   <inv:ucrBlock>
+                    <inv:ucr>GB/427168118378-R2801</inv:ucr>
+                        <inv:ucrType>M</inv:ucrType>
+                   </inv:ucrBlock>
+                   <inv:goodsLocation>GBAUSOUSTNSOU</inv:goodsLocation>
+                   <inv:goodsArrivalDateTime>2020-01-28T09:11:00</inv:goodsArrivalDateTime>
+                   <inv:goodsDepartureDateTime>2020-01-28T09:16:00</inv:goodsDepartureDateTime>
+                    <inv:movementReference>Movement14</inv:movementReference>
+								<inv:transportDetails>
+                      <inv:transportID>11CSCLGLOBE</inv:transportID>
+                      <inv:transportMode>1</inv:transportMode>
+                      <inv:transportNationality>GB</inv:transportNationality>
+                   </inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>

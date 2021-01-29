@@ -1,0 +1,17 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+	<!-- This is an example of a DMSROG notification. With this message the submitter is informed that the goods can be released  -->
+      <FunctionCode>08</FunctionCode>
+      <FunctionalReferenceID>b850b7f5b53a4e699713199658a2d17f</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20200212091507Z</DateTimeString>
+      </IssueDateTime>
+      <AdditionalInformation>
+        <StatementCode>A1</StatementCode>
+        <StatementTypeCode>AFB</StatementTypeCode>
+      </AdditionalInformation>
+      <Declaration>
+        <FunctionalReferenceID>R251_TC05_2111_13</FunctionalReferenceID>
+        <ID>20GB1OJPU2P01FGVR4</ID>
+        <VersionID>3</VersionID>
+      </Declaration>
+    </Response></MetaData>

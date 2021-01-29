@@ -1,0 +1,18 @@
+
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+<!-- This is an example of a DMSACC notification. Function code 01 indicates that the declaration has been legally accepted -->
+      <FunctionCode>01</FunctionCode>
+      <FunctionalReferenceID>71f5ab2ff779445dac05da8d9e56afad</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20190702091532Z</DateTimeString>
+      </IssueDateTime>
+      <Declaration>
+        <AcceptanceDateTime>
+          <DateTimeString formatCode="304">20190702080000Z</DateTimeString>
+        </AcceptanceDateTime>
+          <!-- The Functional Reference refers to DE 2/5 in the declaration - trader's own reference number – this must be unique to the transaction -->
+        <FunctionalReferenceID>E3.4sc1.3_JF_01</FunctionalReferenceID>
+        <ID>19GB78LZCKGGZX8PA1</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

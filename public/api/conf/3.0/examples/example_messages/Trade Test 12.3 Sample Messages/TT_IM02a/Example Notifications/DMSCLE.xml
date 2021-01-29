@@ -1,0 +1,18 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+  <!-- This is an example of a DMSCLE, when the declaration have been cleared and the submitter has been informed. Function code 09 indicates this clearance -->
+      <FunctionCode>09</FunctionCode>
+      <FunctionalReferenceID>14ca74f52ac24d16bd3370a24783f4d5</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20191112152002Z</DateTimeString>
+      </IssueDateTime>
+      <AdditionalInformation>
+        <StatementCode>A2</StatementCode>
+        <StatementTypeCode>AFB</StatementTypeCode>
+      </AdditionalInformation>
+      <Declaration>
+        <!-- The Functional Reference refers to DE 2/5 in the declaration - trader's own reference number – this must be unique to the transaction -->
+        <FunctionalReferenceID>IMZEKZROGVX81-PC8</FunctionalReferenceID>
+        <ID>19GBCJ06D67PBX8PR7</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

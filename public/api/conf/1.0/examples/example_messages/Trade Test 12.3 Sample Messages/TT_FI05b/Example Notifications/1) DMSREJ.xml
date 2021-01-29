@@ -1,0 +1,50 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>03</FunctionCode>
+		<FunctionalReferenceID>7fab966a16ca41cc940dcb3bfe51e3cf</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20201204144347Z</DateTimeString>
+		</IssueDateTime>
+		<Error>
+			<ValidationCode>DMS10020</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>55B</DocumentSectionCode>
+				<TagID>R119</TagID>
+			</Pointer>
+		</Error>
+		<Error>
+			<ValidationCode>DMS12013</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>55B</DocumentSectionCode>
+			</Pointer>
+		</Error>
+		<Declaration>
+			<FunctionalReferenceID>TT_PVA_TC02E</FunctionalReferenceID>
+			<ID>20GBDFUEHB5UXYCXR9</ID>
+			<RejectionDateTime>
+				<DateTimeString formatCode="304">20201204144347Z</DateTimeString>
+			</RejectionDateTime>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

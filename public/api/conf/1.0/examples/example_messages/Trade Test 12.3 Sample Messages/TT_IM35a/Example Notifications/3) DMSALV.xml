@@ -1,0 +1,51 @@
+<!--Please note KEL-356  when testing:
+	The declaration FunctionalReferenceID is not populated on the DMSALV trader notification 
+	in the Trade Test environment. -->
+
+<MetaData xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2"
+           	xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2"
+           	xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>50</FunctionCode>
+		<FunctionalReferenceID>29dd2e12620348bc8df8ab4ce78d7fc9</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20201128093415Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>H01</StatementCode>
+			<StatementDescription>Awaiting Decision</StatementDescription>
+			<StatementTypeCode>ALV</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>07B</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>53A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+		<Error>
+			<ValidationCode>CDS50000</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+		</Error>
+		<Declaration>
+			<ID>20GBD6YMDGQDLHTER6</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

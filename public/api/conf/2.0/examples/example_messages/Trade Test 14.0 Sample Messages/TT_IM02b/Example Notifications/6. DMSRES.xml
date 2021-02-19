@@ -1,0 +1,65 @@
+<MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+		<FunctionCode>07</FunctionCode>
+		<FunctionalReferenceID>38016ca003344f9aa5752e15abda2734</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20210216143811Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementDescription>Amending item price as a mistake was made on the declaration.</StatementDescription>
+			<StatementTypeCode>AES</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>07B</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>06A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+		<Amendment>
+			<ChangeReasonCode>21</ChangeReasonCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>23A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>79A</DocumentSectionCode>
+				<TagID>112</TagID>
+			</Pointer>
+		</Amendment>
+		<Declaration>
+			<FunctionalReferenceID>TT_IM02a_1602_01_SM</FunctionalReferenceID>
+			<ID>21GB1UL9DXUNDQL5R5</ID>
+			<VersionID>2</VersionID>
+		</Declaration>
+		<Declaration xmlns:_2_3="urn:wco:datamodel:WCO:DEC-DMS:2">
+			<FunctionCode>9</FunctionCode>
+			<GoodsShipment>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<Commodity>
+						<InvoiceLine>
+							<ItemChargeAmount currencyID="GBP">999.0</ItemChargeAmount>
+						</InvoiceLine>
+					</Commodity>
+				</GovernmentAgencyGoodsItem>
+			</GoodsShipment>
+		</Declaration>
+	</Response>
+</MetaData>

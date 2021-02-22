@@ -56,7 +56,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
             Future.failed(new IllegalStateException(errorMsg))
           case Some(fileTransmission) =>
             connector.send(fileTransmission).map { _ =>
-              logger.info(s"successfully called file transmission service $fileTransmission")
+              logger.info(s"successfully called file transmission service with batchId ${fileTransmission.batch.id.toString}, callbackUrl ${fileTransmission.callbackUrl.toString} and fileReference ${fileTransmission.file.reference.toString}")
               ()
             }
       }

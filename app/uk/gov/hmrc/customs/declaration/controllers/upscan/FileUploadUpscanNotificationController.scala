@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.upscan
 
 import java.util.UUID
-
 import com.google.inject.Inject
 import play.api.libs.json._
 import play.api.mvc._
@@ -30,6 +29,7 @@ import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.services.upscan.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, UpscanNotificationCallbackToXmlNotification}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
+import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
@@ -56,7 +56,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
                 implicit val conversationId = conversationIdForLogging(callbackBody.reference.value)
                 callbackBody match {
                   case ready: UploadedReadyCallbackBody =>
-                    cdsLogger.debug(s"Valid JSON request received with READY status. Body: ${Json.prettyPrint(js)} headers: ${request.headers}")
+                    cdsLogger.debug(s"Valid JSON request received with READY status. File reference: ${ready.reference.toString}, status: ${ready.fileStatus.status}, ${ready.uploadDetails} and headers: ${request.headers}")
                     businessService.persistAndCallFileTransmission(clientSubscriptionId, ready).map{_ =>
                         Results.NoContent
                     }.recover{

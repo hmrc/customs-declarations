@@ -123,6 +123,7 @@ abstract class CustomsDeclarationController(val common: Common,
               case None => Accepted.as(MimeTypes.XML).withConversationId
             }
           case Left(errorResult) =>
+            logger.warn("Declaration request processing failed")
             errorResult
         }
     }

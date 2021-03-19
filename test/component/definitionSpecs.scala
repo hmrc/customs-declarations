@@ -28,15 +28,9 @@ import scala.concurrent.Future
 
 class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec with Matchers {
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
-    "api.access.version-2.0.whitelistedApplicationIds.0" -> "someId-1",
-    "api.access.version-2.0.whitelistedApplicationIds.1" -> "someId-2",
-    "api.access.version-3.0.whitelistedApplicationIds.0" -> "someId-3"
-  )).build()
-
   feature("Ensure definition file") {
 
-    scenario("is correct when V1 is public and V2 is private and V3 is private") {
+    scenario("is correct when all versions are private") {
 
       Given("the API is available")
       val request = FakeRequest("GET", "/api/definition")
@@ -70,7 +64,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |        "status": "BETA",
           |        "endpointsEnabled": true,
           |        "access": {
-          |          "type": "PUBLIC"
+          |          "type": "PRIVATE"
           |        },
           |        "fieldDefinitions": [
           |          {
@@ -107,11 +101,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |        "status": "BETA",
           |        "endpointsEnabled": true,
           |        "access": {
-          |          "type": "PRIVATE",
-          |          "whitelistedApplicationIds": [
-          |            "someId-1",
-          |            "someId-2"
-          |          ]
+          |          "type": "PRIVATE"
           |        },
           |        "fieldDefinitions": [
           |          {
@@ -148,10 +138,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |        "status": "BETA",
           |        "endpointsEnabled": true,
           |        "access": {
-          |          "type": "PRIVATE",
-          |          "whitelistedApplicationIds": [
-          |            "someId-3"
-          |          ]
+          |          "type": "PRIVATE"
           |        },
           |        "fieldDefinitions": [
           |          {
@@ -194,8 +181,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
 class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder().configure(Map(
-    "api.access.version-2.0.enabled" -> false,
-    "api.access.version-3.0.whitelistedApplicationIds.0" -> "someId-3"
+    "api.access.version-2.0.enabled" -> false
   )).build()
 
   feature("Ensure definition file") {
@@ -233,7 +219,7 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "status": "BETA",
           |        "endpointsEnabled": true,
           |        "access": {
-          |          "type": "PUBLIC"
+          |          "type": "PRIVATE"
           |        },
           |        "fieldDefinitions": [
           |          {
@@ -270,7 +256,7 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "status": "BETA",
           |        "endpointsEnabled": false,
           |        "access": {
-          |          "type": "PUBLIC"
+          |          "type": "PRIVATE"
           |        },
           |        "fieldDefinitions": [
           |          {
@@ -307,10 +293,7 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "status": "BETA",
           |        "endpointsEnabled": true,
           |        "access": {
-          |          "type": "PRIVATE",
-          |          "whitelistedApplicationIds": [
-          |            "someId-3"
-          |          ]
+          |          "type": "PRIVATE"
           |        },
           |        "fieldDefinitions": [
           |          {

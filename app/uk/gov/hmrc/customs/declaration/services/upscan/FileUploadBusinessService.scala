@@ -97,7 +97,6 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
 
   private def persist[A](fileDetails: Seq[UpscanInitiateResponsePayload], sfId: SubscriptionFieldsId)
                         (implicit request: ValidatedFileUploadPayloadRequest[A]): Future[Boolean] = {
-    //TODO ensure/check that ordering of uploadProperties matches batchFiles
     val batchFiles = fileDetails.zipWithIndex.map { case (fileDetail, index) =>
       BatchFile(FileReference(UUID.fromString(fileDetail.reference)), None, new URL(fileDetail.uploadRequest.href),
         request.fileUploadRequest.files(index).fileSequenceNo, 1, request.fileUploadRequest.files(index).maybeDocumentType)

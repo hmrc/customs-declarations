@@ -27,7 +27,6 @@ import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoD
 
 import scala.concurrent.Future
 
-//TODO: Confirm with QA's that schema tests like these that give confidence around schema changes are tested manually by QA's
 class DeclarationSchemaSpec extends ComponentTestSpec
   with Matchers with OptionValues with AuthService with MdgWcoDecService with ApiSubscriptionFieldsService with AuditService {
 

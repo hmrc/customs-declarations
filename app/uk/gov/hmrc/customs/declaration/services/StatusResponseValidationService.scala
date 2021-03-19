@@ -95,7 +95,6 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
     }
   })
 
-  //TODO: Improve re-usability here
   private def validateCreationDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] =
     extractField(declarationNode, "creationDate").fold[Either[ErrorResponse, Boolean]]({
       declarationsLogger.errorWithoutRequestContext("Status response creationDate field is missing")

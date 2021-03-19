@@ -1,17 +1,15 @@
 # Customs Declarations
 
-This service offers a general interface for custom declarations, where those declarations are represented using the full DMS implementation of the WCO declarations XML.
+This service offers a general interface for custom declarations, where those declarations are represented using the WCO declarations schema.
 
-This is as apposed to the, as yet undefined, operation specific customs services which will accept requests with more restricted operation specific payloads.
+The objective of the Customs Declarations Service API is:
 
-The objective of the General Customs Service - Declaration POST API is as below:
-
-1. Receive a request from a declarant wishing to make a declaration via the generic customs service
-2. Validate the request payload conforms to the schema DMS WVO 3.6 schema
-3. Pass the request onto CDS WSO2 (for delivery to DMS)
+1. Receive a request from a declarant wishing to make a declaration
+2. Validate the request payload conforms to the schema DMS WCO 3.6 schema
+3. Pass the request onto CDS backend
 4. Respond to the declarant indicating the success of steps 2 / 3.
 
-It is assumed that the underlying DMS process is asynchronous, and that the only response to the declarant from this API is to indicate the success (or otherwise) of the validation and submission to CDS WSO2 for onward processing by DMS.
+As the notification process is asynchronous the only response to the declarant from this API is to indicate the success (or otherwise) of the validation and submission to the CDS backend.
 
 ## Calling /file-upload
 
@@ -33,15 +31,15 @@ To generate the zip file locally run the following command in command line from 
 The `X-Client-ID` header, together with the application context and version are used
  to call the `api-subscription-fields` service to get the unique `fieldsId` UUID to pass on to the backend request.
 
-So there is now a direct dependency on the `api-subscription-fields` service. Note the service to get the `fieldsId` is not currently stubbed. 
+Note the service to get the `fieldsId` is not currently stubbed. 
 
-## Seeding Data in `api-subscription-fields` for local end to end testing
+## Seeding Data in `api-subscription-fields` for local end-to-end testing
 
 Make sure the [`api-subscription-fields`](https://github.com/hmrc/api-subscription-fields) service is running on port `9650`. Then run the below curl command.
 
-Please note that version `2.0` is used as an example in the commands given and you should insert the customs declarations api version number which you will call subsequently.
+Please note that version `2.0` is used as an example in the commands given, and you should insert the customs declarations api version number which you will call subsequently.
 
-Please note that value `d65f2252-9fcf-4f04-9445-5971021226bb` is used as an example in the commands given and you should insert the UUID value which suits your needs.
+Please note that value `d65f2252-9fcf-4f04-9445-5971021226bb` is used as an example in the commands given, and you should insert the UUID value which suits your needs.
 
     curl -v -X PUT "http://localhost:9650/field/application/d65f2252-9fcf-4f04-9445-5971021226bb/context/customs%2Fdeclarations/version/2.0" -H "Cache-Control: no-cache" -H "Content-Type: application/json" -d '{ "fields" : { "callbackUrl" : "https://postman-echo.com/post", "securityToken" : "securityToken", "authenticatedEori": "ABC123" } }'
 
@@ -61,10 +59,9 @@ When you then send a request to `customs-declarations` make sure you have the HT
 
 # Multiple wco-dec services - config switching based on ACCEPT header
 
-Two versions of this service are available on the Dev Hub. This is a requirement for External Test allowing for us to have one version (v1)
-available publicly and another version (v2) restricted to whitelisted applications.
+Three versions of this service are available on the Developer Hub.
 
-v1 & v2 have separate configuration sections for the MDG wco-declaration endpoint so the versions may be pointed to different backend services.
+Each have separate configuration sections for the MDG wco-declaration endpoint so the versions may be pointed to different backend services.
 
 Supplying the required ACCEPT header in the request distinguishes which service configuration to use:
 
@@ -72,6 +69,7 @@ Supplying the required ACCEPT header in the request distinguishes which service 
 | ------------- | ------- |
 | application/vnd.hmrc.1.0+xml | v1 |
 | application/vnd.hmrc.2.0+xml | v2 |
+| application/vnd.hmrc.3.0+xml | v3 |
 
 Please note that requests with any other value of `Accept` header are rejected with `406 Not Acceptable` response status.
 

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.upscan
 
-import java.util.UUID
 import com.google.inject.Inject
 import play.api.libs.json._
 import play.api.mvc._
@@ -29,7 +28,7 @@ import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.services.upscan.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, UpscanNotificationCallbackToXmlNotification}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import java.net.URL
+import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
@@ -99,7 +98,6 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
   }
 
   private def asyncNotifyInternalServerError(callbackBody: UploadedCallbackBody, subscriptionFieldsId: SubscriptionFieldsId)(implicit request: Request[AnyContent]) = {
-    //TODO: Use persistent retry when this is available
     Future {
       notificationService.sendMessage[FileReference](
         callbackBody.reference,

@@ -23,7 +23,6 @@ import play.api.Configuration
 class SubmissionXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.submit")
 
 @Singleton
-//TODO add post-parsing validation rules here?
 class FileUploadXmlValidationService @Inject()(configuration: Configuration) extends XmlValidationService(configuration, "xsd.locations.fileupload")
 
 @Singleton

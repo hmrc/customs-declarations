@@ -1,0 +1,65 @@
+﻿<MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+		<FunctionCode>07</FunctionCode>
+		<FunctionalReferenceID>f2d8b156668c4b6ba7fd8ad8b0a37299</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20210315093751Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementDescription>TT_IM05 Amendment to Net Weight</StatementDescription>
+			<StatementTypeCode>AES</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>07B</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>06A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+		<Amendment>
+			<ChangeReasonCode>28</ChangeReasonCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>23A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>65A</DocumentSectionCode>
+				<TagID>128</TagID>
+			</Pointer>
+		</Amendment>
+		<Declaration>
+			<FunctionalReferenceID>TTIM05a_150321_001</FunctionalReferenceID>
+			<ID>21GB2WVFAYS7K3MV06</ID>
+			<VersionID>2</VersionID>
+		</Declaration>
+		<Declaration xmlns:_2_3="urn:wco:datamodel:WCO:DEC-DMS:2">
+			<FunctionCode>9</FunctionCode>
+			<GoodsShipment>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<Commodity>
+						<GoodsMeasure>
+							<NetNetWeightMeasure unitCode="KGM">89.000000</NetNetWeightMeasure>
+						</GoodsMeasure>
+					</Commodity>
+				</GovernmentAgencyGoodsItem>
+			</GoodsShipment>
+		</Declaration>
+	</Response>
+</MetaData>

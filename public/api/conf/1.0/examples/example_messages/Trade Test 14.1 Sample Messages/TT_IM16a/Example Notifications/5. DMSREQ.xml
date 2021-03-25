@@ -1,0 +1,26 @@
+﻿<MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+		<FunctionCode>11</FunctionCode>
+		<FunctionalReferenceID>b4ca97eb560d4f7e91c719a25141d90c</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20210318171414Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementTypeCode>AFB</StatementTypeCode>
+		</AdditionalInformation>
+		<Status>
+			<NameCode>39</NameCode>
+		</Status>
+		<Declaration>
+			<FunctionalReferenceID>TT_IM16a_Amend_03</FunctionalReferenceID>
+			<ID>21GB31MDEYU7GC6UR8</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

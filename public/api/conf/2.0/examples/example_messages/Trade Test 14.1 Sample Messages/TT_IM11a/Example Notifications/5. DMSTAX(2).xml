@@ -1,0 +1,34 @@
+<MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+		<FunctionCode>13</FunctionCode>
+		<FunctionalReferenceID>f0efac4400f04c78a986729abd6adac5</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304"
+                   				xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20210309154142Z</DateTimeString>
+		</IssueDateTime>
+		<Bank>
+			<ReferenceID>CITIGB2LLON</ReferenceID>
+			<ID>GB25CITI08320011963155</ID>
+		</Bank>
+		<Status>
+			<NameCode>67</NameCode>
+		</Status>
+		<Declaration>
+			<FunctionalReferenceID>K_Sample_0903_003</FunctionalReferenceID>
+			<ID>21GB2ONXU9DYRQC106</ID>
+			<VersionID>2</VersionID>
+			<GoodsShipment>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<Commodity/>
+				</GovernmentAgencyGoodsItem>
+			</GoodsShipment>
+		</Declaration>
+	</Response>
+</MetaData>

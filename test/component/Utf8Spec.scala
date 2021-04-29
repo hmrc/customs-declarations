@@ -62,6 +62,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
   }
 
     val ValidRawXmlByte: ByteString = if (!new File("target/scala-2.12/test-classes/raw/valid_xml.raw").exists()) {
+      println("xxxxx ----> absolute path ---->" +  new File(".").getAbsolutePath)
       Thread.sleep(10000)
       ByteString.fromArray(Files.readAllBytes(Paths.get(getClass.getResource("/raw/valid_xml.raw").getPath)))
     }

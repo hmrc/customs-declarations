@@ -612,6 +612,4 @@ object TestXMLData {
     </Files>
   </FileUploadRequest>
 
-  lazy val ValidRawXmlByte: ByteString = ByteString.fromArray(Files.readAllBytes(Paths.get(getClass.getResource("/raw/valid_xml.raw").getPath)))
-  lazy val InvalidRawXmlByte: ByteString = ByteString.fromArray(Files.readAllBytes(Paths.get(getClass.getResource("/raw/invalid_xml.raw").getPath)))
 }

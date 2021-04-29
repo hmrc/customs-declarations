@@ -16,6 +16,7 @@
 
 package component
 
+import akka.util.ByteString
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.mvc._
 import play.api.test.Helpers.{status, _}
@@ -23,9 +24,9 @@ import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, Ve
 import util.AuditService
 import util.FakeRequests._
 import util.RequestHeaders.ValidHeadersV2WithCharset
-import util.TestXMLData.{InvalidRawXmlByte, ValidRawXmlByte}
 import util.externalservices._
 
+import java.nio.file.{Files, Paths}
 import scala.concurrent.Future
 
 class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResponses
@@ -57,6 +58,9 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
   override protected def afterAll() {
     stopMockServer()
   }
+
+  val ValidRawXmlByte: ByteString = ByteString.fromArray(Files.readAllBytes(Paths.get(getClass.getResource("/raw/valid_xml.raw").getPath)))
+  val InvalidRawXmlByte: ByteString = ByteString.fromArray(Files.readAllBytes(Paths.get(getClass.getResource("/raw/invalid_xml.raw").getPath)))
 
   feature("Declaration API rejects declaration payloads containing invalid utf-8 bytes") {
     scenario(

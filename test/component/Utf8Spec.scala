@@ -16,6 +16,7 @@
 
 package component
 
+import akka.util.ByteString
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.mvc._
 import play.api.test.Helpers.{status, _}
@@ -23,9 +24,9 @@ import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, Ve
 import util.AuditService
 import util.FakeRequests._
 import util.RequestHeaders.ValidHeadersV2WithCharset
-import util.TestXMLData.InvalidRawXmlByte
 import util.externalservices._
 
+import java.nio.file.{Files, Paths}
 import scala.concurrent.Future
 
 class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResponses
@@ -58,6 +59,9 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
     stopMockServer()
   }
 
+  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.12/test-classes/raw/valid_xml.raw")))
+  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.12/test-classes/raw/invalid_xml.raw")))
+
   feature("Declaration API rejects declaration payloads containing invalid utf-8 bytes") {
     scenario(
       "Response status 200 when user submits a valid utf-8 encoded payload with Header 'Content Type: application/xml'"
@@ -70,6 +74,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
       val request = ValidSubmissionRawRequest.fromCsp
         .withMethod(POST)
         .withTarget(ValidSubmissionRawRequest.target.withPath(endpoint))
+        .withRawBody(ValidRawXmlByte)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -116,6 +121,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
         .withMethod(POST)
         .withHeaders(ValidHeadersV2WithCharset.toSeq: _*)
         .withTarget(ValidSubmissionRawRequest.target.withPath(endpoint))
+        .withRawBody(ValidRawXmlByte)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()

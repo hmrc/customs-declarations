@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, Ve
 import util.AuditService
 import util.FakeRequests._
 import util.RequestHeaders.ValidHeadersV2WithCharset
-import util.TestXMLData.InvalidRawXmlByte
+import util.TestXMLData.{InvalidRawXmlByte, ValidRawXmlByte}
 import util.externalservices._
 
 import scala.concurrent.Future
@@ -70,6 +70,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
       val request = ValidSubmissionRawRequest.fromCsp
         .withMethod(POST)
         .withTarget(ValidSubmissionRawRequest.target.withPath(endpoint))
+        .withRawBody(ValidRawXmlByte)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()
@@ -116,6 +117,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
         .withMethod(POST)
         .withHeaders(ValidHeadersV2WithCharset.toSeq: _*)
         .withTarget(ValidSubmissionRawRequest.target.withPath(endpoint))
+        .withRawBody(ValidRawXmlByte)
 
       And("the CSP is authorised with its privileged application")
       authServiceAuthorizesCSP()

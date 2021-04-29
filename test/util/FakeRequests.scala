@@ -17,7 +17,7 @@
 package util
 
 import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION}
-import play.api.mvc.{AnyContentAsRaw, AnyContentAsText, AnyContentAsXml}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsText, AnyContentAsXml}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{CONTENT_TYPE, POST}
 import util.RequestHeaders._
@@ -29,9 +29,8 @@ object FakeRequests {
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(ValidSubmissionXML)
 
-  lazy val ValidSubmissionRawRequest: FakeRequest[AnyContentAsRaw] = FakeRequest()
+  lazy val ValidSubmissionRawRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
-    .withRawBody(ValidRawXmlByte)
 
   lazy val ValidSubmissionV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
     .withHeaders(ValidHeadersV3.toSeq: _*)

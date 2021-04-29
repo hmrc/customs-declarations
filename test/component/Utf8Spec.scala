@@ -26,10 +26,8 @@ import util.FakeRequests._
 import util.RequestHeaders.ValidHeadersV2WithCharset
 import util.externalservices._
 
-import java.io.File
 import java.nio.file.{Files, Paths}
 import scala.concurrent.Future
-import scala.io.Source
 
 class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
@@ -61,22 +59,8 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
     stopMockServer()
   }
 
-    val ValidRawXmlByte: ByteString = if (!new File("target/scala-2.12/test-classes/raw/valid_xml.raw").exists()) {
-      println("xxxxx ----> absolute path ---->" +  new File(".").getAbsolutePath)
-      Thread.sleep(10000)
-      ByteString.fromArray(Files.readAllBytes(Paths.get(getClass.getResource("/raw/valid_xml.raw").getPath)))
-    }
-    else {
-      ByteString.fromArray(Files.readAllBytes(Paths.get(getClass.getResource("/raw/valid_xml.raw").getPath)))
-    }
-
-  val InvalidRawXmlByte: ByteString = if (!new File("target/scala-2.12/test-classes/raw/invalid_xml.raw").exists()) {
-    Thread.sleep(10000)
-    ByteString.fromArray(Files.readAllBytes(Paths.get(getClass.getResource("/raw/invalid_xml.raw").getPath)))
-  }
-  else {
-    ByteString.fromArray(Files.readAllBytes(Paths.get(getClass.getResource("/raw/invalid_xml.raw").getPath)))
-  }
+  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.12/test-classes/raw/valid_xml.raw")))
+  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.12/test-classes/raw/invalid_xml.raw")))
 
   feature("Declaration API rejects declaration payloads containing invalid utf-8 bytes") {
     scenario(

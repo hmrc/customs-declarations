@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CD518B xsi:type="cd:CD518BType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cd="http://ecs.dgtaxud.ec/CD518B">
+  <SynIdeMES1>UNOC</SynIdeMES1>
+  <SynVerNumMES2>3</SynVerNumMES2>
+  <MesSenMES3>ILE.CDS.HMRC.GB</MesSenMES3>
+  <MesRecMES6>DMSCORE.CDS.HMRC.GB</MesRecMES6>
+  <DatOfPreMES9>210316</DatOfPreMES9>
+  <TimOfPreMES10>1505</TimOfPreMES10>
+  <IntConRefMES11>1433483823</IntConRefMES11>
+  <MesIdeMES19>1347490010</MesIdeMES19>
+  <MesTypMES20>CD518B</MesTypMES20>
+  <HEAHEA>
+    <DocNumHEA5>21GB2YMJU2QOC05QA0</DocNumHEA5>
+    <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
+    <TraHEA1>0</TraHEA1>
+  </HEAHEA>
+  <CUSOFFEXPERT>
+    <RefNumERT1>GBAUBELB</RefNumERT1>
+  </CUSOFFEXPERT>
+  <ACEACE>
+    <RefNumACE1>GBAUBELB</RefNumACE1>
+  </ACEACE>
+  <CONRESEXR>
+    <ConDatEXR14>20210316</ConDatEXR14>
+    <ConResCodEXR16>A1</ConResCodEXR16>
+  </CONRESEXR>
+</CD518B>

@@ -1,0 +1,93 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+           	>
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+           		xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+           		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+           		>
+		<!--Function Code of 13 to represent Request (Additional Message)-->
+		<FunctionCode>13</FunctionCode>
+		<!--The trader assigned reference to the additional message.
+			Note that this reference is independent of the declaration.-->
+		<FunctionalReferenceID>CDSP-3091-2311-001D</FunctionalReferenceID>
+		<!--Declaration ID of the corresponding Declaration to be amended-->
+		<ID>20GBDLD08P58H8NMR0</ID>
+		<!--Defines the type of additional message - in this scenario, COR to indicate that this 
+			additional message is an amendment-->
+		<TypeCode>COR</TypeCode>
+		<AdditionalInformation>
+			<!--Textual description of the reason for amendment-->
+			<StatementDescription>Amending item price as a mistake was made on the declaration.</StatementDescription>
+			<!--The type of Additional Information. 'AES' should always be used for Cancellations 
+				and Amendments to indicate a free text reason is being provided.-->
+			<StatementTypeCode>AES</StatementTypeCode>
+			<!--The two pointer elements below point to the Declaration (42A) and the Amendment (06A) 
+				in the Declaration (which can be seen below).
+		  		This is so that the textual description can be linked to its corresponding amendment reason code.-->
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>06A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+		<!--Details of the amendment to be made to the Declaration-->
+		<Amendment>
+			<!--Used to indicate the reason for the amendment - in this scenario, a code of 21 to indicate 
+				that a value is being amended.-->
+			<ChangeReasonCode>21</ChangeReasonCode>
+			<!--Pointers describe the declaration tree down to the part of the Declaration which needs to 
+				be amended as follows:
+		      	Declaration (42A) -> GoodsShipment (67A) -> GovernmentAgencyGoodsItem (68A) -> Commodity (23A) -> InvoiceLine (79A - tag 112 for ItemChargeAmount)-->
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>23A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>79A</DocumentSectionCode>
+				<TagID>112</TagID>
+			</Pointer>
+		</Amendment>
+		<!--The below details the Declaration data that is being amended. 
+			As described by the pointer structure above, the information below shows that the 
+			item price is being amended and the new value of 999 is included below. -->
+		<GoodsShipment>
+			<GovernmentAgencyGoodsItem>
+				<SequenceNumeric>1</SequenceNumeric>
+				<Commodity>
+					<InvoiceLine>
+						<ItemChargeAmount currencyID="GBP">998</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+			</GovernmentAgencyGoodsItem>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>

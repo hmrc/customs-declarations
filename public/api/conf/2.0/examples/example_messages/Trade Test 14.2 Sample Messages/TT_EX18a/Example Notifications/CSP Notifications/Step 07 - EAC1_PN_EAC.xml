@@ -1,0 +1,9 @@
+<ns2:inventoryLinkingControlResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1"
+                                     xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
+	<ns2:messageCode>EAC</ns2:messageCode>
+	<ns2:actionCode>1</ns2:actionCode>
+	<ns2:ucr>
+		<ns2:ucr>1GB427168118378-2104CD01</ns2:ucr>
+		<ns2:ucrType>D</ns2:ucrType>
+	</ns2:ucr>
+</ns2:inventoryLinkingControlResponse>

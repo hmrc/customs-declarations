@@ -96,7 +96,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   private def getHeaders(date: DateTime, correlationId: UUID) = {
     Seq(
       (ACCEPT, MimeTypes.XML),
-      (CONTENT_TYPE, MimeTypes.XML),
+      (CONTENT_TYPE,MimeTypes.XML + "; charset=utf-8"),
       (DATE, date.toString("EEE, dd MMM yyyy HH:mm:ss z")),
       (X_FORWARDED_HOST, "MDTP"),
       ("X-Correlation-ID", correlationId.toString))

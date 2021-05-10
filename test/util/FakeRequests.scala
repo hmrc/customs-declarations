@@ -29,6 +29,14 @@ object FakeRequests {
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(ValidSubmissionXML)
 
+  lazy val ValidSubmissionV2RequestWithCharSet: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV2WithCharset.toSeq: _*)
+    .withXmlBody(ValidSubmissionXML)
+
+  lazy val ValidSubmissionV2RequestWithInvalidCharSet: FakeRequest[AnyContentAsXml] = FakeRequest()
+    .withHeaders(ValidHeadersV2WithInvalidCharset.toSeq: _*)
+    .withXmlBody(ValidSubmissionXML)
+
   lazy val ValidSubmissionRawRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
     .withHeaders(ValidHeadersV2.toSeq: _*)
 

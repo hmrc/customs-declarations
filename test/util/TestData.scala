@@ -396,6 +396,7 @@ object RequestHeaders {
 
   val CONTENT_TYPE_HEADER: (String, String) = CONTENT_TYPE -> MimeTypes.XML
   val CONTENT_TYPE_CHARSET_VALUE: String = s"${MimeTypes.XML}; charset=UTF-8"
+  val CONTENT_TYPE_CHARSET_Invalid_VALUE: String = s"${MimeTypes.XML}; charset=UTF-16"
   val CONTENT_TYPE_HEADER_CHARSET: (String, String) = CONTENT_TYPE -> CONTENT_TYPE_CHARSET_VALUE
   val CONTENT_TYPE_HEADER_INVALID: (String, String) = CONTENT_TYPE -> "somethinginvalid"
 
@@ -425,6 +426,14 @@ object RequestHeaders {
 
   val ValidHeadersV2WithCharset: Map[String, String] = Map(
     CONTENT_TYPE -> CONTENT_TYPE_CHARSET_VALUE,
+    ACCEPT_HMRC_XML_V2_HEADER,
+    X_CLIENT_ID_HEADER,
+    X_BADGE_IDENTIFIER_HEADER,
+    X_SUBMITTER_IDENTIFIER_HEADER
+  )
+
+  val ValidHeadersV2WithInvalidCharset: Map[String, String] = Map(
+    CONTENT_TYPE -> CONTENT_TYPE_CHARSET_Invalid_VALUE,
     ACCEPT_HMRC_XML_V2_HEADER,
     X_CLIENT_ID_HEADER,
     X_BADGE_IDENTIFIER_HEADER,

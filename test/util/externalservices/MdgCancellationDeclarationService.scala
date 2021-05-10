@@ -59,7 +59,7 @@ trait MdgCancellationDeclarationService extends WireMockRunner {
                                                   expectedAuthToken: String ,
                                                   maybeUnexpectedAuthToken: Option[String]) {
     verify(1, postRequestedFor(urlMatching(requestPath))
-      .withHeader(CONTENT_TYPE, equalTo(XML))
+      .withHeader(CONTENT_TYPE, equalTo(XML + "; charset=utf-8"))
       .withHeader(ACCEPT, equalTo(XML))
       .withHeader(AUTHORIZATION, equalTo(s"Bearer $expectedAuthToken"))
       .withHeader(DATE, notMatching(""))

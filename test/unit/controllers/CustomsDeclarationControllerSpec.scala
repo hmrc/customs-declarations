@@ -151,7 +151,7 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       verifyNoInteractions(mockMetricsConnector)
     }
 
-    "respond with status 202 and conversationId in header for a processed valid CSP request" in new SetUp() {
+    "respond with status 202 and ContentType application.xml and conversationId in header for a processed valid CSP request" in new SetUp() {
       authoriseCsp()
 
       val result: Future[Result] = submit(ValidSubmissionV2Request)
@@ -159,6 +159,25 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       status(result) shouldBe ACCEPTED
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
     }
+
+    "respond with status 202 and ContentType with utf-8 in header for a processed valid CSP request" in new SetUp() {
+      authoriseCsp()
+
+      val result: Future[Result] = submit(ValidSubmissionV2RequestWithCharSet)
+
+      status(result) shouldBe ACCEPTED
+      header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
+    }
+
+    "respond with status 415 and ContentType with utf-16 in header for a processed valid CSP request" in new SetUp() {
+      authoriseCsp()
+
+      val result: Future[Result] = submit(ValidSubmissionV2RequestWithInvalidCharSet)
+
+      status(result) shouldBe UNSUPPORTED_MEDIA_TYPE
+    }
+
+
 
     "respond with status 400 for a CSP request with a missing X-Badge-Identifier" in new SetUp() {
       authoriseCsp()

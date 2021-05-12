@@ -20,10 +20,11 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import akka.actor.ActorSystem
+import play.api.mvc.Codec.utf_8
 import com.google.inject._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE, DATE, X_FORWARDED_HOST}
-import play.api.http.MimeTypes
+import play.api.http.{ContentTypes, MimeTypes}
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.config.DeclarationCircuitBreaker
@@ -96,7 +97,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   private def getHeaders(date: DateTime, correlationId: UUID) = {
     Seq(
       (ACCEPT, MimeTypes.XML),
-      (CONTENT_TYPE, MimeTypes.XML),
+      (CONTENT_TYPE,ContentTypes.XML(utf_8)),
       (DATE, date.toString("EEE, dd MMM yyyy HH:mm:ss z")),
       (X_FORWARDED_HOST, "MDTP"),
       ("X-Correlation-ID", correlationId.toString))

@@ -132,7 +132,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
         val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
         verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
           any[HttpReads[HttpResponse]](), headersCaptor.capture(), any[ExecutionContext])
-        headersCaptor.getValue.extraHeaders should contain(HeaderNames.CONTENT_TYPE -> MimeTypes.XML)
+        headersCaptor.getValue.extraHeaders should contain(HeaderNames.CONTENT_TYPE -> "application/xml; charset=utf-8")
       }
 
       "ensure the accept header in passed through in MDG request" in {

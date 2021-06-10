@@ -1,0 +1,6 @@
+Sample steps
+************
+
+Step 1 - Submit Declaration with 1 DUCR
+Step 2 - Submit EAL Message with 1 DUCR only
+Step 3 - Submit EDL Message with 1 DUCR only

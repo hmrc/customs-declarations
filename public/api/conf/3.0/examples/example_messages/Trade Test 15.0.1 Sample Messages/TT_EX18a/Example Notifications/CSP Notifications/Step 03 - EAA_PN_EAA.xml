@@ -1,0 +1,22 @@
+<ns2:inventoryLinkingMovementResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1"
+                                      xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
+	<ns2:messageCode>EAA</ns2:messageCode>
+	<ns2:crc>000</ns2:crc>
+	<ns2:goodsLocation>GBAULHRLHRANS</ns2:goodsLocation>
+	<ns2:movementReference>Movement65</ns2:movementReference>
+	<ns2:submitRole>RLTRADER9LAP                       </ns2:submitRole>
+	<ns2:ucrBlock>
+		<ns2:ucr>1GB417869120000-AT01CHIEFD8</ns2:ucr>
+		<ns2:ucrPartNo>J</ns2:ucrPartNo>
+		<ns2:ucrType>D</ns2:ucrType>
+	</ns2:ucrBlock>
+	<ns2:goodsItem>
+		<ns2:commodityCode>48111000</ns2:commodityCode>
+		<ns2:totalPackages>22</ns2:totalPackages>
+		<ns2:totalNetMass>2000.000</ns2:totalNetMass>
+	</ns2:goodsItem>
+	<ns2:entryStatus>
+		<ns2:roe>H6</ns2:roe>
+		<ns2:soe>14</ns2:soe>
+	</ns2:entryStatus>
+</ns2:inventoryLinkingMovementResponse>

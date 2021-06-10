@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<!-- EDL – Movement message used for creating Goods Departure messages.-->
+	<inv:messageCode>EDL</inv:messageCode>
+		<inv:agentDetails>
+				<!-- EORI number of the Community Systems Providers (CSPs). -->
+				<inv:EORI>GB239355053000</inv:EORI>
+		</inv:agentDetails>
+		<inv:ucrBlock>
+				<!--MUCR assigned to the consignment. Depart at MUCR level -->
+				<inv:ucr>GB/FCP1-2105CHIEF101</inv:ucr>
+				<inv:ucrType>M</inv:ucrType>
+		</inv:ucrBlock>
+		<!-- ID to give a unique position of the location. LHRLHR Indicating London Heathrow. ANS Indicating shed ID -->
+		<inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
+		<!-- This should be today's Date. Please note that this time is 1 hour after EAL 1, and 2 hours after EAL 2 -->
+		<inv:goodsDepartureDateTime>2020-05-21T10:00:00</inv:goodsDepartureDateTime>
+		<inv:movementReference>E2ETC0803</inv:movementReference>
+		<inv:transportDetails>
+				<inv:transportID>11CSCLGLOBE</inv:transportID>
+				<inv:transportMode>1</inv:transportMode>
+				<inv:transportNationality>GB</inv:transportNationality>
+		</inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>

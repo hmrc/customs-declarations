@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><cd:CD501B xmlns:cd="http://ecs.dgtaxud.ec/CD501B">
+  <SynIdeMES1>UNOC</SynIdeMES1>
+  <SynVerNumMES2>3</SynVerNumMES2>
+  <MesSenMES3>NECA.GB</MesSenMES3>
+  <MesRecMES6>NECA.GB</MesRecMES6>
+  <DatOfPreMES9>210204</DatOfPreMES9>
+  <TimOfPreMES10>1326</TimOfPreMES10>
+  <IntConRefMES11>0FTFTHLUVTD2J8</IntConRefMES11>
+  <TesIndMES18>0</TesIndMES18>
+  <MesIdeMES19>0FTFTHLUVTD2J8</MesIdeMES19>
+  <MesTypMES20>CD501B</MesTypMES20>
+  <HEAHEA>
+    <RefNumHEA4>R312_TC01_0402HH04</RefNumHEA4>
+    <DocNumHEA5>21GB1DDFXO2W84H4A5</DocNumHEA5>
+    <TypOfDecHEA24>EX</TypOfDecHEA24>
+    <CouOfDesCodHEA30>US</CouOfDesCodHEA30>
+    <CouOfDisCodHEA55>GB</CouOfDisCodHEA55>
+    <IdeOfMeaOfTraAtDHEA78>KZ12ABC</IdeOfMeaOfTraAtDHEA78>
+    <ConIndHEA96>1</ConIndHEA96>
+    <AccDatHEA158>20210204</AccDatHEA158>
+    <IssDatHEA186>20210204</IssDatHEA186>
+    <ECSAccDocHEA601>EN</ECSAccDocHEA601>
+    <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
+    <TotNumOfPacHEA306>30</TotNumOfPacHEA306>
+    <DecSubTimHEA1>202102040800</DecSubTimHEA1>
+    <TraChaMetOfPayHEA1>Z</TraChaMetOfPayHEA1>
+  </HEAHEA>
+  <TRAEXPEX1>
+    <NamEX17>CompCalcs1565B</NamEX17>
+    <StrAndNumEX122>5 London Road</StrAndNumEX122>
+    <PosCodEX123>IP1 2JJ</PosCodEX123>
+    <CitEX124>Ipswich</CitEX124>
+    <CouEX125>GB</CouEX125>
+    <TINEX159>GB150454489082</TINEX159>
+  </TRAEXPEX1>
+  <TRACONCE1>
+    <NamCE17>Bags Export</NamCE17>
+    <StrAndNumCE122>1 Bags Avenue</StrAndNumCE122>
+    <PosCodCE123>NY1 234</PosCodCE123>
+    <CitCE124>New York</CitCE124>
+    <CouCE125>US</CouCE125>
+  </TRACONCE1>
+  <CUSOFFEXPERT>
+    <RefNumERT1>GBLBA001</RefNumERT1>
+  </CUSOFFEXPERT>
+  <CUSOFFEXIEXT>
+    <RefNumEXT1>GB000290</RefNumEXT1>
+  </CUSOFFEXIEXT>
+  <CONRESERS>
+    <ConResCodERS16>A2</ConResCodERS16>
+    <DatLimERS69>20210704</DatLimERS69>
+  </CONRESERS>
+  <SEAINFSLI>
+    <SeaNumSLI2>1</SeaNumSLI2>
+    <SEAIDSID>
+      <SeaIdeSID1>34587</SeaIdeSID1>
+    </SEAIDSID>
+  </SEAINFSLI>
+  <GOOITEGDS>
+    <IteNumGDS7>1</IteNumGDS7>
+    <GooDesGDS23>Gin in containers holding 2 litres or less</GooDesGDS23>
+    <GroMasGDS46>40.0</GroMasGDS46>
+    <NetMasGDS48>30.0</NetMasGDS48>
+    <ProReqGDI1>10</ProReqGDI1>
+    <PreProGDI1>07</PreProGDI1>
+    <StaValCurGDI1>GBP</StaValCurGDI1>
+    <StaValAmoGDI1>600.0</StaValAmoGDI1>
+    <PRODOCDC2>
+      <DocTypDC21>C676</DocTypDC21>
+      <DocRefDC23>GBEXW15045448908220190323122709</DocRefDC23>
+    </PRODOCDC2>
+    <PRODOCDC2>
+      <DocTypDC21>C651</DocTypDC21>
+      <DocRefDC23>19GB00202102041307209</DocRefDC23>
+    </PRODOCDC2>
+    <COMCODGODITM>
+      <ComNomCMD1>22085011</ComNomCMD1>
+      <TARCodCMD1>00</TARCodCMD1>
+      <TARFirAddCodCMD1>0000</TARFirAddCodCMD1>
+      <TARSecAddCodCMD1>0000</TARSecAddCodCMD1>
+    </COMCODGODITM>
+    <CONNR2>
+      <ConNumNR21>PSSU8023971</ConNumNR21>
+    </CONNR2>
+    <PACGS2>
+      <MarNumOfPacGS21>Gin123</MarNumOfPacGS21>
+      <KinOfPacGS23>PK</KinOfPacGS23>
+      <NumOfPacGS24>30</NumOfPacGS24>
+    </PACGS2>
+  </GOOITEGDS>
+  <ITI>
+    <CouOfRouCodITI1>US</CouOfRouCodITI1>
+  </ITI>
+  <ITI>
+    <CouOfRouCodITI1>CA</CouOfRouCodITI1>
+  </ITI>
+  <ITI>
+    <CouOfRouCodITI1>GB</CouOfRouCodITI1>
+  </ITI>
+</cd:CD501B>

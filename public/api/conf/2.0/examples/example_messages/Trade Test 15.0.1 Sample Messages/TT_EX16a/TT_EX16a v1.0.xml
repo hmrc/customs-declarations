@@ -1,0 +1,185 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+           	>
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+           		xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+           		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+           		>
+		<!--
+			Type K Exports declaration direct representation scenario with DUCR and CPD Carnet Referencedeclared
+			Goods exported permanently
+			Procedure code 0015 Additional procedure code 13C
+			Goods: Cylinder capacity exceeding 1 500 cm3 but not exceeding 3000 cm3
+			Agent employed by the exporter under direct rep.
+			Movement messages: EAL, EDL 
+			Expected Notification: DMSACC,DMSRCV1, DMSRCV2, DMSRES, DMSROG,DMSCLE
+			Goods presented at London Gatwick Airport 
+		-->
+		<!--This should be updated to today's date.-->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20210205070000+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<!--Function Code of 9 to represent an original declaration.-->
+		<FunctionCode>9</FunctionCode>
+		<!-- DE 2/5: The trader assigned reference to the declaration -->
+		<FunctionalReferenceID>EX3.2_TC02_0502ST05</FunctionalReferenceID>
+		<IssueDateTime>
+			<p1:DateTimeString formatCode="304">20210205070000+01</p1:DateTimeString>
+		</IssueDateTime>
+		<!--DE 1/1: EX to represent an Export declaration.-->
+		<!--DE 1/2: K to represent a Pre lodged declaration.-->
+		<TypeCode>EXK</TypeCode>
+		<!--DE 1/9: Total number of goods items on the declaration.-->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 3/20: EORI number of the Representative.
+            DE 3/21: '2' Indicating direct representation. -->
+		<Agent>
+			<ID>GB150454489082</ID>
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!--DE 7/4: Code 4 indicating that the mode of transport used to arrive at the UK external border is by Air Transport.-->
+		<BorderTransportMeans>
+			<ModeCode>4</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 4/2: Transport charges method of payment. H declared to indicate electronic funds transfer -->
+		<Consignment>
+			<Freight>
+				<PaymentMethodCode>H</PaymentMethodCode>
+			</Freight>
+		</Consignment>
+		<!--DE 3/18: EORI number of the Declarant. -->
+		<Declarant>
+			<ID>GB150454489082</ID>
+		</Declarant>
+		<!-- 5/12: 'GB000085' Code indicating Gatwick -->
+		<ExitOffice>
+			<ID>GB000085</ID>
+		</ExitOffice>
+		<!--DE 3/2: EORI number of the Exporter. -->
+		<Exporter>
+			<ID>GB427168118378</ID>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 3/9: Consignee Name and Address -->
+			<Consignee>
+				<Name>Mr Consignee</Name>
+				<Address>
+					<CityName>Lahore City</CityName>
+					<CountryCode>IN</CountryCode>
+					<Line>Lahore</Line>
+					<PostcodeID>144-0041</PostcodeID>
+				</Address>
+			</Consignee>
+			<Consignment>
+				<!--DE 7/2: '0' Indicating goods not arriving in container.-->
+				<ContainerCode>0</ContainerCode>
+				<!-- 7/7 - Identity of means of transport at departure -->
+				<DepartureTransportMeans>
+					<ID>98765</ID>
+					<IdentificationTypeCode>40</IdentificationTypeCode>
+				</DepartureTransportMeans>
+				<!--DE 5/23: ID to give a unique position of the location. LGWLGWLGW - Indicating London Gatwick Airport. -->
+				<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
+				<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE.-->
+				<!--DE 5/23: 'GB' Country code of the country where the goods may be examined, GB in this scenario.-->
+				<GoodsLocation>
+					<Name>LGWLGWLGW</Name>
+					<TypeCode>A</TypeCode>
+					<Address>
+						<TypeCode>U</TypeCode>
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+			</Consignment>
+			<!--DE 5/8: Country code of the destination country. IN Indicating India-->
+			<Destination>
+				<CountryCode>IN</CountryCode>
+			</Destination>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Sequential number of the goods item.-->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3: A document code of Y903 indicates Declared goods are not included in the list of cultural goods.  
+					COUNCIL REGULATION (EC) No 116/2009 on the export of cultural goods. -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>116/2009</ID>
+					<Name>Not on list of cultural goods</Name>
+					<TypeCode>903</TypeCode>
+				<!--DE 2/3: A document code of Y935 indicates Goods not covered by the provisions of Regulation 
+					(EU) 1332/2013 (OJ L 335) approving non-minor amendments to the specification for a name entered 
+					in the register of protected designations of origin and protected geographical indications. -->
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>1332/2013 </ID>
+					<Name>Goods not covered by the provisions</Name>
+					<TypeCode>935</TypeCode>
+				<!--DE 2/3: A document code of C672 indicates Information document accompanying shipments of waste as mentioned in 
+				Regulation (EC) No 1013/2006 (OJ L 190) – Article 18 and Annex VII on shipments of waste.
+				Document status code of AC in this scenario indicates Document attached for certification by customs.-->
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>0054037</ID>
+					<TypeCode>672</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<Commodity>
+					<!--DE 6/8: Description of the goods.-->
+					<Description>cylinder capacity exceeding 1 500 cm3 but not exceeding 3000 cm3</Description>
+					<Classification>
+						<!--DE 6/14: Commodity code - combined nomenclature code.-->
+						<ID>87032390</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+				</Commodity>
+				<!--DE 1/10: Procedure code of 0015 may be used to release Union goods for temporary exportation -->
+				<GovernmentProcedure>
+					<CurrentCode>00</CurrentCode>
+					<PreviousCode>15</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: 13C to indicate Customs Clearance Request for goods exported or re-exported under an CPD carnet -->
+				<GovernmentProcedure>
+					<CurrentCode>13C</CurrentCode>
+				</GovernmentProcedure>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!-- DE 6/11: Shipping marks -->
+					<MarksNumbersID>2379261ETT</MarksNumbersID>
+					<!--DE 6/10: Number of packages, in this case 1.-->
+					<QuantityQuantity>1</QuantityQuantity>
+					<!-- DE 6/9: Type of packaging, PK indicating package -->
+					<TypeCode>PK</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 2/1: Previous document to show the CPD Carnet assigned to the consignment.
+                This is a mandatory field-->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>19GB2MYXH4SQPFGVT3</ID>
+				<TypeCode>CPD</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment.
+                This is a mandatory field-->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>1GB427168118378-0502ST05</ID>
+				<TypeCode>DCR</TypeCode>
+			</PreviousDocument>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>

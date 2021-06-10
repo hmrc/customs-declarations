@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inv:inventoryLinkingConsolidationRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+    <!-- CST – Message is used to shut MUCR prior to departure -->
+    <inv:messageCode>CST</inv:messageCode>
+    <!--MUCR: Must use the same MUCR as in EAC messages -->
+    <inv:masterUCR>GB/FCP1-2105CHIEF101</inv:masterUCR>
+</inv:inventoryLinkingConsolidationRequest>

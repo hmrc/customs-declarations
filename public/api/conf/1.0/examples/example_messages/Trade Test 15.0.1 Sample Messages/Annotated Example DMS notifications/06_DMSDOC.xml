@@ -1,0 +1,21 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<!-- This is an example of a DMSDOC notification. With this message the submitter is asked (and obligated) to present one or more documents, related to the declaration. The message is also used to remind the submitter about a document that had to be submitted already - Enquiry for additional Information-->
+		<FunctionCode>06</FunctionCode>
+		<FunctionalReferenceID>c8993b9a7f6b4826bf42a260ada0cb0a</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20200212091504Z</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<FunctionalReferenceID>R251_TC05_2111_13</FunctionalReferenceID>
+			<ID>20GB1OJPU2P01FGVR4</ID>
+			<VersionID>3</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

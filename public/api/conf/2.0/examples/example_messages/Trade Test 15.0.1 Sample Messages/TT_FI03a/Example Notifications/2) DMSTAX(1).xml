@@ -1,0 +1,74 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>13</FunctionCode>
+		<FunctionalReferenceID>e88fb2efdb7c448b9fd8ae03118fe9fa</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20201126124909Z</DateTimeString>
+		</IssueDateTime>
+		<Bank>
+			<ReferenceID>CITIGB2LLON</ReferenceID>
+			<ID>GB25CITI08320011963155</ID>
+		</Bank>
+		<Status>
+			<NameCode>67</NameCode>
+		</Status>
+		<Declaration>
+			<FunctionalReferenceID>CG1727084LPA9ZZI8</FunctionalReferenceID>
+			<ID>20GBD4AS5YQZI7W7R4</ID>
+			<VersionID>1</VersionID>
+			<GoodsShipment>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<Commodity>
+						<DutyTaxFee>
+							<AdValoremTaxBaseAmount currencyID="GBP">25000.00</AdValoremTaxBaseAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
+							<DutyRegimeCode>140</DutyRegimeCode>
+							<TaxRateNumeric>0.00</TaxRateNumeric>
+							<TypeCode>A00</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<AdValoremTaxBaseAmount currencyID="GBP">25000.00</AdValoremTaxBaseAmount>
+							<DeductAmount currencyID="GBP">5000.00</DeductAmount>
+							<DutyRegimeCode>140</DutyRegimeCode>
+							<TaxRateNumeric>20.00</TaxRateNumeric>
+							<TypeCode>B00</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<TypeCode>ENU</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">2500.00</TaxAssessedAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<TypeCode>ENU</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">500.00</TaxAssessedAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<TypeCode>ENU</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">5000.00</TaxAssessedAmount>
+							</Payment>
+						</DutyTaxFee>
+					</Commodity>
+				</GovernmentAgencyGoodsItem>
+			</GoodsShipment>
+		</Declaration>
+	</Response>
+</MetaData>

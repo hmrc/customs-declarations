@@ -1,0 +1,30 @@
+  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
+
+		<!--	This is an example of a DMSINV Trader Notification, when the declaration has been Cancelled/Invalidated and the submitter has been informed.
+				Function code 10 indicates this Invalidation -->
+
+
+      <FunctionCode>10</FunctionCode>
+      <FunctionalReferenceID>6d28f492631e40d5ac020129051f3f85</FunctionalReferenceID>
+      <IssueDateTime>
+        <DateTimeString formatCode="304">20200117133013Z</DateTimeString>
+      </IssueDateTime>
+      <AdditionalInformation>
+
+		<!--	With this message the submitter is informed about the invalidating of a declaration, with the reason of invalidation. -->
+        <StatementDescription>Comments for Submitter for TC18</StatementDescription>
+        <StatementTypeCode>AFB</StatementTypeCode>
+      </AdditionalInformation>
+      <Declaration>
+        <CancellationDateTime>
+          <DateTimeString formatCode="304">20200117133013Z</DateTimeString>
+        </CancellationDateTime>
+
+		<!-- 	Traders own reference number - this must be unique to the transaction, submitted via the original Declaration in DE 2/5 -->
+        <FunctionalReferenceID>TC18_SM_1701_004</FunctionalReferenceID>
+
+		<!-- 	This is the CDS Declaration ID, unique to the transaction -->
+        <ID>20GB0NKQGSX2IX8PR5</ID>
+        <VersionID>1</VersionID>
+      </Declaration>
+    </Response></MetaData>

@@ -1,0 +1,281 @@
+<md:MetaData
+      xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+      xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+      xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+      xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "    >
+			<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+			<md:WCOTypeName>DEC</md:WCOTypeName>
+			<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+			<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+			<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+			<Declaration
+        xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+        xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+        xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+        xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+        xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
+				<!--Function Code of 13 to represent Request (Additional Message)-->
+				<FunctionCode>13</FunctionCode>
+				<!--The trader assigned reference to the additional message. Note that this reference is independent of the declaration.-->
+				<FunctionalReferenceID>TT_IM02c_0307_886</FunctionalReferenceID>
+				<!--Declaration ID of the corresponding Declaration to be amended-->
+				<ID>20GB7BKUHU20XX8PR5</ID>
+				<!--Defines the type of additional message - in this scenario, COR to indicate that this additional message is an amendment-->
+				<TypeCode>COR</TypeCode>
+				<TotalPackageQuantity>53</TotalPackageQuantity>						<!-- 146 -->
+				<AdditionalInformation>
+					<StatementDescription>Amend TotalPackageQuantity DE 6/18 - Tag 146</StatementDescription>
+					<!--TotalPackageQuantity-->
+					<StatementTypeCode>AES</StatementTypeCode>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>06A</DocumentSectionCode>
+					</Pointer>
+				</AdditionalInformation>    
+				<AdditionalInformation>
+					<!--Textual description of the reason for amendment-->
+					<StatementDescription>Amend Exporter Name Tag R031</StatementDescription>
+					<!--Exporter/Name-->
+					<!--The type of Additional Information. 'AES' should always be used
+                                             for Cancellations and Amendments to indicate a free text reason
+                                             is being provided.-->
+					<StatementTypeCode>AES</StatementTypeCode>
+					<!--The two pointer elements below point to the Declaration (42A)
+                                            and the Amendment (06A) in the Declaration (which can be seen below).
+                                            This is so that the textual description can be linked to its
+                                            corresponding amendment reason code.-->
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>2</SequenceNumeric>
+						<DocumentSectionCode>06A</DocumentSectionCode>
+					</Pointer>
+				</AdditionalInformation>
+				<AdditionalInformation>
+					<!--Textual description of the reason for amendment-->
+					<StatementDescription>Amend Exporter CityName Tag 241</StatementDescription>
+					<!--CityName-->
+					<!--The type of Additional Information. 'AES' should always be used
+                                             for Cancellations and Amendments to indicate a free text reason
+                                             is being provided.-->
+					<StatementTypeCode>AES</StatementTypeCode>
+					<!--The two pointer elements below point to the Declaration (42A)
+                                            and the Amendment (06A) in the Declaration (which can be seen below).
+                                            This is so that the textual description can be linked to its
+                                            corresponding amendment reason code.-->
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>3</SequenceNumeric>
+						<DocumentSectionCode>06A</DocumentSectionCode>
+					</Pointer>
+				</AdditionalInformation>
+				<AdditionalInformation>
+					<!--Textual description of the reason for amendment-->
+					<StatementDescription>Amend Exporter Address Line Tag 239</StatementDescription>
+					<!--Line-->
+					<!--The type of Additional Information. 'AES' should always be used
+                                             for Cancellations and Amendments to indicate a free text reason
+                                             is being provided.-->
+					<StatementTypeCode>AES</StatementTypeCode>
+					<!--The two pointer elements below point to the Declaration (42A)
+                                            and the Amendment (06A) in the Declaration (which can be seen below).
+                                            This is so that the textual description can be linked to its
+                                            corresponding amendment reason code.-->
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>4</SequenceNumeric>
+						<DocumentSectionCode>06A</DocumentSectionCode>
+					</Pointer>
+				</AdditionalInformation>
+				<AdditionalInformation>
+					<!--Textual description of the reason for amendment-->
+					<StatementDescription>Amend Exporter Postal Code Tag 245</StatementDescription>
+					<!--PostcodeID-->
+					<!--The type of Additional Information. 'AES' should always be used
+                                             for Cancellations and Amendments to indicate a free text reason
+                                             is being provided.-->
+					<StatementTypeCode>AES</StatementTypeCode>
+					<!--The two pointer elements below point to the Declaration (42A)
+                                            and the Amendment (06A) in the Declaration (which can be seen below).
+                                            This is so that the textual description can be linked to its
+                                            corresponding amendment reason code.-->
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>5</SequenceNumeric>
+						<DocumentSectionCode>06A</DocumentSectionCode>
+					</Pointer>
+				</AdditionalInformation>
+				<AdditionalInformation>
+					<StatementDescription>Amend QuantityQuantity DE 6/10 - Tag 144</StatementDescription>
+					<!--QtyQTY-->
+					<StatementTypeCode>AES</StatementTypeCode>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>6</SequenceNumeric>
+						<!-- <SequenceNumeric>7</SequenceNumeric> -->
+						<DocumentSectionCode>06A</DocumentSectionCode>
+					</Pointer>
+				</AdditionalInformation>                            
+				<!-- *********************************************************************************************** -->
+				<Amendment>
+					<!-- Change Reason Code - Used to indicate the reason for the amendment. 
+							In this scenario, a code of 28 to indicate reason for amendment in this case 'Amend weight or quantity' -->
+					<ChangeReasonCode>28</ChangeReasonCode>
+					<!--Pointers describe the declaration tree down to the part of the Declaration which needs to be amended as follows: 
+                                Declaration (42A) -> 
+                                    Tag 146 for TotalPackageQuantityQuantity -->
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+						<TagID>146</TagID>
+						<!-- TotalPackageQuantity-->
+					</Pointer>
+				</Amendment>
+				<!--Details of the amendment to be made to the Declaration-->
+				<Amendment>
+					<!--Used to indicate the reason for the amendment - in this scenario, a code of 29 to indicate that consignee/consignor is being amended.-->
+					<ChangeReasonCode>29</ChangeReasonCode>
+					<!--Pointers describe the declaration tree down to the part of the Declaration which needs to be amended as follows:
+                                    Declaration (42A) 
+                                        Exporter (57A)   
+                                            Exporter/Address (04A) -->              
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>2</SequenceNumeric>
+						<DocumentSectionCode>57A</DocumentSectionCode>
+						<TagID>R031</TagID>
+						<!-- Exporter/Name -->
+					</Pointer>
+				</Amendment>
+				<Amendment>
+					<ChangeReasonCode>29</ChangeReasonCode>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>57A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>3</SequenceNumeric>
+						<DocumentSectionCode>04A</DocumentSectionCode>                 
+						<TagID>241</TagID>
+						<!-- CityName -->
+					</Pointer>
+				</Amendment>
+				<Amendment>
+					<ChangeReasonCode>29</ChangeReasonCode>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>57A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>4</SequenceNumeric>
+						<DocumentSectionCode>04A</DocumentSectionCode>                 
+						<TagID>239</TagID>
+						<!-- Address Line -->
+					</Pointer>
+				</Amendment>
+				<Amendment>
+					<ChangeReasonCode>29</ChangeReasonCode>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>57A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>5</SequenceNumeric>
+						<DocumentSectionCode>04A</DocumentSectionCode>                 
+						<TagID>245</TagID>
+						<!-- PostcodeID -->
+					</Pointer>
+				</Amendment>
+				<!-- End of Exporter Name and Address -->
+				<!--Details of the QuantityQuantity amendment to be made to the Declaration-->
+				<Amendment>
+					<!-- Change Reason Code - Used to indicate the reason for the amendment. 
+                            In this scenario, a code of 28 to indicate reason for amendment in this case 'Amend weight or quantity' -->
+					<ChangeReasonCode>28</ChangeReasonCode>
+					<!--Pointers describe the declaration tree down to the part of the Declaration which needs to be amended as follows: 
+                                    Declaration (42A) -> 
+                                        GoodsShipment (67A) -> 
+                                            GovernmentAgencyGoodsItem (68A) -> 
+                                                Packaging (93A) -> 
+                                                   Tag 144 for QuantityQuantity -->
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>67A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>68A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>93A</DocumentSectionCode>
+						<TagID>144</TagID>
+						<!-- QuantityQuantity -->
+					</Pointer>
+				</Amendment>
+				<!-- *********************************************************************************** -->
+				<!--The details below refer to the Declaration data that is being amended. 
+                     As described by the pointer structure above, the information below maps to the element being amended -->
+				<Exporter>
+					<Name>Detroit Cocoa Company</Name>								<!-- R031 -->       
+					<Address>														<!-- 04A  -->
+						<CityName>Detroit</CityName>								<!-- 241  -->
+						<CountryCode>US</CountryCode>	
+						<Line>101 Peterboro Avenue</Line>							<!-- 239  -->
+						<PostcodeID>48201</PostcodeID>								<!-- 245  -->
+					</Address>
+				</Exporter>
+				<GoodsShipment>		
+					<GovernmentAgencyGoodsItem>
+						<SequenceNumeric>1</SequenceNumeric>
+						<Packaging>
+							<SequenceNumeric>1</SequenceNumeric>
+							<MarksNumbersID>PK12345</MarksNumbersID>
+							<QuantityQuantity>53</QuantityQuantity>					<!-- 144 -->
+							<TypeCode>IG</TypeCode>
+						</Packaging>
+					</GovernmentAgencyGoodsItem>
+				</GoodsShipment>
+			</Declaration>
+		</md:MetaData>

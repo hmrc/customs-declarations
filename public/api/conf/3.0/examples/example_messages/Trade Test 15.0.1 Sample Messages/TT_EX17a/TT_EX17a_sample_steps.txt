@@ -1,0 +1,32 @@
+CDS Func ID: 		TBC on Day
+CDS MRN: 		TBC on Day
+CDS DUCR: 		TBC on Day (In Payload)
+CHIEF DUCR: 		From DT Spreadsheet 
+CHIEF DUCR Part ID: 	From DT Spreadsheet
+MUCR: 			TBC on Day (In Payloads) 
+
+  
+Step 01	Dec 1 in CHIEF with DUCR(1) with DUCR Part ID Numeric and Alpha (331A)
+
+Step 02	Dec 2 in CDS – DUCR(2)
+
+Step 03	Submit EAA 1 with CHIEF DUCR(1) Only with Numeric DUCR Part ID – (331)
+
+Step 04	Submit EAA 2 with CDS DUCR(2)
+
+Step 05	Submit EAL 1 with CDS DUCR(2)
+
+Step 06	Submit EAL 2 with CHIEF DUCR(1) Only with Numeric DUCR Part ID – (331)
+
+Step 07	Submit EAC 1 (CDS) with DUCR (2) + MUCR(1)
+
+Step 08	Submit EAC 2 (CHIEF) with DUCR (1) Only with Numeric DUCR Part ID – (331) + MUCR(1).
+
+Step 09	Submit CST message Close MUCR(1).
+
+Step 10	Submit EAL 3 with MUCR(1).
+
+Step 11	EDL with MUCR(1).
+ 
+
+ 

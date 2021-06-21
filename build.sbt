@@ -1,7 +1,6 @@
 import AppDependencies._
 import com.typesafe.sbt.web.PathMapping
 import com.typesafe.sbt.web.pipeline.Pipeline
-import play.sbt.PlayImport.PlayKeys.playDefaultPort
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
@@ -46,7 +45,6 @@ lazy val microservice = (project in file("."))
   .configs(testConfig: _*)
   .settings(
     commonSettings,
-    playDefaultPort := 9820,
     unitTestSettings,
     integrationComponentTestSettings,
     playPublishingSettings,

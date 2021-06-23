@@ -33,7 +33,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.logging.Authorization
+import uk.gov.hmrc.http.Authorization
 import uk.gov.hmrc.http.{HttpClient, _}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -63,9 +63,10 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
 
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
-    implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, ar.conversationId, correlationId), authorization = Some(Authorization(bearerToken)))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = None)
+    lazy val declarationHeaders = getHeaders(date, ar.conversationId, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken)
     val startTime = LocalDateTime.now
-    withCircuitBreaker(post(xmlToSend, config.url)).map{
+    withCircuitBreaker(post(xmlToSend, config.url, declarationHeaders)).map{
       response =>
         logCallDuration(startTime)
         logger.debug(s"Declaration status response code: ${response.status} and response body: ${response.body}")
@@ -84,10 +85,10 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
     )
   }
 
-  private def post[A](xml: NodeSeq, url: String)(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier) = {
-    logger.debug(s"Sending request to $url. Headers ${hc.headers} Payload:\n$xml")
+  private def post[A](xml: NodeSeq, url: String, declarationHeaders: Seq[(String, String)])(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier) = {
+    logger.debug(s"Sending request to $url. Headers ${declarationHeaders} Payload:\n$xml")
 
-    http.POSTString[HttpResponse](url, xml.toString()).map { response =>
+    http.POSTString[HttpResponse](url, xml.toString(), headers = declarationHeaders).map { response =>
       response.status match {
         case status if is2xx(status) =>
           response

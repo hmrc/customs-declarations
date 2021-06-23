@@ -29,6 +29,6 @@ import uk.gov.hmrc.play.http.ws._
 class NoAuditHttpClient @Inject()( config: Configuration,
                                    override val wsClient: WSClient,
                                    override val actorSystem: ActorSystem) extends HttpClient with WSHttp {
-  override lazy val configuration: Option[Config] = Option(config.underlying)
+  override lazy val configuration: Config = config.underlying
   override val hooks: Seq[HttpHook] = Seq.empty
 }

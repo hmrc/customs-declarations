@@ -25,7 +25,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
@@ -57,7 +57,7 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
 
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val implicitVhr: ValidatedHeadersRequest[A] = vhr
-    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
+    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromRequest(rh)
 
     val requestRetrievals = requestRetrievalsForEndpoint && declarationConfigService.nrsConfig.nrsEnabled
     logger.debug(s"retrievals being requested - $requestRetrievals")

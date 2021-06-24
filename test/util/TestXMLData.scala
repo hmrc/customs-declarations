@@ -16,10 +16,6 @@
 
 package util
 
-import java.nio.file.{Files, Paths}
-
-import akka.util.ByteString
-
 import scala.xml.Elem
 
 object TestXMLData {

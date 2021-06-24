@@ -1,6 +1,7 @@
 import AppDependencies._
 import com.typesafe.sbt.web.PathMapping
 import com.typesafe.sbt.web.pipeline.Pipeline
+import play.sbt.PlayImport.PlayKeys.playDefaultPort
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
@@ -43,6 +44,9 @@ lazy val microservice = (project in file("."))
     scoverageSettings
   )
   .settings(majorVersion := 0)
+  .settings(scalacOptions += "-P:silencer:pathFilters=routes")
+  //.settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
+  .settings(playDefaultPort := 9820)
 
 def onPackageName(rootPackage: String): String => Boolean = {
   testName => testName startsWith rootPackage
@@ -94,7 +98,7 @@ val compileDependencies = Seq(customsApiCommon, simpleReactiveMongo, playJsonJod
 val testDependencies = Seq(scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
 
 Compile / unmanagedResourceDirectories += baseDirectory.value / "public"
-CdsIntegrationComponentTest / unmanagedResourceDirectories += baseDirectory.value / "test" / "resources"
+
 (Runtime / managedClasspath) += (Assets / packageBin).value
 
 libraryDependencies ++= compileDependencies ++ testDependencies

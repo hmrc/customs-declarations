@@ -126,7 +126,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
   }
 
-  private def sendValidRequest(implicit hasConversationId: HasConversationId) = {
+  private def sendValidRequest() = {
     connector.send(FileTransmissionRequest)
   }
 }

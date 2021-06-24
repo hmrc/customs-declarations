@@ -23,7 +23,7 @@ import akka.actor.ActorSystem
 import play.api.mvc.Codec.utf_8
 import com.google.inject._
 import org.joda.time.DateTime
-import play.api.http.HeaderNames.{ACCEPT, CONTENT_TYPE, DATE, X_FORWARDED_HOST}
+import play.api.http.HeaderNames._
 import play.api.http.{ContentTypes, MimeTypes}
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
@@ -83,9 +83,11 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   def send[A](xml: NodeSeq, date: DateTime, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
-    implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = getHeaders(date, correlationId), authorization = Some(Authorization(bearerToken)))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = None)
+
+    lazy val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken)
     val startTime = LocalDateTime.now
-    withCircuitBreaker(post(xml, config.url)).map{
+    withCircuitBreaker(post(xml, config.url, decHeaders)).map{
       response => {
         logCallDuration(startTime)
         logger.debug(s"Response status ${response.status} and response body ${formatResponseBody(response.body)}")
@@ -103,10 +105,10 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
       ("X-Correlation-ID", correlationId.toString))
   }
 
-  private def post[A](xml: NodeSeq, url: String)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
+  private def post[A](xml: NodeSeq, url: String, decHeaders: Seq[(String, String)])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
     logger.debug(s"Sending request to $url.\n Headers:\n $hc\n Payload:\n$xml")
 
-    http.POSTString[HttpResponse](url, xml.toString()).map{ response =>
+    http.POSTString[HttpResponse](url, xml.toString(), headers = decHeaders).map{ response =>
       response.status match {
         case status if is2xx(status) =>
           response

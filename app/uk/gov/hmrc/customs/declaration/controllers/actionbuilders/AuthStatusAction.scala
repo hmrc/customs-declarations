@@ -28,7 +28,7 @@ import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedHeadersStatusRequest}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Left
@@ -47,7 +47,7 @@ class AuthStatusAction @Inject()(override val authConnector: AuthConnector,
 
   override def refine[A](vhsr: ValidatedHeadersStatusRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val implicitVhsr: ValidatedHeadersStatusRequest[A] = vhsr
-    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(rh.headers)
+    implicit def hc(implicit rh: RequestHeader): HeaderCarrier = HeaderCarrierConverter.fromRequest(rh)
 
     authorised(Enrolment(customsDeclarationEnrolment) and AuthProviders(PrivilegedApplication)) {
       logger.debug(s"Successfully authorised status CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment")

@@ -33,9 +33,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.Authorization
 import uk.gov.hmrc.http.{HttpClient, _}
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 

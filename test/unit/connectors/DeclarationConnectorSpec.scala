@@ -75,7 +75,6 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val v3Config = ServiceConfig("v3-url", Some("v3-bearer-token"), "v3-default")
 
   private val xml = <xml></xml>
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
 
@@ -129,10 +128,10 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
         awaitRequest()
 
-        val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
-        verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
-          any[HttpReads[HttpResponse]](), headersCaptor.capture(), any[ExecutionContext])
-        headersCaptor.getValue.extraHeaders should contain(HeaderNames.CONTENT_TYPE -> "application/xml; charset=utf-8")
+        val headersCaptor: ArgumentCaptor[Seq[(String, String)]] = ArgumentCaptor.forClass(classOf[Seq[(String, String)]])
+        verify(mockWsPost).POSTString(anyString, anyString, headersCaptor.capture())(
+          any[HttpReads[HttpResponse]](), any[HeaderCarrier], any[ExecutionContext])
+        headersCaptor.getValue should contain(HeaderNames.CONTENT_TYPE -> "application/xml; charset=utf-8")
       }
 
       "ensure the accept header in passed through in MDG request" in {
@@ -140,10 +139,10 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
         awaitRequest()
 
-        val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
-        verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
-          any[HttpReads[HttpResponse]](), headersCaptor.capture(), any[ExecutionContext])
-        headersCaptor.getValue.extraHeaders should contain(HeaderNames.ACCEPT -> MimeTypes.XML)
+        val headersCaptor: ArgumentCaptor[Seq[(String, String)]] = ArgumentCaptor.forClass(classOf[Seq[(String, String)]])
+        verify(mockWsPost).POSTString(anyString, anyString, headersCaptor.capture())(
+          any[HttpReads[HttpResponse]](), any[HeaderCarrier], any[ExecutionContext])
+        headersCaptor.getValue should contain(HeaderNames.ACCEPT -> MimeTypes.XML)
       }
 
       "ensure the date header in passed through in MDG request" in {
@@ -151,10 +150,10 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
         awaitRequest()
 
-        val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
-        verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
-          any[HttpReads[HttpResponse]](), headersCaptor.capture(), any[ExecutionContext])
-        headersCaptor.getValue.extraHeaders should contain(HeaderNames.DATE -> httpFormattedDate)
+        val headersCaptor: ArgumentCaptor[Seq[(String, String)]] = ArgumentCaptor.forClass(classOf[Seq[(String, String)]])
+        verify(mockWsPost).POSTString(anyString, anyString, headersCaptor.capture())(
+          any[HttpReads[HttpResponse]](), any[HeaderCarrier], any[ExecutionContext])
+        headersCaptor.getValue should contain(HeaderNames.DATE -> httpFormattedDate)
       }
 
       "ensure the X-FORWARDED_HOST header in passed through in MDG request" in {
@@ -162,10 +161,10 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
         awaitRequest()
 
-        val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
-        verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
-          any[HttpReads[HttpResponse]](), headersCaptor.capture(), any[ExecutionContext])
-        headersCaptor.getValue.extraHeaders should contain(HeaderNames.X_FORWARDED_HOST -> "MDTP")
+        val headersCaptor: ArgumentCaptor[Seq[(String, String)]] = ArgumentCaptor.forClass(classOf[Seq[(String, String)]])
+        verify(mockWsPost).POSTString(anyString, anyString, headersCaptor.capture())(
+          any[HttpReads[HttpResponse]](), any[HeaderCarrier], any[ExecutionContext])
+        headersCaptor.getValue should contain(HeaderNames.X_FORWARDED_HOST -> "MDTP")
       }
 
       "ensure the X-Correlation-Id header in passed through in MDG request" in {
@@ -173,10 +172,10 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
         awaitRequest()
 
-        val headersCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
-        verify(mockWsPost).POSTString(anyString, anyString, any[SeqOfHeader])(
-          any[HttpReads[HttpResponse]](), headersCaptor.capture(), any[ExecutionContext])
-        headersCaptor.getValue.extraHeaders should contain("X-Correlation-ID" -> correlationId.toString)
+        val headersCaptor: ArgumentCaptor[Seq[(String, String)]] = ArgumentCaptor.forClass(classOf[Seq[(String, String)]])
+        verify(mockWsPost).POSTString(anyString, anyString, headersCaptor.capture())(
+          any[HttpReads[HttpResponse]](), any[HeaderCarrier], any[ExecutionContext])
+        headersCaptor.getValue should contain("X-Correlation-ID" -> correlationId.toString)
       }
 
       "Ensure routing is working for the config location which will ensure version specific config values are loaded correctly" in {

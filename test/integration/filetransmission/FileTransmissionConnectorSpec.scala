@@ -28,7 +28,6 @@ import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.http._
 import util.ExternalServicesConfig.{Host, Port}
 import util.FileTransmissionTestData._
@@ -126,7 +125,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
   }
 
-  private def sendValidRequest(implicit hasConversationId: HasConversationId) = {
+  private def sendValidRequest() = {
     connector.send(FileTransmissionRequest)
   }
 }

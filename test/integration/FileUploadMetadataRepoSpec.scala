@@ -40,7 +40,6 @@ import util.TestData.{FileMetadataWithFileOne, _}
 import util.UnitSpec
 
 import scala.concurrent.ExecutionContext
-import scala.language.postfixOps
 
 class FileUploadMetadataRepoSpec extends UnitSpec
   with BeforeAndAfterAll

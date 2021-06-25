@@ -193,8 +193,4 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
 
   private def fakeRequestWith(json: JsValue) =
     FakeRequest().withJsonBody(json)
-
-  private implicit val hasConversationId: HasConversationId = new HasConversationId {
-    override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
-  }
 }

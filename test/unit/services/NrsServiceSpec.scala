@@ -37,7 +37,6 @@ import scala.concurrent.Future
 class NrsServiceSpec extends UnitSpec with MockitoSugar {
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val ec = Helpers.stubControllerComponents().executionContext
-  private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
 
   trait SetUp {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]

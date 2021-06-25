@@ -21,12 +21,9 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.customs.declaration.services.TestOnlyService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import scala.concurrent.ExecutionContext
-
 @Singleton
 class TestOnlyController @Inject()(val testOnlyService: TestOnlyService,
-                                   val cc: ControllerComponents)
-                                  (implicit ec: ExecutionContext) extends BackendController(cc) {
+                                   val cc: ControllerComponents) extends BackendController(cc) {
 
   def deleteAll(): Action[AnyContent] = Action {
     testOnlyService.deleteAll()

@@ -46,8 +46,6 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
 
   private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
-
   private val httpException = new Non2xxResponseException(404)
   private val tenThousand = 10000
   private val upscanInitiatePayloadV1WithNoRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, None)

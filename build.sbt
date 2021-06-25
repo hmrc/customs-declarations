@@ -1,27 +1,21 @@
 import AppDependencies._
 import com.typesafe.sbt.web.PathMapping
 import com.typesafe.sbt.web.pipeline.Pipeline
+import play.sbt.PlayImport.PlayKeys.playDefaultPort
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm}
 import uk.gov.hmrc.PublishingSettings._
-import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.gitstamp.GitStampPlugin._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
-import uk.gov.hmrc.versioning.SbtGitVersioning
 
 import scala.language.postfixOps
 
 name := "customs-declarations"
-scalaVersion := "2.12.10"
+scalaVersion := "2.12.13"
 targetJvm := "jvm-1.8"
-
-lazy val allResolvers = resolvers ++= Seq(
-  Resolver.bintrayRepo("hmrc", "releases"),
-  Resolver.jcenterRepo
-)
 
 lazy val CdsIntegrationComponentTest = config("it") extend Test
 
@@ -34,14 +28,12 @@ def forkedJvmPerTestConfig(tests: Seq[TestDefinition], packages: String*): Seq[G
   } toSeq
 
 lazy val testAll = TaskKey[Unit]("test-all")
-lazy val allTest = Seq(testAll := (test in CdsIntegrationComponentTest).dependsOn(test in Test).value)
+lazy val allTest = Seq(testAll := (CdsIntegrationComponentTest / test).dependsOn(Test / test).value)
 
 lazy val microservice = (project in file("."))
   .enablePlugins(PlayScala)
-  .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
   .enablePlugins(SbtDistributablesPlugin)
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
-  .enablePlugins(SbtArtifactory)
   .configs(testConfig: _*)
   .settings(
     commonSettings,
@@ -49,10 +41,12 @@ lazy val microservice = (project in file("."))
     integrationComponentTestSettings,
     playPublishingSettings,
     allTest,
-    scoverageSettings,
-    allResolvers
+    scoverageSettings
   )
   .settings(majorVersion := 0)
+  .settings(scalacOptions += "-P:silencer:pathFilters=routes")
+  .settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
+  .settings(playDefaultPort := 9820)
 
 def onPackageName(rootPackage: String): String => Boolean = {
   testName => testName startsWith rootPackage
@@ -61,20 +55,19 @@ def onPackageName(rootPackage: String): String => Boolean = {
 lazy val unitTestSettings =
   inConfig(Test)(Defaults.testTasks) ++
     Seq(
-      testOptions in Test := Seq(Tests.Filter(onPackageName("unit"))),
-      testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
-      unmanagedSourceDirectories in Test := Seq((baseDirectory in Test).value / "test"),
+      Test / testOptions := Seq(Tests.Filter(onPackageName("unit"))),
+      Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
+      Test / unmanagedSourceDirectories := Seq((Test / baseDirectory).value / "test"),
       addTestReportOption(Test, "test-reports")
     )
 
 lazy val integrationComponentTestSettings =
   inConfig(CdsIntegrationComponentTest)(Defaults.testTasks) ++
     Seq(
-      testOptions in CdsIntegrationComponentTest := Seq(Tests.Filter(integrationComponentTestFilter)),
-      fork in CdsIntegrationComponentTest := false,
-      parallelExecution in CdsIntegrationComponentTest := false,
+      CdsIntegrationComponentTest / testOptions := Seq(Tests.Filter(integrationComponentTestFilter)),
+      CdsIntegrationComponentTest / parallelExecution := false,
       addTestReportOption(CdsIntegrationComponentTest, "int-comp-test-reports"),
-      testGrouping in CdsIntegrationComponentTest := forkedJvmPerTestConfig((definedTests in Test).value, "integration", "component")
+      CdsIntegrationComponentTest / testGrouping := forkedJvmPerTestConfig((Test / definedTests).value, "integration", "component")
     )
 
 lazy val commonSettings: Seq[Setting[_]] = publishingSettings ++ gitStampSettings
@@ -89,10 +82,10 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
       ,"uk\\.gov\\.hmrc\\.customs\\.declaration\\.views\\..*"
       ,".*(Reverse|AuthService|BuildInfo|Routes).*"
     ).mkString(";"),
-  coverageMinimum := 96,
+  coverageMinimumStmtTotal := 96,
   coverageFailOnMinimum := true,
   coverageHighlighting := true,
-  parallelExecution in Test := false
+  Test / parallelExecution := false
 )
 
 def integrationComponentTestFilter(name: String): Boolean = (name startsWith "integration") || (name startsWith "component")
@@ -100,13 +93,13 @@ def unitTestFilter(name: String): Boolean = name startsWith "unit"
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
-val compileDependencies = Seq(customsApiCommon, simpleReactiveMongo, playJsonJoda)
+val compileDependencies = Seq(customsApiCommon, simpleReactiveMongo, playJsonJoda, silencerPlugin, silencerLib)
 
 val testDependencies = Seq(scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
 
-unmanagedResourceDirectories in Compile += baseDirectory.value / "public"
-unmanagedResourceDirectories in CdsIntegrationComponentTest += baseDirectory.value / "test" / "resources"
-(managedClasspath in Runtime) += (packageBin in Assets).value
+Compile / unmanagedResourceDirectories += baseDirectory.value / "public"
+
+(Runtime / managedClasspath) += (Assets / packageBin).value
 
 libraryDependencies ++= compileDependencies ++ testDependencies
 
@@ -124,7 +117,7 @@ zipWcoXsds := { mappings: Seq[PathMapping] =>
         val exampleMessagesFilter = new SimpleFileFilter(_.getPath.contains("/example_messages/"))
         val exampleMessagesPaths = Path.selectSubpaths(dir / "examples", exampleMessagesFilter)
         val zipFile = targetDir / "api" / "conf" / dir.getName / "wco-declaration-schemas.zip"
-        IO.zip(wcoXsdPaths ++ exampleMessagesPaths, zipFile)
+        IO.zip(wcoXsdPaths ++ exampleMessagesPaths, zipFile, None)
         println(s"Created zip $zipFile")
         zipFile
       }
@@ -132,5 +125,3 @@ zipWcoXsds := { mappings: Seq[PathMapping] =>
 }
 
 pipelineStages := Seq(zipWcoXsds)
-
-evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false)

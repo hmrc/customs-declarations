@@ -38,8 +38,6 @@ class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with Guice
 
   private lazy val connector = app.injector.instanceOf[FileUploadCustomsNotificationConnector]
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
-
   private val xml = <foo>bar</foo>
   private val notification =
     FileUploadCustomsNotification(subscriptionFieldsId, TestData.conversationId.uuid, xml)

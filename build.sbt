@@ -45,7 +45,7 @@ lazy val microservice = (project in file("."))
   )
   .settings(majorVersion := 0)
   .settings(scalacOptions += "-P:silencer:pathFilters=routes")
-  //.settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
+  .settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
   .settings(playDefaultPort := 9820)
 
 def onPackageName(rootPackage: String): String => Boolean = {

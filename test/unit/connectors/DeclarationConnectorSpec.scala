@@ -75,7 +75,6 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
   private val v3Config = ServiceConfig("v3-url", Some("v3-bearer-token"), "v3-default")
 
   private val xml = <xml></xml>
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
 

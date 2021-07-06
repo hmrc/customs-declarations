@@ -66,7 +66,6 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }
 
-
     scenario("Response status 202 when authorised as CSP with privileged application and submits function code 13 in the request") {
       Given("the API is available")
       val request = ValidSubmission_13_Request.fromCsp.postTo(endpoint)

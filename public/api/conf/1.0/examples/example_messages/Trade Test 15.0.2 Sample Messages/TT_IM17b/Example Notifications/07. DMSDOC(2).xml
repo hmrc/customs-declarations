@@ -1,0 +1,40 @@
+<!-- 
+	Note that the second DMSDOC Trader Notification is now suppressed for this scenario. This is due to a new feature which suppresses the triggering of duplicate risk rules. As a consequence, only one DMSDOC Trader Notification will now be generated. 
+-->
+
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>06</FunctionCode>
+		<FunctionalReferenceID>2c9332df07424a689d994561359d9ac5</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20210427114017Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>ACA</StatementCode>
+			<StatementDescription/>
+			<LimitDateTime>
+				<DateTimeString formatCode="304">20240215114017Z</DateTimeString>
+			</LimitDateTime>
+			<StatementTypeCode>ACA</StatementTypeCode>
+		</AdditionalInformation>
+		<AdditionalInformation>
+			<StatementCode>ACA</StatementCode>
+			<StatementDescription/>
+			<LimitDateTime>
+				<DateTimeString formatCode="304">20240215113819Z</DateTimeString>
+			</LimitDateTime>
+			<StatementTypeCode>ACA</StatementTypeCode>
+		</AdditionalInformation>
+		<Declaration>
+			<FunctionalReferenceID>TT_IM17b_270421_02</FunctionalReferenceID>
+			<ID>21GB4MG0PWBVK645R7</ID>
+			<VersionID>2</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

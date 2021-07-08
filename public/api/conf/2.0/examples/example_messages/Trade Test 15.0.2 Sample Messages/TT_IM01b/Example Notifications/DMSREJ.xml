@@ -1,0 +1,34 @@
+<MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>03</FunctionCode>
+        <FunctionalReferenceID>868cc2347a40402a9183936bf4143769</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20210617135102Z</DateTimeString>
+        </IssueDateTime>
+        <Error>
+            <ValidationCode>CDS12005</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>17C</DocumentSectionCode>
+                <TagID>R144</TagID>
+            </Pointer>
+        </Error>
+        <Declaration>
+            <FunctionalReferenceID>TT_IM01b_v1.3_1706_01</FunctionalReferenceID>
+            <ID>21GB6NG7YNX0MVARR2</ID>
+            <RejectionDateTime>
+                <DateTimeString formatCode="304">20210617135102Z</DateTimeString>
+            </RejectionDateTime>
+            <VersionID>1</VersionID>
+        </Declaration>
+    </Response>
+</MetaData>

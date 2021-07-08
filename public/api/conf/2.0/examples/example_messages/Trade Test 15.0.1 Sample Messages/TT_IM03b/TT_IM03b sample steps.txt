@@ -1,8 +1,0 @@
-Steps for execution:
-
-Step 1) - Submit Inventory linked pre-lodged Type F declaration with a documentary control
-Step 2) - Receive validate movement response from CSP to indicate that the consignment has been mis-matched to the declaration
-Step 3) - Submit Amendment declaration.
-Step 4) - Receive validate movement response from CSP to indicate that the consignment has been matched to the declaration
-Step 5) - Submit Goods Arrival Notice (GAN)
-Step 6) - Receive validate movement response from CSP to indicate that the consignment has been matched to the declaration

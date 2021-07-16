@@ -1,0 +1,237 @@
+		<md:MetaData
+	  xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	  xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+	  xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+	  xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "    >
+			<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+			<md:WCOTypeName>DEC</md:WCOTypeName>
+			<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+			<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+			<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+			<Declaration
+			xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+			xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+			xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+			xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+			xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
+				<!--
+				SCENARIO
+				A Type D Full Pre-Lodged Import Declaration - REJECTED
+				Invalid Location RMGRMGRMX
+				Full Declaration: Category H2, Declaration Type D – Special procedure, storage, customs warehousing.
+				Procedure code: 71 22. Additional procedure code: B02 (Re-importation of goods after outward processing for repair under guarantee).
+				Goods: Vanity case
+				Data set category: B1
+				The Importer is a Customs Warehousing (CW) authorisation holder for the premises declared.
+				The Importer is a Customs Comprehensive Guarantee (CCG) authorisation holder.
+				The Importer is an Outward Processing (OP) authorisation holder **OP auth needed in the test environment database etc**.
+				Importer EORI number: GB896458895023
+				Self-representation used by the importer.
+				Scenario steps: Submit Type D declaration.
+				Expected notifications: DMSREJ with business rules BR372_237 & BR372_243		-->
+
+				<!--Function Code of 9 to represent an original declaration. -->
+				<FunctionCode>9</FunctionCode>
+				<!--DE 2/5: LRN. This is a mandatory field. Trader's own reference number - this must be unique to the transaction. -->
+				<FunctionalReferenceID>TT_IM32b_280421_01</FunctionalReferenceID>
+				<!--DE 1/1: Declaration Type. This is a mandatory field. IM to represent an import declaration. -->
+				<!--DE 1/2: Additional Declaration Type. This is a mandatory field. D to represent a pre-lodged, standard declaration.-->
+				<TypeCode>IMD</TypeCode>
+				<!--DE 1/9: Total number of items. This is a mandatory field. 
+				Total number of goods items on the declaration. -->
+				<GoodsItemQuantity>1</GoodsItemQuantity>
+				<!--DE 6/18: Total packages. This is a mandatory field. 50 packages.
+				Note that this matches DE 6/10 because this is a single item declaration. -->
+				<TotalPackageQuantity>50</TotalPackageQuantity>
+				<!--DE 3/39: Holder of the authorisation ID no. Mandatory if authorisation is required to declare goods to procedure.
+				Category code of OPO indicates outward processing procedure authorisation type. -->
+				<AuthorisationHolder>
+					<ID>GB896458895023</ID>
+					<CategoryCode>OPO</CategoryCode>
+				</AuthorisationHolder>
+				<!--DE 3/39: Holder of the authorisation ID no. Mandatory if authorisation is required to declare goods to procedure.
+				Category code of CWP indicates operation of storage facilities for the customs warehousing of goods in a private customs warehouse authorisation type. -->
+				<AuthorisationHolder>
+					<ID>GB896458895023</ID>
+					<CategoryCode>CWP</CategoryCode>
+				</AuthorisationHolder>
+				<!--DE 7/4: Mode of Transport at the border. This is a mandatory field. ModeCode of 6 to represent RoRo as the mode of transport at the border.-->
+				<BorderTransportMeans>
+					<ModeCode>6</ModeCode>
+				</BorderTransportMeans>
+				<!--DE 3/18: Declarant ID no. This field is mandatory only when a recognised ID number is available.
+				The EORI number of the declarant. UK requires an EORI to be provided for the declarant. -->
+				<Declarant>
+					<ID>GB896458895023</ID>
+				</Declarant>
+				<GoodsShipment>
+					<!--DE 8/5: Nature of transaction. This is a mandatory field.
+					First digit 9 indicates 'Other transactions which cannot be classified under other codes'.
+					Optional second digit code 9 indicates 'Other'. -->
+					<TransactionNatureCode>99</TransactionNatureCode>
+					<Consignment>
+						<!--DE 7/2: Container. This is a mandatory field. Indicator to show if goods are packed in a container or not.
+						1 indicates that goods are transported in containers.
+						Note: Unlike CHIEF this must now be completed. -->
+						<ContainerCode>1</ContainerCode>
+						<!--DE 5/23: Location of goods. This field is mandatory.
+						Name RMGRMGRMX  indicates an INVALID the location code
+						TypeCode A indicates frontier or frontier linked location.
+						Address qualifier type U indicates where the goods location is identified using a UN/LOCODE.
+						Address country GB indicates the country of the goods location as Great Britain. -->
+						<GoodsLocation>
+							<Name>RMGRMGRMX</Name>
+							<TypeCode>A</TypeCode>
+							<Address>
+								<TypeCode>U</TypeCode>
+								<CountryCode>GB</CountryCode>
+							</Address>
+						</GoodsLocation>
+						<!--DE 7/10: Container identification number. This is a mandatory field. 
+						This is alpha-numeric with up to 17 characters.
+						For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the 
+						International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number. 
+						For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
+						<TransportEquipment>
+							<SequenceNumeric>1</SequenceNumeric>
+							<ID>AD12345</ID>
+						</TransportEquipment>
+					</Consignment>
+					<!--DE 5/8: Country of destination code. This field is mandatory.
+					Code of GB indicates destination country is UK. -->
+					<Destination>
+						<CountryCode>GB</CountryCode>
+					</Destination>
+					<!--DE 5/14: Country of dispatch/ export code. This is a mandatory field.
+					Code of US indicates goods dispatched from the United States. -->
+					<ExportCountry>
+						<ID>US</ID>
+					</ExportCountry>
+					<GovernmentAgencyGoodsItem>
+						<!--DE 1/6: Goods item number. 	This is a mandatory field. 
+						Sequential number of the goods item.-->
+						<SequenceNumeric>1</SequenceNumeric>
+						<!--DE 8/6 Statistical Value. This field mandatory unless the system calculates. 
+						Value of goods at export, plus processing. -->
+						<StatisticalValueAmount currencyID="GBP">5000</StatisticalValueAmount>
+						<!--DE 2/3: Documents produced, certificates and authorisations, additional references. This field is mandatory only where codes required.
+						Additional document code of C019 indicates OP authorisation number valid at the time of export. -->
+						<AdditionalDocument>
+							<CategoryCode>C</CategoryCode>
+							<ID>GBOPO89645889502320190613093450</ID>
+							<TypeCode>019</TypeCode>
+						</AdditionalDocument>
+						<!--DE 2/3: Documents produced, certificates and authorisations, additional references. This field is mandatory only where codes required.
+						Additional document code of C604 indicates INF2 form. 
+						Exemption code AE indicates document attached – exhausted by (or only applies to) this entry (document returned to the trader). -->
+						<AdditionalDocument>
+							<CategoryCode>C</CategoryCode>
+							<ID>INF2123456-190503</ID>
+							<TypeCode>604</TypeCode>
+							<LPCOExemptionCode>AE</LPCOExemptionCode>
+						</AdditionalDocument>
+						<!--DE 2/3: Documents produced, certificates and authorisations, additional references. This field is mandatory only where codes required.
+						Additional document code of C517 indicates authorisation for the private warehouse. -->
+						<AdditionalDocument>
+							<CategoryCode>C</CategoryCode>
+							<ID>GBCWPU1234599GB</ID>
+							<TypeCode>517</TypeCode>
+						</AdditionalDocument>
+						<!--DE 2/2: Additional Information. This field is mandatory only where codes required.
+						Denoting that the declarant and importer are the same party (self-rep). -->
+						<AdditionalInformation>
+							<StatementCode>00500</StatementCode>
+							<StatementDescription>IMPORTER</StatementDescription>
+						</AdditionalInformation>
+						<!--DE 2/2: Additional Information. This field is mandatory only where codes required.
+						Trader's own reference to detail the consignment/process. -->
+						<AdditionalInformation>
+							<StatementCode>GEN45</StatementCode>
+							<StatementDescription>Handbag defect repair invoice 123456</StatementDescription>
+						</AdditionalInformation>
+						<!--DE 6/8: Description of the goods. This is a mandatory field.
+						This is specific enough to enable classification - without repeating the CN code description in the Tariff. -->
+						<Commodity>
+							<Description>Vanity case with outer surface made of plastic sheet</Description>
+							<!--DE 6/14: Commodity code - combined nomenclature code. This is a mandatory field. -->
+							<Classification>
+								<ID>42021219</ID>
+								<IdentificationTypeCode>TSP</IdentificationTypeCode>
+							</Classification>
+							<!--DE 6/5: Gross Mass (KG). This is a mandatory field. 
+							Entry of 150 indicates 150kg including packaging. -->
+							<GoodsMeasure>
+								<GrossMassMeasure>150</GrossMassMeasure>
+							</GoodsMeasure>
+						</Commodity>
+						<!--DE 1/10: Procedure. This is a mandatory field.
+						Requested procedure of 71 indicating entry to a Customs Warehouse.
+						Previous Procedure of 22 indicating re-importation of goods after temporary export outside 
+						the EU for process, adaptation, re-working or making up. -->
+						<GovernmentProcedure>
+							<CurrentCode>71</CurrentCode>
+							<PreviousCode>22</PreviousCode>
+						</GovernmentProcedure>
+						<!--DE 1/11: Additional Procedure. This is a mandatory field.
+						Requested Procedure of B02 indicating re-importation of goods after outward processing for repair under guarantee. -->
+						<GovernmentProcedure>
+							<CurrentCode>B02</CurrentCode>
+						</GovernmentProcedure>
+						<Packaging>
+							<SequenceNumeric>1</SequenceNumeric>
+							<!--DE 6/11: Shipping marks. This is a mandatory field. Marks written on the packaging. -->
+							<MarksNumbersID>BX12345</MarksNumbersID>
+							<!--DE 6/10: Number of packages. This is a mandatory field. 50 is the number of packages. -->
+							<QuantityQuantity>50</QuantityQuantity>
+							<!--DE 6/9: Type of packages. This is a mandatory field. BX to represent Box. -->
+							<TypeCode>BX</TypeCode>
+						</Packaging>
+					</GovernmentAgencyGoodsItem>
+					<!--DE 3/16: Import ID no. This is mandatory only when a recognised ID number is available.
+					The EORI number of the Importer/depositor of the goods. -->
+					<Importer>
+						<ID>GB896458895023</ID>
+					</Importer>
+					<!--DE 2/1: Simplified Declaration/Previous Document.
+					CategoryCode: This is a mandatory field. This identifies the class or kind of document being declared. The previous document, represented by ‘Z’
+					ID: This is a mandatory field. This represents the data needed to recognise and identify the document. 21GB34F7Y1O2CX8PT4.
+					TypeCode: This is a mandatory field. This serves to identify the type of document: 355, Entry Summary Declaration.
+					LineNumeric: This is an optional field. This is the goods item number. It is used to identify which item of the previous document is being referred to. 
+					Where the previous document referred to contained only a single goods item, this component may be left blank.
+					Note: As this is for a single item declaration, this should be declared at header level. -->
+					<PreviousDocument>
+						<CategoryCode>Z</CategoryCode>
+						<ID>21GB34F7Y1O2CX8PT4</ID>
+						<TypeCode>355</TypeCode>
+						<LineNumeric>1</LineNumeric>
+					</PreviousDocument>
+					<!--DE 2/1: Simplified Declaration/Previous Document.
+					Previous document to indicate the export declaration used to export the goods.
+					Note: As this is for a single item declaration, this should be declared at header level-->
+					<PreviousDocument>
+						<CategoryCode>Z</CategoryCode>
+						<ID>21GBCDS123456789B1</ID>
+						<TypeCode>MRN</TypeCode>
+						<LineNumeric>1</LineNumeric>
+					</PreviousDocument>
+					<!--DE 2/7: Identification of warehouse. 
+						This is a mandatory field where warehousing or free zone used. 
+						The private warehouse ID. 
+						Note that the format of the warehouse ID provided below does not include the country code suffix, as required by the Import Declaration Completion Guide, and will be updated for TTM15.1. -->
+					<Warehouse>
+						<ID>1234599</ID>
+						<TypeCode>U</TypeCode>
+					</Warehouse>
+				</GoodsShipment>
+				<!--DE 5/27: Supervising Customs Office. This is a mandatory field dependant on the Procedure code.
+				The ID GBLBA001 represents the Supervising Office Code for the HMRC Office overseeing the Customs Warehouse 
+				procedure (Peter Bennet House, Leeds). -->
+				<SupervisingOffice>
+					<ID>GBLBA001</ID>
+				</SupervisingOffice>
+			</Declaration>
+		</md:MetaData>

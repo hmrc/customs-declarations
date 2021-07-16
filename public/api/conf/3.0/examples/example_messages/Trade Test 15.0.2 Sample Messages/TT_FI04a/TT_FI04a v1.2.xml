@@ -1,0 +1,248 @@
+<md:MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1 </md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+	             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
+		<!--
+			SCENARIO
+			Goods imported and declared 
+			Procedure code 4000 Additional Procedure code 000
+			Goods: Stuffed teddy bears, of mixed size, colour and design
+			Frontier declaration: H1 additional declaration type A
+			Self-Representation
+			General Guarantee account used for securities
+			Goods presented at Baltic Wharf, Wallasea Island (NILP). 
+		-->
+			
+		<!--Function Code of 9 to represent an original declaration -->
+		<FunctionCode>9</FunctionCode>
+		<!-- DE 2/5: Traders own reference number : this must be unique to the transaction. -->
+		<FunctionalReferenceID>TT_TC04_01</FunctionalReferenceID>
+		<!--DE 1/1: IM to represent an import declaration. -->
+		<!--DE 1/2: A to represent a pre-lodged standard declaration. -->
+		<TypeCode>IMA</TypeCode>
+		<!--DE 1/9: Total number of goods items on the declaration - single item declaration. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 4/11: Invoice Amount, this is the total amount for the declaration. -->
+		<InvoiceAmount currencyID="GBP">2500</InvoiceAmount>
+		<!--6/18: Total packages - 100. Note that this matches DE 6/10 because this is a single item declaration. -->
+		<TotalPackageQuantity>100</TotalPackageQuantity>
+		<BorderTransportMeans>
+			<!--DE 7/15: Country code of the nationality of the active means of transport crossing the border.
+				In this case GB. -->
+			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
+			<!--DE 7/4: Mode of transport at the border.
+				ModeCode of 1 to represent Maritime/Sea transport. -->
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: The EORI number of the Importer entering the declaration
+			The UK requires an EORI to be provided for the declarant-->
+		<Declarant>
+			<ID>GB021111238000</ID>
+		</Declarant>
+		<!--DE 3/1: Exporter name and address.
+			Mandatory where no recognised EORI number has been entered into DE 3/2. -->
+		<Exporter>
+			<Name>US Trading Commodities Inc.</Name>
+			<Address>
+				<CityName>New York</CityName>
+				<CountryCode>US</CountryCode>
+				<Line>1 Trade Street</Line>
+				<PostcodeID>NY1 234</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<Consignment>
+				<!--DE 7/2: Indicator to show if goods are packed in a container or not.
+					1 indicates that goods are transported in containers
+					Note: Unlike CHIEF this must now be completed. -->
+				<ContainerCode>1</ContainerCode>
+				<ArrivalTransportMeans>
+					<!--DE 7/9: Identity of means of transport on arrival.
+						Example number representing IMO ship identification number: 10, and 5 digits for the identification number: 12345. -->
+					<ID>12345</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+				</ArrivalTransportMeans>
+				<GoodsLocation>
+					<!--DE 5/23: Location of Goods.
+						The location code for Wallasea Island, Baltic Wharf, a non-inventory linked location.-->
+					<Name>WLALONBTW</Name>
+					<!--DE 5/23: Type of Location.
+						A in this scenario to represent that it is a designated location. -->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Type of ID of the Location.
+							U in this scenario for UN/LOCODE-->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Country code of the country where the goods may be examined.
+							GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+			</Consignment>
+			<Destination>
+				<!--DE 5/8: Country code of the destination country. 
+					In this case GB. -->
+				<CountryCode>GB</CountryCode>
+			</Destination>
+			<ExportCountry>
+				<!--DE 5/14: Country code for the country from which the goods were originally dispatched.
+					In this case US. -->
+				<ID>US</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 8/5: Nature of transaction.
+					1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation. -->
+				<TransactionNatureCode>1</TransactionNatureCode>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of N935 - The invoice on the basis of which the customs value of the goods is declared. -->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>0054037-0054047</ID>
+					<TypeCode>935</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of Y922 - Import of fur other than cats and dogs fur. -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>Cat/Dog Fur-96060</ID>
+					<Name>Cat and/or Dog fur</Name>
+					<TypeCode>922</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional information. 
+					00500 - Identity between declarant and importer. -->
+				<AdditionalInformation>
+					<StatementCode>00500</StatementCode>
+					<StatementDescription>IMPORTER</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 6/8: Description of the goods. -->
+				<Commodity>
+					<Description>Stuffed teddy bears, of mixed size, colour and design</Description>
+					<Classification>
+						<!--DE 6/14: Commodity code - combined nomenclature code. -->
+						<ID>95030041</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/15: Commodity code - TARIC code.-->
+						<ID>00</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
+					<DutyTaxFee>
+						<!--DE 4/17: Preference.
+							Preference type of 100 represents Normal third country tariff duty (including ceilings). -->
+						<DutyRegimeCode>100</DutyRegimeCode>
+						<Payment>
+							<!--DE 4/8: Method of Payment. 
+								MethodCode of P to indicate Immediate payment from CDS Cash Account. -->
+							<MethodCode>P</MethodCode>
+						</Payment>
+					</DutyTaxFee>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass.
+							Mass of the goods in kilograms including packaging. -->
+						<GrossMassMeasure>1100</GrossMassMeasure>
+						<!--DE 6/1: Net Mass.
+							Mass of the goods in kilograms without any packaging. -->
+						<NetNetWeightMeasure>1000</NetNetWeightMeasure>
+						<TariffQuantity>2000</TariffQuantity>
+					</GoodsMeasure>
+					<!--DE 4/14: Item price amount. 
+						The invoice was issued with of a value of 2500 and the currency was in GBP. -->
+					<InvoiceLine>
+						<ItemChargeAmount currencyID="GBP">2500</ItemChargeAmount>
+					</InvoiceLine>
+					<!-- DE 7/10: Container identification number. 
+						Example container identification number: alpha numeric to a total of 17 characters. -->
+					<TransportEquipment>
+						<SequenceNumeric>1</SequenceNumeric>
+						<ID>AD12345</ID>
+					</TransportEquipment>
+				</Commodity>
+				<CustomsValuation>
+					<!--DE 4/16: Valuation method.
+						1 to indicate the method is transaction value of the imported goods. -->
+					<MethodCode>1</MethodCode>
+				</CustomsValuation>
+				<GovernmentProcedure>
+					<!--DE 1/10: Procedure. 
+						Requested Procedure of 40 indicating Release to free circulation. -->
+					<CurrentCode>40</CurrentCode>
+					<!--DE 1/10: Procedure. 
+						Previous Procedure of 00 indicating there is no previous procedure. -->
+					<PreviousCode>00</PreviousCode>
+				</GovernmentProcedure>
+				<GovernmentProcedure>
+					<CurrentCode>000</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 5/15: US repesenting Unites States of America.
+					Where preference in D.E. 4/17 begins with a '1', this must be completed.-->
+				<Origin>
+					<CountryCode>US</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping marks on the packages. -->
+					<MarksNumbersID>ADRN123456123</MarksNumbersID>
+					<!--DE 6/10: Number of packages.
+						In this case 100. 
+						Note that this matches DE 6/18 because this is a single item declaration. -->
+					<QuantityQuantity>100</QuantityQuantity>
+					<!--DE 6/9: Type of packages - BX to represent Box. -->
+					<TypeCode>BX</TypeCode>
+				</Packaging>
+				<!--DE 4/13: Valuation Indicator.
+					The code comprises four digits, each of which being either a ‘0’ or a ‘1’:
+					- First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
+					- Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+					- Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
+					- Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
+				<ValuationAdjustment>
+					<AdditionCode>0000</AdditionCode>
+				</ValuationAdjustment>
+			</GovernmentAgencyGoodsItem>
+			<Importer>
+				<!--DE 3/16: Importer Identification Number.
+					EORI number of the Importer. -->
+				<ID>GB021111238000</ID>
+			</Importer>
+			<PreviousDocument>
+				<!--DE 2/1: Z355 To show the MRN for the Entry Summary Declaration. -->
+				<CategoryCode>Z</CategoryCode>
+				<ID>19GB34F7Y1O2CX8PT4</ID>
+				<TypeCode>355</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!--DE 4/1: To represent the following delivery terms: CIF to Wallasea Island, UK. -->
+			<TradeTerms>
+				<ConditionCode>CIF</ConditionCode>
+				<LocationID>GBWLA</LocationID>
+			</TradeTerms>
+		</GoodsShipment>
+		<ObligationGuarantee>
+			<!--DE 8/3: EORI reference number.
+				To refer to the CDS Cash Account used for security, as stated in DE 8/2. -->
+			<ReferenceID>GB021111238000</ReferenceID>
+			<!--DE 8/2: Guarantee type. 
+				Y to indicate CDS Cash Account. -->
+			<SecurityDetailsCode>Y</SecurityDetailsCode>
+		</ObligationGuarantee>
+	</Declaration>
+</md:MetaData>

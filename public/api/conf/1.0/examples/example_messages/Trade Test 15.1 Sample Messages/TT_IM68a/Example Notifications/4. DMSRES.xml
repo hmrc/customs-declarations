@@ -1,0 +1,55 @@
+<MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>07</FunctionCode>
+        <FunctionalReferenceID>eefd4f56a6ec41b0a5ad978361ecdd82</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20210714113123Z</DateTimeString>
+        </IssueDateTime>
+        <AdditionalInformation>
+            <StatementDescription>Increase Customs Value Amount to GBP 115.66 - DE 4/18, TagID 108</StatementDescription>
+            <StatementTypeCode>AES</StatementTypeCode>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>07B</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>06A</DocumentSectionCode>
+            </Pointer>
+        </AdditionalInformation>
+        <Amendment>
+            <ChangeReasonCode>21</ChangeReasonCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+                <TagID>108</TagID>
+            </Pointer>
+        </Amendment>
+        <Declaration>
+            <FunctionalReferenceID>TT_IM68a_1407_007</FunctionalReferenceID>
+            <ID>21GB7PVHJ0UMZI4J07</ID>
+            <VersionID>2</VersionID>
+        </Declaration>
+        <Declaration>
+            <FunctionCode>9</FunctionCode>
+            <GoodsShipment>
+                <GovernmentAgencyGoodsItem>
+                    <CustomsValueAmount currencyID="GBP">115.66</CustomsValueAmount>
+                    <SequenceNumeric>1</SequenceNumeric>
+                </GovernmentAgencyGoodsItem>
+            </GoodsShipment>
+        </Declaration>
+    </Response>
+</MetaData>

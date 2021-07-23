@@ -1,0 +1,57 @@
+<MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>03</FunctionCode>
+        <FunctionalReferenceID>bfe04d9f9b8f44299e480ac4f7ddcf0f</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20210714105526Z</DateTimeString>
+        </IssueDateTime>
+        <Error>
+            <ValidationCode>CDS12145</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>70A</DocumentSectionCode>
+                <TagID>166</TagID>
+            </Pointer>
+        </Error>
+        <Error>
+            <ValidationCode>CDS12145</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>03A</DocumentSectionCode>
+            </Pointer>
+        </Error>
+        <Declaration>
+            <FunctionalReferenceID>TT_IM47a_v1.4_1407_01</FunctionalReferenceID>
+            <ID>21GB7PUU3K1P2IMUR1</ID>
+            <RejectionDateTime>
+                <DateTimeString formatCode="304">20210714105526Z</DateTimeString>
+            </RejectionDateTime>
+            <VersionID>1</VersionID>
+        </Declaration>
+    </Response>
+</MetaData>

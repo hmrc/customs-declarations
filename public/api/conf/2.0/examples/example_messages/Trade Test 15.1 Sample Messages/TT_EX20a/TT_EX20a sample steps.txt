@@ -1,0 +1,14 @@
+Sample steps
+************
+
+Step-1: Submit a Type D declaration in CDS with DUCR and MUCR.
+
+Step-2: Submit EAA with lower-level DUCR only.
+
+Step-3: Submit EAL-1 with lower-level DUCR only.
+
+Step-4: Submit CST with MUCR
+
+Step-5: Submit EAL-2 with top-level MUCR
+
+Step-6: Submit EDL with top-level MUCR

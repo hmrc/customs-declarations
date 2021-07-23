@@ -1,0 +1,11 @@
+<n1:InventoryLinkingImportsDeclarationStatusNotification xmlns:n1="http://gov.uk/customs/inventoryLinkingImport/v1">
+    <n1:declarationMethod>2</n1:declarationMethod>
+    <n1:dateOfEntry>2021-07-13T14:02:06.000Z</n1:dateOfEntry>
+    <n1:entryNumber>21GB7OLI88MFDRCZR0</n1:entryNumber>
+    <n1:entryVersionNumber>2</n1:entryVersionNumber>
+    <n1:goodsArrivalDeclaration>Y</n1:goodsArrivalDeclaration>
+    <n1:ics>14</n1:ics>
+    <n1:inventoryConsignmentReference>GB/1234-:3333HB</n1:inventoryConsignmentReference>
+    <n1:roe>0H</n1:roe>
+    <n1:totalPackages>50</n1:totalPackages>
+</n1:InventoryLinkingImportsDeclarationStatusNotification>

@@ -1,0 +1,18 @@
+Sample Steps
+************
+
+Step 1 – A type D Declaration with DUCR1 and MUCR 1 (Submitter id - 1).
+
+Step 2 – CST MUCR 1 (Submitter id - 1).
+
+Step 3 – EAL1 with MUCR 1 (Submitter id - 1).
+
+Step 4 – A type D Declaration with DUCR2 and MUCR 2 (Submitter id - 2).
+
+Step 5 – EAC with MUCR1 and MUCR 2 as Parent (Submitter id - 1).
+
+Step 6 – CST with MUCR 2 (Submitter id - 1).
+
+Step 7 – EAL2 with MUCR 2 (Submitter id - 1).
+
+Step 8 – EDL with MUCR 2 (Submitter id - 1).

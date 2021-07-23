@@ -1,0 +1,31 @@
+	<MetaData>
+		<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+		<WCOTypeName>RES</WCOTypeName>
+		<ResponsibleCountryCode/>
+		<ResponsibleAgencyName/>
+		<AgencyAssignedCustomizationCode/>
+		<AgencyAssignedCustomizationVersionCode/>
+		<Response>
+			<FunctionCode>16</FunctionCode>
+			<FunctionalReferenceID>c7dd8d27a8df4222834c5cf776853425</FunctionalReferenceID>
+			<IssueDateTime>
+				<DateTimeString formatCode="304">20210316160940Z</DateTimeString>
+			</IssueDateTime>
+			<AdditionalInformation>
+				<StatementCode/>
+				<StatementDescription>GB000290</StatementDescription>
+				<StatementTypeCode>CEX</StatementTypeCode>
+			</AdditionalInformation>
+			<Status>
+				<EffectiveDateTime>
+					<DateTimeString formatCode="304">20210316000000Z</DateTimeString>
+				</EffectiveDateTime>
+				<NameCode>A1</NameCode>
+			</Status>
+			<Declaration>
+				<FunctionalReferenceID>EX_3.6_TC02B_1603PW11</FunctionalReferenceID>
+				<ID>21GB2YONYFZON4GPA5</ID>
+				<VersionID>2</VersionID>
+			</Declaration>
+		</Response>
+	</MetaData>

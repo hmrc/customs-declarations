@@ -1,0 +1,9 @@
+TT_EX_07a
+
+Type K declaration (C21E Data Set), DUCR and MUCR declared
+Direct Representation
+
+Steps for Execution:
+Step 1 - Submit Declaration with 1x MUCR and 1xDUCR via CDS
+Step 2 - Submit CST with MUCR 
+Step 3 - Submit EAL with MUCR movement message 

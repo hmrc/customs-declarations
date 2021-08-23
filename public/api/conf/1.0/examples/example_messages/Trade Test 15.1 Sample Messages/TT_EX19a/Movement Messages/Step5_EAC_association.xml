@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<inv:inventoryLinkingConsolidationRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-<inv:messageCode>EAC</inv:messageCode>			
-			<inv:masterUCR>GB/FCP1-CDSDM1T16M2</inv:masterUCR>
-			<inv:ucrBlock>
-				<inv:ucr>GB/FCP1-CDSDM1T15M1</inv:ucr>
-				<inv:ucrType>M</inv:ucrType>
-			</inv:ucrBlock>
-</inv:inventoryLinkingConsolidationRequest>

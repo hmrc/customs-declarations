@@ -17,15 +17,15 @@
 package unit.services
 
 import java.util.UUID
-
 import org.joda.time.DateTime
-import org.mockito.ArgumentMatchers.{eq => meq, _}
+import org.mockito.Matchers.{eq => meq, _}
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.NOT_FOUND
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
@@ -44,7 +44,7 @@ import util.TestData.{correlationId, _}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+class DeclarationStatusServiceSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach with Matchers{
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext

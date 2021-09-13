@@ -2,20 +2,20 @@ import sbt._
 
 object AppDependencies {
 
-  private val scalatestplusVersion = "4.0.3"
-  private val mockitoVersion = "3.11.2"
+  private val scalatestplusVersion = "5.0.0"
+  private val mockitoVersion = "1.10.19"
   private val wireMockVersion = "2.28.1"
-  private val customsApiCommonVersion = "1.56.0"
+  private val customsApiCommonVersion = "1.57.0"
   private val playJsonJodaVersion = "2.9.2"
-  private val simpleReactiveMongoVersion = "8.0.0-play-27"
-  private val reactiveMongoTestVersion = "5.0.0-play-27"
+  private val simpleReactiveMongoVersion = "8.0.0-play-28"
+  private val reactiveMongoTestVersion = "5.0.0-play-28"
   private val testScope = "test,it"
 
   val scalaTestPlusPlay = "org.scalatestplus.play" %% "scalatestplus-play" % scalatestplusVersion % testScope
 
   val wireMock = "com.github.tomakehurst" % "wiremock-jre8" % wireMockVersion % testScope
 
-  val mockito = "org.mockito" % "mockito-core" % mockitoVersion % testScope
+  val mockito = "org.mockito" % "mockito-all" % mockitoVersion % testScope
 
   val customsApiCommon = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion withSources()
 

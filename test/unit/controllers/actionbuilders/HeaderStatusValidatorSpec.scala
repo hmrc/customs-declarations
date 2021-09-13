@@ -16,6 +16,7 @@
 
 package unit.controllers.actionbuilders
 
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
@@ -30,7 +31,7 @@ import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ValidHeadersV2, _}
 import util.{TestData, UnitSpec}
 
-class HeaderStatusValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
+class HeaderStatusValidatorSpec extends WordSpec with TableDrivenPropertyChecks with MockitoSugar with Matchers{
 
   private val ErrorInvalidBadgeIdentifierHeader: ErrorResponse = ErrorResponse(BAD_REQUEST, BadRequestCode, s"X-Badge-Identifier header is missing or invalid")
 

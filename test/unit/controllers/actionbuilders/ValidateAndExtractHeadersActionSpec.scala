@@ -16,22 +16,25 @@
 
 package unit.controllers.actionbuilders
 
-import org.mockito.ArgumentMatchers.any
+
+import org.mockito.Matchers.any
 import org.mockito.Mockito.when
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{HeaderWithContentTypeValidator, ValidateAndExtractHeadersAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ValidatedHeadersRequest}
 import util.TestData._
-import util.{RequestHeaders, UnitSpec}
+import util.RequestHeaders
 
 import scala.concurrent.ExecutionContext
 
-class ValidateAndExtractHeadersActionSpec extends UnitSpec with MockitoSugar with TableDrivenPropertyChecks {
+class ValidateAndExtractHeadersActionSpec extends WordSpec with MockitoSugar with TableDrivenPropertyChecks with Matchers {
 
   trait SetUp {
     implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext

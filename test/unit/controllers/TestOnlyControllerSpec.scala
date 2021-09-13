@@ -17,6 +17,7 @@
 package unit.controllers
 
 import org.mockito.Mockito._
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers}
@@ -24,8 +25,8 @@ import uk.gov.hmrc.customs.declaration.controllers.TestOnlyController
 import uk.gov.hmrc.customs.declaration.services.TestOnlyService
 import util.UnitSpec
 
-class TestOnlyControllerSpec extends UnitSpec
-  with MockitoSugar {
+class TestOnlyControllerSpec extends WordSpec
+  with MockitoSugar with Matchers{
 
   private val mockTestOnlyService = mock[TestOnlyService]
 

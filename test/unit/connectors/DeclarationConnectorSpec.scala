@@ -17,18 +17,20 @@
 package unit.connectors
 
 import java.util.UUID
-
 import akka.actor.ActorSystem
 import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.{eq => ameq, _}
+import org.mockito.Matchers.{eq => ameq, _}
+
+import scala.concurrent.Await
 import org.mockito.Mockito._
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames
 import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
@@ -44,7 +46,7 @@ import util.TestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
+class DeclarationConnectorSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
 
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]
@@ -100,6 +102,7 @@ class DeclarationConnectorSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
   private val correlationId = UUID.randomUUID()
   private val successfulHttpResponse = HttpResponse(200, "")
+
 
   "MdgWcoDeclarationConnector" can {
 

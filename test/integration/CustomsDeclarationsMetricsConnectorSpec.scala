@@ -16,26 +16,26 @@
 
 package integration
 
-import org.scalatest.BeforeAndAfterAll
+import org.scalatest.{BeforeAndAfterAll, Matchers}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsXml
-import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
+import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._
 import util.CustomsDeclarationsMetricsTestData._
 import util.ExternalServicesConfig.{Host, Port}
-import util.VerifyLogging.{verifyDeclarationsLoggerError}
+import util.VerifyLogging.verifyDeclarationsLoggerError
 import util.externalservices.{AuditService, CustomsDeclarationsMetricsService}
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 
 class CustomsDeclarationsMetricsConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
-with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService {
+with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService with Matchers{
 
   private lazy val connector = app.injector.instanceOf[CustomsDeclarationsMetricsConnector]
 

@@ -16,11 +16,12 @@
 
 package unit.model.filetransmission
 
+import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.Json
 import util.UnitSpec
 import util.FileTransmissionTestData._
 
-class FileTransmissionModelSpec extends UnitSpec {
+class FileTransmissionModelSpec extends WordSpec with Matchers {
 
   "file transmission model" should {
     "serialise to Json" in {

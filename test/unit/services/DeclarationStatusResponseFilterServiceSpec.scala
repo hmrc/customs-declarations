@@ -17,6 +17,7 @@
 package unit.services
 
 import org.joda.time.{DateTime, DateTimeZone}
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseFilterService}
@@ -26,7 +27,7 @@ import util.TestData.{date, dateString}
 
 import scala.xml.NodeSeq
 
-class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
+class DeclarationStatusResponseFilterServiceSpec extends WordSpec with MockitoSugar with Matchers {
 
   private val acceptanceDateVal = DateTime.now(DateTimeZone.UTC)
 

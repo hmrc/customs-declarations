@@ -17,6 +17,7 @@
 package unit.xml
 
 import org.joda.time.{DateTime, DateTimeZone}
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import util.UnitSpec
@@ -25,7 +26,7 @@ import util.TestData._
 
 import scala.xml.NodeSeq
 
-class MdgPayloadDecoratorSpec extends UnitSpec with MockitoSugar {
+class MdgPayloadDecoratorSpec extends WordSpec with MockitoSugar with Matchers {
 
   private val xml: NodeSeq = <node1></node1>
 

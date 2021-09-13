@@ -17,14 +17,14 @@
 package unit.services.filetransmission
 
 import java.util.UUID
-
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.{any, eq => ameq}
+import org.mockito.Matchers.{any, eq => ameq}
 import org.mockito.Mockito._
-import org.scalatest.Assertion
+import org.scalatest.{Assertion, Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Reads
 import play.api.test.Helpers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.model.ConversationId
@@ -33,7 +33,6 @@ import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionF
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, FileReference}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
-import util.UnitSpec
 import unit.services.filetransmission.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData
@@ -55,7 +54,7 @@ case class ExampleFileTransmissionNotification(fileReference: FileReference,
                                                fileTransmissionStatus: ExampleFileTransmissionStatus,
                                                errorDetails: Option[String])
 
-class FileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
+class FileUploadNotificationServiceSpec extends WordSpec with MockitoSugar with Matchers{
 
   trait SetUp {
     private[FileUploadNotificationServiceSpec] implicit val ec = Helpers.stubControllerComponents().executionContext

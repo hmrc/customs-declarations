@@ -20,6 +20,7 @@ package unit.services
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.Mockito.when
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -31,7 +32,7 @@ import util.TestData.{badgeIdentifier, invalidBadgeIdentifier}
 
 import scala.xml.{Elem, NodeSeq}
 
-class DeclarationStatusResponseValidationServiceSpec extends UnitSpec with MockitoSugar {
+class DeclarationStatusResponseValidationServiceSpec extends WordSpec with MockitoSugar with Matchers {
 
   protected val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
   protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]

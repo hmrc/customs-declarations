@@ -16,6 +16,7 @@
 
 package unit.logging
 
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames._
 import play.api.mvc.Request
@@ -29,7 +30,7 @@ import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
 
-class LoggingHelperSpec extends UnitSpec with MockitoSugar {
+class LoggingHelperSpec extends WordSpec with MockitoSugar with Matchers {
 
   private def expectedMessage(message: String, maybeAuthorised: String = "") = s"[conversationId=${conversationId.toString}]" +
     "[clientId=some-client-id]" +

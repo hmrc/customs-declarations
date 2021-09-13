@@ -17,8 +17,7 @@
 package unit.controllers.upscan
 
 import java.util.UUID
-
-import org.mockito.ArgumentMatchers.{any, eq => ameq}
+import org.mockito.Matchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.concurrent.Eventually
@@ -99,9 +98,9 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       status(result) mustBe NO_CONTENT
       contentAsString(result) mustBe empty
       eventually {
-        verifyNoInteractions(mockNotificationService)
+        verifyZeroInteractions(mockNotificationService)
         verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
-        verifyNoInteractions(mockErrorToXmlNotification)
+        verifyZeroInteractions(mockErrorToXmlNotification)
       }
     }
   }
@@ -116,8 +115,8 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       contentAsString(result) mustBe empty
       eventually {
         verifyFailureNotificationSent(FailedCallbackBody)
-        verifyNoInteractions(mockBusinessService)
-        verifyNoInteractions(mockErrorToXmlNotification)
+        verifyZeroInteractions(mockBusinessService)
+        verifyZeroInteractions(mockErrorToXmlNotification)
       }
     }
 
@@ -130,8 +129,8 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       contentAsString(result) mustBe UpscanNotificationInternalServerErrorJson
       eventually {
         verifyFailureNotificationSent(FailedCallbackBody)
-        verifyNoInteractions(mockBusinessService)
-        verifyNoInteractions(mockErrorToXmlNotification)
+        verifyZeroInteractions(mockBusinessService)
+        verifyZeroInteractions(mockErrorToXmlNotification)
       }
     }
 
@@ -146,7 +145,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       eventually {
         verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
         verifyErrorNotificationSent()
-        verifyNoInteractions(mockToXmlNotification)
+        verifyZeroInteractions(mockToXmlNotification)
       }
     }
 
@@ -156,10 +155,10 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       status(result) mustBe BAD_REQUEST
       contentAsString(result) mustBe UpscanNotifyClientSubscriptionIdErrorJson
       eventually {
-        verifyNoInteractions(mockNotificationService)
-        verifyNoInteractions(mockBusinessService)
-        verifyNoInteractions(mockErrorToXmlNotification)
-        verifyNoInteractions(mockToXmlNotification)
+        verifyZeroInteractions(mockNotificationService)
+        verifyZeroInteractions(mockBusinessService)
+        verifyZeroInteractions(mockErrorToXmlNotification)
+        verifyZeroInteractions(mockToXmlNotification)
       }
     }
 
@@ -170,10 +169,10 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       status(result) mustBe BAD_REQUEST
       contentAsString(result) mustBe UpscanNotificationBadRequestJson
       eventually {
-        verifyNoInteractions(mockNotificationService)
-        verifyNoInteractions(mockBusinessService)
-        verifyNoInteractions(mockErrorToXmlNotification)
-        verifyNoInteractions(mockToXmlNotification)
+        verifyZeroInteractions(mockNotificationService)
+        verifyZeroInteractions(mockBusinessService)
+        verifyZeroInteractions(mockErrorToXmlNotification)
+        verifyZeroInteractions(mockToXmlNotification)
       }
     }
 
@@ -183,10 +182,10 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
     status(result) mustBe BAD_REQUEST
 
     contentAsString(result) mustBe UpscanNotificationBadRequestJsonPayload
-    verifyNoInteractions(mockNotificationService)
-    verifyNoInteractions(mockBusinessService)
-    verifyNoInteractions(mockErrorToXmlNotification)
-    verifyNoInteractions(mockToXmlNotification)
+    verifyZeroInteractions(mockNotificationService)
+    verifyZeroInteractions(mockBusinessService)
+    verifyZeroInteractions(mockErrorToXmlNotification)
+    verifyZeroInteractions(mockToXmlNotification)
   }
 
 }

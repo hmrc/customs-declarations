@@ -18,11 +18,12 @@ package unit.services.upscan
 
 import java.net.URL
 import java.util.UUID
-
-import org.mockito.ArgumentMatchers.{any, eq => ameq}
+import org.mockito.Matchers.{any, eq => ameq}
 import org.mockito.Mockito._
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -38,7 +39,7 @@ import util.TestData._
 
 import scala.concurrent.Future
 
-class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with MockitoSugar {
+class FileUploadUpscanNotificationBusinessServiceSpec extends WordSpec with MockitoSugar with Matchers{
 
   private val outboundUrl = new URL("http://remotehost/outbound-bucket/123")
   private val uploadDetails = UploadedDetails("test.pdf", "application/pdf", InitiateDate, "1a2b3c4d5e")
@@ -104,7 +105,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyNoInteractions(mockConnector)
+      verifyZeroInteractions(mockConnector)
     }
 
     "return failed future when file reference not found in returned metadata" in new SetUp {
@@ -118,7 +119,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyNoInteractions(mockConnector)
+      verifyZeroInteractions(mockConnector)
     }
 
     "propagate exception encountered in repo" in new SetUp {
@@ -132,7 +133,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyNoInteractions(mockConnector)
+      verifyZeroInteractions(mockConnector)
     }
 
     "propagate exception encountered in connector" in new SetUp {

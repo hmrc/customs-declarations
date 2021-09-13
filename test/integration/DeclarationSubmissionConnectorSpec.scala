@@ -17,10 +17,9 @@
 package integration
 
 import java.util.UUID
-
 import org.joda.time.DateTime
 import org.mockito.Mockito._
-import org.scalatest.BeforeAndAfterAll
+import org.scalatest.{BeforeAndAfterAll, Matchers}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -38,6 +37,7 @@ import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
+  with Matchers
   with GuiceOneAppPerSuite
   with MockitoSugar
   with BeforeAndAfterAll

@@ -16,6 +16,7 @@
 
 package unit.logging
 
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
@@ -27,11 +28,11 @@ import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
-import util.UnitSpec
 
-class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
+class DeclarationsLoggerSpec extends WordSpec with MockitoSugar with Matchers{
 
   trait SetUp {
+    println("FAILED PASSED WHERE WE THINK")
     val mockCdsLogger: CdsLogger = mock[CdsLogger]
     val logger = new DeclarationsLogger(mockCdsLogger)
     implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = ApiVersionRequest(conversationId, EventStart, VersionOne, FakeRequest()
@@ -48,9 +49,8 @@ class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
         .withByNameParam("[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d][clientId=SOME_X_CLIENT_ID][requestedApiVersion=1.0][authorisedAs=Csp(Some(ZZ123456789000), Some(BADGEID123))] msg")
         .verify()
     }
-    "debug(s: => String, e: => Throwable)" in new SetUp {
+    "debug(s: => String e: => Throwable)" in new SetUp {
       logger.debug("msg", emulatedServiceFailure)
-
       PassByNameVerifier(mockCdsLogger, "debug")
         .withByNameParam("[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d][clientId=SOME_X_CLIENT_ID][requestedApiVersion=1.0][authorisedAs=Csp(Some(ZZ123456789000), Some(BADGEID123))] msg")
         .withByNameParam(emulatedServiceFailure)

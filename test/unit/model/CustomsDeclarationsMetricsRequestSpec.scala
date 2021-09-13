@@ -16,6 +16,7 @@
 
 package unit.model
 
+import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest._
@@ -23,7 +24,7 @@ import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData._
 import util.TestData.conversationId
 
-class CustomsDeclarationsMetricsRequestSpec extends UnitSpec {
+class CustomsDeclarationsMetricsRequestSpec extends WordSpec with Matchers {
 
 
   private val expectedJson: JsValue = Json.parse("""

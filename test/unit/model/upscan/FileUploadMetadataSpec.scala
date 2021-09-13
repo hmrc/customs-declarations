@@ -16,12 +16,13 @@
 
 package unit.model.upscan
 
+import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.{JsSuccess, Json}
 import uk.gov.hmrc.customs.declaration.model.upscan.FileUploadMetadata
 import util.UnitSpec
 import util.TestData.FileMetadataWithFileOne
 
-class FileUploadMetadataSpec extends UnitSpec {
+class FileUploadMetadataSpec extends WordSpec with Matchers {
   private val jsonString = """{
                              |  "declarationId": "1",
                              |  "eori": "123",

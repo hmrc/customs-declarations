@@ -16,11 +16,12 @@
 
 package integration
 
-import java.net.URL
+import org.mockito.Matchers.any
 
-import org.mockito.ArgumentMatchers._
+import java.net.URL
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsXml
@@ -37,11 +38,13 @@ import uk.gov.hmrc.mongo.{MongoConnector, MongoSpecSupport}
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.{FileMetadataWithFileOne, _}
-import util.UnitSpec
+import org.scalatest.Matchers.{an, be, convertToAnyShouldWrapper, thrownBy}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 import scala.concurrent.ExecutionContext
 
-class FileUploadMetadataRepoSpec extends UnitSpec
+class FileUploadMetadataRepoSpec extends WordSpec
+  with Matchers
   with BeforeAndAfterAll
   with BeforeAndAfterEach
   with MockitoSugar
@@ -97,7 +100,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
       saveResult shouldBe true
       collectionSize(repository) shouldBe 1
 
-      val findResult = await(repository.find(selector(BatchFileOne.reference.toString)).head)
+      val findResult = await(repository.find(selector(BatchFileOne.reference.toString))).head
 
       findResult shouldBe FileMetadataWithFileOne
       logVerifier(mockLogger, "debug", "saving fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00.000Z,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
@@ -108,11 +111,11 @@ class FileUploadMetadataRepoSpec extends UnitSpec
       await(repository.create(FileMetadataWithFileTwo))
       collectionSize(repository) shouldBe 2
 
-      val findResult1 = await(repository.find(selector(BatchFileOne.reference.toString)).head)
+      val findResult1 = await(repository.find(selector(BatchFileOne.reference.toString))).head
 
       findResult1 shouldBe FileMetadataWithFileOne
 
-      val findResult2 = await(repository.find(selector(BatchFileTwo.reference.toString)).head)
+      val findResult2 = await(repository.find(selector(BatchFileTwo.reference.toString))).head
 
       findResult2 shouldBe FileMetadataWithFileTwo
     }

@@ -17,12 +17,12 @@
 package unit.services
 
 import java.io.FileNotFoundException
-
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import play.api.test.Helpers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import util.UnitSpec
 import util.TestXMLData
@@ -30,7 +30,7 @@ import util.TestXMLData.{InvalidSubmissionXML, InvalidSubmissionXMLWith2Errors, 
 
 import scala.xml.{Node, SAXException}
 
-class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+class XmlValidationServiceSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach  with Matchers{
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   protected val MockConfiguration = mock[Configuration]

@@ -17,14 +17,14 @@
 package unit.connectors
 
 import java.util.UUID
-
-import org.mockito.ArgumentMatchers.{eq => ameq, _}
+import org.mockito.Matchers.{eq => ameq, _}
 import org.mockito.Mockito._
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc.AnyContentAsJson
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -41,7 +41,7 @@ import util.TestData.{fileUploadConfig, nrsConfigEnabled}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class NrsConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with Eventually {
+class NrsConnectorSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers{
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val mockWsPost = mock[HttpClient]

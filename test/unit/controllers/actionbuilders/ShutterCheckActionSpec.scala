@@ -16,11 +16,13 @@
 
 package unit.controllers.actionbuilders
 
-import controllers.Assets.ACCEPT
+
 import org.mockito.Mockito.when
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.SERVICE_UNAVAILABLE
 import play.api.mvc.Result
+import play.api.test.Helpers.{ACCEPT, await, defaultAwaitTimeout}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorAcceptHeaderInvalid
@@ -36,7 +38,7 @@ import util.UnitSpec
 
 import scala.concurrent.ExecutionContext
 
-class ShutterCheckActionSpec extends UnitSpec with MockitoSugar {
+class ShutterCheckActionSpec extends WordSpec with MockitoSugar with Matchers{
 
   trait SetUp {
     protected implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext

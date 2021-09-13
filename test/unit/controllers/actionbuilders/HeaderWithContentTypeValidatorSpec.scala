@@ -16,6 +16,7 @@
 
 package unit.controllers.actionbuilders
 
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames._
@@ -31,7 +32,7 @@ import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ValidHeadersV2, _}
 import util.{ApiSubscriptionFieldsTestData, TestData, UnitSpec}
 
-class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
+class HeaderWithContentTypeValidatorSpec extends WordSpec with TableDrivenPropertyChecks with MockitoSugar with Matchers {
 
   private val extractedHeadersWithBadgeIdentifierV1 = ExtractedHeadersImpl(ApiSubscriptionFieldsTestData.clientId)
 

@@ -16,11 +16,11 @@
 
 package unit.connectors
 
+import org.scalatest.{Matchers, WordSpec}
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsPath
-import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData
 
-class ApiSubscriptionFieldsPathSpec extends UnitSpec with ApiSubscriptionFieldsTestData {
+class ApiSubscriptionFieldsPathSpec extends WordSpec with ApiSubscriptionFieldsTestData with Matchers{
 
   "ApiSubscriptionFieldsPath" should {
     "construct path" in {

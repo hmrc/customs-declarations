@@ -20,11 +20,12 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.{eq => ameq, _}
+import org.mockito.ArgumentMatchers.{eq => ameq, _}
 
 import scala.concurrent.Await
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames
@@ -46,7 +47,7 @@ import util.TestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclarationConnectorSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
+class DeclarationConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
 
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]

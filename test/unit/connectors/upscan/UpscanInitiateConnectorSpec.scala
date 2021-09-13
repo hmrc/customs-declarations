@@ -16,9 +16,10 @@
 
 package unit.connectors.upscan
 
-import org.mockito.Matchers.{eq => ameq, _}
+import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Writes
@@ -37,7 +38,7 @@ import util.TestData.{EmulatedServiceFailure, ValidatedFileUploadPayloadRequestF
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpscanInitiateConnectorSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
+class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
 
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]

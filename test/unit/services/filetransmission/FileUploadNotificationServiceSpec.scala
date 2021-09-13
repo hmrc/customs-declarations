@@ -18,9 +18,10 @@ package unit.services.filetransmission
 
 import java.util.UUID
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.{any, eq => ameq}
+import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
-import org.scalatest.{Assertion, Matchers, WordSpec}
+import org.scalatest.{Assertion, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Reads
 import play.api.test.Helpers
@@ -54,7 +55,7 @@ case class ExampleFileTransmissionNotification(fileReference: FileReference,
                                                fileTransmissionStatus: ExampleFileTransmissionStatus,
                                                errorDetails: Option[String])
 
-class FileUploadNotificationServiceSpec extends WordSpec with MockitoSugar with Matchers{
+class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   trait SetUp {
     private[FileUploadNotificationServiceSpec] implicit val ec = Helpers.stubControllerComponents().executionContext

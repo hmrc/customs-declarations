@@ -16,12 +16,11 @@
 
 package integration
 
-import org.mockito.Matchers.any
-
+import org.mockito.ArgumentMatchers.any
 import java.net.URL
 import org.mockito.Mockito._
-import org.scalatest.Matchers.convertToAnyShouldWrapper
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsXml
@@ -38,12 +37,12 @@ import uk.gov.hmrc.mongo.{MongoConnector, MongoSpecSupport}
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.{FileMetadataWithFileOne, _}
-import org.scalatest.Matchers.{an, be, convertToAnyShouldWrapper, thrownBy}
+import org.scalatest.matchers.should.Matchers.{an, be, convertToAnyShouldWrapper, thrownBy}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 import scala.concurrent.ExecutionContext
 
-class FileUploadMetadataRepoSpec extends WordSpec
+class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   with Matchers
   with BeforeAndAfterAll
   with BeforeAndAfterEach

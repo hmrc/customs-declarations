@@ -18,9 +18,10 @@ package unit.services
 
 import java.util.UUID
 import org.joda.time.DateTime
-import org.mockito.Matchers.{eq => meq, _}
+import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.NOT_FOUND
 import play.api.mvc.{AnyContentAsXml, Result}
@@ -36,7 +37,6 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, 
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData.{correlationId, _}
@@ -44,7 +44,7 @@ import util.TestData.{correlationId, _}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class DeclarationStatusServiceSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach with Matchers{
+class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Matchers{
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext

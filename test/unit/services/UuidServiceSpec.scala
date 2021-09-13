@@ -16,11 +16,11 @@
 
 package unit.services
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import uk.gov.hmrc.customs.declaration.services.UuidService
-import util.UnitSpec
 
-class UuidServiceSpec extends WordSpec with Matchers {
+class UuidServiceSpec extends AnyWordSpecLike with Matchers {
 
   private val uuidService = new UuidService
 

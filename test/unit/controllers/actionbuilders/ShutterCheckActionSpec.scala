@@ -18,7 +18,8 @@ package unit.controllers.actionbuilders
 
 
 import org.mockito.Mockito.when
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.SERVICE_UNAVAILABLE
 import play.api.mvc.Result
@@ -34,11 +35,10 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ACCEPT_HEADER_INVALID, ValidHeadersV1, X_CONVERSATION_ID_NAME}
 import util.TestData._
-import util.UnitSpec
 
 import scala.concurrent.ExecutionContext
 
-class ShutterCheckActionSpec extends WordSpec with MockitoSugar with Matchers{
+class ShutterCheckActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   trait SetUp {
     protected implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext

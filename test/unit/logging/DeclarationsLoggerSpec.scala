@@ -16,7 +16,8 @@
 
 package unit.logging
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
@@ -29,7 +30,7 @@ import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
-class DeclarationsLoggerSpec extends WordSpec with MockitoSugar with Matchers{
+class DeclarationsLoggerSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   trait SetUp {
     println("FAILED PASSED WHERE WE THINK")

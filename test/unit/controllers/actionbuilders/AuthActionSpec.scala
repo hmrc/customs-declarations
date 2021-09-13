@@ -16,9 +16,10 @@
 
 package unit.controllers.actionbuilders
 
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
@@ -43,7 +44,7 @@ import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, UnitSpec}
 import scala.Console.in
 import scala.concurrent.ExecutionContext
 
-class AuthActionSpec extends WordSpec with MockitoSugar with Matchers{
+class AuthActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   private val errorResponseUnauthorisedGeneral =
     ErrorResponse(Status.UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")

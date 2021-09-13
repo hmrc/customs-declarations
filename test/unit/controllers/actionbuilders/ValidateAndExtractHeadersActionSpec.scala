@@ -17,9 +17,10 @@
 package unit.controllers.actionbuilders
 
 
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
@@ -34,7 +35,7 @@ import util.RequestHeaders
 
 import scala.concurrent.ExecutionContext
 
-class ValidateAndExtractHeadersActionSpec extends WordSpec with MockitoSugar with TableDrivenPropertyChecks with Matchers {
+class ValidateAndExtractHeadersActionSpec extends AnyWordSpecLike with MockitoSugar with TableDrivenPropertyChecks with Matchers {
 
   trait SetUp {
     implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext

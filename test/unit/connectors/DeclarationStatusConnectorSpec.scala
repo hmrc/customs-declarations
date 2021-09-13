@@ -17,9 +17,10 @@
 package unit.connectors
 
 import akka.actor.ActorSystem
-import org.mockito.Matchers.{eq => ameq, _}
+import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContent, Request}
@@ -36,11 +37,11 @@ import uk.gov.hmrc.http.HttpClient
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData._
-import util.{ApiSubscriptionFieldsTestData, StatusTestXMLData, TestData, UnitSpec}
+import util.{ApiSubscriptionFieldsTestData, StatusTestXMLData, TestData}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclarationStatusConnectorSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
+class DeclarationStatusConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val mockWsPost = mock[HttpClient]

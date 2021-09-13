@@ -16,15 +16,15 @@
 
 package unit.repo
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import reactivemongo.api.commands.{UpdateWriteResult, WriteConcernError, WriteError}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepoErrorHandler
-import util.UnitSpec
 import util.TestData.TestValidatedHeadersRequest
 
-class FileUploadMetadataRepositoryErrorHandlerSpec extends WordSpec with MockitoSugar with Matchers {
+class FileUploadMetadataRepositoryErrorHandlerSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
   private val mockLogger = mock[DeclarationsLogger]
   private val errorHandler = new FileUploadMetadataRepoErrorHandler(mockLogger)

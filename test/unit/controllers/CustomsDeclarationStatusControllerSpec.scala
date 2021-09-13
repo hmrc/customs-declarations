@@ -19,10 +19,11 @@ package unit.controllers
 import java.util.UUID
 import org.joda.time.DateTime
 import play.api.test.Helpers.{redirectLocation, status, _}
-import org.mockito.Matchers.{eq => meq, _}
+import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec, WordSpecLike}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -52,7 +53,7 @@ import util.{AuthConnectorNrsDisabledStubbing, StatusTestXMLData}
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class CustomsDeclarationStatusControllerSpec extends WordSpecLike with Matchers {
+class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matchers {
 
   trait SetUp extends AuthConnectorNrsDisabledStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]

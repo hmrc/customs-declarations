@@ -16,7 +16,8 @@
 
 package unit.controllers.actionbuilders
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
@@ -29,9 +30,9 @@ import uk.gov.hmrc.customs.declaration.model.VersionOne
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders}
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ValidHeadersV2, _}
-import util.{TestData, UnitSpec}
+import util.{TestData}
 
-class HeaderStatusValidatorSpec extends WordSpec with TableDrivenPropertyChecks with MockitoSugar with Matchers{
+class HeaderStatusValidatorSpec extends AnyWordSpecLike with TableDrivenPropertyChecks with MockitoSugar with Matchers{
 
   private val ErrorInvalidBadgeIdentifierHeader: ErrorResponse = ErrorResponse(BAD_REQUEST, BadRequestCode, s"X-Badge-Identifier header is missing or invalid")
 

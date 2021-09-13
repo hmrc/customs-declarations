@@ -17,9 +17,10 @@
 package unit.connectors
 
 import java.util.UUID
-import org.mockito.Matchers.{eq => ameq, _}
+import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{Json, Writes}
@@ -33,7 +34,6 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.HttpClient
-import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData
 import util.TestData.{fileUploadConfig, nrsConfigEnabled}
@@ -41,7 +41,7 @@ import util.TestData.{fileUploadConfig, nrsConfigEnabled}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class NrsConnectorSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers{
+class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers{
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val mockWsPost = mock[HttpClient]

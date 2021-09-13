@@ -17,9 +17,10 @@
 package unit.services
 
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsValue, Json}
@@ -31,7 +32,6 @@ import uk.gov.hmrc.customs.declaration.services.{AuditingService, DeclarationsCo
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, UpstreamErrorResponse}
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
-import util.UnitSpec
 import unit.logging.StubDeclarationsLogger
 import util.TestData.{TestCspValidatedPayloadRequest, nrsConfigEnabled, nrsPayload}
 
@@ -39,7 +39,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
-class AuditingServiceSpec extends WordSpec with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers{
+class AuditingServiceSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers{
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 5 seconds)

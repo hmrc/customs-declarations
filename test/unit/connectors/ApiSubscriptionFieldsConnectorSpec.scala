@@ -16,12 +16,13 @@
 
 package unit.connectors
 
-import org.mockito.Matchers.{eq => ameq, _}
-import org.mockito.Matchers.{any, anyString}
+import org.mockito.ArgumentMatchers.{eq => ameq, _}
+import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.Mockito._
 import org.mockito.internal.matchers.Matches
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
-import org.scalatest.Matchers.{convertToAnyShouldWrapper, intercept}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers.{convertToAnyShouldWrapper, intercept}
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers
@@ -32,14 +33,13 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.http.HttpClient
-import util.UnitSpec
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
 import util.ExternalServicesConfig._
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ApiSubscriptionFieldsConnectorSpec extends WordSpec
+class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
   with Matchers
   with MockitoSugar
   with BeforeAndAfterEach

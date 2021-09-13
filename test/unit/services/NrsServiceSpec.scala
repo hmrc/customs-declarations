@@ -17,9 +17,10 @@
 package unit.services
 
 import org.joda.time.DateTime
-import org.mockito.Matchers.{eq => meq, _}
+import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.Helpers
@@ -31,12 +32,11 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, _}
 import uk.gov.hmrc.customs.declaration.services.{AuditingService, DateTimeService, NrsService}
 import uk.gov.hmrc.http._
-import util.UnitSpec
 import util.TestData.{TestCspValidatedPayloadRequest, _}
 
 import scala.concurrent.Future
 
-class NrsServiceSpec extends WordSpec with MockitoSugar with Matchers{
+class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val ec = Helpers.stubControllerComponents().executionContext
 

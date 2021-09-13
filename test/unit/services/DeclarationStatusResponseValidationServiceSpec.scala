@@ -20,19 +20,19 @@ package unit.services
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.Mockito.when
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.{BadgeIdentifier, DeclarationsConfig}
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseValidationService}
-import util.UnitSpec
 import util.StatusTestXMLData._
 import util.TestData.{badgeIdentifier, invalidBadgeIdentifier}
 
 import scala.xml.{Elem, NodeSeq}
 
-class DeclarationStatusResponseValidationServiceSpec extends WordSpec with MockitoSugar with Matchers {
+class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
   protected val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
   protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]

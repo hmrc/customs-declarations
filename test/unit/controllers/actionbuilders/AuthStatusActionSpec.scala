@@ -17,7 +17,8 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito.reset
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsXml
@@ -34,7 +35,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersStat
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, TestData}
 
-class AuthStatusActionSpec extends WordSpec with MockitoSugar with TableDrivenPropertyChecks with BeforeAndAfterEach with Matchers {
+class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableDrivenPropertyChecks with BeforeAndAfterEach with Matchers {
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private lazy val validatedHeadersRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest

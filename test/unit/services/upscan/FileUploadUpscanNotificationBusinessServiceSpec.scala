@@ -18,9 +18,10 @@ package unit.services.upscan
 
 import java.net.URL
 import java.util.UUID
-import org.mockito.Matchers.{any, eq => ameq}
+import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
@@ -33,13 +34,12 @@ import uk.gov.hmrc.customs.declaration.model.upscan._
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadUpscanNotificationBusinessService
-import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 
 import scala.concurrent.Future
 
-class FileUploadUpscanNotificationBusinessServiceSpec extends WordSpec with MockitoSugar with Matchers{
+class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   private val outboundUrl = new URL("http://remotehost/outbound-bucket/123")
   private val uploadDetails = UploadedDetails("test.pdf", "application/pdf", InitiateDate, "1a2b3c4d5e")

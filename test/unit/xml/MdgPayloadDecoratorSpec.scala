@@ -17,16 +17,16 @@
 package unit.xml
 
 import org.joda.time.{DateTime, DateTimeZone}
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
-import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
 
 import scala.xml.NodeSeq
 
-class MdgPayloadDecoratorSpec extends WordSpec with MockitoSugar with Matchers {
+class MdgPayloadDecoratorSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
   private val xml: NodeSeq = <node1></node1>
 

@@ -17,9 +17,10 @@
 package unit.controllers
 
 import org.mockito.{ArgumentCaptor, Mockito}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.mvc._
 import play.api.test.Helpers
 import play.api.test.Helpers.{UNAUTHORIZED, header, _}
@@ -44,7 +45,7 @@ import util.TestData._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class CustomsDeclarationControllerSpec extends WordSpec
+class CustomsDeclarationControllerSpec extends AnyWordSpecLike
   with Matchers with BeforeAndAfterEach{
 
   trait SetUp extends AuthConnectorStubbing {

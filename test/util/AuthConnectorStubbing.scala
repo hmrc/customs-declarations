@@ -17,9 +17,10 @@
 package util
 
 import org.joda.time.LocalDate
-import org.mockito.Matchers.{any, eq => ameq}
+import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
@@ -34,7 +35,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait AuthConnectorStubbing extends WordSpec with GuiceOneAppPerSuite with MockitoSugar with Matchers{
+trait AuthConnectorStubbing extends AnyWordSpecLike with GuiceOneAppPerSuite with MockitoSugar with Matchers{
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   private val apiScope = "write:customs-declaration"
   private val customsEnrolmentName = "HMRC-CUS-ORG"

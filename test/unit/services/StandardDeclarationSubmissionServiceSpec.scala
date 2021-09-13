@@ -19,9 +19,10 @@ package unit.services
 import java.util.UUID
 import akka.actor.ActorSystem
 import org.joda.time.DateTime
-import org.mockito.Matchers.{eq => meq, _}
+import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
@@ -43,7 +44,7 @@ import util.TestData._
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class StandardDeclarationSubmissionServiceSpec extends WordSpec with MockitoSugar with Matchers{
+class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()

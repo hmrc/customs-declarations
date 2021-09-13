@@ -17,7 +17,8 @@
 package unit.controllers.actionbuilders.upscan
 
 import org.mockito.Mockito.when
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
@@ -35,7 +36,7 @@ import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHea
 
 import scala.concurrent.ExecutionContext
 
-class FileUploadAuthActionSpec extends WordSpec with MockitoSugar with Matchers {
+class FileUploadAuthActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
   private val errorResponseBadgeIdentifierHeaderMissing =
     errorBadRequest(s"$XBadgeIdentifierHeaderName header is missing or invalid")

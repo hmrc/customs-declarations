@@ -17,7 +17,8 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito._
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.{FakeRequest, Helpers}
@@ -25,11 +26,10 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.ConversationId
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.customs.declaration.services.DateTimeService
-import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData.{conversationId, stubUniqueIdsService}
 
-class ConversationIdActionSpec extends WordSpec with MockitoSugar with Matchers {
+class ConversationIdActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
   trait SetUp {
 

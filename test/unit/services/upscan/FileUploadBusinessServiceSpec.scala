@@ -17,9 +17,10 @@
 package unit.services.upscan
 
 import java.util.UUID
-import org.mockito.Matchers.{any, eq => meq}
+import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{atLeastOnce, times, verify, when}
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.test.Helpers.{redirectLocation, status, _}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
@@ -40,12 +41,12 @@ import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsCo
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class FileUploadBusinessServiceSpec extends WordSpec with MockitoSugar with GuiceOneAppPerSuite with Matchers{
+class FileUploadBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar with GuiceOneAppPerSuite with Matchers{
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val headerCarrier: HeaderCarrier = HeaderCarrier()

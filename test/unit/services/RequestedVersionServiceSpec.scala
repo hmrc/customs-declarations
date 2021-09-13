@@ -16,13 +16,13 @@
 
 package unit.services
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.http.MimeTypes
 import uk.gov.hmrc.customs.declaration.model.RequestedVersion
 import uk.gov.hmrc.customs.declaration.services.RequestedVersionService
-import util.UnitSpec
 
-class RequestedVersionServiceSpec extends WordSpec with Matchers {
+class RequestedVersionServiceSpec extends AnyWordSpecLike with Matchers {
 
   private val requestedVersionService: RequestedVersionService = new RequestedVersionService()
 

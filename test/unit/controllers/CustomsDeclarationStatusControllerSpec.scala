@@ -53,7 +53,7 @@ import util.{AuthConnectorNrsDisabledStubbing, StatusTestXMLData}
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matchers {
+class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matchers with MockitoSugar{
 
   trait SetUp extends AuthConnectorNrsDisabledStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -139,8 +139,8 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
     "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidDeclarationStatusRequest.withHeaders(ValidDeclarationStatusRequest.headers.remove(X_CLIENT_ID_NAME)))
-      result shouldBe INTERNAL_SERVER_ERROR
+      val result: Future[Result] = submit(ValidDeclarationStatusRequest.withHeaders(ValidDeclarationStatusRequest.headers.remove(X_CLIENT_ID_NAME)))
+      status(result) shouldBe INTERNAL_SERVER_ERROR
       verifyZeroInteractions(mockStatusConnector)
     }
     "respond with status 400 for a request with an invalid X-Badge-Identifier" in new SetUp() {

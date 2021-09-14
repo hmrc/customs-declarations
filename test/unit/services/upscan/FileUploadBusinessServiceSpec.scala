@@ -17,10 +17,9 @@
 package unit.services.upscan
 
 import java.util.UUID
-import org.mockito.ArgumentMatchers.{any, eq => meq}
+import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{atLeastOnce, times, verify, when}
-import org.scalatest.{Matchers}
-import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.{Matchers, WordSpec}
 import play.api.test.Helpers.{redirectLocation, status, _}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
@@ -41,12 +40,11 @@ import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsCo
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class FileUploadBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar with GuiceOneAppPerSuite with Matchers{
+class FileUploadBusinessServiceSpec extends WordSpec with MockitoSugar with GuiceOneAppPerSuite with Matchers{
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
@@ -199,8 +197,10 @@ class FileUploadBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar wi
 
   "FileUploadBusinessService" should {
     "send payload to connector for non-CSP" in new SetUp() {
+      val successfulConnectorSend = Future.successful(upscanInitiateResponsePayload1)
+      val successfulConnectorSend2 = Future.successful(upscanInitiateResponsePayload2)
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(Future.successful(upscanInitiateResponsePayload1))
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend,successfulConnectorSend2)
 
       val result = send().right.get
 
@@ -209,8 +209,10 @@ class FileUploadBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar wi
     }
 
     "send payload to connector for non-CSP with optional fields" in new SetUp() {
+      val successfulConnectorSend = Future.successful(upscanInitiateResponsePayload1)
+      val successfulConnectorSend2 = Future.successful(upscanInitiateResponsePayload3)
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(Future.successful(upscanInitiateResponsePayload1))
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend,successfulConnectorSend2)
 
       val result = send().right.get
 
@@ -219,8 +221,10 @@ class FileUploadBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar wi
     }
 
     "send payload to connector for CSP" in new SetUp() {
+      val successfulConnectorSend = Future.successful(upscanInitiateResponsePayload1)
+      val successfulConnectorSend2 = Future.successful(upscanInitiateResponsePayload2)
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(Future.successful(upscanInitiateResponsePayload1))
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend,successfulConnectorSend2)
 
       val result = send(ValidatedFileUploadPayloadRequestForCspWithTwoFiles).right.get
 

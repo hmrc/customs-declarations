@@ -191,8 +191,8 @@ class CustomsDeclarationControllerSpec extends AnyWordSpecLike
     "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders(ValidSubmissionV2Request.headers.remove(X_CLIENT_ID_NAME)))
-      result shouldBe INTERNAL_SERVER_ERROR
+      val result: Future[Result] = submit(ValidSubmissionV2Request.withHeaders(ValidSubmissionV2Request.headers.remove(X_CLIENT_ID_NAME)))
+      status(result) shouldBe INTERNAL_SERVER_ERROR
       verifyZeroInteractions(mockBusinessService)
       verifyZeroInteractions(mockXmlValidationService)
     }

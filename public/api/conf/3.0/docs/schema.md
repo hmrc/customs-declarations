@@ -1,1 +1,0 @@
-Schema definitions for all the API endpoints request & response payloads can be found in the following [schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip) zip archive.

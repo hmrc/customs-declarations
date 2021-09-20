@@ -18,7 +18,7 @@ package unit.controllers.actionbuilders
 
 
 import org.mockito.Mockito.when
-import org.scalatest.{Matchers}
+import org.scalatest.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.SERVICE_UNAVAILABLE

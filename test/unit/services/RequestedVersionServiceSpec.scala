@@ -16,7 +16,7 @@
 
 package unit.services
 
-import org.scalatest.{Matchers}
+import org.scalatest.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.http.MimeTypes
 import uk.gov.hmrc.customs.declaration.model.RequestedVersion

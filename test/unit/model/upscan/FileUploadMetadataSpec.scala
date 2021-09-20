@@ -16,7 +16,7 @@
 
 package unit.model.upscan
 
-import org.scalatest.{Matchers}
+import org.scalatest.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.{JsSuccess, Json}
 import uk.gov.hmrc.customs.declaration.model.upscan.FileUploadMetadata

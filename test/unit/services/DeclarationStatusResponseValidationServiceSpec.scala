@@ -20,7 +20,7 @@ package unit.services
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.Mockito.when
-import org.scalatest.{Matchers}
+import org.scalatest.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse

@@ -16,7 +16,7 @@
 
 package unit.logging
 
-import org.scalatest.{Matchers}
+import org.scalatest.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsXml
@@ -33,7 +33,6 @@ import util.TestData._
 class DeclarationsLoggerSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   trait SetUp {
-    println("FAILED PASSED WHERE WE THINK")
     val mockCdsLogger: CdsLogger = mock[CdsLogger]
     val logger = new DeclarationsLogger(mockCdsLogger)
     implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = ApiVersionRequest(conversationId, EventStart, VersionOne, FakeRequest()

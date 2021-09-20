@@ -16,7 +16,7 @@
 
 package unit.services
 
-import org.scalatest.{Matchers}
+import org.scalatest.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import uk.gov.hmrc.customs.declaration.services.UuidService
 

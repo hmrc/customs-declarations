@@ -16,7 +16,7 @@
 
 package unit.connectors
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsPath
 import util.ApiSubscriptionFieldsTestData

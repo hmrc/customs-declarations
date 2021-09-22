@@ -16,7 +16,7 @@
 
 package unit.model
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest

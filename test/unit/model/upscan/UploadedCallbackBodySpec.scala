@@ -16,7 +16,7 @@
 
 package unit.model.upscan
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import util.UpscanNotifyTestData._
 import play.api.libs.json._

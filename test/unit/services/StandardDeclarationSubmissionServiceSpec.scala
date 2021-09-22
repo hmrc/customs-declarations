@@ -21,12 +21,13 @@ import akka.actor.ActorSystem
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationSubmissionConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -74,7 +75,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
     )
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
-      await(service.send(vpr, hc))
+      (service.send(vpr, hc)).futureValue
     }
 
     when(mockPayloadDecorator.wrap(meq(TestXmlPayload), meq[ApiSubscriptionFieldsResponse](apiSubscriptionFieldsResponse), any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)

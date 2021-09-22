@@ -20,12 +20,13 @@ import java.util.UUID
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.{Assertion, Matchers}
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Reads
 import play.api.test.Helpers
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.model.ConversationId
@@ -109,7 +110,7 @@ class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSuga
       when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
       when(mockFileUploadMetadataRepo.fetch(fileRefEq(FileReferenceOne))(any[HasConversationId])).thenReturn(Future.successful(Some(FileMetadataWithFileOne)))
 
-      await(service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)(toXml))
+      (service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)(toXml)).futureValue
 
       verifyNotificationConnectorCalledWithXml(expectedSuccessXml)
     }
@@ -118,7 +119,7 @@ class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSuga
       when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
       when(mockFileUploadMetadataRepo.fetch(fileRefEq(FileReferenceOne))(any[HasConversationId])).thenReturn(Future.successful(None))
 
-      await(service.sendMessage(failureCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId))
+      (service.sendMessage(failureCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)).futureValue
 
       verifyNotificationConnectorCalledWithXml(expectedFailureXml)
     }

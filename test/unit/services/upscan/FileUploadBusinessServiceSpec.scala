@@ -19,7 +19,9 @@ package unit.services.upscan
 import java.util.UUID
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{atLeastOnce, times, verify, when}
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.test.Helpers.{redirectLocation, status, _}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
@@ -27,7 +29,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsJson, Result}
 import play.api.test.Helpers
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -44,7 +46,7 @@ import util.TestData._
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class FileUploadBusinessServiceSpec extends WordSpec with MockitoSugar with GuiceOneAppPerSuite with Matchers{
+class FileUploadBusinessServiceSpec extends AnyWordSpec with MockitoSugar with GuiceOneAppPerSuite with Matchers{
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
@@ -185,7 +187,7 @@ class FileUploadBusinessServiceSpec extends WordSpec with MockitoSugar with Guic
       ("success_action_redirect", "https://success-redirect.com"), ("error_action_redirect", "https://error-redirect.com"))))
 
     protected def send(vupr: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = jsonRequest, hc: HeaderCarrier = headerCarrier): Either[Result, NodeSeq] = {
-      await(service.send(vupr, hc))
+      (service.send(vupr, hc)).futureValue
     }
 
     when(mockFileUploadConfig.fileUploadCallbackUrl).thenReturn("http://file-upload-upscan-callback.url")

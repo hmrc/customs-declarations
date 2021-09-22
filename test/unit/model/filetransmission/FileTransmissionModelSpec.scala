@@ -16,7 +16,7 @@
 
 package unit.model.filetransmission
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
 import util.FileTransmissionTestData._

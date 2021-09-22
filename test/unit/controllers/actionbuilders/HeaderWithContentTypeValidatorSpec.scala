@@ -16,6 +16,8 @@
 
 package unit.controllers.actionbuilders
 
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames._
@@ -29,9 +31,9 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ValidHeadersV2, _}
-import util.{ApiSubscriptionFieldsTestData, TestData, UnitSpec}
+import util.{ApiSubscriptionFieldsTestData, TestData}
 
-class HeaderWithContentTypeValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
+class HeaderWithContentTypeValidatorSpec extends AnyWordSpecLike with TableDrivenPropertyChecks with MockitoSugar with Matchers {
 
   private val extractedHeadersWithBadgeIdentifierV1 = ExtractedHeadersImpl(ApiSubscriptionFieldsTestData.clientId)
 

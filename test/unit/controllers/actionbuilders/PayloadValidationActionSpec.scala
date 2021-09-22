@@ -17,8 +17,11 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.PayloadValidationAction
@@ -29,12 +32,11 @@ import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
-import util.UnitSpec
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.SAXException
 
-class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
+class PayloadValidationActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private implicit val forConversions: ConversationIdRequest[AnyContentAsXml] = TestConversationIdRequest

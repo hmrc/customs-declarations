@@ -18,20 +18,25 @@ package unit.controllers.actionbuilders
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
+import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{HeaderStatusValidator, ValidateAndExtractHeadersStatusAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ValidatedHeadersStatusRequest}
 import util.TestData._
-import util.{RequestHeaders, UnitSpec}
+import util.RequestHeaders
 
 import scala.concurrent.ExecutionContext
 
-class ValidateAndExtractHeadersStatusActionSpec extends UnitSpec with MockitoSugar with TableDrivenPropertyChecks {
+class ValidateAndExtractHeadersStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableDrivenPropertyChecks with Matchers {
 
   trait SetUp {
     implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
@@ -45,7 +50,7 @@ class ValidateAndExtractHeadersStatusActionSpec extends UnitSpec with MockitoSug
       val apiVersionRequestV1: ApiVersionRequest[AnyContentAsXml] = TestApiVersionRequestV1
       when(mockHeaderStatusValidator.validateHeaders(any[ApiVersionRequest[_]])).thenReturn(Right(TestExtractedStatusHeaders))
 
-      val actualResult: Either[Result, ValidatedHeadersStatusRequest[_]] = await(validateAndExtractHeadersAction.refine(apiVersionRequestV1))
+      val actualResult: Either[Result, ValidatedHeadersStatusRequest[_]] = (validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue)
 
       actualResult shouldBe Right(TestValidatedHeadersStatusRequest)
     }
@@ -56,7 +61,7 @@ class ValidateAndExtractHeadersStatusActionSpec extends UnitSpec with MockitoSug
       val apiVersionRequestV1: ApiVersionRequest[AnyContentAsXml] = TestApiVersionRequestV1
       when(mockHeaderStatusValidator.validateHeaders(any[ApiVersionRequest[_]])).thenReturn(Left(ErrorContentTypeHeaderInvalid))
 
-      val actualResult: Either[Result, ValidatedHeadersStatusRequest[_]] = await(validateAndExtractHeadersAction.refine(apiVersionRequestV1))
+      val actualResult: Either[Result, ValidatedHeadersStatusRequest[_]] = (validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue)
 
       actualResult shouldBe Left(ErrorContentTypeHeaderInvalid.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationIdValue))
     }

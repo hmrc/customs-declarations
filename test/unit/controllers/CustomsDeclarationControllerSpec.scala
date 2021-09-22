@@ -16,11 +16,12 @@
 
 package unit.controllers
 
-import org.mockito.ArgumentCaptor
+import org.mockito.{ArgumentCaptor, Mockito}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterEach, Matchers}
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.mvc._
 import play.api.test.Helpers
 import play.api.test.Helpers.{UNAUTHORIZED, header, _}
@@ -36,7 +37,6 @@ import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.http.HeaderCarrier
-import util.UnitSpec
 import util.AuthConnectorStubbing
 import util.CustomsDeclarationsMetricsTestData._
 import util.FakeRequests._
@@ -46,8 +46,8 @@ import util.TestData._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class CustomsDeclarationControllerSpec extends UnitSpec
-  with Matchers with MockitoSugar with BeforeAndAfterEach {
+class CustomsDeclarationControllerSpec extends AnyWordSpecLike
+  with Matchers with BeforeAndAfterEach{
 
   trait SetUp extends AuthConnectorStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -148,7 +148,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       val result: Future[Result] = controllerWithoutMetrics.post().apply(ValidSubmissionV2Request)
 
       status(result) shouldBe ACCEPTED
-      verifyNoInteractions(mockMetricsConnector)
+
+      verifyZeroInteractions(mockMetricsConnector)
     }
 
     "respond with status 202 and ContentType application.xml and conversationId in header for a processed valid CSP request" in new SetUp() {
@@ -184,17 +185,17 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
       val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders(ValidSubmissionV2Request.headers.remove(X_BADGE_IDENTIFIER_NAME)))
       result shouldBe errorResultBadgeIdentifier
-      verifyNoInteractions(mockBusinessService)
-      verifyNoInteractions(mockXmlValidationService)
+      verifyZeroInteractions(mockBusinessService)
+      verifyZeroInteractions(mockXmlValidationService)
     }
 
     "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders(ValidSubmissionV2Request.headers.remove(X_CLIENT_ID_NAME)))
+      val result: Future[Result] = submit(ValidSubmissionV2Request.withHeaders(ValidSubmissionV2Request.headers.remove(X_CLIENT_ID_NAME)))
       status(result) shouldBe INTERNAL_SERVER_ERROR
-      verifyNoInteractions(mockBusinessService)
-      verifyNoInteractions(mockXmlValidationService)
+      verifyZeroInteractions(mockBusinessService)
+      verifyZeroInteractions(mockXmlValidationService)
     }
 
     "respond with status 400 for a request with an invalid X-Badge-Identifier" in new SetUp() {
@@ -203,8 +204,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
       val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders((ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS).toSeq: _*))
 
       result shouldBe errorResultBadgeIdentifier
-      verifyNoInteractions(mockBusinessService)
-      verifyNoInteractions(mockXmlValidationService)
+      verifyZeroInteractions(mockBusinessService)
+      verifyZeroInteractions(mockXmlValidationService)
     }
 
     "respond with status 202 and conversationId in header for a processed valid non-CSP request" in new SetUp() {
@@ -224,8 +225,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
       await(result) shouldBe errorResultUnauthorised
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
-      verifyNoInteractions(mockBusinessService)
-      verifyNoInteractions(mockXmlValidationService)
+      verifyZeroInteractions(mockBusinessService)
+      verifyZeroInteractions(mockXmlValidationService)
     }
 
     "return result 401 UNAUTHORISED and conversationId in header when there's no Customs enrolment retrieved for an enrolled non-CSP call" in new SetUp() {
@@ -236,8 +237,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
       await(result) shouldBe errorResultEoriNotFoundInCustomsEnrolment
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
-      verifyNoInteractions(mockBusinessService)
-      verifyNoInteractions(mockXmlValidationService)
+      verifyZeroInteractions(mockBusinessService)
+      verifyZeroInteractions(mockXmlValidationService)
     }
 
     "return result 401 UNAUTHORISED and conversationId in header when there's no EORI number in Customs enrolment for a non-CSP call" in new SetUp() {
@@ -248,8 +249,8 @@ class CustomsDeclarationControllerSpec extends UnitSpec
 
       await(result) shouldBe errorResultEoriNotFoundInCustomsEnrolment
       header(X_CONVERSATION_ID_NAME, result) shouldBe Some(conversationIdValue)
-      verifyNoInteractions(mockBusinessService)
-      verifyNoInteractions(mockXmlValidationService)
+      verifyZeroInteractions(mockBusinessService)
+      verifyZeroInteractions(mockXmlValidationService)
     }
 
     "return the error response returned from the Communication service" in new SetUp() {

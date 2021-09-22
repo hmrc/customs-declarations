@@ -16,12 +16,13 @@
 
 package unit.model.upscan
 
-import util.UnitSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import util.UpscanNotifyTestData._
 import play.api.libs.json._
 import uk.gov.hmrc.customs.declaration.model.upscan.UploadedReadyCallbackBody._
 
-class UploadedCallbackBodySpec extends UnitSpec {
+class UploadedCallbackBodySpec extends  AnyWordSpecLike with Matchers {
   "UploadedCallbackBody model" can {
     "In Happy Path" should {
       "conditionally de-serialisation callback body as UploadedFailedCallbackBody if fileStatus is READY" in {

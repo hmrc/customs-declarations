@@ -17,16 +17,19 @@
 package unit.schemas
 
 import org.mockito.Mockito.{reset, when}
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import play.api.test.Helpers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
-import util.UnitSpec
 
 import scala.xml.{Elem, Node, SAXException}
 
-class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+class FileUploadResponseSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Matchers{
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   protected val MockConfiguration = mock[Configuration]
@@ -45,7 +48,7 @@ class FileUploadResponseSpec extends UnitSpec with MockitoSugar with BeforeAndAf
 
   "File upload response" should {
     "be successfully validated if correct" in {
-      val result: Unit = await(xmlValidationService.validate(ValidFileUploadResponseXML))
+      val result: Unit = (xmlValidationService.validate(ValidFileUploadResponseXML)).futureValue
 
       result should be(())
     }

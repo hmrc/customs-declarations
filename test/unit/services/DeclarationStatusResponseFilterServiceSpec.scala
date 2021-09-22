@@ -17,16 +17,17 @@
 package unit.services
 
 import org.joda.time.{DateTime, DateTimeZone}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, StatusResponseFilterService}
-import util.UnitSpec
 import util.StatusTestXMLData.{DeclarationType, ImportTradeMovementType, generateDeclarationStatusResponse, generateValidStatusResponseWithMultiplePartiesOnly}
 import util.TestData.{date, dateString}
 
 import scala.xml.NodeSeq
 
-class DeclarationStatusResponseFilterServiceSpec extends UnitSpec with MockitoSugar {
+class DeclarationStatusResponseFilterServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
   private val acceptanceDateVal = DateTime.now(DateTimeZone.UTC)
 

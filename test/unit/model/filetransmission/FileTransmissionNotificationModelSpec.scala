@@ -16,12 +16,13 @@
 
 package unit.model.filetransmission
 
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmissionCallbackDecider
-import util.UnitSpec
 import util.FileTransmissionTestData._
 
-class FileTransmissionNotificationModelSpec extends UnitSpec {
+class FileTransmissionNotificationModelSpec extends AnyWordSpecLike with Matchers {
 
   "FileTransmissionNotification model" can {
     "In happy path" should {

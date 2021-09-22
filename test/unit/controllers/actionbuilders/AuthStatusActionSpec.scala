@@ -18,10 +18,13 @@ package unit.controllers.actionbuilders
 
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorInternalServerError
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
@@ -30,11 +33,10 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersStatusRequest
-import util.UnitSpec
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, TestData}
 
-class AuthStatusActionSpec extends UnitSpec with MockitoSugar with TableDrivenPropertyChecks with BeforeAndAfterEach {
+class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableDrivenPropertyChecks with BeforeAndAfterEach with Matchers {
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private lazy val validatedHeadersRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest

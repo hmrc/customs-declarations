@@ -17,9 +17,12 @@
 package unit.controllers.actionbuilders.upscan
 
 import org.mockito.Mockito.when
+import org.scalatest.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.mvc.AnyContentAsXml
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.{FileUploadPayloadValidationAction, FileUploadPayloadValidationComposedAction}
@@ -38,7 +41,7 @@ import util.TestXMLData
 import scala.concurrent.Future
 import scala.xml.Elem
 
-class FileUploadPayloadValidationComposedActionSpec extends UnitSpec with MockitoSugar {
+class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   trait SetUp {
     implicit val ec = Helpers.stubControllerComponents().executionContext

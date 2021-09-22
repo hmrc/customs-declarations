@@ -17,7 +17,8 @@
 package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
+import org.scalatest.matchers.should.Matchers
 import play.api.Application
 import play.api.mvc._
 import play.api.test.FakeRequest

@@ -17,17 +17,20 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.test.Helpers.defaultAwaitTimeout
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.ConversationIdAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.customs.declaration.services.DateTimeService
-import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData.{conversationId, stubUniqueIdsService}
 
-class ConversationIdActionSpec extends UnitSpec with MockitoSugar {
+class ConversationIdActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
   trait SetUp {
 
@@ -44,7 +47,7 @@ class ConversationIdActionSpec extends UnitSpec with MockitoSugar {
     "Generate a request containing a unique conversation id" in new SetUp {
       when(mockDateTimeService.zonedDateTimeUtc).thenReturn(EventStart)
 
-      private val actual = await(conversationIdAction.transform(request))
+      private val actual = (conversationIdAction.transform(request).futureValue)
 
       actual shouldBe expected
     }

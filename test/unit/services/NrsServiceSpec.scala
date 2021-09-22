@@ -19,9 +19,12 @@ package unit.services
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{times, verify, when}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.Helpers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.{ApiVersionRequestOps, AuthorisedRequestOps, ConversationIdRequestOps, ValidatedHeadersRequestOps}
@@ -29,12 +32,11 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, _}
 import uk.gov.hmrc.customs.declaration.services.{AuditingService, DateTimeService, NrsService}
 import uk.gov.hmrc.http._
-import util.UnitSpec
 import util.TestData.{TestCspValidatedPayloadRequest, _}
 
 import scala.concurrent.Future
 
-class NrsServiceSpec extends UnitSpec with MockitoSugar {
+class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val ec = Helpers.stubControllerComponents().executionContext
 

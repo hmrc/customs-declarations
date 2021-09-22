@@ -16,11 +16,13 @@
 
 package integration
 
-import java.net.URL
+import org.mockito.ArgumentMatchers.any
 
-import org.mockito.ArgumentMatchers._
+import java.net.URL
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsXml
@@ -37,11 +39,13 @@ import uk.gov.hmrc.mongo.{MongoConnector, MongoSpecSupport}
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.{FileMetadataWithFileOne, _}
-import util.UnitSpec
+import org.scalatest.matchers.should.Matchers.{an, be, convertToAnyShouldWrapper, thrownBy}
+import play.api.test.Helpers.defaultAwaitTimeout
 
 import scala.concurrent.ExecutionContext
 
-class FileUploadMetadataRepoSpec extends UnitSpec
+class FileUploadMetadataRepoSpec extends AnyWordSpecLike
+  with Matchers
   with BeforeAndAfterAll
   with BeforeAndAfterEach
   with MockitoSugar
@@ -76,7 +80,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
   }
 
   private def collectionSize(repository: FileUploadMetadataMongoRepo): Int = {
-    await(repository.count(Json.obj()))
+    (repository.count(Json.obj()).futureValue)
   }
 
   private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {
@@ -93,107 +97,107 @@ class FileUploadMetadataRepoSpec extends UnitSpec
   "repository" should {
     "successfully save a single file metadata" in new SetUp {
       when(mockErrorHandler.handleSaveError(any(), any())(any())).thenReturn(true)
-      val saveResult = await(repository.create(FileMetadataWithFileOne))
+      val saveResult = (repository.create(FileMetadataWithFileOne)).futureValue
       saveResult shouldBe true
       collectionSize(repository) shouldBe 1
 
-      val findResult = await(repository.find(selector(BatchFileOne.reference.toString)).head)
+      val findResult = (repository.find(selector(BatchFileOne.reference.toString)).futureValue).head
 
       findResult shouldBe FileMetadataWithFileOne
       logVerifier(mockLogger, "debug", "saving fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00.000Z,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
     }
 
     "successfully save when create is called multiple times" in new SetUp {
-      await(repository.create(FileMetadataWithFileOne))
-      await(repository.create(FileMetadataWithFileTwo))
+      (repository.create(FileMetadataWithFileOne)).futureValue
+      (repository.create(FileMetadataWithFileTwo)).futureValue
       collectionSize(repository) shouldBe 2
 
-      val findResult1 = await(repository.find(selector(BatchFileOne.reference.toString)).head)
+      val findResult1 = (repository.find(selector(BatchFileOne.reference.toString)).futureValue).head
 
       findResult1 shouldBe FileMetadataWithFileOne
 
-      val findResult2 = await(repository.find(selector(BatchFileTwo.reference.toString)).head)
+      val findResult2 = (repository.find(selector(BatchFileTwo.reference.toString)).futureValue).head
 
       findResult2 shouldBe FileMetadataWithFileTwo
     }
 
     "successfully update checksum, searching by reference" in new SetUp {
-      await(repository.create(FileMetadataWithFilesOneAndThree))
-      await(repository.create(FileMetadataWithFileTwo))
+      (repository.create(FileMetadataWithFilesOneAndThree)).futureValue
+      (repository.create(FileMetadataWithFileTwo)).futureValue
       val updatedFileOne = BatchFileOne.copy(maybeCallbackFields = Some(CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate, new URL("https://outbound.a.com"))))
       val expectedRecord = FileMetadataWithFilesOneAndThree.copy(files = Seq(updatedFileOne, BatchFileThree))
 
-      val maybeActual = await(repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
+      val maybeActual = (repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated)).futureValue
 
       maybeActual shouldBe Some(expectedRecord)
-      await(repository.fetch(BatchFileOne.reference)) shouldBe Some(expectedRecord)
-      await(repository.fetch(BatchFileTwo.reference)) shouldBe Some(FileMetadataWithFileTwo)
+      (repository.fetch(BatchFileOne.reference)).futureValue shouldBe Some(expectedRecord)
+      (repository.fetch(BatchFileTwo.reference)).futureValue shouldBe Some(FileMetadataWithFileTwo)
       logVerifier(mockLogger,"debug", "updating file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f with callbackField=CallbackFields(UPDATED_NAME,UPDATED_MIMETYPE,UPDATED_CHECKSUM,2018-04-24T09:30:00Z,https://outbound.a.com)")
     }
 
     "not update checksum, when searching by reference fails" in new SetUp {
-      await(repository.create(FileMetadataWithFileTwo))
+      (repository.create(FileMetadataWithFileTwo)).futureValue
 
-      val maybeActual = await(repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
+      val maybeActual = (repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated)).futureValue
 
       maybeActual shouldBe None
     }
 
     "return Some when fetch by file reference is successful" in new SetUp {
-      await(repository.create(FileMetadataWithFileOne))
-      await(repository.create(FileMetadataWithFileTwo))
+      (repository.create(FileMetadataWithFileOne)).futureValue
+      (repository.create(FileMetadataWithFileTwo)).futureValue
 
-      val maybeFoundRecordOne = await(repository.fetch(BatchFileOne.reference))
+      val maybeFoundRecordOne = (repository.fetch(BatchFileOne.reference)).futureValue
 
       maybeFoundRecordOne shouldBe Some(FileMetadataWithFileOne)
 
-      val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
+      val maybeFoundRecordTwo = (repository.fetch(BatchFileTwo.reference)).futureValue
 
       maybeFoundRecordTwo shouldBe Some(FileMetadataWithFileTwo)
       logVerifier(mockLogger, "debug", "fetching file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f")
     }
 
     "return None when fetch by file reference is un-successful" in new SetUp {
-      await(repository.create(FileMetadataWithFileTwo))
+      (repository.create(FileMetadataWithFileTwo)).futureValue
 
-      val maybeFoundRecord = await(repository.fetch(BatchFileOne.reference))
+      val maybeFoundRecord = (repository.fetch(BatchFileOne.reference)).futureValue
 
       maybeFoundRecord shouldBe None
     }
 
     "successfully delete a record" in new SetUp {
-      await(repository.create(FileMetadataWithFileOne))
-      await(repository.create(FileMetadataWithFileTwo))
+      (repository.create(FileMetadataWithFileOne)).futureValue
+      (repository.create(FileMetadataWithFileTwo)).futureValue
       collectionSize(repository) shouldBe 2
 
-      val maybeFoundRecordOne = await(repository.fetch(BatchFileOne.reference))
+      val maybeFoundRecordOne = (repository.fetch(BatchFileOne.reference)).futureValue
 
       maybeFoundRecordOne shouldBe Some(FileMetadataWithFileOne)
 
-      await(repository.delete(maybeFoundRecordOne.get))
+      (repository.delete(maybeFoundRecordOne.get)).futureValue
       collectionSize(repository) shouldBe 1
 
-      val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
+      val maybeFoundRecordTwo = (repository.fetch(BatchFileTwo.reference)).futureValue
 
       maybeFoundRecordTwo shouldBe Some(FileMetadataWithFileTwo)
       logVerifier(mockLogger,"debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00.000Z,Vector(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
     }
 
     "collection should be same size when deleting non-existent record" in new SetUp {
-      await(repository.create(FileMetadataWithFileOne))
+      (repository.create(FileMetadataWithFileOne)).futureValue
       collectionSize(repository) shouldBe 1
 
-      await(repository.delete(FileMetadataWithFileTwo))
+     (repository.delete(FileMetadataWithFileTwo)).futureValue
 
       collectionSize(repository) shouldBe 1
     }
 
     "successfully delete all file metadata" in new SetUp {
-      await(repository.create(FileMetadataWithFileOne))
-      await(repository.create(FileMetadataWithFileTwo))
+      (repository.create(FileMetadataWithFileOne)).futureValue
+      (repository.create(FileMetadataWithFileTwo)).futureValue
       collectionSize(repository) shouldBe 2
 
-      await(repository.deleteAll())
+      (repository.deleteAll()).futureValue
 
       collectionSize(repository) shouldBe 0
     }

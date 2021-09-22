@@ -17,6 +17,8 @@
 package unit.services
 
 import com.typesafe.config.{Config, ConfigFactory}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.customs.api.common.config.ConfigValidatedNelAdaptor
@@ -24,9 +26,8 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import util.MockitoPassByNameHelper.PassByNameVerifier
-import util.UnitSpec
 
-class DeclarationsConfigServiceSpec extends UnitSpec with MockitoSugar {
+class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
   private val validAppConfig: Config = ConfigFactory.parseString(
     """
       |microservice.services.api-subscription-fields.host=some-host

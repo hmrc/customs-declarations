@@ -18,15 +18,18 @@ package unit.services
 
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-
 import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
 import org.joda.time.DateTime
-import org.mockito.ArgumentMatchers.{eq => meq, _}
-import org.mockito.Mockito.{verify, verifyNoInteractions, when}
+import org.mockito.ArgumentMatchers.{any, eq => meq}
+import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
+import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorInternalServerError}
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -36,7 +39,6 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, 
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
 import util.CustomsDeclarationsMetricsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
@@ -46,7 +48,7 @@ import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
+class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private val expectedApiSubscriptionKey = ApiSubscriptionKey(clientId, "customs%2Fdeclarations", VersionOne)
@@ -79,7 +81,7 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
-      await(service.send(vpr, hc))
+      (service.send(vpr, hc)).futureValue
     }
 
     when(mockPayloadDecorator.wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
@@ -146,8 +148,8 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId)
-      verifyNoInteractions(mockPayloadDecorator)
-      verifyNoInteractions(mockMdgDeclarationConnector)
+      verifyZeroInteractions(mockPayloadDecorator)
+      verifyZeroInteractions(mockMdgDeclarationConnector)
     }
 
     "return 500 error response when authenticatedEori is blank" in new SetUp() {
@@ -157,8 +159,8 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
-      verifyNoInteractions(mockPayloadDecorator)
-      verifyNoInteractions(mockMdgDeclarationConnector)
+      verifyZeroInteractions(mockPayloadDecorator)
+      verifyZeroInteractions(mockMdgDeclarationConnector)
     }
 
     "return 500 error response when MDG call fails" in new SetUp() {
@@ -194,8 +196,8 @@ class DeclarationServiceSpec extends UnitSpec with MockitoSugar {
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
-      verifyNoInteractions(mockPayloadDecorator)
-      verifyNoInteractions(mockMdgDeclarationConnector)
+      verifyZeroInteractions(mockPayloadDecorator)
+      verifyZeroInteractions(mockMdgDeclarationConnector)
     }
 
 }

@@ -17,16 +17,14 @@
 package unit.services.filetransmission
 
 import java.util.UUID
+
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
-import org.scalatest.{Assertion, Matchers}
-import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.Assertion
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Reads
 import play.api.test.Helpers
-import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.model.ConversationId
@@ -35,6 +33,7 @@ import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionF
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, FileReference}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
+import util.UnitSpec
 import unit.services.filetransmission.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData
@@ -56,7 +55,7 @@ case class ExampleFileTransmissionNotification(fileReference: FileReference,
                                                fileTransmissionStatus: ExampleFileTransmissionStatus,
                                                errorDetails: Option[String])
 
-class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
+class FileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
     private[FileUploadNotificationServiceSpec] implicit val ec = Helpers.stubControllerComponents().executionContext
@@ -110,7 +109,7 @@ class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSuga
       when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
       when(mockFileUploadMetadataRepo.fetch(fileRefEq(FileReferenceOne))(any[HasConversationId])).thenReturn(Future.successful(Some(FileMetadataWithFileOne)))
 
-      (service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)(toXml)).futureValue
+      await(service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)(toXml))
 
       verifyNotificationConnectorCalledWithXml(expectedSuccessXml)
     }
@@ -119,7 +118,7 @@ class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSuga
       when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
       when(mockFileUploadMetadataRepo.fetch(fileRefEq(FileReferenceOne))(any[HasConversationId])).thenReturn(Future.successful(None))
 
-      (service.sendMessage(failureCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)).futureValue
+      await(service.sendMessage(failureCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId))
 
       verifyNotificationConnectorCalledWithXml(expectedFailureXml)
     }

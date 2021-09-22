@@ -17,18 +17,15 @@
 package unit.services
 
 import java.util.UUID
+
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.NOT_FOUND
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
-import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
@@ -39,6 +36,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, 
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData.{correlationId, _}
@@ -46,7 +44,7 @@ import util.TestData.{correlationId, _}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Matchers{
+class DeclarationStatusServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
@@ -77,7 +75,7 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
       mockDateTimeProvider, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService)
 
     protected def send(vpr: AuthorisedRequest[AnyContentAsXml] = TestAuthorisedStatusRequest, hc: HeaderCarrier = headerCarrier): Either[Result, HttpResponse] = {
-     (service.send(mrn) (vpr, hc).futureValue)
+      await(service.send(mrn) (vpr, hc))
     }
   }
 

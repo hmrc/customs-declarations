@@ -17,7 +17,7 @@
 package integration
 
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterAll, Matchers}
+import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -37,7 +37,6 @@ import util._
 import util.externalservices.MdgStatusDeclarationService
 
 class DeclarationStatusConnectorSpec extends IntegrationTestSpec
-  with Matchers
   with GuiceOneAppPerSuite
   with MockitoSugar
   with BeforeAndAfterAll

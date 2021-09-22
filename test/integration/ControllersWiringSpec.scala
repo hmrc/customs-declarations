@@ -16,7 +16,6 @@
 
 package integration
 
-import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.Helpers
@@ -28,7 +27,7 @@ import uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, _}
 
-class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar with Matchers{
+class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   private lazy val mockSubmissionXmlValidationService = mock[SubmissionXmlValidationService]

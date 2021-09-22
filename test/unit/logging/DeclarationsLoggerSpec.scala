@@ -16,8 +16,6 @@
 
 package unit.logging
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
@@ -29,8 +27,9 @@ import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
+import util.UnitSpec
 
-class DeclarationsLoggerSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
+class DeclarationsLoggerSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
     val mockCdsLogger: CdsLogger = mock[CdsLogger]
@@ -49,8 +48,9 @@ class DeclarationsLoggerSpec extends AnyWordSpecLike with MockitoSugar with Matc
         .withByNameParam("[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d][clientId=SOME_X_CLIENT_ID][requestedApiVersion=1.0][authorisedAs=Csp(Some(ZZ123456789000), Some(BADGEID123))] msg")
         .verify()
     }
-    "debug(s: => String e: => Throwable)" in new SetUp {
+    "debug(s: => String, e: => Throwable)" in new SetUp {
       logger.debug("msg", emulatedServiceFailure)
+
       PassByNameVerifier(mockCdsLogger, "debug")
         .withByNameParam("[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d][clientId=SOME_X_CLIENT_ID][requestedApiVersion=1.0][authorisedAs=Csp(Some(ZZ123456789000), Some(BADGEID123))] msg")
         .withByNameParam(emulatedServiceFailure)

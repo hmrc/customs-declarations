@@ -16,7 +16,7 @@
 
 package component
 
-import org.scalatest.matchers.should.Matchers
+import org.scalatest.Matchers
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json

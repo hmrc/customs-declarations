@@ -18,12 +18,12 @@ package integration.filetransmission
 
 import integration.{IntegrationTestModule, IntegrationTestSpec}
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterAll, Matchers}
+import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND, await, defaultAwaitTimeout}
+import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, MULTIPLE_CHOICES}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
@@ -36,7 +36,7 @@ import util.externalservices.FileTransmissionService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
-  with BeforeAndAfterAll with FileTransmissionService with Matchers{
+  with BeforeAndAfterAll with FileTransmissionService {
 
   private lazy val connector = app.injector.instanceOf[FileTransmissionConnector]
   private implicit val mockCdsLogger: CdsLogger = mock[CdsLogger]

@@ -19,10 +19,7 @@ package util
 import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{AgentInformation, Credentials, EmptyRetrieval, ItmpAddress, ItmpName, LoginTimes, MdtpInformation, Name, Retrieval, ~}
@@ -30,12 +27,10 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.customs.declaration.model.Eori
 import uk.gov.hmrc.http.HeaderCarrier
 import util.TestData._
-import org.mockito.Mockito._
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait AuthConnectorStubbing extends AnyWordSpecLike with GuiceOneAppPerSuite with MockitoSugar with Matchers{
+trait AuthConnectorStubbing extends UnitSpec with MockitoSugar {
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   private val apiScope = "write:customs-declaration"
   private val customsEnrolmentName = "HMRC-CUS-ORG"
@@ -45,7 +40,7 @@ trait AuthConnectorStubbing extends AnyWordSpecLike with GuiceOneAppPerSuite wit
 
   def authoriseCsp(): Unit = {
     when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(nrsRetrievalData))(any[HeaderCarrier], any[ExecutionContext]))
-      .thenReturn(Future.successful(TestData.nrsReturnData))
+      .thenReturn(TestData.nrsReturnData)
   }
 
   def authoriseCspButDontFetchRetrievals(): Unit = {
@@ -79,13 +74,13 @@ trait AuthConnectorStubbing extends AnyWordSpecLike with GuiceOneAppPerSuite wit
       Enrolment(customsEnrolmentName).withIdentifier(eoriIdentifier, eori.value)
     }
     when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
-      .thenReturn(Future.successful(new ~( nrsReturnData, Enrolments(Set(customsEnrolment)))))
+      .thenReturn(new ~( nrsReturnData, Enrolments(Set(customsEnrolment))))
   }
 
   def authoriseNonCspButDontRetrieveCustomsEnrolment(): Unit = {
     unauthoriseCsp()
     when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(nrsRetrievalData and Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
-      .thenReturn(Future.successful(new ~( nrsReturnData, Enrolments(Set.empty))))
+      .thenReturn(new ~( nrsReturnData, Enrolments(Set.empty)))
   }
 
   def unauthoriseNonCspOnly(authException: AuthorisationException = new InsufficientEnrolments): Unit = {

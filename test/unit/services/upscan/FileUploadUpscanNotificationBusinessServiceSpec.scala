@@ -18,15 +18,11 @@ package unit.services.upscan
 
 import java.net.URL
 import java.util.UUID
+
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
-import org.scalatest.Matchers
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -36,12 +32,13 @@ import uk.gov.hmrc.customs.declaration.model.upscan._
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadUpscanNotificationBusinessService
+import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 
 import scala.concurrent.Future
 
-class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
+class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with MockitoSugar {
 
   private val outboundUrl = new URL("http://remotehost/outbound-bucket/123")
   private val uploadDetails = UploadedDetails("test.pdf", "application/pdf", InitiateDate, "1a2b3c4d5e")
@@ -85,7 +82,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
       when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
       when(mockConnector.send(any[FileTransmission])(any[HasConversationId])).thenReturn(Future.successful(()))
 
-      val actual: Unit = (service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)).futureValue
+      val actual: Unit = await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody))
 
       actual shouldBe (())
       verify(mockRepo).update(
@@ -99,7 +96,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
     "return failed future when no metadata record found for file reference" in new SetUp {
       when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(None))
 
-      val error = intercept[IllegalStateException] (await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
+      val error = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 
       error.getMessage shouldBe s"database error - can't find record with file reference ${FileReferenceOne.value.toString}"
       verify(mockRepo).update(
@@ -107,7 +104,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyZeroInteractions(mockConnector)
+      verifyNoInteractions(mockConnector)
     }
 
     "return failed future when file reference not found in returned metadata" in new SetUp {
@@ -121,7 +118,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyZeroInteractions(mockConnector)
+      verifyNoInteractions(mockConnector)
     }
 
     "propagate exception encountered in repo" in new SetUp {
@@ -135,7 +132,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyZeroInteractions(mockConnector)
+      verifyNoInteractions(mockConnector)
     }
 
     "propagate exception encountered in connector" in new SetUp {

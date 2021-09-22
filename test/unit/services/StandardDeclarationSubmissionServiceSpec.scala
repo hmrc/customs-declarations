@@ -17,17 +17,14 @@
 package unit.services
 
 import java.util.UUID
+
 import akka.actor.ActorSystem
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
-import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
-import org.scalatest.wordspec.AnyWordSpecLike
+import org.mockito.Mockito.{verify, verifyNoInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
-import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationSubmissionConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -45,7 +42,7 @@ import util.TestData._
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
+class StandardDeclarationSubmissionServiceSpec extends UnitSpec with MockitoSugar {
 
   private val dateTime = new DateTime()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
@@ -75,7 +72,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
     )
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
-      (service.send(vpr, hc)).futureValue
+      await(service.send(vpr, hc))
     }
 
     when(mockPayloadDecorator.wrap(meq(TestXmlPayload), meq[ApiSubscriptionFieldsResponse](apiSubscriptionFieldsResponse), any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
@@ -103,7 +100,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
         val result: Either[Result, Option[NrSubmissionId]] = send()
         result shouldBe Right(None)
 
-        verifyZeroInteractions(mockNrsService)
+        verifyNoInteractions(mockNrsService)
       }
 
     "should still contain nrs submission id even if call to downstream fails" in new SetUp() {

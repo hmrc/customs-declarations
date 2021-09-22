@@ -17,11 +17,8 @@
 package unit.controllers.actionbuilders.upscan
 
 import org.mockito.Mockito.when
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XEoriIdentifierHeaderName}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, HeaderWithContentTypeValidator}
@@ -36,7 +33,7 @@ import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHea
 
 import scala.concurrent.ExecutionContext
 
-class FileUploadAuthActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
+class FileUploadAuthActionSpec extends UnitSpec with MockitoSugar {
 
   private val errorResponseBadgeIdentifierHeaderMissing =
     errorBadRequest(s"$XBadgeIdentifierHeaderName header is missing or invalid")

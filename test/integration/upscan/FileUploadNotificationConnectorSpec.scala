@@ -17,13 +17,12 @@
 package integration.upscan
 
 import integration.IntegrationTestSpec
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
-import org.scalatest.{BeforeAndAfterAll, Matchers}
+import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND, defaultAwaitTimeout}
+import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, MULTIPLE_CHOICES}
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadCustomsNotification
@@ -35,7 +34,7 @@ import util.externalservices.CustomsNotificationService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
-  with BeforeAndAfterAll with CustomsNotificationService with Matchers{
+  with BeforeAndAfterAll with CustomsNotificationService {
 
   private lazy val connector = app.injector.instanceOf[FileUploadCustomsNotificationConnector]
 
@@ -111,6 +110,6 @@ class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with Guice
   }
 
   private def awaitSendValidRequest() = {
-    (connector.send(notification)).futureValue
+    await(connector.send(notification))
   }
 }

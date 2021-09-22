@@ -17,10 +17,10 @@
 package integration
 
 import java.util.UUID
+
 import org.joda.time.DateTime
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
-import org.scalatest.{BeforeAndAfterAll, Matchers}
+import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -38,7 +38,6 @@ import util.externalservices.MdgCancellationDeclarationService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
-  with Matchers
   with GuiceOneAppPerSuite
   with MockitoSugar
   with BeforeAndAfterAll
@@ -79,7 +78,7 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
 
     "make a correct request" in {
       startMdgCancellationV1Service(ACCEPTED)
-      (sendValidXml()).futureValue
+      await(sendValidXml())
       verifyMdgWcoDecServiceWasCalledWithV1(requestBody = ValidSubmissionXML.toString(), maybeUnexpectedAuthToken = Some(incomingAuthToken))
     }
 
@@ -100,7 +99,7 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
 
     "return a failed future when fail to connect the external service" in {
       stopMockServer()
-      intercept[BadGatewayException]((sendValidXml()).futureValue)
+      intercept[BadGatewayException](await(sendValidXml()))
       startMockServer()
     }
   }
@@ -110,7 +109,7 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
   }
 
   private def checkCaughtException(status: Int) {
-    val exception = intercept[Non2xxResponseException]((sendValidXml()).futureValue)
+    val exception = intercept[Non2xxResponseException](await(sendValidXml()))
     exception.responseCode shouldBe status
   }
 }

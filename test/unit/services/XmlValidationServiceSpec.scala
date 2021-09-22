@@ -17,23 +17,20 @@
 package unit.services
 
 import java.io.FileNotFoundException
+
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import play.api.test.Helpers
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
+import util.UnitSpec
 import util.TestXMLData
 import util.TestXMLData.{InvalidSubmissionXML, InvalidSubmissionXMLWith2Errors, ValidSubmissionXML}
 
 import scala.xml.{Node, SAXException}
 
-class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach  with Matchers with ScalaFutures{
+class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   protected val MockConfiguration = mock[Configuration]
@@ -90,7 +87,7 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
     }
 
     "successfully validate a correct xml" in {
-      val result = (xmlValidationService.validate(ValidSubmissionXML)).futureValue
+      val result = await(xmlValidationService.validate(ValidSubmissionXML))
 
       result should be(())
     }
@@ -153,7 +150,7 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
     }
 
     "successfully validate a cancellation request with typecode and function code" in {
-      val result = (xmlValidationService.validate(TestXMLData.validCancellationXML())).futureValue
+      val result = await(xmlValidationService.validate(TestXMLData.validCancellationXML()))
 
       result should be(())
     }

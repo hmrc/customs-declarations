@@ -18,8 +18,6 @@ package util
 
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
@@ -30,7 +28,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait AuthConnectorNrsDisabledStubbing extends AnyWordSpecLike with MockitoSugar with Matchers {
+trait AuthConnectorNrsDisabledStubbing extends UnitSpec with MockitoSugar {
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   private val apiScope = "write:customs-declaration"
   private val customsEnrolmentName = "HMRC-CUS-ORG"
@@ -40,7 +38,7 @@ trait AuthConnectorNrsDisabledStubbing extends AnyWordSpecLike with MockitoSugar
 
   def authoriseCsp(): Unit = {
     when(mockAuthConnector.authorise(ameq(cspAuthPredicate), ameq(EmptyRetrieval))(any[HeaderCarrier], any[ExecutionContext]))
-      .thenReturn(Future.successful(()))
+      .thenReturn(())
   }
 
   def authoriseCspError(): Unit = {
@@ -59,13 +57,13 @@ trait AuthConnectorNrsDisabledStubbing extends AnyWordSpecLike with MockitoSugar
       Enrolment(customsEnrolmentName).withIdentifier(eoriIdentifier, eori.value)
     }
     when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
-      .thenReturn(Future.successful(Enrolments(Set(customsEnrolment))))
+      .thenReturn(Enrolments(Set(customsEnrolment)))
   }
 
   def authoriseNonCspButDontRetrieveCustomsEnrolment(): Unit = {
     unauthoriseCsp()
     when(mockAuthConnector.authorise(ameq(nonCspAuthPredicate), ameq(Retrievals.authorisedEnrolments))(any[HeaderCarrier], any[ExecutionContext]))
-      .thenReturn(Future.successful(Enrolments(Set.empty)))
+      .thenReturn(Enrolments(Set.empty))
   }
 
   def unauthoriseNonCspOnly(authException: AuthorisationException = new InsufficientEnrolments): Unit = {

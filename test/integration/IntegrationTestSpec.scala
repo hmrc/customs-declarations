@@ -19,7 +19,6 @@ package integration
 import com.google.inject.AbstractModule
 import org.scalatest.concurrent.Eventually
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
-import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.inject.guice.GuiceableModule
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import util.UnitSpec
@@ -32,5 +31,5 @@ case class IntegrationTestModule(mockLogger: DeclarationsLogger) extends Abstrac
   def asGuiceableModule: GuiceableModule = GuiceableModule.guiceable(this)
 }
 
-trait IntegrationTestSpec extends AnyWordSpecLike
+trait IntegrationTestSpec extends UnitSpec
   with BeforeAndAfterEach with BeforeAndAfterAll with Eventually

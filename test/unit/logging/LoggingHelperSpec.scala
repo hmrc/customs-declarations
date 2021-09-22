@@ -16,8 +16,6 @@
 
 package unit.logging
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames._
 import play.api.mvc.Request
@@ -27,10 +25,11 @@ import uk.gov.hmrc.customs.declaration.logging.LoggingHelper
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.customs.declaration.model.{ClientId, Csp, VersionOne}
+import util.UnitSpec
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
 
-class LoggingHelperSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
+class LoggingHelperSpec extends UnitSpec with MockitoSugar {
 
   private def expectedMessage(message: String, maybeAuthorised: String = "") = s"[conversationId=${conversationId.toString}]" +
     "[clientId=some-client-id]" +

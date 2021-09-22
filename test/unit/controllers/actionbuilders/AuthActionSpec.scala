@@ -25,7 +25,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
 import play.api.test.Helpers
-import play.api.test.Helpers.defaultAwaitTimeout
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
@@ -104,7 +104,7 @@ class AuthActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
       "authorise as CSP when authorised by auth API and badge identifier exists" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = (authAction.refine(validatedHeadersRequestWithValidBadgeId).futureValue)
+        private val actual = await(authAction.refine(validatedHeadersRequestWithValidBadgeId))
         actual shouldBe Right(validatedHeadersRequestWithValidBadgeId.toCspAuthorisedRequest(Csp(None, Some(badgeIdentifier), Some(nrsRetrievalValues))))
         verifyNonCspAuthorisationNotCalled
 
@@ -119,7 +119,7 @@ class AuthActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
         val validatedHeadersRequestNoBadge = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
         
-        private val actual = (authAction.refine(validatedHeadersRequestNoBadge)).futureValue
+        private val actual = await(authAction.refine(validatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -128,7 +128,7 @@ class AuthActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
       "Return 400 response when authorised by auth API but badge identifier exists but is too long" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = (authAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooLong)).futureValue
+        private val actual = await(authAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooLong))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
@@ -137,7 +137,7 @@ class AuthActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
       "Return 400 response when authorised by auth API but badge identifier exists but is too short" in new NrsEnabled {
         authoriseCsp()
 
-        private val actual = (authAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooShort)).futureValue
+        private val actual = await(authAction.refine(validatedHeadersRequestWithInvalidBadgeIdTooShort))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled

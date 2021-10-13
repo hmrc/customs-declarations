@@ -1,0 +1,310 @@
+		<v1:submitDeclarationRequest
+  xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1"
+  xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2"
+  xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+  xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+  xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+  xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+  xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+  xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <v1:requestCommon>
+    <v1:regime>CDS</v1:regime>
+    <v1:receiptDate>${#TestCase#ReceiptDate}</v1:receiptDate>
+    <v1:clientID>${#TestCase#ClientID}</v1:clientID>
+    <v1:conversationID>${#TestCase#ConvoID}</v1:conversationID>
+<v1:authenticatedPartyID>GB717572504502811</v1:authenticatedPartyID>
+  </v1:requestCommon>
+  <v1:requestDetail>
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+           	>
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+           		xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+           		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+           		>
+		<!--
+			SCENARIO
+			Type A declaration using Electronic Licensing to be followed by cancellation.
+			Data set category: B1
+			Procedure code 1040 with additional procedure 1CS.
+			Direct export, DUCR and MUCR declared, Direct Representation.
+			Goods: Military weapons.
+			Additional documents for Electronic Licensing: E012 indicates Export licence "Cultural goods",
+			and 9104 indicates Standard Individual Export Licence for Military Goods and dual use goods.
+		-->
+		<!--This should be updated to today's date as the declaration is a frontier type.
+			Note this data element is not mandatory for pre-lodged or frontier declarations. -->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20210927090000+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<!--Function Code of 9 to represent an original declaration.-->
+		<FunctionCode>9</FunctionCode>
+		<!-- DE 2/5: The trader assigned reference to the declaration -->
+		<FunctionalReferenceID>E3.9TC03_1711_27091</FunctionalReferenceID>
+		<IssueDateTime>
+			<p1:DateTimeString formatCode="304">20210927090000+01</p1:DateTimeString>
+		</IssueDateTime>
+		<!--DE 1/1: EX to represent an Export declaration.-->
+		<!--DE 1/2: A to represent a standard frontier declaration.-->
+		<TypeCode>EXA</TypeCode>
+		<!--DE 1/9: Total number of goods items on the declaration.-->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<DeclarationOfficeID>GBLBA001</DeclarationOfficeID>
+		<!--DE 4/11: Total amount invoiced-->
+		<InvoiceAmount currencyID="GBP">9500</InvoiceAmount>
+		<!--DE 6/18: Total packages -->
+		<TotalPackageQuantity>1</TotalPackageQuantity>
+		<!--DE 3/20: EORI number of the Representative.
+			DE 3/21: '2' Indicating 'Direct representation' -->
+		<Agent>
+			<ID>GB150454489082</ID>
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!--DE 3/39: Holder of the authorisation identification no.
+			An authorisation type code of CSE indicates a Customs Supervised Exports authorisation.
+			The ID here is the EORI of the CSE authorised party. -->
+		<AuthorisationHolder>
+			<ID>GB150454489082</ID>
+			<CategoryCode>CSE</CategoryCode>
+		</AuthorisationHolder>
+		<BorderTransportMeans>
+			<!--DE 7/14: Identity of active means of transport crossing the border.
+				11 indicating Name of the seagoing vessel declared in ID-->
+			<ID>CSCLGLOBE</ID>
+			<IdentificationTypeCode>11</IdentificationTypeCode>
+			<!--DE 7/15: Country code of the nationality of the active means of transport
+				crossing the border, in this case GB.-->
+			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
+			<!--DE 7/4: ModeCode of 4 to represent Air transport as the mode of transport at the border.-->
+			<ModeCode>4</ModeCode>
+		</BorderTransportMeans>
+		<Consignment>
+			<!--DE 3/32: Carrier identification no -->
+			<Carrier>
+				<ID>GB025115100010</ID>
+			</Carrier>
+			<!-- 4/2: Transport charges method of payment. B indicating Credit Card -->
+			<Freight>
+				<PaymentMethodCode>B</PaymentMethodCode>
+			</Freight>
+			<!-- DE 5/18: Countries of routing codes. Routing from GB to Pakistan -->
+			<Itinerary>
+				<SequenceNumeric>1</SequenceNumeric>
+				<RoutingCountryCode>GB</RoutingCountryCode>
+			</Itinerary>
+			<Itinerary>
+				<SequenceNumeric>2</SequenceNumeric>
+				<RoutingCountryCode>PK</RoutingCountryCode>
+			</Itinerary>
+		</Consignment>
+		<!--DE 3/18: EORI number of the Declarant. -->
+		<Declarant>
+			<ID>GB150454489082</ID>
+		</Declarant>
+		<!-- 5/12: 'GB000084' Indicating Indicating London Heathrow Cargo. -->
+		<ExitOffice>
+			<ID>GB000084</ID>
+		</ExitOffice>
+		<!--DE 3/2: EORI number of the Exporter. -->
+		<Exporter>
+			<ID>GB417869120000</ID>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 3/9: Consignee Name and Address (Mandatory when DE 3/10 is not completed) 
+				PK Indicating 'Pakistan' -->
+			<Consignee>
+				<Name>PK Rifle Ltd</Name>
+				<Address>
+					<CityName>Islamabad</CityName>
+					<CountryCode>PK</CountryCode>
+					<Line>Islamabad</Line>
+					<PostcodeID>PK1 234</PostcodeID>
+				</Address>
+			</Consignee>
+			<Consignment>
+				<!--DE 7/2: 1 to indicate that the goods are transported in containers.-->
+				<ContainerCode>1</ContainerCode>
+				<!--DE 7/7: ID of the means of transport. GB427052534 Indicating Registration Number and
+					identification type of the means of transport (in this scenario, 41 Indicating  Aircraft). -->
+				<DepartureTransportMeans>
+					<ID>GB427052534</ID>
+					<IdentificationTypeCode>41</IdentificationTypeCode>
+					<ModeCode>4</ModeCode>
+				</DepartureTransportMeans>
+				<GoodsLocation>
+					<!--DE 5/23: ID to give a unique position of the location. 
+						CBRLHRXAD Indicating DEP Cargo, Heathrow. -->
+					<Name>CBRLHRXAD</Name>
+					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated 
+						location. -->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE. -->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: 'GB' Country code of the country where the goods may be examined, 
+							GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<TransportEquipment>
+					<!--DE 7/10: Sequence number and ID of the container. -->
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>AHFB9384274</ID>
+					<!--DE 7/18: Seal sequence number 1, then seal number. -->
+					<Seal>
+						<SequenceNumeric>1</SequenceNumeric>
+						<ID>17583753</ID>
+					</Seal>
+				</TransportEquipment>
+			</Consignment>
+			<!--DE 5/8: Country code of the destination country, Indicating Pakistan. -->
+			<Destination>
+				<CountryCode>PK</CountryCode>
+			</Destination>
+			<!--DE 5/14: Country code for the country from which the goods were
+	      		originally dispatched, in this case GB. -->
+			<ExportCountry>
+				<ID>GB</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Sequential number of the goods item.-->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 8/6: Enter the statistical value for the goods item in GBP (Pound sterling), irrespective 
+					of the currency used in Invoice Currency. -->
+				<StatisticalValueAmount currencyID="GBP">9500</StatisticalValueAmount>
+				<!--DE 8/5: Nature of Transaction. Enter, a 2-digit code (second digit is optional)
+					The single digit codes listed in column A of the table provided for under Article 10(2) 
+					of Commission Regulation (EC) No 113/2010 shall be used.
+					Member States may also provide for a second digit from the list in column B of that table to be collected.
+					In this case first digit (1) represents 'Transactions involving actual or intended transfer of 
+					ownership from residents to non-residents against financial or other compensation'
+					second digit (1) represents 'Outright purchase/sale'. -->
+				<TransactionNatureCode>11</TransactionNatureCode>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCSE150454489082E20191113093111</ID>
+					<TypeCode>676</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: A document code of Y935. Goods not covered by the provisions of Regulation 
+					(EU) 1332/2013 (OJ L 335) approving non-minor amendments to the specification for a name 
+					entered in the register of protected designations of origin and protected geographical 
+					indications. -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>005345687</ID>
+					<Name>Reg 1332/2013 exempt</Name>
+					<TypeCode>935</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional reference.
+					A document code of E012 indicates Export licence "Cultural goods" (Regulation 
+					(EC) No 116/2009).
+					Licence status code ES is used to declare that the Electronic details on the  Customs Declaration Services (CDS) are surrendered.
+					Note that using code ES will make the licence inactive until it is automatically refreshed - when this occurs another licence from the TDL for the same EORI and commodity code can be substituted. -->
+				<AdditionalDocument>
+					<CategoryCode>E</CategoryCode>
+					<ID>005345688</ID>
+					<Name>Cultural goods</Name>
+					<TypeCode>012</TypeCode>
+					<LPCOExemptionCode>ES</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional reference. 
+					A document code of 9104 indicates Standard Individual Export Licence for Military 
+					Goods and dual use goods subject to UK export controls.
+					Licence status code ES is used to declare that the Electronic details on the  Customs Declaration Services (CDS) are surrendered.
+					Note that using code ES will make the licence inactive until it is automatically refreshed - when this occurs another licence from the TDL for the same EORI and commodity code can be substituted.
+					Quantity declaration is mandatory for this scenario. KGM#G indicates Kilogram Gross. -->
+				<AdditionalDocument>
+					<CategoryCode>9</CategoryCode>
+					<ID>GBSIEE2E350001-0001</ID>
+					<Name>Export licence "Cultural goods"</Name>
+					<TypeCode>104</TypeCode>
+					<LPCOExemptionCode>ES</LPCOExemptionCode>
+					<WriteOff>
+						<QuantityQuantity unitCode="KGM#G">10.00</QuantityQuantity>
+					</WriteOff>
+				</AdditionalDocument>
+				<Commodity>
+					<!--DE 6/8: Description of the goods.-->
+					<Description>Military weapons</Description>
+					<!--DE 6/14: Commodity code - combined nomenclature code. -->
+					<Classification>
+						<ID>93063030</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<!--DE 6/16: Commodity code - TARIC Additional code -->
+					<Classification>
+						<ID>4099</ID>
+						<IdentificationTypeCode>TRA</IdentificationTypeCode>
+					</Classification>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
+						<GrossMassMeasure unitCode="KGM">20</GrossMassMeasure>
+						<!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
+						<NetNetWeightMeasure unitCode="KGM">15</NetNetWeightMeasure>
+						<!--DE 6/2: Supplementary units. This data element is only required where the commodity 
+							code requires a supplementary unit. -->
+						<TariffQuantity>10</TariffQuantity>
+					</GoodsMeasure>
+				</Commodity>
+				<!--DE 1/10: Requested Procedure of 1040 indicating Permanent export of goods in Free Circulation 
+					and Home Use. -->
+				<GovernmentProcedure>
+					<CurrentCode>10</CurrentCode>
+					<PreviousCode>40</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Special Procedure code 1CS Indicating for Customs Simplified Exports. -->
+				<GovernmentProcedure>
+					<CurrentCode>1CS</CurrentCode>
+				</GovernmentProcedure>
+				<!-- DE 5/15 + 5/16: Country of origin code Box 34b -->
+				<Origin>
+                   <CountryCode>GB</CountryCode>
+                   <TypeCode>1</TypeCode>
+                </Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping marks on the packages. -->
+					<MarksNumbersID>TIME123</MarksNumbersID>
+					<!--DE 6/10: Number of packages. 1 Indicating bulk package. -->
+					<QuantityQuantity>1</QuantityQuantity>
+					<!--DE 6/9: Type of packages - BX indicates Box. -->
+					<TypeCode>BX</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment. 
+				This is a mandatory field. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>0GB417869120000-2709DA1</ID>
+				<TypeCode>DCR</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!--DE 2/1: Previous document to show the Declaration Unique Consignment Reference Part Number 
+				(DUCR Part) assigned to the consignment. -->
+			<PreviousDocument>
+				<CategoryCode>Y</CategoryCode>
+				<ID>GHI</ID>
+				<TypeCode>DCS</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>
+  </v1:requestDetail>
+</v1:submitDeclarationRequest>

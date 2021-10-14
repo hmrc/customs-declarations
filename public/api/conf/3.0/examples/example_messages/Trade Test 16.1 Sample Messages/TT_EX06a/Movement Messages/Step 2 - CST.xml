@@ -1,0 +1,21 @@
+<n1:InventoryLinkingExportsInboundRequest
+xmlns:inv="http://gov.uk/customs/inventoryLinking/v1"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:gw="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1"
+xmlns:n1="http://www.hmrc.gov.uk/cds/inventorylinking/exportmovement"
+xsi:schemaLocation="http://www.hmrc.gov.uk/cds/inventorylinking/exportmovement DEC39_Root.xsd">
+      <n1:requestCommon>
+	       <!--   <gw:badgeIdentifier>FCP127</gw:badgeIdentifier>  -->
+            <gw:submitter>GB239355053000</gw:submitter>
+            <gw:clientID>${#TestCase#clientID}</gw:clientID>
+            <gw:conversationID>${#TestCase#conversationID}</gw:conversationID>
+            <gw:correlationID>${#TestCase#correlationID}</gw:correlationID>
+            <gw:dateTimeStamp>${#TestCase#dateAndTime}</gw:dateTimeStamp>
+      </n1:requestCommon>
+<n1:requestDetail>
+		<inv:inventoryLinkingConsolidationRequest>
+			<inv:messageCode>CST</inv:messageCode>
+			<inv:masterUCR>GB/427168118378-2809MR1</inv:masterUCR>
+		</inv:inventoryLinkingConsolidationRequest>
+	</n1:requestDetail>
+</n1:InventoryLinkingExportsInboundRequest>

@@ -56,26 +56,26 @@ Schema agency: 	UN/CEFACT
 		</xsd:simpleContent>
 	</xsd:complexType>
 	<xsd:simpleType name="FormatCodeType">
- 		<xsd:restriction base="xsd:string">
- 			<xsd:enumeration value="102" />
- 			<xsd:enumeration value="304" />
- 		</xsd:restriction>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="102" />
+			<xsd:enumeration value="304" />
+		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="DateTimePatternType">
 		<xsd:restriction base="xsd:string">
-              <xsd:pattern value="(20\d{6})(\d{6}(Z|[-+]\d\d))?"/>
+			<xsd:pattern value="(20\d{6})(\d{6}(Z|[-+]\d\d))?"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:complexType name="DateTimeType">
-          <xsd:simpleContent>
-            <xsd:extension base="udt:DateTimePatternType">
-              <xsd:attribute name="formatCode" type="udt:FormatCodeType" use="required"/>
-            </xsd:extension>
-          </xsd:simpleContent>
+		<xsd:simpleContent>
+			<xsd:extension base="udt:DateTimePatternType">
+				<xsd:attribute name="formatCode" type="udt:FormatCodeType" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
 	</xsd:complexType>
 	<xsd:complexType name="IDType">
 		<xsd:simpleContent>
-			<xsd:extension base="xsd:token">
+			<xsd:extension base="xsd:string">
 				<xsd:attribute name="schemeID" type="xsd:token" use="optional"/>
 				<xsd:attribute name="schemeName" type="xsd:string" use="optional"/>
 				<xsd:attribute name="schemeAgencyID" type="clm63055:AgencyIdentificationCodeContentType" use="optional"/>
@@ -124,5 +124,5 @@ Schema agency: 	UN/CEFACT
 			<xsd:minLength value="1"/>
 			<xsd:maxLength value="5"/>
 		</xsd:restriction>
-    </xsd:simpleType>
+	</xsd:simpleType>
 </xsd:schema>

@@ -26,7 +26,7 @@
 		</AdditionalInformation>
 		<Error>
 			<Description>Value per kilo appears too low for this commodity</Description>
-			<ValidationCode>DMS13000</ValidationCode>
+			<ValidationCode>CDS13000</ValidationCode>
 			<Pointer>
 				<DocumentSectionCode>42A</DocumentSectionCode>
 			</Pointer>

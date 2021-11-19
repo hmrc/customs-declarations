@@ -56,13 +56,16 @@
 			<!--This field is mandatory according to CDSNIP-284 Note 2: Data elements 5/23 and 7/4 are required for Risk and must therefore be added. -->
 			<ModeCode>5</ModeCode>
 		</BorderTransportMeans>
-		<!-- DE 3/18: Declarant ID no. Mandatory only when a recognised ID number is available.
-  					 The EORI number of the declarant. UK requires an EORI to be provided for the declarant. -->
+		<!--DE 3/18: Declarant Identification Number. 
+			Mandatory only when a recognised ID number is available.
+			The EORI number of the declarant. 
+			UK requires an EORI to be provided for the declarant. -->
 		<Declarant>
 			<ID>GB603202734852</ID>
 		</Declarant>
-		<!-- DE 3/1: Exporter. This data element can be declared at a header or item level, depending on the scenario.
-					Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2.  -->
+		<!--DE 3/1: Exporter. 
+			This data element can be declared at a header or item level, depending on the scenario.
+			Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
 		<Exporter>
 			<Name>Invaluable Fine Arts Inc</Name>
 			<Address>

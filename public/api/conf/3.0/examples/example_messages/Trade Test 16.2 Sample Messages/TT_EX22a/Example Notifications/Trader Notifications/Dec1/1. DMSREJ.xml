@@ -12,7 +12,7 @@
 			<DateTimeString formatCode="304">20210712154719Z</DateTimeString>
 		</IssueDateTime>
 		<Error>
-			<ValidationCode>DMS10001</ValidationCode>
+			<ValidationCode>CDS10001</ValidationCode>
 			<Pointer>
 				<DocumentSectionCode>42A</DocumentSectionCode>
 			</Pointer>
@@ -21,7 +21,7 @@
 			</Pointer>
 		</Error>
 		<Error>
-			<ValidationCode>DMS12070</ValidationCode>
+			<ValidationCode>CDS12070</ValidationCode>
 			<Pointer>
 				<DocumentSectionCode>42A</DocumentSectionCode>
 			</Pointer>
@@ -37,7 +37,7 @@
 			</Pointer>
 		</Error>
 		<Error>
-			<ValidationCode>DMS12070</ValidationCode>
+			<ValidationCode>CDS12070</ValidationCode>
 			<Pointer>
 				<DocumentSectionCode>42A</DocumentSectionCode>
 			</Pointer>

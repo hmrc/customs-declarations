@@ -67,15 +67,18 @@
 				<BorderTransportMeans>
 					<ModeCode>1</ModeCode>
 				</BorderTransportMeans>
-				<!--DE 3/18: Declarant ID no. This field is mandatory only when a recognised ID number is available.
-				The EORI number of the declarant. UK requires an EORI to be provided for the declarant. -->
+				<!--DE 3/18: Declarant ID no. 
+					This field is mandatory only when a recognised ID number is available.
+					The EORI number of the declarant. 
+					UK requires an EORI to be provided for the declarant. -->
 				<Declarant>
 					<ID>GB201909014000</ID>
 				</Declarant>
 				<GoodsShipment>
-					<!--DE 8/5: Nature of transaction. This is a mandatory field.
-					First digit 9 indicates 'Other transactions which cannot be classified under other codes'.
-					Optional second digit code 9 indicates 'Other'. -->
+					<!--DE 8/5: Nature of transaction. 
+						This is a mandatory field.
+						First digit 9 indicates 'Other transactions which cannot be classified under other codes'.
+						Optional second digit code 9 indicates 'Other'. -->
 					<TransactionNatureCode>99</TransactionNatureCode>
 					<Consignment>
 						<!--DE 7/2: Container. This is a mandatory field. Indicator to show if goods are packed in a container or not.

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inv:inventoryLinkingConsolidationRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+  <inv:messageCode>CST</inv:messageCode>
+  <inv:masterUCR>GB/FCP1-CHIEF2104M1</inv:masterUCR>
+</inv:inventoryLinkingConsolidationRequest>

@@ -87,11 +87,15 @@
 					<!-- DE 7/4: Mode of transport at the border. Mandatory field. ModeCode of 1 to represent Maritime Sea transport. -->
 					<ModeCode>1</ModeCode>
 				</BorderTransportMeans>
-				<!-- DE 3/18: Declarant ID no. Mandatory only when a recognised ID number is available. The EORI number of the declarant. UK requires an EORI to be provided for the declarant. -->
+				<!--DE 3/18: Declarant ID no. 
+					Mandatory only when a recognised ID number is available. 
+					The EORI number of the declarant. 
+					UK requires an EORI to be provided for the declarant. -->
 				<Declarant>
 					<ID>GB553202734852</ID>
 				</Declarant>
-				<!-- DE 3/1: Exporter. This data element can be declared at a header or item level, depending on the scenario. Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2.  -->
+				<!-- DE 3/1: Exporter. 
+					This data element can be declared at a header or item level, depending on the scenario. Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
 				<Exporter>
 					<Name>Egyptian Vegetable Company</Name>
 					<Address>

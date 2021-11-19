@@ -13,7 +13,7 @@
 			<DateTimeString formatCode="304">20200211114212Z</DateTimeString>
 		</IssueDateTime>
 		<Error>
-			<ValidationCode>DMS12005</ValidationCode>
+			<ValidationCode>CDS12005</ValidationCode>
 			<Pointer>
 				<DocumentSectionCode>42A</DocumentSectionCode>
 			</Pointer>

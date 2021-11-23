@@ -1,0 +1,292 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1
+      </md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--
+			***
+			Note KEL 430 when testing: When ASVX (% volume Hectolitre) is declared as a Measurement Unit in D.E 4/4, then the System incorrectly applies validation rules relating to ASV, resulting in the the declaration being rejected. As a workaround, only declare ASV (% volume) on a declaration when it is required.
+			***
+			
+			SCENARIO
+			Goods imported and declared to Free circulation and Home Use
+			Procedure code 4000 Additional procedure code 000
+			Goods: High Strength beer
+			Frontier declaration: H1 additional declaration type D
+			Importer is not an AEO authorisation holder
+			Agent employed by the importer under direct rep.
+			Deferment used for payment of VAT & Excise (i.e. non Customs Duties). Therefore, there is no need to include the Additional Documents C505/C506, their associated Authorisation Holder references in D.E 3/39 (CGU/DPO),
+			or the Obligation Guarantee details (D.E 8/2 & 8/3), as no Customs Duty is due.
+			Goods presented at Baltic Wharf, Wallasea Island (NILP) -->
+		
+		<!--Function Code of 9 to represent an original declaration-->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: Traders own reference number: this must be unique to the transaction-->
+		<FunctionalReferenceID>TT_IM10b_v4.9_0909_05</FunctionalReferenceID>
+		<!--DE 1/1: IM to represent an import declaration-->
+		<!--DE 1/2: D to represent a pre-lodged standard declaration-->
+		<TypeCode>IMD</TypeCode>
+		<!--DE 1/9: Total number of goods items on the declaration - single item declaration.-->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--6/18: Total packages -  100. Note that this matches DE 6/10 because this is a single item declaration.-->
+		<TotalPackageQuantity>100</TotalPackageQuantity>
+		<!--DE 2/6: The DAN account used for deferred payment (for excise duty in this scenario).
+					This declared DAN belongs to the importer declared on the declaration.-->
+		<AdditionalDocument>
+			<CategoryCode>1</CategoryCode>
+			<ID>8078888</ID>
+			<TypeCode>DAN</TypeCode>
+		</AdditionalDocument>
+		<Agent>
+			<!--DE 3/21: FunctionCode of 2 indicating agent acting in direct representation
+						for the importer (holding written instruction to do so).-->
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<BorderTransportMeans>
+			<!--DE 7/15: Country code of the nationality of the active means of transport crossing the border, in this case NG.-->
+			<RegistrationNationalityCode>NG</RegistrationNationalityCode>
+			<!--DE 7/4: ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border-->
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<Declarant>
+			<!--DE 3/18: The EORI number of the agent entering the declaration. The UK requires an EORI to be provided for the declarant. -->
+			<ID>GB575456994000</ID>
+		</Declarant>
+		<Exporter>
+			<!--DE 3/1: Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2.-->
+			<Name>Nigeria Trading.</Name>
+			<Address>
+				<CityName>Lagos</CityName>
+				<CountryCode>NG</CountryCode>
+				<Line>1 Trade Street</Line>
+				<PostcodeID>LG1 234</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 8/5: Nature of transaction: 1 to indicate transactions involving actual or intended
+						transfer of ownership from residents to non-residents against financial or other compensation.-->
+			<TransactionNatureCode>1</TransactionNatureCode>
+			<Consignment>
+				<!--DE 7/2: Indicator to show if goods are packed in a container or not.
+							1 indicates that goods are transported in containers.
+							Note: Unlike CHIEF this must now be completed.-->
+				<ContainerCode>1</ContainerCode>
+				<!--DE 7/9: Identity of the means of transport on arrival.
+							Example number representing IMO ship identification number: '10',
+							and 5 digits for the identification number: '12345'.-->
+				<ArrivalTransportMeans>
+					<ID>12345</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+				</ArrivalTransportMeans>
+				<!--DE 5/23: The location code for Wallasea Island, Baltic Wharf, a non-inventory linked location -->
+				<GoodsLocation>
+					<!--DE 5/23: ID to give a unique position of the location.-->
+					<Name>WLALONBTW</Name>
+					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE.-->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Country code of the country where the goods may be examined, GB in this scenario.-->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<!--DE 7/10: Container identification number. This is alpha-numeric with up to 17 characters.
+                     For containers covered by the standard ISO 6346, the identifier (prefix) allocated
+                     by the International Bureau of Containers and Intermodal Transport (BIC) shall
+                     also be provided in addition to the container identification number.
+                     For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as
+                     introduced by the European EN 13044 shall be used.-->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>AD12345</ID>
+				</TransportEquipment>
+			</Consignment>
+			<!--DE 5/8: Country code of the destination country: GB.-->
+			<Destination>
+				<CountryCode>GB</CountryCode>
+			</Destination>
+			<!--DE 5/14: Country code of the dispatch country: NG.-->
+			<ExportCountry>
+				<ID>NG</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Sequential number of the goods item-->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3:	A document code of Y929 indicates: Goods not concerned by
+							Regulation (EC) No 834/2007 (organic products)
+							Council Regulation (EC) No 834/2007 on organic production
+							and labelling of organic products and repealing Regulation (EEC) No 2092/91.-->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>Excluded from Reg 834/2007</ID>
+					<Name>Reason for Waiver</Name>
+					<TypeCode>929</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of N935 indicates: the invoice on the basis of which
+							the customs value of the goods is declared.
+							This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16.-->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>12345/10.08.2021</ID>
+					<TypeCode>935</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<Commodity>
+					<!--DE 6/8: Description of the goods specific enough to enable classification
+                          - without repeating the CN code description in the Tariff.-->
+					<Description>Super Strength Special 8percent beer, 1000 bottles, 10 per box, 100 boxes, 10 boxes per pallet, 10 pallets.</Description>
+					<Classification>
+						<!--DE 6/14: Commodity code - combined nomenclature code.-->
+						<ID>22030001</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/15: Commodity code - The TARIC code (two characters for the application of specific Union measures in respect of formalities to be completed at destination).-->
+						<ID>00</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/17: Commodity code - National Additional Code.-->
+						<ID>X447</ID>
+						<IdentificationTypeCode>GN</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/17: Commodity code - National Additional Code.-->
+						<ID>X473</ID>
+						<IdentificationTypeCode>GN</IdentificationTypeCode>
+					</Classification>
+					<DutyTaxFee>
+						<!--DE 4/17: Preference Type of 100 represents no preference being claimed.-->
+						<DutyRegimeCode>100</DutyRegimeCode>
+						<!--DE 4/4: Tax Base
+							In this scenario, GP1 indicating Gross Annual Production -->
+						<SpecificTaxBaseQuantity unitCode="GP1">70000</SpecificTaxBaseQuantity>
+						<!--DE 4/3: Tax type
+							In this scenario, B00 indicating VAT. -->
+						<TypeCode>B00</TypeCode>
+						<!--DE 4/8: MethodCode of E to indicate Deferment used for import - VAT-->
+						<Payment>
+							<MethodCode>E</MethodCode>
+						</Payment>
+					</DutyTaxFee>
+					<DutyTaxFee>
+						<!--DE 4/4: Calculation of taxes - Tax Base.
+							In this scenario, ASV indicating Alcoholic Strength Volume @ 8.0.
+							Note KEL 430 when testing: When ASVX (% volume Hectolitre) is declared as a Measurement Unit in D.E 4/4, then the System incorrectly applies validation rules relating to ASV, resulting in the the declaration being rejected. As a workaround, only declare ASV (% volume) on a declaration when it is required. -->
+						<SpecificTaxBaseQuantity unitCode="ASV">8</SpecificTaxBaseQuantity>
+						<!--DE 4/3: Tax type
+							447 indicating EXCISE - FULL, 447, IMPORTED BEER 5.69 GBP / percent vol/hl. -->
+						<TypeCode>447</TypeCode>
+						<!--DE 4/8: MethodCode of E to indicate Deferment used for import - Excise-->
+						<Payment>
+							<MethodCode>E</MethodCode>
+						</Payment>
+					</DutyTaxFee>
+					<DutyTaxFee>
+						<!--DE 4/3: Tax type 
+							447 indicating EXCISE - FULL, 473, BEER BASED BEVERAGE EXCEEDING 1.2 percent VOL. 19.08 GBP / percent vol/hl. -->
+						<TypeCode>473</TypeCode>
+						<!--DE 4/8: MethodCode of E to indicate Deferment used for import - Excise-->
+						<Payment>
+							<MethodCode>E</MethodCode>
+						</Payment>
+					</DutyTaxFee>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
+						<GrossMassMeasure>1050</GrossMassMeasure>
+						<!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
+						<NetNetWeightMeasure>850</NetNetWeightMeasure>
+						<!--DE 6/2: Supplementary units.
+							Quantity of the goods in the unit as required by Customs for tariff, statistical or fiscal purposes. -->
+						<TariffQuantity>500</TariffQuantity>
+					</GoodsMeasure>
+					<!--DE 4/14: Item price amount. 
+						The invoice was issued with a value of 1250 and the currency GBP. -->
+					<InvoiceLine>
+						<ItemChargeAmount currencyID="GBP">1250</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+				<CustomsValuation>
+					<!--DE 4/16: Valuation method: 1 to indicate the method is transaction value of the imported goods.-->
+					<MethodCode>1</MethodCode>
+				</CustomsValuation>
+				<GovernmentProcedure>
+					<!--DE 1/10: Requested Procedure of 40 indicating entry for free circulation and home use of goods.-->
+					<CurrentCode>40</CurrentCode>
+					<!--DE 1/10: Previous Procedure of 00 indicating there is no previous procedure.-->
+					<PreviousCode>00</PreviousCode>
+				</GovernmentProcedure>
+				<GovernmentProcedure>
+					<!--DE 1/11: 000 to indicate no additional procedure.-->
+					<CurrentCode>000</CurrentCode>
+				</GovernmentProcedure>
+				<Origin>
+					<!--DE 5/15: TypeCode of 1 to represent non-preferential origin.
+					Where preference in DE 4/17 begins with '1', this must be completed.
+					CountryCode cotains the code for the country from which the goods originated, in this case NG.-->
+					<CountryCode>NG</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping marks on the packages.-->
+					<MarksNumbersID>ADRN123456123</MarksNumbersID>
+					<!--DE 6/10: Number of packages, in this case 100.-->
+					<QuantityQuantity>100</QuantityQuantity>
+					<!--DE 6/9: Type of packages - BX to represent Box.-->
+					<TypeCode>BX</TypeCode>
+				</Packaging>
+				<PreviousDocument>
+					<!--DE 2/1:	Previous document of Z355 to show the MRN for the entry summary declaration.
+						This is a mandatory field. To denote the inventory reference number.
+						Note: As this is for a single item declaration, this should all be declared at header level-->
+					<CategoryCode>Z</CategoryCode>
+					<ID>21GB34F7Y1O2CX8PT4</ID>
+					<TypeCode>355</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<ValuationAdjustment>
+					<!--DE 4/13: Valuation indicator
+					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
+					The code comprises four digits, each of which being either a ‘0’ or a ‘1’: 
+					- First digit: 0 = there is no price influence as a result of a
+					Party Relationship between the buyer and seller.
+					- Second digit: 0 = there are no restrictions as to the disposal
+					or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+					- Third digit: 0 = the sale or price is not subject to some condition
+					or consideration in accordance with Article 70(3)(b) of the Code.
+					- Fourth digit: 0 = the sale is not subject to an arrangement under
+					which part of the proceeds of any subsequent resale, disposal or use
+					accrues directly or indirectly to the seller.-->
+					<AdditionCode>0000</AdditionCode>
+				</ValuationAdjustment>
+			</GovernmentAgencyGoodsItem>
+			<Importer>
+				<!--DE 3/16: EORI number of the Importer.-->
+				<ID>GB225456994000</ID>
+			</Importer>
+			<TradeTerms>
+				<!--DE 4/1: Mandatory as method 1 is being used in DE 4/16.
+					CIF to indicate Cost, Insurance and Freight.
+					GBWLA to represent the named port of destination: Wallasea Island, Baltic Wharf, UK, a non-inventory linked location. -->
+				<ConditionCode>CIF</ConditionCode>
+				<LocationID>GBWLA</LocationID>
+			</TradeTerms>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>

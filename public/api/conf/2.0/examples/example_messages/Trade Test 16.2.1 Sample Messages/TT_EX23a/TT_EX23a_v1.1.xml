@@ -1,0 +1,254 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--
+			SCENARIO
+			Type A Export with self representation and no control
+			B2 data set
+			Goods exported for Outward Processing
+			Procedure code 2100 Additional procedure code 1CS
+			Goods: Straw envelopes for bottles
+			Goods presented at Felixstowe 
+		-->
+		<!--This should be updated to today's date as the declaration is a frontier type.
+			Note this data element is not mandatory for pre-lodged or frontier declarations. -->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20210923080000+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<!--Function Code of 9 to represent an original declaration. -->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: The trader assigned reference to the declaration. -->
+		<FunctionalReferenceID>E3.4sc2.0_2309R1</FunctionalReferenceID>
+		<IssueDateTime>
+			<p1:DateTimeString formatCode="304">20210923080000+01</p1:DateTimeString>
+		</IssueDateTime>
+		<!--DE 1/1: EX to represent an Export declaration.-->
+		<!--DE 1/2: A to represent a standard frontier declaration.-->
+		<TypeCode>EXA</TypeCode>
+		<!--DE 1/9: Total number of goods items on the declaration.-->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 5/26: Customs Office of Presentation. 
+			Note 1: This information is only required when centralised clearance/SASP is being used, and
+			may be removed in the next version of this sample.
+			Note 2: 'DeclarationOfficeID' and 'Declaration/PresentationOffice/ID' are two different fields. DeclarationOfficeID is unassigned from any UCC/Data Element number so this can apply to any Data Element number: in this case 5/26. -->
+		<DeclarationOfficeID>GBLBA001</DeclarationOfficeID>
+		<!--DE 4/11: Total invoice amount. -->
+		<InvoiceAmount currencyID="JPY">15000</InvoiceAmount>
+		<!--DE 6/18: Total packages. -->
+		<TotalPackageQuantity>50</TotalPackageQuantity>
+		<!--DE 3/39: Holder of the authorisation identification number. 
+			OPO indicates authorisation for the use of outward processing procedure. -->
+		<AuthorisationHolder>
+			<ID>GB896458895023</ID>
+			<CategoryCode>OPO</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: Holder of the authorisation identification number.
+			An authorisation type code of CSE indicates Customs Supervised Exports authorisation issued by the competent authorities of the Member States. -->
+		<AuthorisationHolder>
+			<ID>GB896458895023</ID>
+			<CategoryCode>CSE</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 7/14: Identity of active means of transport crossing the border.-->
+		<BorderTransportMeans>
+			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<Consignment>
+			<!--DE 3/31: Carrier Name and Address. 
+				This is Security and Safety Data. -->
+			<Carrier>
+				<Name>Transportation Company</Name>
+				<Address>
+					<CityName>London</CityName>
+					<CountryCode>GB</CountryCode>
+					<Line>London</Line>
+					<PostcodeID>SE1 7PB</PostcodeID>
+				</Address>
+			</Carrier>
+			<!-- DE 4/2: Transport charges method of payment. C indicating payment by cheque. -->
+			<Freight>
+				<PaymentMethodCode>C</PaymentMethodCode>
+			</Freight>
+			<!-- DE 5/18: Countries of routing codes. 
+				GBJP Routing from GB to JP. 
+				This is Security and Safety Data. -->
+			<Itinerary>
+				<SequenceNumeric>1</SequenceNumeric>
+				<RoutingCountryCode>GB</RoutingCountryCode>
+			</Itinerary>
+			<Itinerary>
+				<SequenceNumeric>2</SequenceNumeric>
+				<RoutingCountryCode>JP</RoutingCountryCode>
+			</Itinerary>
+		</Consignment>
+		<!--DE 3/18: EORI number of the Declarant. -->
+		<Declarant>
+			<ID>GB896458895023</ID>
+		</Declarant>
+		<!--DE 5/12 Customs office of exit. -->
+		<ExitOffice>
+			<ID>GB000051</ID>
+		</ExitOffice>
+		<!--DE 3/2: EORI number of the Exporter, the same as 3/18. -->
+		<Exporter>
+			<ID>GB896458895023</ID>
+		</Exporter>
+		<GoodsShipment>
+			<!-- DE 3/9: Consignee name and address details. -->
+			<Consignee>
+				<Name>Tokyo Export</Name>
+				<Address>
+					<CityName>Tokyo</CityName>
+					<CountryCode>JP</CountryCode>
+					<Line>Tokyo</Line>
+					<PostcodeID>150 0002</PostcodeID>
+				</Address>
+			</Consignee>
+			<Consignment>
+				<!--DE 7/2: 1 to indicate that the goods are transported in containers. -->
+				<ContainerCode>1</ContainerCode>
+				<!--DE 7/7: ID of the means of transport. -->
+				<!--DE 7/5: '3' indicating lorry from CSE location to the ship/boat. -->
+				<DepartureTransportMeans>
+					<ID>123</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+					<ModeCode>3</ModeCode>
+				</DepartureTransportMeans>
+				<!--DE 5/23: ID to give a unique position of the location.
+					FXTFXTFXT Indicating Felixstowe. -->
+				<GoodsLocation>
+					<Name>FXTFXTFXT</Name>
+					<TypeCode>A</TypeCode>
+					<Address>
+						<TypeCode>U</TypeCode>
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<TransportEquipment>
+					<!--DE 7/10: Container Identification Number.
+						Sequence number and ID of the container. -->
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>Container123</ID>
+					<!--DE 7/18: Seal sequence number 1, then seal number. -->
+					<Seal>
+						<SequenceNumeric>1</SequenceNumeric>
+						<ID>12345</ID>
+					</Seal>
+				</TransportEquipment>
+			</Consignment>
+			<!--DE 5/8: Country code of the destination country.
+				JP Indicating Indicating Japan. -->
+			<Destination>
+				<CountryCode>JP</CountryCode>
+			</Destination>
+			<!--DE 5/14: Country of Destination Code.
+				In this case GB. -->
+			<ExportCountry>
+				<ID>GB</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Goods Item Number.
+					Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 8/6: Statistical Value.
+					Value of the goods item in GBP. -->
+				<StatisticalValueAmount currencyID="GBP">1000</StatisticalValueAmount>
+				<!--DE 8/5: Nature of  Transaction.
+					22 represents replacement for returned goods. -->
+				<TransactionNatureCode>22</TransactionNatureCode>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of C676 indicates Export authorisation issued by the competent authorities of the member states. 
+					CSE is used to indicate custom supervised export. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCSE896458895023E</ID>
+					<TypeCode>676</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					This field is mandatory only where codes required.
+					Additional document code of C019 indicates OP authorisation number valid at the time of export. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCSE896458895023E</ID>
+					<TypeCode>019</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional information. 
+					00400 Indicating Self representation i.e. the declarant and the exporter are the same party. -->
+				<AdditionalInformation>
+					<StatementCode>00400</StatementCode>
+					<StatementDescription>EXPORTER</StatementDescription>
+					<StatementTypeCode>ACB</StatementTypeCode>
+				</AdditionalInformation>
+				<Commodity>
+					<!--DE 6/8: Description of the goods. -->
+					<Description>Straw envelopes for bottles</Description>
+					<!--DE 6/14: Commodity code - combined nomenclature code. -->
+					<Classification>
+						<ID>46021910</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass.
+							Mass of the goods in kilograms including packaging. -->
+						<GrossMassMeasure unitCode="KGM">700</GrossMassMeasure>
+						<!--DE 6/1: Net Mass. 
+							Mass of the goods in kilograms without any packaging. -->
+						<NetNetWeightMeasure unitCode="KGM">500</NetNetWeightMeasure>
+					</GoodsMeasure>
+				</Commodity>
+				<!--DE 1/10: Procedure Code.
+					Requested procedure of 2100 indicating temporary export under outward processing where the goods have not been subject to any previous procedure. -->
+				<GovernmentProcedure>
+					<CurrentCode>21</CurrentCode>
+					<PreviousCode>00</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code.
+					1CS is used as CDS must validate that the relevant document code is present here. -->
+				<GovernmentProcedure>
+					<CurrentCode>1CS</CurrentCode>
+				</GovernmentProcedure>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping Marks.
+						In this case 'TIME123'. -->
+					<MarksNumbersID>TIME123</MarksNumbersID>
+					<!--DE 6/10: Number of Packages.
+						In this case 1. -->
+					<QuantityQuantity>50</QuantityQuantity>
+					<!--DE 6/9: Type of Packages.
+						BX indicating Box. -->
+					<TypeCode>BX</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 2/1: Simplified Declaration/ Previous Documents .
+				Previous document to show the DUCR assigned to the consignment. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>1GB225456994000-2309R1</ID>
+				<TypeCode>DCR</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+		</GoodsShipment>
+		<!--DE 5/27: Supervising Customs Office. 
+			The Supervising Office Code for the HMRC Office overseeing the Customs Warehouse procedure. 
+			ID GBBEL004 is Belfast, Dorchester House (NIRU). -->
+		<SupervisingOffice>
+			<ID>GBBEL004</ID>
+		</SupervisingOffice>
+	</Declaration>
+</md:MetaData>

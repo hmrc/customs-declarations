@@ -1,0 +1,221 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--
+			SCENARIO
+			Type J Bulk Import Reduced Dataset (BIRDS) declaration with minimum data with Inventory Linking.
+			Procedure code 0020, with 21V additional procedure code.
+			Goods: Documentation and printed materials.
+			C21i additional declaration type J.
+			Expected Trader Notifications: DMSACC, DMSTAX, DMSTAX, DMSCLE.
+		-->
+		
+		<!--Function Code of 9 to represent an original declaration.-->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: LRN.
+			Trader's own reference number - this must be unique to the transaction -->
+		<FunctionalReferenceID>CDSP_9245_TC3_2710_01</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type.
+			IM to represent an import declaration.-->
+		<!--DE 1/2: Additional Declaration Type.
+			J to represent Goods arrived C21 declaration-->
+		<TypeCode>IMJ</TypeCode>
+		<!--DE 1/9: Total Number of Items.
+			Total number of goods items on the declaration. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 6/18: Total packages.
+			In this declaration, 150.
+			Note that this matches DE 6/10 because this is a single item declaration. -->
+		<TotalPackageQuantity>150</TotalPackageQuantity>
+		<!--DE 3/21: Representative Status Code.
+			Required if self-rep not used.
+			FunctionCode of 2 indicating agent acting in direct representation for the importer (holding written instruction to do so). -->
+		<Agent>
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!--DE 3/39: Holder of the authorisation ID Number.
+			BRD to indicate BIRDS. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>BRD</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 7/4: Mode of Transport at the Border. 
+			4 represents air transport. 
+			This is a mandatory data element. -->
+		<BorderTransportMeans>
+			<ModeCode>4</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: Declarant Identification Number. 
+			The EORI number of the agent entering the declaration.
+			The UK requires an EORI to be provided for the declarant. -->
+		<Declarant>
+			<ID>GB603202734852</ID>
+		</Declarant>
+		<!--DE 3/1: Exporter.
+			Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2.
+			Where the BIRDS declaration contains more than one exporter, code '00200' is declared in all subfields under Exporter except Country sub-field, which contains a valid country code. -->
+		<Exporter>
+			<Name>00200</Name>
+			<Address>
+				<CityName>00200</CityName>
+				<CountryCode>US</CountryCode>
+				<Line>00200</Line>
+				<PostcodeID>00200</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 7/2: Container.
+				Indicator to show if goods are packed in a container or not. 
+				1 indicates that goods are transported in containers.
+				Note: Unlike CHIEF this must now be completed. -->
+			<Consignment>
+				<ContainerCode>1</ContainerCode>
+				<!--DE 7/9: Identity of the Means of Transport on Arrival. 
+					Example number representing IATA flight number and date of flight. -->
+				<ArrivalTransportMeans>
+					<ID>NYC00120102021</ID>
+					<IdentificationTypeCode>40</IdentificationTypeCode>
+				</ArrivalTransportMeans>
+				<!--DE 5/23: Location of Goods. 
+					The location code for London Heathrow Airport (an IVL airport) an Inventory Linked location. -->
+				<GoodsLocation>
+					<Name>LHRLHRLHR</Name>
+					<!--DE 5/23: Type of Location.
+						A in this scenario to represent that it is a designated location.-->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Type of ID of the Location.
+							U in this scenario for UN/LOCODE. -->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Country code.
+							Country where the goods may be examined.
+								GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<!--DE 7/10: Container identification number. 
+					This is alpha-numeric with up to 17 characters.
+					For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of in addition to the container identification number.
+					For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>CN12345</ID>
+				</TransportEquipment>
+			</Consignment>
+			<!--DE 5/14: Country of Dispatch/Export Code 
+				The dispatch country: US. -->
+			<ExportCountry>
+				<ID>US</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Goods Item Number.
+					Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3 Documents produced, certificates and authorisations, additional references.
+					BIRDS authorisation document code '1BRD' is declared. -->
+				<AdditionalDocument>
+					<CategoryCode>1</CategoryCode>
+					<ID>GBBIRDS55320273485220211018095959</ID>
+					<TypeCode>BRD</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional information. 
+					Code '00200' and description 'Various' are declared, to indicate multiple parties where the BIRDS declaration contains more than one exporter. -->
+				<AdditionalInformation>
+					<StatementCode>00200</StatementCode>
+					<StatementDescription>Various</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 6/8: Description of Goods. -->
+				<Commodity>
+					<Description>Packets of Stickers</Description>
+					<!--DE 6/1: Net Mass.
+						Mass of the goods in kilograms without any packaging.
+                        N.B: There is no need to include a unitcode indicating KG. -->
+					<GoodsMeasure>
+						<GrossMassMeasure>4</GrossMassMeasure>
+						<NetNetWeightMeasure>3</NetNetWeightMeasure>
+					</GoodsMeasure>
+					<!--DE 4/14: Item Price/Amount.
+						The invoice was issued with a value of 2500 and the currency was in GBP. -->
+					<InvoiceLine>
+						<ItemChargeAmount currencyID="GBP">125</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+				<!--DE 1/10: Procedure. 
+					00 20 indicating Home use and free circulation, with no previous procedure.
+					Customs Clearance Request (CCR) for release from customs control to free circulation on 
+					payment of customs duty and other charges, where required, for goods where a customs declaration is not required. -->
+				<GovernmentProcedure>
+					<CurrentCode>00</CurrentCode>
+					<PreviousCode>20</PreviousCode>
+				</GovernmentProcedure>
+				<GovernmentProcedure>
+					<!--DE 1/11: Additional Procedure Code.
+						21V to indicate Bulk Import Reduced Dataset (BIRDS). -->
+					<CurrentCode>21V</CurrentCode>
+				</GovernmentProcedure>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping Marks.
+						Description of any marks and numbers on transport units or packages. -->
+					<MarksNumbersID>ADR/PA/00002</MarksNumbersID>
+					<!--DE 6/10: Number of Packages.
+						In this case 50. 
+						Note that this matches DE 6/18 because this is a single item declaration. -->
+					<QuantityQuantity>150</QuantityQuantity>
+					<!--DE 6/9: Type of Packages.
+						PA to represent a Packet. -->
+					<TypeCode>PA</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--Tags included from here are at Header level. -->
+			<!--DE 3/16: Importer Identification Number.
+				EORI number of the Importer. -->
+			<Importer>
+				<ID>GB553202734852</ID>
+			</Importer>
+			<!--DE 2/1: Previous Documents.
+				For import inventory linked locations, the Inventory Reference Number (UCN) must be 
+				declared in DE 2/1 using the code 'MCR'. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>GB/1234-:3333HB</ID>
+				<TypeCode>MCR</TypeCode>
+			</PreviousDocument>
+			<PreviousDocument>
+				<!--DE 2/1: Previous Documents. 
+					Document Z355 to show the MRN for the entry summary declaration. 
+					This is a mandatory field. -->
+				<CategoryCode>Z</CategoryCode>
+				<ID>21GB34F7Y1O2CX8PT4</ID>
+				<TypeCode>355</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!--DE 2/4: Reference Number/UCR.
+				Reference number which is optional for the declarant to complete. -->
+			<UCR>
+				<TraderAssignedReferenceID>1GB553202734852-12345</TraderAssignedReferenceID>
+			</UCR>
+		</GoodsShipment>
+		<!--DE 5/27: Supervising Customs Office. 
+			This is a mandatory field dependant on the Procedure code.
+			The ID GBSAA001 represents Southend on Sea, Alexander House. -->
+		<SupervisingOffice>
+			<ID>GBSAA001</ID>
+		</SupervisingOffice>
+	</Declaration>
+</md:MetaData>

@@ -1,0 +1,22 @@
+Sample Instructions
+*******************
+
+A CSP submits a query for declarations that they have submitted, using the following parameters:
+
+PartyRole (*M) - 'Submitter'
+DeclarationStatus (*O) - 'All'
+Declaration Category (*M) - 'EX'
+Date From (*O) - Not populated
+Date To (*O) - Populated
+
+The list will return Pre-lodged and Arrived Export declarations.
+
+By entering an End Date in the date range, the query will return results to the End Date provided.
+Results will be returned in descending date order.
+
+Search Parameter URL:
+
+Example DIS search query: https://api.qa.tax.service.gov.uk/customs/declarations-information/search?partyRole=Submitter&declarationCategory=EX&declarationStatus=ALL&dateFrom=2021-12-01&dateTo=2021-12-15
+
+*M - Mandatory
+*O - Optional

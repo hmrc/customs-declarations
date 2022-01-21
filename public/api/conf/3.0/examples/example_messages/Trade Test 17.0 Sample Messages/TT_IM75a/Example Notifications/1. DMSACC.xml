@@ -1,0 +1,23 @@
+<MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>01</FunctionCode>
+        <FunctionalReferenceID>d2ef437efc64412fba5ed182508fadee</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20211209155726Z</DateTimeString>
+        </IssueDateTime>
+        <Declaration>
+            <AcceptanceDateTime>
+                <DateTimeString formatCode="304">20211209155725Z</DateTimeString>
+            </AcceptanceDateTime>
+            <FunctionalReferenceID>CDSP9756_TC01_0912_03</FunctionalReferenceID>
+            <ID>21GBDLMSLIBAFSEAR1</ID>
+            <VersionID>1</VersionID>
+        </Declaration>
+    </Response>
+</MetaData>

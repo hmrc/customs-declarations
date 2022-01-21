@@ -1,0 +1,3 @@
+Steps to follow for TT_EX25a:
+
+Step 1 - Submit type Z Declaration with 1x MUCR and 1xDUCR via CDS.

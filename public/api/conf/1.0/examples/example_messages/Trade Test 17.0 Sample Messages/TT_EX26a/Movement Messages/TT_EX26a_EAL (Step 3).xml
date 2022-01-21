@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EAL – Movement message notification format for Entry arriving at location (Arrivals) -->
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+                   <inv:messageCode>EAL</inv:messageCode>
+				   <inv:ucrBlock>
+				   <inv:ucr>A:16035081201</inv:ucr>
+                        <inv:ucrType>M</inv:ucrType>
+                   </inv:ucrBlock>
+				   <!-- ID to give a unique position of the location. LGWLGWLGW Indicating London Gatwick airport. This value has come from Declaration -->
+                   <inv:goodsLocation>GBAULGWLGWLGW</inv:goodsLocation>
+				   <!-- This should be today's Date -->
+                   <inv:goodsArrivalDateTime>2021-12-08T10:30:00</inv:goodsArrivalDateTime>
+                    <inv:movementReference>Movement14</inv:movementReference>
+								<inv:transportDetails>
+                      <inv:transportID>11CSCLGLOBE</inv:transportID>
+                      <inv:transportMode>1</inv:transportMode>
+                      <inv:transportNationality>GB</inv:transportNationality>
+                   </inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>
+
+
+
+
+

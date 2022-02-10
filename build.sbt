@@ -114,7 +114,7 @@ zipWcoXsds := { mappings: Seq[PathMapping] =>
       .filter(_.isDirectory)
       .map { dir =>
         val wcoXsdPaths = Path.allSubpaths(dir / "schemas")
-        val exampleMessagesFilter = new SimpleFileFilter(_.getPath.contains("/example_messages/"))
+        val exampleMessagesFilter = new SimpleFileFilter(_.getPath.contains("/annotated_XML_samples/"))
         val exampleMessagesPaths = Path.selectSubpaths(dir / "examples", exampleMessagesFilter)
         val zipFile = targetDir / "api" / "conf" / dir.getName / "wco-declaration-schemas.zip"
         IO.zip(wcoXsdPaths ++ exampleMessagesPaths, zipFile, None)

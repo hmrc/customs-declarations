@@ -25,6 +25,7 @@ documentation:
   - title: Testing
     content: !include docs/testing.md
 
+
 /customs/declarations:
   /:
     post:
@@ -61,12 +62,13 @@ documentation:
           type: string
           required: false
           example: GB123456789000
+
       (annotations.scope): "write:customs-declaration"
       securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
       body:
         application/xml:
           type: !include schemas/customs/wrapper_submit.xsd
-          example: !include examples/example_messages/Trade%20Test%2017.0%20Sample%20Messages/TT_EX01a/TT_EX01a_v1.9.xml
+          example: !include examples/annotated_XML_samples/TT_EX01a/TT_EX01a_v1.9.xml
       responses:
         202:
         400:
@@ -133,12 +135,13 @@ documentation:
             type: string
             required: false
             example: GB123456789000
+
         (annotations.scope): "write:customs-declaration"
         securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-declaration" ] } ]
         body:
           application/xml:
             type: !include schemas/customs/wrapper_cancel.xsd
-            example: !include examples/example_messages/Trade%20Test%2017.0%20Sample%20Messages/TT_IM10b/TT_IM10b_Cancellation_v1.3.xml
+            example: !include examples/annotated_XML_samples/TT_IM10b/TT_IM10b_Cancellation_v1.3.xml
         responses:
           202:
           400:
@@ -173,20 +176,20 @@ documentation:
   /file-upload:
       post:
         displayName: Submit an upload initiate request
-        description: | 
+        description: |
           Obtain a signed URL to upload files to.
-          
+
           The SuccessRedirect and ErrorRedirect fields are optional.
-          
-          If you provide them when you POST your file, then the response will be an automatic redirect. 
-          
+
+          If you provide them when you POST your file, then the response will be an automatic redirect.
+
           If you do not require these redirects for your application, then do not provide these redirect fields.
-          
+
           ### File upload workflow
           Once you receive a successful response from this endpoint, use the information in the response to POST your file to the URL provided.
-          
+
           You must use multipart encoding (multipart/form-data) NOT application/x-www-form-urlencoded.
-          
+
           The 'file' field must be the last field in the submitted form.
 
         headers:
@@ -302,7 +305,7 @@ documentation:
       body:
         application/xml:
           type: !include schemas/customs/wrapper_submit.xsd
-          example: !include examples/example_messages/Trade%20Test%2017.0%20Sample%20Messages/TT_IM02b/TT_IM02b_Amendment_V1.2.xml
+          example: !include examples/annotated_XML_samples/TT_IM02b/TT_IM02b_Amendment_V1.2.xml
       responses:
         202:
         400:
@@ -374,7 +377,7 @@ documentation:
       body:
         application/xml:
           type: !include schemas/customs/wrapper_submit.xsd
-          example: !include examples/example_messages/Trade%20Test%2017.0%20Sample%20Messages/TT_IM10a/Movement%20Messages/GPN.xml
+          example: !include examples/annotated_XML_samples/TT_IM10a/Movement_Messages/GPN.xml
       responses:
         202:
         400:

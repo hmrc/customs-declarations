@@ -7,5 +7,3 @@ Schema definitions for all the API endpoints request & response payloads can be 
 <p class="govuk-body-s" style="font-size: 16px;margin-bottom: 15px;">ZIP, 1.8MB</p>
 
 <p class="govuk-body-s" style="font-size: 16px;margin-bottom: 15px;">The ZIP file contains XML files. Open in your preferred file viewer.</p>
-
-

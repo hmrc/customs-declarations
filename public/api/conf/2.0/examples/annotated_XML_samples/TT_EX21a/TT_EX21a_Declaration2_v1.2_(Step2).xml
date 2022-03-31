@@ -1,0 +1,226 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!-- 
+			***
+			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID), even when the Representative is the same Party as the Declarant.
+			***
+			
+			SCENARIO
+			Declaration #2
+			Type A Direct Export with Direct Representation and no control.
+			Goods exported permanently.
+			Procedure code 1040 Additional procedure code 1CS.
+			Goods: Blind Rivet Nuts Stainless Steel.
+			Exporter is an SDE authorisation holder.
+
+			Agent employed by the exporter under direct representation.
+			Movement messages: CST, EAL EDL.
+			Expected Notifications: DMSACC, DMSCLE, DMSEOG.
+			Credit Card used for payment of VAT & Excise.
+			Goods presented at Sunderland.
+			
+			Note that declarations for Customs Supervised Exports (CSE) controlled goods require:
+			- DE 1/2 Additional Declaration Type to reflect the new approach of the declaration being declared as "Arrived" i.e. Types A, B or C.
+			- DE 1/11 Additional Procedure Code 1CS - this is a CDS workaround pending confirmation or a new solution to provide CSE functionality (as the Tariff currently does not include this code).
+			- DE 3/39 Holder of the Authorisation quoting the CSE authorisation.
+			- DE 5/23 Location of Goods to reflect the approved CSE inland location.
+		-->
+		
+		<!--Function Code of 9 to represent an original declaration.-->
+		<FunctionCode>9</FunctionCode>
+		<!-- DE 2/5: The trader assigned reference to the declaration -->
+		<FunctionalReferenceID>R323_E2E_TC03_DD02</FunctionalReferenceID>
+		<IssueDateTime>
+			<p1:DateTimeString formatCode="304">20210712090000+01</p1:DateTimeString>
+		</IssueDateTime>
+		<!--DE 1/1: EX to represent an Export declaration.-->
+		<!--DE 1/2: A to represent a standard frontier declaration.-->
+		<TypeCode>EXA</TypeCode>
+		<!--DE 1/9: Total number of goods items on the declaration.-->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 4/11: Total amount invoiced-->
+		<InvoiceAmount currencyID="GBP">9500</InvoiceAmount>
+		<!--DE 6/18: Total packages -->
+		<TotalPackageQuantity>1</TotalPackageQuantity>
+		<Agent>
+		<!--DE 3/20: Representative Identification Number. 
+			EORI number of the Representative. 
+			This needs to refer to the same user as the DUCR.
+			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
+			<ID>GB427168118378</ID>
+			<!--DE 3/21: Representative Status Code. 
+			'2' Indicating 'Direct representation'. -->
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!--DE 3/39: Holder of the authorisation identification no-->
+		<AuthorisationHolder>
+			<ID>GB150454489082</ID>
+			<CategoryCode>CSE</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 7/14: 'Wayfarer' Numberplate of vehicle on the ship
+			Identity of active means of transport crossing the border -->
+		<!--DE 7/15: Country code of the nationality of the active means of transport
+			crossing the border, in this case FR.
+			DE 7/4: ModeCode of 1 to represent transport as the mode of transport
+			at the border. '1' Indicating ferry -->
+		<BorderTransportMeans>
+			<ID>Wayfarer</ID>
+			<IdentificationTypeCode>11</IdentificationTypeCode>
+			<RegistrationNationalityCode>FR</RegistrationNationalityCode>
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<Consignment>
+			<!--DE 3/32: Carrier identification no -->
+			<Carrier>
+				<ID>GB025115100010</ID>
+			</Carrier>
+			<!-- 4/2: Transport charges method of payment. B indicating credit card -->
+			<Freight>
+				<PaymentMethodCode>B</PaymentMethodCode>
+			</Freight>
+			<!-- 5/18: Countries of routing codes. GBZG Routing from GB to ZG. -->
+			<Itinerary>
+				<SequenceNumeric>1</SequenceNumeric>
+				<RoutingCountryCode>GB</RoutingCountryCode>
+			</Itinerary>
+			<Itinerary>
+				<SequenceNumeric>2</SequenceNumeric>
+				<RoutingCountryCode>ZG</RoutingCountryCode>
+			</Itinerary>
+		</Consignment>
+		<!--DE 3/18: EORI number of the Declarant. -->
+		<Declarant>
+			<ID>GB427168118378</ID>
+		</Declarant>
+		<!-- 5/12: 'GB000290' Indicating Indicating Southampton -->
+		<ExitOffice>
+			<ID>GB000290</ID>
+		</ExitOffice>
+		<!--DE 3/2: EORI number of the Exporter. -->
+		<Exporter>
+			<ID>GB150454489082</ID>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 3/9: Consignee Name and Address -->
+			<Consignee>
+				<Name>ZG Export</Name>
+				<Address>
+					<CityName>Berlin</CityName>
+					<CountryCode>ZG</CountryCode>
+					<Line>Germany</Line>
+					<PostcodeID>150 0002</PostcodeID>
+				</Address>
+			</Consignee>
+			<Consignment>
+				<!--DE 7/2: 1 to indicate that the goods are transported in containers.-->
+				<ContainerCode>1</ContainerCode>
+				<!--DE 7/7: ID of the means of transport. -->
+				<!--DE 7/5: '3'Indicating Lorry from CSE location to Ferry-->
+				<DepartureTransportMeans>
+					<ID>Wayfarer</ID>
+					<IdentificationTypeCode>11</IdentificationTypeCode>
+					<ModeCode>3</ModeCode>
+				</DepartureTransportMeans>
+				<!--DE 5/23: GBAUSUNSUNSUN indicating Sunderland. -->
+				<GoodsLocation>
+					<Name>SUNSUNSUN</Name>
+					<TypeCode>A</TypeCode>
+					<Address>
+						<TypeCode>U</TypeCode>
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<!--DE 7/10: Sequence number and ID of the container.-->
+				<!--DE 7/18: Seal sequence number 1, then seal number-->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>AHFB9384274</ID>
+					<Seal>
+						<SequenceNumeric>1</SequenceNumeric>
+						<ID>17583753</ID>
+					</Seal>
+				</TransportEquipment>
+			</Consignment>
+			<!--DE 5/8: Country code of the destination country, ZG Indicating Indicating German Continental Shelf.-->
+			<Destination>
+				<CountryCode>ZG</CountryCode>
+			</Destination>
+			<!--DE 5/14: Country code for the country from which the goods were
+				originally dispatched, in this case GB.-->
+			<ExportCountry>
+				<ID>GB</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Sequential number of the goods item.-->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 8/6: statistical value for the goods item in GBP  -->
+				<StatisticalValueAmount currencyID="GBP">9500</StatisticalValueAmount>
+				<!--DE 8/5:Nature of  Transaction(11 equals to Sale ) -->
+				<TransactionNatureCode>11</TransactionNatureCode>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.-->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCSE150454489082E20191113093111</ID>
+					<TypeCode>676</TypeCode>
+				</AdditionalDocument>
+				<Commodity>
+					<!--DE 6/8: Description of the goods.-->
+					<Description>Blind Rivet Nuts Stainless Steel</Description>
+					<!--DE 6/14: Commodity code - combined nomenclature code 73181631 indicating Blind Rivet Nuts Stainless Steel.-->
+					<Classification>
+						<ID>73181631</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
+					<!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
+					<GoodsMeasure>
+						<GrossMassMeasure unitCode="KGM">48</GrossMassMeasure>
+						<NetNetWeightMeasure unitCode="KGM">43</NetNetWeightMeasure>
+					</GoodsMeasure>
+				</Commodity>
+				<!--DE 1/10: Requested Procedure of 1040 indicating Permanent export of goods in Free Circulation and Home Use -->
+				<GovernmentProcedure>
+					<CurrentCode>10</CurrentCode>
+					<PreviousCode>40</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code.
+					The code 1CS is a CDS workaround pending confirmation or a new solution to provide CSE functionality (as the Tariff currently does not include this code). -->
+				<GovernmentProcedure>
+					<CurrentCode>1CS</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 6/11: Shipping marks on the packages 'TIME123'.-->
+				<!--DE 6/10: Number of packages, in this case 1.-->
+				<!--DE 6/9: Type of packages - BX indicating Box-->
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<MarksNumbersID>TIME123</MarksNumbersID>
+					<QuantityQuantity>1</QuantityQuantity>
+					<TypeCode>BX</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment.
+				This is a mandatory field-->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>1GB427168118378-12AD01</ID>
+				<TypeCode>DCR</TypeCode>
+			</PreviousDocument>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>

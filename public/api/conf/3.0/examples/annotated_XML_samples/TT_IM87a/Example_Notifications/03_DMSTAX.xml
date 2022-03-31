@@ -1,0 +1,56 @@
+<MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>13</FunctionCode>
+        <FunctionalReferenceID>2982e293680c4036830eb9d3a60a5a8b</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20220309141835Z</DateTimeString>
+        </IssueDateTime>
+        <Bank>
+            <ReferenceID xsi:type="BankReferenceIDType">CITIGB2LLON</ReferenceID>
+            <ID xsi:type="BankAccountIdentificationIDType">GB25CITI08320011963155</ID>
+        </Bank>
+        <Status>
+            <NameCode>4</NameCode>
+        </Status>
+        <Declaration>
+            <FunctionalReferenceID>CDSP_9779_TC2_0903_01</FunctionalReferenceID>
+            <ID>22GB2OL670ZN77RAR2</ID>
+            <VersionID>1</VersionID>
+            <GoodsShipment>
+                <GovernmentAgencyGoodsItem>
+                    <SequenceNumeric>1</SequenceNumeric>
+                    <Commodity>
+                        <DutyTaxFee>
+                            <AdValoremTaxBaseAmount xsi:type="DutyTaxFeeAdValoremTaxBaseAmountType" currencyID="GBP">100.00</AdValoremTaxBaseAmount>
+                            <DeductAmount xsi:type="DutyTaxFeeDeductAmountType" currencyID="GBP">0.00</DeductAmount>
+                            <DutyRegimeCode xsi:type="DutyTaxFeeDutyRegimeCodeType">100</DutyRegimeCode>
+                            <TaxRateNumeric>2.00</TaxRateNumeric>
+                            <TypeCode xsi:type="DutyTaxFeeTypeCodeType">A00</TypeCode>
+                            <Payment>
+                                <TaxAssessedAmount xsi:type="PaymentTaxAssessedAmountType" currencyID="GBP">2.00</TaxAssessedAmount>
+                                <PaymentAmount xsi:type="PaymentPaymentAmountType" currencyID="GBP">2.00</PaymentAmount>
+                            </Payment>
+                        </DutyTaxFee>
+                        <DutyTaxFee>
+                            <AdValoremTaxBaseAmount xsi:type="DutyTaxFeeAdValoremTaxBaseAmountType" currencyID="GBP">102.00</AdValoremTaxBaseAmount>
+                            <DeductAmount xsi:type="DutyTaxFeeDeductAmountType" currencyID="GBP">0.00</DeductAmount>
+                            <DutyRegimeCode xsi:type="DutyTaxFeeDutyRegimeCodeType">100</DutyRegimeCode>
+                            <TaxRateNumeric>0.00</TaxRateNumeric>
+                            <TypeCode xsi:type="DutyTaxFeeTypeCodeType">B00</TypeCode>
+                            <Payment>
+                                <TaxAssessedAmount xsi:type="PaymentTaxAssessedAmountType" currencyID="GBP">0.00</TaxAssessedAmount>
+                                <PaymentAmount xsi:type="PaymentPaymentAmountType" currencyID="GBP">0.00</PaymentAmount>
+                            </Payment>
+                        </DutyTaxFee>
+                    </Commodity>
+                </GovernmentAgencyGoodsItem>
+            </GoodsShipment>
+        </Declaration>
+    </Response>
+</MetaData>

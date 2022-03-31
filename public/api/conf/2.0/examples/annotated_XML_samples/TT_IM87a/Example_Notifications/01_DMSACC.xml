@@ -1,0 +1,23 @@
+<MetaData xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>01</FunctionCode>
+        <FunctionalReferenceID>00d15aaf6091421cb37616f0edaa87d4</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20220309141835Z</DateTimeString>
+        </IssueDateTime>
+        <Declaration>
+            <AcceptanceDateTime>
+                <DateTimeString formatCode="304">20220309141833Z</DateTimeString>
+            </AcceptanceDateTime>
+            <FunctionalReferenceID>CDSP_9779_TC2_0903_01</FunctionalReferenceID>
+            <ID>22GB2OL670ZN77RAR2</ID>
+            <VersionID>1</VersionID>
+        </Declaration>
+    </Response>
+</MetaData>

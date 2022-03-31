@@ -6,8 +6,9 @@
 	<AgencyAssignedCustomizationCode/>
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
-		<!-- This is an example of a DMSCPI notification. With this message the submitter is informed of the insufficient balance against a deferred method of payment. 
-		The relevant financial party will need to take action to rectify the situation before the goods can be released  -->
+		<!-- This is an example of a DMSCPI notification. 
+			With this message the submitter is informed of the insufficient balance against a deferred method of payment. 
+			The relevant financial party will need to take action to rectify the situation before the goods can be released.  -->
 		<FunctionCode>14</FunctionCode>
 		<FunctionalReferenceID>58732f17f9d7459d91e775e1edf9cd55</FunctionalReferenceID>
 		<IssueDateTime>

@@ -1,0 +1,28 @@
+﻿<md:MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1 </md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+	             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
+		<FunctionCode>13</FunctionCode>
+		<FunctionalReferenceID>TT_IM68a_1403_001</FunctionalReferenceID>
+		<ID>22GB2VL0IA6VLYBA03</ID>
+		<TypeCode>GPR</TypeCode>
+		<Submitter>
+			<ID>GB603202734852</ID>
+		</Submitter>
+	</Declaration>
+</md:MetaData>
+

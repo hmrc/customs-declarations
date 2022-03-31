@@ -1,0 +1,37 @@
+<MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/"
+          xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+          xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>13</FunctionCode>
+		<FunctionalReferenceID>7b38b42802e54ec0841540bfa9c0af3b</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20220303103459Z</DateTimeString>
+		</IssueDateTime>
+		<Bank>
+			<ReferenceID xsi:type="BankReferenceIDType">CITIGB2LLON</ReferenceID>
+			<ID xsi:type="BankAccountIdentificationIDType">GB25CITI08320011963155</ID>
+		</Bank>
+		<Status>
+			<NameCode>67</NameCode>
+		</Status>
+		<Declaration>
+			<FunctionalReferenceID>CDSP_9793_TC2_0303_02</FunctionalReferenceID>
+			<ID>22GB2FSDD8A53RIA03</ID>
+			<VersionID>1</VersionID>
+			<GoodsShipment>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<Commodity/>
+				</GovernmentAgencyGoodsItem>
+			</GoodsShipment>
+		</Declaration>
+	</Response>
+</MetaData>

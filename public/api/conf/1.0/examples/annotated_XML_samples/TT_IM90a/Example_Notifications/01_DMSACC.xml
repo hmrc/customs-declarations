@@ -1,0 +1,104 @@
+<MetaData xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>01</FunctionCode>
+        <FunctionalReferenceID>fd1ef7422bc44e24b5abbf27c9e86f83</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20220304140129Z</DateTimeString>
+        </IssueDateTime>
+        <AdditionalInformation>
+            <StatementCode>smartErrorMsg</StatementCode>
+            <StatementDescription>Value per kilo appears too high for this commodity</StatementDescription>
+            <StatementTypeCode>1</StatementTypeCode>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>07B</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>53A</DocumentSectionCode>
+            </Pointer>
+        </AdditionalInformation>
+        <AdditionalInformation>
+            <StatementCode>smartErrorMsg</StatementCode>
+            <StatementDescription>Value of 1 item appears too low for this commodity</StatementDescription>
+            <StatementTypeCode>1</StatementTypeCode>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>07B</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>2</SequenceNumeric>
+                <DocumentSectionCode>53A</DocumentSectionCode>
+            </Pointer>
+        </AdditionalInformation>
+        <AdditionalInformation>
+            <StatementCode>smartErrorMsg</StatementCode>
+            <StatementDescription>Weight appears too low per item</StatementDescription>
+            <StatementTypeCode>1</StatementTypeCode>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>07B</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>3</SequenceNumeric>
+                <DocumentSectionCode>53A</DocumentSectionCode>
+            </Pointer>
+        </AdditionalInformation>
+        <Error>
+            <Description>Value per kilo appears too high for this commodity</Description>
+            <ValidationCode>CDS13000</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+        </Error>
+        <Error>
+            <Description>Value of 1 item appears too low for this commodity</Description>
+            <ValidationCode>CDS13000</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+        </Error>
+        <Error>
+            <Description>Weight appears too low per item</Description>
+            <ValidationCode>CDS13000</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+        </Error>
+        <Declaration>
+            <AcceptanceDateTime>
+                <DateTimeString formatCode="304">20220304140127Z</DateTimeString>
+            </AcceptanceDateTime>
+            <FunctionalReferenceID>CSDP_9778_001_1402_00</FunctionalReferenceID>
+            <ID>22GB2HFCXR8BO07AR1</ID>
+            <VersionID>1</VersionID>
+        </Declaration>
+    </Response>
+</MetaData>

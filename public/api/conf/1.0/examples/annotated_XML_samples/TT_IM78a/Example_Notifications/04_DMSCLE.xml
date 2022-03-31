@@ -1,0 +1,28 @@
+<MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/"
+          xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+          xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>09</FunctionCode>
+		<FunctionalReferenceID>fe50dddae68d41b392ae6e8dbec1c579</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20220309132402Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode xsi:type="AdditionalInformationStatementCodeType">A2</StatementCode>
+			<StatementTypeCode xsi:type="AdditionalInformationStatementTypeCodeType">AFB</StatementTypeCode>
+		</AdditionalInformation>
+		<Declaration>
+			<FunctionalReferenceID>TT_IM78a_v1.2_0903_01</FunctionalReferenceID>
+			<ID>22GB2OJ80MBPE0VAR3</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

@@ -1,20 +1,23 @@
-<MetaData>
-    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-    <WCOTypeName>RES</WCOTypeName>
-    <ResponsibleCountryCode/>
-    <ResponsibleAgencyName/>
-    <AgencyAssignedCustomizationCode/>
-    <AgencyAssignedCustomizationVersionCode/>
-    <Response>
-        <FunctionCode>02</FunctionCode>
-        <FunctionalReferenceID>3718a2e705ed4401b4260828c0c7ee35</FunctionalReferenceID>
-        <IssueDateTime>
-            <DateTimeString formatCode="304">20220127102904Z</DateTimeString>
-        </IssueDateTime>
-        <Declaration>
-            <FunctionalReferenceID>TT_IM77a_v1.1_2701_01</FunctionalReferenceID>
-            <ID>22GB11RULN221EQA05</ID>
-            <VersionID>1</VersionID>
-        </Declaration>
-    </Response>
+<MetaData xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/"
+          xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+          xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>02</FunctionCode>
+		<FunctionalReferenceID>c0834d8eac014547a0801d8b24721237</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20220309131946Z</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<FunctionalReferenceID>TT_IM77a_v1.1_0903_01</FunctionalReferenceID>
+			<ID>22GB2OIZNQAP8JPA05</ID>
+		</Declaration>
+	</Response>
 </MetaData>

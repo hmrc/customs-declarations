@@ -21,13 +21,14 @@
 
 				<!--
 				Scenario:
-					A self-representing frontier declaration: H1 additional declaration type Y
-					Goods imported and declared to free-circulation, with no previous procedure.  Application of duties & Preference to a declaration where the goods have SIV rates, but SIV is not chosen as a method of valuation for the goods – application of security where value differs from SIV by specified percentage.
-					Procedure code 4000 Additional Procedure code 000
-					Goods: Fresh courgettes from Egypt, 7000kg
-					Importer is an AEO authorisation holder, DAN holder, and SDE authorised party
-					Deferment used for payment of duty & security
-					Goods presented at Baltic Wharf, Wallasea Island (NILP)
+				A self-representing frontier declaration: H1 additional declaration type Y
+				Goods imported and declared to free-circulation, with no previous procedure.
+				Application of duties & Preference to a declaration where the goods have SIV rates, but SIV is not chosen as a method of valuation for the goods – application of security where value differs from SIV by specified percentage.
+				Procedure code 4000 Additional Procedure code 000
+				Goods: Fresh courgettes from Egypt, 7000kg
+				Importer is an AEO authorisation holder, DAN holder, and SDE authorised party
+				Deferment used for payment of duty & security
+				Goods presented at Baltic Wharf, Wallasea Island (NILP)
 
 				Note: Data elements 6/14 to 6/17 and 4/17 use Tariff codes for fresh fruit and vegetables. Many of these Tariff codes are seasonal and the associated preference/SIV/SPV measures may change or expire. The declaration may be rejected if a code entered is not active on the acceptance date.
 				-->

@@ -189,8 +189,7 @@
 				<ID>GB553202734852</ID>
 			</Importer>
 			<!--DE 2/1: Previous Documents.
-				For import inventory linked locations, the Inventory Reference Number (UCN) must be 
-				declared in DE 2/1 using the code 'MCR'. -->
+				For import inventory linked locations, the Inventory Reference Number (UCN) must be declared in DE 2/1 using the code 'MCR'. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
 				<ID>GB/1234-:3333HB</ID>

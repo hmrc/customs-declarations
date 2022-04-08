@@ -1,8 +1,4 @@
-<MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/"
-          xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-          xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
-          xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<MetaData>
 	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
 	<WCOTypeName>RES</WCOTypeName>
 	<ResponsibleCountryCode/>
@@ -16,8 +12,8 @@
 			<DateTimeString formatCode="304">20220318103252Z</DateTimeString>
 		</IssueDateTime>
 		<AdditionalInformation>
-			<StatementCode xsi:type="AdditionalInformationStatementCodeType">A2</StatementCode>
-			<StatementTypeCode xsi:type="AdditionalInformationStatementTypeCodeType">AFB</StatementTypeCode>
+			<StatementCode>A2</StatementCode>
+			<StatementTypeCode>AFB</StatementTypeCode>
 		</AdditionalInformation>
 		<Declaration>
 			<FunctionalReferenceID>TT_IM48a_180322_001</FunctionalReferenceID>

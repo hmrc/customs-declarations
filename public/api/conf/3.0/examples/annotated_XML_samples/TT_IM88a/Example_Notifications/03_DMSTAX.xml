@@ -1,4 +1,4 @@
-<MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:v3="http://core.dms/TraderNotificationServiceSOAP/v3/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<MetaData>
     <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
     <WCOTypeName>RES</WCOTypeName>
     <ResponsibleCountryCode/>
@@ -12,8 +12,8 @@
             <DateTimeString formatCode="304">20220304092901Z</DateTimeString>
         </IssueDateTime>
         <Bank>
-            <ReferenceID xsi:type="BankReferenceIDType">CITIGB2LLON</ReferenceID>
-            <ID xsi:type="BankAccountIdentificationIDType">GB25CITI08320011963155</ID>
+            <ReferenceID>CITIGB2LLON</ReferenceID>
+            <ID>GB25CITI08320011963155</ID>
         </Bank>
         <Status>
             <NameCode>4</NameCode>
@@ -27,25 +27,25 @@
                     <SequenceNumeric>1</SequenceNumeric>
                     <Commodity>
                         <DutyTaxFee>
-                            <AdValoremTaxBaseAmount xsi:type="DutyTaxFeeAdValoremTaxBaseAmountType" currencyID="GBP">1000.00</AdValoremTaxBaseAmount>
-                            <DeductAmount xsi:type="DutyTaxFeeDeductAmountType" currencyID="GBP">0.00</DeductAmount>
-                            <DutyRegimeCode xsi:type="DutyTaxFeeDutyRegimeCodeType">100</DutyRegimeCode>
+                            <AdValoremTaxBaseAmount currencyID="GBP">1000.00</AdValoremTaxBaseAmount>
+                            <DeductAmount currencyID="GBP">0.00</DeductAmount>
+                            <DutyRegimeCode>100</DutyRegimeCode>
                             <TaxRateNumeric>8.00</TaxRateNumeric>
-                            <TypeCode xsi:type="DutyTaxFeeTypeCodeType">A00</TypeCode>
+                            <TypeCode>A00</TypeCode>
                             <Payment>
-                                <TaxAssessedAmount xsi:type="PaymentTaxAssessedAmountType" currencyID="GBP">80.00</TaxAssessedAmount>
-                                <PaymentAmount xsi:type="PaymentPaymentAmountType" currencyID="GBP">80.00</PaymentAmount>
+                                <TaxAssessedAmount currencyID="GBP">80.00</TaxAssessedAmount>
+                                <PaymentAmount currencyID="GBP">80.00</PaymentAmount>
                             </Payment>
                         </DutyTaxFee>
                         <DutyTaxFee>
-                            <AdValoremTaxBaseAmount xsi:type="DutyTaxFeeAdValoremTaxBaseAmountType" currencyID="GBP">1080.00</AdValoremTaxBaseAmount>
-                            <DeductAmount xsi:type="DutyTaxFeeDeductAmountType" currencyID="GBP">0.00</DeductAmount>
-                            <DutyRegimeCode xsi:type="DutyTaxFeeDutyRegimeCodeType">100</DutyRegimeCode>
+                            <AdValoremTaxBaseAmount currencyID="GBP">1080.00</AdValoremTaxBaseAmount>
+                            <DeductAmount currencyID="GBP">0.00</DeductAmount>
+                            <DutyRegimeCode>100</DutyRegimeCode>
                             <TaxRateNumeric>0.00</TaxRateNumeric>
-                            <TypeCode xsi:type="DutyTaxFeeTypeCodeType">B00</TypeCode>
+                            <TypeCode>B00</TypeCode>
                             <Payment>
-                                <TaxAssessedAmount xsi:type="PaymentTaxAssessedAmountType" currencyID="GBP">0.00</TaxAssessedAmount>
-                                <PaymentAmount xsi:type="PaymentPaymentAmountType" currencyID="GBP">0.00</PaymentAmount>
+                                <TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+                                <PaymentAmount currencyID="GBP">0.00</PaymentAmount>
                             </Payment>
                         </DutyTaxFee>
                     </Commodity>

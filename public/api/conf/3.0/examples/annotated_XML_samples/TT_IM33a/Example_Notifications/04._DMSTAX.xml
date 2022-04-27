@@ -1,4 +1,9 @@
-<MetaData>
+<!--
+	***
+	Following the TTM18.0.2 Tariff data refresh, this scenario now attracts Definitive Anti-Dumping Duties (DADD) instead of Provisional Anti-Dumping Duties (PADD). As a result the Tax Type in the DMSTAX notifications will now show A80 instead of A85 and the duty calculations will be different. The sample will be updated to use a scenario that attracts PADD for TTM19.0.
+	***
+	-->
+	<MetaData>
     <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
     <WCOTypeName>RES</WCOTypeName>
     <ResponsibleCountryCode/>

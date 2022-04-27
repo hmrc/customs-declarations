@@ -1,23 +1,21 @@
-<md:MetaData
-      xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-      xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-      xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-      xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "    >
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration
-        xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-        xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-        xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-        xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-        xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
             Removal of goods from a private customs warehouse using EIDR.
@@ -29,7 +27,6 @@
             Also results in a FEC challenge, which is detailed in the DMSACC Trader Notification: “Incredible value found : Value per kilo appears too high for this commodity”.
             Acceptance Date is present on all supplementary declarations, and will match the CLE date listed in 2/1.
 		-->
-
 		<AcceptanceDateTime>
 			<p1:DateTimeString formatCode="304">20210708143931+01</p1:DateTimeString>
 		</AcceptanceDateTime>
@@ -85,11 +82,9 @@
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of CWP indicates operation of storage facilities for the customs warehousing of goods in a private customs warehouse
-               The ID is the EORI number of the Private Customs Warehousekeeper. As per the
-               import declaration completion guide, when goods are being removed from a private
-               customs warehouse, the EORI number entered here must be the same as the
-               Importer's EORI number declared in DE 3/16.-->
+			An authorisation type code of CWP indicates operation of storage facilities for the customs warehousing of goods in a private customs warehouse.
+			The ID is the EORI number of the Private Customs Warehousekeeper. 
+			As per the import declaration completion guide, when goods are being removed from a private customs warehouse, the EORI number entered here must be the same as the importer's EORI number declared in DE 3/16. -->
 		<AuthorisationHolder>
 			<ID>GB553202734852</ID>
 			<CategoryCode>CWP</CategoryCode>
@@ -150,7 +145,7 @@
 				</ArrivalTransportMeans>
 				<!--DE 5/23: ID to give a unique position of the location -->
 				<GoodsLocation>
-					<!--DE 5/23:The location code for the Customs Warehouse. -->				
+					<!--DE 5/23:The location code for the Customs Warehouse. -->
 					<Name>CW1117770GB</Name>
 					<!--DE 5/23: Type of Location.
 						B is used to identify inland locations such as customs warehouses. -->
@@ -309,7 +304,7 @@
 						<!--DE 6/1: Net Mass 
 							Mass of the goods in kilograms without any packaging. -->
 						<NetNetWeightMeasure>10</NetNetWeightMeasure>
-						</GoodsMeasure>
+					</GoodsMeasure>
 					<!--DE 4/14:  Item price amount. 
 						The invoice was issued with of a value of £1000 and the currency was in GBP. -->
 					<InvoiceLine>

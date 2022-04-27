@@ -154,12 +154,12 @@
 						A in this scenario to represent that it is a designated location. -->
 					<TypeCode>A</TypeCode>
 					<Address>
-					<!--DE 5/23: Location of Goods - Qualifier of the identification.
-						Type of ID of the Location - U in this scenario for UN/LOCODE. -->
+						<!--DE 5/23: Location of Goods - Qualifier of the identification.
+							Type of ID of the Location - U in this scenario for UN/LOCODE. -->
 						<TypeCode>U</TypeCode>
-					<!--DE 5/23: Location of Goods - Country.
-						Country code of the country where the goods may be examined.
-						GB in this scenario. -->
+						<!--DE 5/23: Location of Goods - Country.
+							Country code of the country where the goods may be examined.
+							GB in this scenario. -->
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
@@ -283,7 +283,7 @@
 					</Classification>
 					<Classification>
 						<!--DE 6/15: Commodity code: TARIC code. 
-							(two characters for the application of specific Union measures in respect of formalities to be completed at destination).
+							Two characters for the application of specific Union measures in respect of formalities to be completed at destination.
 							Identification Type Code TRC indicates TARIC Code. -->
 						<ID>00</ID>
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
@@ -409,7 +409,8 @@
 				</ValuationAdjustment>
 			</GovernmentAgencyGoodsItem>
 			<!--DE 3/16: Importer Identification Number. 
-				Mandatory only when a recognised ID no. is available EORI number of the Importer. -->
+				Mandatory only when a recognised ID no. is available. 
+				EORI number of the Importer. -->
 			<Importer>
 				<ID>GB553202734852</ID>
 			</Importer>

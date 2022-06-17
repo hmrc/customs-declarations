@@ -6,8 +6,7 @@
 	<AgencyAssignedCustomizationCode/>
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
-		<!-- This is an example of a DMSCPR notification. With this message the submitter is sent a reminder regarding the need to take action on the 
-		insufficient balance against a deferred method of payment OR to make an immediate payment. -->
+		<!--This is an example of a DMSCPR notification. With this message the submitter is sent a reminder regarding the need to take action on the insufficient balance against a deferred method of payment OR to make an immediate payment. -->
 		<FunctionCode>15</FunctionCode>
 		<FunctionalReferenceID>bee6c4091dd14ef2a058c73398029611</FunctionalReferenceID>
 		<IssueDateTime>

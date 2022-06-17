@@ -1,0 +1,61 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>13</FunctionCode>
+		<FunctionalReferenceID>e662aeca3a2a428f926b83be42a50994</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20220614121444+01</DateTimeString>
+		</IssueDateTime>
+		<Bank>
+			<ReferenceID>BARCGB22</ReferenceID>
+			<ID>GB16BARC20051723372545</ID>
+		</Bank>
+		<Status>
+			<NameCode>67</NameCode>
+		</Status>
+		<Declaration>
+			<FunctionalReferenceID>CDSP_3395_TC2_1406_01</FunctionalReferenceID>
+			<ID>22GB6J0BE6P2YMEAR8</ID>
+			<VersionID>1</VersionID>
+			<GoodsShipment>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<Commodity>
+						<DutyTaxFee>
+							<DutyRegimeCode>100</DutyRegimeCode>
+							<SpecificTaxBaseQuantity unitCode="GBP">718.500000</SpecificTaxBaseQuantity>
+							<TypeCode>451</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">718.50</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">718.50</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<DutyRegimeCode>100</DutyRegimeCode>
+							<SpecificTaxBaseQuantity unitCode="GBP">200.000000</SpecificTaxBaseQuantity>
+							<TypeCode>A00</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">200.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">200.00</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<DutyRegimeCode>100</DutyRegimeCode>
+							<SpecificTaxBaseQuantity unitCode="GBP">183.700000</SpecificTaxBaseQuantity>
+							<TypeCode>B00</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">683.70</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">683.70</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+					</Commodity>
+				</GovernmentAgencyGoodsItem>
+			</GoodsShipment>
+		</Declaration>
+	</Response>
+</MetaData>

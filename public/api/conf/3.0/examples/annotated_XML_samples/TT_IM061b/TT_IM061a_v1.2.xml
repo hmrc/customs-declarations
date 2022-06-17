@@ -1,0 +1,129 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1
+	</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31">
+		<!--
+			SCENARIO:
+			Imports non-excise Final Supplementary Declaration (FSD).
+			A CFSP Trader submits an Imports Type Q  non-excise Final Supplementary Declaration (FSD) to inform HMRC of how many Supplementary Declarations have been submitted and those due in the previous period, as well as any Supplementary Declarations that were submitted late. 
+			-->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20210301010000+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: LRN.
+			Mandatory.
+			Trader's own reference number - this must be unique to the transaction. -->
+		<FunctionalReferenceID>TT_IM61b_v1.1_0408_01</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type.
+			IM to represent an import declaration. -->
+		<!--DE 1/2: Additional Declaration Type.
+			Q to represent Final Supplementary Declaration. -->
+		<TypeCode>IMQ</TypeCode>
+		<!--DE 1/9: Total Number of Items.
+			Number of goods items on the declaration - single item declaration. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 3/18: Declaration Identification Number.
+			The EORI number of the Declarant. -->
+		<Declarant>
+			<ID>GB553202734852</ID>
+		</Declarant>
+		<GoodsShipment>
+			<Consignment>
+				<GoodsLocation>
+					<!--DE 5/23:Location of Goods - Identification of location. 
+						The location code for the Customs Warehouse. -->
+					<Name>FSDGBEIR553202734852I20190613093448</Name>
+					<!--DE 5/23: Location of Goods - Type of location.
+						Location type B is used to identify inland locations such as customs warehouses. -->
+					<TypeCode>B</TypeCode>
+					<Address>
+					<!--DE 5/23: Location of Goods - Qualifier of the identification.
+						Address type is used where the goods location is identified by an authorisation number. -->
+						<TypeCode>Y</TypeCode>
+					<!--DE 5/23: Location of Goods - Country.
+						Country code of the country where the goods may be examined, GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+			</Consignment>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Goods Item Number.
+					Mandatory.
+					Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<AdditionalInformation>
+				<!--DE 2/2: Additional Information.
+					FINSY indicating FSD for SDP Supplementary Declarations. -->
+					<StatementCode>FINSY</StatementCode>
+					<!--The statement description indicates that 8 Supplementary Declarations out of 10 actually due have been submitted. -->
+					<StatementDescription>SDY=8/10</StatementDescription>
+				</AdditionalInformation>
+				<AdditionalInformation>
+				<!--DE 2/2: Additional Information.
+					FINSL indicating FSD for late Supplementary Declarations. -->
+					<StatementCode>FINSL</StatementCode>
+					<!--The statement description 02/21=Y 2 indicates the submission of 2 late Supplementary Declarations relating to Feb 21, 01/21=Z 3 indicates the submission of 3 late EIDR Supplumentary Declarations relating to Jan 21. -->
+					<StatementDescription>02/21=Y 2 01/21=Z 3</StatementDescription>
+				</AdditionalInformation>
+				<AdditionalInformation>
+				<!--DE 2/2: Additional Information.
+					FINSZ indicating FSD for EIDR Supplementary Declarations. -->
+					<StatementCode>FINSZ</StatementCode>
+					<!--The statement description indicates 5 Supplementary Declarations out of 5 actually due have been submitted. -->
+					<StatementDescription>SDZ=5/5</StatementDescription>
+				</AdditionalInformation>
+				<AdditionalInformation>
+				<!--DE 2/2: Additional Information.
+					00500 indicating self-representation by the importer. -->
+					<StatementCode>00500</StatementCode>
+					<StatementDescription>IMPORTER</StatementDescription>
+				</AdditionalInformation>
+				<AdditionalInformation>
+				<!--DE 2/2: Additional Information.
+					BR123 indicating Branch/Division selected by Importer. -->
+					<StatementCode>BR123</StatementCode>
+					<StatementDescription>BR Code</StatementDescription>
+				</AdditionalInformation>
+				<GovernmentProcedure>
+				<!--DE 1/10: Procedure.
+					The combination of Requested Procedure code of 00 and Previous code of 90 indicates the Final Supplementary Declaration (FSD) for SDP (Regular Use) and EIDR Reporting purposes.
+					Requested Procedure of 00 indicating SDP (Regular Use).
+					Previous Procedure of 90 indicating EIDR Final Supplementary Declaration (FSD). -->
+					<CurrentCode>00</CurrentCode>
+					<PreviousCode>90</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code.
+					Additional  Procedure of 97F indicates the Customs Clearance Request (CCR) used to report the Final Supplementary Declaration (FSD) information for SDP (Regular Use) and EIDR purposes. -->
+					<GovernmentProcedure>
+					<CurrentCode>97F</CurrentCode>
+				</GovernmentProcedure>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 2/1: Simplified Declaration/ Previous Documents.
+				Type ZZZZ to indicate other document.
+				ID FSD to indicate Final Supplementary Declaration. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>FSD</ID>
+				<TypeCode>ZZZ</TypeCode>
+			</PreviousDocument>
+			<!--DE 2/4: Reference Number/UCR. 
+				Reference number which is optional for the declarant to complete. -->
+			<UCR>
+				<TraderAssignedReferenceID>0GB553202734852-BS12345</TraderAssignedReferenceID>
+			</UCR>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>

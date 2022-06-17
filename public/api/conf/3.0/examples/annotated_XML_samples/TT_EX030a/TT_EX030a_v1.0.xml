@@ -1,0 +1,176 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--
+			SCENARIO
+			Type K direct reperesentation scenario with DUCR and MUCR declared and no control.
+			Agent employed by the exporter under direct rep.
+			Goods exported permanently.
+			
+			The agent declares:
+			Procedure code 1040 Additional procedure code 1FT
+			Goods: Electrical Energy.
+			Goods location is GNI (UK) Limited, BGE Compressor Station, Brighthouse Bay Kirkcudbright.	
+			Mode of Transport of '7' at header level in DE 7/4.
+			Authorisation Type Code 'FTI' in DE 3/39.
+			Additional Document Code 'C676' in DE 2/3.
+			FTI Goods Location Code at header level in DE 5/23.
+			
+			Movement messages: EAL and EDL.
+			Expected Notification: DMSRCV, DMSRCV, DMSACC, DMSRES, DMSCLE, DMSEOG.			
+		-->
+		<!--Function Code of 9 to represent an original declaration.-->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: LRN.
+			The trader assigned reference to the declaration. -->
+		<FunctionalReferenceID>R3.7.0CDSP9808_TC03_8</FunctionalReferenceID>
+		<IssueDateTime>
+			<p1:DateTimeString formatCode="304">20220516070000+01</p1:DateTimeString>
+		</IssueDateTime>
+		<!--DE 1/1: Declaration Type.
+			EX to represent an Export declaration.-->
+		<!--DE 1/2: Additional Declaration Type.
+			K to represent a trusted pre-lodged declaration.-->
+		<TypeCode>EXK</TypeCode>
+		<!--DE 1/9: Total Number of Items.
+			In this case, 1. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 3/21: Representative Status Code.
+			2 indicating direct representation. -->
+		<Agent>
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!--DE 3/39: Holder of the Authorisation Identification Number.-->
+		<AuthorisationHolder>
+			<ID>GB150454489082</ID>
+			<CategoryCode>FTI</CategoryCode>
+		</AuthorisationHolder>
+		<AuthorisationHolder>
+			<ID>GB150454489082</ID>
+			<CategoryCode>EIR</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 7/4: Mode of Transport at the Border.
+			7 to represent Fixed transport installations. -->
+		<BorderTransportMeans>
+			<ModeCode>7</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: Declarant Identification Number.
+			EORI number of the Declarant. -->
+		<Declarant>
+			<ID>GB150454489082</ID>
+		</Declarant>
+		<!--DE 5/12: Customs Office of Exit.
+			'GB004098' code indicating Glasgow, Scotland -->
+		<ExitOffice>
+			<ID>GB004098</ID>
+		</ExitOffice>
+		<!--DE 3/2: Exporter Identification Number.
+			EORI number of the Exporter. -->
+		<Exporter>
+			<ID>GB427168118378</ID>
+		</Exporter>
+		<GoodsShipment>
+			<Consignment>
+				<!--DE 7/2: Container.
+					'0' Indicating goods not arriving in container. -->
+				<ContainerCode>0</ContainerCode>
+				<!--DE 5/23: Location of Goods.
+					ID to give a unique position of the location where the goods are located at the time they are declared.
+					The location code is entered using the following components:
+					• Name: ID to give a unique position of the location, in this scenario KBTABDGNI indicating GNI (UK) Limited, BGE Compressor Station, Brighthouse Bay Kirkcudbright.
+					• TypeCode: Type of Location, in this scenario D to represent that it is a 'TBC' location.
+					• Address TypeCode: Type of ID of the Location, in this scenario U for UN/LOCODE.
+					• Addess CountryCode: Code of the country where the goods may be examined, in this scenario GB. -->
+				<GoodsLocation>
+					<Name>KBTABDGNI</Name>
+					<TypeCode>D</TypeCode>
+					<Address>
+						<TypeCode>U</TypeCode>
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+			</Consignment>
+			<!--DE 5/8: Country of Destination Code. 
+				In this case, country code IE for Ireland. -->
+			<Destination>
+				<CountryCode>IE</CountryCode>
+			</Destination>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Goods Item Number.
+					Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					C676 for Import/Export authorisation issued by the competent authorities of the Member States. Decision 1764/15. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBFTI15045448908220211125132100</ID>
+					<TypeCode>676</TypeCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+						A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant’s records. -->
+					<CategoryCode>C</CategoryCode>
+					<ID>GBEIR150454489082E20191113093111</ID>
+					<TypeCode>514</TypeCode>
+				</AdditionalDocument>
+				<Commodity>
+					<!--DE 6/8: Description of Goods.
+						Description of the goods specific enough to enable classification - without repeating the CN code description in the Tariff. Classification ID 27160000 -->
+					<Description>Electrical Energy</Description>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass
+							Mass of the goods in kilograms including packaging. -->
+						<GrossMassMeasure>0.001</GrossMassMeasure>
+					</GoodsMeasure>
+				</Commodity>
+				<!--DE 1/10: Procedure.
+					Requested procedure code 10 to represent permanent export or dispatch.
+					Previous procedure code 40 to represent goods were previously for free circulation and home use. -->
+				<GovernmentProcedure>
+					<CurrentCode>10</CurrentCode>
+					<PreviousCode>40</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code.
+					1FT to represent Fixed Transport Installation. -->
+				<GovernmentProcedure>
+					<CurrentCode>1FT</CurrentCode>
+				</GovernmentProcedure>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping Marks.
+						Shipping marks on the packages. -->
+					<MarksNumbersID>Unpackaged</MarksNumbersID>
+					<!--DE 6/10: Number of Packages. 
+						In this case, 0. -->
+					<QuantityQuantity>0</QuantityQuantity>
+					<!--DE 6/9: Type of Packages.
+						NE indicating 'TBC'. -->
+					<TypeCode>NE</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 2/1: Previous Documents.
+				ZDCR to show the DUCR assigned to the consignment.
+				This is a mandatory field. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>2GB427168118378-1605D8</ID>
+				<TypeCode>DCR</TypeCode>
+			</PreviousDocument>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>

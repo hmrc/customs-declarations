@@ -20,13 +20,13 @@
 			A CFSP Trader submits an Imports Type Q  non-excise Final Supplementary Declaration (FSD) to inform HMRC of how many Supplementary Declarations have been submitted and those due in the previous period, as well as any Supplementary Declarations that were submitted late. 
 			-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20210301010000+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20220606010000+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Mandatory.
 			Trader's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IM61b_v1.1_0408_01</FunctionalReferenceID>
+		<FunctionalReferenceID>TT_IM61b_v1.1_1606_04</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.

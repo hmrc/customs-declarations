@@ -242,11 +242,10 @@
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
 		</GoodsShipment>
-		<!--DE 5/27: Supervising Customs Office.
+		<!--DE 5/27: Supervising customs office. 
 			In this scenario, this is Nottingham Customs Office. -->
 		<SupervisingOffice>
 			<ID>GBNTG004</ID>
 		</SupervisingOffice>
 	</Declaration>
 </md:MetaData>
- 

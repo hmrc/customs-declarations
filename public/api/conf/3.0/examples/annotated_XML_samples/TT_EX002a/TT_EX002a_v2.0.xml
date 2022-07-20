@@ -242,11 +242,11 @@
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
 		</GoodsShipment>
-		<!--DE 5/27: Supervising customs office. The Supervising Office Code for the
-			   HMRC Office overseeing the Customs Warehouse procedure. In this scenario, this
-			   is Nottingham Customs Office.-->
+		<!--DE 5/27: Supervising Customs Office.
+			In this scenario, this is Nottingham Customs Office. -->
 		<SupervisingOffice>
 			<ID>GBNTG004</ID>
 		</SupervisingOffice>
 	</Declaration>
 </md:MetaData>
+ 

@@ -16,10 +16,13 @@
 
 package unit.repo
 
+import com.mongodb.WriteError
+import com.mongodb.bulk.WriteConcernError
+import org.bson.BsonDocument
+import org.mongodb.scala.bson.conversions.Bson
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import reactivemongo.api.commands.{UpdateWriteResult, WriteConcernError, WriteError}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepoErrorHandler
 import util.TestData.TestValidatedHeadersRequest
@@ -49,7 +52,7 @@ class FileUploadMetadataRepositoryErrorHandlerSpec extends AnyWordSpecLike with 
       }
 
       "throw a RuntimeException if there is a database error" in {
-        val writeConcernError = Some(WriteConcernError(1, "ERROR"))
+        val writeConcernError = Some(new WriteConcernError(1, "ERROR", "ERROR MESSAGE", new BsonDocument()))
         val errorWriteResult = writeResult(alteredRecords = 0, writeConcernError = writeConcernError)
 
         val caught = intercept[RuntimeException](errorHandler.handleSaveError(errorWriteResult, "ERROR_MSG"))
@@ -73,7 +76,7 @@ class FileUploadMetadataRepositoryErrorHandlerSpec extends AnyWordSpecLike with 
       }
 
       "throw a RuntimeException if there is a database error" in {
-        val writeConcernError = Some(WriteConcernError(1, "ERROR"))
+        val writeConcernError = Some(new WriteConcernError(1, "ERROR", "ERROR MESSAGE", new BsonDocument()))
         val errorWriteResult = writeResult(alteredRecords = 0, writeConcernError = writeConcernError)
 
         val caught = intercept[RuntimeException](errorHandler.handleDeleteError(errorWriteResult, "ERROR_MSG"))
@@ -85,15 +88,17 @@ class FileUploadMetadataRepositoryErrorHandlerSpec extends AnyWordSpecLike with 
 
   private def writeResult(alteredRecords: Int, writeErrors: Seq[WriteError] = Nil,
                           writeConcernError: Option[WriteConcernError] = None) = {
-    UpdateWriteResult(
-      ok = true,
-      n = alteredRecords,
-      writeErrors = writeErrors,
-      writeConcernError = writeConcernError,
-      code = None,
-      errmsg = None,
-      nModified = 1,
-      upserted = Seq.empty)
+    //TODO correct this
+//    WriteResult(
+//      ok = true,
+//      n = alteredRecords,
+//      writeErrors = writeErrors,
+//      writeConcernError = writeConcernError,
+//      code = None,
+//      errmsg = None,
+//      nModified = 1,
+//      upserted = Seq.empty)
+    new Object()
   }
 
 }

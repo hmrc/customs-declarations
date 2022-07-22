@@ -51,18 +51,21 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
   val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]
 
   override protected def beforeAll() {
-    await(repo.drop)
+    //TODO need to be a drop?
+    await(repo.deleteAll())
     startMockServer()
   }
 
   override protected def beforeEach() {
-    await(repo.drop)
+    //TODO need to be a drop?
+    await(repo.deleteAll)
     resetMockServer()
   }
 
   override protected def afterAll() {
     stopMockServer()
-    await(repo.drop)
+    //TODO need to be a drop?
+    await(repo.deleteAll)
   }
 
   private val hasConversationId = new HasConversationId {

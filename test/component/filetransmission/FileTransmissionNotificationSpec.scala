@@ -49,26 +49,31 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
   with IntegrationPatience {
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
+
   private val endpoint = s"/file-transmission-notify/clientSubscriptionId/$subscriptionFieldsIdString"
+
+  val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]
 
   private val schemaFileUploadNotificationLocationV1: Schema = ValidateXmlAgainstSchema.getSchema(xsdFileUploadNotificationLocationV1).get
 
   override protected def beforeAll() {
-    await(repo.drop)
+    //TODO need find a drop
+    await(repo.deleteAll())
     startMockServer()
   }
 
   override protected def beforeEach() {
-    await(repo.drop)
+    //TODO need find a drop
+    await(repo.deleteAll)
     resetMockServer()
   }
 
   override protected def afterAll() {
+    //TODO need find a drop
     stopMockServer()
-    await(repo.drop)
+    await(repo.deleteAll)
   }
 
-  val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]
 
   private val hasConversationId = new HasConversationId {
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)

@@ -23,7 +23,8 @@ import java.util.UUID
 import org.joda.time.DateTime
 import play.api.libs.json._
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
+import uk.gov.hmrc.mongo.play.json.formats.MongoFormats
+import uk.gov.hmrc.mongo.play.json.formats.MongoJodaFormats
 
 import scala.util.Try
 
@@ -93,7 +94,7 @@ case class FileUploadMetadata(
   files: Seq[BatchFile]
 )
 object FileUploadMetadata {
-  implicit val dateTimeJF = ReactiveMongoFormats.dateTimeFormats
+  implicit val dateTimeJF = MongoJodaFormats.dateTimeFormat // TODO is this needed anymore and should we change to Java time anyway?
   implicit val format = Json.format[FileUploadMetadata]
-  implicit val fileUploadMetadataJF = ReactiveMongoFormats.mongoEntity(Json.format[FileUploadMetadata])
+//  implicit val fileUploadMetadataJF =  Json.format[FileUploadMetadata] //TODO not sure about this
 }

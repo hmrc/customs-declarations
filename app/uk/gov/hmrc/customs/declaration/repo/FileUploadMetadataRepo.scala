@@ -17,19 +17,37 @@
 package uk.gov.hmrc.customs.declaration.repo
 
 import com.google.inject.ImplementedBy
+import com.mongodb.client.model.Indexes.{ascending, descending}
+import org.mongodb.scala.model.{IndexModel, IndexOptions}
+
+
+import org.mongodb.scala.model.Filters._
+
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import play.api.libs.json.{Format, Json}
-import play.modules.reactivemongo.ReactiveMongoComponent
-import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.{BSONDocument, BSONObjectID}
-import reactivemongo.play.json.JsObjectDocumentWriter
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.{CallbackFields, FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.mongo.ReactiveRepository
+import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+import uk.gov.hmrc.mongo.play.json.formats.MongoFormats
+
+
+import org.mongodb.scala._
+import org.mongodb.scala.model._
+import org.mongodb.scala.model.Filters._
+import org.mongodb.scala.model.Updates._
+import org.mongodb.scala.model.UpdateOptions
+import org.mongodb.scala.bson.BsonObjectId
+
+import scala.collection.script.Index
+import org.mongodb.scala.model.Filters._
+import org.mongodb.scala.model.Projections._
+import org.mongodb.scala.model.Sorts._
+import play.shaded.ahc.io.netty.util.concurrent.FastThreadLocal.removeAll
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -48,51 +66,44 @@ trait FileUploadMetadataRepo {
 }
 
 @Singleton
-class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMongoComponent,
+class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
                                             errorHandler: FileUploadMetadataRepoErrorHandler,
                                             configService: DeclarationsConfigService,
                                             logger: DeclarationsLogger)
                                            (implicit ec: ExecutionContext)
-  extends ReactiveRepository[FileUploadMetadata, BSONObjectID](
+  extends PlayMongoRepository[FileUploadMetadata](
     collectionName = "batchFileUploads",
-    mongo = reactiveMongoComponent.mongoConnector.db,
-    domainFormat = FileUploadMetadata.fileUploadMetadataJF
+    mongoComponent = mongoComponent,
+    domainFormat = FileUploadMetadata.format,
+    indexes = Seq(
+      IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index")
+        /** TODO options = BSONDocument("expireAfterSeconds" -> ttlInSeconds) ** */),
+      IndexModel(ascending("batchId"), IndexOptions().unique(true).name("batch-id")),
+      IndexModel(ascending("files.reference", "csId"), IndexOptions().unique(true).name("csId-and-file-reference"))
+    )
+    ,
+    replaceIndexes = true
   ) with FileUploadMetadataRepo {
 
-  private implicit val format: Format[FileUploadMetadata] = FileUploadMetadata.fileUploadMetadataJF
+  private implicit val format: Format[FileUploadMetadata] = FileUploadMetadata.format
 
   private val ttlIndexName = "createdAt-Index"
   private val ttlInSeconds = configService.fileUploadConfig.ttlInSeconds
-  private val ttlIndex = Index(
-    key = Seq("createdAt" -> IndexType.Descending),
-    name = Some(ttlIndexName),
-    unique = false,
-    options = BSONDocument("expireAfterSeconds" -> ttlInSeconds)
-  )
 
-  dropInvalidIndexes.flatMap { _ =>
-    collection.indexesManager.ensure(ttlIndex)
-  }
 
-  override def indexes: Seq[Index] = Seq(
-    Index(
-      key = Seq("batchId" -> IndexType.Ascending),
-      name = Some("batch-id"),
-      unique = true
-    ),
-    Index(
-      key = Seq("files.reference" -> IndexType.Ascending, "csId" -> IndexType.Ascending),
-      name = Some("csId-and-file-reference"),
-      unique = true
-    ),
-    ttlIndex
-  )
+  //  private val ttlIndex = Index(
+  //    key = Seq("createdAt" -> IndexType.Descending),
+  //    name = Some(ttlIndexName),
+  //    unique = false,
+  //    options = BSONDocument("expireAfterSeconds" -> ttlInSeconds)
+  //  )
+
 
   override def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
     logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
     lazy val errorMsg = s"File meta data not inserted for $fileUploadMetadata"
 
-    collection.insert(ordered = false).one(fileUploadMetadata).map {
+    collection.insertOne(fileUploadMetadata).toFuture().map {
       writeResult => errorHandler.handleSaveError(writeResult, errorMsg)
     }
   }
@@ -100,29 +111,31 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
   override def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
     logger.debug(s"fetching file upload metadata with file reference: $reference")
 
-    val selector = "files.reference" -> toJsFieldJsValueWrapper(reference)
-    find(selector).map (_.headOption)
+    val selector = equal("files.reference", toJsFieldJsValueWrapper(reference))
+    collection.find(selector).toFuture().map(_.headOption)
   }
 
   override def delete(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Unit] = {
     logger.debug(s"deleting fileUploadMetadata: $fileUploadMetadata")
 
-    val selector = "batchId" -> toJsFieldJsValueWrapper(fileUploadMetadata.batchId)
+    val selector = equal("batchId", toJsFieldJsValueWrapper(fileUploadMetadata.batchId))
     lazy val errorMsg = s"Could not delete entity for selector: $selector"
-    remove(selector).map(errorHandler.handleDeleteError(_, errorMsg))
+    collection.deleteOne(selector).toFuture().map(errorHandler.handleDeleteError(_, errorMsg))
   }
 
   def update(csId: SubscriptionFieldsId, reference: FileReference, cf: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
     logger.debug(s"updating file upload metadata with file reference: $reference with callbackField=$cf")
 
-    val selector = Json.obj("files.reference" -> reference.toString, "csId" -> csId.toString)
-    val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum, "uploadTimestamp" -> cf.uploadTimestamp, "outboundLocation" -> cf.outboundLocation.toString)))
+    val selector = and(equal("files.reference", reference.toString), equal("csId", csId.toString))
+    //TODO Check this update
+    //    val update = combine(set(Json.obj("files.$.maybeCallbackFields" -> Json.obj("name", cf.name), ("mimeType",cf.mimeType), ("checksum" , cf.checksum), ("uploadTimestamp", cf.uploadTimestamp), ("outboundLocation" , cf.outboundLocation.toString))))
+    val update = combine(set("name", cf.name), set("mimeType", cf.mimeType), set("checksum", cf.checksum), set("uploadTimestamp", cf.uploadTimestamp), set("outboundLocation", cf.outboundLocation.toString))
 
-    findAndUpdate(selector, update, fetchNewObject = true).map(findAndModifyResult =>
-      findAndModifyResult.value match {
+    collection.findOneAndUpdate(selector, update).toFutureOption().map(findAndModifyResult =>
+      findAndModifyResult match {
         case None => None
         case Some(jsonDoc) =>
-          val record = jsonDoc.as[FileUploadMetadata]
+          val record = jsonDoc
           Some(record)
       })
   }
@@ -130,23 +143,16 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
   override def deleteAll(): Future[Unit] = {
     logger.debugWithoutRequestContext(s"deleting all file upload metadata")
 
-    removeAll().map {result =>
-      logger.debugWithoutRequestContext(s"deleted ${result.n} file upload metadata")
-    }
+    //TODO is this ok?
+    //    removeAll().map {result =>
+    //      logger.debugWithoutRequestContext(s"deleted ${result.n} file upload metadata")
+    //    }
+
+    removeAll()
+    logger.debugWithoutRequestContext(s"deleted file upload metadata")
+    Future.successful()
+
   }
 
-  private def dropInvalidIndexes: Future[_] =
-    collection.indexesManager.list().flatMap { indexes =>
-      indexes
-        .find { index =>
-          index.name.contains(ttlIndexName) &&
-            !index.options.getAs[Int]("expireAfterSeconds").contains(ttlInSeconds)
-        }
-        .map { _ =>
-          logger.debugWithoutRequestContext(s"dropping $ttlIndexName index as ttl value is incorrect")
-          collection.indexesManager.drop(ttlIndexName)
-        }
-        .getOrElse(Future.successful(()))
-    }
 
 }

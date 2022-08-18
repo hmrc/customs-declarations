@@ -21,8 +21,7 @@
 			ROW-NI, NIIMP, NIREM 'De-Risked' (UK Tariff):
 			Type D Standard Declaration for excise goods imported to NI from RoW. 
 			Goods are deemed ‘At Risk’ of entry to the EU but have been ‘De-risked’ by the Trader. 
-			Deferment used for payment of VAT & Excise (i.e. non Customs Duties). Therefore, there is no need to include the Additional Documents C505/C506, 
-			their associated Authorisation Holder references in D.E 3/39 (CGU/DPO),	or the Obligation Guarantee details (D.E 8/2 & 8/3), as no Customs Duty is due.
+			Deferment used for payment of VAT & Excise (i.e. non Customs Duties). Therefore, there is no need to include the Additional Documents C505/C506, their associated Authorisation Holder references in D.E 3/39 (CGU/DPO),	or the Obligation Guarantee details (D.E 8/2 & 8/3), as no Customs Duty is due.
 			UK Excise Duty and UK VAT is calculated and charged according to the UK Tariff.
 			Expected Notifications (7): DMSRCV(1), DMSTAX(1), DMSRCV(2), DMSACC, DMSTAX(2), DMSTAX(3) and DMSCLE.
 			

@@ -400,8 +400,7 @@
 				</CustomsValuation>
 				<!--DE 1/10: Procedure. 
 					Mandatory.
-					Requested Procedure of 40 indicating entry for free circulation and 
-					home use of goods.
+					Requested Procedure of 40 indicating entry for free circulation and home use of goods.
 					Previous Procedure of 53 indicating the goods have been previously entered to temporary admission. -->
 				<GovernmentProcedure>
 					<CurrentCode>40</CurrentCode>

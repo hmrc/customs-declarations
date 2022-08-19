@@ -22,13 +22,13 @@
 			RoW to NI: SRDS
 			Importing into Northern Ireland - SRDS Declarations - ROW to NI - Journey Type B2C with Amendments to the new Data Elements 4/18 and 4/19
 			
-			A Trader submits a Type D Pre-Lodged Imports Declaration importing non-excise goods from the ROW into Northern Ireland
+			An agent submits a Type D Pre-Lodged Imports Declaration importing non-excise goods from the ROW into Northern Ireland
 			The only Procedure Code D.E.1/10 combination allowed is '4000'.
 			The SRDS journey type is signalled by the value combinations included within the Additional Procedure Code D.E. 1/11 - 1H7 and C07.
 		
-			The trader then submits an amendment payload to increase the values of the new Data Elements, Customs Value Amount D.E. 4/18 and Postal Charges D.E. 4/19
+			The agent then submits an amendment payload to increase the values of the new Data Elements, Customs Value Amount D.E. 4/18 and Postal Charges D.E. 4/19
 			The increased value remains at less than GBP 135
-			The trader then submits a Goods Presentation Notice.
+			The agent then submits a Goods Presentation Notice.
 
 			CDS accepts the amendment and the GPN.
 			The Declaration clears. 
@@ -38,7 +38,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. 
 			Mandatory field. 
-			Traders own reference number this must be unique to the transaction. -->
+			Declarant's own reference number this must be unique to the transaction. -->
 		<FunctionalReferenceID>TT_IM68a_1612_001</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory field. 

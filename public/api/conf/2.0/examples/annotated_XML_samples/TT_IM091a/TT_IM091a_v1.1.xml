@@ -19,10 +19,14 @@
            		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
            		>
 		<!--
+			***
+			Following the Tariff data refresh for TTM20.0, this scenario is now rejected. An update is planned for TTM20.0.1.
+			***
+			
 			SCENARIO
 			To show that CDS can process an import Declaration for inherited goods, when using additional procedure C04.
 
-			A trader submits an Imports Type F declaration importing goods from ROW to GB, declaring:
+			An agent submits an Imports Type F declaration importing goods from ROW to GB, declaring:
 			• Procedure Code: 4000 in D.E. 1/10.
 			• Additional Procedure Code: C04 in D.E 1/11.
 			• Commodity code 7113110000 importing goods from the country Switzerland.
@@ -33,7 +37,7 @@
 			-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			Traders own reference number - this must be unique to the transaction-->
+			Declarant's own reference number - this must be unique to the transaction-->
 		<FunctionalReferenceID>CDSP_9778_03_1602_00</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->

@@ -40,7 +40,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			The trader assigned reference to the declaration. -->
+			The declarant's assigned reference to the declaration. -->
 		<FunctionalReferenceID>BIGBANG1.1708A2</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			EX to represent an Export declaration. -->

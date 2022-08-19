@@ -37,7 +37,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			The trader assigned reference to the declaration -->
+			The declarant's assigned reference to the declaration -->
 		<FunctionalReferenceID>R3.5.0_9752_TC01_P09</FunctionalReferenceID>
 		<IssueDateTime>
 			<p1:DateTimeString formatCode="304">20211209090000+01</p1:DateTimeString>

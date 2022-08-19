@@ -18,7 +18,7 @@
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
-			Trader submits a Type A declaration to import steel from the ROW into NI.
+			Agent submits a Type A declaration to import steel from the ROW into NI.
 			Goods imported and declared to free-circulation and home use of non-union goods, with no previous procedure.
 			Procedure code 4000 Additional Procedure code.
 			Goods: Tubes, pipes and hollow profiles, seamless, of iron (other than cast iron) or steel).
@@ -37,7 +37,7 @@
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			Traders own reference number.
+			Declarant's own reference number.
 			This must be unique to the transaction. -->
 		<FunctionalReferenceID>R310_NIP_TC13_1708_03</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration-->

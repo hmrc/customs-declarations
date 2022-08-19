@@ -17,6 +17,10 @@
 	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
+			***
+			Following the Tariff data refresh for TTM20.0, this scenario is now rejected. An update is planned for TTM20.0.1.
+			***
+			
 			SCENARIO
 			Trader submits a Type A Frontier declaration and provisional duty calculation is sent to the trader. 
 			An amendment is then submitted within the dwell time period and provisional duty calculation recalculated and sent to the trader. 
@@ -32,7 +36,7 @@
 			-->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
-		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
+		<!-- DE 2/5: Declarant's own reference number - this must be unique to the transaction -->
 		<FunctionalReferenceID>TT_IM33b_v1.2_1005_02</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: A to represent a standard frontier declaration.-->

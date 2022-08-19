@@ -30,7 +30,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			Trader's own reference number - this must be unique to the transaction. -->
+			Declarant's own reference number - this must be unique to the transaction. -->
 		<FunctionalReferenceID>TT_IM78a_v1.2_0903_01</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->

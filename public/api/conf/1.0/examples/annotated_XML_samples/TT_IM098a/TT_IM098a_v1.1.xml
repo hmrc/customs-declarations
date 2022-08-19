@@ -15,9 +15,9 @@
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--
 			SCENARIO
-			A trader submits a Type A (H1) Declaration importing goods from the Continental Shelf (CS) Norway into NI.
+			An agent submits a Type A (H1) Declaration importing goods from the Continental Shelf (CS) Norway into NI.
 
-			The trader enters the following information on the declaration:
+			The agent enters the following information on the declaration:
 			• Country of Dispatch 'ZN' in DE 5/14.
 			• Country of Origin 'ZN' in DE 5/15.
 			• Border Transport Means Nationality Code 'ZN' in DE 7/15.
@@ -33,7 +33,7 @@
 
 			No VAT will be calculated using the EU Tariff as a VAT zero rate is applied.
 
-			The trader gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.
+			The agent gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.
 
 			Duties will be collected via the method of payment declared.
 		-->
@@ -41,7 +41,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. 
 			Mandatory.
-			Trader's own reference number - this must be unique to the transaction -->
+			Declarant's own reference number - this must be unique to the transaction -->
 		<FunctionalReferenceID>TT_293_TC02_2807_04</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory.
@@ -305,7 +305,6 @@
 					</InvoiceLine>
 				</Commodity>
 				<!--DE 4/16: Valuation method.
-					Mandatory unless D.E. 1/11 used E01 or E02.
 					1 to indicate the method is transaction value of the imported goods. -->
 				<CustomsValuation>
 					<MethodCode>1</MethodCode>

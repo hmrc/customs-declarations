@@ -17,10 +17,14 @@
            		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
 		<!--
+			***
+			Following the Tariff data refresh for TTM20.0, this scenario is now rejected. An update is planned for TTM20.0.1.
+			***
+			
 			SCENARIO
 			A Type Y declaration for goods imported from the Rest of the World to Northern Ireland, where the goods are 'At Risk' of onward transport to the EU.
 			
-			EU Specific requested procedure code declared is '42'	and Additional Information code 'NIIMP' has been declared.
+			EU Specific requested procedure code declared is '42' and Additional Information code 'NIIMP' has been declared.
 			
 			Onward Supply Relief is claimed on VAT, for the goods being forwarded to the EU via Northern Ireland; all other duties are calculated and charged. 
 			
@@ -40,7 +44,7 @@
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			Traders own reference number.
+			Declarant's own reference number.
 			This must be unique to the transaction. -->
 		<FunctionalReferenceID>TT_IM47b_090622_005</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 

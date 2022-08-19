@@ -24,11 +24,11 @@
 
 			The trader enters the following information on the declaration: 
 			- Goods: Straw envelopes for bottles.
+			- Goods Location Dover Eastern Docks in 5/23.
 			- Additional Information code 'MIB02' at item level in DE 2/2.
 			- Authorisation Type Code 'MIB' at header level in DE 3/39, along with a valid EORI.
 			- Procedure Code '1040' at item level in DE 1/10 .
 			- Additional Procedure Code '1MB' at item level in DE 1/11.
-			- Goods Location 'DVRDOVDVR' in 5/23.
 			- Additional Document Code '1MIB' at item level in DE 2/3, along with a date of arrival at the border.
 			- CDS auto-departs the declaration. 
 			- No EAL and EDL are required to be submitted. 
@@ -41,7 +41,7 @@
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			The trader assigned reference to the declaration. -->
+			The declarant's assigned reference to the declaration. -->
 		<FunctionalReferenceID>3.8.0CDSP8645_TC01_D</FunctionalReferenceID>
 		<IssueDateTime>
 			<p1:DateTimeString formatCode="304">20220727115500+01</p1:DateTimeString>
@@ -153,7 +153,7 @@
 				<GoodsLocation>
 					<!--DE 5/23: Location of Goods - Identification of location.
 						ID to give a unique position of the location.
-						DVRDOVDVR Indicating indicating Dover. -->
+						DVRDOVDVR Indicating indicating Dover Eastern Docks. -->
 					<Name>DVRDOVDVR</Name>
 					<!--DE 5/23: Location of Goods - Type of location.
 						A in this scenario to represent that it is a Frontier or Frontier linked location. -->

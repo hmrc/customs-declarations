@@ -18,20 +18,41 @@
 	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			SCENARIO RoW to NI:"Not At Risk".
-			Import of goods liable to Customs Duty & VAT, with no previous procedure.
-			Goods: Live horses, asses, mules and hinnies.
-			Pre-lodged Declaration Type D which derives a H1 Declaration Category data set.
-			Deferred Payment is used with standing authority. Importer's DAN is being used.
-			Goods presented at Belfast Airport on arrival.
-			AI code 'NIIMP' entered at Item Level.
-			AI code 'NIREM' entered at Item Level to signify that goods have been de-risked by the trader.
+			SCENARIO RoW to NI
+			ROW-NI Not At Risk + Valuation Method 4 + APC '1FV'.
+			Duties calculated using Item Price.
+
+			An agent submits a Type A (H1) declaration importing goods from ROW to NI 'Not At Risk'
+
+			The agent enters the following information on the declaration:
+			- Goods: Live horses, asses, mules and hinnies.
+			- Deferred Payment is used with standing authority. 
+			- Importer's DAN is being used.
+			- Goods presented at Belfast Airport on arrival.
+			- Import of goods liable to UK Customs Duty & VAT, with no previous procedure.
+			- Additional Procedure Code '1FV' in D.E 1/11
+			- Additional Information Codes 'NIIMP' and 'NIREM' at item level in D.E 2/2
+			- Additional Document Code '9WKS' with Status Code 'AC' in D.E 2/3
+			- Item Price in D.E 4/14
+			- Valuation Method '4' in D.E 4/16
+			- Country of Origin in D.E 5/15
+			- Net Mass in D.E 6/1
+			- Combined Nomenclature in D.E 6/14
+			- TARIC code in D.E 6/15.
+			
+			CDS must calculate the Customs Duty and VAT payable, according to the relevant measures applicable in the UK Tariff.
+
+			Custom Duty will be calculated using the UK Tariff and the declared Item Price, at a rate of 10%. Customs Duty will be reserved as a Security Deposit.
+
+			VAT will be calculated using the UK Tariff at a rate of 20%.
+
+			The agent gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.
 			-->
 		<!--Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. 
 			Mandatory field. 
-			Traders own reference number this must be unique to the transaction. -->
+			Declarant's own reference number this must be unique to the transaction. -->
 		<FunctionalReferenceID>R380_NIP550_2607_02</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory field. 
@@ -391,7 +412,7 @@
 			</Importer>
 			<!--DE 2/1 : Previous Documents. 
 				Mandatory field. 
-				The Trader's DUCR assigned to the consignment.
+				DUCR assigned to the consignment.
 				As this is for a single item declaration, this should all be declared at header level.
 				In CDS, the MUCR (MCR) is not required on a sup dec. -->
 			<PreviousDocument>

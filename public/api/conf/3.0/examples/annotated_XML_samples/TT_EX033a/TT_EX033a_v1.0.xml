@@ -24,6 +24,7 @@
 
 			The trader enters the following information on the declaration:
 			- Goods: Straw envelopes for bottles
+			- Goods Location Belfast Airport
 			- Additional Information code 'MIB01' at item level in DE 2/2.
 			- Additional Information code 'NIEXP' at item level in DE 2/2.
 			- Procedure Code '23 00' at item level in DE 1/10.
@@ -43,7 +44,7 @@
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: LRN.
-			The trader assigned reference to the declaration. -->
+			The declarant's assigned reference to the declaration. -->
 		<FunctionalReferenceID>3.8.0CDSNIP598_TC01_G</FunctionalReferenceID>
 		<IssueDateTime>
 			<p1:DateTimeString formatCode="304">20220729095500+01</p1:DateTimeString>

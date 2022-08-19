@@ -32,7 +32,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			This is a mandatory field. 
-			Trader's own reference number - this must be unique to the transaction. -->
+			Declarant's own reference number - this must be unique to the transaction. -->
 		<FunctionalReferenceID>CDSP_9793_1_1003_01</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			This is a mandatory field. 

@@ -17,7 +17,11 @@
 	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			Scenario:
+			***
+			Following the Tariff data refresh for TTM20.0, this scenario is now rejected. An update is planned for TTM20.0.1.
+			***
+			
+			SCENARIO
 			A self-representing frontier declaration: H1 additional declaration type Y
 			Goods imported and declared to free-circulation, with no previous procedure.
 			Application of duties & Preference to a declaration where the goods have SIV rates, but SIV is not chosen as a method of valuation for the goods – application of security where value differs from SIV by specified percentage.
@@ -41,7 +45,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. 
 			Mandatory field. 
-			Traders own reference number this must be unique to the transaction. -->
+			Declarant's own reference number this must be unique to the transaction. -->
 		<FunctionalReferenceID>TT_IM13a_v1.6_1006_01</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory field. 
@@ -359,7 +363,6 @@
 					</InvoiceLine>
 				</Commodity>
 				<!--DE 4/16: Valuation Method. 
-					Mandatory field unless DE 1/11 used E01 or E02. 
 					Method 1 used - transaction value of the imported goods. -->
 				<CustomsValuation>
 					<MethodCode>1</MethodCode>

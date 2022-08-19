@@ -33,13 +33,12 @@
 			
 			Goods presented at Warrenport on arrival.
 
-			The trader gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.	
-			
-			-->
+			The trader gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.
+		-->
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			Trader's own reference number - this must be unique to the transaction. -->
+			Declarants's own reference number - this must be unique to the transaction. -->
 		<FunctionalReferenceID>TT_IM107a_v0.1_0208_02</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->

@@ -15,20 +15,37 @@
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--
 			SCENARIO
-			Import of goods liable to Customs Duty & VAT, with no previous procedure.
-			Goods: Horseradish.
-			Standard frontier Declaration Type A which derives a H1 Declaration Category data set.
-			Deferred Payment is used with standing authority. 
-			Importer's DAN is being used.
-			Goods presented at Wallasea Island on arrival.
+			ROW-GB Valuation Method 4 + APC '1FV'.
+			Duties calculated using Item Price.
+
+			An agent submits a Type A (H1) declaration importing goods from ROW to GB.
+
+			The agent enters the following information on the declaration:
+			- Goods: Horseradish.
+			- Deferred Payment is used with standing authority. 
+			- Importer's DAN is being used.
+			- Goods presented at Wallasea Island on arrival.
+			- Import of goods liable to Customs Duty & VAT, with no previous procedure.
+			- Additional Procedure Code '1FV' in D.E 1/11
+			- Additional Document Code '9WKS' with status code 'AC' in D.E 2/3
+			- Item Price in D.E 4/14
+			- Valuation Method '4' in D.E 4/16
+			- Country of Origin in D.E 5/15
+			- Net Mass in D.E 6/1
+			- Combined Nomenclature in D.E 6/14
+			- TARIC code in D.E 6/15.
 			
+			Custom Duty will be calculated using the UK Tariff and the declared Item Price, at a rate of 12%. Customs Duty will be reserved as a Security Deposit.
+
+			The agent gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.
+
 			Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'. 
 		-->
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. 
 			Mandatory.
-			Trader's own reference number - this must be unique to the transaction. -->
+			Declarants's own reference number - this must be unique to the transaction. -->
 		<FunctionalReferenceID>CDSP_9754_TC1_2907_2</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory.

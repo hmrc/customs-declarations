@@ -15,20 +15,40 @@
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--
 			SCENARIO
-			Import of goods liable to Customs Duty & VAT, with no previous procedure.
-			Goods: Umbrellas with telescopic shafts.
-			Standard frontier Declaration Type A which derives a H1 Declaration Category data set.
-			Deferred Payment is used with standing authority. 
-			Importer's DAN is being used.
-			Goods presented at Wallasea Island on arrival.
-			
+			ROW-GB + Valuation Method 5.
+			Duties calculated using Item Price.
+
+			An Agent submits a Type A (H1) declaration importing goods from ROW to GB.
+
+			The Agent enters the following information on the declaration:
+			- Goods: Umbrellas with telescopic shafts.
+			- Deferred Payment is used with standing authority. 
+			- Importer's DAN is being used.
+			- Goods presented at Wallasea Island on arrival.
+			- Additional Procedure Code '000' (No APC) in D.E 1/11
+			- Additional Document Code '9WKS' with Status Code 'AC' in D.E 2/3
+			- Item Price in D.E 4/14
+			- Valuation Method '5' in D.E 4/16
+			- Country of Origin in D.E 5/15
+			- Net Mass in D.E 6/1
+			- Combined Nomenclature in D.E 6/14
+			- TARIC code in D.E 6/15.
+
+			CDS must calculate the Customs Duty and VAT payable, according to the relevant measures applicable in the UK Tariff.
+
+			Custom Duty will be calculated using the UK Tariff and the declared Item Price, at a rate of 4%. 
+
+			VAT will be calculated using the UK Tariff at a rate of 20%.
+
+			The agent gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.
+
 			Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'. 
 		-->
-		<!--Function Code of 9 to represent an original declaration.-->
+		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. 
 			Mandatory.
-			Trader's own reference number - this must be unique to the transaction. -->
+			Declarant's own reference number - this must be unique to the transaction. -->
 		<FunctionalReferenceID>CDSP_9895_TC1_0208_1</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory.

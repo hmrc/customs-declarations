@@ -17,9 +17,9 @@
 			SCENARIO
 			ROW-NI At Risk + Valuation Method 4 + APC 'E01'. Duties calculated using SPV (with no Item Price).
 
-			A trader submits a Type A (H1) declaration importing goods from ROW to NI 'At Risk'.
+			An agent submits a Type A (H1) declaration importing goods from ROW to NI 'At Risk'.
 
-			The trader enters the following information on the declaration:
+			The agent enters the following information on the declaration:
 			- Goods: Onions.
 			- Deferred Payment is used with standing authority. 
 			- Importer's DAN is being used.
@@ -35,13 +35,13 @@
 
 			Goods presented at Port of Belfast on arrival.
 			
-			The trader gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.	 
+			The agent gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.	 
 		-->
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. 
 			Mandatory.
-			Trader's own reference number - this must be unique to the transaction. -->
+			Declarant's own reference number - this must be unique to the transaction. -->
 		<FunctionalReferenceID>R380_NIP493_0108_01</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory.

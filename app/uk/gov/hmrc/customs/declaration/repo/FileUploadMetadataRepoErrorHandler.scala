@@ -18,40 +18,42 @@ package uk.gov.hmrc.customs.declaration.repo
 
 import javax.inject.{Inject, Singleton}
 
-import reactivemongo.api.commands.WriteResult
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 
 @Singleton
 class FileUploadMetadataRepoErrorHandler @Inject()(logger: DeclarationsLogger) {
 
-  def handleDeleteError(result: WriteResult, exceptionMsg: => String)(implicit r: HasConversationId): Boolean = {
-    handleError(result, databaseAltered, exceptionMsg)
+  //TODO correct this whole file
+  def handleDeleteError(result: Any, exceptionMsg: => String)(implicit r: HasConversationId): Boolean = {
+//    handleError(result, databaseAltered, exceptionMsg)
+    false
   }
 
-  def handleSaveError(writeResult: WriteResult, exceptionMsg: String)(implicit r: HasConversationId): Boolean = {
-
-    def handleSaveError(result: WriteResult): Boolean =
-      if (databaseAltered(result)) {
-        true
-      }
-      else {
-        throw new IllegalStateException(exceptionMsg)
-      }
-
-    handleError(writeResult, handleSaveError, exceptionMsg)
+  def handleSaveError(writeResult: Any, exceptionMsg: String)(implicit r: HasConversationId): Boolean = {
+//
+//    def handleSaveError(result: WriteResult): Boolean =
+//      if (databaseAltered(result)) {
+//        true
+//      }
+//      else {
+//        throw new IllegalStateException(exceptionMsg)
+//      }
+//
+//    handleError(writeResult, handleSaveError, exceptionMsg)
+    false
   }
-
-  private def handleError[T](result: WriteResult, f: WriteResult => T, exceptionMsg: => String)(implicit r: HasConversationId): T = {
-    result.writeConcernError.fold(f(result)) {
-      errMsg => {
-        val errorMsg = s"$exceptionMsg. $errMsg"
-        logger.error(errorMsg)
-        throw new RuntimeException(errorMsg)
-      }
-    }
-  }
-
-  private def databaseAltered(writeResult: WriteResult): Boolean = writeResult.n > 0
+//
+//  private def handleError[T](result: Any, f: Any => T, exceptionMsg: => String)(implicit r: HasConversationId): T = {
+//    result.writeConcernError.fold(f(result)) {
+//      errMsg => {
+//        val errorMsg = s"$exceptionMsg. $errMsg"
+//        logger.error(errorMsg)
+//        throw new RuntimeException(errorMsg)
+//      }
+//    }
+//  }
+//
+//  private def databaseAltered(writeResult: WriteResult): Boolean = writeResult.n > 0
 
 }

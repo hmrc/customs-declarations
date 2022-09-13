@@ -70,6 +70,8 @@ import org.mongodb.scala.model.Sorts._
 import org.scalactic.Equality
 import org.scalatest.matchers.dsl.MatcherFactory1
 import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.play.BaseOneAppPerSuite
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -77,9 +79,11 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   with Matchers
   with BeforeAndAfterAll
   with BeforeAndAfterEach
-  with MockitoSugar {
+  with MockitoSugar
+  with GuiceOneAppPerSuite {
 
   implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
+
 
   trait SetUp {
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
@@ -90,17 +94,18 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
     implicit val implicitVHR: ValidatedHeadersRequest[AnyContentAsXml] = TestValidatedHeadersRequest
     when(mockConfigService.fileUploadConfig).thenReturn(mockFileUploadConfig)
     when(mockFileUploadConfig.ttlInSeconds).thenReturn(10000)
+    private val mongoComponent : MongoComponent = app.injector.instanceOf[MongoComponent]
     val repository = new FileUploadMetadataMongoRepo(mongoComponent, mockErrorHandler, mockConfigService, mockLogger)
   }
 
 //  override implicit lazy val mongoConnectorForTest: MongoConnector = MongoConnector(mongoUri)
 
-  private val mongoComponent:   MongoComponent =
-    new MongoComponent {
-      override def client: MongoClient = ???
-
-      override def database: MongoDatabase = ???
-    }
+//  private val mongoComponent:   MongoComponent =
+//    new MongoComponent {
+//      override def client: MongoClient = ???
+//
+//      override def database: MongoDatabase = ???
+//    }
 
   override def beforeEach() {
     // TODO what to do here?

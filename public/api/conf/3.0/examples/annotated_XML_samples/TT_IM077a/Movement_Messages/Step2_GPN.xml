@@ -23,6 +23,7 @@
 		<TypeCode>GPR</TypeCode>
 		<!--The Agent EORI.
 			Note that the original scenario TT_IM21a uses the Importer EORI in the GPN however the Agent EORI is used here as the Importer EORI will be invalidated. -->
+		<!--Note that Submitter/ID should not be needed because it is not a mandatory field for Goods Arrival. -->
 		<Submitter>
 			<ID>GB603202734852</ID>
 		</Submitter>

@@ -20,6 +20,7 @@
 		<FunctionalReferenceID>CDSP_9793_1_1003_01</FunctionalReferenceID>
 		<ID>22GB2Q72X4EJ2KKAR2</ID>
 		<TypeCode>GPR</TypeCode>
+		<!--Note that Submitter/ID should not be needed because it is not a mandatory field for Goods Arrival. -->
 		<Submitter>
 			<ID>GB553202734852</ID>
 		</Submitter>

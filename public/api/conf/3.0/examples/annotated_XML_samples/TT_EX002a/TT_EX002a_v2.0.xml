@@ -76,8 +76,9 @@
 				In this case, 2 indicates a direct representation (holding written instruction to do so). -->
 			<FunctionCode>2</FunctionCode>
 		</Agent>
-		<!-- DE 3/39: Holder of the authorisation identification number. This data element is only mandatory where an authorisation is required to declare the goods.
-		An authorisation type code of SDE is required for authorisation to make a simplified declaration -->
+		<!--DE 3/39: Holder of the authorisation identification number. 
+			This data element is only mandatory where an authorisation is required to declare the goods.
+			An authorisation type code of SDE is required for authorisation to make a simplified declaration. -->
 		<AuthorisationHolder>
 			<ID>GB150454489082</ID>
 			<CategoryCode>SDE</CategoryCode>

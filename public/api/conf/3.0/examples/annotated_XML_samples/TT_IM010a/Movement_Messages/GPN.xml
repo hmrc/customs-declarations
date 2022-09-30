@@ -25,6 +25,7 @@ xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
 		<FunctionalReferenceID>TT_IM10a_1102_001</FunctionalReferenceID>
 		<ID>21GB1NEXFX6SU9C4R1</ID>
 		<TypeCode>GPR</TypeCode>
+		<!--Note that Submitter/ID should not be needed because it is not a mandatory field for Goods Arrival. -->
 		<Submitter>
 			<ID>GB553202734852</ID>
 		</Submitter>

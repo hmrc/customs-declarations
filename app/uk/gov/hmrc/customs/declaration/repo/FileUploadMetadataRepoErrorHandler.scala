@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.repo
 
-import javax.inject.{Inject, Singleton}
+import org.mongodb.scala.result.InsertOneResult
 
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 
@@ -25,14 +26,17 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 class FileUploadMetadataRepoErrorHandler @Inject()(logger: DeclarationsLogger) {
 
   //TODO correct this whole file
-  def handleDeleteError(result: Any, exceptionMsg: => String)(implicit r: HasConversationId): Boolean = {
+  def handleDeleteError(result: Throwable, exceptionMsg: => String)(implicit r: HasConversationId): Boolean = {
+    logger.error(exceptionMsg)
+    throw new RuntimeException(result)
 //    handleError(result, databaseAltered, exceptionMsg)
-    false
   }
 
-  def handleSaveError(writeResult: Any, exceptionMsg: String)(implicit r: HasConversationId): Boolean = {
-//
-//    def handleSaveError(result: WriteResult): Boolean =
+  def handleSaveError(result: Throwable, exceptionMsg: String)(implicit r: HasConversationId): Boolean = {
+
+    logger.error(exceptionMsg)
+    throw new IllegalStateException(result)
+//    def handleSaveError(result: InsertOneResult): Boolean =
 //      if (databaseAltered(result)) {
 //        true
 //      }
@@ -41,10 +45,9 @@ class FileUploadMetadataRepoErrorHandler @Inject()(logger: DeclarationsLogger) {
 //      }
 //
 //    handleError(writeResult, handleSaveError, exceptionMsg)
-    false
   }
 //
-//  private def handleError[T](result: Any, f: Any => T, exceptionMsg: => String)(implicit r: HasConversationId): T = {
+//  private def handleError[T](result: InsertOneResult, f: InsertOneResult => T, exceptionMsg: => String)(implicit r: HasConversationId): T = {
 //    result.writeConcernError.fold(f(result)) {
 //      errMsg => {
 //        val errorMsg = s"$exceptionMsg. $errMsg"
@@ -54,6 +57,7 @@ class FileUploadMetadataRepoErrorHandler @Inject()(logger: DeclarationsLogger) {
 //    }
 //  }
 //
+//  private def databaseAltered(writeResult: InsertOneResult): Boolean = writeResult.wasAcknowledged()
 //  private def databaseAltered(writeResult: WriteResult): Boolean = writeResult.n > 0
 
 }

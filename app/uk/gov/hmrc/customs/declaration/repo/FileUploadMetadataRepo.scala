@@ -18,14 +18,11 @@ package uk.gov.hmrc.customs.declaration.repo
 
 import com.google.inject.ImplementedBy
 import com.mongodb.client.model.Indexes.{ascending, descending}
-import org.mongodb.scala.model.{IndexModel, IndexOptions}
-
-
+import org.mongodb.scala._
 import org.mongodb.scala.model.Filters._
-
-import javax.inject.{Inject, Singleton}
-import play.api.libs.json.Json.toJsFieldJsValueWrapper
-import play.api.libs.json.{Format, Json}
+import org.mongodb.scala.model.Updates._
+import org.mongodb.scala.model.{IndexModel, IndexOptions}
+import play.api.libs.json.Format
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
@@ -33,23 +30,10 @@ import uk.gov.hmrc.customs.declaration.model.upscan.{CallbackFields, FileReferen
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
-import uk.gov.hmrc.mongo.play.json.formats.MongoFormats
 
-
-import org.mongodb.scala._
-import org.mongodb.scala.model._
-import org.mongodb.scala.model.Filters._
-import org.mongodb.scala.model.Updates._
-import org.mongodb.scala.model.UpdateOptions
-import org.mongodb.scala.bson.BsonObjectId
-
-import scala.collection.script.Index
-import org.mongodb.scala.model.Filters._
-import org.mongodb.scala.model.Projections._
-import org.mongodb.scala.model.Sorts._
-import play.shaded.ahc.io.netty.util.concurrent.FastThreadLocal.removeAll
-
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 @ImplementedBy(classOf[FileUploadMetadataMongoRepo])
 trait FileUploadMetadataRepo {
@@ -77,7 +61,8 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     domainFormat = FileUploadMetadata.format,
     indexes = Seq(
       IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index")
-        /** TODO options = BSONDocument("expireAfterSeconds" -> ttlInSeconds) ** */),
+
+        /** TODO check these indices options = BSONDocument("expireAfterSeconds" -> ttlInSeconds) ** */),
       IndexModel(ascending("batchId"), IndexOptions().unique(true).name("batch-id")),
       IndexModel(ascending("files.reference", "csId"), IndexOptions().unique(true).name("csId-and-file-reference"))
     )
@@ -103,24 +88,37 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
     lazy val errorMsg = s"File meta data not inserted for $fileUploadMetadata"
 
-    collection.insertOne(fileUploadMetadata).toFuture().map {
-      writeResult => errorHandler.handleSaveError(writeResult, errorMsg)
+    collection.insertOne(fileUploadMetadata).toFuture().transformWith {
+      case Success(result) =>
+        result.wasAcknowledged()
+        Future.successful(true)
+      case Failure(exception) =>
+        errorHandler.handleSaveError(exception, errorMsg)
+        Future.failed(exception)
     }
+
   }
 
   override def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
     logger.debug(s"fetching file upload metadata with file reference: $reference")
 
-    val selector = equal("files.reference", toJsFieldJsValueWrapper(reference))
+    val selector = equal("files.reference", reference.toString)
     collection.find(selector).toFuture().map(_.headOption)
   }
 
   override def delete(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Unit] = {
     logger.debug(s"deleting fileUploadMetadata: $fileUploadMetadata")
 
-    val selector = equal("batchId", toJsFieldJsValueWrapper(fileUploadMetadata.batchId))
+    val selector = equal("batchId", fileUploadMetadata.batchId.toString)
     lazy val errorMsg = s"Could not delete entity for selector: $selector"
-    collection.deleteOne(selector).toFuture().map(errorHandler.handleDeleteError(_, errorMsg))
+    //    collection.deleteOne(selector).toFuture().map(errorHandler.handleDeleteError(_, errorMsg))
+    collection.deleteOne(selector).toFuture().transformWith {
+      case Success(_) => Future.successful(Unit)
+      case Failure(exception) => {
+        errorHandler.handleDeleteError(exception, errorMsg)
+        Future.failed(exception)
+      }
+    }
   }
 
   def update(csId: SubscriptionFieldsId, reference: FileReference, cf: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
@@ -128,18 +126,20 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
 
     val selector = and(equal("files.reference", reference.toString), equal("csId", csId.toString))
     //TODO Check this update
-    //    val update = combine(set(Json.obj("files.$.maybeCallbackFields" -> Json.obj("name", cf.name), ("mimeType",cf.mimeType), ("checksum" , cf.checksum), ("uploadTimestamp", cf.uploadTimestamp), ("outboundLocation" , cf.outboundLocation.toString))))
-    val update = combine(set("name", cf.name), set("mimeType", cf.mimeType), set("checksum", cf.checksum), set("uploadTimestamp", cf.uploadTimestamp), set("outboundLocation", cf.outboundLocation.toString))
+   //    val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum, "uploadTimestamp" -> cf.uploadTimestamp, "outboundLocation" -> cf.outboundLocation.toString)))
 
-    collection.findOneAndUpdate(selector, update).toFutureOption().map(findAndModifyResult =>
-      findAndModifyResult match {
-        case None => None
-        case Some(jsonDoc) =>
-          val record = jsonDoc
-          Some(record)
-      })
+    //TODO this is adding 'ISODate' to uploadTimestamp, is this correct?
+   val update = combine(
+     set("files.$.maybeCallbackFields.name", cf.name),
+     set("files.$.maybeCallbackFields.mimeType", cf.mimeType),
+     set("files.$.maybeCallbackFields.checksum", cf.checksum),
+     set("files.$.maybeCallbackFields.uploadTimestamp", cf.uploadTimestamp),
+     set("files.$.maybeCallbackFields.outboundLocation", cf.outboundLocation.toString))
+
+    collection.findOneAndUpdate(selector, update).toFutureOption()
   }
 
+  //TODO is this needed? Only seems to be used in TestOnlyService
   override def deleteAll(): Future[Unit] = {
     logger.debugWithoutRequestContext(s"deleting all file upload metadata")
 
@@ -148,7 +148,7 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     //      logger.debugWithoutRequestContext(s"deleted ${result.n} file upload metadata")
     //    }
 
-    removeAll()
+    collection.deleteMany(Document())
     logger.debugWithoutRequestContext(s"deleted file upload metadata")
     Future.successful()
 

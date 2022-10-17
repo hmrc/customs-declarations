@@ -19,12 +19,10 @@ package uk.gov.hmrc.customs.declaration.model.upscan
 import java.net.URL
 import java.time.Instant
 import java.util.UUID
-
 import org.joda.time.DateTime
 import play.api.libs.json._
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.mongo.play.json.formats.MongoFormats
-import uk.gov.hmrc.mongo.play.json.formats.MongoJodaFormats
+import uk.gov.hmrc.mongo.play.json.formats.{MongoFormats, MongoJavatimeFormats, MongoJodaFormats}
 
 import scala.util.Try
 
@@ -67,6 +65,7 @@ object FileReference {
 
 case class CallbackFields(name: String, mimeType: String, checksum: String, uploadTimestamp: Instant, outboundLocation: URL)
 object CallbackFields {
+  implicit val dateTimeJF = MongoJavatimeFormats.instantFormat
   implicit val urlFormat = HttpUrlFormat
   implicit val format = Json.format[CallbackFields]
 }

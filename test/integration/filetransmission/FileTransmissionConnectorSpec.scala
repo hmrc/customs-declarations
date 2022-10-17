@@ -34,6 +34,7 @@ import util.FileTransmissionTestData._
 import util.VerifyLogging._
 import util.externalservices.FileTransmissionService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
+import org.scalatest.matchers.should.Matchers
 
 class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with FileTransmissionService with Matchers{

@@ -28,7 +28,7 @@ import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.XmlOps.stringToXml
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoDecService}
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig}
-
+import org.scalatest.matchers.should.Matchers
 import java.io.StringReader
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
@@ -83,8 +83,8 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
     stopMockServer()
   }
 
-  feature("Declaration API authorises arrival notification submissions from CSPs with v2.0 accept header") {
-    scenario("An authorised CSP successfully submits a customs arrival notification declaration") {
+  Feature("Declaration API authorises arrival notification submissions from CSPs with v2.0 accept header") {
+    Scenario("An authorised CSP successfully submits a customs arrival notification declaration") {
       Given("A CSP wants to submit a valid customs arrival notification declaration")
       startMdgWcoDecServiceV2()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
@@ -112,8 +112,8 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
 
   }
 
-  feature("Declaration API authorises arrival notification submissions from CSPs with v3.0 accept header") {
-    scenario("An authorised CSP successfully submits a customs arrival notification declaration") {
+  Feature("Declaration API authorises arrival notification submissions from CSPs with v3.0 accept header") {
+    Scenario("An authorised CSP successfully submits a customs arrival notification declaration") {
       Given("A CSP wants to submit a valid customs arrival notification declaration")
       startMdgWcoDecServiceV3()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
@@ -141,9 +141,9 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
 
   }
 
-  feature("Declaration API handles arrival-notification submission errors from CSPs as expected") {
+  Feature("Declaration API handles arrival-notification submission errors from CSPs as expected") {
 
-    scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
+    Scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")
       val request = InvalidSubmissionRequestWith2Errors.fromCsp.postTo(endpoint)
       stubAuditService()

@@ -32,7 +32,7 @@ import util.FileTransmissionTestData._
 import util.TestData._
 import util.XmlOps.stringToXml
 import util.externalservices.CustomsNotificationService
-
+import org.scalatest.matchers.should.Matchers
 import java.io.StringReader
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
@@ -74,8 +74,8 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
 
-  feature("File Transmission Notification") {
-    scenario("Success request has been made to Customs Notification service") {
+  Feature("File Transmission Notification") {
+    Scenario("Success request has been made to Customs Notification service") {
       notificationServiceIsRunning()
       Given("the File Transmission service sends a notification")
 
@@ -118,7 +118,7 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
       schemaFileUploadNotificationLocationV1.newValidator().validate(new StreamSource(new StringReader(requestPayload)))
     }
 
-    scenario("Response status 400 when File Transmission service sends invalid payload") {
+    Scenario("Response status 400 when File Transmission service sends invalid payload") {
       Given("the File Transmission service sends a notification")
 
       When("File Transmission service notifies Declaration API using previously provided callback URL with invalid json payload")

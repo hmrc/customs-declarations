@@ -20,14 +20,13 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
-import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
+import org.mockito.Mockito.{verify, verifyNoInteractions, verifyZeroInteractions, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
-import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationSubmissionConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -37,7 +36,6 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, _}
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData._
 import util.CustomsDeclarationsMetricsTestData
 import util.TestData._
@@ -83,7 +81,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
     when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(CustomsDeclarationsMetricsTestData.EventStart, CustomsDeclarationsMetricsTestData.EventEnd)
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockNrsService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(nrSubmissionId))
+    when(mockNrsService.send(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(nrSubmissionId))
   }
   "StandardDeclarationSubmissionService" should {
 
@@ -94,7 +92,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
 
       result shouldBe Right(Some(nrSubmissionId))
 
-      verify(mockNrsService).send(meq(vpr), any[HeaderCarrier])
+      verify(mockNrsService).send(meq(vpr))
     }
 
       "not send to connector when nrs disabled" in new SetUp() {
@@ -103,7 +101,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
         val result: Either[Result, Option[NrSubmissionId]] = send()
         result shouldBe Right(None)
 
-        verifyZeroInteractions(mockNrsService)
+        verifyNoInteractions(mockNrsService)
       }
 
     "should still contain nrs submission id even if call to downstream fails" in new SetUp() {

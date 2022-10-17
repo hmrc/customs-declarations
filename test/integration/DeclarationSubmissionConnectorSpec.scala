@@ -35,6 +35,7 @@ import util.TestData._
 import util.TestXMLData.ValidSubmissionXML
 import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
+import org.scalatest.matchers.should.Matchers
 
 class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
   with Matchers

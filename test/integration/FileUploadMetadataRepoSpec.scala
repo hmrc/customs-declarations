@@ -39,7 +39,7 @@ import uk.gov.hmrc.mongo.{MongoConnector, MongoSpecSupport}
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.{FileMetadataWithFileOne, _}
-import org.scalatest.matchers.should.Matchers.{an, be, convertToAnyShouldWrapper, thrownBy}
+import org.scalatest.matchers.should.Matchers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 import scala.concurrent.ExecutionContext

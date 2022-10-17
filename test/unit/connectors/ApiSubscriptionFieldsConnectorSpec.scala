@@ -22,7 +22,7 @@ import org.mockito.Mockito._
 import org.mockito.internal.matchers.Matches
 import org.scalatest.{BeforeAndAfterEach, Matchers}
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.matchers.should.Matchers.{convertToAnyShouldWrapper, intercept}
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers

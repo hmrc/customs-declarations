@@ -20,8 +20,7 @@ import java.net.URL
 import java.util.UUID
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
-import org.scalatest.Matchers
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
@@ -107,7 +106,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyZeroInteractions(mockConnector)
+      verifyNoInteractions(mockConnector)
     }
 
     "return failed future when file reference not found in returned metadata" in new SetUp {
@@ -121,7 +120,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyZeroInteractions(mockConnector)
+      verifyNoInteractions(mockConnector)
     }
 
     "propagate exception encountered in repo" in new SetUp {
@@ -135,7 +134,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verifyZeroInteractions(mockConnector)
+      verifyNoInteractions(mockConnector)
     }
 
     "propagate exception encountered in connector" in new SetUp {

@@ -87,13 +87,13 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
   def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     futureApiSubFieldsId(vpr.clientId) flatMap {
       case Right(sfId) =>
-          callBackendAndNrs(vpr, hc, sfId)
+          callBackendAndNrs(vpr, sfId)
       case Left(result) =>
         Future.successful(Left(result))
     }
   }
 
-  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier, asfr: ApiSubscriptionFieldsResponse): Future[Either[Result, Option[NrSubmissionId]]] = {
+  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], asfr: ApiSubscriptionFieldsResponse): Future[Either[Result, Option[NrSubmissionId]]] = {
 
   val nrSubmissionId = new NrSubmissionId(vpr.conversationId.uuid)
     if (declarationsConfigService.nrsConfig.nrsEnabled) {
@@ -101,7 +101,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
 
       val startTime = dateTimeProvider.zonedDateTimeUtc
 
-      nrsService.send(vpr, hc)
+      nrsService.send(vpr)
         .map(nrSubmissionId => {
           logger.debug(s"NRS returned submission id: $nrSubmissionId")
           logCallDuration(startTime)
@@ -124,7 +124,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
   }
 
   private def callBackend[A](asfr: ApiSubscriptionFieldsResponse)
-                            (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
+                            (implicit vpr: ValidatedPayloadRequest[A]): Future[Either[Result, Option[NrSubmissionId]]] = {
     val dateTime = dateTimeProvider.nowUtc()
     val correlationId = uniqueIdsService.correlation
     val xmlToSend = preparePayload(vpr.xmlBody, asfr, dateTime)
@@ -140,13 +140,13 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
   }
 
   private def preparePayload[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: DateTime)
-                               (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): NodeSeq = {
+                               (implicit vpr: ValidatedPayloadRequest[A]): NodeSeq = {
     logger.debug(s"preparePayload called")
     wrapper.wrap(xml, asfr, dateTime)
   }
 
   private def logCallDuration[A](startTime: ZonedDateTime)
-                                  (implicit hc: HeaderCarrier, vpr: ValidatedPayloadRequest[A]): Unit ={
+                                  (implicit vpr: ValidatedPayloadRequest[A]): Unit ={
     val endTime = dateTimeProvider.zonedDateTimeUtc
     val callDuration = ChronoUnit.MILLIS.between(startTime, endTime)
     logger.info(s"Duration of call to NRS $callDuration ms")

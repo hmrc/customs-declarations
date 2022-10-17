@@ -22,14 +22,13 @@ import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{any, eq => meq}
-import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
+import org.mockito.Mockito.{verify, verifyNoInteractions, verifyZeroInteractions, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
-import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorInternalServerError}
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -89,7 +88,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(CustomsDeclarationsMetricsTestData.EventStart, CustomsDeclarationsMetricsTestData.EventEnd)
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.successful(nrSubmissionId))
+    when(mockNrsService.send(vpr)).thenReturn(Future.successful(nrSubmissionId))
     when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
     "BusinessService" should {
@@ -107,7 +106,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       }
 
       "send transformed xml to connector even when nrs fails" in new SetUp() {
-        when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.failed(emulatedServiceFailure))
+        when(mockNrsService.send(vpr)).thenReturn(Future.failed(emulatedServiceFailure))
 
         val result: Either[Result, Option[NrSubmissionId]] = send()
 
@@ -148,8 +147,8 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId)
-      verifyZeroInteractions(mockPayloadDecorator)
-      verifyZeroInteractions(mockMdgDeclarationConnector)
+      verifyNoInteractions(mockPayloadDecorator)
+      verifyNoInteractions(mockMdgDeclarationConnector)
     }
 
     "return 500 error response when authenticatedEori is blank" in new SetUp() {
@@ -159,8 +158,8 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
-      verifyZeroInteractions(mockPayloadDecorator)
-      verifyZeroInteractions(mockMdgDeclarationConnector)
+      verifyNoInteractions(mockPayloadDecorator)
+      verifyNoInteractions(mockMdgDeclarationConnector)
     }
 
     "return 500 error response when MDG call fails" in new SetUp() {
@@ -196,8 +195,8 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
-      verifyZeroInteractions(mockPayloadDecorator)
-      verifyZeroInteractions(mockMdgDeclarationConnector)
+      verifyNoInteractions(mockPayloadDecorator)
+      verifyNoInteractions(mockMdgDeclarationConnector)
     }
 
 }

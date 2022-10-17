@@ -35,6 +35,7 @@ import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData._
 import util._
 import util.externalservices.MdgStatusDeclarationService
+import org.scalatest.matchers.should.Matchers
 
 class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   with Matchers

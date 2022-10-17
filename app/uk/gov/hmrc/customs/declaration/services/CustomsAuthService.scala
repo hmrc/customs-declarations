@@ -156,7 +156,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
     }
   }
 
-  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: HasConversationId, hc: HeaderCarrier): Option[Eori] = {
+  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: HasConversationId): Option[Eori] = {
     val maybeCustomsEnrolment = enrolments.getEnrolment(hmrcCustomsEnrolment)
     if (maybeCustomsEnrolment.isEmpty) {
       logger.warn(s"$hmrcCustomsEnrolment enrolment not retrieved for non-CSP request")

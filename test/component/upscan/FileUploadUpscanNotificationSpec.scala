@@ -31,6 +31,7 @@ import util.TestData._
 import util.UpscanNotifyTestData._
 import util.XmlOps.stringToXml
 import util.externalservices.{CustomsNotificationService, FileTransmissionService}
+import org.scalatest.matchers.should.Matchers
 
 import scala.xml.Utility.trim
 
@@ -69,8 +70,8 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
 
-  feature("File Transmission Notification") {
-    scenario("Success request has been made to the Declaration API") {
+  Feature("File Transmission Notification") {
+    Scenario("Success request has been made to the Declaration API") {
       startFileTransmissionService()
       await(repo.create(FileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
 
@@ -102,7 +103,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       Json.parse(requestPayload) shouldBe Json.parse(expectedFileTransmissionRequest)
     }
 
-    scenario("Failure request has been made to the Declaration API") {
+    Scenario("Failure request has been made to the Declaration API") {
       notificationServiceIsRunning()
       await(repo.create(FileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
 
@@ -140,7 +141,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       trim(stringToXml(requestPayload)) shouldBe trim(UpscanNotificationFailedCustomsNotificationXml)
     }
 
-    scenario("Success request has been made to the Declaration API but metadata record does not exist in the database") {
+    Scenario("Success request has been made to the Declaration API but metadata record does not exist in the database") {
       notificationServiceIsRunning()
       await(repo.create(FileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
 

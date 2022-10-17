@@ -17,7 +17,7 @@
 package component
 
 import java.time.{Instant, ZoneId, ZonedDateTime}
-
+import org.scalatest.featurespec.AnyFeatureSpec
 import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.Mockito.when
 import org.scalatest._
@@ -31,7 +31,7 @@ import uk.gov.hmrc.customs.declaration.services.{DateTimeService, UniqueIdsServi
 import util.TestData.stubUniqueIdsService
 import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig}
 
-trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
+trait ComponentTestSpec extends AnyFeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
   with BeforeAndAfterAll with BeforeAndAfterEach with Eventually with MockitoSugar {
 
   private val mockDateTimeService =  mock[DateTimeService]

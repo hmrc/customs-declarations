@@ -19,10 +19,9 @@ package util
 import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{AgentInformation, Credentials, EmptyRetrieval, ItmpAddress, ItmpName, LoginTimes, MdtpInformation, Name, Retrieval, ~}
@@ -30,7 +29,6 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.customs.declaration.model.Eori
 import uk.gov.hmrc.http.HeaderCarrier
 import util.TestData._
-import org.mockito.Mockito._
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import scala.concurrent.{ExecutionContext, Future}

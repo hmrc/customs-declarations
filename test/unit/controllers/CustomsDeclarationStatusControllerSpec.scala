@@ -18,17 +18,12 @@ package unit.controllers
 
 import java.util.UUID
 import org.joda.time.DateTime
-import play.api.test.Helpers.{redirectLocation, status, _}
+import play.api.test.Helpers.status
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import play.api.mvc._
 import play.api.test.Helpers
@@ -134,7 +129,7 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
 
       val result: Result = awaitSubmit(ValidDeclarationStatusRequest.withHeaders(ValidDeclarationStatusRequest.headers.remove(X_BADGE_IDENTIFIER_NAME)))
       result shouldBe errorResultBadgeIdentifier
-      verifyZeroInteractions(mockStatusConnector)
+      verifyNoInteractions(mockStatusConnector)
     }
 
     "respond with status 500 for a request with a missing X-Client-ID" in new SetUp() {
@@ -142,7 +137,7 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
 
       val result: Future[Result] = submit(ValidDeclarationStatusRequest.withHeaders(ValidDeclarationStatusRequest.headers.remove(X_CLIENT_ID_NAME)))
       status(result) shouldBe INTERNAL_SERVER_ERROR
-      verifyZeroInteractions(mockStatusConnector)
+      verifyNoInteractions(mockStatusConnector)
     }
     "respond with status 400 for a request with an invalid X-Badge-Identifier" in new SetUp() {
       authoriseCsp()
@@ -150,7 +145,7 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
       val result: Result = awaitSubmit(ValidDeclarationStatusRequest.withHeaders((ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS).toSeq: _*))
 
       result shouldBe errorResultBadgeIdentifier
-      verifyZeroInteractions(mockStatusConnector)
+      verifyNoInteractions(mockStatusConnector)
     }
 
     "respond with status 401 and conversationId in header when non-CSP request" in new SetUp() {

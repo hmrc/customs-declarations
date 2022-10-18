@@ -185,15 +185,8 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       collectionSize(repository) shouldBe 1
     }
 
-    // TODO doesn't work, and I am not certain method 'repository.deleteAll()' is needed anyway
     "successfully delete all file metadata" in {
       await(repository.create(FileMetadataWithFileOne))
-      when(mockErrorHandler.handleSaveError(any(), any())(any())).thenReturn(true)
-
-      val saveResult = await(repository.create(FileMetadataWithFileOne))
-      saveResult shouldBe true
-      collectionSize(repository) shouldBe 1
-
       await(repository.create(FileMetadataWithFileTwo))
       collectionSize(repository) shouldBe 2
 

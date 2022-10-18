@@ -126,35 +126,28 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
 
     val selector = and(equal("files.reference", reference.toString), equal("csId", csId.toString))
     //TODO Check this update
-   //    val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum, "uploadTimestamp" -> cf.uploadTimestamp, "outboundLocation" -> cf.outboundLocation.toString)))
+    //    val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum, "uploadTimestamp" -> cf.uploadTimestamp, "outboundLocation" -> cf.outboundLocation.toString)))
 
     //TODO this is adding 'ISODate' to uploadTimestamp, is this correct?
-   val update = combine(
-     set("files.$.maybeCallbackFields.name", cf.name),
-     set("files.$.maybeCallbackFields.mimeType", cf.mimeType),
-     set("files.$.maybeCallbackFields.checksum", cf.checksum),
-     set("files.$.maybeCallbackFields.uploadTimestamp", cf.uploadTimestamp),
-     set("files.$.maybeCallbackFields.outboundLocation", cf.outboundLocation.toString))
+    val update = combine(
+      set("files.$.maybeCallbackFields.name", cf.name),
+      set("files.$.maybeCallbackFields.mimeType", cf.mimeType),
+      set("files.$.maybeCallbackFields.checksum", cf.checksum),
+      set("files.$.maybeCallbackFields.uploadTimestamp", cf.uploadTimestamp),
+      set("files.$.maybeCallbackFields.outboundLocation", cf.outboundLocation.toString))
 
     collection.findOneAndUpdate(selector, update,
       FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER))
       .toFutureOption()
   }
 
-  //TODO is this needed? Only seems to be used in TestOnlyService
   override def deleteAll(): Future[Unit] = {
     logger.debugWithoutRequestContext(s"deleting all file upload metadata")
 
-    //TODO is this ok?
-    //    removeAll().map {result =>
-    //      logger.debugWithoutRequestContext(s"deleted ${result.n} file upload metadata")
-    //    }
-
-    collection.deleteMany(Document())
-    logger.debugWithoutRequestContext(s"deleted file upload metadata")
-    Future.successful()
+    collection.deleteMany(Document.empty).toFuture().map { result =>
+      logger.debugWithoutRequestContext(s"deleted ${result.getDeletedCount} file upload metadata")
+    }
 
   }
-
 
 }

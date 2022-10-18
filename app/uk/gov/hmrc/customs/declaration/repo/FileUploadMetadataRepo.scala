@@ -21,7 +21,7 @@ import com.mongodb.client.model.Indexes.{ascending, descending}
 import org.mongodb.scala._
 import org.mongodb.scala.model.Filters._
 import org.mongodb.scala.model.Updates._
-import org.mongodb.scala.model.{IndexModel, IndexOptions}
+import org.mongodb.scala.model.{FindOneAndUpdateOptions, IndexModel, IndexOptions, ReturnDocument, UpdateOptions}
 import play.api.libs.json.Format
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
@@ -136,7 +136,9 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
      set("files.$.maybeCallbackFields.uploadTimestamp", cf.uploadTimestamp),
      set("files.$.maybeCallbackFields.outboundLocation", cf.outboundLocation.toString))
 
-    collection.findOneAndUpdate(selector, update).toFutureOption()
+    collection.findOneAndUpdate(selector, update,
+      FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER))
+      .toFutureOption()
   }
 
   //TODO is this needed? Only seems to be used in TestOnlyService

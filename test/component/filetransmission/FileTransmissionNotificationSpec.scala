@@ -57,21 +57,17 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
   private val schemaFileUploadNotificationLocationV1: Schema = ValidateXmlAgainstSchema.getSchema(xsdFileUploadNotificationLocationV1).get
 
   override protected def beforeAll() {
-    //TODO need find a drop
-    await(repo.deleteAll())
     startMockServer()
   }
 
   override protected def beforeEach() {
-    //TODO need find a drop
-    await(repo.deleteAll)
+    await(repo.collection.drop().toFuture())
     resetMockServer()
   }
 
   override protected def afterAll() {
-    //TODO need find a drop
     stopMockServer()
-    await(repo.deleteAll)
+    await(repo.collection.drop().toFuture())
   }
 
 

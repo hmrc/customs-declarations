@@ -48,6 +48,8 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   with MockitoSugar
   with DefaultPlayMongoRepositorySupport[FileUploadMetadata] {
 
+
+
   implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
 
   val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
@@ -64,6 +66,12 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   private def collectionSize(repository: FileUploadMetadataMongoRepo): Int = {
     await(repository.collection.countDocuments().toFuture()).toInt
   }
+
+  override def afterAll(): Unit = {
+    dropCollection()
+  }
+
+
 
   private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {
     PassByNameVerifier(mockLogger, logLevel)
@@ -104,7 +112,6 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       findResult2 shouldBe FileMetadataWithFileTwo
     }
 
-    // TODO doesn't work.
     "successfully update checksum, searching by reference" in  {
       System.setProperty("returnOriginal", "false")
       await(repository.create(FileMetadataWithFilesOneAndThree))
@@ -112,7 +119,6 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       val updatedFileOne = BatchFileOne.copy(maybeCallbackFields = Some(CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate, new URL("https://outbound.a.com"))))
       val expectedRecord = FileMetadataWithFilesOneAndThree.copy(files = Seq(updatedFileOne, BatchFileThree))
 
-      //TODO fileUploadMetadataModels.scala FileUploadMetadata I think is wrong. Timestamps sometimes written with 'ISODate(' and sometimes not
       val maybeActual = await(repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
 
       maybeActual shouldBe Some(expectedRecord)

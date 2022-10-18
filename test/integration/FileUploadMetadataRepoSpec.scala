@@ -48,8 +48,6 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   with MockitoSugar
   with DefaultPlayMongoRepositorySupport[FileUploadMetadata] {
 
-
-
   implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
 
   val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
@@ -67,11 +65,14 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
     await(repository.collection.countDocuments().toFuture()).toInt
   }
 
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockLogger, mockErrorHandler, mockConfigService, mockFileUploadConfig)
+  }
+
   override def afterAll(): Unit = {
     dropCollection()
   }
-
-
 
   private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {
     PassByNameVerifier(mockLogger, logLevel)
@@ -81,12 +82,12 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   }
 
   private def selector(fileReference: String) = {
-    org.mongodb.scala.model.Filters.equal("files.reference",fileReference)
+    org.mongodb.scala.model.Filters.equal("files.reference", fileReference)
   }
 
   "repository" should {
 
-    "successfully save a single file metadata" in  {
+    "successfully save a single file metadata" in {
       when(mockErrorHandler.handleSaveError(any(), any())(any())).thenReturn(true)
       val saveResult = await(repository.create(FileMetadataWithFileOne))
       saveResult shouldBe true
@@ -98,7 +99,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       logVerifier(mockLogger, "debug", "saving fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00.000Z,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
     }
 
-    "successfully save when create is called multiple times" in  {
+    "successfully save when create is called multiple times" in {
       await(repository.create(FileMetadataWithFileOne))
       await(repository.create(FileMetadataWithFileTwo))
       collectionSize(repository) shouldBe 2
@@ -112,7 +113,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       findResult2 shouldBe FileMetadataWithFileTwo
     }
 
-    "successfully update checksum, searching by reference" in  {
+    "successfully update checksum, searching by reference" in {
       System.setProperty("returnOriginal", "false")
       await(repository.create(FileMetadataWithFilesOneAndThree))
       await(repository.create(FileMetadataWithFileTwo))
@@ -127,8 +128,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       logVerifier(mockLogger, "debug", "updating file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f with callbackField=CallbackFields(UPDATED_NAME,UPDATED_MIMETYPE,UPDATED_CHECKSUM,2018-04-24T09:30:00Z,https://outbound.a.com)")
     }
 
-    // TODO works
-    "not update checksum, when searching by reference fails" in  {
+    "not update checksum, when searching by reference fails" in {
       await(repository.create(FileMetadataWithFileTwo))
 
       val maybeActual = await(repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
@@ -136,8 +136,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       maybeActual shouldBe None
     }
 
-    // TODO works
-    "return Some when fetch by file reference is successful" in  {
+    "return Some when fetch by file reference is successful" in {
       await(repository.create(FileMetadataWithFileOne))
       await(repository.create(FileMetadataWithFileTwo))
 
@@ -151,7 +150,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       logVerifier(mockLogger, "debug", "fetching file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f")
     }
 
-    "return None when fetch by file reference is un-successful" in  {
+    "return None when fetch by file reference is un-successful" in {
       await(repository.create(FileMetadataWithFileTwo))
 
       val maybeFoundRecord = await(repository.fetch(BatchFileOne.reference))
@@ -159,7 +158,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       maybeFoundRecord shouldBe None
     }
 
-    "successfully delete a record" in  {
+    "successfully delete a record" in {
       await(repository.create(FileMetadataWithFileOne))
       await(repository.create(FileMetadataWithFileTwo))
       collectionSize(repository) shouldBe 2
@@ -177,7 +176,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       logVerifier(mockLogger, "debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00.000Z,Vector(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
     }
 
-    "collection should be same size when deleting non-existent record" in  {
+    "collection should be same size when deleting non-existent record" in {
       await(repository.create(FileMetadataWithFileOne))
       collectionSize(repository) shouldBe 1
 
@@ -187,7 +186,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
     }
 
     // TODO doesn't work, and I am not certain method 'repository.deleteAll()' is needed anyway
-    "successfully delete all file metadata" in  {
+    "successfully delete all file metadata" in {
       await(repository.create(FileMetadataWithFileOne))
       when(mockErrorHandler.handleSaveError(any(), any())(any())).thenReturn(true)
 

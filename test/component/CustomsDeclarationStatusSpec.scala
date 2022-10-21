@@ -31,7 +31,7 @@ import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgStat
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTestXMLData}
 
 import java.io.StringReader
-import java.time.Instant
+import java.time.{Instant, ZoneOffset}
 import java.time.temporal.ChronoUnit
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
@@ -151,7 +151,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
     scenario("Response status 400 when Date of declaration is older than configured allowed value") {
       Given("the API is available")
-      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceOrCreationDate = Instant.now().minus(1, ChronoUnit.YEARS)))
+      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceOrCreationDate = Instant.now.atOffset(ZoneOffset.UTC).minus(1, ChronoUnit.YEARS).toInstant))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
 
       And("the CSP is authorised with its privileged application")

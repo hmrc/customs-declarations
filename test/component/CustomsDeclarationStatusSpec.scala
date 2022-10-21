@@ -17,9 +17,8 @@
 package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
-import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormatter, ISODateTimeFormat}
 import org.scalatest._
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
@@ -32,6 +31,8 @@ import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgStat
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTestXMLData}
 
 import java.io.StringReader
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
@@ -47,8 +48,6 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
   private val mrn = "some-mrn"
   private val endpoint = s"/status-request/mrn/$mrn"
-
-  private val ISO_UTC_DateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTime.withZoneUTC()
 
   private val apiSubscriptionKeyForXClientIdV1 =
     ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
@@ -112,7 +111,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(ISO_UTC_DateTimeFormat))
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString())
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())
@@ -138,7 +137,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(ISO_UTC_DateTimeFormat))
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString())
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())
@@ -152,7 +151,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
     scenario("Response status 400 when Date of declaration is older than configured allowed value") {
       Given("the API is available")
-      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceOrCreationDate = DateTime.now().minusYears(1)))
+      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceOrCreationDate = Instant.now().minus(1, ChronoUnit.YEARS)))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
 
       And("the CSP is authorised with its privileged application")

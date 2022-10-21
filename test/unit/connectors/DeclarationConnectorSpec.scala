@@ -16,18 +16,14 @@
 
 package unit.connectors
 
-import java.util.UUID
 import akka.actor.ActorSystem
-import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
-
-import scala.concurrent.Await
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterEach}
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames
 import play.api.mvc.AnyContentAsXml
@@ -41,11 +37,11 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
-import uk.gov.hmrc.http.HttpClient
-import util.UnitSpec
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 import util.TestData
 
+import java.time.{LocalDateTime, ZoneOffset}
+import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
@@ -61,14 +57,14 @@ class DeclarationConnectorSpec extends AnyWordSpecLike with MockitoSugar with Be
   private val mockCdsLogger = mock[CdsLogger]
   private val mockActorSystem = ActorSystem("mockActorSystem")
 
-  class DummyDeclarationCancellationConnector (
-      override val http: HttpClient,
-      override val logger: DeclarationsLogger,
-      override val serviceConfigProvider: ServiceConfigProvider,
-      override val config: DeclarationsConfigService,
-      override val cdsLogger: CdsLogger,
-      override val actorSystem: ActorSystem)
-    (implicit val ec: ExecutionContext) extends DeclarationConnector {
+  class DummyDeclarationCancellationConnector(
+                                               override val http: HttpClient,
+                                               override val logger: DeclarationsLogger,
+                                               override val serviceConfigProvider: ServiceConfigProvider,
+                                               override val config: DeclarationsConfigService,
+                                               override val cdsLogger: CdsLogger,
+                                               override val actorSystem: ActorSystem)
+                                             (implicit val ec: ExecutionContext) extends DeclarationConnector {
     override val configKey = "wco-declaration"
   }
 
@@ -98,13 +94,12 @@ class DeclarationConnectorSpec extends AnyWordSpecLike with MockitoSugar with Be
   private val dayOfMonth = 4
   private val hourOfDay = 13
   private val minuteOfHour = 45
-  private val date = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, DateTimeZone.UTC)
+  private val date = LocalDateTime.of(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour).toInstant(ZoneOffset.UTC)
 
   private val httpFormattedDate = "Tue, 04 Jul 2017 13:45:00 UTC"
 
   private val correlationId = UUID.randomUUID()
   private val successfulHttpResponse = HttpResponse(200, "")
-
 
   "MdgWcoDeclarationConnector" can {
 

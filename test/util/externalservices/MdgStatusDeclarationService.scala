@@ -18,17 +18,18 @@ package util.externalservices
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.UrlPattern
-import org.joda.time.{DateTime, DateTimeZone}
 import play.api.test.Helpers._
 import util._
 
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import scala.xml.NodeSeq
 
 trait MdgStatusDeclarationService extends WireMockRunner {
   private val v2URL = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgStatusDeclarationServiceContextV2)
   private val v3URL = urlMatching(CustomsDeclarationsExternalServicesConfig.MdgStatusDeclarationServiceContextV3)
 
-  val acceptanceDateVal = DateTime.now(DateTimeZone.UTC).minusDays(30)
+  val acceptanceDateVal = Instant.now().minus(30, ChronoUnit.DAYS)
 
   def startMdgStatusV2Service(status: Int = OK, body: NodeSeq = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceOrCreationDate = acceptanceDateVal)): Unit = startService(status, v2URL, body)
 

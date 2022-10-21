@@ -16,11 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import java.time.LocalDateTime
-
+import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
 import akka.actor.ActorSystem
 import com.google.inject._
-import org.joda.time.DateTime
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
 import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
@@ -34,6 +32,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HttpClient, _}
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
@@ -54,7 +53,7 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
   override lazy val unavailablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
 
   def send[A](xmlToSend: NodeSeq,
-              date: DateTime,
+              date: Instant,
               correlationId: CorrelationId,
               apiVersion: ApiVersion)
              (implicit ar: AuthorisedRequest[A]): Future[HttpResponse] = {
@@ -72,12 +71,15 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
     }
   }
 
-  private def getHeaders(date: DateTime, conversationId: ConversationId, correlationId: CorrelationId) = {
+  private def getHeaders(date: Instant, conversationId: ConversationId, correlationId: CorrelationId) = {
+    import java.time.format.DateTimeFormatter
+    val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss")
+    val zdt = ZonedDateTime.ofInstant(date, ZoneOffset.UTC)
     Seq(
         (X_FORWARDED_HOST, "MDTP"),
         (XCorrelationIdHeaderName, correlationId.toString),
         (XConversationIdHeaderName, conversationId.toString),
-        (DATE, date.toString("EEE, dd MMM yyyy HH:mm:ss z")),
+        (DATE, formatter.format(zdt) + " UTC"),
         (CONTENT_TYPE, MimeTypes.XML + "; charset=utf-8"),
         (ACCEPT, MimeTypes.XML)
     )

@@ -21,7 +21,7 @@ import com.mongodb.client.model.Indexes.{ascending, descending}
 import org.mongodb.scala._
 import org.mongodb.scala.model.Filters._
 import org.mongodb.scala.model.Updates._
-import org.mongodb.scala.model.{FindOneAndUpdateOptions, IndexModel, IndexOptions, ReturnDocument, UpdateOptions}
+import org.mongodb.scala.model.{FindOneAndUpdateOptions, IndexModel, IndexOptions, ReturnDocument}
 import play.api.libs.json.Format
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
@@ -31,6 +31,7 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
+import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
@@ -51,7 +52,6 @@ trait FileUploadMetadataRepo {
 
 @Singleton
 class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
-                                            errorHandler: FileUploadMetadataRepoErrorHandler,
                                             configService: DeclarationsConfigService,
                                             logger: DeclarationsLogger)
                                            (implicit ec: ExecutionContext)
@@ -60,29 +60,13 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     mongoComponent = mongoComponent,
     domainFormat = FileUploadMetadata.format,
     indexes = Seq(
-      IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index")
-
-        /** TODO check these indices options = BSONDocument("expireAfterSeconds" -> ttlInSeconds) ** */),
+      IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index").expireAfter(configService.fileUploadConfig.ttlInSeconds,TimeUnit.SECONDS)),
       IndexModel(ascending("batchId"), IndexOptions().unique(true).name("batch-id")),
       IndexModel(ascending("files.reference", "csId"), IndexOptions().unique(true).name("csId-and-file-reference"))
     )
-    ,
-    replaceIndexes = true
   ) with FileUploadMetadataRepo {
 
   private implicit val format: Format[FileUploadMetadata] = FileUploadMetadata.format
-
-  private val ttlIndexName = "createdAt-Index"
-  private val ttlInSeconds = configService.fileUploadConfig.ttlInSeconds
-
-
-  //  private val ttlIndex = Index(
-  //    key = Seq("createdAt" -> IndexType.Descending),
-  //    name = Some(ttlIndexName),
-  //    unique = false,
-  //    options = BSONDocument("expireAfterSeconds" -> ttlInSeconds)
-  //  )
-
 
   override def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
     logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
@@ -93,8 +77,8 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
         result.wasAcknowledged()
         Future.successful(true)
       case Failure(exception) =>
-        errorHandler.handleSaveError(exception, errorMsg)
-        Future.failed(exception)
+        logger.error(errorMsg)
+        Future.failed(new IllegalStateException(exception))
     }
 
   }
@@ -111,12 +95,11 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
 
     val selector = equal("batchId", fileUploadMetadata.batchId.toString)
     lazy val errorMsg = s"Could not delete entity for selector: $selector"
-    //    collection.deleteOne(selector).toFuture().map(errorHandler.handleDeleteError(_, errorMsg))
     collection.deleteOne(selector).toFuture().transformWith {
       case Success(_) => Future.successful(Unit)
       case Failure(exception) => {
-        errorHandler.handleDeleteError(exception, errorMsg)
-        Future.failed(exception)
+        logger.error(errorMsg)
+        Future.failed(new RuntimeException(exception))
       }
     }
   }
@@ -125,15 +108,12 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     logger.debug(s"updating file upload metadata with file reference: $reference with callbackField=$cf")
 
     val selector = and(equal("files.reference", reference.toString), equal("csId", csId.toString))
-    //TODO Check this update
-    //    val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum, "uploadTimestamp" -> cf.uploadTimestamp, "outboundLocation" -> cf.outboundLocation.toString)))
 
-    //TODO this is adding 'ISODate' to uploadTimestamp, is this correct?
     val update = combine(
       set("files.$.maybeCallbackFields.name", cf.name),
       set("files.$.maybeCallbackFields.mimeType", cf.mimeType),
       set("files.$.maybeCallbackFields.checksum", cf.checksum),
-      set("files.$.maybeCallbackFields.uploadTimestamp", cf.uploadTimestamp),
+      set("files.$.maybeCallbackFields.uploadTimestamp", cf.uploadTimestamp.toString),
       set("files.$.maybeCallbackFields.outboundLocation", cf.outboundLocation.toString))
 
     collection.findOneAndUpdate(selector, update,

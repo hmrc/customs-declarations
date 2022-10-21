@@ -16,14 +16,13 @@
 
 package uk.gov.hmrc.customs.declaration.model.upscan
 
+import play.api.libs.json._
+import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
+
 import java.net.URL
 import java.time.Instant
 import java.util.UUID
-import org.joda.time.DateTime
-import play.api.libs.json._
-import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.mongo.play.json.formats.{MongoFormats, MongoJavatimeFormats, MongoJodaFormats}
-
 import scala.util.Try
 
 object HttpUrlFormat extends Format[URL] {
@@ -64,8 +63,11 @@ object FileReference {
 }
 
 case class CallbackFields(name: String, mimeType: String, checksum: String, uploadTimestamp: Instant, outboundLocation: URL)
+
 object CallbackFields {
-  implicit val dateTimeJF = MongoJavatimeFormats.instantFormat
+  implicit val dateWriter = Writes[Instant] {x => JsString(x.toString)}
+  implicit val dateReader = Reads.of[Instant]
+
   implicit val urlFormat = HttpUrlFormat
   implicit val format = Json.format[CallbackFields]
 }
@@ -78,6 +80,7 @@ case class BatchFile(
   size: Int, // assumption - it appears to be mandatory but is ignored
   documentType: Option[DocumentType] // user request
 )
+
 object BatchFile {
   implicit val urlFormat = HttpUrlFormat
   implicit val format = Json.format[BatchFile]
@@ -89,11 +92,11 @@ case class FileUploadMetadata(
   csId: SubscriptionFieldsId,
   batchId: BatchId,
   fileCount: Int,
-  createdAt: DateTime,
+  createdAt: Instant,
   files: Seq[BatchFile]
 )
+
 object FileUploadMetadata {
-  implicit val dateTimeJF = MongoJodaFormats.dateTimeFormat // TODO is this needed anymore and should we change to Java time anyway?
+  implicit val dateTimeJF = MongoJavatimeFormats.instantFormat
   implicit val format = Json.format[FileUploadMetadata]
-//  implicit val fileUploadMetadataJF =  Json.format[FileUploadMetadata] //TODO not sure about this
 }

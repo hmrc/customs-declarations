@@ -17,7 +17,6 @@
 package integration
 
 import java.util.UUID
-import org.joda.time.DateTime
 import org.mockito.Mockito._
 import org.scalatest.{BeforeAndAfterAll, Matchers}
 import org.scalatestplus.mockito.MockitoSugar
@@ -35,6 +34,8 @@ import util.TestData._
 import util.TestXMLData.ValidSubmissionXML
 import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
+
+import java.time.Instant
 
 class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
   with Matchers
@@ -108,7 +109,7 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
   }
 
   private def sendValidXml()(implicit vpr: ValidatedPayloadRequest[_]) = {
-    connector.send(ValidSubmissionXML, new DateTime(), correlationId, VersionOne)
+    connector.send(ValidSubmissionXML, Instant.now(), correlationId, VersionOne)
   }
 
   private def checkCaughtException(status: Int) {

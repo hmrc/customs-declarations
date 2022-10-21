@@ -16,30 +16,22 @@
 
 package unit.controllers
 
-import java.util.UUID
-import org.joda.time.DateTime
-import play.api.test.Helpers.{redirectLocation, status, _}
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import play.api.mvc._
 import play.api.test.Helpers
-import play.api.test.Helpers.{UNAUTHORIZED, header, _}
+import play.api.test.Helpers.{UNAUTHORIZED, header, status, _}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorBadRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
 import uk.gov.hmrc.customs.declaration.controllers.DeclarationStatusController
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{ValidateAndExtractHeadersStatusAction, _}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
@@ -51,6 +43,9 @@ import util.FakeRequests._
 import util.RequestHeaders._
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, StatusTestXMLData}
+
+import java.time.Instant
+import java.util.UUID
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
@@ -74,7 +69,7 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
 
     protected val mockStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
-    protected val dateTime = new DateTime()
+    protected val dateTime = Instant.now()
 
     protected val stubShutterCheckAction = new ShutterCheckAction(mockDeclarationsLogger, mockDeclarationConfigService)
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
@@ -99,7 +94,7 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
       controller.get(mrnValue).apply(request)
     }
 
-    when(mockStatusConnector.send(any[NodeSeq], any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.successful(stubHttpResponse))
+    when(mockStatusConnector.send(any[NodeSeq], any[Instant], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId], any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.successful(stubHttpResponse))
     when(mockDateTimeService.nowUtc()).thenReturn(dateTime)
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
@@ -165,7 +160,7 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
 
     "return the Internal Server error when connector returns a 500 " in new SetUp() {
       when(mockStatusConnector.send(any[NodeSeq],
-        any[DateTime],
+        any[Instant],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
         any[ApiVersion])(any[AuthorisedRequest[_]]))
         .thenReturn(Future.failed(emulatedServiceFailure))

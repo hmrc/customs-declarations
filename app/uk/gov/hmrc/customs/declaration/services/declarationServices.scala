@@ -16,14 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import java.net.URLEncoder
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
-
 import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
-import javax.inject.{Inject, Singleton}
-import org.joda.time.DateTime
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
@@ -31,12 +25,15 @@ import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnecto
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ExtractedHeaders, HasApiVersion, HasAuthorisedAs, HasConversationId, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.net.URLEncoder
+import java.time.temporal.ChronoUnit
+import java.time.{Instant, ZonedDateTime}
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml.NodeSeq
 
@@ -139,7 +136,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
     }
   }
 
-  private def preparePayload[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: DateTime)
+  private def preparePayload[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: Instant)
                                (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): NodeSeq = {
     logger.debug(s"preparePayload called")
     wrapper.wrap(xml, asfr, dateTime)

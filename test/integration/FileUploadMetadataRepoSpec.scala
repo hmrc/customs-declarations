@@ -30,7 +30,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.FileUploadConfig
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedHeadersRequest}
 import uk.gov.hmrc.customs.declaration.model.upscan.{CallbackFields, FileUploadMetadata}
-import uk.gov.hmrc.customs.declaration.repo.{FileUploadMetadataMongoRepo, FileUploadMetadataRepoErrorHandler}
+import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataMongoRepo
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
@@ -51,7 +51,6 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
 
   val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
-  val mockErrorHandler: FileUploadMetadataRepoErrorHandler = mock[FileUploadMetadataRepoErrorHandler]
   val mockConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
   val mockFileUploadConfig: FileUploadConfig = mock[FileUploadConfig]
   lazy implicit val emptyHC: HeaderCarrier = HeaderCarrier()
@@ -59,7 +58,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   when(mockConfigService.fileUploadConfig).thenReturn(mockFileUploadConfig)
   when(mockFileUploadConfig.ttlInSeconds).thenReturn(10000)
 
-  override lazy val repository = new FileUploadMetadataMongoRepo(mongoComponent, mockErrorHandler, mockConfigService, mockLogger)
+  override lazy val repository = new FileUploadMetadataMongoRepo(mongoComponent, mockConfigService, mockLogger)
 
   private def collectionSize(repository: FileUploadMetadataMongoRepo): Int = {
     await(repository.collection.countDocuments().toFuture()).toInt
@@ -67,7 +66,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockLogger, mockErrorHandler, mockConfigService, mockFileUploadConfig)
+    reset(mockLogger, mockConfigService, mockFileUploadConfig)
   }
 
   override def afterAll(): Unit = {
@@ -88,7 +87,6 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   "repository" should {
 
     "successfully save a single file metadata" in {
-      when(mockErrorHandler.handleSaveError(any(), any())(any())).thenReturn(true)
       val saveResult = await(repository.create(FileMetadataWithFileOne))
       saveResult shouldBe true
       collectionSize(repository) shouldBe 1
@@ -96,7 +94,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       val findResult = await(repository.collection.find(selector(BatchFileOne.reference.toString)).toFuture()).head
 
       findResult shouldBe FileMetadataWithFileOne
-      logVerifier(mockLogger, "debug", "saving fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00.000Z,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
+      logVerifier(mockLogger, "debug", "saving fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00Z,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
     }
 
     "successfully save when create is called multiple times" in {
@@ -114,7 +112,6 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
     }
 
     "successfully update checksum, searching by reference" in {
-      System.setProperty("returnOriginal", "false")
       await(repository.create(FileMetadataWithFilesOneAndThree))
       await(repository.create(FileMetadataWithFileTwo))
       val updatedFileOne = BatchFileOne.copy(maybeCallbackFields = Some(CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate, new URL("https://outbound.a.com"))))
@@ -173,7 +170,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
 
       maybeFoundRecordTwo shouldBe Some(FileMetadataWithFileTwo)
-      logVerifier(mockLogger, "debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00.000Z,Vector(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
+      logVerifier(mockLogger, "debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00Z,Vector(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
     }
 
     "collection should be same size when deleting non-existent record" in {

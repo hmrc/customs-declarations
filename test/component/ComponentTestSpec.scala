@@ -18,7 +18,6 @@ package component
 
 import java.time.{Instant, ZoneId, ZonedDateTime}
 
-import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.Mockito.when
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
@@ -38,7 +37,7 @@ trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppP
 
   val dateTime = 1546344000000L // 01/01/2019 12:00:00
 
-  when(mockDateTimeService.nowUtc()).thenReturn(new DateTime(dateTime, DateTimeZone.UTC))
+  when(mockDateTimeService.nowUtc()).thenReturn( Instant.ofEpochMilli(dateTime))
   when(mockDateTimeService.zonedDateTimeUtc).thenReturn(ZonedDateTime.ofInstant(Instant.ofEpochMilli(dateTime), ZoneId.of("UTC")))
 
   protected val configMap: Map[String, Any] = Map(

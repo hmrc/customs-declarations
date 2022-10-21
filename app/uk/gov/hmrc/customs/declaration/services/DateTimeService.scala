@@ -16,12 +16,10 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import java.time.{Clock, ZoneId, ZonedDateTime}
-
-import org.joda.time.{DateTime, DateTimeZone}
+import java.time.{Instant, ZoneId, ZonedDateTime}
 
 class DateTimeService {
   val UtcZoneId = ZoneId.of("UTC")
-  def nowUtc(): DateTime = new DateTime(Clock.systemUTC().instant().toEpochMilli, DateTimeZone.UTC)
+  def nowUtc(): Instant =  Instant.now()
   def zonedDateTimeUtc: ZonedDateTime = ZonedDateTime.now(UtcZoneId)
 }

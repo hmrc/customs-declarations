@@ -16,20 +16,16 @@
 
 package unit.services
 
-import java.util.UUID
-import java.util.concurrent.TimeUnit
 import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
-import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
-import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorInternalServerError}
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -44,12 +40,15 @@ import util.CustomsDeclarationsMetricsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
+import java.time.Instant
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
-  private val dateTime = new DateTime()
+  private val dateTime = Instant.now()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private val expectedApiSubscriptionKey = ApiSubscriptionKey(clientId, "customs%2Fdeclarations", VersionOne)
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
@@ -84,7 +83,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       (service.send(vpr, hc)).futureValue
     }
 
-    when(mockPayloadDecorator.wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[DateTime])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
+    when(mockPayloadDecorator.wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[Instant])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(CustomsDeclarationsMetricsTestData.EventStart, CustomsDeclarationsMetricsTestData.EventEnd)
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
@@ -98,7 +97,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
 
         val result: Either[Result, Option[NrSubmissionId]] = send()
         result shouldBe Right(Some(nrSubmissionId))
-        verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+        verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
 
         PassByNameVerifier(mockLogger, "info")
           .withByNameParam[String]("Duration of call to NRS 2000 ms")
@@ -112,7 +111,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
         val result: Either[Result, Option[NrSubmissionId]] = send()
 
         result shouldBe Right(Some(nrSubmissionId))
-        verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+        verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
       }
 
     }
@@ -130,7 +129,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Right(Some(nrSubmissionId))
-      verify(mockMdgDeclarationConnector).send(any[NodeSeq], any[DateTime], any[UUID], meq(VersionOne))(any[ValidatedPayloadRequest[_]])
+      verify(mockMdgDeclarationConnector).send(any[NodeSeq], any[Instant], any[UUID], meq(VersionOne))(any[ValidatedPayloadRequest[_]])
     }
 
     "call payload decorator passing incoming xml" in new SetUp() {
@@ -138,7 +137,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Right(Some(nrSubmissionId))
-      verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[DateTime])(any[ValidatedPayloadRequest[_]])
+      verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[Instant])(any[ValidatedPayloadRequest[_]])
       verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
     }
 
@@ -164,7 +163,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     }
 
     "return 500 error response when MDG call fails" in new SetUp() {
-      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
@@ -172,7 +171,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     }
 
     "return 500 error response when MDG circuit breaker trips" in new SetUp() {
-      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new CircuitBreakerOpenException(FiniteDuration(10, TimeUnit.SECONDS))))
+      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new CircuitBreakerOpenException(FiniteDuration(10, TimeUnit.SECONDS))))
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
@@ -186,7 +185,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Right(None)
-      verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[DateTime], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+      verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
     }
 
     "return 500 error when CSP has no authenticatedEori in api subscription fields" in new SetUp() {

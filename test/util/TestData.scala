@@ -68,6 +68,7 @@ object TestData {
 
   val dateString = "2018-09-11T10:28:54.128Z"
   val date = Instant.parse("2018-09-11T10:28:54.128Z")
+  val httpFormattedDate = "Tue, 11 Sep 2018 10:28:54 UTC"
 
   val subscriptionFieldsIdString: String = "b82f31c6-2239-4253-b6f5-ed75e37ab7a5"
   val subscriptionFieldsIdUuid: UUID = fromString("b82f31c6-2239-4253-b6f5-ed75e37ab7a5")

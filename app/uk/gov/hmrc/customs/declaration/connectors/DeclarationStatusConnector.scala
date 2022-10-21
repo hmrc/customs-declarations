@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
 import akka.actor.ActorSystem
 import com.google.inject._
 import play.api.http.HeaderNames._
@@ -33,6 +32,7 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HttpClient, _}
 
+import java.time.{Instant, LocalDateTime}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
@@ -44,7 +44,7 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
                                             override val cdsLogger: CdsLogger,
                                             override val actorSystem: ActorSystem)
                                            (implicit val ec: ExecutionContext)
-  extends DeclarationCircuitBreaker with HttpErrorFunctions {
+  extends DeclarationCircuitBreaker with HttpErrorFunctions with HeaderUtil {
 
   override val configKey = "declaration-status"
 
@@ -72,14 +72,11 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
   }
 
   private def getHeaders(date: Instant, conversationId: ConversationId, correlationId: CorrelationId) = {
-    import java.time.format.DateTimeFormatter
-    val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss")
-    val zdt = ZonedDateTime.ofInstant(date, ZoneOffset.UTC)
     Seq(
         (X_FORWARDED_HOST, "MDTP"),
         (XCorrelationIdHeaderName, correlationId.toString),
         (XConversationIdHeaderName, conversationId.toString),
-        (DATE, formatter.format(zdt) + " UTC"),
+        (DATE, getDateHeader(date)),
         (CONTENT_TYPE, MimeTypes.XML + "; charset=utf-8"),
         (ACCEPT, MimeTypes.XML)
     )
@@ -108,3 +105,4 @@ class DeclarationStatusConnector @Inject() (val http: HttpClient,
       }
   }
 }
+

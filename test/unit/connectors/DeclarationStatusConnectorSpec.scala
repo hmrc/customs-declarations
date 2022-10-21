@@ -17,6 +17,7 @@
 package unit.connectors
 
 import akka.actor.ActorSystem
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -24,6 +25,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.http.HeaderNames
 import play.api.mvc.{AnyContent, Request}
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
@@ -122,6 +124,18 @@ class DeclarationStatusConnectorSpec extends AnyWordSpecLike with MockitoSugar w
         }
         caught.getMessage shouldBe "config not found"
       }
+    }
+
+    "ensure the date header in passed through in MDG request" in {
+       val successfulHttpResponse = HttpResponse(200, "")
+      returnResponseForRequest(Future.successful(successfulHttpResponse))
+
+      awaitRequest
+
+      val headersCaptor: ArgumentCaptor[Seq[(String, String)]] = ArgumentCaptor.forClass(classOf[Seq[(String, String)]])
+      verify(mockWsPost).POSTString(anyString, anyString, headersCaptor.capture())(
+        any[HttpReads[HttpResponse]](), any[HeaderCarrier], any[ExecutionContext])
+      headersCaptor.getValue should contain(HeaderNames.DATE -> httpFormattedDate)
     }
   }
 

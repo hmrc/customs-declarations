@@ -64,7 +64,7 @@ class DeclarationCancellationConnector @Inject()(override val http: HttpClient,
   override val configKey = "declaration-cancellation"
 }
 
-trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunctions {
+trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunctions with HeaderUtil {
 
   def http: HttpClient
 
@@ -95,12 +95,10 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   }
 
   private def getHeaders(date: Instant, correlationId: UUID) = {
-    val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss")
-    val zdt = ZonedDateTime.ofInstant(date, ZoneOffset.UTC)
     Seq(
       (ACCEPT, MimeTypes.XML),
       (CONTENT_TYPE, ContentTypes.XML(utf_8)),
-      (DATE, formatter.format(zdt) + " UTC"),
+      (DATE, getDateHeader(date)),
       (X_FORWARDED_HOST, "MDTP"),
       ("X-Correlation-ID", correlationId.toString))
   }

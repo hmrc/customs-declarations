@@ -17,6 +17,7 @@
 package component.filetransmission
 
 import component.{ComponentTestSpec, ExpectedTestResponses}
+import org.mongodb.scala.model.Filters
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.libs.json.Json
@@ -61,13 +62,13 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
   }
 
   override protected def beforeEach() {
-    await(repo.collection.drop().toFuture())
+    await(repo.collection.deleteMany(Filters.exists("_id")).toFuture())
     resetMockServer()
   }
 
   override protected def afterAll() {
     stopMockServer()
-    await(repo.collection.drop().toFuture())
+    await(repo.collection.deleteMany(Filters.exists("_id")).toFuture())
   }
 
 

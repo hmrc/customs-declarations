@@ -66,11 +66,12 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
 
   override def beforeEach(): Unit = {
     super.beforeEach()
+    deleteAll()
     reset(mockLogger, mockConfigService, mockFileUploadConfig)
   }
 
   override def afterAll(): Unit = {
-    dropCollection()
+    deleteAll()
   }
 
   private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {

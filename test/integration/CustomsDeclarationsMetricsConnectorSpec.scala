@@ -107,7 +107,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
       stopMockServer()
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadGatewayException]
-      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=502, Error=POST of 'http://localhost:11111/log-times' failed. Caused by: 'Connection refused: localhost/127.0.0.1:11111'")
+      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=502, Error=POST of 'http://localhost:11111/log-times' failed. Caused by: 'Connection refused: localhost/0:0:0:0:0:0:0:1:11111'")
 
       startMockServer()
     }

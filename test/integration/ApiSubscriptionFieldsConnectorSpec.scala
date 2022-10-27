@@ -115,7 +115,7 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
 
       intercept[RuntimeException](await(getApiSubscriptionFields)).getCause.getClass shouldBe classOf[BadGatewayException]
 
-      verifyDeclarationsLoggerError("Subscriptions fields lookup call failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=502 error=GET of 'http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' failed. Caused by: 'Connection refused: localhost/127.0.0.1:11111'")
+      verifyDeclarationsLoggerError("Subscriptions fields lookup call failed. url=http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=502 error=GET of 'http://localhost:11111/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' failed. Caused by: 'Connection refused: localhost/0:0:0:0:0:0:0:1:11111'")
 
       startMockServer()
 

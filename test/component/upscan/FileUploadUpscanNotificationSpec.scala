@@ -62,7 +62,6 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
 
   override protected def afterAll() {
     stopMockServer()
-    await(repo.collection.deleteMany(Filters.exists("_id")).toFuture())
   }
 
   private val hasConversationId = new HasConversationId {

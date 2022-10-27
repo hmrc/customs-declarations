@@ -68,7 +68,6 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
 
   override protected def afterAll() {
     stopMockServer()
-    await(repo.collection.deleteMany(Filters.exists("_id")).toFuture())
   }
 
 

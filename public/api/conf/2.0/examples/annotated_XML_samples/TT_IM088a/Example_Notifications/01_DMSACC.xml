@@ -7,16 +7,16 @@
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
         <FunctionCode>01</FunctionCode>
-        <FunctionalReferenceID>2f0cd5e6a7ff4924a346a97af17f0f98</FunctionalReferenceID>
+        <FunctionalReferenceID>d493b52b6a034aecb7d1c6ad7411569a</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20220610102020+01</DateTimeString>
+            <DateTimeString formatCode="304">20220830144248Z</DateTimeString>
         </IssueDateTime>
         <Declaration>
             <AcceptanceDateTime>
-                <DateTimeString formatCode="304">20220610102018+01</DateTimeString>
+                <DateTimeString formatCode="304">20220830144246Z</DateTimeString>
             </AcceptanceDateTime>
-            <FunctionalReferenceID>CDSP_9779_003_1006_00</FunctionalReferenceID>
-            <ID>22GB6D6GUZHBYZNAR2</ID>
+            <FunctionalReferenceID>CDSP_9779_003_3008_05</FunctionalReferenceID>
+            <ID>22GB9L8NKHSW1Z0AR4</ID>
             <VersionID>1</VersionID>
         </Declaration>
     </Response>

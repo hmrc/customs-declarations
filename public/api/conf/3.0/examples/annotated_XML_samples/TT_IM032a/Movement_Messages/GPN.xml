@@ -20,6 +20,7 @@
 		<FunctionalReferenceID>TT_IM32a_v1.2_2804_02</FunctionalReferenceID>
 		<ID>21GB4NO8TF7NA7DMR2</ID>
 		<TypeCode>GPR</TypeCode>
+		<!--Note that Submitter/ID should not be needed because it is not a mandatory field for Goods Arrival. -->
 		<Submitter>
 			<ID>GB896458895023</ID>
 		</Submitter>

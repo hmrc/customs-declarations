@@ -17,7 +17,7 @@
 package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
@@ -33,6 +33,7 @@ import java.io.StringReader
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
+import org.scalatest.matchers.should.Matchers
 
 class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
@@ -99,8 +100,8 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
     stopMockServer()
   }
 
-  feature("Declaration API authorises amendment of submissions from CSPs with v2.0 accept header") {
-    scenario("An authorised CSP successfully submits a customs amend declaration") {
+  Feature("Declaration API authorises amendment of submissions from CSPs with v2.0 accept header") {
+    Scenario("An authorised CSP successfully submits a customs amend declaration") {
       Given("A CSP wants to submit a valid customs amend declaration")
       startMdgWcoDecServiceV2()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
@@ -131,8 +132,8 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
 
   }
 
-  feature("Declaration API authorises amendment of submissions from CSPs with v3.0 accept header") {
-    scenario("An authorised CSP successfully submits a customs amend declaration") {
+  Feature("Declaration API authorises amendment of submissions from CSPs with v3.0 accept header") {
+    Scenario("An authorised CSP successfully submits a customs amend declaration") {
       Given("A CSP wants to submit a valid customs amend declaration")
       startMdgWcoDecServiceV3()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
@@ -159,9 +160,9 @@ class CustomsDeclarationAmendSpec extends ComponentTestSpec with AuditService wi
     }
   }
 
-  feature("Declaration API handles amendment of submission errors from CSPs as expected") {
+  Feature("Declaration API handles amendment of submission errors from CSPs as expected") {
 
-    scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
+    Scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")
       val request = InvalidSubmissionRequestWith2Errors.fromCsp.postTo(endpoint)
       stubAuditService()

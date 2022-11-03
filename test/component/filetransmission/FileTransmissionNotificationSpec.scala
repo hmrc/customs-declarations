@@ -19,7 +19,7 @@ package component.filetransmission
 import component.{ComponentTestSpec, ExpectedTestResponses}
 import org.mongodb.scala.model.Filters
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.libs.json.Json
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{ACCEPT, AUTHORIZATION, CONTENT_TYPE, contentAsString, route, status, _}
@@ -38,6 +38,7 @@ import java.io.StringReader
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.xml.Utility.trim
+import org.scalatest.matchers.should.Matchers
 
 class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
@@ -75,8 +76,8 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
 
-  feature("File Transmission Notification") {
-    scenario("Success request has been made to Customs Notification service") {
+  Feature("File Transmission Notification") {
+    Scenario("Success request has been made to Customs Notification service") {
       notificationServiceIsRunning()
       Given("the File Transmission service sends a notification")
 
@@ -119,7 +120,7 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
       schemaFileUploadNotificationLocationV1.newValidator().validate(new StreamSource(new StringReader(requestPayload)))
     }
 
-    scenario("Response status 400 when File Transmission service sends invalid payload") {
+    Scenario("Response status 400 when File Transmission service sends invalid payload") {
       Given("the File Transmission service sends a notification")
 
       When("File Transmission service notifies Declaration API using previously provided callback URL with invalid json payload")

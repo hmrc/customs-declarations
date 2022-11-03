@@ -29,8 +29,9 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, UniqueIdsService}
 import util.TestData.stubUniqueIdsService
 import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig}
+import org.scalatest.featurespec.AnyFeatureSpec
 
-trait ComponentTestSpec extends FeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
+trait ComponentTestSpec extends AnyFeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
   with BeforeAndAfterAll with BeforeAndAfterEach with Eventually with MockitoSugar {
 
   private val mockDateTimeService =  mock[DateTimeService]

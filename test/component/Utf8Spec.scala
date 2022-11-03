@@ -17,7 +17,7 @@
 package component
 
 import akka.util.ByteString
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.mvc._
 import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
@@ -28,6 +28,7 @@ import util.externalservices._
 
 import java.nio.file.{Files, Paths}
 import scala.concurrent.Future
+import org.scalatest.matchers.should.Matchers
 
 class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
@@ -62,8 +63,8 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
   val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.12/test-classes/raw/valid_xml.raw")))
   val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.12/test-classes/raw/invalid_xml.raw")))
 
-  feature("Declaration API rejects declaration payloads containing invalid utf-8 bytes") {
-    scenario(
+  Feature("Declaration API rejects declaration payloads containing invalid utf-8 bytes") {
+    Scenario(
       "Response status 200 when user submits a valid utf-8 encoded payload with Header 'Content Type: application/xml'"
     ) {
       Given("the API is available")
@@ -86,7 +87,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
       status(result) shouldBe ACCEPTED
     }
 
-    scenario(
+    Scenario(
       "Response status 400 when user submits a payload containing a non-utf-8 byte with Header 'Content Type: application/xml'"
     ) {
       Given("the API is available")
@@ -109,7 +110,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
       status(result) shouldBe BAD_REQUEST
     }
 
-    scenario(
+    Scenario(
       "Response status 200 when user submits a valid utf-8 encoded payload with Header 'Content Type: application/xml; charset=UTF-8'"
     ) {
       Given("the API is available")
@@ -133,7 +134,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
       status(result) shouldBe ACCEPTED
     }
 
-    scenario(
+    Scenario(
       "Response status 400 when user submits a payload containing a non-utf-8 byte with Header 'Content Type: application/xml; charset=UTF-8'"
     ) {
       Given("the API is available")

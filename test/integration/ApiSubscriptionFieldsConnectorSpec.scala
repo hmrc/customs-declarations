@@ -17,7 +17,7 @@
 package integration
 
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterAll, Matchers}
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -36,6 +36,7 @@ import util._
 import util.externalservices.ApiSubscriptionFieldsService
 
 import scala.concurrent.Future
+import org.scalatest.matchers.should.Matchers
 
 class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with ApiSubscriptionFieldsService with ApiSubscriptionFieldsTestData with Matchers {

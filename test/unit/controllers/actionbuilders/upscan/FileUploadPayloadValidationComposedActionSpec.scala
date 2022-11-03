@@ -17,7 +17,6 @@
 package unit.controllers.actionbuilders.upscan
 
 import org.mockito.Mockito.when
-import org.scalatest.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
@@ -40,6 +39,7 @@ import util.TestXMLData
 
 import scala.concurrent.Future
 import scala.xml.Elem
+import org.scalatest.matchers.should.Matchers
 
 class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 

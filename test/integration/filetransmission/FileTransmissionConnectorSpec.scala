@@ -18,7 +18,7 @@ package integration.filetransmission
 
 import integration.{IntegrationTestModule, IntegrationTestSpec}
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfterAll, Matchers}
+import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -34,6 +34,7 @@ import util.FileTransmissionTestData._
 import util.VerifyLogging._
 import util.externalservices.FileTransmissionService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
+import org.scalatest.matchers.should.Matchers
 
 class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
   with BeforeAndAfterAll with FileTransmissionService with Matchers{

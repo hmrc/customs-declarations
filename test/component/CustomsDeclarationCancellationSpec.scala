@@ -17,7 +17,7 @@
 package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
@@ -33,6 +33,7 @@ import java.io.StringReader
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
+import org.scalatest.matchers.should.Matchers
 
 class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
@@ -82,8 +83,8 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
     </v1:requestDetail>
   </v1:submitDeclarationRequest>.toString()
 
-  feature("Declaration API authorises cancellation of submissions from CSPs with v1.0 accept header") {
-    scenario("An authorised CSP successfully submits a cancellation request") {
+  Feature("Declaration API authorises cancellation of submissions from CSPs with v1.0 accept header") {
+    Scenario("An authorised CSP successfully submits a cancellation request") {
       Given("A CSP wants to submit a valid cancellation request")
       startMdgCancellationV1Service()
       val request: FakeRequest[AnyContentAsXml] = ValidCancellationRequestWithV1AcceptHeader.fromCsp.postTo(endpoint)
@@ -112,8 +113,8 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
     }
   }
 
-  feature("Declaration API authorises cancellation of submissions from CSPs with v2.0 accept header") {
-    scenario("An authorised CSP successfully submits a cancellation request") {
+  Feature("Declaration API authorises cancellation of submissions from CSPs with v2.0 accept header") {
+    Scenario("An authorised CSP successfully submits a cancellation request") {
       Given("A CSP wants to submit a valid cancellation request")
       startMdgCancellationV2Service()
       val request: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request.fromCsp.postTo(endpoint)
@@ -141,8 +142,8 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       verifyMdgWcoDecServiceWasCalledWithV2(expectedXml)
     }
   }
-    feature("Declaration API authorises cancellation of submissions from CSPs with v3.0 accept header") {
-      scenario("An authorised CSP successfully submits a cancellation request") {
+    Feature("Declaration API authorises cancellation of submissions from CSPs with v3.0 accept header") {
+      Scenario("An authorised CSP successfully submits a cancellation request") {
         Given("A CSP wants to submit a valid cancellation request")
         startMdgCancellationV3Service()
         val request: FakeRequest[AnyContentAsXml] = ValidCancellationV3Request.fromCsp.postTo(endpoint)
@@ -168,9 +169,9 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       }
     }
 
-  feature("Declaration API handles cancellation of submission errors from CSPs as expected") {
+  Feature("Declaration API handles cancellation of submission errors from CSPs as expected") {
 
-    scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
+    Scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")
       stubAuditService()
       authServiceAuthorizesCSP()

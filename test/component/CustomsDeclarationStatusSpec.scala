@@ -36,6 +36,7 @@ import java.time.temporal.ChronoUnit
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
+import org.scalatest.matchers.should.Matchers
 
 class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
@@ -95,8 +96,8 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
     stopMockServer()
   }
 
-  feature("Declaration API authorises status requests from CSPs with v2.0 accept header") {
-    scenario("An authorised CSP successfully requests a status") {
+  Feature("Declaration API authorises status requests from CSPs with v2.0 accept header") {
+    Scenario("An authorised CSP successfully requests a status") {
       Given("A CSP wants the status of a declaration")
       startMdgStatusV2Service()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
@@ -121,8 +122,8 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
     }
   }
 
-  feature("Declaration API authorises status requests from CSPs with v3.0 accept header") {
-    scenario("An authorised CSP successfully requests a status") {
+  Feature("Declaration API authorises status requests from CSPs with v3.0 accept header") {
+    Scenario("An authorised CSP successfully requests a status") {
       Given("A CSP wants the status of a declaration")
       startMdgStatusV3Service()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
@@ -147,9 +148,9 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
     }
   }
 
-  feature("Declaration API handles status request errors from CSPs as expected") {
+  Feature("Declaration API handles status request errors from CSPs as expected") {
 
-    scenario("Response status 400 when Date of declaration is older than configured allowed value") {
+    Scenario("Response status 400 when Date of declaration is older than configured allowed value") {
       Given("the API is available")
       startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceOrCreationDate = Instant.now.atOffset(ZoneOffset.UTC).minus(1, ChronoUnit.YEARS).toInstant))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
@@ -168,7 +169,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadStatusResponseErrorInvalidDate)))
     }
 
-    scenario("Response status 400 when Declaration Management Information Response does not contain a valid communicationAddress") {
+    Scenario("Response status 400 when Declaration Management Information Response does not contain a valid communicationAddress") {
       Given("the API is available")
       startMdgStatusV3Service(body = StatusTestXMLData.statusResponseDeclarationNoCommunicationAddress)
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
@@ -187,7 +188,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadStatusResponseErrorBadgeIdMissingOrInvalid)))
     }
 
-    scenario("Response status 400 when Declaration Management Information Response does contains different Badge Identifier") {
+    Scenario("Response status 400 when Declaration Management Information Response does contains different Badge Identifier") {
       Given("the API is available")
       startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(communicationAddress = "hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:IWONTMATCH"))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)

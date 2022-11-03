@@ -16,7 +16,7 @@
 
 package component
 
-import org.scalatest.{Matchers, OptionValues}
+import org.scalatest.OptionValues
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
@@ -26,6 +26,7 @@ import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoDecService}
 
 import scala.concurrent.Future
+import org.scalatest.matchers.should.Matchers
 
 class DeclarationSchemaSpec extends ComponentTestSpec
   with Matchers with OptionValues with AuthService with MdgWcoDecService with ApiSubscriptionFieldsService with AuditService {
@@ -49,9 +50,9 @@ class DeclarationSchemaSpec extends ComponentTestSpec
     stopMockServer()
   }
 
-  feature("The API handles cancellation-specific type code (INV) correctly") {
+  Feature("The API handles cancellation-specific type code (INV) correctly") {
 
-    scenario("Response status 202 when user submits function code 13 + type code INV") {
+    Scenario("Response status 202 when user submits function code 13 + type code INV") {
       Given("the API is available")
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
       val request = ValidSubmission_13_INV_Request.fromCsp.postTo(endpoint)
@@ -66,7 +67,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }
 
-    scenario("Response status 202 when authorised as CSP with privileged application and submits function code 13 in the request") {
+    Scenario("Response status 202 when authorised as CSP with privileged application and submits function code 13 in the request") {
       Given("the API is available")
       val request = ValidSubmission_13_Request.fromCsp.postTo(endpoint)
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
@@ -80,7 +81,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       status(result) shouldBe ACCEPTED
     }
 
-    scenario("Response status 202 when authorised as CSP with privileged application and submits type code INV in the request") {
+    Scenario("Response status 202 when authorised as CSP with privileged application and submits type code INV in the request") {
       Given("the API is available")
       val request = ValidSubmission_13_INV_Request.fromCsp.postTo(endpoint)
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
@@ -95,7 +96,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }
 
-    scenario("Response status 202 when function code 13 is in the request") {
+    Scenario("Response status 202 when function code 13 is in the request") {
       Given("the API is available")
       val request = ValidSubmission_13_Request.fromCsp.postTo(endpoint)
 
@@ -107,7 +108,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
     }
 
 
-    scenario("Response status 202 when user submits type code INV in the request") {
+    Scenario("Response status 202 when user submits type code INV in the request") {
       Given("the API is available")
       val request = ValidSubmission_INV_Request.fromCsp.postTo(endpoint)
 

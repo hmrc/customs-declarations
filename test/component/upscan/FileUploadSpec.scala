@@ -17,7 +17,7 @@
 package component.upscan
 
 import component.{ComponentTestSpec, ExpectedTestResponses}
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.libs.json.{JsObject, JsString}
 import play.api.mvc._
 import play.api.test.FakeRequest
@@ -35,6 +35,7 @@ import java.io.StringReader
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
+import org.scalatest.matchers.should.Matchers
 
 class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
@@ -66,8 +67,8 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     stopMockServer()
   }
 
-  feature("Valid request is processed correctly") {
-    scenario("Response status 200 when user submits correct request") {
+  Feature("Valid request is processed correctly") {
+    Scenario("Response status 200 when user submits correct request") {
       Given("the API is available")
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
       val request = ValidFileUploadV2Request.fromNonCsp.postTo(endpoint)
@@ -84,9 +85,9 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     }
   }
 
-  feature("Unauthorized file upload API submissions are processed correctly") {
+  Feature("Unauthorized file upload API submissions are processed correctly") {
 
-    scenario("An unauthorised CSP is not allowed to submit a file upload request with v2.0 accept header") {
+    Scenario("An unauthorised CSP is not allowed to submit a file upload request with v2.0 accept header") {
       Given("A CSP wants to submit a valid file upload")
       val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV2Request.fromCsp.postTo(endpoint)
 
@@ -107,7 +108,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       eventually(verifyAuthServiceCalledForCspWithoutRetrievals())
     }
 
-    scenario("An unauthorised CSP is not allowed to submit a file upload request with v3.0 accept header") {
+    Scenario("An unauthorised CSP is not allowed to submit a file upload request with v3.0 accept header") {
       Given("A CSP wants to submit a valid file upload")
       val request: FakeRequest[AnyContentAsXml] = ValidFileUploadV3Request.fromCsp.postTo(endpoint)
 
@@ -129,8 +130,8 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
     }
   }
 
-  feature("The API handles errors as expected") {
-    scenario("Response status 400 when user submits a non-xml payload") {
+  Feature("The API handles errors as expected") {
+    Scenario("Response status 400 when user submits a non-xml payload") {
       Given("the API is available")
       val request = InvalidFileUploadRequest.fromNonCsp
         .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
@@ -151,7 +152,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(MalformedXmlBodyError)
     }
 
-    scenario("Response status 400 when user submits invalid request") {
+    Scenario("Response status 400 when user submits invalid request") {
       Given("the API is available")
       val request = ValidSubmission_13_INV_Request.fromNonCsp.postTo(endpoint)
       setupExternalServiceExpectations()
@@ -165,7 +166,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }
 
-    scenario("Response status 400 when user submits a malformed xml payload") {
+    Scenario("Response status 400 when user submits a malformed xml payload") {
       Given("the API is available")
       val request = MalformedXmlRequest.fromNonCsp
         .withMethod(POST).withTarget(InvalidFileUploadRequest.target.withPath(endpoint))

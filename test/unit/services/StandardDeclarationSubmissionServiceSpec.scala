@@ -18,7 +18,7 @@ package unit.services
 
 import akka.actor.ActorSystem
 import org.mockito.ArgumentMatchers.{eq => meq, _}
-import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
+import org.mockito.Mockito.{verify, verifyNoMoreInteractions, when}
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -101,7 +101,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
         val result: Either[Result, Option[NrSubmissionId]] = send()
         result shouldBe Right(None)
 
-        verifyZeroInteractions(mockNrsService)
+        verifyNoMoreInteractions(mockNrsService)
       }
 
     "should still contain nrs submission id even if call to downstream fails" in new SetUp() {

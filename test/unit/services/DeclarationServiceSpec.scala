@@ -19,7 +19,7 @@ package unit.services
 import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
 import org.mockito.ArgumentMatchers.{any, eq => meq}
-import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
+import org.mockito.Mockito.{verify, verifyNoMoreInteractions, when}
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -147,8 +147,8 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId)
-      verifyZeroInteractions(mockPayloadDecorator)
-      verifyZeroInteractions(mockMdgDeclarationConnector)
+      verifyNoMoreInteractions(mockPayloadDecorator)
+      verifyNoMoreInteractions(mockMdgDeclarationConnector)
     }
 
     "return 500 error response when authenticatedEori is blank" in new SetUp() {
@@ -158,8 +158,8 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
-      verifyZeroInteractions(mockPayloadDecorator)
-      verifyZeroInteractions(mockMdgDeclarationConnector)
+      verifyNoMoreInteractions(mockPayloadDecorator)
+      verifyNoMoreInteractions(mockMdgDeclarationConnector)
     }
 
     "return 500 error response when MDG call fails" in new SetUp() {
@@ -195,8 +195,8 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
-      verifyZeroInteractions(mockPayloadDecorator)
-      verifyZeroInteractions(mockMdgDeclarationConnector)
+      verifyNoMoreInteractions(mockPayloadDecorator)
+      verifyNoMoreInteractions(mockMdgDeclarationConnector)
     }
 
 }

@@ -137,7 +137,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
     eventualAuth.map{ enrolmentsAndMaybeNrsData =>
       val enrolments: Enrolments = enrolmentsAndMaybeNrsData._1
       val maybeNrsData: Option[NrsRetrievalData] = enrolmentsAndMaybeNrsData._2
-      val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(enrolments, hc.authorization)
+      val maybeEori: Option[Eori] = findEoriInCustomsEnrolment(enrolments)
       logger.debug(s"eori from $hmrcCustomsEnrolment enrolment for non-CSP request: $maybeEori")
       maybeEori.fold[Either[ErrorResponse, NonCsp]]{
         logger.debug(s"No authorisation for non-CSP with $hmrcCustomsEnrolment enrolment due to no eori in $hmrcCustomsEnrolment enrolment")
@@ -156,7 +156,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
     }
   }
 
-  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments, authHeader: Option[Authorization])(implicit vhr: HasConversationId, hc: HeaderCarrier): Option[Eori] = {
+  private def findEoriInCustomsEnrolment[A](enrolments: Enrolments)(implicit vhr: HasConversationId): Option[Eori] = {
     val maybeCustomsEnrolment = enrolments.getEnrolment(hmrcCustomsEnrolment)
     if (maybeCustomsEnrolment.isEmpty) {
       logger.warn(s"$hmrcCustomsEnrolment enrolment not retrieved for non-CSP request")

@@ -88,7 +88,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(CustomsDeclarationsMetricsTestData.EventStart, CustomsDeclarationsMetricsTestData.EventEnd)
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.successful(nrSubmissionId))
+    when(mockNrsService.send(vpr)).thenReturn(Future.successful(nrSubmissionId))
     when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
   }
     "BusinessService" should {
@@ -106,7 +106,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       }
 
       "send transformed xml to connector even when nrs fails" in new SetUp() {
-        when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.failed(emulatedServiceFailure))
+        when(mockNrsService.send(vpr)).thenReturn(Future.failed(emulatedServiceFailure))
 
         val result: Either[Result, Option[NrSubmissionId]] = send()
 

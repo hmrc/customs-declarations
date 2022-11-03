@@ -81,7 +81,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
     when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(CustomsDeclarationsMetricsTestData.EventStart, CustomsDeclarationsMetricsTestData.EventEnd)
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockNrsService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(nrSubmissionId))
+    when(mockNrsService.send(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(nrSubmissionId))
   }
   "StandardDeclarationSubmissionService" should {
 
@@ -92,7 +92,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
 
       result shouldBe Right(Some(nrSubmissionId))
 
-      verify(mockNrsService).send(meq(vpr), any[HeaderCarrier])
+      verify(mockNrsService).send(meq(vpr))
     }
 
       "not send to connector when nrs disabled" in new SetUp() {

@@ -47,7 +47,6 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
   with Eventually
   with IntegrationPatience {
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val endpoint = s"/uploaded-file-upscan-notifications/clientSubscriptionId/$subscriptionFieldsIdString"
 
   val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]

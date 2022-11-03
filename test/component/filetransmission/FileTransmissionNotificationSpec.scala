@@ -50,8 +50,6 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
   with Eventually
   with IntegrationPatience {
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
-
   private val endpoint = s"/file-transmission-notify/clientSubscriptionId/$subscriptionFieldsIdString"
 
   val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]

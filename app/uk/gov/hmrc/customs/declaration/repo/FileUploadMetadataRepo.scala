@@ -66,8 +66,6 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     )
   ) with FileUploadMetadataRepo {
 
-  private implicit val format: Format[FileUploadMetadata] = FileUploadMetadata.format
-
   override def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
     logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
     lazy val errorMsg = s"File meta data not inserted for $fileUploadMetadata"

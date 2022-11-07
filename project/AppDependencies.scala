@@ -29,9 +29,9 @@ object AppDependencies {
   //TODO remove when migration complete.
 //  val reactiveMongoTest = "uk.gov.hmrc" %% "reactivemongo-test" % reactiveMongoTestVersion % testScope
 
-  val hmrcMongo = "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"      % "0.66.0"
+  val hmrcMongo = "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"      % "0.73.0"
 
-  val hmrcMongoTest = "uk.gov.hmrc.mongo" %% "hmrc-mongo-test-play-28" % "0.66.0"
+  val hmrcMongoTest = "uk.gov.hmrc.mongo" %% "hmrc-mongo-test-play-28" % "0.73.0"
 
   val silencerPlugin = compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.5" cross CrossVersion.full)
 

@@ -37,7 +37,7 @@ import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 
 class CustomsDeclarationsMetricsConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
-with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService with Matchers{
+with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService with Matchers {
 
   private lazy val connector = app.injector.instanceOf[CustomsDeclarationsMetricsConnector]
 
@@ -107,13 +107,8 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
       stopMockServer()
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadGatewayException]
-      //TODO if jenkins this else 127..
-      println(s"""HOME [${System.getenv("HOME")}]""")
 
-      def localhostString = {
-        if (System.getenv("HOME") == "/home/jenkins") "127.0.0.1" else "0:0:0:0:0:0:0:1"
-      }
-      verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=502, Error=POST of 'http://localhost:11111/log-times' failed. Caused by: 'Connection refused: localhost/${localhostString}:11111'")
+      verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=502, Error=POST of 'http://localhost:11111/log-times' failed. Caused by: 'Connection refused: localhost/$localhostString:11111'")
 
       startMockServer()
     }
@@ -123,3 +118,5 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
     connector.post(ValidCustomsDeclarationsMetricsRequest)
   }
 }
+
+

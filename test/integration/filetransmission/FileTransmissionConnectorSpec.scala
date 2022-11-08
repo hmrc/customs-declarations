@@ -19,6 +19,7 @@ package integration.filetransmission
 import integration.{IntegrationTestModule, IntegrationTestSpec}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -34,10 +35,9 @@ import util.FileTransmissionTestData._
 import util.VerifyLogging._
 import util.externalservices.FileTransmissionService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
-import org.scalatest.matchers.should.Matchers
 
 class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar
-  with BeforeAndAfterAll with FileTransmissionService with Matchers{
+  with BeforeAndAfterAll with FileTransmissionService with Matchers {
 
   private lazy val connector = app.injector.instanceOf[FileTransmissionConnector]
   private implicit val mockCdsLogger: CdsLogger = mock[CdsLogger]
@@ -119,7 +119,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
       intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[BadGatewayException]
 
-      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=502, Error=POST of 'http://localhost:11111/file/transmission' failed. Caused by: 'Connection refused: localhost/127.0.0.1:11111'")
+      verifyDeclarationsLoggerError(s"Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=502, Error=POST of 'http://localhost:11111/file/transmission' failed. Caused by: 'Connection refused: localhost/$localhostString:11111'")
 
       startMockServer()
     }

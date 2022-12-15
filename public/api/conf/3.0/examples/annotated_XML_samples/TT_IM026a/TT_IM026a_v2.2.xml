@@ -19,6 +19,10 @@
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
 		<!--
+	  
+																																																																								  
+	  
+   
 			SCENARIO
 			GB-NI 'At Risk' - CAP Safeguarding Duties.
 
@@ -36,7 +40,7 @@
 		<!--Function Code of 9 to represent an original declaration.  -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IM26a_v1.5_1410_01</FunctionalReferenceID>
+		<FunctionalReferenceID>TT_IM26a_v1.5_1412_01</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory field. 
 			IM to represent an import declaration. -->

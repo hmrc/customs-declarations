@@ -1,0 +1,31 @@
+A CSP submits an Imports Type A declaration with a single goods item, importing goods from the United States to Great Britain.
+
+The payload used in this sample is the same as the TT_IM001a payload.
+
+The CSP then submits an API query to retrieve the status of the declaration using the following parameter:
+ - MRN - 'Declaration ID'
+
+https://api.qa.tax.service.gov.uk/customs/declarations-information/mrn/20GB5M2723461FGVR3/status
+
+If a declaration matches the entered search parameters, the information of the matching declaration is returned. 
+
+The fields to be returned are:
+ - Declaration version number - this will be the last version (Mandatory)
+ - Date & Time declaration received on (Mandatory)
+ - Date & Time declaration accepted on (Optional)
+ - DE 1/1 & DE 1/2: Declaration Type (Mandatory)
+ - Originating Party: Submitting Trader (Mandatory)
+ - DE 1/9: Total number of items (Optional)
+ - DE 6/18: Total number of packages (Optional)
+ - Date & time goods released (Optional)
+ - Customs route (Optional)
+ - ICS code (Optional)
+ - MRN (Mandatory)
+ - DE 2/1: DUCR(s) @ header level only (Optional)
+ - DE 2/1: MUCR(s) @ header level only (Optional)
+ - DE 2/1: Inventory Reference @ header level only (Optional)
+ - DE 2/4: UCR (Optional)
+
+
+
+

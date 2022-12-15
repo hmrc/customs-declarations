@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inv:InventoryLinkingImportsValidateMovementResponse xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
+<inv:entryNumber>22GB0P9YTPF0U9HAR8</inv:entryNumber>
+<inv:entryVersionNumber>2</inv:entryVersionNumber>
+<inv:inventoryConsignmentReference>GB/1234-:3333HB</inv:inventoryConsignmentReference>
+<inv:irc>000</inv:irc>
+</inv:InventoryLinkingImportsValidateMovementResponse>

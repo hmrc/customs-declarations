@@ -1,0 +1,19 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>02</FunctionCode>
+		<FunctionalReferenceID>c0834d8eac014547a0801d8b24721237</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20220309131946Z</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<FunctionalReferenceID>TT_IM77a_v1.1_0903_01</FunctionalReferenceID>
+			<ID>22GB2OIZNQAP8JPA05</ID>
+		</Declaration>
+	</Response>
+</MetaData>

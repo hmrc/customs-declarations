@@ -1,0 +1,271 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+           	>
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+           		xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+           		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+           		>
+		<!--SCENARIO
+			
+			SDP Authorised Trader submitting a Type C simplified declaration importing goods from ROW to NI.
+            Tariff P&R measures are enforced on a goods item (Live horses) that requires a licence (C400). 
+            Importer EORI: GB575456994000.
+			Declarant EORI: GB603202734852.
+			
+			The Trader declares:
+			 - 'NIIMP' in D.E. 2/2 at Item level, as the goods are being imported from ROW to NI and are deemed to be 'At Risk'.
+			 - Procedure Code 40 00 entered in D.E. 1/10
+			 - A Document Code of C400 in D.E. 2/3 to satify an Import Control CITES measure, as mandated by EU Tariff. 
+			 - Supplementary Units (p/st) entered in D.E. 6/2
+			 - A valid commodity code for importing Live Horses is entered within D.E. 6/14 and D.E. 6/15
+
+			The declaration will be successfully accepted and cleared.
+			As per BAU processing for Type C declarations there will be no tax calculated.
+			CDS will generate trader notifications. 
+		-->
+		
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: LRN.
+			Traders own reference number - this must be unique to the transaction-->
+		<FunctionalReferenceID>CDSP3674_TC01_1512_03</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type.
+			IM to represent an import declaration. -->
+		<!--DE 1/2: Additional Declaration Type.
+			C to represent a pre-lodged simplified declaration. -->
+		<TypeCode>IMC</TypeCode>
+		<!--DE 1/9: Total Number of Items.
+			Total number of goods items on the declaration. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 6/18: Total Packages.
+			Total number of packages making up the consignment covered by the declaration.  
+			As this is an Inventory Linked Import declaration, the total packages must match the consignment details 
+			held by the inventory system.  
+			Note that this matches DE 6/10 because this is a single item declaration. -->
+		<TotalPackageQuantity>4</TotalPackageQuantity>
+		<!--DE 3/21: Representative Status Code.
+			FunctionCode of 2 indicating agent acting in direct representation for the importer holding written instruction to do so). -->
+		<Agent>
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
+			An authorisation type code of SDE is required for authorisation to make a simplified declaration (see DE 2/3 where a document code of C512 has been entered). -->
+		<AuthorisationHolder>
+			<ID>GB575456994000</ID>
+			<CategoryCode>SDE</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/18: Declarant Identification Number.
+			The EORI number of the agent entering the declaration. 
+			The UK requires an EORI to be provided for the declarant. -->
+		<Declarant>
+			<ID>GB603202734852</ID>
+		</Declarant>
+		<!--DE 3/1: Exporter. 
+			Exporter name and address is mandatory where no recognised EORI number has been 
+			entered into DE 3/2.-->
+		<Exporter>
+			<Name>Cheval</Name>
+			<Address>
+				<CityName>France</CityName>
+				<CountryCode>FR</CountryCode>
+				<Line>52 La Cavalerie Rue</Line>
+				<PostcodeID>33500 Ver</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<Consignment>
+				<!--DE 7/2: Container.
+					Indicator to show if goods are packed in a container or not.  
+					1 indicates that goods are transported in containers.  
+					Note: unlike CHIEF this must now be completed. -->
+				<ContainerCode>1</ContainerCode>
+				<!--DE 5/23: Location of Goods.
+					ID to give a unique position of the location where the goods are located at the time they are declared.
+					The location code is entered using the following code components:
+					 - Name: To give a unique position of the location - in this case BELBFSBEL the code for Belfast Airport.
+					 - TypeCode: Type of Location - A in this scenario to represent that it is a designated location.
+					 - Address TypeCode: ID of the type of Location - U in this scenario for UN/LOCODE.
+					 - Address CountryCode: Country code of the country where the goods may be examined - GB in this scenario. -->
+				<GoodsLocation>
+					<Name>BELBFSBEL</Name>
+					<TypeCode>A</TypeCode>
+					<Address>
+						<TypeCode>U</TypeCode>
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<!--DE 7/10: Container Identification Number.  
+					Example container identification number: alpha numeric to a total of 17 characters. -->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>DM1234</ID>
+				</TransportEquipment>
+			</Consignment>
+			<!-- DE 5/14: Country of Dispatch/Export Code.
+				Country code of the dispatch country is FR for France. -->
+			<ExportCountry>
+				<ID>FR</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Good Item Number.
+					Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					A document code C512 indicates an authorisation to use a simplified declaration. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBSDE575456994000I</ID>
+					<TypeCode>512</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					Presentation of the required "CITES" certificate.  
+					Commission Reg 160/2017 amending Council Reg (EC) No 338/97 on the protection of species of wild fauna and flora by regulating trade therein. -->
+				<AdditionalDocument>				
+					<CategoryCode>C</CategoryCode>
+					<ID>FRICP12568</ID>
+					<TypeCode>400</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					This field is mandatory if the codes are required.
+					A document code of 9120 indicates: Importation of animal pathogens Licence under the Importation of Animal 
+					pathogens Order 1980 (IAPO).
+					LPCOExemptionCode: AE indicates Document attached – exhausted by (or only applies to) this entry (document 
+					returned to the trader). -->
+				<AdditionalDocument>
+					<CategoryCode>9</CategoryCode>
+					<ID>GBAHC12345</ID>
+					<TypeCode>120</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					Certificate of inspection for organic products.  
+					Council Regulation (EC) No 834/2007 on organic  production and labelling of organic products and repealing Regulation (EEC) No 2092/91. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>6004001</ID>
+					<TypeCode>644</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					Common Health Entry Document for Animals (CHED-A) (as set out in Part 2, Section A of Annex II to Commission Implementing Regulation (EU) 2019/1715 (OJ L 261)), used for animals referred to in point (a) of Article 47(1) of Regulation (EU) 2017/625). -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCHD2021.</ID>
+					<TypeCode>640</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					Identification document for equidae (Regulation (EU) 2016/1012, Article 32) Purebred equine animals imported for breeding purposes may be accompanied by: a single lifetime identification document for equine animals only 
+					When a single lifetime identification document is not held, document codes C074 and C075 must be declared instead. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>12345678</ID>
+					<TypeCode>078</TypeCode>
+					<LPCOExemptionCode>AP</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					Document indicating that purebred breeding animals are to be entered in a breeding book maintained by a breed society or registered in a breeding register maintained by a breeding operation (Regulation (EU) 2016/1012, Article 37) 
+					Purebred animals imported for breeding prposes shall be accompanied by: the zootechnical certificate referred to in Article 30(5) or Article 32 of Regulation (EU) 2016/1012; a document indicating that they are to be entered in a breeding book maintained by a breed society or registered in a breeding register maintained by a breeding operation. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>1234567801</ID>
+					<TypeCode>075</TypeCode>
+					<LPCOExemptionCode>AP</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/2 Additional Information. 
+					This field is mandatory, this represents goods are imported from ROW into Northern Ireland. -->
+				<AdditionalInformation>
+				<StatementCode>NIIMP</StatementCode>
+				</AdditionalInformation>
+					<Commodity>
+					<!--DE 6/8: Description of Goods.
+						Description	specific enough to enable classification - Live thoroughbred horses used for racing.-->
+					<Description>Live thoroughbred horses used for racing</Description>
+					<!--DE 6/14: Commodity Code - Combined Nomenclature Code. -->
+					<Classification>
+						<ID>01012100</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<!--DE 6/15: Commodity Code - TARIC Code. -->
+					<Classification>
+						<ID>00</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass 
+							Mass of the goods in kilograms including packaging. -->
+						<GrossMassMeasure>2300</GrossMassMeasure>
+						<!--DE 6/1: Net Mass.
+							Mass of the goods in kilograms without any packaging. -->
+						<NetNetWeightMeasure>1800</NetNetWeightMeasure>
+						<!--DE 6/2: Supplementary Units.
+						Quantity of the goods in the unit as required by Customs for tariff, statistical or fiscal purposes)--> 
+						<TariffQuantity>4</TariffQuantity>						
+					</GoodsMeasure>					
+					<InvoiceLine>
+						<!--DE 4/14: Item price amount. 
+							The invoice was issued with a value of 100,000 and the currency was in GBP. -->
+						<ItemChargeAmount currencyID="GBP">100000</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+				<!--DE 1/10: Procedure.
+					Requested Procedure of 40 indicating entry for free circulation and home use of goods. 
+					Previous Procedure of 00 indicating that there is no previous procedure. -->
+				<GovernmentProcedure>
+					<CurrentCode>40</CurrentCode>
+					<PreviousCode>00</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code.
+					000 to indicate no additional procedure. -->
+				<GovernmentProcedure>
+					<CurrentCode>000</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 5/15: Country of Origin.
+					TypeCode of 1 to represent non-preferential origin.  
+					Where preference in DE 4/17 begins with '1', this must be completed.  
+					CountryCode contains the code for the country from which the goods originated, in this case France. -->
+				<Origin>
+					<CountryCode>FR</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping marks on the packages-->
+					<MarksNumbersID>PT51120CN</MarksNumbersID>
+					<!--DE 6/10: Number of Packages.
+						In this case 1. -->
+					<QuantityQuantity>4</QuantityQuantity>
+					<!--DE 6/9: Type of Packages.
+						CN to represent container. -->
+					<TypeCode>CN</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 3/16: Importer Identification Number.
+				EORI number of the importer. -->
+			<Importer>
+				<ID>GB575456994000</ID>
+			</Importer>
+			<!--DE 2/1: Previous Documents.
+				Previous document to show the DUCR assigned to the consignment.
+				This is a mandatory field. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>1GB575456994000-12345</ID>
+				<TypeCode>DCR</TypeCode>
+			</PreviousDocument>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>

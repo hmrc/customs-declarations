@@ -1,0 +1,96 @@
+<!--
+	DIS Query: https://api.qa.tax.service.gov.uk/customs/declarations-information/mrn/21GBDVCRQ90LUHQAR7/version 
+-->
+
+<p:DeclarationVersionResponse xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationVersion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p4="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:p3="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:p2="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:p="http://gov.uk/customs/retrieveDeclarationVersion">
+    <p:DeclarationVersionDetails>
+        <p:Declaration>
+            <p:ID>21GBDVCRQ90LUHQAR7</p:ID>
+            <p:VersionID>3</p:VersionID>
+            <p:CreatedDateTime>
+                <p:DateTimeString formatCode="304">20211216111713Z</p:DateTimeString>
+            </p:CreatedDateTime>
+            <p:LRN>TT_IM02a_EIDR_1612_001</p:LRN>
+        </p:Declaration>
+        <p2:Declaration>
+            <p2:FunctionCode>9</p2:FunctionCode>
+            <p2:TypeCode>IMZ</p2:TypeCode>
+            <p2:GoodsShipment>
+                <p2:Consignment>
+                    <p2:GoodsLocation>
+                        <p2:Name>CW1117770GB</p2:Name>
+                        <p2:TypeCode>B</p2:TypeCode>
+                        <p2:Address>
+                            <p2:TypeCode>Y</p2:TypeCode>
+                            <p2:CountryCode>GB</p2:CountryCode>
+                        </p2:Address>
+                    </p2:GoodsLocation>
+                </p2:Consignment>
+                <p2:PreviousDocument>
+                    <p2:ID>1GB553202734852-20210107</p2:ID>
+                    <p2:TypeCode>DCR</p2:TypeCode>
+                </p2:PreviousDocument>
+            </p2:GoodsShipment>
+        </p2:Declaration>
+    </p:DeclarationVersionDetails>
+    <p:DeclarationVersionDetails>
+        <p:Declaration>
+            <p:ID>21GBDVCRQ90LUHQAR7</p:ID>
+            <p:VersionID>2</p:VersionID>
+            <p:CreatedDateTime>
+                <p:DateTimeString formatCode="304">20211216111614Z</p:DateTimeString>
+            </p:CreatedDateTime>
+            <p:LRN>TT_IM02a_EIDR_1612_001</p:LRN>
+        </p:Declaration>
+        <p2:Declaration>
+            <p2:FunctionCode>9</p2:FunctionCode>
+            <p2:TypeCode>IMZ</p2:TypeCode>
+            <p2:GoodsShipment>
+                <p2:Consignment>
+                    <p2:GoodsLocation>
+                        <p2:Name>CW1117770GB</p2:Name>
+                        <p2:TypeCode>B</p2:TypeCode>
+                        <p2:Address>
+                            <p2:TypeCode>Y</p2:TypeCode>
+                            <p2:CountryCode>GB</p2:CountryCode>
+                        </p2:Address>
+                    </p2:GoodsLocation>
+                </p2:Consignment>
+                <p2:PreviousDocument>
+                    <p2:ID>1GB553202734852-20210107</p2:ID>
+                    <p2:TypeCode>DCR</p2:TypeCode>
+                </p2:PreviousDocument>
+            </p2:GoodsShipment>
+        </p2:Declaration>
+    </p:DeclarationVersionDetails>
+    <p:DeclarationVersionDetails>
+        <p:Declaration>
+            <p:ID>21GBDVCRQ90LUHQAR7</p:ID>
+            <p:VersionID>1</p:VersionID>
+            <p:CreatedDateTime>
+                <p:DateTimeString formatCode="304">20211216111430Z</p:DateTimeString>
+            </p:CreatedDateTime>
+            <p:LRN>TT_IM02a_EIDR_1612_001</p:LRN>
+        </p:Declaration>
+        <p2:Declaration>
+            <p2:FunctionCode>9</p2:FunctionCode>
+            <p2:TypeCode>IMZ</p2:TypeCode>
+            <p2:GoodsShipment>
+                <p2:Consignment>
+                    <p2:GoodsLocation>
+                        <p2:Name>CW1117770GB</p2:Name>
+                        <p2:TypeCode>B</p2:TypeCode>
+                        <p2:Address>
+                            <p2:TypeCode>Y</p2:TypeCode>
+                            <p2:CountryCode>GB</p2:CountryCode>
+                        </p2:Address>
+                    </p2:GoodsLocation>
+                </p2:Consignment>
+                <p2:PreviousDocument>
+                    <p2:ID>1GB553202734852-20210107</p2:ID>
+                    <p2:TypeCode>DCR</p2:TypeCode>
+                </p2:PreviousDocument>
+            </p2:GoodsShipment>
+        </p2:Declaration>
+    </p:DeclarationVersionDetails>
+</p:DeclarationVersionResponse>

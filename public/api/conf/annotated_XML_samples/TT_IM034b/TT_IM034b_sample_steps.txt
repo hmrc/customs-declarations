@@ -1,0 +1,20 @@
+Sample steps
+************
+
+1. Submit base payload
+
+2.Receive validate movement response from CSP, where 000 is a Match. 
+
+3. Trader Notifications:
+    11 DMSRCV
+    13 DMSTAX
+    01 DMSACC
+    05 DMSCTL
+
+3. Case Emulator clears the control
+
+4. Trader Notifications:
+    13 DMSTAX
+    09 DMSCLE
+
+

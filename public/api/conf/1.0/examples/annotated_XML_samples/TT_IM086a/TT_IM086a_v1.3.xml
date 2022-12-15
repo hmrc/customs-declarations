@@ -1,0 +1,228 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--
+			SCENARIO
+			To show that CDS can process an Inventory-linked import Declaration, where a document code 108C is entered on a C21i import declaration.
+
+			A trader submits a C21i Declaration Type J importing goods from GB-NI, declaring:
+			• Procedure code 0005, with additional procedure code 51P. 
+			• Goods: Transmission apparatus incorporating reception apparatus - Temporary Admission.
+			• Additional Information (Item level): NIDOM in D.E. 2/2 to indicate that the import is a domestic movement.
+			• Document code: 108C in D.E. 2/3 is used to support an oral customs declaration for temporary admission.
+			
+			The submitted IVL payload will be followed by a Validate Movement Response of 000 (match).
+			No Customs Duty, Excise or VAT will be calculated using the EU Tariff.
+			DMS will generate the trader notifications.
+		-->
+		<!--Function Code of 9 to represent an original declaration. -->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: LRN. 
+			Trader's own reference number - this must be unique to the transaction. -->
+		<FunctionalReferenceID>IM86a_v2.2511_01</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type. 
+			IM to represent an import declaration. -->
+		<!--DE 1/2: Additional Declaration Type. 
+			J to represent Goods arrived C21 declaration. -->
+		<TypeCode>IMJ</TypeCode>
+		<!--DE 1/9: Total Number of Items.
+			Total number of goods items on the declaration. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 7/4: Mode of Transport at the Border. 
+			1 represents maritime/sea transport. This is a mandatory data element. -->
+		<BorderTransportMeans>
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: Declarant Identification Number. 
+			The EORI number of the agent entering the declaration.
+			The UK requires an EORI to be provided for the declarant. -->
+		<Declarant>
+			<ID>GB553202734852</ID>
+		</Declarant>
+		<!--DE 3/1: Exporter.
+			Name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
+		<Exporter>
+			<Name>GB Transmission Equipment</Name>
+			<Address>
+				<CityName>Leeds</CityName>
+				<CountryCode>GB</CountryCode>
+				<Line>1 High Street</Line>
+				<PostcodeID>LS1 3ER</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 7/2: Container. 
+				Indicator to show if goods are packed in a container or not. 
+				1 indicates that goods are transported in containers.
+				Note: Unlike CHIEF this must now be completed. -->
+			<Consignment>
+				<ContainerCode>1</ContainerCode>
+			<!--DE 7/9: Identity of Means of Transport on Arrival. 
+				Example number representing IMO ship identification number: '10', 
+				and 5 digits for the identification number: '12345'. -->
+				<ArrivalTransportMeans>
+					<ID>12345</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+				</ArrivalTransportMeans>
+				<GoodsLocation>
+				<!--DE 5/23: Location of Goods - Identification of location.
+					ID BELBELBTC1 is the location code for Port of Belfast.
+					Goods moved via shipping container from GB to NI via port of Belfast Container Terminal. -->
+				<Name>BELBELBTC1</Name>
+				<!--DE 5/23: Location of Goods - Type of location.
+					A in this scenario to represent that it is a designated location. -->
+					<TypeCode>A</TypeCode>
+					<Address>
+				<!--DE 5/23: Location of Goods - Qualifier of the identification.
+					Type of ID of the Location - U in this scenario for UN/LOCODE. -->
+						<TypeCode>U</TypeCode>
+				<!--DE 5/23: Location of Goods - Country.
+					Country code of the country where the goods may be examined, GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<!--DE 7/10: Container Identification Number.
+					This is alpha-numeric with up to 17 characters.
+					For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number.
+				    For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>BG1234</ID>
+				</TransportEquipment>
+			</Consignment>
+			<GovernmentAgencyGoodsItem>
+				<SequenceNumeric>1</SequenceNumeric>
+			<!--DE 2/3: Documents produced, certificates and authorisations, additional references.  
+				Document Code 108C to declare an HMRC C108 form for Temporary Admissions Oral Declarations on a C21i only - See Additional Procedure Code (DE 1/11) 51P.
+				Enter the date as completed on the HMRC C108 form in the format yymmdd. -->
+				<AdditionalDocument>
+					<CategoryCode>1</CategoryCode>
+					<ID>220131</ID>
+					<TypeCode>08C</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional information. 
+					00500 - IMPORTER Indicating Self representation by the importer. -->
+				<AdditionalInformation>
+					<StatementCode>00500</StatementCode>
+					<StatementDescription>IMPORTER</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional information. 
+					AI Statement Code GEN28 for Temporary Admissions - See Additional Procedure Code 51P for C21i data set. 
+					Enter the duration for the goods intended usage followed by the intended date of re-export. -->
+				<AdditionalInformation>
+					<StatementCode>GEN28</StatementCode>
+					<StatementDescription>90 Days - 23.05.2022</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional information. 
+					AI Statement Code GEN30 for Temporary Admissions - See Additional Procedure Code 51P for C21i data set. 
+					"Enter the use to which the Temporary Admission goods will be put. -->
+				<AdditionalInformation>
+					<StatementCode>GEN30</StatementCode>
+					<StatementDescription>Camera used for documentary</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional information. 
+					AI Statement Code GEN31 for Temporary Admissions - See Additional Procedure Code 51P for C21i data set. 
+					Enter the name and address of the non-EU owner of the goods followed by the type of ownership evidence held. -->
+				<AdditionalInformation>
+					<StatementCode>GEN31</StatementCode>
+					<StatementDescription>DA logistics,23 Giben Road, RM20 0LX, Receipt no 6754389</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional Information. 
+					This field is mandatory, this represents a domestic movement as the goods are imported from GB into Northern Ireland. -->
+				<AdditionalInformation>
+					<StatementCode>NIDOM</StatementCode>
+				</AdditionalInformation>
+				<Commodity>
+				<!--DE 6/8: Description of Goods. -->
+					<Description>Transmission apparatus incorporating reception apparatus</Description>
+					<Classification>
+				<!--DE 6/14: Commodity Code - Combined Nomenclature Code. -->
+						<ID>85256000</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<GoodsMeasure>
+				<!--DE 6/1: Net Mass.
+					Weight of the goods in kilograms without any packaging. -->
+						<NetNetWeightMeasure>100</NetNetWeightMeasure>
+					</GoodsMeasure>
+				</Commodity>
+				<!--DE 5/14: Country of Dispatch/Export Code. 
+					For declarations with a single goods item, this DE can be declared at header or item level.
+					In this case, GB. -->
+				<ExportCountry>
+					<ID>GB</ID>
+				</ExportCountry>
+				<!--DE 1/10: Procedure. 
+					00 05 indicating Temporary Admission or Temporary Import of Non-Union Goods. -->
+				<GovernmentProcedure>
+					<CurrentCode>00</CurrentCode>
+					<PreviousCode>05</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code.
+					51P to indicate Professional Equipment. -->
+				<GovernmentProcedure>
+					<CurrentCode>51P</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 5/15: Country of Origin.
+					TypeCode of 1 to represent non-preferential origin. 
+					Where preference in DE 4/17 begins with '1', this must be completed.
+					In this case, GB. -->
+				<Origin>
+					<CountryCode>GB</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 6/11: Shipping Marks.
+					Marks on the packages. -->
+					<MarksNumbersID>ADR/BG/12345</MarksNumbersID>
+				<!--DE 6/10: Number of Packages.
+					In this case 50. 
+					Note that this matches DE 6/18 because this is a single item declaration. -->
+					<QuantityQuantity>50</QuantityQuantity>
+				<!--DE 6/9: Type of Packages. 
+				    BG to represent Bag. -->
+					<TypeCode>BG</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			    <!--DE 3/16: Importer Identification Number. 
+				    EORI number of the Importer. -->
+			<Importer>
+				<ID>GB553202734852</ID>
+			</Importer>
+			<!--DE 2/1: For import inventory linked locations, the Inventory Reference Number (UCN) must be 
+				declared in DE 2/1 using the Previous Document Type Code 'MCR'.-->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>GB/1234-:3333HB</ID>
+				<TypeCode>MCR</TypeCode>
+			</PreviousDocument>
+			<!--DE 2/4: Reference Number/ UCR. 
+				Reference number which is optional for the declarant to complete. -->
+			<UCR>
+				<TraderAssignedReferenceID>2GB553202734852-12345</TraderAssignedReferenceID>
+			</UCR>
+		</GoodsShipment>
+			<!--DE 5/27: Supervising Customs Office. 
+				In this scenario, GBSFY001 for Salford, Ralli Quays (NTAS). -->
+		<SupervisingOffice>
+			<ID>GBSFY001</ID>
+		</SupervisingOffice>
+	</Declaration>
+</md:MetaData>

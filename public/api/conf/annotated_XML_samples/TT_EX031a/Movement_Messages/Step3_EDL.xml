@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--EDL – Movement message used for creating Goods Departure messages. 
+	This also covers the removal of goods back inland where an export is abandoned (Departures). -->
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EDL</inv:messageCode>
+	<inv:ucrBlock>
+		<inv:ucr>2GB427168118378-0806A1</inv:ucr>
+		<inv:ucrType>D</inv:ucrType>
+	</inv:ucrBlock>
+	<!--DE 5/23: ID to give a unique position of the location. 
+		LGWLGWLGW - Indicating London Gatwick Airport. -->
+	<inv:goodsLocation>GBAULGWLGWLGW</inv:goodsLocation>
+	<!--This should be today's date. -->
+	<inv:goodsDepartureDateTime>2022-06-08T14:18:00Z</inv:goodsDepartureDateTime>
+	<inv:movementReference>Movement14</inv:movementReference>
+	<inv:transportDetails>
+		<inv:transportID>11CSCLGLOBE</inv:transportID>
+		<inv:transportMode>1</inv:transportMode>
+		<inv:transportNationality>GB</inv:transportNationality>
+	</inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>
+

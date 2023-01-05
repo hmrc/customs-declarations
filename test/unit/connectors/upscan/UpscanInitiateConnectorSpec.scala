@@ -19,9 +19,9 @@ package unit.connectors.upscan
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Writes
 import play.api.mvc.AnyContentAsJson
@@ -33,16 +33,16 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 import util.TestData.{EmulatedServiceFailure, ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles, emulatedServiceFailure, fileUploadConfig}
+import util.VerifyLogging.verifyDeclarationsLoggerError
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
 
   private val mockWsPost = mock[HttpClient]
-  private val mockLogger = mock[DeclarationsLogger]
+  private implicit val mockLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private implicit val ec = Helpers.stubControllerComponents().executionContext
 
@@ -120,6 +120,7 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with
           awaitRequest()
         }
         caught shouldBe emulatedServiceFailure
+        verifyDeclarationsLoggerError("Call to upscan initiate failed.")
       }
 
       "wrap an underlying error when MDG call fails with an http exception" in {

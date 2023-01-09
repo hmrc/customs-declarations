@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
       .recoverWith {
         case httpError: HttpException => Future.failed(new RuntimeException(httpError))
         case e: Throwable =>
-          logger.error(s"Call to upscan initiate failed. url=$url")
+          logger.error(s"Call to upscan initiate failed.")
           Future.failed(e)
       }
   }

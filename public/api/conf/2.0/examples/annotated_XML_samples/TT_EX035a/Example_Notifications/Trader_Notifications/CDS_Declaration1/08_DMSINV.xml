@@ -1,0 +1,27 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>10</FunctionCode>
+		<FunctionalReferenceID>feaa3705e03d41db8734f43ff882b73c</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20221209150435Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>3</StatementCode>
+			<StatementTypeCode>AFB</StatementTypeCode>
+		</AdditionalInformation>
+		<Declaration>
+			<CancellationDateTime>
+				<DateTimeString formatCode="304">20221209150435Z</DateTimeString>
+			</CancellationDateTime>
+			<FunctionalReferenceID>R3.9.0_10439_DEC1</FunctionalReferenceID>
+			<ID>22GBDLDO49YEKLWAA4</ID>
+			<VersionID>2</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

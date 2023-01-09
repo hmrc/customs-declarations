@@ -7,13 +7,13 @@
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
         <FunctionCode>02</FunctionCode>
-        <FunctionalReferenceID>05b457b74195427bb269c08a8dfdcdbb</FunctionalReferenceID>
+        <FunctionalReferenceID>da294e1ccda742eaa4de91d7b31a1332</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString>20220805151104+01</DateTimeString>
+            <DateTimeString formatCode="304">20221214101700Z</DateTimeString>
         </IssueDateTime>
         <Declaration>
-            <FunctionalReferenceID>TT_IM26a_v1.5_0508_03</FunctionalReferenceID>
-            <ID>22GB8LHIGITZAB8AR4</ID>
+            <FunctionalReferenceID>TT_IM26a_v1.5_1412_01</FunctionalReferenceID>
+            <ID>22GBDSFU1TEBSLLAR2</ID>
             <VersionID>1</VersionID>
         </Declaration>
     </Response>

@@ -53,7 +53,7 @@ class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
     protected def send(vupr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): NrSubmissionId = {
       when(mockDateTimeService.nowUtc()).thenReturn(nrsTimeStamp)
-      await(service.send(vupr, hc))
+      await(service.send(vupr))
     }
   }
 

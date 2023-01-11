@@ -17,9 +17,8 @@
 package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
-import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormatter, ISODateTimeFormat}
 import org.scalatest._
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
@@ -32,9 +31,12 @@ import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgStat
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTestXMLData}
 
 import java.io.StringReader
+import java.time.{Instant, ZoneOffset}
+import java.time.temporal.ChronoUnit
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
+import org.scalatest.matchers.should.Matchers
 
 class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
@@ -47,8 +49,6 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
 
   private val mrn = "some-mrn"
   private val endpoint = s"/status-request/mrn/$mrn"
-
-  private val ISO_UTC_DateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTime.withZoneUTC()
 
   private val apiSubscriptionKeyForXClientIdV1 =
     ApiSubscriptionKey(clientId = clientId, context = "customs%2Fdeclarations", version = VersionOne)
@@ -96,8 +96,8 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
     stopMockServer()
   }
 
-  feature("Declaration API authorises status requests from CSPs with v2.0 accept header") {
-    scenario("An authorised CSP successfully requests a status") {
+  Feature("Declaration API authorises status requests from CSPs with v2.0 accept header") {
+    Scenario("An authorised CSP successfully requests a status") {
       Given("A CSP wants the status of a declaration")
       startMdgStatusV2Service()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
@@ -112,7 +112,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(ISO_UTC_DateTimeFormat))
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString())
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())
@@ -122,8 +122,8 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
     }
   }
 
-  feature("Declaration API authorises status requests from CSPs with v3.0 accept header") {
-    scenario("An authorised CSP successfully requests a status") {
+  Feature("Declaration API authorises status requests from CSPs with v3.0 accept header") {
+    Scenario("An authorised CSP successfully requests a status") {
       Given("A CSP wants the status of a declaration")
       startMdgStatusV3Service()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
@@ -138,7 +138,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe OK
 
       And("the response body is a valid status xml")
-      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString(ISO_UTC_DateTimeFormat))
+      contentAsString(result) shouldBe validResponse(acceptanceDateVal.toString())
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspNoNrs())
@@ -148,11 +148,11 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
     }
   }
 
-  feature("Declaration API handles status request errors from CSPs as expected") {
+  Feature("Declaration API handles status request errors from CSPs as expected") {
 
-    scenario("Response status 400 when Date of declaration is older than configured allowed value") {
+    Scenario("Response status 400 when Date of declaration is older than configured allowed value") {
       Given("the API is available")
-      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceOrCreationDate = DateTime.now().minusYears(1)))
+      startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(acceptanceOrCreationDate = Instant.now.atOffset(ZoneOffset.UTC).minus(1, ChronoUnit.YEARS).toInstant))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
 
       And("the CSP is authorised with its privileged application")
@@ -169,7 +169,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadStatusResponseErrorInvalidDate)))
     }
 
-    scenario("Response status 400 when Declaration Management Information Response does not contain a valid communicationAddress") {
+    Scenario("Response status 400 when Declaration Management Information Response does not contain a valid communicationAddress") {
       Given("the API is available")
       startMdgStatusV3Service(body = StatusTestXMLData.statusResponseDeclarationNoCommunicationAddress)
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
@@ -188,7 +188,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadStatusResponseErrorBadgeIdMissingOrInvalid)))
     }
 
-    scenario("Response status 400 when Declaration Management Information Response does contains different Badge Identifier") {
+    Scenario("Response status 400 when Declaration Management Information Response does contains different Badge Identifier") {
       Given("the API is available")
       startMdgStatusV3Service(body = StatusTestXMLData.generateDeclarationStatusResponse(communicationAddress = "hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:IWONTMATCH"))
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.services
+package uk.gov.hmrc.customs.declaration.connectors
 
-import java.time.{Instant, ZoneId, ZonedDateTime}
+import java.time.{Instant, ZoneOffset, ZonedDateTime}
 
-class DateTimeService {
-  val UtcZoneId = ZoneId.of("UTC")
-  def nowUtc(): Instant =  Instant.now()
-  def zonedDateTimeUtc: ZonedDateTime = ZonedDateTime.now(UtcZoneId)
+trait HeaderUtil {
+  def getDateHeader(date: Instant): String = {
+    import java.time.format.DateTimeFormatter
+    val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss")
+    val zdt = ZonedDateTime.ofInstant(date, ZoneOffset.UTC)
+    formatter.format(zdt) + " UTC"
+  }
 }

@@ -21,7 +21,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
-import org.scalatest.{Assertion, Matchers}
+import org.scalatest.Assertion
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Reads
@@ -43,6 +43,7 @@ import util.XmlOps._
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq
+import org.scalatest.matchers.should.Matchers
 
 object ExampleFileTransmissionStatus extends Enumeration {
   type ExampleFileTransmissionStatus = Value

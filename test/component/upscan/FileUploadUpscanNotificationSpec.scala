@@ -17,8 +17,9 @@
 package component.upscan
 
 import component.{ComponentTestSpec, ExpectedTestResponses}
+import org.mongodb.scala.model.Filters
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.libs.json.Json
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{ACCEPT, CONTENT_TYPE, contentAsString, route, status, _}
@@ -33,6 +34,7 @@ import util.XmlOps.stringToXml
 import util.externalservices.{CustomsNotificationService, FileTransmissionService}
 
 import scala.xml.Utility.trim
+import org.scalatest.matchers.should.Matchers
 
 class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
@@ -45,32 +47,29 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
   with Eventually
   with IntegrationPatience {
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val endpoint = s"/uploaded-file-upscan-notifications/clientSubscriptionId/$subscriptionFieldsIdString"
 
   val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]
 
   override protected def beforeAll() {
-    await(repo.drop)
     startMockServer()
   }
 
   override protected def beforeEach() {
-    await(repo.drop)
+    await(repo.collection.deleteMany(Filters.exists("_id")).toFuture())
     resetMockServer()
   }
 
   override protected def afterAll() {
     stopMockServer()
-    await(repo.drop)
   }
 
   private val hasConversationId = new HasConversationId {
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
 
-  feature("File Transmission Notification") {
-    scenario("Success request has been made to the Declaration API") {
+  Feature("File Transmission Notification") {
+    Scenario("Success request has been made to the Declaration API") {
       startFileTransmissionService()
       await(repo.create(FileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
 
@@ -102,7 +101,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       Json.parse(requestPayload) shouldBe Json.parse(expectedFileTransmissionRequest)
     }
 
-    scenario("Failure request has been made to the Declaration API") {
+    Scenario("Failure request has been made to the Declaration API") {
       notificationServiceIsRunning()
       await(repo.create(FileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
 
@@ -140,7 +139,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       trim(stringToXml(requestPayload)) shouldBe trim(UpscanNotificationFailedCustomsNotificationXml)
     }
 
-    scenario("Success request has been made to the Declaration API but metadata record does not exist in the database") {
+    Scenario("Success request has been made to the Declaration API but metadata record does not exist in the database") {
       notificationServiceIsRunning()
       await(repo.create(FileMetadataWithFileOneWithNoCallbackFieldsAndThree)(hasConversationId))
 

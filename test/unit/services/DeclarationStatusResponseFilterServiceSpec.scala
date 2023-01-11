@@ -16,7 +16,6 @@
 
 package unit.services
 
-import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
@@ -25,11 +24,12 @@ import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, Stat
 import util.StatusTestXMLData.{DeclarationType, ImportTradeMovementType, generateDeclarationStatusResponse, generateValidStatusResponseWithMultiplePartiesOnly}
 import util.TestData.{date, dateString}
 
+import java.time.Instant
 import scala.xml.NodeSeq
 
 class DeclarationStatusResponseFilterServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
-  private val acceptanceDateVal = DateTime.now(DateTimeZone.UTC)
+  private val acceptanceDateVal = Instant.now()
 
   trait SetUp {
 

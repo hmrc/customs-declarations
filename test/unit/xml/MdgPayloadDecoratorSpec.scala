@@ -16,7 +16,6 @@
 
 package unit.xml
 
-import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
@@ -24,6 +23,7 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
 
+import java.time.{LocalDateTime, ZoneOffset}
 import scala.xml.NodeSeq
 
 class MdgPayloadDecoratorSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
@@ -37,7 +37,8 @@ class MdgPayloadDecoratorSpec extends AnyWordSpecLike with MockitoSugar with Mat
   private val minuteOfHour = 55
   private val secondOfMinute = 0
   private val millisOfSecond = 0
-  private val dateTime = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, DateTimeZone.UTC)
+  private val dateTime = LocalDateTime.of(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond).toInstant(ZoneOffset.UTC)
+
   private val payloadWrapper = new MdgPayloadDecorator()
 
   "MdgPayloadDecorator for Csp with Eori " should {

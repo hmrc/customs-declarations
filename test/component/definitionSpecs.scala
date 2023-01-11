@@ -28,9 +28,9 @@ import scala.concurrent.Future
 
 class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec with Matchers {
 
-  feature("Ensure definition file") {
+  Feature("Ensure definition file") {
 
-    scenario("is correct when all versions are private") {
+    Scenario("is correct when all versions are private") {
 
       Given("the API is available")
       val request = FakeRequest("GET", "/api/definition")
@@ -184,9 +184,9 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
     "api.access.version-2.0.enabled" -> false
   )).build()
 
-  feature("Ensure definition file") {
+  Feature("Ensure definition file") {
 
-    scenario("is correct when version 2 is disabled") {
+    Scenario("is correct when version 2 is disabled") {
 
       Given("the API is available")
       val request = FakeRequest("GET", "/api/definition")

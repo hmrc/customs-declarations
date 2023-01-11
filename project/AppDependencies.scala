@@ -22,12 +22,13 @@ object AppDependencies {
   val customsApiCommonTests = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion % testScope classifier "tests"
 
   val playJsonJoda = "com.typesafe.play" %% "play-json-joda" % playJsonJodaVersion
-  
-  val simpleReactiveMongo = "uk.gov.hmrc" %% "simple-reactivemongo" % simpleReactiveMongoVersion
 
-  val reactiveMongoTest = "uk.gov.hmrc" %% "reactivemongo-test" % reactiveMongoTestVersion % testScope
+  val hmrcMongo = "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"      % "0.73.0"
+
+  val hmrcMongoTest = "uk.gov.hmrc.mongo" %% "hmrc-mongo-test-play-28" % "0.73.0"
 
   val silencerPlugin = compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.5" cross CrossVersion.full)
+
   val silencerLib = "com.github.ghik" % "silencer-lib" % "1.7.5" % Provided cross CrossVersion.full
 
 }

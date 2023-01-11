@@ -16,14 +16,9 @@
 
 package util
 
-import java.net.URL
-import java.time.Instant
-import java.util.UUID
-import java.util.UUID.fromString
-
 import com.google.inject.AbstractModule
 import org.joda.time.DateTimeZone.UTC
-import org.joda.time.{DateTime, DateTimeZone, LocalDate}
+import org.joda.time.{DateTime, LocalDate}
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
@@ -40,7 +35,7 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedFileUploadPayloadRequest, _}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.model.upscan._
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 import unit.logging.StubDeclarationsLogger
@@ -49,6 +44,10 @@ import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.RequestHeaders.{ValidHeadersV1, ValidHeadersV2, ValidHeadersV3, X_EORI_IDENTIFIER_NAME}
 import util.TestData.declarantEori
 
+import java.net.URL
+import java.time.Instant
+import java.util.UUID
+import java.util.UUID.fromString
 import scala.xml.{Elem, NodeSeq}
 
 object TestData {
@@ -68,7 +67,8 @@ object TestData {
   val mrn = Mrn(mrnValue)
 
   val dateString = "2018-09-11T10:28:54.128Z"
-  val date: DateTime = DateTime.parse("2018-09-11T10:28:54.128Z")
+  val date = Instant.parse("2018-09-11T10:28:54.128Z")
+  val httpFormattedDate = "Tue, 11 Sep 2018 10:28:54 UTC"
 
   val subscriptionFieldsIdString: String = "b82f31c6-2239-4253-b6f5-ed75e37ab7a5"
   val subscriptionFieldsIdUuid: UUID = fromString("b82f31c6-2239-4253-b6f5-ed75e37ab7a5")
@@ -179,8 +179,10 @@ object TestData {
   val PREVIOUS_TIME_IN_MILLIS = 1530464400000L
   val NRS_TIMESTAMP_IN_MILLIS = 1530475200000L
   val currentLoginTime: DateTime = new DateTime(CURRENT_TIME_IN_MILLIS, UTC)
+  val currentLoginTime_2 = Instant.ofEpochMilli(CURRENT_TIME_IN_MILLIS)
   val previousLoginTime: DateTime = new DateTime(PREVIOUS_TIME_IN_MILLIS, UTC)
-  val nrsTimeStamp: DateTime = new DateTime(NRS_TIMESTAMP_IN_MILLIS, UTC)
+  val previousLoginTime_2 = Instant.ofEpochMilli(PREVIOUS_TIME_IN_MILLIS)
+  val nrsTimeStamp = Instant.ofEpochMilli(NRS_TIMESTAMP_IN_MILLIS)
 
   val nrsLoginTimes = LoginTimes(currentLoginTime, Some(previousLoginTime))
 
@@ -345,7 +347,7 @@ object TestData {
   val FileReferenceThree = FileReference(fromString("33400000-8cd0-11bd-b23e-10b96e4ef00f"))
   val InitiateDateAsString = "2018-04-24T09:30:00Z"
   val InitiateDate = Instant.parse(InitiateDateAsString)
-  val createdAtDate = new DateTime(InitiateDate.toEpochMilli, DateTimeZone.UTC)
+  val createdAtDate = Instant.ofEpochMilli(InitiateDate.toEpochMilli)
   val CallbackFieldsOne = CallbackFields("name1", "application/xml", "checksum1", InitiateDate, new URL("https://outbound.a.com"))
   val CallbackFieldsTwo = CallbackFields("name2", "application/xml", "checksum2", InitiateDate, new URL("https://outbound.a.com"))
   val CallbackFieldsThree = CallbackFields("name3", "application/xml", "checksum3", InitiateDate, new URL("https://outbound.a.com"))

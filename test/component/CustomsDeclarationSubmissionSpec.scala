@@ -104,8 +104,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
     </v1:requestDetail>
     </v1:submitDeclarationRequest>.toString()
 
-  feature("Declaration API authorises submissions from CSPs with v1.0 accept header") {
-    scenario("An authorised CSP successfully submits a customs declaration") {
+  Feature("Declaration API authorises submissions from CSPs with v1.0 accept header") {
+    Scenario("An authorised CSP successfully submits a customs declaration") {
       Given("A CSP wants to submit a valid customs declaration")
       startMdgWcoDecServiceV1()
       val request: FakeRequest[AnyContentAsXml] = ValidSubmissionV1Request.fromCsp.postTo(endpoint)
@@ -141,7 +141,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
     }
 
-    scenario("Response status 400 when user submits a malformed xml payload") {
+    Scenario("Response status 400 when user submits a malformed xml payload") {
       Given("the API is available")
       startMdgWcoDecServiceV1()
       val request = MalformedXmlRequest.fromCsp.withMethod(POST).withTarget(MalformedXmlRequest.target.withPath(endpoint))
@@ -165,8 +165,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
   }
 
-  feature("Declaration API authorises submissions from CSPs with v2.0 accept header") {
-    scenario("An authorised CSP successfully submits a customs declaration") {
+  Feature("Declaration API authorises submissions from CSPs with v2.0 accept header") {
+    Scenario("An authorised CSP successfully submits a customs declaration") {
       Given("A CSP wants to submit a valid customs declaration")
       startMdgWcoDecServiceV2()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
@@ -200,8 +200,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
   }
 
-  feature("Declaration API authorises submissions from CSPs with v3.0 accept header") {
-    scenario("An authorised CSP successfully submits a customs declaration") {
+  Feature("Declaration API authorises submissions from CSPs with v3.0 accept header") {
+    Scenario("An authorised CSP successfully submits a customs declaration") {
       Given("A CSP wants to submit a valid customs declaration")
       startMdgWcoDecServiceV3()
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV3)
@@ -235,8 +235,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
   }
 
-  feature("Declaration API returns unavailable when a version is shuttered") {
-    scenario("An authorised CSP fails to submit a customs declaration to a shuttered version") {
+  Feature("Declaration API returns unavailable when a version is shuttered") {
+    Scenario("An authorised CSP fails to submit a customs declaration to a shuttered version") {
       Given("A CSP wants to submit a valid customs declaration to a shuttered version")
       implicit lazy val app: Application = super.app(configMap + ("shutter.v2" -> "true"))
       
@@ -261,8 +261,8 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
   }
   
-  feature("Declaration API handles submission errors from CSPs as expected") {
-    scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
+  Feature("Declaration API handles submission errors from CSPs as expected") {
+    Scenario("Response status 400 when user submits an xml payload that does not adhere to schema having multiple errors") {
       Given("the API is available")
       val request = InvalidSubmissionRequestWith2Errors.fromCsp.postTo(endpoint)
       stubAuditService()

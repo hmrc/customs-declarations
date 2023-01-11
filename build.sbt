@@ -95,9 +95,9 @@ def unitTestFilter(name: String): Boolean = name startsWith "unit"
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
-val compileDependencies = Seq(customsApiCommon, simpleReactiveMongo, playJsonJoda, silencerPlugin, silencerLib)
+val compileDependencies = Seq(customsApiCommon, hmrcMongo, playJsonJoda, silencerPlugin, silencerLib)
 
-val testDependencies = Seq(scalaTestPlusPlay, flexmark, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
+val testDependencies = Seq(scalaTestPlusPlay, flexmark, wireMock, mockito, customsApiCommonTests, hmrcMongoTest)
 
 Compile / unmanagedResourceDirectories += baseDirectory.value / "public"
 

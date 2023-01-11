@@ -46,7 +46,7 @@ class NrsService @Inject()(logger: DeclarationsLogger,
   private val businessIdValue = "cds"
   private val notableEventValue = "cds-declaration"
 
-  def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[NrSubmissionId] = {
+  def send[A](implicit vpr: ValidatedPayloadRequest[A]): Future[NrSubmissionId] = {
 
     val payloadAsString = vpr.request.body.asInstanceOf[AnyContentAsXml].xml.toString
 

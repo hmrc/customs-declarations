@@ -98,9 +98,9 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       status(result) mustBe NO_CONTENT
       contentAsString(result) mustBe empty
       eventually {
-        verifyZeroInteractions(mockNotificationService)
+        verifyNoMoreInteractions(mockNotificationService)
         verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
-        verifyZeroInteractions(mockErrorToXmlNotification)
+        verifyNoMoreInteractions(mockErrorToXmlNotification)
       }
     }
   }
@@ -115,8 +115,8 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       contentAsString(result) mustBe empty
       eventually {
         verifyFailureNotificationSent(FailedCallbackBody)
-        verifyZeroInteractions(mockBusinessService)
-        verifyZeroInteractions(mockErrorToXmlNotification)
+        verifyNoMoreInteractions(mockBusinessService)
+        verifyNoMoreInteractions(mockErrorToXmlNotification)
       }
     }
 
@@ -129,8 +129,8 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       contentAsString(result) mustBe UpscanNotificationInternalServerErrorJson
       eventually {
         verifyFailureNotificationSent(FailedCallbackBody)
-        verifyZeroInteractions(mockBusinessService)
-        verifyZeroInteractions(mockErrorToXmlNotification)
+        verifyNoMoreInteractions(mockBusinessService)
+        verifyNoMoreInteractions(mockErrorToXmlNotification)
       }
     }
 
@@ -145,7 +145,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       eventually {
         verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
         verifyErrorNotificationSent()
-        verifyZeroInteractions(mockToXmlNotification)
+        verifyNoMoreInteractions(mockToXmlNotification)
       }
     }
 
@@ -155,10 +155,10 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       status(result) mustBe BAD_REQUEST
       contentAsString(result) mustBe UpscanNotifyClientSubscriptionIdErrorJson
       eventually {
-        verifyZeroInteractions(mockNotificationService)
-        verifyZeroInteractions(mockBusinessService)
-        verifyZeroInteractions(mockErrorToXmlNotification)
-        verifyZeroInteractions(mockToXmlNotification)
+        verifyNoMoreInteractions(mockNotificationService)
+        verifyNoMoreInteractions(mockBusinessService)
+        verifyNoMoreInteractions(mockErrorToXmlNotification)
+        verifyNoMoreInteractions(mockToXmlNotification)
       }
     }
 
@@ -169,10 +169,10 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       status(result) mustBe BAD_REQUEST
       contentAsString(result) mustBe UpscanNotificationBadRequestJson
       eventually {
-        verifyZeroInteractions(mockNotificationService)
-        verifyZeroInteractions(mockBusinessService)
-        verifyZeroInteractions(mockErrorToXmlNotification)
-        verifyZeroInteractions(mockToXmlNotification)
+        verifyNoMoreInteractions(mockNotificationService)
+        verifyNoMoreInteractions(mockBusinessService)
+        verifyNoMoreInteractions(mockErrorToXmlNotification)
+        verifyNoMoreInteractions(mockToXmlNotification)
       }
     }
 
@@ -182,10 +182,10 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
     status(result) mustBe BAD_REQUEST
 
     contentAsString(result) mustBe UpscanNotificationBadRequestJsonPayload
-    verifyZeroInteractions(mockNotificationService)
-    verifyZeroInteractions(mockBusinessService)
-    verifyZeroInteractions(mockErrorToXmlNotification)
-    verifyZeroInteractions(mockToXmlNotification)
+    verifyNoMoreInteractions(mockNotificationService)
+    verifyNoMoreInteractions(mockBusinessService)
+    verifyNoMoreInteractions(mockErrorToXmlNotification)
+    verifyNoMoreInteractions(mockToXmlNotification)
   }
 
 }

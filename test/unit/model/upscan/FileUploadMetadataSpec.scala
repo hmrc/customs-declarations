@@ -29,7 +29,7 @@ class FileUploadMetadataSpec extends AnyWordSpecLike with Matchers {
                              |  "csId": "327d9145-4965-4d28-a2c5-39dedee50334",
                              |  "batchId": "48400000-8cf0-11bd-b23e-10b96e4ef001",
                              |  "fileCount": 1,
-                             |  "createdAt": {"$date":1524562200000},
+                             |  "createdAt": {"$date":{"$numberLong":"1524562200000"}},
                              |  "files": [
                              |    {
                              |      "reference": "31400000-8ce0-11bd-b23e-10b96e4ef00f",
@@ -53,7 +53,6 @@ class FileUploadMetadataSpec extends AnyWordSpecLike with Matchers {
 
   "FileUploadMetaData model" should {
     "serialise to Json" in {
-
       val actualJson = Json.toJson(FileMetadataWithFileOne)
 
       actualJson shouldBe json

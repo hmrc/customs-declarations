@@ -16,18 +16,17 @@
 
 package uk.gov.hmrc.customs.declaration.xml
 
-import org.joda.time.DateTime
-import org.joda.time.format.ISODateTimeFormat
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 
+import java.time.Instant
 import scala.xml.{NodeSeq, Text}
 
 class MdgPayloadDecorator() {
 
   private val newLineAndIndentation = "\n        "
 
-  def wrap[A](xml: NodeSeq, sfId: ApiSubscriptionFieldsResponse, dateTime: DateTime)(implicit vpr: ValidatedPayloadRequest[A]): NodeSeq =
+  def wrap[A](xml: NodeSeq, sfId: ApiSubscriptionFieldsResponse, dateTime: Instant)(implicit vpr: ValidatedPayloadRequest[A]): NodeSeq =
     <v1:submitDeclarationRequest
     xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1"
     xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2"
@@ -36,7 +35,7 @@ class MdgPayloadDecorator() {
       <v1:requestCommon>
         <!--type: regimeType-->
         <v1:regime>CDS</v1:regime>
-        <v1:receiptDate>{ dateTime.toString(ISODateTimeFormat.dateTimeNoMillis) }</v1:receiptDate>
+        <v1:receiptDate>{ dateTime }</v1:receiptDate>
         <v1:clientID>{sfId.fieldsId}</v1:clientID>
         <v1:conversationID>{vpr.conversationId.uuid}</v1:conversationID>
         {val as = vpr.authorisedAs
@@ -59,7 +58,7 @@ class MdgPayloadDecorator() {
     </v1:submitDeclarationRequest>
 
   def status[A](correlationId: CorrelationId,
-                date: DateTime,
+                date: Instant,
                 mrn: Mrn,
                 dmirId: DeclarationManagementInformationRequestId,
                 sfId: ApiSubscriptionFieldsResponse)

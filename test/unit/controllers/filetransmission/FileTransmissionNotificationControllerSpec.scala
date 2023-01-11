@@ -78,7 +78,7 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
       status(result) mustBe BAD_REQUEST
 
       contentAsString(result) mustBe BadRequestErrorResponseInvalidOutcome
-      verifyZeroInteractions(mockService)
+      verifyNoMoreInteractions(mockService)
     }
 
     "return 400 when a invalid json is received" in new SetUp {
@@ -87,7 +87,7 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
       status(result) mustBe BAD_REQUEST
 
       contentAsString(result) mustBe BadRequestErrorResponseInvalidJson
-      verifyZeroInteractions(mockService)
+      verifyNoMoreInteractions(mockService)
       PassByNameVerifier(mockCdsLogger, "error")
         .withByNameParam[String]("Malformed JSON received. Body: Some(some) headers: List((Host,localhost), (Content-Type,application/json))")
         .verify()
@@ -98,8 +98,8 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
 
       status(result) mustBe BAD_REQUEST
       contentAsString(result) mustBe FileTransmissionClientSubscriptionIdErrorJson
-      verifyZeroInteractions(mockService)
-      verifyZeroInteractions(callbackToXmlNotification)
+      verifyNoMoreInteractions(mockService)
+      verifyNoMoreInteractions(callbackToXmlNotification)
     }
 
     "return 500 when call to Custom Notification services fails" in new SetUp {

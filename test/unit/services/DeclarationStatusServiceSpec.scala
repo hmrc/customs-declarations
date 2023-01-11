@@ -16,19 +16,16 @@
 
 package unit.services
 
-import java.util.UUID
-import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.NOT_FOUND
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
-import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
@@ -41,13 +38,15 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
-import util.TestData.{correlationId, _}
+import util.TestData._
 
+import java.time.Instant
+import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Matchers{
-  private val dateTime = new DateTime()
+  private val dateTime = Instant.now()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private implicit val ar: AuthorisedRequest[AnyContentAsXml] = util.TestData.TestAuthorisedStatusRequest
@@ -66,7 +65,7 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
 
   trait SetUp {
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
-    when(mockDeclarationStatusConnector.send(any[NodeSeq], any[DateTime], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
+    when(mockDeclarationStatusConnector.send(any[NodeSeq], any[Instant], meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
       any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
     when(mockHttpResponse.body).thenReturn("<xml>some xml</xml>")
     when(mockHttpResponse.headers).thenReturn(any[Map[String, Seq[String]]])
@@ -102,7 +101,7 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
 
     "return 404 error response when MDG call fails with 404" in new SetUp() {
       when(mockDeclarationStatusConnector.send(any[NodeSeq],
-        any[DateTime],
+        any[Instant],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
         any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(NOT_FOUND)))
       val result: Either[Result, HttpResponse] = send()
@@ -112,7 +111,7 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
 
     "return 500 error response when MDG call fails" in new SetUp() {
       when(mockDeclarationStatusConnector.send(any[NodeSeq],
-        any[DateTime],
+        any[Instant],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
         any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
       val result: Either[Result, HttpResponse] = send()

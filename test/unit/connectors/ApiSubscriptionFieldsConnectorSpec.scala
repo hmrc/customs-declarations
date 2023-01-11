@@ -20,7 +20,7 @@ import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.Mockito._
 import org.mockito.internal.matchers.Matches
-import org.scalatest.{BeforeAndAfterEach, Matchers}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.matchers.should.Matchers.{convertToAnyShouldWrapper, intercept}
 import org.scalatest.concurrent.Eventually
@@ -38,6 +38,7 @@ import util.ExternalServicesConfig._
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
 import scala.concurrent.{ExecutionContext, Future}
+import org.scalatest.matchers.should.Matchers
 
 class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
   with Matchers

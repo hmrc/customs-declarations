@@ -87,8 +87,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def backendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
-                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
-                             hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
+                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]): Future[Seq[UpscanInitiateResponsePayload]] = {
 
     val upscanInitiateRequests = validatedRequest.fileUploadRequest.files
 
@@ -161,7 +160,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
 
   private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
-                              (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
+                              (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]) = {
     upscanInitiateConnector.send(
       preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)
   }
@@ -174,7 +173,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
-                               (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
+                               (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]): UpscanInitiatePayload = {
 
     val upscanInitiatePayload = UpscanInitiatePayload(s"""${config.fileUploadConfig.fileUploadCallbackUrl}/uploaded-file-upscan-notifications/clientSubscriptionId/${subscriptionFieldsId.value}""".stripMargin,
       config.fileUploadConfig.upscanInitiateMaximumFileSize,

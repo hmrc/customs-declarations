@@ -16,8 +16,8 @@
 
 package integration
 
+import java.time.Instant
 import java.util.UUID
-import org.joda.time.DateTime
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.BeforeAndAfterAll
@@ -108,7 +108,7 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
   }
 
   private def sendValidXml()(implicit vpr: ValidatedPayloadRequest[_]) = {
-    connector.send(ValidSubmissionXML, new DateTime(), correlationId, VersionOne)
+    connector.send(ValidSubmissionXML, Instant.now(), correlationId, VersionOne)
   }
 
   private def checkCaughtException(status: Int) {

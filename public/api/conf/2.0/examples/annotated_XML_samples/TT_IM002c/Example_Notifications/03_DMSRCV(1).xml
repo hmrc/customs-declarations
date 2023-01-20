@@ -7,9 +7,9 @@
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
         <FunctionCode>02</FunctionCode>
-        <FunctionalReferenceID>f87cb88c1bf545a2b62216fa5f98c4f0</FunctionalReferenceID>
+        <FunctionalReferenceID>8be5c362299f4fdaafcac00faf9c5343</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20210709111728Z</DateTimeString>
+            <DateTimeString formatCode="304">20221117123939Z</DateTimeString>
         </IssueDateTime>
         <AdditionalInformation>
             <StatementCode>smartErrorMsg</StatementCode>
@@ -38,9 +38,8 @@
             </Pointer>
         </Error>
         <Declaration>
-            <FunctionalReferenceID>TT_IM02c_v1.2_0907_01</FunctionalReferenceID>
-            <ID>21GB7IQC4FGWJZ5GR0</ID>
-            <VersionID>1</VersionID>
+            <FunctionalReferenceID>TT_IM02a_EIDR_1511_013</FunctionalReferenceID>
+            <ID>22GBCPZYWSP575DAR2</ID>
         </Declaration>
     </Response>
 </MetaData>

@@ -7,9 +7,9 @@
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
         <FunctionCode>01</FunctionCode>
-        <FunctionalReferenceID>55a51db61f2d46e88d61d5a316fb1a41</FunctionalReferenceID>
+        <FunctionalReferenceID>c77e1b9b70864ddcbc71238ed1d815aa</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20210709111504Z</DateTimeString>
+            <DateTimeString formatCode="304">20221117123738Z</DateTimeString>
         </IssueDateTime>
         <AdditionalInformation>
             <StatementCode>smartErrorMsg</StatementCode>
@@ -40,10 +40,10 @@
         </Error>
         <Declaration>
             <AcceptanceDateTime>
-                <DateTimeString formatCode="304">20210610000000Z</DateTimeString>
+                <DateTimeString formatCode="304">20221114000000Z</DateTimeString>
             </AcceptanceDateTime>
-            <FunctionalReferenceID>TT_IM02c_v2.0_0907_01</FunctionalReferenceID>
-            <ID>21GB7IQC4FGWJZ5GR0</ID>
+            <FunctionalReferenceID>TT_IM02a_EIDR_1511_013</FunctionalReferenceID>
+            <ID>22GBCPZYWSP575DAR2</ID>
             <VersionID>1</VersionID>
         </Declaration>
     </Response>

@@ -7,9 +7,9 @@
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
         <FunctionCode>11</FunctionCode>
-        <FunctionalReferenceID>fdaed1ead9974a9cb39cc3a27568c92d</FunctionalReferenceID>
+        <FunctionalReferenceID>906cc1f4ab114cbfb4ed373caeab6c7f</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20210709111729Z</DateTimeString>
+            <DateTimeString formatCode="304">20221117123939Z</DateTimeString>
         </IssueDateTime>
         <AdditionalInformation>
             <StatementTypeCode>AFB</StatementTypeCode>
@@ -18,9 +18,8 @@
             <NameCode>39</NameCode>
         </Status>
         <Declaration>
-            <FunctionalReferenceID>TT_IM02c_v1.2_0907_01</FunctionalReferenceID>
-            <ID>21GB7IQC4FGWJZ5GR0</ID>
-            <VersionID>1</VersionID>
+            <FunctionalReferenceID>TT_IM02a_EIDR_1511_013</FunctionalReferenceID>
+            <ID>22GBCPZYWSP575DAR2</ID>
         </Declaration>
     </Response>
 </MetaData>

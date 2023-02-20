@@ -40,6 +40,7 @@
 		<!--DE 2/5: LRN.
 			The trader assigned reference to the declaration. -->
 		<FunctionalReferenceID>TC04_RoRo_Test_NI02</FunctionalReferenceID>
+		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
 		<IssueDateTime>
 			<p1:DateTimeString formatCode="304">20201001080000+01</p1:DateTimeString>
 		</IssueDateTime>

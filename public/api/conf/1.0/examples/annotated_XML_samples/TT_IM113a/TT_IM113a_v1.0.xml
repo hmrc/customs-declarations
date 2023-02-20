@@ -104,7 +104,7 @@
 					Note: Unlike CHIEF this must now be completed. -->
 				<ContainerCode>1</ContainerCode>
 				<!--DE 7/9: Identity of means of transport on arrival. 
-					Mandatory unless postak or fixed energy installation.
+					Mandatory unless postal or fixed energy installation.
 					ID: Textual identity of the means of transport on which the goods are directly loaded at the time of presentation at the customs office where the destination formalities are completed. 
 					Example 5 digits for the ID: 12345
 					IdentificationTypeCode: The identity of the means of transport on which the goods are directly loaded at the time of presentation at the customs office where the destination formalities are completed. 
@@ -201,7 +201,7 @@
 					This field is mandatory if the codes are required.
 					A document code of 9120 indicates: Importation of animal pathogens Licence under the Importation of Animal 
 					pathogens Order 1980 (IAPO).
-					LPCOExemptionCode: AE indicates Document attached ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ exhausted by (or only applies to) this entry (document 
+					LPCOExemptionCode: AE indicates Document attached exhausted by (or only applies to) this entry (document 
 					returned to the trader). -->
 				<AdditionalDocument>
 					<CategoryCode>9</CategoryCode>

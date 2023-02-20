@@ -40,7 +40,7 @@
 			Total number of goods items on the declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<!--DE 7/4: Mode of Transport at the Border.
-			ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border. -->
+			ModeCode of 5 to indicate Postal (Mail) consignment. -->
 		<BorderTransportMeans>
 			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
 			<ModeCode>5</ModeCode>
@@ -86,7 +86,7 @@
 					</Address>
 				</GoodsLocation>
 			</Consignment>
-			<!--DE 4/19: Postal Charges.
+			<!--DE 4/19: Transport costs to the final destination.
 				Postal charge of 5 GBP. -->
 			<CustomsValuation>
 				<FreightChargeAmount currencyID="GBP">5.00</FreightChargeAmount>

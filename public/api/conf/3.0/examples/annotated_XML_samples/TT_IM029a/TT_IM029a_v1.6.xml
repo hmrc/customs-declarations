@@ -126,7 +126,7 @@
 				<!--DE 7/2: Container. Mandatory field. Indicator to show if goods are packed in a container or not. Code 1 indicates that goods are transported in containers.
 						Note: Unlike CHIEF this must now be completed. -->
 				<ContainerCode>1</ContainerCode>
-				<!--DE 7/9: Identity of means of transport on arrival. Mandatory unless postak or fixed energy installation.
+				<!--DE 7/9: Identity of means of transport on arrival. Mandatory unless postal or fixed energy installation.
 						ID: Textual identity of the means of transport on which the goods are directly loaded at the time of presentation at the customs office where the destination formalities are completed. 
 						Example 5 digits for the ID: 12345
 						IdentificationTypeCode: The identity of the means of transport on which the goods are directly loaded at the time of presentation at the customs office 

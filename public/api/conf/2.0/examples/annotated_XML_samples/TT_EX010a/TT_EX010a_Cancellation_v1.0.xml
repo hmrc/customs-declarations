@@ -22,7 +22,8 @@
     >
   		<!--This is an example of a cancellation message that has been applied to a declaration. -->
 
-  		<!--This should be updated to today's date.-->
+  		<!--This should be updated to today's date as the declaration is a frontier type.
+			Note this data element is not mandatory for pre-lodged or frontier declarations. -->
       <AcceptanceDateTime>
         <p1:DateTimeString formatCode="304">20200715090000+01</p1:DateTimeString>
       </AcceptanceDateTime>

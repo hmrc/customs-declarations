@@ -97,7 +97,7 @@
 					</Address>
 				</GoodsLocation>
 			</Consignment>
-			<!--DE 4/19: Postal Charges. 
+			<!--DE 4/19: Transport costs to the final destination. 
 				In this case £9. -->
 			<CustomsValuation>
 				<FreightChargeAmount currencyID="GBP">9</FreightChargeAmount>

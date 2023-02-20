@@ -37,7 +37,8 @@
 			EMR Message also expected response from ILE, as MUCR and DUCR consolidated in the declaration 
 		-->
 
-		<!--This should be updated to today's date.-->
+		<!--This should be updated to today's date as the declaration is a pre-lodged type.
+			Note this data element is not mandatory for pre-lodged or frontier declarations. -->
 		<AcceptanceDateTime>
 			<p1:DateTimeString formatCode="304">20210210090000+01</p1:DateTimeString>
 		</AcceptanceDateTime>
@@ -45,6 +46,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: The trader assigned reference to the declaration -->
 		<FunctionalReferenceID>R3.1.2_E2E_TC01_P002</FunctionalReferenceID>
+		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
 		<IssueDateTime>
 			<p1:DateTimeString formatCode="304">20210210090000+01</p1:DateTimeString>
 		</IssueDateTime>

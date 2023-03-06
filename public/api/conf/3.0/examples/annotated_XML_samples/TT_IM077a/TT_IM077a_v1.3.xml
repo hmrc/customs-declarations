@@ -98,7 +98,7 @@
 					</Address>
 				</GoodsLocation>
 			</Consignment>
-			<!--DE 4/19: Postal Charges. 
+			<!--DE 4/19: Transport costs to the final destination. 
 				In this case £13.75. -->
 			<CustomsValuation>
 				<FreightChargeAmount currencyID="GBP">13.75</FreightChargeAmount>
@@ -166,7 +166,7 @@
 					<CurrentCode>1H7</CurrentCode>
 				</GovernmentProcedure>
 				<!--DE 1/11: Additional Procedure Code.
-					C07 to indicate that different goods have been grouped on a single customs declaration. -->
+					C07 to indicate that its an consignments of negligible value. -->
 				<GovernmentProcedure>
 					<CurrentCode>C07</CurrentCode>
 				</GovernmentProcedure>

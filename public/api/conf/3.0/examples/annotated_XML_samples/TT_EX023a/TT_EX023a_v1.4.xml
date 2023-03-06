@@ -40,6 +40,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: The trader assigned reference to the declaration. -->
 		<FunctionalReferenceID>E3.4sc2.0_2309R1</FunctionalReferenceID>
+		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
 		<IssueDateTime>
 			<p1:DateTimeString formatCode="304">20210923080000+01</p1:DateTimeString>
 		</IssueDateTime>

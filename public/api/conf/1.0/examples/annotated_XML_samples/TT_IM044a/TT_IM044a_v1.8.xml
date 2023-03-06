@@ -1,4 +1,4 @@
-﻿<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
            	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
            	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"

@@ -7,9 +7,9 @@
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
         <FunctionCode>07</FunctionCode>
-        <FunctionalReferenceID>0ecdaa251c6f4246bf98adaa8190e452</FunctionalReferenceID>
+        <FunctionalReferenceID>70983a55df3f49beafa8888cdee336b3</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20210709112007Z</DateTimeString>
+            <DateTimeString formatCode="304">20221117124840Z</DateTimeString>
         </IssueDateTime>
         <AdditionalInformation>
             <StatementDescription>Amending item price as a mistake was made on the declaration.</StatementDescription>
@@ -190,8 +190,8 @@
             </Pointer>
         </Amendment>
         <Declaration>
-            <FunctionalReferenceID>TT_IM02c_v2.0_0907_01</FunctionalReferenceID>
-            <ID>21GB7IQC4FGWJZ5GR0</ID>
+            <FunctionalReferenceID>TT_IM02a_EIDR_1511_013</FunctionalReferenceID>
+            <ID>22GBCPZYWSP575DAR2</ID>
             <VersionID>3</VersionID>
         </Declaration>
         <Declaration>

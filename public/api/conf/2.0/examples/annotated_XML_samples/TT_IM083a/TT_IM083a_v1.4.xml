@@ -762,14 +762,14 @@
 				</Address>
 			</Importer>
 			<!--DE 2/1: Simplified Declarations/Previous documents.
-				Previous document of X337 to show the MRN for the entry summary declaration. -->
+				Previous document of X337 to show the MRN for the temporary storage declaration. -->
 			<PreviousDocument>
 				<CategoryCode>X</CategoryCode>
 				<ID>21GBTSD123456789U3-1</ID>
 				<TypeCode>337</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Simplified Declarations/Previous documents.
-				Previous document of Z355 to show the MRN for the entry summary declaration. -->
+				Previous document of MCR to show the MUCR (Master Unique Consigment Reference for the entry summary declaration. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
 				<ID>CSPUCN123</ID>

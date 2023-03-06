@@ -1,6 +1,0 @@
-Steps for to follow for TT_EX26a:
-
-Step 1 - Submit type K Declaration with 1x MUCR and 1xDUCR via CDS.
-Step 2 - Submit CST with MUCR.
-Step 3 - Submit EAL with MUCR.
-Step 4 - Submit EDL with MUCR.

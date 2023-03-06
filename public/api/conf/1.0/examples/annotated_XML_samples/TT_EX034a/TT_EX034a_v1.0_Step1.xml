@@ -31,7 +31,7 @@
 			  -  '10 40' Procedure code at D.E. 1/10.
 			  -  '3LV' Additional Procedure Code at D.E. 1/11.
 			  -  Goods: Candy Canes.
-			  -  Data set category: B1.
+			  -  Data set category: C1.
 			
 			Scenario steps:
 			Loader submits EAL message to CDS for the declared DUCR.
@@ -44,6 +44,7 @@
 		<!--DE 2/5: LRN.
 			The declarant's assigned reference to the declaration. -->
 		<FunctionalReferenceID>R3.9.0_3858_TC01_1</FunctionalReferenceID>
+		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
 		<IssueDateTime>
 			<p1:DateTimeString formatCode="304">20221115110000Z</p1:DateTimeString>
 		</IssueDateTime>

@@ -33,7 +33,8 @@
 			Expected Notification: DMSACC,DMSRCV1, DMSRCV2, DMSRES, DMSROG,DMSCLE
 			Goods presented at London Gatwick Airport 
 		-->
-		<!--This should be updated to today's date.-->
+		<!--This should be updated to today's date as the declaration is a pre-lodged type.
+			Note this data element is not mandatory for pre-lodged or frontier declarations. -->
 		<AcceptanceDateTime>
 			<p1:DateTimeString formatCode="304">20210205070000+01</p1:DateTimeString>
 		</AcceptanceDateTime>
@@ -41,6 +42,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: The trader assigned reference to the declaration -->
 		<FunctionalReferenceID>EX3.2_TC02_0502ST05</FunctionalReferenceID>
+		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
 		<IssueDateTime>
 			<p1:DateTimeString formatCode="304">20210205070000+01</p1:DateTimeString>
 		</IssueDateTime>

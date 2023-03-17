@@ -1,10 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <inv:InventoryLinkingImportsValidateMovementResponse xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
-    <!--ID of the declaration assigned by Customs, being a specific customs ID or a Movement Reference Number (MRN)-->
-    <inv:entryNumber>22GBCLK1IIJMT6PAR6</inv:entryNumber>
-    <!-- Version number of the declaration before processing the amendment -->
-    <inv:entryVersionNumber>1</inv:entryVersionNumber>
-    <!-- Inventory Consignment Reference number which matches that within the declaration payload MUCR -->
-    <inv:inventoryConsignmentReference>GB/1234-:3338HC</inv:inventoryConsignmentReference>
-    <!-- 000 indicates that the consignment has been matched to the declaration which should allow CDS to continue processing the declaration further. -->
-    <inv:irc>000</inv:irc>
+<inv:entryNumber>23GB2K7WU9ZOAL9AR8</inv:entryNumber>
+<inv:entryVersionNumber>1</inv:entryVersionNumber>
+<inv:inventoryConsignmentReference>CSPUCN123</inv:inventoryConsignmentReference>
+<inv:irc>000</inv:irc>
 </inv:InventoryLinkingImportsValidateMovementResponse>

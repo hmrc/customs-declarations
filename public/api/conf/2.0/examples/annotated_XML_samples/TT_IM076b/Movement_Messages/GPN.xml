@@ -17,9 +17,9 @@
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
 	             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>TT_IM76a_v2_0512_05</FunctionalReferenceID>
+		<FunctionalReferenceID>TT_IM76b280223SA01</FunctionalReferenceID>
 		<!--The Declaration ID needs to be updated before submitting the GPN. -->
-		<ID>22GBDIQAFI43ATDAR4</ID>
+		<ID>23GB2BG6DBSGDFUAR5</ID>
 		<TypeCode>GPR</TypeCode>
 		<!--The Agent EORI.
 			Note that the original scenario TT_IM21a uses the Importer EORI in the GPN however the Agent EORI is used here as the Importer EORI will be invalidated. -->

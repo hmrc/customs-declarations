@@ -11,8 +11,8 @@
 	</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>TT_IM12a_0903_002</FunctionalReferenceID>
-		<ID>21GB2OIP9JO3CA27R9</ID>
+		<FunctionalReferenceID>TT_IM12a_2402_001</FunctionalReferenceID>
+		<ID>23GB25ULH0OXZJ6AR7</ID>
 		<TypeCode>GPR</TypeCode>
 		<!--Note that Submitter/ID should not be needed because it is not a mandatory field for Goods Arrival. -->
 		<Submitter>

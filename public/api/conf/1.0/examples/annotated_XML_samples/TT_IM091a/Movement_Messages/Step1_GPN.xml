@@ -21,8 +21,8 @@ xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
 					xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" 
 					xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>CDSP_9778_03_3008_01</FunctionalReferenceID>
-		<ID>22GB9LAUBACU7K5AR7</ID>
+		<FunctionalReferenceID>CDSP_9778_03_2302_01</FunctionalReferenceID>
+		<ID>23GB24KDTK7XEYAAR1</ID>
 		<TypeCode>GPR</TypeCode>
 		<!--Note that Submitter/ID should not be needed because it is not a mandatory field for Goods Arrival. -->
 		<Submitter>

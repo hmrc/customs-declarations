@@ -1,0 +1,1028 @@
+openapi: 3.0.0
+info:
+  title: Customs Declarations
+  description: "This API allows the submission of any UCC declarations for asynchronous processing by the customs declarations service, to enable a user to have their declarations accepted by means of a single API.\n\nThe API takes any UCC declaration payload. It also allows for the submission of a cancellation request (pre-clearance) and provides a method of securely uploading additional documentation to support a declaration submission.\n\nThe file-upload endpoint is used to initiate a file upload as part of the declaration submission process. An example document you may be requested to upload could be a paper copy of a licence. This endpoint is used to initiate a file upload where a signed URL is returned by the endpoint to be used in the file upload workflow.\nWhen an API changes in a way that is backwards-incompatible, we increase the version number of the API. \nSee our [reference guide](/api-documentation/docs/reference-guide#versioning) for more on\nversioning.\nWe use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:\n* 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action\n* 400 to 499 if it failed because of a client error by your application\n* 500 to 599 if it failed because of an error on our server\n\nErrors specific to each API are shown in the Endpoints section, under Response. \nSee our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.\nSchema definitions for all the API endpoints request & response payloads can be found in the following zip archive.\n\n<p class=\"govuk-body-l\" style=\"font-size: 24px;\">\n  <a href=\"/api-documentation/docs/api/download/customs-declarations/1.0/wco-declaration-schemas.zip\" class=\"govuk-link\">Schemas and example messages</a>\n</p>\n\n<p class=\"govuk-body-s\" style=\"font-size: 16px;margin-bottom: 15px;\">ZIP, 2.2MB last updated 16/03/2023</p>\n\n<p class=\"govuk-body-s\" style=\"font-size: 16px;margin-bottom: 15px;\">The ZIP file contains XML files. Open in your preferred file viewer.</p>\nYou can use the HMRC Developer Sandbox to test the Customs Declarations API. The Sandbox is an enhanced testing service that functions as a simulator of HMRC’s production environment.\nTo use the Customs Declaration API you will need to create your own test user. To create your own test user:\n- Use the [Create Test User API](/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion)\n- Ensure under ‘Body’ “customs-services” is requested. To use an EORI from the Test Data Library, provide it as part of the request. \n- The first time you call this API the username and password log in box should appear (select do not have credentials, follow the steps & enter the username/password provided). \n- If successful this will prompt the grant authority to your application and select approve. If correct, you should see a 200 response showing some test data including a username, password and EORI.\n- After completing the above, if you call the Customs Declaration API, the same process should occur whereby it will ask for a username and password (Please enter the Username and Password that is in the test data generated from the step above when calling the create test user API)\nPlease Note: 443 is the only allowed port, which means port 443 will need to be used in the callback URL."
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://api.service.hmrc.gov.uk/
+  variables: {}
+paths:
+  /customs/declarations/:
+    post:
+      tags:
+      - customs
+      summary: Submit a Customs Declaration
+      description: Allows submission of a Customs Declaration.
+      operationId: SubmitaCustomsDeclaration
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Submitter-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            schema:
+              type: object
+              xml:
+                name: body
+                attribute: false
+                wrapped: false
+        required: true
+      responses:
+        '202':
+          description: ''
+          headers: {}
+          content: {}
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+  /customs/declarations/cancellation-requests:
+    post:
+      tags:
+      - customs
+      summary: Submit a cancellation request
+      description: Allows submission of a cancellation request.
+      operationId: Submitacancellationrequest
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Submitter-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            schema:
+              type: object
+              xml:
+                name: body
+                attribute: false
+                wrapped: false
+        required: true
+      responses:
+        '202':
+          description: ''
+          headers: {}
+          content: {}
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsCancellationRequestsresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsCancellationRequestsresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsCancellationRequestsresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsCancellationRequestsresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+  /customs/declarations/file-upload:
+    post:
+      tags:
+      - customs
+      summary: Submit an upload initiate request
+      description: "Obtain a signed URL to upload files to.\n\nThe SuccessRedirect and ErrorRedirect fields are optional.\n\nIf you provide them when you POST your file, then the response will be an automatic redirect. \n\nIf you do not require these redirects for your application, then do not provide these redirect fields.\n\n### File upload workflow\nOnce you receive a successful response from this endpoint, use the information in the response to POST your file to the URL provided.\n\nYou must use multipart encoding (multipart/form-data) NOT application/x-www-form-urlencoded.\n\nThe 'file' field must be the last field in the submitted form.\n"
+      operationId: Submitanuploadinitiaterequest
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Eori-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Eori-Identifier.
+
+
+          Must be numbers and letters with a maximum length of 17 characters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CustomsDeclarationsFileUploadrequest'
+              - xml:
+                  name: CustomsDeclarationsFileUploadrequest
+                  attribute: false
+                  wrapped: false
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse'
+                - description: Successful response payload
+                  xml:
+                    name: CustomsDeclarationsFileUploadresponse
+                    attribute: false
+                    wrapped: false
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsFileUploadresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsFileUploadresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+  /customs/declarations/amend:
+    post:
+      tags:
+      - customs
+      summary: Submit a Customs Amend Declaration
+      description: Allows submission of a Customs Amend Declaration.
+      operationId: SubmitaCustomsAmendDeclaration
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Submitter-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            schema:
+              type: object
+              xml:
+                name: body
+                attribute: false
+                wrapped: false
+        required: true
+      responses:
+        '202':
+          description: ''
+          headers: {}
+          content: {}
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsAmendresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsAmendresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsAmendresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsAmendresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+  /customs/declarations/arrival-notification:
+    post:
+      tags:
+      - customs
+      summary: Submit an Arrival Notification Declaration
+      description: Allows submission of a Customs Arrival Notification Declaration.
+      operationId: SubmitanArrivalNotificationDeclaration
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Submitter-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            schema:
+              type: object
+              xml:
+                name: body
+                attribute: false
+                wrapped: false
+        required: true
+      responses:
+        '202':
+          description: ''
+          headers: {}
+          content: {}
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsArrivalNotificationresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsArrivalNotificationresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsArrivalNotificationresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsArrivalNotificationresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+components:
+  schemas:
+    errorResponse:
+      title: errorResponse
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+    CustomsDeclarationsAmendresponse400:
+      title: CustomsDeclarationsAmendresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsArrivalNotificationresponse400:
+      title: CustomsDeclarationsArrivalNotificationresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsCancellationRequestsresponse400:
+      title: CustomsDeclarationsCancellationRequestsresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsFileUploadrequest:
+      title: CustomsDeclarationsFileUploadrequest
+      required:
+      - FileUploadRequest
+      type: object
+      properties:
+        FileUploadRequest:
+          allOf:
+          - $ref: '#/components/schemas/FileUploadRequestType'
+          - xml:
+              name: FileUploadRequest
+              namespace: hmrc:fileupload
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsFileUploadresponse:
+      title: CustomsDeclarationsFileUploadresponse
+      required:
+      - FileUploadResponse
+      type: object
+      properties:
+        FileUploadResponse:
+          allOf:
+          - $ref: '#/components/schemas/FileUploadResponse'
+          - xml:
+              name: FileUploadResponse
+              namespace: hmrc:fileupload
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsFileUploadresponse400:
+      title: CustomsDeclarationsFileUploadresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsresponse400:
+      title: CustomsDeclarationsresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    errorResponseType:
+      title: errorResponseType
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          xml:
+            name: code
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+        message:
+          type: string
+          xml:
+            name: message
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+        errors:
+          allOf:
+          - $ref: '#/components/schemas/errorsType'
+          - xml:
+              name: errors
+              namespace: http://example.com/example.xsd
+              prefix: tns
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: errorResponseType
+        namespace: http://example.com/example.xsd
+        prefix: tns
+        attribute: false
+        wrapped: false
+    errorsType:
+      title: errorsType
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/errorType'
+          description: ''
+          xml:
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: errorsType
+        namespace: http://example.com/example.xsd
+        prefix: tns
+        attribute: false
+        wrapped: false
+    errorType:
+      title: errorType
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          xml:
+            name: code
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+        message:
+          type: string
+          xml:
+            name: message
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: errorType
+        namespace: http://example.com/example.xsd
+        prefix: tns
+        attribute: false
+        wrapped: false
+    Fields:
+      title: Fields
+      type: object
+      properties:
+        Content-Type:
+          type: string
+          xml:
+            name: Content-Type
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-callback-url:
+          type: string
+          xml:
+            name: x-amz-meta-callback-url
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-date:
+          type: string
+          xml:
+            name: x-amz-date
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-credential:
+          type: string
+          xml:
+            name: x-amz-credential
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-upscan-initiate-response:
+          type: string
+          xml:
+            name: x-amz-meta-upscan-initiate-response
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-upscan-initiate-received:
+          type: string
+          xml:
+            name: x-amz-meta-upscan-initiate-received
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-request-id:
+          type: string
+          xml:
+            name: x-amz-meta-request-id
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-original-filename:
+          type: string
+          xml:
+            name: x-amz-meta-original-filename
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-algorithm:
+          type: string
+          xml:
+            name: x-amz-algorithm
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        key:
+          type: string
+          xml:
+            name: key
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        acl:
+          type: string
+          xml:
+            name: acl
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-signature:
+          type: string
+          xml:
+            name: x-amz-signature
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-session-id:
+          type: string
+          xml:
+            name: x-amz-meta-session-id
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-consuming-service:
+          type: string
+          xml:
+            name: x-amz-meta-consuming-service
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        policy:
+          type: string
+          xml:
+            name: policy
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        success_action_redirect:
+          type: string
+          xml:
+            name: success_action_redirect
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        error_action_redirect:
+          type: string
+          xml:
+            name: error_action_redirect
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: Fields
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    File:
+      title: File
+      required:
+      - Reference
+      - UploadRequest
+      type: object
+      properties:
+        Reference:
+          type: string
+          xml:
+            name: Reference
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        UploadRequest:
+          allOf:
+          - $ref: '#/components/schemas/UploadRequest'
+          - xml:
+              name: UploadRequest
+              namespace: hmrc:fileupload
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: File
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    Files:
+      title: Files
+      required:
+      - File
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+          description: ''
+          xml:
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: Files
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    FilesType:
+      title: FilesType
+      required:
+      - File
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileType'
+          description: ''
+          xml:
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: FilesType
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    FileType:
+      title: FileType
+      required:
+      - FileSequenceNo
+      type: object
+      properties:
+        FileSequenceNo:
+          minimum: 0
+          exclusiveMinimum: true
+          type: integer
+          format: int32
+          xml:
+            name: FileSequenceNo
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        DocumentType:
+          type: string
+          xml:
+            name: DocumentType
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        SuccessRedirect:
+          type: string
+          xml:
+            name: SuccessRedirect
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        ErrorRedirect:
+          type: string
+          xml:
+            name: ErrorRedirect
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: FileType
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    FileUploadRequestType:
+      title: FileUploadRequestType
+      required:
+      - DeclarationID
+      - FileGroupSize
+      - Files
+      type: object
+      properties:
+        DeclarationID:
+          maxLength: 22
+          minLength: 1
+          type: string
+          xml:
+            name: DeclarationID
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        FileGroupSize:
+          minimum: 0
+          exclusiveMinimum: true
+          type: integer
+          format: int32
+          xml:
+            name: FileGroupSize
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        Files:
+          allOf:
+          - $ref: '#/components/schemas/FilesType'
+          - xml:
+              name: Files
+              namespace: hmrc:fileupload
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: FileUploadRequestType
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    FileUploadResponse:
+      title: FileUploadResponse
+      required:
+      - Files
+      type: object
+      properties:
+        Files:
+          allOf:
+          - $ref: '#/components/schemas/Files'
+          - xml:
+              name: Files
+              namespace: hmrc:fileupload
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: FileUploadResponse
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    UploadRequest:
+      title: UploadRequest
+      required:
+      - Href
+      - Fields
+      type: object
+      properties:
+        Href:
+          type: string
+          xml:
+            name: Href
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        Fields:
+          allOf:
+          - $ref: '#/components/schemas/Fields'
+          - xml:
+              name: Fields
+              namespace: hmrc:fileupload
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: UploadRequest
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+tags:
+- name: customs
+  description: ''

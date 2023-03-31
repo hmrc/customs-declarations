@@ -126,6 +126,9 @@ paths:
           headers: {}
           content:
             application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/BadRequestExample'
               schema:
                 allOf:
                 - $ref: '#/components/schemas/CustomsDeclarationsresponse400'
@@ -544,6 +547,21 @@ paths:
                     wrapped: false
       deprecated: false
 components:
+  examples:
+    BadRequestExample:
+      summary: BadRequest
+      value : |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <errorResponse>
+            <code>BAD_REQUEST</code>
+            <message>Payload is not valid according to schema</message>
+            <errors>
+                <error>
+                    <code>xml_validation_error</code>
+                    <message>Error at line 13, column 13: no declaration found for element 'unknown'</message>
+              </error>
+            </errors>
+        </errorResponse>
   schemas:
     errorResponse:
       title: errorResponse

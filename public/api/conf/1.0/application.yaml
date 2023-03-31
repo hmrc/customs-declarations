@@ -37,13 +37,16 @@ info:
   contact: {}
   version: '1.0'
 servers:
-- url: https://api.service.hmrc.gov.uk/
-  variables: {}
+  - url: https://test-api.service.hmrc.gov.uk/
+    description: Sandbox
+  - url: https://api.service.hmrc.gov.uk/
+    description: Production
+    variables: {}
 paths:
   /customs/declarations/:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit a Customs Declaration
       description: Allows submission of a Customs Declaration.
       operationId: SubmitaCustomsDeclaration
@@ -131,7 +134,7 @@ paths:
   /customs/declarations/cancellation-requests:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit a cancellation request
       description: Allows submission of a cancellation request.
       operationId: Submitacancellationrequest
@@ -219,7 +222,7 @@ paths:
   /customs/declarations/file-upload:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit an upload initiate request
       description: "Obtain a signed URL to upload files to.\n\nThe SuccessRedirect and ErrorRedirect fields are optional.\n\nIf you provide them when you POST your file, then the response will be an automatic redirect. \n\nIf you do not require these redirects for your application, then do not provide these redirect fields.\n\n### File upload workflow\nOnce you receive a successful response from this endpoint, use the information in the response to POST your file to the URL provided.\n\nYou must use multipart encoding (multipart/form-data) NOT application/x-www-form-urlencoded.\n\nThe 'file' field must be the last field in the submitted form.\n"
       operationId: Submitanuploadinitiaterequest
@@ -317,7 +320,7 @@ paths:
   /customs/declarations/amend:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit a Customs Amend Declaration
       description: Allows submission of a Customs Amend Declaration.
       operationId: SubmitaCustomsAmendDeclaration
@@ -405,7 +408,7 @@ paths:
   /customs/declarations/arrival-notification:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit an Arrival Notification Declaration
       description: Allows submission of a Customs Arrival Notification Declaration.
       operationId: SubmitanArrivalNotificationDeclaration
@@ -1056,5 +1059,5 @@ components:
         attribute: false
         wrapped: false
 tags:
-- name: customs
+- name: Endpoints
   description: ''

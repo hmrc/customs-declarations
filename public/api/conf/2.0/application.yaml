@@ -39,13 +39,16 @@ info:
   contact: {}
   version: '2.0'
 servers:
-- url: https://api.service.hmrc.gov.uk/
-  variables: {}
+  - url: https://test-api.service.hmrc.gov.uk/
+    description: Sandbox
+  - url: https://api.service.hmrc.gov.uk/
+    description: Production
+    variables: {}
 paths:
   /customs/declarations/:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit a Customs Declaration
       description: Allows submission of a Customs Declaration.
       operationId: SubmitaCustomsDeclaration
@@ -133,7 +136,7 @@ paths:
   /customs/declarations/cancellation-requests:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit a cancellation request
       description: Allows submission of a cancellation request.
       operationId: Submitacancellationrequest
@@ -221,7 +224,7 @@ paths:
   /customs/declarations/file-upload:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit an upload initiate request
       description: >
         Obtain a signed URL to upload files to.
@@ -339,7 +342,7 @@ paths:
   /customs/declarations/amend:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit a Customs Amend Declaration
       description: Allows submission of a Customs Amend Declaration.
       operationId: SubmitaCustomsAmendDeclaration
@@ -427,7 +430,7 @@ paths:
   /customs/declarations/arrival-notification:
     post:
       tags:
-      - customs
+      - Endpoints
       summary: Submit an Arrival Notification Declaration
       description: Allows submission of a Customs Arrival Notification Declaration.
       operationId: SubmitanArrivalNotificationDeclaration
@@ -1078,5 +1081,5 @@ components:
         attribute: false
         wrapped: false
 tags:
-- name: customs
+- name: Endpoints
   description: ''

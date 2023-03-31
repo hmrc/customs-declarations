@@ -142,6 +142,9 @@ paths:
           headers: {}
           content:
             application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
               schema:
                 allOf:
                 - $ref: '#/components/schemas/CustomsDeclarationsresponse400'
@@ -561,6 +564,14 @@ components:
                     <message>Error at line 13, column 13: no declaration found for element 'unknown'</message>
               </error>
             </errors>
+        </errorResponse>
+    InternalServerErrorExample:
+      summary: InternalServerError
+      value: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <errorResponse>
+            <code>INTERNAL_SERVER_ERROR</code>
+            <message>Internal server error</message>
         </errorResponse>
   schemas:
     errorResponse:

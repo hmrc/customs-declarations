@@ -342,6 +342,9 @@ paths:
           headers: {}
           content:
             application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/CustomsDeclarationsFileUploadResponseExample'
               schema:
                 allOf:
                 - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse'
@@ -605,6 +608,59 @@ components:
             <code>INTERNAL_SERVER_ERROR</code>
             <message>Internal server error</message>
         </errorResponse>
+    CustomsDeclarationsFileUploadResponseExample:
+      summary: CustomsDeclarationsFileUploadResponse
+      value: |
+        <FileUploadResponse xmlns="hmrc:fileupload">
+          <Files>
+            <File>
+              <Reference>63acb547-85d4-4ce7-b702-05115ed99521</Reference>
+              <UploadRequest>
+                <Href>https://fus-inbound-8264ee52f589f4c0191aa94f87aa1111.s3.amazonaws.com</Href>
+                <Fields>
+                  <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+                  <x-amz-date>20200119T122531Z</x-amz-date>
+                  <x-amz-credential>AKIAIFG3PRBHSAVV7BWA/20200819/eu-west-2/s3/aws4_request</x-amz-credential>
+                  <x-amz-meta-upscan-initiate-response>2020-01-19T12:25:31.896Z</x-amz-meta-upscan-initiate-response>
+                  <x-amz-meta-upscan-initiate-received>2020-01-19T12:25:31.895Z</x-amz-meta-upscan-initiate-received>
+                  <x-amz-meta-request-id>n/a</x-amz-meta-request-id>
+                  <x-amz-meta-original-filename>${filename}</x-amz-meta-original-filename>
+                  <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+                  <key>63acb547-85d4-4ce7-b702-05115ed99521</key>
+                  <acl>private</acl>
+                  <x-amz-signature>4555a985f7651112ed7de834b534ff495f7ea001df3f741a344bfa55aef3ffda</x-amz-signature>
+                  <x-amz-meta-session-id>n/a</x-amz-meta-session-id>
+                  <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+                  <policy>eyJleHBpcmF0aW9uIjoiMjAyMC0wOC=</policy>
+                  <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                  <error_action_redirect>https://error-redirect.com</error_action_redirect>
+                </Fields>
+              </UploadRequest>
+            </File>
+            <File>
+              <Reference>398d2c4d-f28e-471b-9035-1b14c7227ac9</Reference>
+              <UploadRequest>
+                <Href>https://fus-inbound-8264ee52f589f4c0191aa94f87aa2222.s3.amazonaws.com</Href>
+                <Fields>
+                  <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+                  <x-amz-date>20200119T122531Z</x-amz-date>
+                  <x-amz-credential>AKIAIFG3PRBHSAVVXXXX/20200819/eu-west-2/s3/aws4_request</x-amz-credential>
+                  <x-amz-meta-upscan-initiate-response>2020-01-19T12:25:31.919Z</x-amz-meta-upscan-initiate-response>
+                  <x-amz-meta-upscan-initiate-received>2020-01-19T12:25:31.918Z</x-amz-meta-upscan-initiate-received>
+                  <x-amz-meta-request-id>n/a</x-amz-meta-request-id>
+                  <x-amz-meta-original-filename>${filename}</x-amz-meta-original-filename>
+                  <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+                  <key>398d2c4d-f28e-471b-9035-1b14c7227ac9</key>
+                  <acl>private</acl>
+                  <x-amz-signature>becb1fa1bc49edd06f029c42f5923cf58a8495d6cd376a3b7a518876ede40879</x-amz-signature>
+                  <x-amz-meta-session-id>n/a</x-amz-meta-session-id>
+                  <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+                  <policy>eyJleHBpcmF0aW9uIjoiMjAyMC0wOC0yNlQ=</policy>
+                </Fields>
+              </UploadRequest>
+            </File>
+          </Files>
+        </FileUploadResponse>
   schemas:
     errorResponse:
       title: errorResponse

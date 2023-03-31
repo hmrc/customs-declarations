@@ -248,7 +248,25 @@ paths:
       tags:
       - Endpoints
       summary: Submit an upload initiate request
-      description: "Obtain a signed URL to upload files to.\n\nThe SuccessRedirect and ErrorRedirect fields are optional.\n\nIf you provide them when you POST your file, then the response will be an automatic redirect. \n\nIf you do not require these redirects for your application, then do not provide these redirect fields.\n\n### File upload workflow\nOnce you receive a successful response from this endpoint, use the information in the response to POST your file to the URL provided.\n\nYou must use multipart encoding (multipart/form-data) NOT application/x-www-form-urlencoded.\n\nThe 'file' field must be the last field in the submitted form.\n"
+      description: |
+        Obtain a signed URL to upload files to.
+  
+        The SuccessRedirect and ErrorRedirect fields are optional.
+        
+        If you provide them when you POST your file, then the response will be an automatic redirect. 
+        
+        If you do not require these redirects for your application, then do not provide these redirect fields.
+        
+        ### File upload workflow
+        Once you receive a successful response from this endpoint, use the information in the response to POST your file to the URL provided.
+        
+        You must use multipart encoding (multipart/form-data) NOT application/x-www-form-urlencoded.
+        
+        The 'file' field must be the last field in the submitted form.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations-information` scope.
       operationId: Submitanuploadinitiaterequest
       parameters:
       - name: Content-Type

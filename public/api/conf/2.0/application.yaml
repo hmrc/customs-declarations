@@ -271,6 +271,10 @@ paths:
 
 
         The 'file' field must be the last field in the submitted form.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations-information` scope.
       operationId: Submitanuploadinitiaterequest
       parameters:
       - name: Content-Type

@@ -64,7 +64,12 @@ paths:
       tags:
       - Endpoints
       summary: Submit a Customs Declaration
-      description: Allows submission of a Customs Declaration.
+      description: |
+        Allows submission of a Customs Declaration.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations-information` scope.
       operationId: SubmitaCustomsDeclaration
       parameters:
       - name: Content-Type
@@ -152,7 +157,12 @@ paths:
       tags:
       - Endpoints
       summary: Submit a cancellation request
-      description: Allows submission of a cancellation request.
+      description: |
+        Allows submission of a cancellation request.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations-information` scope.
       operationId: Submitacancellationrequest
       parameters:
       - name: Content-Type
@@ -358,7 +368,12 @@ paths:
       tags:
       - Endpoints
       summary: Submit a Customs Amend Declaration
-      description: Allows submission of a Customs Amend Declaration.
+      description: |
+        Allows submission of a Customs Amend Declaration.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations-information` scope.
       operationId: SubmitaCustomsAmendDeclaration
       parameters:
       - name: Content-Type
@@ -446,7 +461,12 @@ paths:
       tags:
       - Endpoints
       summary: Submit an Arrival Notification Declaration
-      description: Allows submission of a Customs Arrival Notification Declaration.
+      description: |
+        Allows submission of a Customs Arrival Notification Declaration.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations-information` scope.
       operationId: SubmitanArrivalNotificationDeclaration
       parameters:
       - name: Content-Type
@@ -544,6 +564,10 @@ paths:
 
 
         Get the status of a declaration with the given MRN. This endpoint is only available to CSP users.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations-information` scope.
       operationId: Getthestatusofadeclaration(deprecated)
       parameters:
       - name: mrn

@@ -1,7 +1,41 @@
 openapi: 3.0.0
 info:
   title: Customs Declarations
-  description: "This API allows the submission of any UCC declarations for asynchronous processing by the customs declarations service, to enable a user to have their declarations accepted by means of a single API.\n\nThe API takes any UCC declaration payload. It also allows for the submission of a cancellation request (pre-clearance) and provides a method of securely uploading additional documentation to support a declaration submission.\n\nThe file-upload endpoint is used to initiate a file upload as part of the declaration submission process. An example document you may be requested to upload could be a paper copy of a licence. This endpoint is used to initiate a file upload where a signed URL is returned by the endpoint to be used in the file upload workflow.\n\nUse the status-request endpoint to get the status of a declaration. This endpoint is only available to CSP users. A declaration can be identified by a movement reference number (MRN).\nWhen an API changes in a way that is backwards-incompatible, we increase the version number of the API. \nSee our [reference guide](/api-documentation/docs/reference-guide#versioning) for more on\nversioning.\nWe use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:\n* 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action\n* 400 to 499 if it failed because of a client error by your application\n* 500 to 599 if it failed because of an error on our server\n\nErrors specific to each API are shown in the Endpoints section, under Response. \nSee our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.\nSchema definitions for all the API endpoints request & response payloads can be found in the following zip archive.\n\n<p class=\"govuk-body-l\" style=\"font-size: 24px;\">\n  <a href=\"/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip\" class=\"govuk-link\">Schemas and example messages</a>\n</p>\n\n<p class=\"govuk-body-s\" style=\"font-size: 16px;margin-bottom: 15px;\">ZIP, 2.2MB last updated 16/03/2023</p>\n\n<p class=\"govuk-body-s\" style=\"font-size: 16px;margin-bottom: 15px;\">The ZIP file contains XML files. Open in your preferred file viewer.</p>\nYou can use the HMRC Developer Sandbox to test the Customs Declarations API. The Sandbox is an enhanced testing service that functions as a simulator of HMRC’s production environment.\nTo use the Customs Declaration API you will need to create your own test user. To create your own test user:\n- Use the [Create Test User API](/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion)\n- Ensure under ‘Body’ “customs-services” is requested. To use an EORI from the Test Data Library, provide it as part of the request.\n- The first time you call this API the username and password log in box should appear (select do not have credentials, follow the steps & enter the username/password provided). \n- If successful this will prompt the grant authority to your application and select approve. If correct, you should see a 200 response showing some test data including a username, password and EORI.\n- After completing the above, if you call the Customs Declaration API, the same process should occur whereby it will ask for a username and password (Please enter the Username and Password that is in the test data generated from the step above when calling the create test user API)\nPlease Note: 443 is the only allowed port, which means port 443 will need to be used in the callback URL."
+  description: |
+    This API allows the submission of any UCC declarations for asynchronous processing by the customs declarations service, to enable a user to have their declarations accepted by means of a single API.
+  
+    The API takes any UCC declaration payload. It also allows for the submission of a cancellation request (pre-clearance) and provides a method of securely uploading additional documentation to support a declaration submission.
+    
+    The file-upload endpoint is used to initiate a file upload as part of the declaration submission process. An example document you may be requested to upload could be a paper copy of a licence. This endpoint is used to initiate a file upload where a signed URL is returned by the endpoint to be used in the file upload workflow.
+    
+    Use the status-request endpoint to get the status of a declaration. This endpoint is only available to CSP users. A declaration can be identified by a movement reference number (MRN).
+    When an API changes in a way that is backwards-incompatible, we increase the version number of the API. 
+    See our [reference guide](/api-documentation/docs/reference-guide#versioning) for more on
+    versioning.
+    We use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:
+    * 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action
+    * 400 to 499 if it failed because of a client error by your application
+    * 500 to 599 if it failed because of an error on our server
+    
+    Errors specific to each API are shown in the Endpoints section, under Response. 
+    See our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
+    Schema definitions for all the API endpoints request & response payloads can be found in the following zip archive.
+    
+    <p class=\"govuk-body-l\" style=\"font-size: 24px;\">
+      <a href=\"/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip\" class=\"govuk-link\">Schemas and example messages</a>
+    </p>
+    
+    <p class=\"govuk-body-s\" style=\"font-size: 16px;margin-bottom: 15px;\">ZIP, 2.2MB last updated 16/03/2023</p>
+    
+    <p class=\"govuk-body-s\" style=\"font-size: 16px;margin-bottom: 15px;\">The ZIP file contains XML files. Open in your preferred file viewer.</p>
+    You can use the HMRC Developer Sandbox to test the Customs Declarations API. The Sandbox is an enhanced testing service that functions as a simulator of HMRC’s production environment.
+    To use the Customs Declaration API you will need to create your own test user. To create your own test user:
+    - Use the [Create Test User API](/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion)
+    - Ensure under ‘Body’ “customs-services” is requested. To use an EORI from the Test Data Library, provide it as part of the request.
+    - The first time you call this API the username and password log in box should appear (select do not have credentials, follow the steps & enter the username/password provided). 
+    - If successful this will prompt the grant authority to your application and select approve. If correct, you should see a 200 response showing some test data including a username, password and EORI.
+    - After completing the above, if you call the Customs Declaration API, the same process should occur whereby it will ask for a username and password (Please enter the Username and Password that is in the test data generated from the step above when calling the create test user API)
+    Please Note: 443 is the only allowed port, which means port 443 will need to be used in the callback URL.
   contact: {}
   version: '3.0'
 servers:
@@ -835,7 +869,10 @@ components:
             wrapped: false
         DutyRegimeCode:
           type: string
-          description: "EDIFACT codes (9213) or user\n                                      codes\n                                    \r\n9213"
+          description: "EDIFACT codes (9213) or user
+                                      codes
+                                    \r
+9213"
           xml:
             name: DutyRegimeCode
             namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
@@ -868,7 +905,10 @@ components:
             wrapped: false
         TypeCode:
           type: string
-          description: "EDIFACT codes (5153) or user\n                                      codes\n                                    \r\n5153"
+          description: "EDIFACT codes (5153) or user
+                                      codes
+                                    \r
+5153"
           xml:
             name: TypeCode
             namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1

@@ -539,12 +539,16 @@ paths:
         description: ''
         content:
           application/xml:
-            schema:
-              type: object
-              xml:
-                name: body
-                attribute: false
-                wrapped: false
+#            TODO: Correct request body examples - and for all others
+            examples:
+              objectExample:
+                $ref: '#/components/examples/InternalServerErrorExample'
+#            schema:
+#              type: object
+#              xml:
+#                name: body
+#                attribute: false
+#                wrapped: false
         required: true
       responses:
         '202':

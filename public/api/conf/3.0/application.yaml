@@ -634,6 +634,7 @@ paths:
           headers: {}
           content:
             application/xml:
+#              TODO: Add example
               schema:
                 allOf:
                 - $ref: '#/components/schemas/CustomsDeclarationsStatusRequestMrnresponse'
@@ -885,6 +886,7 @@ components:
               name: errorResponse
               attribute: false
               wrapped: false
+#    TODO: Implement correct response schema
     CustomsDeclarationsStatusRequestMrnresponse:
       title: CustomsDeclarationsStatusRequestMrnresponse
       required:

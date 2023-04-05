@@ -171,8 +171,8 @@
 					The single digit codes listed in column A of the table provided for under Article 10(2) of Commission Regulation (EC) No 113/2010 shall be used.
 					Member States may also provide for a second digit from the list in column B of that table to be collected.
 					In this case: 
-					- First digit (1) represents 'Transactions involving actual or intended transfer of ownership 
-					from residents to non-residents against financial or other compensation'. 
+					- First digit (1) represents 'Transactions involving actual or intended transfer of ownership
+					from residents to non-residents against financial or other compensation'.
 					- Second digit (1) represents 'Outright purchase/sale'. -->
 				<TransactionNatureCode>11</TransactionNatureCode>
 				<!--DE 2/2: Additional Information. 

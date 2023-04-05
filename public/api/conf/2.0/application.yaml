@@ -111,12 +111,9 @@ paths:
         description: ''
         content:
           application/xml:
-            schema:
-              type: object
-              xml:
-                name: body
-                attribute: false
-                wrapped: false
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsRequestBodyExample'
         required: true
       responses:
         '202':
@@ -210,12 +207,9 @@ paths:
         description: ''
         content:
           application/xml:
-            schema:
-              type: object
-              xml:
-                name: body
-                attribute: false
-                wrapped: false
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsCancellationRequestBodyExample'
         required: true
       responses:
         '202':
@@ -328,6 +322,9 @@ paths:
         description: ''
         content:
           application/xml:
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsFileUploadRequestBodyExample'
             schema:
               allOf:
               - $ref: '#/components/schemas/CustomsDeclarationsFileUploadrequest'
@@ -440,12 +437,9 @@ paths:
         description: ''
         content:
           application/xml:
-            schema:
-              type: object
-              xml:
-                name: body
-                attribute: false
-                wrapped: false
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsAmendRequestBodyExample'
         required: true
       responses:
         '202':
@@ -539,12 +533,9 @@ paths:
         description: ''
         content:
           application/xml:
-            schema:
-              type: object
-              xml:
-                name: body
-                attribute: false
-                wrapped: false
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsArrivalNotificationRequestBodyExample'
         required: true
       responses:
         '202':
@@ -608,6 +599,460 @@ components:
             <code>INTERNAL_SERVER_ERROR</code>
             <message>Internal server error</message>
         </errorResponse>
+    CustomsDeclarationsRequestBodyExample:
+      summary: CustomsDeclarationsRequestBody
+      value: |
+        <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+                   	xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+                   	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+                   	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+                   	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+        	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+        	<md:WCOTypeName>DEC</md:WCOTypeName>
+        	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+        	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+        	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+        	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+                   		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+                   		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+                   		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+        		<!--Type D pre-lodged declaration with procedure code 1040, additional procedure code 000. 
+        			No control,Inventory linked Type D Maritime declaration with one MUCR and one DUCR, arrived, shut and departed at MUCR level.
+        			Goods: Straw envelopes for bottles. 
+        			Data set category: B1. 
+        			National Additional Code: VATZ to claim VAT zero-rating.
+        			Scenario steps:
+        			Loader submits EAL message to CDS for the declared MUCR.
+        			Consolidator closes the MUCR by sending a CST message to CDS containing the MUCR
+        			to be closed.
+        			Loader sends EDL message for MUCR to CDS to notify departure of the consolidation. 
+        			Expected notifications: DMSACC, DMSCLE, DMSEOG, DMSRCV, DMSRCV2, DMSRES. 
+        			EMR Message also expected response from ILE, as MUCR and DUCR consolidated in the declaration. 
+        		-->
+        		<!--Function Code of 9 to represent an original declaration. -->
+        		<FunctionCode>9</FunctionCode>
+        		<!--DE 2/5: LRN
+        			The trader assigned reference to the declaration. -->
+        		<FunctionalReferenceID>TT_EX01A_HH020301</FunctionalReferenceID>
+        		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
+        		<IssueDateTime>
+        			<p1:DateTimeString formatCode="304">20210302104604+01</p1:DateTimeString>
+        		</IssueDateTime>
+        		<!--DE 1/1: Declaration Type. 
+        			EX to represent an Export declaration. -->
+        		<!--DE 1/2: Additional Declaration Type. 
+        			D to represent a Pre lodged declaration. -->
+        		<TypeCode>EXD</TypeCode>
+        		<!--DE 1/9: Total Number of Items. -->
+        		<GoodsItemQuantity>1</GoodsItemQuantity>
+        		<!--DE 6/18: Total Packages. -->
+        		<TotalPackageQuantity>10</TotalPackageQuantity>
+        		<!--DE 7/14: Identity of active means of transport crossing the border. -->
+        		<BorderTransportMeans>
+        			<ID>CSCLGLOBE</ID>
+        			<IdentificationTypeCode>11</IdentificationTypeCode>
+        			<!--DE 7/15: Nationality of active means of transport crossing the border.
+        				In this the case country code for GB. -->
+        			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
+        			<!--DE 7/4: Mode of Transport at the Border.
+        				ModeCode of 1 to represent Maritime/Sea transport. -->
+        			<ModeCode>1</ModeCode>
+        		</BorderTransportMeans>
+        		<Consignment>
+        			<!--DE 3/32: Carrier Identification number. 
+        				This is Security and Safety Data. -->
+        			<Carrier>
+        				<ID>GB025115100010</ID>
+        			</Carrier>
+        			<!--DE 4/2: Transport charges method of payment. 
+        				D indicating other e.g. direct debit to cash account. 
+        				This is Security and Safety Data. -->
+        			<Freight>
+        				<PaymentMethodCode>D</PaymentMethodCode>
+        			</Freight>
+        			<!--DE 5/18: Country of Routing Codes. 
+        				GBCAUS Routing from GB to US via Canada. 
+        				This is Security and Safety Data. -->
+        			<Itinerary>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<RoutingCountryCode>GB</RoutingCountryCode>
+        			</Itinerary>
+        			<Itinerary>
+        				<SequenceNumeric>2</SequenceNumeric>
+        				<RoutingCountryCode>CA</RoutingCountryCode>
+        			</Itinerary>
+        			<Itinerary>
+        				<SequenceNumeric>3</SequenceNumeric>
+        				<RoutingCountryCode>US</RoutingCountryCode>
+        			</Itinerary>
+        		</Consignment>
+        		<!--DE 3/18: Declarant Identification Number. 
+        			EORI number of the Declarant. -->
+        		<Declarant>
+        			<ID>GB427168118378</ID>
+        		</Declarant>
+        		<!--DE 5/12 Customs Office of Exit. 
+        			Indicating Dover. -->
+        		<ExitOffice>
+        			<ID>GB000040</ID>
+        		</ExitOffice>
+        		<!--DE 3/2: Exporter Identification Number. 
+        			EORI number of the Exporter, the same as 3/18. -->
+        		<Exporter>
+        			<ID>GB427168118378</ID>
+        		</Exporter>
+        		<GoodsShipment>
+        			<!--DE 3/9: Consignee Name and Address.
+        				(Mandatory when DE 3/10 is not completed). 
+        				This is Security and Safety Data. -->
+        			<Consignee>
+        				<Name>Packings Import Incorporated</Name>
+        				<Address>
+        					<CityName>New York</CityName>
+        					<CountryCode>US</CountryCode>
+        					<Line>1 Bags Avenue</Line>
+        					<PostcodeID>NY1 234</PostcodeID>
+        				</Address>
+        			</Consignee>
+        			<Consignment>
+        				<!--DE 7/2: Container. 
+        					1 to indicate that the goods are transported in containers. -->
+        				<ContainerCode>1</ContainerCode>
+        				<!--DE 7/7: Identity of the means of transport at departure. 
+        					(In this scenario, 11 indicating name of the seagoing vessel). -->
+        				<DepartureTransportMeans>
+        					<ID>CSCLGLOBE</ID>
+        					<IdentificationTypeCode>11</IdentificationTypeCode>
+        				</DepartureTransportMeans>
+        				<GoodsLocation>
+        					<!--DE 5/23: Location of Goods - Identification of location.
+        						ID to give a unique position of the location. 
+        						DVRDVRDVR Indicating Dover. -->
+        					<Name>DVRDOVDVR</Name>
+        					<!--DE 5/23: Location of Goods - Type of location.
+        						A in this scenario to represent that it is a designated location. -->
+        					<TypeCode>A</TypeCode>
+        					<Address>
+        						<!--DE 5/23: Location of Goods - Qualifier of the identification.
+        							Type of ID of the Location - U in this scenario for UN/LOCODE. -->
+        						<TypeCode>U</TypeCode>
+        						<!--DE 5/23: Location of Goods - Country.
+        							Country code of the country where the goods may be examined, GB in this scenario. -->
+        						<CountryCode>GB</CountryCode>
+        					</Address>
+        				</GoodsLocation>
+        				<TransportEquipment>
+        					<!--DE 7/10: Container Identification Number. -->
+        					<SequenceNumeric>1</SequenceNumeric>
+        					<ID>CONU1234567</ID>
+        					<!--DE 7/18: Seal number. 
+        						This is Security and Safety Data. -->
+        					<Seal>
+        						<SequenceNumeric>1</SequenceNumeric>
+        						<ID>333</ID>
+        					</Seal>
+        				</TransportEquipment>
+        			</Consignment>
+        			<Destination>
+        				<!--DE 5/8: Country of Destination Code.
+        					In this case US. -->
+        				<CountryCode>US</CountryCode>
+        			</Destination>
+        			<!--DE 5/14: Country of Dispatch/Export Code. 
+        				Country code for the country from which the goods were originally dispatched, in this case GB. -->
+        			<ExportCountry>
+        				<ID>GB</ID>
+        			</ExportCountry>
+        			<GovernmentAgencyGoodsItem>
+        				<!--DE 1/6: Goods Item Number. -->
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<!--DE 8/6: Statistical Value. 
+        					For the goods item in GBP (£ sterling), irrespective of the currency used in Invoice Currency. -->
+        				<StatisticalValueAmount currencyID="GBP">200</StatisticalValueAmount>
+        				<!--DE 8/5 Nature of Transaction. 
+        					Enter, a 2-digit code (second digit is optional).
+        					The single digit codes listed in column A of the table provided for under Article 10(2) of Commission Regulation (EC) No 113/2010 shall be used.
+        					Member States may also provide for a second digit from the list in column B of that table to be collected.
+        					In this case: 
+        					- First digit (1) represents 'Transactions involving actual or intended transfer of ownership 
+        					from residents to non-residents against financial or other compensation'. 
+        					- Second digit (1) represents 'Outright purchase/sale'. -->
+        				<TransactionNatureCode>11</TransactionNatureCode>
+        				<!--DE 2/2: Additional Information. 
+        					00400 Indicating Self representation i.e. the declarant and the exporter are the same party. -->
+        				<AdditionalInformation>
+        					<StatementCode>00400</StatementCode>
+        					<StatementDescription>EXPORTER</StatementDescription>
+        				</AdditionalInformation>
+        				<Commodity>
+        					<!--DE 6/8: Description of Goods. -->
+        					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+        					<Classification>
+        						<!--DE 6/14: Commodity Code - Combined Nomenclature Code. -->
+        						<ID>46021910</ID>
+        						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+        					</Classification>
+        					<Classification>
+        						<!--DE 6/17: National Additional Code.
+        							VATZ to represent VAT 0% duty rate.
+        							Note that when code VATZ is used the requirements for VAT zero-rating in the Export Declaration Completion Guide Appendix 20 and VAT Notice 703 will apply. -->
+        						<ID>VATZ</ID>
+        						<IdentificationTypeCode>GN</IdentificationTypeCode>
+        					</Classification>
+        					<GoodsMeasure>
+        						<!--DE 6/5: Gross Mass.
+        							Weight of the goods in kilograms including packaging. -->
+        						<GrossMassMeasure>10</GrossMassMeasure>
+        						<!--DE 6/1: Net Mass.
+        							Weight of the goods in kilograms without any packaging. -->
+        						<NetNetWeightMeasure>5</NetNetWeightMeasure>
+        					</GoodsMeasure>
+        				</Commodity>
+        				<GovernmentProcedure>
+        					<!--DE 1/10: Procedure. 
+        						Requested Procedure of 10 40 indicating permanent export of goods in free circulation and home use. -->
+        					<CurrentCode>10</CurrentCode>
+        					<PreviousCode>40</PreviousCode>
+        				</GovernmentProcedure>
+        				<GovernmentProcedure>
+        					<!--DE 1/11: Additional Procedure Code. 
+        						000 to indicate no additional procedure. -->
+        					<CurrentCode>000</CurrentCode>
+        				</GovernmentProcedure>
+        				<Packaging>
+        					<SequenceNumeric>1</SequenceNumeric>
+        					<!--DE 6/11: Shipping Marks. -->
+        					<MarksNumbersID>2379261ETT</MarksNumbersID>
+        					<!--DE 6/10: Number of Packages. 
+        						In this case 10. -->
+        					<QuantityQuantity>10</QuantityQuantity>
+        					<!--DE 6/9: Type of Packages.
+        						PK to represent standard packaging unit. -->
+        					<TypeCode>PK</TypeCode>
+        				</Packaging>
+        			</GovernmentAgencyGoodsItem>
+        			<!--DE 2/1: Simplified Declaration/ Previous Documents. 
+        				To show the DUCR assigned to the consignment.
+        				This is a mandatory field. -->
+        			<PreviousDocument>
+        				<CategoryCode>Z</CategoryCode>
+        				<ID>1GB427168118378-0203N1</ID>
+        				<TypeCode>DCR</TypeCode>
+        				<LineNumeric>1</LineNumeric>
+        			</PreviousDocument>
+        			<!--DE 2/1: Simplified Declaration/ Previous Documents. 
+        				To show the MUCR assigned to the consignment. -->
+        			<PreviousDocument>
+        				<CategoryCode>Z</CategoryCode>
+        				<ID>GB/123456789012-0203N1</ID>
+        				<TypeCode>MCR</TypeCode>
+        			</PreviousDocument>
+        		</GoodsShipment>
+        	</Declaration>
+        </md:MetaData>
+    CustomsDeclarationsCancellationRequestBodyExample:
+      summary: CustomsDeclarationsCancellationRequestBody
+      value: |
+        <md:MetaData
+              xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+              xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+              xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+              xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+            >
+            <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+            <md:WCOTypeName>DEC</md:WCOTypeName>
+            <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+            <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+            <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+                    <Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
+                      <!--This is an example of a cancellation message that has been applied to a declaration-->
+
+                       <!--Function Code of 13 to represent Request (Additional Message)-->
+        			   <FunctionCode>13</FunctionCode>
+        			   <!--The trader assigned reference to the additional message.
+                       	Note that this reference is independent of the declaration.-->
+                       <FunctionalReferenceID>TT_IM10b_v4.9_0909_01</FunctionalReferenceID>
+                       <!--Declaration ID of the corresponding Declaration to be cancelled-->
+        			   <ID>20GBDPQ8A31WX1XXR5</ID>
+        			   <!--Defines the type of additional message - in this scenario, INV
+                       	to indicate that this additional message is a cancellation-->
+                       <TypeCode>INV</TypeCode>
+                       <AdditionalInformation>
+        			   <!--Textual description of the reason for cancellation-->
+                    <StatementDescription>Declaration is no longer required</StatementDescription>
+        			<!--The type of Additional Information. 'AES' should always be used
+                         		 for Cancellations and Amendments to indicate a free text reason
+                         		 is being provided.-->
+                          <StatementTypeCode>AES</StatementTypeCode>
+                          <Pointer>
+                             <SequenceNumeric>1</SequenceNumeric>
+                             <DocumentSectionCode>42A</DocumentSectionCode>
+                          </Pointer>
+                          <Pointer>
+                             <SequenceNumeric>1</SequenceNumeric>
+                             <DocumentSectionCode>06A</DocumentSectionCode>
+                          </Pointer>
+                       </AdditionalInformation>
+                       <Amendment>
+        			   <!--Used to indicate the reason for the amendment - in this scenario,
+                       	a code of 1 to indicate that the Declaration is to be Cancelled. -->
+                          <ChangeReasonCode>1</ChangeReasonCode>
+                       </Amendment>
+                    </Declaration>
+                             </md:MetaData>
+    CustomsDeclarationsFileUploadRequestBodyExample:
+      summary: CustomsDeclarationsFileUploadRequestBody
+      value: |
+        <FileUploadRequest xmlns="hmrc:fileupload" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <DeclarationID>DEC123</DeclarationID>
+        <FileGroupSize>2</FileGroupSize>
+        <Files>
+          <File>
+            <FileSequenceNo>1</FileSequenceNo>
+            <DocumentType>Certificate of Origin</DocumentType>
+            <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
+            <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
+          </File>
+          <File>
+            <FileSequenceNo>2</FileSequenceNo>
+            <DocumentType>Licence</DocumentType>
+          </File>
+        </Files>
+        </FileUploadRequest>
+    CustomsDeclarationsAmendRequestBodyExample:
+      summary: CustomsDeclarationsAmendRequestBody
+      value: |
+        <md:MetaData
+            xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+            xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+            xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+            xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+        >
+        	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+        	<md:WCOTypeName>DEC</md:WCOTypeName>
+        	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+        	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+        	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+        	<Declaration
+              xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+              xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+              xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+              xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+              xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+        	>
+
+        		<!--Function Code of 13 to represent Request (Additional Message)-->
+        		<FunctionCode>13</FunctionCode>
+        		<!--The trader assigned reference to the additional message.
+        		Note that this reference is independent of the declaration.-->
+        		<FunctionalReferenceID>TT_IM02b_1803_002</FunctionalReferenceID>
+        		<!--Declaration ID of the corresponding Declaration to be amended-->
+        		<ID>20GB32VVZI0YMFGVR0</ID>
+        		<!--Defines the type of additional message - in this scenario, COR to indicate that this additional message is an amendment-->
+        		<TypeCode>COR</TypeCode>
+        		<AdditionalInformation>
+        			<!--Textual description of the reason for amendment-->
+        			<StatementDescription>Amending item price as a mistake was made on the declaration.</StatementDescription>
+        			<!--The type of Additional Information. 'AES' should always be used for Cancellations and Amendments to indicate a free text
+        			 reason is being provided.-->
+        			<StatementTypeCode>AES</StatementTypeCode>
+        			<!--The two pointer elements below point to the Declaration (42A) and the Amendment (06A) in the Declaration (which can be
+        			 seen below).
+          		This is so that the textual description can be linked to its corresponding amendment reason code.-->
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>42A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>06A</DocumentSectionCode>
+        			</Pointer>
+        		</AdditionalInformation>
+        		<!--Details of the amendment to be made to the Declaration-->
+        		<Amendment>
+        			<!--Used to indicate the reason for the amendment - in this scenario, a code of 21 to indicate that a value is being amended.-->
+        			<ChangeReasonCode>21</ChangeReasonCode>
+        			<!--Pointers describe the declaration tree down to the part of the Declaration which needs to be amended as follows:
+              	Declaration (42A) -> GoodsShipment (67A) -> GovernmentAgencyGoodsItem (68A) -> Commodity (23A) -> InvoiceLine (79A - tag 112
+        				 for ItemChargeAmount)-->
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>42A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>67A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>68A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>23A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>79A</DocumentSectionCode>
+        				<TagID>112</TagID>
+        			</Pointer>
+        		</Amendment>
+        		<!--The below details the Declaration data that is being amended. As described by the pointer structure above,
+        		 the information below shows that the item price is being amended and the new value of 999 is included below.-->
+        		<GoodsShipment>
+        			<GovernmentAgencyGoodsItem>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<Commodity>
+        					<InvoiceLine>
+        						<ItemChargeAmount currencyID="GBP">999</ItemChargeAmount>
+        					</InvoiceLine>
+        				</Commodity>
+        			</GovernmentAgencyGoodsItem>
+        		</GoodsShipment>
+        	</Declaration>
+        </md:MetaData>
+    CustomsDeclarationsArrivalNotificationRequestBodyExample:
+      summary: CustomsDeclarationsArrivalNotificationRequestBody
+      value: |
+        <md:MetaData 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" 
+        xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" 
+        xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" 
+        xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd " 
+        xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+
+        >
+        	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+        	<md:WCOTypeName>DEC</md:WCOTypeName>
+        	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+        	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+        	<md:AgencyAssignedCustomizationVersionCode>v2.1 </md:AgencyAssignedCustomizationVersionCode>
+
+        	<Declaration 
+        					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        					xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" 
+        					xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" 
+        					xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" 
+        					xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" 
+        					xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
+        		<FunctionCode>13</FunctionCode>
+        		<FunctionalReferenceID>TT_IM10a_1102_001</FunctionalReferenceID>
+        		<ID>21GB1NEXFX6SU9C4R1</ID>
+        		<TypeCode>GPR</TypeCode>
+        		<!--Note that Submitter/ID should not be needed because it is not a mandatory field for Goods Arrival. -->
+        		<Submitter>
+        			<ID>GB553202734852</ID>
+        		</Submitter>
+        	</Declaration>
+        </md:MetaData>
     CustomsDeclarationsFileUploadResponseExample:
       summary: CustomsDeclarationsFileUploadResponse
       value: |

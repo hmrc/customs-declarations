@@ -68,6 +68,14 @@ paths:
         This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
       operationId: SubmitaCustomsDeclaration
       parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.1.0+xml
       - name: Content-Type
         in: header
         description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
@@ -105,6 +113,14 @@ paths:
         schema:
           type: string
           example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:
@@ -164,6 +180,14 @@ paths:
         This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
       operationId: Submitacancellationrequest
       parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.1.0+xml
       - name: Content-Type
         in: header
         description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
@@ -201,6 +225,14 @@ paths:
         schema:
           type: string
           example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:
@@ -273,6 +305,14 @@ paths:
         This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
       operationId: Submitanuploadinitiaterequest
       parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.1.0+xml
       - name: Content-Type
         in: header
         description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
@@ -310,6 +350,14 @@ paths:
         schema:
           type: string
           example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:
@@ -388,6 +436,14 @@ paths:
         This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
       operationId: SubmitaCustomsAmendDeclaration
       parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.1.0+xml
       - name: Content-Type
         in: header
         description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
@@ -425,6 +481,14 @@ paths:
         schema:
           type: string
           example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:
@@ -484,6 +548,14 @@ paths:
         This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
       operationId: SubmitanArrivalNotificationDeclaration
       parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.1.0+xml
       - name: Content-Type
         in: header
         description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
@@ -521,6 +593,14 @@ paths:
         schema:
           type: string
           example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:

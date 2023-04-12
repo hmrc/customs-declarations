@@ -584,9 +584,7 @@ paths:
         description: >-
           The EORI associated with the originating owner of the declaration.
 
-
           CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
-
 
           Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
         style: simple

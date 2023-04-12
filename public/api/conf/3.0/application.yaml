@@ -1,0 +1,2463 @@
+openapi: 3.0.0
+info:
+  title: Customs Declarations
+  description: |
+    # Overview
+    
+    This API allows the submission of any UCC declarations for asynchronous processing by the customs declarations service, to enable a user to have their declarations accepted by means of a single API.
+  
+    The API takes any UCC declaration payload. It also allows for the submission of a cancellation request (pre-clearance) and provides a method of securely uploading additional documentation to support a declaration submission.
+    
+    The file-upload endpoint is used to initiate a file upload as part of the declaration submission process. An example document you may be requested to upload could be a paper copy of a licence. This endpoint is used to initiate a file upload where a signed URL is returned by the endpoint to be used in the file upload workflow.
+    
+    Use the status-request endpoint to get the status of a declaration. This endpoint is only available to CSP users. A declaration can be identified by a movement reference number (MRN).
+    
+    # Versioning
+    
+    When an API changes in a way that is backwards-incompatible, we increase the version number of the API. 
+    See our [reference guide](/api-documentation/docs/reference-guide#versioning) for more on
+    versioning.
+    
+    # Errors
+    
+    We use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:
+    * 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action
+    * 400 to 499 if it failed because of a client error by your application
+    * 500 to 599 if it failed because of an error on our server
+    
+    Errors specific to each API are shown in the Endpoints section, under Response. 
+    See our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
+    
+    # Schemas and examples
+    
+    Schema definitions for all the API endpoints request & response payloads can be found in the following zip archive.
+    
+    [Schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip)
+    
+    ZIP, 2.2MB last updated 16/03/2023
+    
+    The ZIP file contains XML files. Open in your preferred file viewer.
+    
+    # Testing
+    
+    You can use the HMRC Developer Sandbox to test the Customs Declarations API. The Sandbox is an enhanced testing service that functions as a simulator of HMRC’s production environment.
+    To use the Customs Declaration API you will need to create your own test user. To create your own test user:
+      - Use the [Create Test User API](/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion)
+      - Ensure under ‘Body’ “customs-services” is requested. To use an EORI from the Test Data Library, provide it as part of the request.
+      - The first time you call this API the username and password log in box should appear (select do not have credentials, follow the steps & enter the username/password provided). 
+      - If successful this will prompt the grant authority to your application and select approve. If correct, you should see a 200 response showing some test data including a username, password and EORI.
+      - After completing the above, if you call the Customs Declaration API, the same process should occur whereby it will ask for a username and password (Please enter the Username and Password that is in the test data generated from the step above when calling the create test user API)
+    Please Note: 443 is the only allowed port, which means port 443 will need to be used in the callback URL.
+  contact: {}
+  version: '3.0'
+servers:
+  - url: https://test-api.service.hmrc.gov.uk/
+    description: Sandbox
+  - url: https://api.service.hmrc.gov.uk/
+    description: Production
+    variables: {}
+paths:
+  /customs/declarations/:
+    post:
+      tags:
+      - Endpoints
+      summary: Submit a Customs Declaration
+      description: |
+        Allows submission of a Customs Declaration.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      operationId: SubmitaCustomsDeclaration
+      parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.3.0+xml
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Submitter-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsRequestBodyExample'
+        required: true
+      responses:
+        '202':
+          description: ''
+          headers: {}
+          content: {}
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+  /customs/declarations/cancellation-requests:
+    post:
+      tags:
+      - Endpoints
+      summary: Submit a cancellation request
+      description: |
+        Allows submission of a cancellation request.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      operationId: Submitacancellationrequest
+      parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.3.0+xml
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Submitter-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsCancellationRequestBodyExample'
+        required: true
+      responses:
+        '202':
+          description: ''
+          headers: {}
+          content: {}
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsCancellationRequestsresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsCancellationRequestsresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsCancellationRequestsresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsCancellationRequestsresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+  /customs/declarations/file-upload:
+    post:
+      tags:
+      - Endpoints
+      summary: Submit an upload initiate request
+      description: >
+        Obtain a signed URL to upload files to.
+
+
+        The SuccessRedirect and ErrorRedirect fields are optional.
+
+
+        If you provide them when you POST your file, then the response will be an automatic redirect.
+
+
+        If you do not require these redirects for your application, then do not provide these redirect fields.
+
+
+
+        Once you receive a successful response from this endpoint, use the information in the response to POST your file to the URL provided.
+
+
+        You must use multipart encoding (multipart/form-data) NOT application/x-www-form-urlencoded.
+
+
+        The 'file' field must be the last field in the submitted form.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      operationId: Submitanuploadinitiaterequest
+      parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.3.0+xml
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Eori-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Eori-Identifier.
+
+
+          Must be numbers and letters with a maximum length of 17 characters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsFileUploadRequestBodyExample'
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CustomsDeclarationsFileUploadrequest'
+              - xml:
+                  name: CustomsDeclarationsFileUploadrequest
+                  attribute: false
+                  wrapped: false
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/CustomsDeclarationsFileUploadResponseExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse'
+                - description: Successful response payload
+                  xml:
+                    name: CustomsDeclarationsFileUploadresponse
+                    attribute: false
+                    wrapped: false
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsFileUploadresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsFileUploadresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+  /customs/declarations/amend:
+    post:
+      tags:
+      - Endpoints
+      summary: Submit a Customs Amend Declaration
+      description: |
+        Allows submission of a Customs Amend Declaration.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      operationId: SubmitaCustomsAmendDeclaration
+      parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.3.0+xml
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Submitter-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsAmendRequestBodyExample'
+        required: true
+      responses:
+        '202':
+          description: ''
+          headers: {}
+          content: {}
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsAmendresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsAmendresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsAmendresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsAmendresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+  /customs/declarations/arrival-notification:
+    post:
+      tags:
+      - Endpoints
+      summary: Submit an Arrival Notification Declaration
+      description: |
+        Allows submission of a Customs Arrival Notification Declaration.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      operationId: SubmitanArrivalNotificationDeclaration
+      parameters:
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.3.0+xml
+      - name: Content-Type
+        in: header
+        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/xml
+          type: string
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: X-Submitter-Identifier
+        in: header
+        description: >-
+          The EORI associated with the originating owner of the declaration.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
+        style: simple
+        schema:
+          type: string
+          example: GB123456789000
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
+      requestBody:
+        description: ''
+        content:
+          application/xml:
+            examples:
+              objectExample:
+                $ref: '#/components/examples/CustomsDeclarationsArrivalNotificationRequestBodyExample'
+        required: true
+      responses:
+        '202':
+          description: ''
+          headers: {}
+          content: {}
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsArrivalNotificationresponse400'
+                - description: Invalid XML Payload
+                  xml:
+                    name: CustomsDeclarationsArrivalNotificationresponse400
+                    attribute: false
+                    wrapped: false
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsArrivalNotificationresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsArrivalNotificationresponse400
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+  /customs/declarations/status-request/mrn/{mrn}:
+    get:
+      tags:
+      - Endpoints
+      summary: Get the status of a declaration (deprecated)
+      description: >
+        *This endpoint has been deprecated. It is still functional but it will be removed in a future release.*
+
+
+
+        *Use the [Customs Declarations Information API](/api-documentation/docs/api/service/customs-declarations-information) instead.*
+
+
+
+        Get the status of a declaration with the given MRN. This endpoint is only available to CSP users.
+        
+        #### Authorisation
+
+        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      operationId: Getthestatusofadeclaration(deprecated)
+      parameters:
+      - name: mrn
+        in: path
+        description: Movement Reference Number
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 19GBL4592NCOI21NR9
+      - name: Accept
+        in: header
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/vnd.hmrc.3.0+xml
+      - name: X-Badge-Identifier
+        in: header
+        description: >-
+          Represents the end-user who is interacting with the subscribed application.
+
+
+          CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
+
+
+          Must be 6 to 12 characters, consisting of any combination of numeric digits and/or upper-case letters.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: ABC123
+      - name: Authorization
+        in: header
+        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/CustomsDeclarationsStatusRequestMrnResponseExample'
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsStatusRequestMrnresponse500'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsStatusRequestMrnresponse500
+                    attribute: false
+                    wrapped: false
+      deprecated: false
+components:
+  examples:
+    BadRequestExample:
+      summary: BadRequest
+      value: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <errorResponse>
+            <code>BAD_REQUEST</code>
+            <message>Payload is not valid according to schema</message>
+            <errors>
+                <error>
+                    <code>xml_validation_error</code>
+                    <message>Error at line 13, column 13: no declaration found for element 'unknown'</message>
+              </error>
+            </errors>
+        </errorResponse>
+    InternalServerErrorExample:
+      summary: InternalServerError
+      value: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <errorResponse>
+            <code>INTERNAL_SERVER_ERROR</code>
+            <message>Internal server error</message>
+        </errorResponse>
+    CustomsDeclarationsRequestBodyExample:
+      summary: CustomsDeclarationsRequestBody
+      value: |
+        <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+                   	xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+                   	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+                   	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+                   	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+        	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+        	<md:WCOTypeName>DEC</md:WCOTypeName>
+        	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+        	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+        	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+        	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+                   		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+                   		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+                   		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+        		<!--Type D pre-lodged declaration with procedure code 1040, additional procedure code 000. 
+        			No control,Inventory linked Type D Maritime declaration with one MUCR and one DUCR, arrived, shut and departed at MUCR level.
+        			Goods: Straw envelopes for bottles. 
+        			Data set category: B1. 
+        			National Additional Code: VATZ to claim VAT zero-rating.
+        			Scenario steps:
+        			Loader submits EAL message to CDS for the declared MUCR.
+        			Consolidator closes the MUCR by sending a CST message to CDS containing the MUCR
+        			to be closed.
+        			Loader sends EDL message for MUCR to CDS to notify departure of the consolidation. 
+        			Expected notifications: DMSACC, DMSCLE, DMSEOG, DMSRCV, DMSRCV2, DMSRES. 
+        			EMR Message also expected response from ILE, as MUCR and DUCR consolidated in the declaration. 
+        		-->
+        		<!--Function Code of 9 to represent an original declaration. -->
+        		<FunctionCode>9</FunctionCode>
+        		<!--DE 2/5: LRN
+        			The trader assigned reference to the declaration. -->
+        		<FunctionalReferenceID>TT_EX01A_HH020301</FunctionalReferenceID>
+        		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
+        		<IssueDateTime>
+        			<p1:DateTimeString formatCode="304">20210302104604+01</p1:DateTimeString>
+        		</IssueDateTime>
+        		<!--DE 1/1: Declaration Type. 
+        			EX to represent an Export declaration. -->
+        		<!--DE 1/2: Additional Declaration Type. 
+        			D to represent a Pre lodged declaration. -->
+        		<TypeCode>EXD</TypeCode>
+        		<!--DE 1/9: Total Number of Items. -->
+        		<GoodsItemQuantity>1</GoodsItemQuantity>
+        		<!--DE 6/18: Total Packages. -->
+        		<TotalPackageQuantity>10</TotalPackageQuantity>
+        		<!--DE 7/14: Identity of active means of transport crossing the border. -->
+        		<BorderTransportMeans>
+        			<ID>CSCLGLOBE</ID>
+        			<IdentificationTypeCode>11</IdentificationTypeCode>
+        			<!--DE 7/15: Nationality of active means of transport crossing the border.
+        				In this the case country code for GB. -->
+        			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
+        			<!--DE 7/4: Mode of Transport at the Border.
+        				ModeCode of 1 to represent Maritime/Sea transport. -->
+        			<ModeCode>1</ModeCode>
+        		</BorderTransportMeans>
+        		<Consignment>
+        			<!--DE 3/32: Carrier Identification number. 
+        				This is Security and Safety Data. -->
+        			<Carrier>
+        				<ID>GB025115100010</ID>
+        			</Carrier>
+        			<!--DE 4/2: Transport charges method of payment. 
+        				D indicating other e.g. direct debit to cash account. 
+        				This is Security and Safety Data. -->
+        			<Freight>
+        				<PaymentMethodCode>D</PaymentMethodCode>
+        			</Freight>
+        			<!--DE 5/18: Country of Routing Codes. 
+        				GBCAUS Routing from GB to US via Canada. 
+        				This is Security and Safety Data. -->
+        			<Itinerary>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<RoutingCountryCode>GB</RoutingCountryCode>
+        			</Itinerary>
+        			<Itinerary>
+        				<SequenceNumeric>2</SequenceNumeric>
+        				<RoutingCountryCode>CA</RoutingCountryCode>
+        			</Itinerary>
+        			<Itinerary>
+        				<SequenceNumeric>3</SequenceNumeric>
+        				<RoutingCountryCode>US</RoutingCountryCode>
+        			</Itinerary>
+        		</Consignment>
+        		<!--DE 3/18: Declarant Identification Number. 
+        			EORI number of the Declarant. -->
+        		<Declarant>
+        			<ID>GB427168118378</ID>
+        		</Declarant>
+        		<!--DE 5/12 Customs Office of Exit. 
+        			Indicating Dover. -->
+        		<ExitOffice>
+        			<ID>GB000040</ID>
+        		</ExitOffice>
+        		<!--DE 3/2: Exporter Identification Number. 
+        			EORI number of the Exporter, the same as 3/18. -->
+        		<Exporter>
+        			<ID>GB427168118378</ID>
+        		</Exporter>
+        		<GoodsShipment>
+        			<!--DE 3/9: Consignee Name and Address.
+        				(Mandatory when DE 3/10 is not completed). 
+        				This is Security and Safety Data. -->
+        			<Consignee>
+        				<Name>Packings Import Incorporated</Name>
+        				<Address>
+        					<CityName>New York</CityName>
+        					<CountryCode>US</CountryCode>
+        					<Line>1 Bags Avenue</Line>
+        					<PostcodeID>NY1 234</PostcodeID>
+        				</Address>
+        			</Consignee>
+        			<Consignment>
+        				<!--DE 7/2: Container. 
+        					1 to indicate that the goods are transported in containers. -->
+        				<ContainerCode>1</ContainerCode>
+        				<!--DE 7/7: Identity of the means of transport at departure. 
+        					(In this scenario, 11 indicating name of the seagoing vessel). -->
+        				<DepartureTransportMeans>
+        					<ID>CSCLGLOBE</ID>
+        					<IdentificationTypeCode>11</IdentificationTypeCode>
+        				</DepartureTransportMeans>
+        				<GoodsLocation>
+        					<!--DE 5/23: Location of Goods - Identification of location.
+        						ID to give a unique position of the location. 
+        						DVRDVRDVR Indicating Dover. -->
+        					<Name>DVRDOVDVR</Name>
+        					<!--DE 5/23: Location of Goods - Type of location.
+        						A in this scenario to represent that it is a designated location. -->
+        					<TypeCode>A</TypeCode>
+        					<Address>
+        						<!--DE 5/23: Location of Goods - Qualifier of the identification.
+        							Type of ID of the Location - U in this scenario for UN/LOCODE. -->
+        						<TypeCode>U</TypeCode>
+        						<!--DE 5/23: Location of Goods - Country.
+        							Country code of the country where the goods may be examined, GB in this scenario. -->
+        						<CountryCode>GB</CountryCode>
+        					</Address>
+        				</GoodsLocation>
+        				<TransportEquipment>
+        					<!--DE 7/10: Container Identification Number. -->
+        					<SequenceNumeric>1</SequenceNumeric>
+        					<ID>CONU1234567</ID>
+        					<!--DE 7/18: Seal number. 
+        						This is Security and Safety Data. -->
+        					<Seal>
+        						<SequenceNumeric>1</SequenceNumeric>
+        						<ID>333</ID>
+        					</Seal>
+        				</TransportEquipment>
+        			</Consignment>
+        			<Destination>
+        				<!--DE 5/8: Country of Destination Code.
+        					In this case US. -->
+        				<CountryCode>US</CountryCode>
+        			</Destination>
+        			<!--DE 5/14: Country of Dispatch/Export Code. 
+        				Country code for the country from which the goods were originally dispatched, in this case GB. -->
+        			<ExportCountry>
+        				<ID>GB</ID>
+        			</ExportCountry>
+        			<GovernmentAgencyGoodsItem>
+        				<!--DE 1/6: Goods Item Number. -->
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<!--DE 8/6: Statistical Value. 
+        					For the goods item in GBP (£ sterling), irrespective of the currency used in Invoice Currency. -->
+        				<StatisticalValueAmount currencyID="GBP">200</StatisticalValueAmount>
+        				<!--DE 8/5 Nature of Transaction. 
+        					Enter, a 2-digit code (second digit is optional).
+        					The single digit codes listed in column A of the table provided for under Article 10(2) of Commission Regulation (EC) No 113/2010 shall be used.
+        					Member States may also provide for a second digit from the list in column B of that table to be collected.
+        					In this case: 
+        					- First digit (1) represents 'Transactions involving actual or intended transfer of ownership 
+        					from residents to non-residents against financial or other compensation'. 
+        					- Second digit (1) represents 'Outright purchase/sale'. -->
+        				<TransactionNatureCode>11</TransactionNatureCode>
+        				<!--DE 2/2: Additional Information. 
+        					00400 Indicating Self representation i.e. the declarant and the exporter are the same party. -->
+        				<AdditionalInformation>
+        					<StatementCode>00400</StatementCode>
+        					<StatementDescription>EXPORTER</StatementDescription>
+        				</AdditionalInformation>
+        				<Commodity>
+        					<!--DE 6/8: Description of Goods. -->
+        					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+        					<Classification>
+        						<!--DE 6/14: Commodity Code - Combined Nomenclature Code. -->
+        						<ID>46021910</ID>
+        						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+        					</Classification>
+        					<Classification>
+        						<!--DE 6/17: National Additional Code.
+        							VATZ to represent VAT 0% duty rate.
+        							Note that when code VATZ is used the requirements for VAT zero-rating in the Export Declaration Completion Guide Appendix 20 and VAT Notice 703 will apply. -->
+        						<ID>VATZ</ID>
+        						<IdentificationTypeCode>GN</IdentificationTypeCode>
+        					</Classification>
+        					<GoodsMeasure>
+        						<!--DE 6/5: Gross Mass.
+        							Weight of the goods in kilograms including packaging. -->
+        						<GrossMassMeasure>10</GrossMassMeasure>
+        						<!--DE 6/1: Net Mass.
+        							Weight of the goods in kilograms without any packaging. -->
+        						<NetNetWeightMeasure>5</NetNetWeightMeasure>
+        					</GoodsMeasure>
+        				</Commodity>
+        				<GovernmentProcedure>
+        					<!--DE 1/10: Procedure. 
+        						Requested Procedure of 10 40 indicating permanent export of goods in free circulation and home use. -->
+        					<CurrentCode>10</CurrentCode>
+        					<PreviousCode>40</PreviousCode>
+        				</GovernmentProcedure>
+        				<GovernmentProcedure>
+        					<!--DE 1/11: Additional Procedure Code. 
+        						000 to indicate no additional procedure. -->
+        					<CurrentCode>000</CurrentCode>
+        				</GovernmentProcedure>
+        				<Packaging>
+        					<SequenceNumeric>1</SequenceNumeric>
+        					<!--DE 6/11: Shipping Marks. -->
+        					<MarksNumbersID>2379261ETT</MarksNumbersID>
+        					<!--DE 6/10: Number of Packages. 
+        						In this case 10. -->
+        					<QuantityQuantity>10</QuantityQuantity>
+        					<!--DE 6/9: Type of Packages.
+        						PK to represent standard packaging unit. -->
+        					<TypeCode>PK</TypeCode>
+        				</Packaging>
+        			</GovernmentAgencyGoodsItem>
+        			<!--DE 2/1: Simplified Declaration/ Previous Documents. 
+        				To show the DUCR assigned to the consignment.
+        				This is a mandatory field. -->
+        			<PreviousDocument>
+        				<CategoryCode>Z</CategoryCode>
+        				<ID>1GB427168118378-0203N1</ID>
+        				<TypeCode>DCR</TypeCode>
+        				<LineNumeric>1</LineNumeric>
+        			</PreviousDocument>
+        			<!--DE 2/1: Simplified Declaration/ Previous Documents. 
+        				To show the MUCR assigned to the consignment. -->
+        			<PreviousDocument>
+        				<CategoryCode>Z</CategoryCode>
+        				<ID>GB/123456789012-0203N1</ID>
+        				<TypeCode>MCR</TypeCode>
+        			</PreviousDocument>
+        		</GoodsShipment>
+        	</Declaration>
+        </md:MetaData>
+    CustomsDeclarationsCancellationRequestBodyExample:
+      summary: CustomsDeclarationsCancellationRequestBody
+      value: |
+        <md:MetaData
+              xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+              xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+              xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+              xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+            >
+            <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+            <md:WCOTypeName>DEC</md:WCOTypeName>
+            <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+            <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+            <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+                    <Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
+                      <!--This is an example of a cancellation message that has been applied to a declaration-->
+
+                       <!--Function Code of 13 to represent Request (Additional Message)-->
+        			   <FunctionCode>13</FunctionCode>
+        			   <!--The trader assigned reference to the additional message.
+                       	Note that this reference is independent of the declaration.-->
+                       <FunctionalReferenceID>TT_IM10b_v4.9_0909_01</FunctionalReferenceID>
+                       <!--Declaration ID of the corresponding Declaration to be cancelled-->
+        			   <ID>20GBDPQ8A31WX1XXR5</ID>
+        			   <!--Defines the type of additional message - in this scenario, INV
+                       	to indicate that this additional message is a cancellation-->
+                       <TypeCode>INV</TypeCode>
+                       <AdditionalInformation>
+        			   <!--Textual description of the reason for cancellation-->
+                    <StatementDescription>Declaration is no longer required</StatementDescription>
+        			<!--The type of Additional Information. 'AES' should always be used
+                         		 for Cancellations and Amendments to indicate a free text reason
+                         		 is being provided.-->
+                          <StatementTypeCode>AES</StatementTypeCode>
+                          <Pointer>
+                             <SequenceNumeric>1</SequenceNumeric>
+                             <DocumentSectionCode>42A</DocumentSectionCode>
+                          </Pointer>
+                          <Pointer>
+                             <SequenceNumeric>1</SequenceNumeric>
+                             <DocumentSectionCode>06A</DocumentSectionCode>
+                          </Pointer>
+                       </AdditionalInformation>
+                       <Amendment>
+        			   <!--Used to indicate the reason for the amendment - in this scenario,
+                       	a code of 1 to indicate that the Declaration is to be Cancelled. -->
+                          <ChangeReasonCode>1</ChangeReasonCode>
+                       </Amendment>
+                    </Declaration>
+                             </md:MetaData>
+    CustomsDeclarationsFileUploadRequestBodyExample:
+      summary: CustomsDeclarationsFileUploadRequestBody
+      value: |
+        <FileUploadRequest xmlns="hmrc:fileupload" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <DeclarationID>DEC123</DeclarationID>
+        <FileGroupSize>2</FileGroupSize>
+        <Files>
+          <File>
+            <FileSequenceNo>1</FileSequenceNo>
+            <DocumentType>Certificate of Origin</DocumentType>
+            <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
+            <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
+          </File>
+          <File>
+            <FileSequenceNo>2</FileSequenceNo>
+            <DocumentType>Licence</DocumentType>
+          </File>
+        </Files>
+        </FileUploadRequest>
+    CustomsDeclarationsAmendRequestBodyExample:
+      summary: CustomsDeclarationsAmendRequestBody
+      value: |
+        <md:MetaData
+            xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+            xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+            xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+            xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
+        >
+        	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+        	<md:WCOTypeName>DEC</md:WCOTypeName>
+        	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+        	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+        	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+        	<Declaration
+              xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+              xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+              xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+              xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+              xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
+        	>
+
+        		<!--Function Code of 13 to represent Request (Additional Message)-->
+        		<FunctionCode>13</FunctionCode>
+        		<!--The trader assigned reference to the additional message.
+        		Note that this reference is independent of the declaration.-->
+        		<FunctionalReferenceID>TT_IM02b_1803_002</FunctionalReferenceID>
+        		<!--Declaration ID of the corresponding Declaration to be amended-->
+        		<ID>20GB32VVZI0YMFGVR0</ID>
+        		<!--Defines the type of additional message - in this scenario, COR to indicate that this additional message is an amendment-->
+        		<TypeCode>COR</TypeCode>
+        		<AdditionalInformation>
+        			<!--Textual description of the reason for amendment-->
+        			<StatementDescription>Amending item price as a mistake was made on the declaration.</StatementDescription>
+        			<!--The type of Additional Information. 'AES' should always be used for Cancellations and Amendments to indicate a free text
+        			 reason is being provided.-->
+        			<StatementTypeCode>AES</StatementTypeCode>
+        			<!--The two pointer elements below point to the Declaration (42A) and the Amendment (06A) in the Declaration (which can be
+        			 seen below).
+          		This is so that the textual description can be linked to its corresponding amendment reason code.-->
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>42A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>06A</DocumentSectionCode>
+        			</Pointer>
+        		</AdditionalInformation>
+        		<!--Details of the amendment to be made to the Declaration-->
+        		<Amendment>
+        			<!--Used to indicate the reason for the amendment - in this scenario, a code of 21 to indicate that a value is being amended.-->
+        			<ChangeReasonCode>21</ChangeReasonCode>
+        			<!--Pointers describe the declaration tree down to the part of the Declaration which needs to be amended as follows:
+              	Declaration (42A) -> GoodsShipment (67A) -> GovernmentAgencyGoodsItem (68A) -> Commodity (23A) -> InvoiceLine (79A - tag 112
+        				 for ItemChargeAmount)-->
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>42A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>67A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>68A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>23A</DocumentSectionCode>
+        			</Pointer>
+        			<Pointer>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<DocumentSectionCode>79A</DocumentSectionCode>
+        				<TagID>112</TagID>
+        			</Pointer>
+        		</Amendment>
+        		<!--The below details the Declaration data that is being amended. As described by the pointer structure above,
+        		 the information below shows that the item price is being amended and the new value of 999 is included below.-->
+        		<GoodsShipment>
+        			<GovernmentAgencyGoodsItem>
+        				<SequenceNumeric>1</SequenceNumeric>
+        				<Commodity>
+        					<InvoiceLine>
+        						<ItemChargeAmount currencyID="GBP">999</ItemChargeAmount>
+        					</InvoiceLine>
+        				</Commodity>
+        			</GovernmentAgencyGoodsItem>
+        		</GoodsShipment>
+        	</Declaration>
+        </md:MetaData>
+    CustomsDeclarationsArrivalNotificationRequestBodyExample:
+      summary: CustomsDeclarationsArrivalNotificationRequestBody
+      value: |
+        <md:MetaData 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" 
+        xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" 
+        xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" 
+        xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd " 
+        xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+
+        >
+        	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+        	<md:WCOTypeName>DEC</md:WCOTypeName>
+        	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+        	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+        	<md:AgencyAssignedCustomizationVersionCode>v2.1 </md:AgencyAssignedCustomizationVersionCode>
+
+        	<Declaration 
+        					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        					xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" 
+        					xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" 
+        					xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" 
+        					xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" 
+        					xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " xmlns="urn:wco:datamodel:WCO:DEC-DMS:2">
+        		<FunctionCode>13</FunctionCode>
+        		<FunctionalReferenceID>TT_IM10a_1102_001</FunctionalReferenceID>
+        		<ID>21GB1NEXFX6SU9C4R1</ID>
+        		<TypeCode>GPR</TypeCode>
+        		<!--Note that Submitter/ID should not be needed because it is not a mandatory field for Goods Arrival. -->
+        		<Submitter>
+        			<ID>GB553202734852</ID>
+        		</Submitter>
+        	</Declaration>
+        </md:MetaData>
+    CustomsDeclarationsFileUploadResponseExample:
+      summary: CustomsDeclarationsFileUploadResponse
+      value: |
+        <FileUploadResponse xmlns="hmrc:fileupload">
+          <Files>
+            <File>
+              <Reference>63acb547-85d4-4ce7-b702-05115ed99521</Reference>
+              <UploadRequest>
+                <Href>https://fus-inbound-8264ee52f589f4c0191aa94f87aa1111.s3.amazonaws.com</Href>
+                <Fields>
+                  <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+                  <x-amz-date>20200119T122531Z</x-amz-date>
+                  <x-amz-credential>AKIAIFG3PRBHSAVV7BWA/20200819/eu-west-2/s3/aws4_request</x-amz-credential>
+                  <x-amz-meta-upscan-initiate-response>2020-01-19T12:25:31.896Z</x-amz-meta-upscan-initiate-response>
+                  <x-amz-meta-upscan-initiate-received>2020-01-19T12:25:31.895Z</x-amz-meta-upscan-initiate-received>
+                  <x-amz-meta-request-id>n/a</x-amz-meta-request-id>
+                  <x-amz-meta-original-filename>${filename}</x-amz-meta-original-filename>
+                  <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+                  <key>63acb547-85d4-4ce7-b702-05115ed99521</key>
+                  <acl>private</acl>
+                  <x-amz-signature>4555a985f7651112ed7de834b534ff495f7ea001df3f741a344bfa55aef3ffda</x-amz-signature>
+                  <x-amz-meta-session-id>n/a</x-amz-meta-session-id>
+                  <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+                  <policy>eyJleHBpcmF0aW9uIjoiMjAyMC0wOC=</policy>
+                  <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                  <error_action_redirect>https://error-redirect.com</error_action_redirect>
+                </Fields>
+              </UploadRequest>
+            </File>
+            <File>
+              <Reference>398d2c4d-f28e-471b-9035-1b14c7227ac9</Reference>
+              <UploadRequest>
+                <Href>https://fus-inbound-8264ee52f589f4c0191aa94f87aa2222.s3.amazonaws.com</Href>
+                <Fields>
+                  <x-amz-meta-callback-url>https://some-callback-url</x-amz-meta-callback-url>
+                  <x-amz-date>20200119T122531Z</x-amz-date>
+                  <x-amz-credential>AKIAIFG3PRBHSAVVXXXX/20200819/eu-west-2/s3/aws4_request</x-amz-credential>
+                  <x-amz-meta-upscan-initiate-response>2020-01-19T12:25:31.919Z</x-amz-meta-upscan-initiate-response>
+                  <x-amz-meta-upscan-initiate-received>2020-01-19T12:25:31.918Z</x-amz-meta-upscan-initiate-received>
+                  <x-amz-meta-request-id>n/a</x-amz-meta-request-id>
+                  <x-amz-meta-original-filename>${filename}</x-amz-meta-original-filename>
+                  <x-amz-algorithm>AWS4-HMAC-SHA256</x-amz-algorithm>
+                  <key>398d2c4d-f28e-471b-9035-1b14c7227ac9</key>
+                  <acl>private</acl>
+                  <x-amz-signature>becb1fa1bc49edd06f029c42f5923cf58a8495d6cd376a3b7a518876ede40879</x-amz-signature>
+                  <x-amz-meta-session-id>n/a</x-amz-meta-session-id>
+                  <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
+                  <policy>eyJleHBpcmF0aW9uIjoiMjAyMC0wOC0yNlQ=</policy>
+                </Fields>
+              </UploadRequest>
+            </File>
+          </Files>
+        </FileUploadResponse>
+    CustomsDeclarationsStatusRequestMrnResponseExample:
+      summary: CustomsDeclarationsStatusRequestMrnResponse
+      value: |
+        <v1:DeclarationStatusResponse
+                xmlns:v1="http://gov.uk/customs/declarationInformationRetrieval/status/v1"
+                xmlns:_2="urn:wco:datamodel:WCO:DEC-DMS:2"
+                xmlns:_3="urn:wco:datamodel:WCO:Response_DS:DMS:2"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/status/v1">
+          <v1:Declaration>
+            <v1:AcceptanceDateTime>
+              <_3:DateTimeString formatCode="304">20190428183130+01</_3:DateTimeString>
+            </v1:AcceptanceDateTime>
+            <v1:ID>18GB9JLC3CU1LFGVR2</v1:ID>
+            <v1:VersionID>1</v1:VersionID>
+            <v1:CreationDateTime>
+              <v1:DateTimeString formatCode="304">20190428183129+01</v1:DateTimeString>
+            </v1:CreationDateTime>
+          </v1:Declaration>
+          <_2:Declaration>
+            <_2:FunctionCode>9</_2:FunctionCode>
+            <_2:TypeCode>IMZ</_2:TypeCode>
+            <_2:GoodsItemQuantity unitCode="NPR">100</_2:GoodsItemQuantity>
+            <_2:TotalPackageQuantity>10</_2:TotalPackageQuantity>
+            <_2:Submitter>
+              <_2:ID>GB123456789012000</_2:ID>
+            </_2:Submitter>
+          </_2:Declaration>
+        </v1:DeclarationStatusResponse>
+  schemas:
+    errorResponse:
+      title: errorResponse
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+    Commodity:
+      title: Commodity
+      type: object
+      properties:
+        DutyTaxFee:
+          type: array
+          items:
+            $ref: '#/components/schemas/DutyTaxFee1'
+          description: >-
+            50A
+
+            X
+          xml:
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: >-
+        23A
+
+        X
+      xml:
+        name: Commodity
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    CreationDateTime:
+      title: CreationDateTime
+      type: object
+      properties:
+        DateTimeString:
+          allOf:
+          - $ref: '#/components/schemas/DateTimeString'
+          - xml:
+              name: DateTimeString
+              namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: an..35
+      xml:
+        name: CreationDateTime
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    CustomsDeclarationsAmendresponse400:
+      title: CustomsDeclarationsAmendresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsArrivalNotificationresponse400:
+      title: CustomsDeclarationsArrivalNotificationresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsCancellationRequestsresponse400:
+      title: CustomsDeclarationsCancellationRequestsresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsFileUploadrequest:
+      title: CustomsDeclarationsFileUploadrequest
+      required:
+      - FileUploadRequest
+      type: object
+      properties:
+        FileUploadRequest:
+          allOf:
+          - $ref: '#/components/schemas/FileUploadRequestType'
+          - xml:
+              name: FileUploadRequest
+              namespace: hmrc:fileupload
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsFileUploadresponse:
+      title: CustomsDeclarationsFileUploadresponse
+      required:
+      - FileUploadResponse
+      type: object
+      properties:
+        FileUploadResponse:
+          allOf:
+          - $ref: '#/components/schemas/FileUploadResponse'
+          - xml:
+              name: FileUploadResponse
+              namespace: hmrc:fileupload
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsFileUploadresponse400:
+      title: CustomsDeclarationsFileUploadresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsresponse400:
+      title: CustomsDeclarationsresponse400
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+#    TODO: Implement correct response schema
+    CustomsDeclarationsStatusRequestMrnresponse:
+      title: CustomsDeclarationsStatusRequestMrnresponse
+      required:
+      - DeclarationStatusResponse
+      type: object
+      properties:
+        DeclarationStatusResponse:
+          allOf:
+          - $ref: '#/components/schemas/DeclarationStatusResponse'
+          - xml:
+              name: DeclarationStatusResponse
+              namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+              attribute: false
+              wrapped: false
+    CustomsDeclarationsStatusRequestMrnresponse500:
+      title: CustomsDeclarationsStatusRequestMrnresponse500
+      required:
+      - errorResponse
+      type: object
+      properties:
+        errorResponse:
+          allOf:
+          - $ref: '#/components/schemas/errorResponseType'
+          - xml:
+              name: errorResponse
+              attribute: false
+              wrapped: false
+    DateTimeString:
+      title: DateTimeString
+      type: object
+      description: ''
+      xml:
+        name: DateTimeString
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    Declaration:
+      title: Declaration
+      allOf:
+      - $ref: '#/components/schemas/TraderNotificationResponseDeclaration'
+      - type: object
+        properties:
+          CreationDateTime:
+            allOf:
+            - $ref: '#/components/schemas/CreationDateTime'
+            - description: an..35
+              xml:
+                name: CreationDateTime
+                namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+                prefix: default
+                attribute: false
+                wrapped: false
+        xml:
+          name: Declaration
+          namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+          prefix: default
+          attribute: false
+          wrapped: false
+      description: ''
+    DeclarationStatusResponse:
+      title: DeclarationStatusResponse
+      required:
+      - Declaration
+      type: object
+      properties:
+        Declaration:
+          allOf:
+          - $ref: '#/components/schemas/Declaration'
+          - xml:
+              name: Declaration
+              namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: DeclarationStatusResponse
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    DutyTaxFee:
+      title: DutyTaxFee
+      type: object
+      properties:
+        Payment:
+          allOf:
+          - $ref: '#/components/schemas/Payment'
+          - description: >-
+              94A
+
+              X
+            xml:
+              name: Payment
+              namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: >-
+        50A
+
+        X
+      xml:
+        name: DutyTaxFee
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    DutyTaxFee1:
+      title: DutyTaxFee1
+      type: object
+      properties:
+        AdValoremTaxBaseAmount:
+          type: string
+          description: >-
+            116
+
+            5286
+          xml:
+            name: AdValoremTaxBaseAmount
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        DeductAmount:
+          type: string
+          description: >-
+            111
+
+            5074
+          xml:
+            name: DeductAmount
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        DutyRegimeCode:
+          type: string
+          description: "EDIFACT codes (9213) or user
+                                      codes
+                                    \r
+9213"
+          xml:
+            name: DutyRegimeCode
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        SpecificTaxBaseQuantity:
+          type: string
+          description: >-
+            129
+
+            6090
+          xml:
+            name: SpecificTaxBaseQuantity
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        TaxRateNumeric:
+          type: string
+          description: >-
+            115
+
+            5278
+          xml:
+            name: TaxRateNumeric
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        TypeCode:
+          type: string
+          description: "EDIFACT codes (5153) or user
+                                      codes
+                                    \r
+5153"
+          xml:
+            name: TypeCode
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        Payment:
+          allOf:
+          - $ref: '#/components/schemas/Payment1'
+          - description: >-
+              94A
+
+              X
+            xml:
+              name: Payment
+              namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: >-
+        50A
+
+        X
+      xml:
+        name: DutyTaxFee
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    errorResponseType:
+      title: errorResponseType
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          xml:
+            name: code
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+        message:
+          type: string
+          xml:
+            name: message
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+        errors:
+          allOf:
+          - $ref: '#/components/schemas/errorsType'
+          - xml:
+              name: errors
+              namespace: http://example.com/example.xsd
+              prefix: tns
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: errorResponseType
+        namespace: http://example.com/example.xsd
+        prefix: tns
+        attribute: false
+        wrapped: false
+    errorsType:
+      title: errorsType
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/errorType'
+          description: ''
+          xml:
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: errorsType
+        namespace: http://example.com/example.xsd
+        prefix: tns
+        attribute: false
+        wrapped: false
+    errorType:
+      title: errorType
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          xml:
+            name: code
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+        message:
+          type: string
+          xml:
+            name: message
+            namespace: http://example.com/example.xsd
+            prefix: tns
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: errorType
+        namespace: http://example.com/example.xsd
+        prefix: tns
+        attribute: false
+        wrapped: false
+    Fields:
+      title: Fields
+      type: object
+      properties:
+        Content-Type:
+          type: string
+          xml:
+            name: Content-Type
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-callback-url:
+          type: string
+          xml:
+            name: x-amz-meta-callback-url
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-date:
+          type: string
+          xml:
+            name: x-amz-date
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-credential:
+          type: string
+          xml:
+            name: x-amz-credential
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-upscan-initiate-response:
+          type: string
+          xml:
+            name: x-amz-meta-upscan-initiate-response
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-upscan-initiate-received:
+          type: string
+          xml:
+            name: x-amz-meta-upscan-initiate-received
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-request-id:
+          type: string
+          xml:
+            name: x-amz-meta-request-id
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-original-filename:
+          type: string
+          xml:
+            name: x-amz-meta-original-filename
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-algorithm:
+          type: string
+          xml:
+            name: x-amz-algorithm
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        key:
+          type: string
+          xml:
+            name: key
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        acl:
+          type: string
+          xml:
+            name: acl
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-signature:
+          type: string
+          xml:
+            name: x-amz-signature
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-session-id:
+          type: string
+          xml:
+            name: x-amz-meta-session-id
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        x-amz-meta-consuming-service:
+          type: string
+          xml:
+            name: x-amz-meta-consuming-service
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        policy:
+          type: string
+          xml:
+            name: policy
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        success_action_redirect:
+          type: string
+          xml:
+            name: success_action_redirect
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        error_action_redirect:
+          type: string
+          xml:
+            name: error_action_redirect
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: Fields
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    File:
+      title: File
+      required:
+      - Reference
+      - UploadRequest
+      type: object
+      properties:
+        Reference:
+          type: string
+          xml:
+            name: Reference
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        UploadRequest:
+          allOf:
+          - $ref: '#/components/schemas/UploadRequest'
+          - xml:
+              name: UploadRequest
+              namespace: hmrc:fileupload
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: File
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    Files:
+      title: Files
+      required:
+      - File
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+          description: ''
+          xml:
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: Files
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    FilesType:
+      title: FilesType
+      required:
+      - File
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileType'
+          description: ''
+          xml:
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: FilesType
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    FileType:
+      title: FileType
+      required:
+      - FileSequenceNo
+      type: object
+      properties:
+        FileSequenceNo:
+          minimum: 0
+          exclusiveMinimum: true
+          type: integer
+          format: int32
+          xml:
+            name: FileSequenceNo
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        DocumentType:
+          type: string
+          xml:
+            name: DocumentType
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        SuccessRedirect:
+          type: string
+          xml:
+            name: SuccessRedirect
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        ErrorRedirect:
+          type: string
+          xml:
+            name: ErrorRedirect
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: ''
+      xml:
+        name: FileType
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    FileUploadRequestType:
+      title: FileUploadRequestType
+      required:
+      - DeclarationID
+      - FileGroupSize
+      - Files
+      type: object
+      properties:
+        DeclarationID:
+          maxLength: 22
+          minLength: 1
+          type: string
+          xml:
+            name: DeclarationID
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        FileGroupSize:
+          minimum: 0
+          exclusiveMinimum: true
+          type: integer
+          format: int32
+          xml:
+            name: FileGroupSize
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        Files:
+          allOf:
+          - $ref: '#/components/schemas/FilesType'
+          - xml:
+              name: Files
+              namespace: hmrc:fileupload
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: FileUploadRequestType
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    FileUploadResponse:
+      title: FileUploadResponse
+      required:
+      - Files
+      type: object
+      properties:
+        Files:
+          allOf:
+          - $ref: '#/components/schemas/Files'
+          - xml:
+              name: Files
+              namespace: hmrc:fileupload
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: FileUploadResponse
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+    GoodsShipment:
+      title: GoodsShipment
+      type: object
+      properties:
+        GovernmentAgencyGoodsItem:
+          type: array
+          items:
+            $ref: '#/components/schemas/GovernmentAgencyGoodsItem'
+          description: >-
+            68A
+
+            X
+          xml:
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: >-
+        67A
+
+        X
+      xml:
+        name: GoodsShipment
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    GovernmentAgencyGoodsItem:
+      title: GovernmentAgencyGoodsItem
+      required:
+      - SequenceNumeric
+      type: object
+      properties:
+        SequenceNumeric:
+          type: string
+          description: >-
+            006
+
+            1050
+          xml:
+            name: SequenceNumeric
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        Commodity:
+          allOf:
+          - $ref: '#/components/schemas/Commodity'
+          - description: >-
+              23A
+
+              X
+            xml:
+              name: Commodity
+              namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: >-
+        68A
+
+        X
+      xml:
+        name: GovernmentAgencyGoodsItem
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    ObligationGuarantee:
+      title: ObligationGuarantee
+      type: object
+      properties:
+        ReferenceID:
+          type: string
+          description: >-
+            100
+
+            1154
+          xml:
+            name: ReferenceID
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: 90A
+      xml:
+        name: ObligationGuarantee
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    Payment:
+      title: Payment
+      type: object
+      properties:
+        ReferenceID:
+          type: string
+          description: >-
+            014
+
+            1168
+          xml:
+            name: ReferenceID
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        TaxAssessedAmount:
+          type: string
+          description: >-
+            120
+
+            5504
+          xml:
+            name: TaxAssessedAmount
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        DueDateTime:
+          type: string
+          description: >-
+            376
+
+            2480
+          xml:
+            name: DueDateTime
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        PaymentAmount:
+          type: string
+          description: >-
+            378
+
+            5082
+          xml:
+            name: PaymentAmount
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        ObligationGuarantee:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObligationGuarantee'
+          description: 90A
+          xml:
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: >-
+        94A
+
+        X
+      xml:
+        name: Payment
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    Payment1:
+      title: Payment1
+      type: object
+      properties:
+        TaxAssessedAmount:
+          type: string
+          description: >-
+            120
+
+            5504
+          xml:
+            name: TaxAssessedAmount
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        PaymentAmount:
+          type: string
+          description: >-
+            378
+
+            5082
+          xml:
+            name: PaymentAmount
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+      description: >-
+        94A
+
+        X
+      xml:
+        name: Payment
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    TraderNotificationResponseDeclaration:
+      title: TraderNotificationResponseDeclaration
+      type: object
+      properties:
+        AcceptanceDateTime:
+          type: string
+          description: >-
+            an..35
+
+            2380
+
+            023
+
+            Declaration. Acceptance. Date Time
+          xml:
+            name: AcceptanceDateTime
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        CancellationDateTime:
+          type: string
+          description: >-
+            an..35
+
+            2380
+
+            373
+
+            Declaration. Cancellation. Date Time
+          xml:
+            name: CancellationDateTime
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        FunctionalReferenceID:
+          type: string
+          description: >-
+            an..35
+
+            1154
+
+            D026
+
+            Declaration. Functional Reference. Identifier
+          xml:
+            name: FunctionalReferenceID
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        ID:
+          type: string
+          description: >-
+            an..70
+
+            1004
+
+            D014
+
+            Declaration. Identification. Identifier
+          xml:
+            name: ID
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        RejectionDateTime:
+          type: string
+          description: >-
+            an..35
+
+            2380
+
+            374
+
+            Declaration. Rejection. Date Time
+          xml:
+            name: RejectionDateTime
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        VersionID:
+          type: string
+          description: >-
+            an..9
+
+            1057
+
+            383
+
+            Declaration. Version. Identifier
+          xml:
+            name: VersionID
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        DutyTaxFee:
+          type: array
+          items:
+            $ref: '#/components/schemas/DutyTaxFee'
+          description: >-
+            50A
+
+            X
+          xml:
+            namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+            prefix: default
+            attribute: false
+            wrapped: false
+        GoodsShipment:
+          allOf:
+          - $ref: '#/components/schemas/GoodsShipment'
+          - description: >-
+              67A
+
+              X
+            xml:
+              name: GoodsShipment
+              namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: >-
+        42A
+
+        X
+      xml:
+        name: TraderNotificationResponseDeclaration
+        namespace: http://gov.uk/customs/declarationInformationRetrieval/status/v1
+        prefix: default
+        attribute: false
+        wrapped: false
+    UploadRequest:
+      title: UploadRequest
+      required:
+      - Href
+      - Fields
+      type: object
+      properties:
+        Href:
+          type: string
+          xml:
+            name: Href
+            namespace: hmrc:fileupload
+            prefix: default
+            attribute: false
+            wrapped: false
+        Fields:
+          allOf:
+          - $ref: '#/components/schemas/Fields'
+          - xml:
+              name: Fields
+              namespace: hmrc:fileupload
+              prefix: default
+              attribute: false
+              wrapped: false
+      description: ''
+      xml:
+        name: UploadRequest
+        namespace: hmrc:fileupload
+        prefix: default
+        attribute: false
+        wrapped: false
+tags:
+- name: Endpoints
+  description: ''

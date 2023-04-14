@@ -64,7 +64,7 @@ class DeclarationStatusConnectorSpec extends AnyWordSpecLike with MockitoSugar w
   private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
     ApiSubscriptionFieldsTestData.clientId, Csp(None, Some(badgeIdentifier), None), mock[Request[AnyContent]])
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     reset(mockWsPost, mockServiceConfigProvider)
     when(mockServiceConfigProvider.getConfig("v2.declaration-status")).thenReturn(v2Config)
     when(mockServiceConfigProvider.getConfig("v3.declaration-status")).thenReturn(v3Config)

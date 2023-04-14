@@ -17,14 +17,12 @@
 package util
 
 import com.google.inject.AbstractModule
-import org.joda.time.DateTimeZone.UTC
-import org.joda.time.{DateTime, LocalDate}
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
 import play.api.inject.guice.GuiceableModule
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
-import play.api.mvc.AnyContentAsXml
+import play.api.mvc.{AnyContentAsJson, AnyContentAsXml}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.CONTENT_TYPE
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
@@ -45,7 +43,7 @@ import util.RequestHeaders.{ValidHeadersV1, ValidHeadersV2, ValidHeadersV3, X_EO
 import util.TestData.declarantEori
 
 import java.net.URL
-import java.time.Instant
+import java.time.{Instant, LocalDate, ZoneId, ZonedDateTime}
 import java.util.UUID
 import java.util.UUID.fromString
 import scala.xml.{Elem, NodeSeq}
@@ -57,17 +55,17 @@ object TestData {
 
   val correlationIdValue = "e61f8eee-812c-4b8f-b193-06aedc60dca2"
   val correlationIdUuid: UUID = fromString(correlationIdValue)
-  val correlationId = CorrelationId(correlationIdUuid)
+  val correlationId: CorrelationId = CorrelationId(correlationIdUuid)
 
   val dmirIdValue = "1b0a48a8-1259-42c9-9d6a-e797b919eb16"
   val dmirIdUuid: UUID = fromString(dmirIdValue)
-  val dmirId = DeclarationManagementInformationRequestId(dmirIdUuid)
+  val dmirId: DeclarationManagementInformationRequestId = DeclarationManagementInformationRequestId(dmirIdUuid)
 
   val mrnValue = "theMrn"
-  val mrn = Mrn(mrnValue)
+  val mrn: Mrn = Mrn(mrnValue)
 
   val dateString = "2018-09-11T10:28:54.128Z"
-  val date = Instant.parse("2018-09-11T10:28:54.128Z")
+  val date: Instant = Instant.parse("2018-09-11T10:28:54.128Z")
   val httpFormattedDate = "Tue, 11 Sep 2018 10:28:54 UTC"
 
   val subscriptionFieldsIdString: String = "b82f31c6-2239-4253-b6f5-ed75e37ab7a5"
@@ -75,14 +73,14 @@ object TestData {
 
   val clientSubscriptionIdString: String = "327d9145-4965-4d28-a2c5-39dedee50334"
 
-  val nrSubmissionId = NrSubmissionId(conversationId.uuid)
-  val nrsConfigEnabled = NrsConfig(nrsEnabled = true, "nrs-api-key", "nrs.url")
-  val nrsConfigDisabled = NrsConfig(nrsEnabled = false, "nrs-api-key",  "nrs.url")
+  val nrSubmissionId: NrSubmissionId = NrSubmissionId(conversationId.uuid)
+  val nrsConfigEnabled: NrsConfig = NrsConfig(nrsEnabled = true, "nrs-api-key", "nrs.url")
+  val nrsConfigDisabled: NrsConfig = NrsConfig(nrsEnabled = false, "nrs-api-key",  "nrs.url")
 
-  val allVersionsUnshuttered = DeclarationsShutterConfig(Some(false), Some(false), Some(false))
+  val allVersionsUnshuttered: DeclarationsShutterConfig = DeclarationsShutterConfig(Some(false), Some(false), Some(false))
 
   val TenMb = 10485760
-  val fileUploadConfig = FileUploadConfig("upscan-initiate-v1.url", "upscan-initiate-v2.url", 10485760, "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl", 600)
+  val fileUploadConfig: FileUploadConfig = FileUploadConfig("upscan-initiate-v1.url", "upscan-initiate-v2.url", 10485760, "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl", 600)
 
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"
@@ -94,16 +92,16 @@ object TestData {
   val invalidBearerToken = "InvalidBearerToken"
 
   val declarantEoriValue = "ZZ123456789000"
-  val declarantEori = Eori(declarantEoriValue)
+  val declarantEori: Eori = Eori(declarantEoriValue)
   val invalidDeclarantEoriValue = "ZZ123456789000123456789"
-  val invalidDeclarantEori = Eori(invalidDeclarantEoriValue)
+  val invalidDeclarantEori: Eori = Eori(invalidDeclarantEoriValue)
   val upscanInitiateReference = "11370e18-6e24-453e-b45a-76d3e32ea33d"
   val ONE = 1
   val TWO = 2
   val THREE = 3
   val FOUR = 4
 
-  val ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
+  val ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     EventStart,
     VersionTwo,
@@ -115,7 +113,7 @@ object TestData {
     Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None, Some("https://success-redirect.com"), Some("https://error-redirect.com")), FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), Some("https://success-redirect.com"), Some("https://error-redirect.com"))))
   )
 
-  val ValidatedFileUploadPayloadRequestForCspWithTwoFiles = ValidatedFileUploadPayloadRequest(
+  val ValidatedFileUploadPayloadRequestForCspWithTwoFiles: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     EventStart,
     VersionTwo,
@@ -127,7 +125,7 @@ object TestData {
     Seq(FileUploadFile(FileSequenceNo(ONE), Some(DocumentType("docType1")), Some("https://success-redirect.com"), Some("https://error-redirect.com")), FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), Some("https://success-redirect.com"), Some("https://error-redirect.com"))))
   )
 
-  val ValidatedFileUploadPayloadRequestWithFourFiles = ValidatedFileUploadPayloadRequest(
+  val ValidatedFileUploadPayloadRequestWithFourFiles: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
     EventStart,
     VersionTwo,
@@ -158,13 +156,13 @@ object TestData {
   val nrsAgentInformationValue: AgentInformation = AgentInformation(Some("agentId"),
                                                   Some("agentCode"),
                                                   Some("agentFriendlyName"))
-  val nrsGroupIdentifierValue = Some("groupIdentifierValue")
-  val nrsCredentialRole = Some(User)
-  val nrsMdtpInformation = MdtpInformation("deviceId", "sessionId")
-  val nrsItmpName = Some(ItmpName(Some("givenName"),
+  val nrsGroupIdentifierValue: Some[String] = Some("groupIdentifierValue")
+  val nrsCredentialRole: Some[User.type] = Some(User)
+  val nrsMdtpInformation: MdtpInformation = MdtpInformation("deviceId", "sessionId")
+  val nrsItmpName: Some[ItmpName] = Some(ItmpName(Some("givenName"),
                             Some("middleName"),
                             Some("familyName")))
-  val nrsItmpAddress = Some(ItmpAddress(Some("line1"),
+  val nrsItmpAddress: Some[ItmpAddress] = Some(ItmpAddress(Some("line1"),
                                   Some("line2"),
                                   Some("line3"),
                                   Some("line4"),
@@ -172,21 +170,22 @@ object TestData {
                                   Some("postCode"),
                                   Some("countryName"),
                                   Some("countryCode")))
-  val nrsAffinityGroup = Some(Individual)
-  val nrsCredentialStrength = Some("STRONG")
+  val nrsAffinityGroup: Some[AffinityGroup.Individual.type] = Some(Individual)
+  val nrsCredentialStrength: Some[String] = Some("STRONG")
 
   val CURRENT_TIME_IN_MILLIS = 1530442800000L
   val PREVIOUS_TIME_IN_MILLIS = 1530464400000L
   val NRS_TIMESTAMP_IN_MILLIS = 1530475200000L
-  val currentLoginTime: DateTime = new DateTime(CURRENT_TIME_IN_MILLIS, UTC)
-  val currentLoginTime_2 = Instant.ofEpochMilli(CURRENT_TIME_IN_MILLIS)
-  val previousLoginTime: DateTime = new DateTime(PREVIOUS_TIME_IN_MILLIS, UTC)
-  val previousLoginTime_2 = Instant.ofEpochMilli(PREVIOUS_TIME_IN_MILLIS)
-  val nrsTimeStamp = Instant.ofEpochMilli(NRS_TIMESTAMP_IN_MILLIS)
 
-  val nrsLoginTimes = LoginTimes(currentLoginTime, Some(previousLoginTime))
+  val currentLoginTime: ZonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(CURRENT_TIME_IN_MILLIS),  ZoneId.of("UTC"))
+  val currentLoginTime_2: ZonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(CURRENT_TIME_IN_MILLIS), ZoneId.of("UTC"))
+  val previousLoginTime: ZonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(PREVIOUS_TIME_IN_MILLIS), ZoneId.of("UTC"))
+  val previousLoginTime_2: ZonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(PREVIOUS_TIME_IN_MILLIS), ZoneId.of("UTC"))
+  val nrsTimeStamp: Instant = Instant.ofEpochMilli(NRS_TIMESTAMP_IN_MILLIS)
 
-  val nrsRetrievalValues = NrsRetrievalData(Some(nrsInternalIdValue),
+  val nrsLoginTimes: LoginTimes = LoginTimes(currentLoginTime.toInstant, Some(previousLoginTime.toInstant))
+
+  val nrsRetrievalValues: NrsRetrievalData = NrsRetrievalData(Some(nrsInternalIdValue),
     Some(nrsExternalIdValue),
     Some(nrsAgentCodeValue),
     nrsCredentials,
@@ -207,7 +206,7 @@ object TestData {
     nrsCredentialStrength,
     nrsLoginTimes)
 
-  val nrsRetrievalData = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
+  val nrsRetrievalData: Retrieval[Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Option[Name] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes] = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
     Retrievals.nino and Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
     Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
     Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
@@ -283,9 +282,9 @@ object TestData {
   val TestFakeRequestWithBadgeIdAndNoEori: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(("Authorization", "bearer-token"), ("X-Badge-Identifier", badgeIdentifier.value))
   val TestFakeRequestWithEoriAndNoBadgeId: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(("Authorization", "bearer-token"), ("X-EORI-Identifier", declarantEori.value))
   val TestFakeRequestMultipleHeaderValues: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(("Authorization", "bearer-token"), ("Accept", "ABC"), ("Accept", "DEF"))
-  val TestFakeRequestWithV1Headers = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV1.toSeq: _*)
-  val TestFakeRequestWithV2Headers = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV2.toSeq: _*)
-  val TestFakeRequestWithV3Headers = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV3.toSeq: _*)
+  val TestFakeRequestWithV1Headers: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV1.toSeq: _*)
+  val TestFakeRequestWithV2Headers: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV2.toSeq: _*)
+  val TestFakeRequestWithV3Headers: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV3.toSeq: _*)
 
   def testFakeRequestWithBadgeId(badgeIdString: String = badgeIdentifier.value): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString)
@@ -305,27 +304,27 @@ object TestData {
   def testFakeRequestWithHeader(header: String, headerValue: String): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(header -> headerValue)
 
-  val TestConversationIdRequest = ConversationIdRequest(conversationId, EventStart, TestFakeRequest)
-  val TestConversationIdRequestWithV1Headers = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithV1Headers)
-  val TestConversationIdRequestWithV2Headers = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithV2Headers)
-  val TestConversationIdRequestWithV3Headers = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithV3Headers)
-  val TestConversationIdRequestMultipleHeaderValues = ConversationIdRequest(conversationId, EventStart, TestFakeRequestMultipleHeaderValues)
-  val TestConversationIdRequestWithBadgeIdAndNoEori = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithBadgeIdAndNoEori)
-  val TestConversationIdRequestWithEoriAndNoBadgeId = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithEoriAndNoBadgeId)
-  val TestApiVersionRequestV1 = TestConversationIdRequestWithV1Headers.toApiVersionRequest(VersionOne)
-  val TestApiVersionRequestV2 = TestConversationIdRequestWithV2Headers.toApiVersionRequest(VersionTwo)
-  val TestApiVersionRequestV3 = TestConversationIdRequestWithV3Headers.toApiVersionRequest(VersionThree)
-  val TestApiVersionRequestMultipleHeaderValues = TestConversationIdRequestMultipleHeaderValues.toApiVersionRequest(VersionOne)
-  val TestApiVersionRequestWithBadgeIdAndNoEori = TestConversationIdRequestWithBadgeIdAndNoEori.toApiVersionRequest(VersionOne)
-  val TestApiVersionRequestWithEoriAndNoBadgeId = TestConversationIdRequestWithEoriAndNoBadgeId.toApiVersionRequest(VersionOne)
+  val TestConversationIdRequest: ConversationIdRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, TestFakeRequest)
+  val TestConversationIdRequestWithV1Headers: ConversationIdRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithV1Headers)
+  val TestConversationIdRequestWithV2Headers: ConversationIdRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithV2Headers)
+  val TestConversationIdRequestWithV3Headers: ConversationIdRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithV3Headers)
+  val TestConversationIdRequestMultipleHeaderValues: ConversationIdRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, TestFakeRequestMultipleHeaderValues)
+  val TestConversationIdRequestWithBadgeIdAndNoEori: ConversationIdRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithBadgeIdAndNoEori)
+  val TestConversationIdRequestWithEoriAndNoBadgeId: ConversationIdRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, TestFakeRequestWithEoriAndNoBadgeId)
+  val TestApiVersionRequestV1: ApiVersionRequest[AnyContentAsXml] = TestConversationIdRequestWithV1Headers.toApiVersionRequest(VersionOne)
+  val TestApiVersionRequestV2: ApiVersionRequest[AnyContentAsXml] = TestConversationIdRequestWithV2Headers.toApiVersionRequest(VersionTwo)
+  val TestApiVersionRequestV3: ApiVersionRequest[AnyContentAsXml] = TestConversationIdRequestWithV3Headers.toApiVersionRequest(VersionThree)
+  val TestApiVersionRequestMultipleHeaderValues: ApiVersionRequest[AnyContentAsXml] = TestConversationIdRequestMultipleHeaderValues.toApiVersionRequest(VersionOne)
+  val TestApiVersionRequestWithBadgeIdAndNoEori: ApiVersionRequest[AnyContentAsXml] = TestConversationIdRequestWithBadgeIdAndNoEori.toApiVersionRequest(VersionOne)
+  val TestApiVersionRequestWithEoriAndNoBadgeId: ApiVersionRequest[AnyContentAsXml] = TestConversationIdRequestWithEoriAndNoBadgeId.toApiVersionRequest(VersionOne)
   
   // For Status endpoint
-  val TestConversationIdStatusRequest = ConversationIdRequest(conversationId, EventStart, TestFakeRequest)
-  val TestExtractedStatusHeaders = ExtractedStatusHeadersImpl(badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
+  val TestConversationIdStatusRequest: ConversationIdRequest[AnyContentAsXml] = ConversationIdRequest(conversationId, EventStart, TestFakeRequest)
+  val TestExtractedStatusHeaders: ExtractedStatusHeadersImpl = ExtractedStatusHeadersImpl(badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
   val TestValidatedHeadersStatusRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestApiVersionRequestV1.toValidatedHeadersStatusRequest(TestExtractedStatusHeaders)
   val TestAuthorisedStatusRequest: AuthorisedRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest.toAuthorisedRequest(Csp(None, Some(badgeIdentifier), None))
 
-  val TestExtractedHeaders = ExtractedHeadersImpl(ApiSubscriptionFieldsTestData.clientId)
+  val TestExtractedHeaders: ExtractedHeadersImpl = ExtractedHeadersImpl(ApiSubscriptionFieldsTestData.clientId)
   val TestValidatedHeadersRequest: ValidatedHeadersRequest[AnyContentAsXml] = TestApiVersionRequestV1.toValidatedHeadersRequest(TestExtractedHeaders)
 
   val TestValidatedHeadersRequestMultipleHeaderValues: ValidatedHeadersRequest[AnyContentAsXml] = TestApiVersionRequestMultipleHeaderValues.toValidatedHeadersRequest(TestExtractedHeaders)
@@ -339,36 +338,36 @@ object TestData {
   val TestCspValidatedPayloadRequestMultipleHeaderValues: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequestMultipleHeaderValues.toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), Some(nrsRetrievalValues))).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
   val TestNonCspValidatedPayloadRequest: ValidatedPayloadRequest[AnyContentAsXml] = TestValidatedHeadersRequest.toNonCspAuthorisedRequest(declarantEori, Some(nrsRetrievalValues)).toValidatedPayloadRequest(xmlBody = TestXmlPayload)
 
-  val BatchIdOne = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef001"))
-  val BatchIdTwo = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef002"))
-  val BatchIdThree = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef003"))
-  val FileReferenceOne = FileReference(fromString("31400000-8ce0-11bd-b23e-10b96e4ef00f"))
-  val FileReferenceTwo = FileReference(fromString("32400000-8cf0-11bd-b23e-10b96e4ef00f"))
-  val FileReferenceThree = FileReference(fromString("33400000-8cd0-11bd-b23e-10b96e4ef00f"))
+  val BatchIdOne: BatchId = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef001"))
+  val BatchIdTwo: BatchId = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef002"))
+  val BatchIdThree: BatchId = BatchId(fromString("48400000-8cf0-11bd-b23e-10b96e4ef003"))
+  val FileReferenceOne: FileReference = FileReference(fromString("31400000-8ce0-11bd-b23e-10b96e4ef00f"))
+  val FileReferenceTwo: FileReference = FileReference(fromString("32400000-8cf0-11bd-b23e-10b96e4ef00f"))
+  val FileReferenceThree: FileReference = FileReference(fromString("33400000-8cd0-11bd-b23e-10b96e4ef00f"))
   val InitiateDateAsString = "2018-04-24T09:30:00Z"
-  val InitiateDate = Instant.parse(InitiateDateAsString)
-  val createdAtDate = Instant.ofEpochMilli(InitiateDate.toEpochMilli)
-  val CallbackFieldsOne = CallbackFields("name1", "application/xml", "checksum1", InitiateDate, new URL("https://outbound.a.com"))
-  val CallbackFieldsTwo = CallbackFields("name2", "application/xml", "checksum2", InitiateDate, new URL("https://outbound.a.com"))
-  val CallbackFieldsThree = CallbackFields("name3", "application/xml", "checksum3", InitiateDate, new URL("https://outbound.a.com"))
-  val CallbackFieldsUpdated = CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate, new URL("https://outbound.a.com"))
-  val BatchFileOne = BatchFile(reference = FileReferenceOne, Some(CallbackFieldsOne),
+  val InitiateDate: Instant = Instant.parse(InitiateDateAsString)
+  val createdAtDate: Instant = Instant.ofEpochMilli(InitiateDate.toEpochMilli)
+  val CallbackFieldsOne: CallbackFields = CallbackFields("name1", "application/xml", "checksum1", InitiateDate, new URL("https://outbound.a.com"))
+  val CallbackFieldsTwo: CallbackFields = CallbackFields("name2", "application/xml", "checksum2", InitiateDate, new URL("https://outbound.a.com"))
+  val CallbackFieldsThree: CallbackFields = CallbackFields("name3", "application/xml", "checksum3", InitiateDate, new URL("https://outbound.a.com"))
+  val CallbackFieldsUpdated: CallbackFields = CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate, new URL("https://outbound.a.com"))
+  val BatchFileOne: BatchFile = BatchFile(reference = FileReferenceOne, Some(CallbackFieldsOne),
     inboundLocation = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(1), size = 1, documentType = Some(DocumentType("Document Type 1")))
-  val BatchFileTwo = BatchFile(reference = FileReferenceTwo, Some(CallbackFieldsTwo),
+  val BatchFileTwo: BatchFile = BatchFile(reference = FileReferenceTwo, Some(CallbackFieldsTwo),
     inboundLocation = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(2), size = 1, documentType = Some(DocumentType("Document Type 2")))
-  val BatchFileThree = BatchFile(reference = FileReferenceThree, Some(CallbackFieldsThree),
+  val BatchFileThree: BatchFile = BatchFile(reference = FileReferenceThree, Some(CallbackFieldsThree),
     inboundLocation = new URL("https://a.b.com"), sequenceNumber = FileSequenceNo(3), size = 1, documentType = Some(DocumentType("Document Type 3")))
   val BatchFileOneNoCallbackFields: BatchFile = BatchFileOne.copy(maybeCallbackFields = None)
-  val FileMetadataWithFileOne = FileUploadMetadata(DeclarationId("1"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 1, createdAt = createdAtDate, Seq(
+  val FileMetadataWithFileOne: FileUploadMetadata = FileUploadMetadata(DeclarationId("1"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 1, createdAt = createdAtDate, Seq(
     BatchFileOne
   ))
-  val FileMetadataWithFileTwo = FileUploadMetadata(DeclarationId("2"), Eori("123"), csId = subscriptionFieldsId, BatchIdTwo, fileCount = 1, createdAt = createdAtDate, Seq(
+  val FileMetadataWithFileTwo: FileUploadMetadata = FileUploadMetadata(DeclarationId("2"), Eori("123"), csId = subscriptionFieldsId, BatchIdTwo, fileCount = 1, createdAt = createdAtDate, Seq(
     BatchFileTwo
   ))
-  val FileMetadataWithFilesOneAndThree = FileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdThree, fileCount = 2, createdAt = createdAtDate, Seq(
+  val FileMetadataWithFilesOneAndThree: FileUploadMetadata = FileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdThree, fileCount = 2, createdAt = createdAtDate, Seq(
     BatchFileOne, BatchFileThree
   ))
-  val FileMetadataWithFileOneWithNoCallbackFieldsAndThree = FileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 2, createdAt = createdAtDate, Seq(
+  val FileMetadataWithFileOneWithNoCallbackFieldsAndThree: FileUploadMetadata = FileUploadMetadata(DeclarationId("3"), Eori("123"), csId = subscriptionFieldsId, BatchIdOne, fileCount = 2, createdAt = createdAtDate, Seq(
     BatchFileOneNoCallbackFields, BatchFileThree
   ))
 

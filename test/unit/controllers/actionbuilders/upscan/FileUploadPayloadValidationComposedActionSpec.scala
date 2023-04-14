@@ -17,6 +17,7 @@
 package unit.controllers.actionbuilders.upscan
 
 import org.mockito.Mockito.when
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
@@ -31,7 +32,6 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.model.upscan.DocumentType
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import util.UnitSpec
 import util.ApiSubscriptionFieldsTestData.clientId
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData.{conversationId, fileUploadConfig, nrsRetrievalValues}
@@ -39,7 +39,6 @@ import util.TestXMLData
 
 import scala.concurrent.Future
 import scala.xml.Elem
-import org.scalatest.matchers.should.Matchers
 
 class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 

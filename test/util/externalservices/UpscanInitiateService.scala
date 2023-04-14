@@ -55,7 +55,7 @@ trait UpscanInitiateService extends WireMockRunner {
       aResponse().withBody(validUpscanInitiateResponse)
         .withStatus(status)))
 
-  def verifyUpscanInitiateServiceWasCalled() {
+  def verifyUpscanInitiateServiceWasCalled(): Unit = {
     verify(1, postRequestedFor(urlMatchingRequestPath))
   }
 }

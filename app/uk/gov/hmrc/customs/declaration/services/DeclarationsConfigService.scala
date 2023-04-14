@@ -92,7 +92,10 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
       validatedDeclarationsCircuitBreakerConfig,
       validatedNrsConfig,
       validatedFileUploadConfig
-      ) mapN CustomsConfigHolder fold(
+      ) mapN CustomsConfigHolder
+
+  private val customsConfigHolderConf =
+    customsConfigHolder.fold(
         fe = { nel =>
           // error case exposes nel (a NotEmptyList)
           val errorMsg = nel.toList.mkString("\n", "\n", "")
@@ -102,15 +105,15 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
         fa = identity
       )
 
-  val declarationsConfig: DeclarationsConfig = customsConfigHolder.declarationsConfig
+  val declarationsConfig: DeclarationsConfig = customsConfigHolderConf.declarationsConfig
 
-  val declarationsShutterConfig: DeclarationsShutterConfig = customsConfigHolder.declarationsShutterConfig
+  val declarationsShutterConfig: DeclarationsShutterConfig = customsConfigHolderConf.declarationsShutterConfig
 
-  val declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig = customsConfigHolder.declarationsCircuitBreakerConfig
+  val declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig = customsConfigHolderConf.declarationsCircuitBreakerConfig
 
-  val nrsConfig: NrsConfig = customsConfigHolder.validatedNrsConfig
+  val nrsConfig: NrsConfig = customsConfigHolderConf.validatedNrsConfig
 
-  val fileUploadConfig: FileUploadConfig = customsConfigHolder.validatedFileUploadConfig
+  val fileUploadConfig: FileUploadConfig = customsConfigHolderConf.validatedFileUploadConfig
 
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
                                          declarationsShutterConfig: DeclarationsShutterConfig,

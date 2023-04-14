@@ -62,7 +62,7 @@ class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndA
 
   private val httpException =  UpstreamErrorResponse("Emulated 404 response from a web call", 404)
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     reset(mockWsPost, mockLogger)
     when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig)
     when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)

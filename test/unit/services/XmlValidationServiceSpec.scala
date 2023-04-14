@@ -16,11 +16,9 @@
 
 package unit.services
 
-import java.io.FileNotFoundException
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
@@ -31,13 +29,13 @@ import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import util.TestXMLData
 import util.TestXMLData.{InvalidSubmissionXML, InvalidSubmissionXMLWith2Errors, ValidSubmissionXML}
 
-import scala.xml.{Node, SAXException}
+import java.io.FileNotFoundException
+import scala.xml.SAXException
 
 class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach  with Matchers with ScalaFutures{
 
   private implicit val ec = Helpers.stubControllerComponents().executionContext
   protected val MockConfiguration = mock[Configuration]
-  protected val MockXml = mock[Node]
 
   protected val propertyName: String = "xsd.locations.submit"
 
@@ -47,7 +45,7 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
 
   def xmlValidationService: XmlValidationService = new XmlValidationService(MockConfiguration, schemaPropertyName = propertyName){}
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     reset(MockConfiguration)
     when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(Some(xsdLocations))
     when(MockConfiguration.getOptional[Int]("xml.max-errors")).thenReturn(None)
@@ -63,7 +61,7 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
       when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(None)
 
       val caught = intercept[IllegalStateException]{
-        await(xmlValidationService.validate(MockXml))
+        await(xmlValidationService.validate(ValidSubmissionXML))
       }
 
       caught.getMessage shouldBe s"application.conf is missing mandatory property '$propertyName'"
@@ -73,7 +71,7 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
       when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(Some(Nil))
 
       val caught = intercept[IllegalStateException] {
-        await(xmlValidationService.validate(MockXml))
+        await(xmlValidationService.validate(ValidSubmissionXML))
       }
 
       caught.getMessage shouldBe s"application.conf is missing mandatory property '$propertyName'"
@@ -83,14 +81,14 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
       when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(Some(List("there/is/no/such/file")))
 
       val caught = intercept[FileNotFoundException] {
-        await(xmlValidationService.validate(MockXml))
+        await(xmlValidationService.validate(ValidSubmissionXML))
       }
 
       caught.getMessage shouldBe "XML Schema resource file: there/is/no/such/file"
     }
 
     "successfully validate a correct xml" in {
-      val result = (xmlValidationService.validate(ValidSubmissionXML)).futureValue
+      val result: Unit = await(xmlValidationService.validate(ValidSubmissionXML))
 
       result should be(())
     }
@@ -111,12 +109,12 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
       }
       caught.getMessage shouldBe "cvc-complex-type.2.2: Element 'TotalPackageQuantity' must have no element [children], and the value must be valid."
 
-      Option(caught.getException) shouldBe 'nonEmpty
+      Option(caught.getException) shouldBe Symbol("nonEmpty")
       val wrapped1 = caught.getException
       wrapped1.getMessage shouldBe "cvc-datatype-valid.1.2.1: 'ABC' is not a valid value for 'decimal'."
       wrapped1.isInstanceOf[SAXException] shouldBe true
 
-      Option(wrapped1.asInstanceOf[SAXException].getException) shouldBe 'nonEmpty
+      Option(wrapped1.asInstanceOf[SAXException].getException) shouldBe Symbol("nonEmpty")
       val wrapped2 = wrapped1.asInstanceOf[SAXException].getException
       wrapped2.getMessage shouldBe "cvc-complex-type.3.2.2: Attribute 'foo' is not allowed to appear in element 'Declaration'."
       wrapped2.isInstanceOf[SAXException] shouldBe true
@@ -134,7 +132,7 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
 
       caught.getMessage shouldBe "cvc-datatype-valid.1.2.1: 'ABC' is not a valid value for 'decimal'."
 
-      Option(caught.getException) shouldBe 'nonEmpty
+      Option(caught.getException) shouldBe Symbol("nonEmpty")
       val wrapped1 = caught.getException
       wrapped1.getMessage shouldBe "cvc-complex-type.3.2.2: Attribute 'foo' is not allowed to appear in element 'Declaration'."
       wrapped1.isInstanceOf[SAXException] shouldBe true
@@ -146,14 +144,14 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
       when(MockConfiguration.getOptional[Int]("xml.max-errors")).thenReturn(Some(0))
 
       val caught = intercept[IllegalArgumentException] {
-        await(xmlValidationService.validate(MockXml))
+        await(xmlValidationService.validate(ValidSubmissionXML))
       }
 
       caught.getMessage shouldBe "requirement failed: maxErrors should be a positive number but 0 was provided instead."
     }
 
     "successfully validate a cancellation request with typecode and function code" in {
-      val result = (xmlValidationService.validate(TestXMLData.validCancellationXML())).futureValue
+      val result: Unit = await(xmlValidationService.validate(TestXMLData.validCancellationXML()))
 
       result should be(())
     }

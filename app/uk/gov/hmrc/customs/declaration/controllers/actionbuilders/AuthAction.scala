@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{ActionRefiner, RequestHeader, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -27,8 +26,8 @@ import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, Declaration
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Left
 
 
 /** Action builder that attempts to authorise request as a CSP or else NON CSP
@@ -86,7 +85,7 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
       customsAuthService.authAsCsp(requestRetrievals).map {
         case Right((isCsp, maybeNrsRetrievalData)) =>
           if (isCsp) {
-            eitherCspAuthData(maybeNrsRetrievalData).right.map(authAsCsp => Some(authAsCsp))
+            eitherCspAuthData(maybeNrsRetrievalData).map(authAsCsp => Some(authAsCsp))
           } else {
             Right(None)
           }
@@ -97,7 +96,7 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
   }
 
   protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
-    eitherBadgeIdentifier(allowNone = false).right map {
+    eitherBadgeIdentifier(allowNone = false) map {
       badgeId =>
         logger.info(headerValidator.logBadgeIdHeaderText(badgeId))
         Csp(None, badgeId, maybeNrsRetrievalData)

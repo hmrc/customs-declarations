@@ -42,7 +42,7 @@ class HeaderStatusValidator @Inject()(logger: DeclarationsLogger) extends Header
     super.validateHeaders match {
       case Right(b) =>
         val theResult: Either[ErrorResponse, ExtractedStatusHeaders] = for {
-        badgeIdentifier <- hasBadgeIdentifier.right
+        badgeIdentifier <- hasBadgeIdentifier
         } yield {
           logger.debug(s"${logAcceptAndClientIdHeaderText(b.clientId)}" +
             s"$XBadgeIdentifierHeaderName header passed validation: $badgeIdentifier")

@@ -15,8 +15,8 @@ import java.util.Calendar
 import scala.language.postfixOps
 
 name := "customs-declarations"
-scalaVersion := "2.12.13"
-targetJvm := "jvm-1.8"
+scalaVersion := "2.13.10"
+targetJvm := "jvm-11"
 
 lazy val CdsIntegrationComponentTest = config("it") extend Test
 
@@ -44,8 +44,6 @@ lazy val microservice = (project in file("."))
     scoverageSettings
   )
   .settings(majorVersion := 0)
-  .settings(scalacOptions += "-P:silencer:pathFilters=routes")
-  .settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
   .settings(playDefaultPort := 9820)
 
 def onPackageName(rootPackage: String): String => Boolean = {
@@ -90,7 +88,7 @@ def unitTestFilter(name: String): Boolean = name startsWith "unit"
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
-val compileDependencies = Seq(customsApiCommon, hmrcMongo, playJsonJoda, silencerPlugin, silencerLib)
+val compileDependencies = Seq(customsApiCommon, hmrcMongo)
 
 val testDependencies = Seq(scalaTestPlusPlay, flexmark, wireMock, mockito, customsApiCommonTests, hmrcMongoTest)
 
@@ -106,7 +104,7 @@ val zipWcoXsds = taskKey[Pipeline.Stage]("Zips up all WCO declaration XSDs and e
 zipWcoXsds := { mappings: Seq[PathMapping] =>
   val targetDir = WebKeys.webTarget.value / "zip"
   val zipFiles: Iterable[java.io.File] =
-    ((resourceDirectory in Assets).value / "api" / "conf")
+    ((Assets / resourceDirectory ).value / "api" / "conf")
       .listFiles
       .filter(_.isDirectory)
       .map { dir =>
@@ -129,3 +127,7 @@ zipWcoXsds := { mappings: Seq[PathMapping] =>
 }
 
 pipelineStages := Seq(zipWcoXsds)
+
+// To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
+// Try to remove when sbt 1.8.0+ and scoverage is 2.0.7+
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always

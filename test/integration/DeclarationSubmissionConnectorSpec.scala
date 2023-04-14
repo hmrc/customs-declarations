@@ -52,11 +52,11 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
   private val correlationId = UUID.randomUUID()
   private implicit val vpr = TestData.TestCspValidatedPayloadRequest
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     when(mockUuidService.uuid()).thenReturn(correlationId)
   }
 
@@ -64,7 +64,7 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -113,7 +113,7 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
     connector.send(ValidSubmissionXML, Instant.now(), correlationId, VersionOne)
   }
 
-  private def checkCaughtException(status: Int) {
+  private def checkCaughtException(status: Int): Unit = {
     val exception = intercept[Non2xxResponseException](await(sendValidXml()))
     exception.responseCode shouldBe status
   }

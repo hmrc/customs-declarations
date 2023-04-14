@@ -17,7 +17,7 @@
 package util
 
 import java.time.temporal.ChronoUnit
-import java.time.{Instant, ZoneOffset}
+import java.time.{Instant, ZonedDateTime}
 import scala.xml.{Elem, NodeSeq}
 
 object StatusTestXMLData {
@@ -815,7 +815,7 @@ object StatusTestXMLData {
     </n1:queryDeclarationInformationResponse>
 
   def statusResponseDeclarationNoCommunicationAddress: Elem =    <xsd_1:declaration>
-    <n3:acceptanceDate>{Instant.now().atOffset(ZoneOffset.UTC).minus(2, ChronoUnit.MONTHS).toString}</n3:acceptanceDate>
+    <n3:acceptanceDate>{ZonedDateTime.now().minus(2, ChronoUnit.MONTHS).toString}</n3:acceptanceDate>
     <n3:tradeMovementType>{ImportTradeMovementType}</n3:tradeMovementType>
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
   </xsd_1:declaration>
@@ -844,12 +844,12 @@ object StatusTestXMLData {
   def statusResponseDeclarationNoProcedureCategory: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
     <n3:tradeMovementType>{COTradeMovementType}</n3:tradeMovementType>
-    <n3:acceptanceDate>{Instant.now().minus(61, ChronoUnit.DAYS).toString()}</n3:acceptanceDate>
+    <n3:acceptanceDate>{ZonedDateTime.now().minus(61, ChronoUnit.DAYS).toString}</n3:acceptanceDate>
   </xsd_1:declaration>
 
   def statusResponseDeclarationNoTradeMovementType: Elem =    <xsd_1:declaration>
     <n3:communicationAddress>hmrcgwid:144b80b0-b46e-4c56-be1a-83b36649ac46:ad3a8c50-fc1c-4b81-a56cbb153aced791:BADGEID123</n3:communicationAddress>
-    <n3:acceptanceDate>{Instant.now().minus(61, ChronoUnit.DAYS).toString()}</n3:acceptanceDate>
+    <n3:acceptanceDate>{ZonedDateTime.now().minus(61, ChronoUnit.DAYS).toString()}</n3:acceptanceDate>
     <n3:procedureCategory>{ValidImportProcedureCategory}</n3:procedureCategory>
   </xsd_1:declaration>
 

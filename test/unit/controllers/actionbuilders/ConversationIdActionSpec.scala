@@ -17,11 +17,10 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito._
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.test.Helpers.defaultAwaitTimeout
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.ConversationIdAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger

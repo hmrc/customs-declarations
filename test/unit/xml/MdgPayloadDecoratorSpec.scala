@@ -50,7 +50,7 @@ class MdgPayloadDecoratorSpec extends AnyWordSpecLike with MockitoSugar with Mat
 
       val rd = result \\ "badgeIdentifier"
 
-      rd shouldBe 'empty
+      rd shouldBe Symbol("empty")
     }
 
     "set the originatingPartyID as Eori" in {

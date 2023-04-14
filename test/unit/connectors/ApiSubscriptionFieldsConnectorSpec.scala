@@ -16,14 +16,12 @@
 
 package unit.connectors
 
-import org.mockito.ArgumentMatchers.{eq => ameq, _}
-import org.mockito.ArgumentMatchers.{any, anyString}
+import org.mockito.ArgumentMatchers.{any, anyString, eq => ameq}
 import org.mockito.Mockito._
-import org.mockito.internal.matchers.Matches
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.matchers.should.Matchers.{convertToAnyShouldWrapper, intercept}
 import org.scalatest.concurrent.Eventually
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
@@ -31,14 +29,12 @@ import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
 import util.ExternalServicesConfig._
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
 import scala.concurrent.{ExecutionContext, Future}
-import org.scalatest.matchers.should.Matchers
 
 class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
   with Matchers
@@ -59,7 +55,7 @@ class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
 
   private val expectedUrl = s"http://$Host:$Port$ApiSubscriptionFieldsContext/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0"
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     reset(mockLogger, mockWSGetImpl, mockDeclarationsConfigService)
 
     when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)

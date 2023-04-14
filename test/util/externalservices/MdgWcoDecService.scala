@@ -48,21 +48,21 @@ trait MdgWcoDecService extends WireMockRunner {
 
   def verifyMdgWcoDecServiceWasCalledWithV2(requestBody: String,
                                             expectedAuthToken: String = ExternalServicesConfig.AuthToken,
-                                            maybeUnexpectedAuthToken: Option[String] = None) {
+                                            maybeUnexpectedAuthToken: Option[String] = None): Unit = {
 
     verifyMdgWcoDecServiceWasCalledWith(MdgWcoDecV2ServiceContext, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
   }
 
   def verifyMdgWcoDecServiceWasCalledWithV1(requestBody: String,
                                           expectedAuthToken: String = ExternalServicesConfig.AuthToken,
-                                          maybeUnexpectedAuthToken: Option[String] = None) {
+                                          maybeUnexpectedAuthToken: Option[String] = None): Unit = {
 
     verifyMdgWcoDecServiceWasCalledWith(MdgWcoDecV1ServiceContext, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
   }
 
   def verifyMdgWcoDecServiceWasCalledWithV3(requestBody: String,
                                           expectedAuthToken: String = ExternalServicesConfig.AuthToken,
-                                          maybeUnexpectedAuthToken: Option[String] = None) {
+                                          maybeUnexpectedAuthToken: Option[String] = None): Unit = {
 
       verifyMdgWcoDecServiceWasCalledWith(MdgWcoDecV3ServiceContext, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
   }
@@ -70,7 +70,7 @@ trait MdgWcoDecService extends WireMockRunner {
   def verifyMdgWcoDecServiceWasCalledWith(requestPath: String,
                                           requestBody: String,
                                           expectedAuthToken: String,
-                                          maybeUnexpectedAuthToken: Option[String]) {
+                                          maybeUnexpectedAuthToken: Option[String]): Unit = {
 
     verify(1, postRequestedFor(urlMatching(requestPath))
       .withHeader(CONTENT_TYPE, equalTo(XML + "; charset=utf-8"))

@@ -16,14 +16,12 @@
 
 package uk.gov.hmrc.customs.declaration.model
 
-import java.util.UUID
-
-import org.joda.time.LocalDate
 import play.api.libs.json._
-import play.api.libs.json.JodaWrites._
-import play.api.libs.json.JodaReads._
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
+
+import java.time.LocalDate
+import java.util.UUID
 
 case class RequestedVersion(versionNumber: String, configPrefix: Option[String])
 

@@ -55,15 +55,15 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
 
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -80,7 +80,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       Then("a response with a 200 (OK) status is received")
       status(result) shouldBe OK
 
-      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
       schemaFileUploadResponseLocationV1.newValidator().validate(new StreamSource(new StringReader(contentAsString(result))))
     }
   }
@@ -142,11 +142,11 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 400 status is received")
-      result shouldBe 'defined
+      result shouldBe Symbol("defined")
       val resultFuture = result.value
 
       status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
 
       And("the response body is a \"malformed xml body\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(MalformedXmlBodyError)
@@ -163,7 +163,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       Then(s"a response with a 400 status is received")
 
       status(result) shouldBe BAD_REQUEST
-      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
     }
 
     Scenario("Response status 400 when user submits a malformed xml payload") {
@@ -176,11 +176,11 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 400 status is received")
-      result shouldBe 'defined
+      result shouldBe Symbol("defined")
       val resultFuture = result.value
 
       status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
 
       And("the response body is a \"malformed xml body\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(MalformedXmlBodyError)

@@ -48,20 +48,20 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
 
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
-  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.12/test-classes/raw/valid_xml.raw")))
-  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.12/test-classes/raw/invalid_xml.raw")))
+  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.13/test-classes/raw/valid_xml.raw")))
+  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.13/test-classes/raw/invalid_xml.raw")))
 
   Feature("Declaration API rejects declaration payloads containing invalid utf-8 bytes") {
     Scenario(

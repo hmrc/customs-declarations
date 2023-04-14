@@ -57,7 +57,7 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with
 
   implicit val jsonRequest: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     reset(mockWsPost, mockLogger)
     when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig)
   }

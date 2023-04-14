@@ -22,7 +22,6 @@ import org.mongodb.scala._
 import org.mongodb.scala.model.Filters._
 import org.mongodb.scala.model.Updates._
 import org.mongodb.scala.model.{FindOneAndUpdateOptions, IndexModel, IndexOptions, ReturnDocument}
-import play.api.libs.json.Format
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
@@ -94,7 +93,7 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     val selector = equal("batchId", fileUploadMetadata.batchId.toString)
     lazy val errorMsg = s"Could not delete entity for selector: $selector"
     collection.deleteOne(selector).toFuture().transformWith {
-      case Success(_) => Future.successful(Unit)
+      case Success(_) => Future.successful((): Unit)
       case Failure(exception) => {
         logger.error(errorMsg)
         Future.failed(new RuntimeException(exception))

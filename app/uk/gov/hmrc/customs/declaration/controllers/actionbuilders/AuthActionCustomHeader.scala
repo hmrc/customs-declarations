@@ -37,8 +37,8 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     for {
-      maybeBadgeId <- eitherBadgeIdentifier(allowNone = false).right
-      maybeEori <- eitherEori.right
+      maybeBadgeId <- eitherBadgeIdentifier(allowNone = false)
+      maybeEori <- eitherEori
     } yield {
       logger.info(headerValidator.logEoriAndBadgeIdHeaderText(eoriHeaderName, maybeBadgeId, maybeEori))
       Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
@@ -75,14 +75,14 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
 
   override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     val cpsAuth: Either[ErrorResponse, Csp] = for {
-      maybeBadgeId <- eitherBadgeIdentifier(allowNone = true).right
-      maybeEori <- eitherEori.right
+      maybeBadgeId <- eitherBadgeIdentifier(allowNone = true)
+      maybeEori <- eitherEori
     } yield {
       logger.info(headerValidator.logEoriAndBadgeIdHeaderText(XSubmitterIdentifierHeaderName, maybeBadgeId, maybeEori))
       Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
     }
 
-    if (cpsAuth.isRight && cpsAuth.right.get.badgeIdentifier.isEmpty && cpsAuth.right.get.eori.isEmpty) {
+    if (cpsAuth.isRight && cpsAuth.toOption.get.badgeIdentifier.isEmpty && cpsAuth.toOption.get.eori.isEmpty) {
       logger.error(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName headers are missing")
       Left(errorResponseMissingIdentifiers)
     } else {

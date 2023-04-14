@@ -20,6 +20,7 @@ import org.mockito.Mockito.when
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorBadRequest}
@@ -32,7 +33,7 @@ import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData._
-import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders, UnitSpec}
+import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
 
 import scala.concurrent.ExecutionContext
 
@@ -106,7 +107,7 @@ class FileUploadAuthActionSpec extends AnyWordSpecLike with MockitoSugar with Ma
       "Return 401 response when authorised by auth API but badge identifier does not exist" in new NrsEnabled {
         authoriseCspButDontFetchRetrievals()
 
-        val validatedHeadersRequestNoBadge = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
+        val validatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
 
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestNoBadge))
 
@@ -218,7 +219,7 @@ class FileUploadAuthActionSpec extends AnyWordSpecLike with MockitoSugar with Ma
       "Return 401 response when authorised by auth API but badge identifier does not exist" in new NrsDisabled {
         authoriseCsp()
 
-        val validatedHeadersRequestNoBadge = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
+        val validatedHeadersRequestNoBadge: ValidatedHeadersRequest[AnyContentAsXml] = TestConversationIdRequest.toApiVersionRequest(VersionOne).toValidatedHeadersRequest(TestExtractedHeaders)
         private val actual = await(fileUploadAuthAction.refine(validatedHeadersRequestNoBadge))
 
         actual shouldBe Left(errorResponseBadgeIdentifierHeaderMissing.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationId.toString))

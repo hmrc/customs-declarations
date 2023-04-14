@@ -17,6 +17,7 @@
 package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.mvc._
 import play.api.test.FakeRequest
@@ -33,7 +34,6 @@ import java.io.StringReader
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
-import org.scalatest.matchers.should.Matchers
 
 class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
@@ -72,15 +72,15 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
       |</errorResponse>
     """.stripMargin
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -102,7 +102,7 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
       status(result) shouldBe ACCEPTED
 
       And("the response body is empty")
-      contentAsString(result) shouldBe 'empty
+      contentAsString(result) shouldBe Symbol("empty")
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCsp())
@@ -131,7 +131,7 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
       status(result) shouldBe ACCEPTED
 
       And("the response body is empty")
-      contentAsString(result) shouldBe 'empty
+      contentAsString(result) shouldBe Symbol("empty")
 
       And("the request was authorised with AuthService")
       verifyAuthServiceCalledForCsp()
@@ -154,11 +154,11 @@ class CustomsDeclarationArrivalNotificationSpec extends ComponentTestSpec with A
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 400 status is received")
-      result shouldBe 'defined
+      result shouldBe Symbol("defined")
       val resultFuture = result.value
 
       status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
 
       And("the response body is a \"invalid xml\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(BadRequestErrorWith2Errors)

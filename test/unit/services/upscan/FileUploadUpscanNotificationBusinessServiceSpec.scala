@@ -16,12 +16,10 @@
 
 package unit.services.upscan
 
-import java.net.URL
-import java.util.UUID
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers
@@ -38,8 +36,9 @@ import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadUpscanNotificat
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 
+import java.net.URL
+import java.util.UUID
 import scala.concurrent.Future
-import org.scalatest.matchers.should.Matchers
 
 class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 

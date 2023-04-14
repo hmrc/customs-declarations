@@ -39,14 +39,14 @@ class DeclarationSchemaSpec extends ComponentTestSpec
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
     stubAuditService()
     authServiceAuthorizesCSP()
     startMdgWcoDecServiceV2()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -60,11 +60,11 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 202 status is received")
-      result shouldBe 'defined
+      result shouldBe Symbol("defined")
       val resultFuture = result.value
 
       status(resultFuture) shouldBe ACCEPTED
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
     }
 
     Scenario("Response status 202 when authorised as CSP with privileged application and submits function code 13 in the request") {
@@ -93,7 +93,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
 
       Then("a response with a 202 (ACCEPTED) status is received")
       status(resultFuture) shouldBe ACCEPTED
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
     }
 
     Scenario("Response status 202 when function code 13 is in the request") {
@@ -116,11 +116,11 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 202 status is received")
-      result shouldBe 'defined
+      result shouldBe Symbol("defined")
       val resultFuture = result.value
 
       status(resultFuture) shouldBe ACCEPTED
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
     }
   }
 

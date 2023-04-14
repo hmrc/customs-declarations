@@ -62,12 +62,7 @@ paths:
       tags:
       - Endpoints
       summary: Submit a Customs Declaration
-      description: |
-        Allows submission of a Customs Declaration.
-        
-        #### Authorisation
-
-        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      description: Allows submission of a Customs Declaration.
       operationId: SubmitaCustomsDeclaration
       parameters:
       - name: Accept
@@ -168,18 +163,15 @@ paths:
                     name: CustomsDeclarationsresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ ]
       deprecated: false
   /customs/declarations/cancellation-requests:
     post:
       tags:
       - Endpoints
       summary: Submit a cancellation request
-      description: |
-        Allows submission of a cancellation request.
-        
-        #### Authorisation
-
-        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      description: Allows submission of a cancellation request.
       operationId: Submitacancellationrequest
       parameters:
       - name: Accept
@@ -280,6 +272,8 @@ paths:
                     name: CustomsDeclarationsCancellationRequestsresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ ]
       deprecated: false
   /customs/declarations/file-upload:
     post:
@@ -307,10 +301,6 @@ paths:
 
 
         The 'file' field must be the last field in the submitted form.
-        
-        #### Authorisation
-
-        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
       operationId: Submitanuploadinitiaterequest
       parameters:
       - name: Accept
@@ -430,18 +420,15 @@ paths:
                     name: CustomsDeclarationsFileUploadresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ ]
       deprecated: false
   /customs/declarations/amend:
     post:
       tags:
       - Endpoints
       summary: Submit a Customs Amend Declaration
-      description: |
-        Allows submission of a Customs Amend Declaration.
-        
-        #### Authorisation
-
-        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      description: Allows submission of a Customs Amend Declaration.
       operationId: SubmitaCustomsAmendDeclaration
       parameters:
       - name: Accept
@@ -542,18 +529,15 @@ paths:
                     name: CustomsDeclarationsAmendresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ ]
       deprecated: false
   /customs/declarations/arrival-notification:
     post:
       tags:
       - Endpoints
       summary: Submit an Arrival Notification Declaration
-      description: |
-        Allows submission of a Customs Arrival Notification Declaration.
-        
-        #### Authorisation
-
-        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
+      description: Allows submission of a Customs Arrival Notification Declaration.
       operationId: SubmitanArrivalNotificationDeclaration
       parameters:
       - name: Accept
@@ -654,6 +638,8 @@ paths:
                     name: CustomsDeclarationsArrivalNotificationresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ ]
       deprecated: false
   /customs/declarations/status-request/mrn/{mrn}:
     get:
@@ -670,10 +656,6 @@ paths:
 
 
         Get the status of a declaration with the given MRN. This endpoint is only available to CSP users.
-        
-        #### Authorisation
-
-        This endpoint is [user-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) and requires an `Authorization` header containing an OAuth 2.0 Bearer Token with the `write:customs-declarations` scope.
       operationId: Getthestatusofadeclaration(deprecated)
       parameters:
       - name: mrn
@@ -740,8 +722,23 @@ paths:
                     name: CustomsDeclarationsStatusRequestMrnresponse500
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ ]
       deprecated: false
 components:
+  securitySchemes:
+    userRestricted:
+      type: oauth2
+      description: |
+        HMRC supports OAuth 2.0 for authenticating user restricted API requests using an OAuth 2.0 Bearer Token in the AUTHORIZATION header.
+        See https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints for details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.service.hmrc.gov.uk/oauth/authorize
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
+          scopes:
+            "write:customs-declarations": "write:customs-declarations"
   examples:
     BadRequestExample:
       summary: BadRequest

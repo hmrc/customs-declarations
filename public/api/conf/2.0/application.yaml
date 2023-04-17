@@ -50,6 +50,9 @@ info:
     Please Note: 443 is the only allowed port, which means port 443 will need to be used in the callback URL.
   contact: {}
   version: '2.0'
+security:
+  - userRestricted:
+    - "write:customs-declarations"
 servers:
   - url: https://test-api.service.hmrc.gov.uk/
     description: Sandbox
@@ -155,8 +158,6 @@ paths:
                     name: CustomsDeclarationsresponse400
                     attribute: false
                     wrapped: false
-      security:
-        - userRestricted: [ ]
       deprecated: false
   /customs/declarations/cancellation-requests:
     post:
@@ -256,8 +257,6 @@ paths:
                     name: CustomsDeclarationsCancellationRequestsresponse400
                     attribute: false
                     wrapped: false
-      security:
-        - userRestricted: [ ]
       deprecated: false
   /customs/declarations/file-upload:
     post:
@@ -396,8 +395,6 @@ paths:
                     name: CustomsDeclarationsFileUploadresponse400
                     attribute: false
                     wrapped: false
-      security:
-        - userRestricted: [ ]
       deprecated: false
   /customs/declarations/amend:
     post:
@@ -497,8 +494,6 @@ paths:
                     name: CustomsDeclarationsAmendresponse400
                     attribute: false
                     wrapped: false
-      security:
-        - userRestricted: [ ]
       deprecated: false
   /customs/declarations/arrival-notification:
     post:
@@ -598,8 +593,6 @@ paths:
                     name: CustomsDeclarationsArrivalNotificationresponse400
                     attribute: false
                     wrapped: false
-      security:
-        - userRestricted: [ ]
       deprecated: false
 components:
   securitySchemes:

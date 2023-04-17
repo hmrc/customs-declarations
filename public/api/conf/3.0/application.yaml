@@ -158,6 +158,8 @@ paths:
                     name: CustomsDeclarationsresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ "write:customs-declarations" ]
       deprecated: false
   /customs/declarations/cancellation-requests:
     post:
@@ -257,6 +259,8 @@ paths:
                     name: CustomsDeclarationsCancellationRequestsresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ "write:customs-declarations" ]
       deprecated: false
   /customs/declarations/file-upload:
     post:
@@ -395,6 +399,8 @@ paths:
                     name: CustomsDeclarationsFileUploadresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ "write:customs-declarations" ]
       deprecated: false
   /customs/declarations/amend:
     post:
@@ -494,6 +500,8 @@ paths:
                     name: CustomsDeclarationsAmendresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ "write:customs-declarations" ]
       deprecated: false
   /customs/declarations/arrival-notification:
     post:
@@ -593,6 +601,8 @@ paths:
                     name: CustomsDeclarationsArrivalNotificationresponse400
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ "write:customs-declarations" ]
       deprecated: false
   /customs/declarations/status-request/mrn/{mrn}:
     get:
@@ -667,6 +677,8 @@ paths:
                     name: CustomsDeclarationsStatusRequestMrnresponse500
                     attribute: false
                     wrapped: false
+      security:
+        - userRestricted: [ "write:customs-declarations" ]
       deprecated: false
 components:
   securitySchemes:

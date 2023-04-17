@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: Customs Declarations
   description: |
@@ -108,14 +108,6 @@ paths:
         schema:
           type: string
           example: GB123456789000
-      - name: Authorization
-        in: header
-        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
-        required: true
-        style: simple
-        schema:
-          type: string
-          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:
@@ -217,14 +209,6 @@ paths:
         schema:
           type: string
           example: GB123456789000
-      - name: Authorization
-        in: header
-        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
-        required: true
-        style: simple
-        schema:
-          type: string
-          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:
@@ -340,14 +324,6 @@ paths:
         schema:
           type: string
           example: GB123456789000
-      - name: Authorization
-        in: header
-        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
-        required: true
-        style: simple
-        schema:
-          type: string
-          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:
@@ -468,14 +444,6 @@ paths:
         schema:
           type: string
           example: GB123456789000
-      - name: Authorization
-        in: header
-        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
-        required: true
-        style: simple
-        schema:
-          type: string
-          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:
@@ -575,14 +543,6 @@ paths:
         schema:
           type: string
           example: GB123456789000
-      - name: Authorization
-        in: header
-        description: An [OAuth 2.0 Bearer Token](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) with the `write:customs-declarations` scope.
-        required: true
-        style: simple
-        schema:
-          type: string
-          example: Bearer bb7fed3fe10dd235a2ccda3d50fb
       requestBody:
         description: ''
         content:

@@ -48,6 +48,8 @@ info:
       - If successful this will prompt the grant authority to your application and select approve. If correct, you should see a 200 response showing some test data including a username, password and EORI.
       - After completing the above, if you call the Customs Declaration API, the same process should occur whereby it will ask for a username and password (Please enter the Username and Password that is in the test data generated from the step above when calling the create test user API)
     Please Note: 443 is the only allowed port, which means port 443 will need to be used in the callback URL.
+    
+    See also [fraud prevention](https://developer.service.hmrc.gov.uk/guides/fraud-prevention/).
   contact: {}
   version: '3.0'
 security:
@@ -82,9 +84,8 @@ paths:
         required: true
         style: simple
         schema:
-          enum:
-          - application/xml
           type: string
+          example: application/xml; charset=UTF-8
       - name: X-Badge-Identifier
         in: header
         description: >-
@@ -183,9 +184,8 @@ paths:
         required: true
         style: simple
         schema:
-          enum:
-          - application/xml
           type: string
+          example: application/xml; charset=UTF-8
       - name: X-Badge-Identifier
         in: header
         description: >-
@@ -304,9 +304,8 @@ paths:
         required: true
         style: simple
         schema:
-          enum:
-          - application/xml
           type: string
+          example: application/xml; charset=UTF-8
       - name: X-Badge-Identifier
         in: header
         description: >-
@@ -424,9 +423,8 @@ paths:
         required: true
         style: simple
         schema:
-          enum:
-          - application/xml
           type: string
+          example: application/xml; charset=UTF-8
       - name: X-Badge-Identifier
         in: header
         description: >-
@@ -525,9 +523,8 @@ paths:
         required: true
         style: simple
         schema:
-          enum:
-          - application/xml
           type: string
+          example: application/xml; charset=UTF-8
       - name: X-Badge-Identifier
         in: header
         description: >-

@@ -67,7 +67,32 @@ paths:
       tags:
       - Endpoints
       summary: Submit a Customs Declaration
-      description: Allows submission of a Customs Declaration.
+      description: |
+        Allows submission of a Customs Declaration.
+        
+        **Error scenarios**
+
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Scenario</b></td>
+              <td><b>HTTP Status</b></td>
+              <td><b>Code</b></td>
+            </tr>
+            <tr>
+              <td>Invalid XML Payload</td>
+              <td>400 (Bad Request)</td>
+              <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>Internal server error</td>
+              <td>500 (Internal Server Error)</td>
+              <td>INTERNAL_SERVER_ERROR</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        For error scenarios that are common across all APIs, and for error formats, see our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
       operationId: SubmitaCustomsDeclaration
       parameters:
       - name: Accept

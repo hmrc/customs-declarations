@@ -62,7 +62,32 @@ paths:
       tags:
       - Endpoints
       summary: Submit a Customs Declaration
-      description: Allows submission of a Customs Declaration.
+      description: |
+        Allows submission of a Customs Declaration.
+        
+        **Error scenarios**
+
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Scenario</b></td>
+              <td><b>HTTP Status</b></td>
+              <td><b>Code</b></td>
+            </tr>
+            <tr>
+              <td>Invalid XML Payload</td>
+              <td>400 (Bad Request)</td>
+              <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>Internal server error</td>
+              <td>500 (Internal Server Error)</td>
+              <td>INTERNAL_SERVER_ERROR</td>
+            </tr>
+          </tbody>
+        </table>
+
+        For error scenarios that are common across all APIs, and for error formats, see our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
       operationId: SubmitaCustomsDeclaration
       parameters:
       - name: Accept
@@ -162,7 +187,32 @@ paths:
       tags:
       - Endpoints
       summary: Submit a cancellation request
-      description: Allows submission of a cancellation request.
+      description: |
+        Allows submission of a cancellation request.
+        
+        **Error scenarios**
+
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Scenario</b></td>
+              <td><b>HTTP Status</b></td>
+              <td><b>Code</b></td>
+            </tr>
+            <tr>
+              <td>Invalid XML Payload</td>
+              <td>400 (Bad Request)</td>
+              <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>Internal server error</td>
+              <td>500 (Internal Server Error)</td>
+              <td>INTERNAL_SERVER_ERROR</td>
+            </tr>
+          </tbody>
+        </table>
+
+        For error scenarios that are common across all APIs, and for error formats, see our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
       operationId: Submitacancellationrequest
       parameters:
       - name: Accept
@@ -277,6 +327,30 @@ paths:
         You must use multipart encoding (multipart/form-data) NOT application/x-www-form-urlencoded.
         
         The 'file' field must be the last field in the submitted form.
+        
+        **Error scenarios**
+
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Scenario</b></td>
+              <td><b>HTTP Status</b></td>
+              <td><b>Code</b></td>
+            </tr>
+            <tr>
+              <td>Invalid XML Payload</td>
+              <td>400 (Bad Request)</td>
+              <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>Internal server error</td>
+              <td>500 (Internal Server Error)</td>
+              <td>INTERNAL_SERVER_ERROR</td>
+            </tr>
+          </tbody>
+        </table>
+
+        For error scenarios that are common across all APIs, and for error formats, see our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
       operationId: Submitanuploadinitiaterequest
       parameters:
       - name: Accept
@@ -395,7 +469,32 @@ paths:
       tags:
       - Endpoints
       summary: Submit a Customs Amend Declaration
-      description: Allows submission of a Customs Amend Declaration.
+      description: |
+        Allows submission of a Customs Amend Declaration.
+        
+        **Error scenarios**
+
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Scenario</b></td>
+              <td><b>HTTP Status</b></td>
+              <td><b>Code</b></td>
+            </tr>
+            <tr>
+              <td>Invalid XML Payload</td>
+              <td>400 (Bad Request)</td>
+              <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>Internal server error</td>
+              <td>500 (Internal Server Error)</td>
+              <td>INTERNAL_SERVER_ERROR</td>
+            </tr>
+          </tbody>
+        </table>
+
+        For error scenarios that are common across all APIs, and for error formats, see our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
       operationId: SubmitaCustomsAmendDeclaration
       parameters:
       - name: Accept
@@ -495,7 +594,32 @@ paths:
       tags:
       - Endpoints
       summary: Submit an Arrival Notification Declaration
-      description: Allows submission of a Customs Arrival Notification Declaration.
+      description: |
+        Allows submission of a Customs Arrival Notification Declaration.
+        
+        **Error scenarios**
+
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Scenario</b></td>
+              <td><b>HTTP Status</b></td>
+              <td><b>Code</b></td>
+            </tr>
+            <tr>
+              <td>Invalid XML Payload</td>
+              <td>400 (Bad Request)</td>
+              <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>Internal server error</td>
+              <td>500 (Internal Server Error)</td>
+              <td>INTERNAL_SERVER_ERROR</td>
+            </tr>
+          </tbody>
+        </table>
+
+        For error scenarios that are common across all APIs, and for error formats, see our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
       operationId: SubmitanArrivalNotificationDeclaration
       parameters:
       - name: Accept

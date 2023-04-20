@@ -52,9 +52,6 @@ info:
     See also [fraud prevention](https://developer.service.hmrc.gov.uk/guides/fraud-prevention/).
   contact: {}
   version: '3.0'
-security:
-  - userRestricted:
-    - "write:customs-declarations"
 servers:
   - url: https://test-api.service.hmrc.gov.uk/
     description: Sandbox
@@ -185,7 +182,7 @@ paths:
                     attribute: false
                     wrapped: false
       security:
-        - userRestricted: [ "write:customs-declarations" ]
+        - userRestricted: [ "write:customs-declaration" ]
       deprecated: false
   /customs/declarations/cancellation-requests:
     post:
@@ -310,7 +307,7 @@ paths:
                     attribute: false
                     wrapped: false
       security:
-        - userRestricted: [ "write:customs-declarations" ]
+        - userRestricted: [ "write:customs-declaration" ]
       deprecated: false
   /customs/declarations/file-upload:
     post:
@@ -473,7 +470,7 @@ paths:
                     attribute: false
                     wrapped: false
       security:
-        - userRestricted: [ "write:customs-declarations" ]
+        - userRestricted: [ "write:customs-declaration" ]
       deprecated: false
   /customs/declarations/amend:
     post:
@@ -598,7 +595,7 @@ paths:
                     attribute: false
                     wrapped: false
       security:
-        - userRestricted: [ "write:customs-declarations" ]
+        - userRestricted: [ "write:customs-declaration" ]
       deprecated: false
   /customs/declarations/arrival-notification:
     post:
@@ -723,7 +720,7 @@ paths:
                     attribute: false
                     wrapped: false
       security:
-        - userRestricted: [ "write:customs-declarations" ]
+        - userRestricted: [ "write:customs-declaration" ]
       deprecated: false
   /customs/declarations/status-request/mrn/{mrn}:
     get:
@@ -818,7 +815,7 @@ paths:
                     attribute: false
                     wrapped: false
       security:
-        - userRestricted: [ "write:customs-declarations" ]
+        - userRestricted: [ "write:customs-declaration" ]
       deprecated: false
 components:
   securitySchemes:
@@ -833,7 +830,7 @@ components:
           tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
           refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
           scopes:
-            "write:customs-declarations": "write:customs-declarations"
+            "write:customs-declaration": "write:customs-declaration"
   examples:
     BadRequestExample:
       summary: BadRequest

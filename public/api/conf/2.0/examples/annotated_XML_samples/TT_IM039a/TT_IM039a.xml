@@ -16,30 +16,29 @@
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
 	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-		
 		<!--	
+
 			SCENARIO
+
 			ROW-NI, NIIMP, Goods 'At Risk'
 			EU Liabilities - Suspension
 			Type A Frontier Standard Declaration for goods imported to NI from RoW (Brazil). Goods are deemed at Risk. 
 			Due to the nature of the Commodity and the Country of Origin, customs duty is calculated and charged according to the EU Tariff at the prevailing Autonomous Suspensions rate.			
 			The suspension is partial rather than total. 
 			No UK Customs Duty, UK Excise Duty or UK additional duties are charged 
-			
 			Expected Notifications (4): DMSACC, DMSTAX(1), DMSTAX(2), and DMSCLE.
+
 		-->
-		
 		<!--Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: Traders own reference number this must be unique to the transaction -->
-		<FunctionalReferenceID>TT_IM39a_v1.3_0902_02</FunctionalReferenceID>
+		<FunctionalReferenceID>TT_IM39a_v1.3_0902_W3</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: A to represent a supplementary declaration.-->
 		<TypeCode>IMA</TypeCode>
 		<!--DE 1/9: Total number of goods items on the declaration (single item declaration).-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
-		<!--6/18: Total packages -  10 note that this matches DE 6/10 because this is a 
-			single item declaration.-->
+		<!--6/18: Total packages -  10 note that this matches DE 6/10 because this is a single item declaration.-->
 		<TotalPackageQuantity>10</TotalPackageQuantity>
 		<!--DE 2/6: The DAN account used for deferred payment of duty in this scenario.
 			This declared DAN belongs to the importer declared on the declaration.-->
@@ -119,6 +118,7 @@
 						<!--DE 5/23: Type of ID of the Location. Y in this scenario for UN/LOCODE.-->
 						<TypeCode>U</TypeCode>
 						<!--DE 5/23: Country code of the country where the goods may be examined, 
+
 							GB in this scenario.-->
 						<CountryCode>GB</CountryCode>
 					</Address>
@@ -158,8 +158,7 @@
 				</AdditionalDocument>
 				<!--DE 2/3 Documents produced, certificates and authorisations, additional references.
 					A document code of C505 indicates CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver. 
-					In this scenario, a waiver to the CCG authorisation is being used (indicated by the 
-					status code of CC), and therefore the ID also indicates that a waiver is being used. -->
+					In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of CC), and therefore the ID also indicates that a waiver is being used. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBCGUGuaranteenotrequired</ID>
@@ -184,6 +183,13 @@
 					<ID>GBCHA12345678</ID>
 					<TypeCode>113</TypeCode>
 					<LPCOExemptionCode>AE</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3 Documents produced, certificates and authorisations, additional references.
+					A document code of Y110 indicates: Exemption from REACH restrictions by virtue of Article 67(1) and 67(2) of Regulation (EC) No 1907/2006. -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>Reg. 1907/2006 Exempt</ID>
+					<TypeCode>110</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/2: Additional information. 
 					00500 Indicating Self representation by the importer. -->
@@ -316,7 +322,7 @@
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>2GB553202734852-12345</ID>
+				<ID>2GB553202734852-123143</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

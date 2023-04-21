@@ -276,9 +276,11 @@
 						</Payment>
 					</DutyTaxFee>
 					<DutyTaxFee>
+							<!--DE 4/4: Tax Base. 
+							In this scenario, LPA indicating Litre pure (100%) alcohol. -->
+						<SpecificTaxBaseQuantity unitCode="LPA">100</SpecificTaxBaseQuantity>
 						<!--DE 4/3: Tax Type.
 							451 represents UK tax type 451, Spirits other than UK produced whisky. -->
-						<SpecificTaxBaseQuantity unitCode="LPA">100</SpecificTaxBaseQuantity>
 						<TypeCode>451</TypeCode>
 						<Payment>
 							<!--DE 4/8: Method of Payment. 

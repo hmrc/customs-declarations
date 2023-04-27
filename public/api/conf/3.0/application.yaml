@@ -3,12 +3,7 @@ info:
   title: Customs Declarations
   description: |
     # Schemas and examples
-    
-    Schema definitions for all the API endpoints request & response payloads can be found in the following zip archive.
-    
-    [Schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip)
-    
-    ZIP, 2.2MB last updated 20/04/2023
+    Schema definitions for all the API endpoints request & response payloads can be found in the following zip archive: [Schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip) (ZIP, 2.2MB last updated 20/04/2023).
     
     The ZIP file contains XML files. Open in your preferred file viewer.
   contact: {}

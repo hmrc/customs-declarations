@@ -18,7 +18,7 @@ package uk.gov.hmrc.customs.declaration.model
 
 import java.util.UUID
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.libs.json._
 import play.api.libs.json.JodaWrites._
 import play.api.libs.json.JodaReads._

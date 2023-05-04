@@ -18,7 +18,8 @@ package util
 
 import com.google.inject.AbstractModule
 import org.joda.time.DateTimeZone.UTC
-import org.joda.time.{DateTime, LocalDate}
+import org.joda.time.{DateTime}
+import java.time.{LocalDate}
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
@@ -184,7 +185,7 @@ object TestData {
   val previousLoginTime_2 = Instant.ofEpochMilli(PREVIOUS_TIME_IN_MILLIS)
   val nrsTimeStamp = Instant.ofEpochMilli(NRS_TIMESTAMP_IN_MILLIS)
 
-  val nrsLoginTimes = LoginTimes(currentLoginTime, Some(previousLoginTime))
+  val nrsLoginTimes = LoginTimes(java.time.Instant.ofEpochMilli(currentLoginTime.toInstant.getMillis), Some(java.time.Instant.ofEpochMilli(previousLoginTime.toInstant.getMillis)))
 
   val nrsRetrievalValues = NrsRetrievalData(Some(nrsInternalIdValue),
     Some(nrsExternalIdValue),

@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import javax.inject.{Inject, Singleton}
 import org.joda.time.format.{DateTimeFormatter, ISODateTimeFormat}
+import javax.inject.{Inject, Singleton}
+//import java.time.format.{DateTimeFormatter}
 import org.joda.time.{DateTime, DateTimeZone}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -115,7 +116,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
       }
   })
 
-  private def safelyExtractValue(extractedValues : Seq[String]): Option[String] = {
+  private def safelyExtractValue(extractedValues : scala.collection.Seq[String]): Option[String] = {
     if(extractedValues.nonEmpty && !extractedValues.head.isEmpty && extractedValues.head.length > 1) {
       Some(extractedValues.head.substring(0,2))
     } else {
@@ -173,7 +174,7 @@ class StatusResponseValidationService @Inject() (declarationsLogger: Declaration
     DateTime.now(DateTimeZone.UTC).minusDays(declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit)
   }
 
-  private def extractField(declarationNode: NodeSeq, nodeName: String): Option[Seq[String]] = {
+  private def extractField(declarationNode: NodeSeq, nodeName: String): Option[scala.collection.Seq[String]] = {
     val mayBeFieldValue = (declarationNode \ nodeName).theSeq match {
       case Nil => None
       case a => Some(a.map(_.text))

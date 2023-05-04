@@ -94,7 +94,7 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     val selector = equal("batchId", fileUploadMetadata.batchId.toString)
     lazy val errorMsg = s"Could not delete entity for selector: $selector"
     collection.deleteOne(selector).toFuture().transformWith {
-      case Success(_) => Future.successful(Unit)
+      case Success(_) => Future.successful(())
       case Failure(exception) => {
         logger.error(errorMsg)
         Future.failed(new RuntimeException(exception))

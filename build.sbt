@@ -15,6 +15,8 @@ import java.util.Calendar
 import scala.language.postfixOps
 
 name := "customs-declarations"
+scalaVersion := "2.13.10"
+targetJvm := "jvm-11"
 
 lazy val CdsIntegrationComponentTest = config("it") extend Test
 
@@ -35,8 +37,6 @@ lazy val microservice = (project in file("."))
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
   .configs(testConfig: _*)
   .settings(
-    scalaVersion := "2.13.10",
-    targetJvm := "jvm-11",
     commonSettings,
     unitTestSettings,
     integrationComponentTestSettings,

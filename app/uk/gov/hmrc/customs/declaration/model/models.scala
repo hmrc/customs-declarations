@@ -20,8 +20,8 @@ import java.util.UUID
 
 import java.time.LocalDate
 import play.api.libs.json._
-import play.api.libs.json.JodaWrites._
-import play.api.libs.json.JodaReads._
+//import play.api.libs.json.JodaWrites._
+//import play.api.libs.json.JodaReads._
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
 

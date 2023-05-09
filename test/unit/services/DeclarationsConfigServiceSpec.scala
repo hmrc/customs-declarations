@@ -51,6 +51,7 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
       |fileUpload.fileGroupSize.maximum=10
       |fileUpload.fileSize.maximum=100
       |ttlInSeconds=600
+      |payloadForbidden.enable = true
       |nrs.enabled=true
       |nrs.apikey="nrs-api-key"
       |microservice.services.nrs.host="nrs.url"
@@ -85,6 +86,7 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
       configService.declarationsConfig.customsNotificationBaseBaseUrl shouldBe "http://some-host2:1112/some-context2"
       configService.declarationsConfig.customsDeclarationsMetricsBaseBaseUrl shouldBe "http://some-host3:1113/some-context3"
       configService.declarationsConfig.customsNotificationBearerToken shouldBe "some-token"
+      configService.declarationsConfig.payloadForbiddenEnabled shouldBe true
       configService.declarationsShutterConfig.v1Shuttered shouldBe Some(true)
       configService.declarationsShutterConfig.v2Shuttered shouldBe Some(false)
       configService.declarationsShutterConfig.v3Shuttered shouldBe None
@@ -111,6 +113,7 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
           |Service configuration not found for key: customs-declarations-metrics.context
           |Service configuration not found for key: customs-notification.bearer-token
           |Could not find config key 'declarationStatus.requestDaysLimit'
+          |Could not find config key 'payloadForbidden.enable'
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'

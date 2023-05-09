@@ -49,6 +49,8 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
   private val customsDeclarationsMetricsServiceUrlNel = customsDeclarationsMetricsService.serviceUrl
 
+  private val payloadForbiddenEnabled = root.boolean("payloadForbidden.enable")
+
   private val nrsEnabled = root.boolean("nrs.enabled")
   private val nrsApiKey = root.string("nrs.apikey")
   private val nrsUrl = nrsService.serviceUrl
@@ -63,7 +65,8 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val ttlInSeconds = root.int("ttlInSeconds")
 
   private val validatedDeclarationsConfig: CustomsValidatedNel[DeclarationsConfig] = (
-    apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, customsDeclarationsMetricsServiceUrlNel, bearerTokenNel, declarationStatusRequestDaysLimit
+    apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, customsDeclarationsMetricsServiceUrlNel, bearerTokenNel,
+    declarationStatusRequestDaysLimit, payloadForbiddenEnabled
     ) mapN DeclarationsConfig
 
   private val validatedDeclarationsShutterConfig: CustomsValidatedNel[DeclarationsShutterConfig] = (

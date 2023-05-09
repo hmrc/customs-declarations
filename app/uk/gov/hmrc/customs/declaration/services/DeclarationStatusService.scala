@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
+import play.api.http.Status.{FORBIDDEN, NOT_FOUND}
+
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
@@ -41,7 +43,8 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
                                          dateTimeProvider: DateTimeService,
                                          uniqueIdsService: UniqueIdsService,
                                          statusResponseFilterService: StatusResponseFilterService,
-                                         statusResponseValidationService: StatusResponseValidationService)
+                                         statusResponseValidationService: StatusResponseValidationService,
+                                         configService: DeclarationsConfigService)
                                         (implicit val ec: ExecutionContext) extends ApiSubscriptionFieldsService {
 
   def send[A](mrn: Mrn)(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier): Future[Either[Result, HttpResponse]] = {
@@ -66,15 +69,27 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
                 Left(ErrorGenericBadRequest.XmlResult.withConversationId)
             }
           }).recover{
-          case e: HttpException if e.responseCode == 404 =>
-            logger.warn(s"declaration status call failed with 404: ${e.getMessage}")
-            Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)
+          case e: HttpException if isNotFoundOrForbidden(e.responseCode) =>
+            logger.warn(s"declaration status call failed with ${e.responseCode}: ${e.getMessage}")
+            Left(deriveErrorResponse(e.responseCode).withConversationId)
           case NonFatal(e) =>
             logger.error(s"declaration status call failed: ${e.getMessage}", e)
             Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
         }
       case Left(result) =>
         Future.successful(Left(result))
+    }
+  }
+
+  private val isNotFoundOrForbidden = (statusCode: Int) => statusCode == 404 ||
+    (configService.declarationsConfig.payloadForbiddenEnabled && statusCode == 403)
+
+  private def deriveErrorResponse(statusCode: Int): Result = {
+    statusCode match {
+      case FORBIDDEN =>
+        ErrorResponse.ErrorPayloadForbidden.XmlResult
+      case NOT_FOUND =>
+        ErrorResponse.ErrorNotFound.XmlResult
     }
   }
 

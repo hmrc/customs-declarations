@@ -69,12 +69,13 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
 
     protected val mockStatusConnector: DeclarationStatusConnector = mock[DeclarationStatusConnector]
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
+    protected lazy val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
     protected val dateTime = Instant.now()
 
     protected val stubShutterCheckAction = new ShutterCheckAction(mockDeclarationsLogger, mockDeclarationConfigService)
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger)
-    protected val stubDeclarationStatusService = new DeclarationStatusService(mockDeclarationsLogger, mockApiSubscriptionFieldsConnector, mockStatusConnector, mockMdgPayloadDecorator, mockDateTimeService, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService)
+    protected val stubDeclarationStatusService = new DeclarationStatusService(mockDeclarationsLogger, mockApiSubscriptionFieldsConnector, mockStatusConnector, mockMdgPayloadDecorator, mockDateTimeService, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsConfigService)
     protected val stubConversationIdAction = new ConversationIdAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(

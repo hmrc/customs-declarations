@@ -23,7 +23,7 @@ import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.http.Status.NOT_FOUND
+import play.api.http.Status.{FORBIDDEN, NOT_FOUND}
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
@@ -61,6 +61,7 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
   protected lazy val mockDateTimeProvider: DateTimeService = mock[DateTimeService]
   protected lazy val mockHttpResponse: HttpResponse = mock[HttpResponse]
   protected lazy val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
+  protected lazy val mockDeclarationsConfig: DeclarationsConfig = mock[DeclarationsConfig]
   protected val mrn: Mrn = Mrn("theMrn")
 
   trait SetUp {
@@ -73,7 +74,7 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
 
     protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockLogger, mockApiSubscriptionFieldsConnector, mockDeclarationStatusConnector, mockMdgPayloadDecorator,
-      mockDateTimeProvider, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService)
+      mockDateTimeProvider, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsConfigService)
 
     protected def send(vpr: AuthorisedRequest[AnyContentAsXml] = TestAuthorisedStatusRequest, hc: HeaderCarrier = headerCarrier): Either[Result, HttpResponse] = {
      (service.send(mrn) (vpr, hc).futureValue)
@@ -107,6 +108,30 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
       val result: Either[Result, HttpResponse] = send()
 
       result shouldBe Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)
+    }
+
+    "return 403 error response when EIS call fails with 403 and payloadForbiddenEnabled is on" in new SetUp() {
+      when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)
+      when(mockDeclarationsConfig.payloadForbiddenEnabled).thenReturn(true)
+      when(mockDeclarationStatusConnector.send(any[NodeSeq],
+        any[Instant],
+        meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
+        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(FORBIDDEN)))
+      val result: Either[Result, HttpResponse] = send()
+
+      result shouldBe Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId)
+    }
+
+    "return 500 error response when EIS call fails with 403 but payloadForbiddenEnabled is off" in new SetUp() {
+      when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)
+      when(mockDeclarationsConfig.payloadForbiddenEnabled).thenReturn(false)
+      when(mockDeclarationStatusConnector.send(any[NodeSeq],
+        any[Instant],
+        meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
+        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(FORBIDDEN)))
+      val result: Either[Result, HttpResponse] = send()
+
+      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
     }
 
     "return 500 error response when MDG call fails" in new SetUp() {

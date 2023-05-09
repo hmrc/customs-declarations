@@ -32,6 +32,7 @@ trait DeclarationCircuitBreaker extends CircuitBreakerConnector {
     case e: Non2xxResponseException => e.responseCode match {
       case 400 => false //BadRequest
       case 404 => false //NotFound
+      case 403 => false //Forbidden
       case _ => true
     }
     case _ => true

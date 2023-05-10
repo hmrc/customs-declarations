@@ -210,6 +210,8 @@
 					<DutyTaxFee>
 						<!--DE 4/17: Preference Type of 115 indicates Tariff suspension subject to a specific end-use.-->
 						<DutyRegimeCode>115</DutyRegimeCode>
+						<!--DE 4/3: Tax Type.
+							A50 represents EU Customs duty. -->
 						<TypeCode>A50</TypeCode>	  
 						<Payment>
 							<!--DE 4/8: MethodCode of E to indicate Deferment used for import - Tax line 1-->
@@ -217,6 +219,8 @@
 						</Payment>
 					</DutyTaxFee>
 					<DutyTaxFee>
+					<!--DE 4/3: Tax Type.
+							Tax Type of B00 represents UK VAT. -->
 						<TypeCode>B00</TypeCode>	  
 						<Payment>
 							<!--DE 4/8: MethodCode of E to indicate Deferment used for import - Tax line 2-->
@@ -224,6 +228,8 @@
 						</Payment>
 					</DutyTaxFee>
 					<DutyTaxFee>
+					<!--DE 4/3: Tax Type.
+							Tax Type of B05 represents EU VAT. -->
 						<TypeCode>B05</TypeCode>	  
 						<Payment>
 							<!--DE 4/8: MethodCode of E to indicate Deferment used for import - Tax line 3-->

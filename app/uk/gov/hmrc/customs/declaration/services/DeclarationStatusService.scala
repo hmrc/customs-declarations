@@ -76,19 +76,19 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
   }
 
   private def recoverException[A](implicit ar: AuthorisedRequest[A]): PartialFunction[Throwable, Left[Result, Nothing]] = {
-    case e: HttpException if isNotFoundOrForbidden(e.responseCode) =>
-      logger.warn(s"declaration status call failed with ${e.responseCode}: ${e.getMessage}")
-      Left(deriveErrorResponse(e.responseCode).withConversationId)
+    case e: HttpException if e.responseCode == NOT_FOUND =>
+      logger.warn(s"declaration status call failed with 404: ${e.getMessage}")
+      Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)
+    case e: HttpException if isForbiddenAndFeatureFlagIsOn(e.responseCode) =>
+      logger.warn(s"declaration status call failed with 403: ${e.getMessage}")
+      Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId)
     case NonFatal(e) =>
       logger.error(s"declaration status call failed: ${e.getMessage}", e)
       Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
   }
 
-  private val isNotFoundOrForbidden = (statusCode: Int) => statusCode == 404 ||
-    (configService.declarationsConfig.payloadForbiddenEnabled && statusCode == 403)
-
-  private def deriveErrorResponse(statusCode: Int): Result =
-    if (statusCode == FORBIDDEN) ErrorResponse.ErrorPayloadForbidden.XmlResult else ErrorResponse.ErrorNotFound.XmlResult
+  private val isForbiddenAndFeatureFlagIsOn = (statusCode: Int) =>
+    configService.declarationsConfig.payloadForbiddenEnabled && statusCode == FORBIDDEN
 
   private def logError[A](errorResponse: ErrorResponse)(implicit ar: AuthorisedRequest[A]): Unit = {
     logger.error(s"declaration status call returning error response '${errorResponse.message}' and status code ${errorResponse.httpStatusCode}")

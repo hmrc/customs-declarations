@@ -72,6 +72,7 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
     when(mockHttpResponse.headers).thenReturn(any[Map[String, Seq[String]]])
     when(mockStatusResponseFilterService.transform(<xml>backendXml</xml>)).thenReturn(<xml>transformed</xml>)
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+    when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)
 
     protected lazy val service: DeclarationStatusService = new DeclarationStatusService(mockLogger, mockApiSubscriptionFieldsConnector, mockDeclarationStatusConnector, mockMdgPayloadDecorator,
       mockDateTimeProvider, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsConfigService)
@@ -111,7 +112,6 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
     }
 
     "return 403 error response when EIS call fails with 403 and payloadForbiddenEnabled is on" in new SetUp() {
-      when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)
       when(mockDeclarationsConfig.payloadForbiddenEnabled).thenReturn(true)
       when(mockDeclarationStatusConnector.send(any[NodeSeq],
         any[Instant],
@@ -123,7 +123,6 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
     }
 
     "return 500 error response when EIS call fails with 403 but payloadForbiddenEnabled is off" in new SetUp() {
-      when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)
       when(mockDeclarationsConfig.payloadForbiddenEnabled).thenReturn(false)
       when(mockDeclarationStatusConnector.send(any[NodeSeq],
         any[Instant],

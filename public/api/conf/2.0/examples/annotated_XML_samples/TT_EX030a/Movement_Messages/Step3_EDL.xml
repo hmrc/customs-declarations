@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--EDL – Movement message used for creating Goods Departure messages. 
-	This also covers the removal of goods back inland where an export is abandoned (Departaures). -->
+	This also covers the removal of goods back inland where an export is abandoned (Departures). -->
 <inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
 	<inv:messageCode>EDL</inv:messageCode>
 	<inv:ucrBlock>

@@ -27,7 +27,7 @@
 			The following Trader Notifications are sent: DMSACC, DMSCLE.
 		-->
 		<FunctionCode>9</FunctionCode>
-		<FunctionalReferenceID>R3.5.0_9780_TC01_23D1</FunctionalReferenceID>
+		<FunctionalReferenceID>R3.5.0_9780_EX25_283a</FunctionalReferenceID>
 		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
 		<IssueDateTime>
 			<p1:DateTimeString formatCode="304">20230302100000+01</p1:DateTimeString>
@@ -216,20 +216,12 @@
 				</Packaging>
 			</GovernmentAgencyGoodsItem>
 			<PreviousDocument>
-			<!--DE 2/1: Previous Documents.
-				ZDCR to show the DUCR assigned to the consignment.
+			<!--DE 2/1: Simplified Declaration/ Previous Documents. 
+				DCR to show the DUCR assigned to the consignment.
 				This is a mandatory field. -->
-			<CategoryCode>Z</CategoryCode>
+			<CategoryCode>Y</CategoryCode>
 				<ID>1GB150454489082-A0203D1</ID>
 				<TypeCode>DCR</TypeCode>
-			</PreviousDocument>
-			<!--DE 2/1: Previous Documents.
-				ZMCR to show the MUCR assigned to the consignment.
-				This is a mandatory field. -->
-			<PreviousDocument>
-				<CategoryCode>Y</CategoryCode>
-				<ID>A:7175020320231</ID>
-				<TypeCode>MCR</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>
 	</Declaration>

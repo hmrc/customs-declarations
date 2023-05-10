@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
+import play.api.http.Status.{FORBIDDEN, NOT_FOUND}
+
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
@@ -29,7 +31,6 @@ import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Left
 import scala.util.control.NonFatal
 import scala.xml.{Elem, XML}
 
@@ -41,7 +42,8 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
                                          dateTimeProvider: DateTimeService,
                                          uniqueIdsService: UniqueIdsService,
                                          statusResponseFilterService: StatusResponseFilterService,
-                                         statusResponseValidationService: StatusResponseValidationService)
+                                         statusResponseValidationService: StatusResponseValidationService,
+                                         configService: DeclarationsConfigService)
                                         (implicit val ec: ExecutionContext) extends ApiSubscriptionFieldsService {
 
   def send[A](mrn: Mrn)(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier): Future[Either[Result, HttpResponse]] = {
@@ -54,29 +56,39 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
       case Right(sfId) =>
         val declarationStatusPayload = wrapper.status(correlationId, dateTime, mrn, dmirId, sfId)
         connector.send(declarationStatusPayload, dateTime, correlationId, ar.requestedApiVersion)
-          .map(response => {
-            val xmlResponseBody = XML.loadString(response.body)
-            statusResponseValidationService.validate(xmlResponseBody, ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier.get) match {
-              case Right(_) => Right(filterResponse(response, xmlResponseBody))
-              case Left(errorResponse) =>
-                logError(errorResponse)
-                Left(errorResponse.XmlResult.withConversationId)
-              case _ =>
-                logError(ErrorGenericBadRequest)
-                Left(ErrorGenericBadRequest.XmlResult.withConversationId)
-            }
-          }).recover{
-          case e: HttpException if e.responseCode == 404 =>
-            logger.warn(s"declaration status call failed with 404: ${e.getMessage}")
-            Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)
-          case NonFatal(e) =>
-            logger.error(s"declaration status call failed: ${e.getMessage}", e)
-            Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
-        }
+          .map(response => validateStatusResponse(ar, response)).recover(recoverException(ar))
       case Left(result) =>
         Future.successful(Left(result))
     }
   }
+
+  private def validateStatusResponse[A](implicit ar: AuthorisedRequest[A], response: HttpResponse): Either[Result, HttpResponse] = {
+    val xmlResponseBody = XML.loadString(response.body)
+    statusResponseValidationService.validate(xmlResponseBody, ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier.get) match {
+      case Right(_) => Right(filterResponse(response, xmlResponseBody))
+      case Left(errorResponse) =>
+        logError(errorResponse)
+        Left(errorResponse.XmlResult.withConversationId)
+      case _ =>
+        logError(ErrorGenericBadRequest)
+        Left(ErrorGenericBadRequest.XmlResult.withConversationId)
+    }
+  }
+
+  private def recoverException[A](implicit ar: AuthorisedRequest[A]): PartialFunction[Throwable, Left[Result, Nothing]] = {
+    case e: HttpException if e.responseCode == NOT_FOUND =>
+      logger.warn(s"declaration status call failed with 404: ${e.getMessage}")
+      Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)
+    case e: HttpException if isForbiddenAndFeatureFlagIsOn(e.responseCode) =>
+      logger.warn(s"declaration status call failed with 403: ${e.getMessage}")
+      Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId)
+    case NonFatal(e) =>
+      logger.error(s"declaration status call failed: ${e.getMessage}", e)
+      Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+  }
+
+  private val isForbiddenAndFeatureFlagIsOn = (statusCode: Int) =>
+    configService.declarationsConfig.payloadForbiddenEnabled && statusCode == FORBIDDEN
 
   private def logError[A](errorResponse: ErrorResponse)(implicit ar: AuthorisedRequest[A]): Unit = {
     logger.error(s"declaration status call returning error response '${errorResponse.message}' and status code ${errorResponse.httpStatusCode}")

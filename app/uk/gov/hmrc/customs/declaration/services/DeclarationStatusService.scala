@@ -56,41 +56,39 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
       case Right(sfId) =>
         val declarationStatusPayload = wrapper.status(correlationId, dateTime, mrn, dmirId, sfId)
         connector.send(declarationStatusPayload, dateTime, correlationId, ar.requestedApiVersion)
-          .map(response => {
-            val xmlResponseBody = XML.loadString(response.body)
-            statusResponseValidationService.validate(xmlResponseBody, ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier.get) match {
-              case Right(_) => Right(filterResponse(response, xmlResponseBody))
-              case Left(errorResponse) =>
-                logError(errorResponse)
-                Left(errorResponse.XmlResult.withConversationId)
-              case _ =>
-                logError(ErrorGenericBadRequest)
-                Left(ErrorGenericBadRequest.XmlResult.withConversationId)
-            }
-          }).recover{
-          case e: HttpException if isNotFoundOrForbidden(e.responseCode) =>
-            logger.warn(s"declaration status call failed with ${e.responseCode}: ${e.getMessage}")
-            Left(deriveErrorResponse(e.responseCode).withConversationId)
-          case NonFatal(e) =>
-            logger.error(s"declaration status call failed: ${e.getMessage}", e)
-            Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
-        }
+          .map(response => validateStatusResponse(ar, response)).recover(recoverException(ar))
       case Left(result) =>
         Future.successful(Left(result))
     }
   }
 
+  private def validateStatusResponse[A](implicit ar: AuthorisedRequest[A], response: HttpResponse): Either[Result, HttpResponse] = {
+    val xmlResponseBody = XML.loadString(response.body)
+    statusResponseValidationService.validate(xmlResponseBody, ar.authorisedAs.asInstanceOf[Csp].badgeIdentifier.get) match {
+      case Right(_) => Right(filterResponse(response, xmlResponseBody))
+      case Left(errorResponse) =>
+        logError(errorResponse)
+        Left(errorResponse.XmlResult.withConversationId)
+      case _ =>
+        logError(ErrorGenericBadRequest)
+        Left(ErrorGenericBadRequest.XmlResult.withConversationId)
+    }
+  }
+
+  private def recoverException[A](implicit ar: AuthorisedRequest[A]): PartialFunction[Throwable, Left[Result, Nothing]] = {
+    case e: HttpException if isNotFoundOrForbidden(e.responseCode) =>
+      logger.warn(s"declaration status call failed with ${e.responseCode}: ${e.getMessage}")
+      Left(deriveErrorResponse(e.responseCode).withConversationId)
+    case NonFatal(e) =>
+      logger.error(s"declaration status call failed: ${e.getMessage}", e)
+      Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+  }
+
   private val isNotFoundOrForbidden = (statusCode: Int) => statusCode == 404 ||
     (configService.declarationsConfig.payloadForbiddenEnabled && statusCode == 403)
 
-  private def deriveErrorResponse(statusCode: Int): Result = {
-    statusCode match {
-      case FORBIDDEN =>
-        ErrorResponse.ErrorPayloadForbidden.XmlResult
-      case NOT_FOUND =>
-        ErrorResponse.ErrorNotFound.XmlResult
-    }
-  }
+  private def deriveErrorResponse(statusCode: Int): Result =
+    if (statusCode == FORBIDDEN) ErrorResponse.ErrorPayloadForbidden.XmlResult else ErrorResponse.ErrorNotFound.XmlResult
 
   private def logError[A](errorResponse: ErrorResponse)(implicit ar: AuthorisedRequest[A]): Unit = {
     logger.error(s"declaration status call returning error response '${errorResponse.message}' and status code ${errorResponse.httpStatusCode}")

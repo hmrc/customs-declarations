@@ -1,20 +1,19 @@
 <MetaData>
-	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-	<WCOTypeName>RES</WCOTypeName>
-	<ResponsibleCountryCode/>
-	<ResponsibleAgencyName/>
-	<AgencyAssignedCustomizationCode/>
-	<AgencyAssignedCustomizationVersionCode/>
-	<Response>
-		<FunctionCode>02</FunctionCode>
-		<FunctionalReferenceID>90c01a7f5bde415a8cc80592158410f8</FunctionalReferenceID>
-		<IssueDateTime>
-			<DateTimeString formatCode="304">20200715113338Z</DateTimeString>
-		</IssueDateTime>
-		<Declaration>
-			<FunctionalReferenceID>TC03_Invalidate2</FunctionalReferenceID>
-			<ID>20GB7SPKVP6FJDRYA0</ID>
-			<VersionID>1</VersionID>
-		</Declaration>
-	</Response>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>02</FunctionCode>
+        <FunctionalReferenceID>722523e7b0fb45f98baebf116bd9e873</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20230324161429Z</DateTimeString>
+        </IssueDateTime>
+        <Declaration>
+            <FunctionalReferenceID>TC03_Invalidate2</FunctionalReferenceID>
+            <ID>23GB3A4TM7T8VQUAA3</ID>
+        </Declaration>
+    </Response>
 </MetaData>

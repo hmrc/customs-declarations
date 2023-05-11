@@ -43,6 +43,11 @@ paths:
               <td>BAD_REQUEST</td>
             </tr>
             <tr>
+              <td>A firewall rejected the request</td>
+              <td>403 (Payload Forbidden)</td>
+              <td>PAYLOAD_FORBIDDEN</td>
+            </tr>
+            <tr>
               <td>Internal server error</td>
               <td>500 (Internal Server Error)</td>
               <td>INTERNAL_SERVER_ERROR</td>
@@ -126,6 +131,22 @@ paths:
                     name: CustomsDeclarationsresponse400
                     attribute: false
                     wrapped: false
+        '403':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/PayloadForbiddenExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -166,6 +187,11 @@ paths:
               <td>Invalid XML Payload</td>
               <td>400 (Bad Request)</td>
               <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>A firewall rejected the request</td>
+              <td>403 (Payload Forbidden)</td>
+              <td>PAYLOAD_FORBIDDEN</td>
             </tr>
             <tr>
               <td>Internal server error</td>
@@ -251,6 +277,22 @@ paths:
                     name: CustomsDeclarationsCancellationRequestsresponse400
                     attribute: false
                     wrapped: false
+        '403':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/PayloadForbiddenExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsCancellationRequestsresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsCancellationRequestsresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -304,6 +346,11 @@ paths:
               <td>Invalid XML Payload</td>
               <td>400 (Bad Request)</td>
               <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>A firewall rejected the request</td>
+              <td>403 (Payload Forbidden)</td>
+              <td>PAYLOAD_FORBIDDEN</td>
             </tr>
             <tr>
               <td>Internal server error</td>
@@ -408,6 +455,22 @@ paths:
                     name: CustomsDeclarationsFileUploadresponse400
                     attribute: false
                     wrapped: false
+        '403':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/PayloadForbiddenExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsFileUploadresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -448,6 +511,11 @@ paths:
               <td>Invalid XML Payload</td>
               <td>400 (Bad Request)</td>
               <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>A firewall rejected the request</td>
+              <td>403 (Payload Forbidden)</td>
+              <td>PAYLOAD_FORBIDDEN</td>
             </tr>
             <tr>
               <td>Internal server error</td>
@@ -533,6 +601,22 @@ paths:
                     name: CustomsDeclarationsAmendresponse400
                     attribute: false
                     wrapped: false
+        '403':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/PayloadForbiddenExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsAmendresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsAmendresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -573,6 +657,11 @@ paths:
               <td>Invalid XML Payload</td>
               <td>400 (Bad Request)</td>
               <td>BAD_REQUEST</td>
+            </tr>
+            <tr>
+              <td>A firewall rejected the request</td>
+              <td>403 (Payload Forbidden)</td>
+              <td>PAYLOAD_FORBIDDEN</td>
             </tr>
             <tr>
               <td>Internal server error</td>
@@ -656,6 +745,22 @@ paths:
                     name: CustomsDeclarationsArrivalNotificationresponse400
                     attribute: false
                     wrapped: false
+        '403':
+          description: ''
+          headers: {}
+          content:
+            application/xml:
+              examples:
+                objectExample:
+                  $ref: '#/components/examples/PayloadForbiddenExample'
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CustomsDeclarationsArrivalNotificationresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsArrivalNotificationresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -703,6 +808,14 @@ components:
                     <message>Error at line 13, column 13: no declaration found for element 'unknown'</message>
               </error>
             </errors>
+        </errorResponse>
+    PayloadForbiddenExample:
+      summary: PayloadForbidden
+      value: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <errorResponse>
+            <code>PAYLOAD_FORBIDDEN</code>
+            <message>A firewall rejected the request”</message>
         </errorResponse>
     InternalServerErrorExample:
       summary: InternalServerError

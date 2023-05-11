@@ -771,12 +771,12 @@ paths:
                   $ref: '#/components/examples/InternalServerErrorExample'
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/CustomsDeclarationsArrivalNotificationresponse400'
-                  - description: Internal server error
-                    xml:
-                      name: CustomsDeclarationsArrivalNotificationresponse400
-                      attribute: false
-                      wrapped: false
+                - $ref: '#/components/schemas/CustomsDeclarationsArrivalNotificationresponse400'
+                - description: Internal server error
+                  xml:
+                    name: CustomsDeclarationsArrivalNotificationresponse400
+                    attribute: false
+                    wrapped: false
       security:
         - userRestricted: [ "write:customs-declaration" ]
       deprecated: false

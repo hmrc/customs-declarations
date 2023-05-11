@@ -141,12 +141,12 @@ paths:
                   $ref: '#/components/examples/PayloadForbiddenExample'
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/CustomsDeclarationsresponse400'
-                  - description: A firewall rejected the request
-                    xml:
-                      name: CustomsDeclarationsresponse400
-                      attribute: false
-                      wrapped: false
+                - $ref: '#/components/schemas/CustomsDeclarationsresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -287,12 +287,12 @@ paths:
                   $ref: '#/components/examples/PayloadForbiddenExample'
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/CustomsDeclarationsCancellationRequestsresponse400'
-                  - description: A firewall rejected the request
-                    xml:
-                      name: CustomsDeclarationsCancellationRequestsresponse400
-                      attribute: false
-                      wrapped: false
+                - $ref: '#/components/schemas/CustomsDeclarationsCancellationRequestsresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsCancellationRequestsresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -471,12 +471,12 @@ paths:
                   $ref: '#/components/examples/PayloadForbiddenExample'
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse400'
-                  - description: A firewall rejected the request
-                    xml:
-                      name: CustomsDeclarationsFileUploadresponse400
-                      attribute: false
-                      wrapped: false
+                - $ref: '#/components/schemas/CustomsDeclarationsFileUploadresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsFileUploadresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -617,12 +617,12 @@ paths:
                   $ref: '#/components/examples/PayloadForbiddenExample'
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/CustomsDeclarationsAmendresponse400'
-                  - description: A firewall rejected the request
-                    xml:
-                      name: CustomsDeclarationsAmendresponse400
-                      attribute: false
-                      wrapped: false
+                - $ref: '#/components/schemas/CustomsDeclarationsAmendresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsAmendresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -763,12 +763,12 @@ paths:
                   $ref: '#/components/examples/PayloadForbiddenExample'
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/CustomsDeclarationsArrivalNotificationresponse400'
-                  - description: A firewall rejected the request
-                    xml:
-                      name: CustomsDeclarationsArrivalNotificationresponse400
-                      attribute: false
-                      wrapped: false
+                - $ref: '#/components/schemas/CustomsDeclarationsArrivalNotificationresponse400'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsArrivalNotificationresponse400
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}
@@ -879,12 +879,12 @@ paths:
                   $ref: '#/components/examples/PayloadForbiddenExample'
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/CustomsDeclarationsStatusRequestMrnresponse500'
-                  - description: A firewall rejected the request
-                    xml:
-                      name: CustomsDeclarationsStatusRequestMrnresponse500
-                      attribute: false
-                      wrapped: false
+                - $ref: '#/components/schemas/CustomsDeclarationsStatusRequestMrnresponse500'
+                - description: A firewall rejected the request
+                  xml:
+                    name: CustomsDeclarationsStatusRequestMrnresponse500
+                    attribute: false
+                    wrapped: false
         '500':
           description: ''
           headers: {}

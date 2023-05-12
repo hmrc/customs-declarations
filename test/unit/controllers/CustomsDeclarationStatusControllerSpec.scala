@@ -75,7 +75,8 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
     protected val stubShutterCheckAction = new ShutterCheckAction(mockDeclarationsLogger, mockDeclarationConfigService)
     protected val stubAuthStatusAction: AuthStatusAction = new AuthStatusAction (mockAuthConnector, mockDeclarationsLogger)
     protected val stubValidateAndExtractHeadersStatusAction: ValidateAndExtractHeadersStatusAction = new ValidateAndExtractHeadersStatusAction(new HeaderStatusValidator(mockDeclarationsLogger), mockDeclarationsLogger)
-    protected val stubDeclarationStatusService = new DeclarationStatusService(mockDeclarationsLogger, mockApiSubscriptionFieldsConnector, mockStatusConnector, mockMdgPayloadDecorator, mockDateTimeService, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService, mockDeclarationsConfigService)
+    protected val stubDeclarationStatusService = new DeclarationStatusService(mockDeclarationsLogger, mockApiSubscriptionFieldsConnector, mockStatusConnector,
+      mockMdgPayloadDecorator, mockDateTimeService, stubUniqueIdsService, mockStatusResponseFilterService, mockStatusResponseValidationService)
     protected val stubConversationIdAction = new ConversationIdAction(mockDeclarationsLogger, stubUniqueIdsService, mockDateTimeService)
 
     protected val controller: DeclarationStatusController = new DeclarationStatusController(

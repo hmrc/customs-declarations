@@ -42,8 +42,7 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
                                          dateTimeProvider: DateTimeService,
                                          uniqueIdsService: UniqueIdsService,
                                          statusResponseFilterService: StatusResponseFilterService,
-                                         statusResponseValidationService: StatusResponseValidationService,
-                                         configService: DeclarationsConfigService)
+                                         statusResponseValidationService: StatusResponseValidationService)
                                         (implicit val ec: ExecutionContext) extends ApiSubscriptionFieldsService {
 
   def send[A](mrn: Mrn)(implicit ar: AuthorisedRequest[A], hc: HeaderCarrier): Future[Either[Result, HttpResponse]] = {
@@ -79,16 +78,10 @@ class DeclarationStatusService @Inject()(override val logger: DeclarationsLogger
     case e: HttpException if e.responseCode == NOT_FOUND =>
       logger.warn(s"declaration status call failed with 404: ${e.getMessage}")
       Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)
-    case e: HttpException if isForbiddenAndFeatureFlagIsOn(e.responseCode) =>
-      logger.warn(s"declaration status call failed with 403: ${e.getMessage}")
-      Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId)
     case NonFatal(e) =>
       logger.error(s"declaration status call failed: ${e.getMessage}", e)
       Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
   }
-
-  private val isForbiddenAndFeatureFlagIsOn = (statusCode: Int) =>
-    configService.declarationsConfig.payloadForbiddenEnabled && statusCode == FORBIDDEN
 
   private def logError[A](errorResponse: ErrorResponse)(implicit ar: AuthorisedRequest[A]): Unit = {
     logger.error(s"declaration status call returning error response '${errorResponse.message}' and status code ${errorResponse.httpStatusCode}")

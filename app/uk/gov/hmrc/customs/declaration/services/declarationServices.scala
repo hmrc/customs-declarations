@@ -18,6 +18,7 @@ package uk.gov.hmrc.customs.declaration.services
 
 import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
+import play.api.http.Status.FORBIDDEN
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
@@ -27,7 +28,7 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 
 import java.net.URLEncoder
 import java.time.temporal.ChronoUnit
@@ -130,11 +131,17 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
       case _: CircuitBreakerOpenException =>
         logger.error("unhealthy state entered")
         Left(errorResponseServiceUnavailable.XmlResult.withConversationId)
+      case e: HttpException if isForbiddenAndFeatureFlagIsOn(e.responseCode) =>
+        logger.warn(s"submission declaration call failed with 403: [${e.getMessage}]")
+        Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId)
       case NonFatal(e) =>
-        logger.error(s"submission declaration call failed: ${e.getMessage}", e)
+        logger.error(s"submission declaration call failed: [${e.getMessage}]", e)
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
     }
   }
+
+  private val isForbiddenAndFeatureFlagIsOn = (statusCode: Int) =>
+    declarationsConfigService.declarationsConfig.payloadForbiddenEnabled && statusCode == FORBIDDEN
 
   private def preparePayload[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: Instant)
                                (implicit vpr: ValidatedPayloadRequest[A]): NodeSeq = {

@@ -141,7 +141,7 @@ class StatusResponseValidationService @Inject()(declarationsLogger: Declarations
       }
     })
 
-  private def safelyExtractValue(extractedValues : scala.collection.Seq[String]): Option[String] = {
+  private def safelyExtractValue(extractedValues : Seq[String]): Option[String] = {
     if(extractedValues.nonEmpty && !extractedValues.head.isEmpty && extractedValues.head.length > 1) {
       Some(extractedValues.head.substring(0,2))
     } else {

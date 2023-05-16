@@ -148,7 +148,7 @@ trait HasXmlBody {
   val xmlBody: NodeSeq
 }
 
-case class FileUploadRequest(declarationId: DeclarationId, fileGroupSize: FileGroupSize, files: scala.collection.Seq[FileUploadFile])
+case class FileUploadRequest(declarationId: DeclarationId, fileGroupSize: FileGroupSize, files: Seq[FileUploadFile])
 
 case class FileUploadFile(fileSequenceNo: FileSequenceNo, maybeDocumentType: Option[DocumentType], successRedirect: Option[String], errorRedirect: Option[String]) {
 

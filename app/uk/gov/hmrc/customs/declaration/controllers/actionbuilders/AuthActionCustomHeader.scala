@@ -82,7 +82,7 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
       Csp(maybeEori, maybeBadgeId, maybeNrsRetrievalData)
     }
 
-    if (cpsAuth.isRight && cpsAuth.toOption.get.badgeIdentifier.isEmpty && cpsAuth.toOption.get.eori.isEmpty) {
+    if (cpsAuth.isRight && cpsAuth.toOption.head.badgeIdentifier.isEmpty && cpsAuth.toOption.head.eori.isEmpty) {
       logger.error(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName headers are missing")
       Left(errorResponseMissingIdentifiers)
     } else {

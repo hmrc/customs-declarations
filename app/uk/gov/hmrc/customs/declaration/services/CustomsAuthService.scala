@@ -49,7 +49,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
 
   private type NonCspRetrievalDataType = Retrieval[NrsRetrievalDataType ~ Enrolments]
 
-  private val cspRetrievals: Retrieval[Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Option[Name] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes] =
+  private val cspRetrievals: Retrieval[NrsRetrievalDataType]=
     Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
       Retrievals.credentials and Retrievals.confidenceLevel and Retrievals.nino and
       Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and

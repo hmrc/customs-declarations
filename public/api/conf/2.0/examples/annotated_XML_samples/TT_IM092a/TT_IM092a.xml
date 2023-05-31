@@ -14,13 +14,14 @@
 	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--
+
 			SCENARIO
 			A trader submits a Type E simplified declaration (I1), re-importing returned goods from ROW to GB.
 
 			The trader enters the following information on the declaration:
 			• Procedure Code '6123' at item level in DE 1/10.
 			• Additional Procedure Code 'F05' at item level in DE 1/11.
-			
+
 			A Goods Presentation Notice is submitted to arrive the goods. The declaration is converted into a Type B.
 
 			No Excise Duty will be calculated using the UK Tariff.
@@ -35,7 +36,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Trader's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>CDSP_9884_01_0706_01</FunctionalReferenceID>
+		<FunctionalReferenceID>CDSP_9884_01_2504_01</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -75,19 +76,19 @@
 					Note that, unlike CHIEF, this must now be completed. -->
 				<ContainerCode>1</ContainerCode>
 				<GoodsLocation>
-				<!--DE 5/23: Location of Goods - Identification of location. 
+					<!--DE 5/23: Location of Goods - Identification of location. 
 					Mandatory.
 					ID to give a unique position of the location where the goods are located at the time they are declared.
 					Name: ID to give a unique position of the location, in this scenario LIVLIVLIV indicating Liverpool Docks. -->
-				<Name>LIVLIVLIV</Name>
-				<!--DE 5/23: Location of Goods - Type of location.
+					<Name>LIVLIVLIV</Name>
+					<!--DE 5/23: Location of Goods - Type of location.
 					TypeCode: Type of Location, in this scenario A to represent that it is a designated location. -->
 					<TypeCode>A</TypeCode>
 					<Address>
-					<!--DE 5/23: Location of Goods - Qualifier of the identification.
+						<!--DE 5/23: Location of Goods - Qualifier of the identification.
 						Address TypeCode: Type of ID of the Location, in this scenario U for UN/LOCODE. -->
-					<TypeCode>U</TypeCode>
-					<!--DE 5/23: Location of Goods - Country. 
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Location of Goods - Country. 
 						Address CountryCode: Code of the country where the goods may be examined, in this scenario GB. -->
 						<CountryCode>GB</CountryCode>
 					</Address>
@@ -167,7 +168,7 @@
 					<GoodsMeasure>
 						<!--DE 6/1: Net Mass.
 							Weight of the goods in kilograms without any packaging. -->
-						<NetNetWeightMeasure>1000</NetNetWeightMeasure>
+						<NetNetWeightMeasure>500</NetNetWeightMeasure>
 					</GoodsMeasure>
 					<!--DE 4/14: Item Price/ Amount. 
 						The invoice was issued with a value of 2500 and the currency of GBP. -->

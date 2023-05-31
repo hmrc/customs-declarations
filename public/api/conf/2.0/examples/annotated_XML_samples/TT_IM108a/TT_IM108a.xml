@@ -50,7 +50,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Agents own reference number – this must be unique to the transaction. -->
-		<FunctionalReferenceID>CDSP_10174_01_1007_01</FunctionalReferenceID>
+		<FunctionalReferenceID>CDSP_10174_01_2504-SA2</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -258,10 +258,10 @@
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass.
 							Weight of the goods in kilograms including packaging. -->
-						<GrossMassMeasure>0.000001</GrossMassMeasure>
+						<GrossMassMeasure>1</GrossMassMeasure>
 						<!--DE 6/1: Net Mass.
 							Weight of the goods in kilograms without any packaging. -->
-						<NetNetWeightMeasure>0.000001</NetNetWeightMeasure>
+						<NetNetWeightMeasure>0.5</NetNetWeightMeasure>
 						<!--DE 6/2: Supplementary Units.
 							Quantity of the goods in the unit (1000 kWh) as required by Customs for tariff, statistical or fiscal purposes. -->
 						<TariffQuantity>8760</TariffQuantity>

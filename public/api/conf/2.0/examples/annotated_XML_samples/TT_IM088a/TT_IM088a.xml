@@ -40,7 +40,7 @@
 		<!--DE 2/5: LRN. 
 			Mandatory.
 			Trader's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>CDSP_9779_003_3008_05</FunctionalReferenceID>
+		<FunctionalReferenceID>CDSP_9779_003_2104_10</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory.
 			IM to represent an import declaration. -->
@@ -272,7 +272,7 @@
 							100 represents no preference being claimed. -->
 						<DutyRegimeCode>100</DutyRegimeCode>
 						<!--DE 4/3: Tax type. 
-							Mandatory field if revenue to pay/secure. 
+							Mandatory field if revenue to pay/secure. y
 							Tax Type of A00 represents Customs duty. -->
 						<TypeCode>A00</TypeCode>
 						<!--DE 4/8: Method of Payment.  
@@ -285,11 +285,11 @@
 						<!--DE 6/5: Gross Mass. 
 							Mandatory.
 							Weight of the goods in kilograms including packaging. -->
-						<GrossMassMeasure>250</GrossMassMeasure>
+						<GrossMassMeasure>1000</GrossMassMeasure>
 						<!--DE 6/1: Net Mass. 
 							Mandatory.
 							Weight of the goods in kilograms without any packaging. -->
-						<NetNetWeightMeasure>200</NetNetWeightMeasure>
+						<NetNetWeightMeasure>300</NetNetWeightMeasure>
 					</GoodsMeasure>
 					<!--DE 4/14: Item Price/ Amount.  
 							Mandatory.

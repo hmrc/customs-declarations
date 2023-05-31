@@ -49,7 +49,7 @@
 		<!--DE 2/5: LRN.
 			Mandatory.
 			Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IMA_CDSP-109a_SA01</FunctionalReferenceID>
+		<FunctionalReferenceID>TT_IMA_CDSP-2104_SA03</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			Mandatory.
 			IM to represent an import declaration. -->
@@ -274,11 +274,11 @@
 						<!--DE 6/5: Gross Mass.
 							Mandatory.
 							Weight of the goods in kilograms including packaging. -->
-						<GrossMassMeasure>1000</GrossMassMeasure>
+						<GrossMassMeasure>150</GrossMassMeasure>
 						<!--DE 6/1: Net Mass.
 							Mandatory.
 							Weight of the goods in kilograms without any packaging. -->
-						<NetNetWeightMeasure>800</NetNetWeightMeasure>
+						<NetNetWeightMeasure>130</NetNetWeightMeasure>
 						<!--DE 6/2: Supplementary Units -->
 						<TariffQuantity>500</TariffQuantity>
 					</GoodsMeasure>

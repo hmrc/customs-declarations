@@ -1,18 +1,10 @@
-<md:MetaData xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
-             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			ROW-GB + Valuation Method 5.
@@ -49,7 +41,7 @@
 		<!--DE 2/5: LRN.
 			Mandatory.
 			Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IMA_CDSP-2104_SA03</FunctionalReferenceID>
+		<FunctionalReferenceID>784830951QEHNSOQN</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			Mandatory.
 			IM to represent an import declaration. -->
@@ -217,7 +209,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 						Worksheet to support calculation of the customs value and/or revenue calculations (for example: C&E 1154 for Outward Processing Relief).
 						Manual calculations required if the goods have been invoiced in more than one currency or a fixed rate of exchange has been stipulated in the contract of sale.
-						If a fixed rate of exchange has been used this is also to be declared on the attached document and rate declared inÃƒâ€š DEÃƒâ€š 4/15. -->
+						If a fixed rate of exchange has been used this is also to be declared on the attached document and rate declared inÃƒÆ’Ã¢â‚¬Å¡ DEÃƒÆ’Ã¢â‚¬Å¡ 4/15. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
 					<ID>2345</ID>
@@ -340,7 +332,7 @@
 			</Importer>
 			<!--DE 2/1: Simplified Declarations/ Previous documents.
 				Previous document of ZDCR to show the DUCR assigned to the consignment.
-				Note: The DUCR is not mandatory for ÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“normalÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
+				Note: The DUCR is not mandatory for ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¹Ã…â€œnormalÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
 				<ID>2GB553202734852-12345</ID>
@@ -370,5 +362,3 @@
 		</ObligationGuarantee>
 	</Declaration>
 </md:MetaData>
-
-

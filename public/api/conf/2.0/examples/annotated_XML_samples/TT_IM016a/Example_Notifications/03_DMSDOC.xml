@@ -1,0 +1,28 @@
+<MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>06</FunctionCode>
+        <FunctionalReferenceID>e3b3436187a440078d8a61cfa527b564</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20230605173755+01</DateTimeString>
+        </IssueDateTime>
+        <AdditionalInformation>
+            <StatementCode>ACA</StatementCode>
+            <StatementDescription/>
+            <LimitDateTime>
+                <DateTimeString formatCode="304">20260325163755Z</DateTimeString>
+            </LimitDateTime>
+            <StatementTypeCode>ACA</StatementTypeCode>
+        </AdditionalInformation>
+        <Declaration>
+            <FunctionalReferenceID>TT_IM16a_v1.3_06062023</FunctionalReferenceID>
+            <ID>23GB66GVO0X3GBZAR3</ID>
+            <VersionID>1</VersionID>
+        </Declaration>
+    </Response>
+</MetaData>

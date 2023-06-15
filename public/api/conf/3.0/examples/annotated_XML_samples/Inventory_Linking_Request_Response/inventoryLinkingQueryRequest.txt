@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+           <inv:inventoryLinkingQueryRequest xmlns:inv= "http://gov.uk/customs/inventoryLinking/v1">
+           <!--inv:inventoryLinkingMovementRequest xmlns:inv= "http://gov.uk/customs/inventoryLinking/v1"-->
+               <inv:queryUCR>
+                    <inv:ucr>A:24682009062</inv:ucr>
+                    <inv:ucrType>M</inv:ucrType>
+               </inv:queryUCR>
+            <!--inv:agentDetails>
+               <inv:EORI>GB201909013000</inv:EORI>
+               <inv:agentLocation>a</inv:agentLocation>
+               <inv:agentRole>a</inv:agentRole>
+            </inv:agentDetails-->
+            <!--/inv:inventoryLinkingMovementRequest-->
+          </inv:inventoryLinkingQueryRequest>

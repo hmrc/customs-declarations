@@ -1,43 +1,31 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
-           	>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-           		xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-           		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
-           		>
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			To show that CDS can process an import Declaration for inherited goods, when using additional procedure C04.
 
 			An agent submits an Imports Type F declaration importing goods from ROW to GB, declaring:
-			• Procedure Code: 4000 in D.E. 1/10.
-			• Additional Procedure Code: C04 in D.E 1/11.
-			• Goods: Silver jewellery, not plated or clad with other precious metal. 
-			• Commodity code 7113110000 importing goods from the country Switzerland.
+			- Procedure Code: 4000 in D.E. 1/10.
+			- Additional Procedure Code: C04 in D.E 1/11.
+			- Goods: Silver jewellery, not plated or clad with other precious metal. 
+			- Commodity code 7113110000 importing goods from the country Switzerland.
 
 			The Goods Arrival Notification is submitted, the declaration becomes a Type C and CDS processes the declaration:
-			• No Customs Duty, Excise or VAT will be calculated using the UK Tariff.
-			• DMS will generate trader notifications.
-			
+
+			- No Customs Duty, Excise or VAT will be calculated using the UK Tariff.
+			- DMS will generate trader notifications.			
+
 			Goods presented at Baltic Wharf, Wallasea Island (NILP). 
 			-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>CDSP_9778_03_2302_01</FunctionalReferenceID>
+		<FunctionalReferenceID>7848309S71Z3FNINR</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -47,7 +35,7 @@
 			Total number of goods items on the declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<!--DE 6/18: Total Packages.
-			Total number of packages making up the consignment covered by the declaration.  
+			Total number of packages making up the consignment covered by the declaration. 
 			As this is an Inventory Linked Import declaration, the total packages must match the consignment details held by the inventory system.  
 			Note that this matches DE 6/10 because this is a single item declaration. -->
 		<TotalPackageQuantity>1</TotalPackageQuantity>
@@ -75,7 +63,7 @@
 			The EORI number of the agent entering the declaration. 
 			The UK requires an EORI to be provided for the declarant. -->
 		<Declarant>
-			<ID>GB603202734852</ID>
+			<ID>GB575456994000</ID>
 		</Declarant>
 		<!--DE 3/1: Exporter. 
 			Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
@@ -152,6 +140,15 @@
 					<CategoryCode>C</CategoryCode>
 					<ID>GBICP54321</ID>
 					<TypeCode>400</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					This field is mandatory if the codes are required.
+					C639 indicates CITES Import Commission Reg 160/2017 on the protection of species of wild fauna and flora by regulating trade therein. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBICP160/2017</ID>
+					<TypeCode>639</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 

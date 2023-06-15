@@ -15,7 +15,7 @@
            		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--	
 			***
-			Please note this scenario is now rejected. The issue is due to a business rule error which will be fixed for a future release.
+			Please note calculations in DMSTAX notification will be incorrect at this time, looking to resolve this next release.
 			***
 
 			SCENARIO RoW-NI, NIIMP, Goods 'At Risk'

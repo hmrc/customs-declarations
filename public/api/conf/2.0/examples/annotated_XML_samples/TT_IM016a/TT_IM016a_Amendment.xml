@@ -19,16 +19,11 @@
 						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 						xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
 				<FunctionCode>13</FunctionCode>
-				<FunctionalReferenceID>TT_IM16a_v1.3_1607_01</FunctionalReferenceID>
-				<ID>21GB6NEWTFQ9QSCFR9</ID>
-				
-				<TypeCode>COR</TypeCode>
-			
-				<!-- Section 1 Statement Descriptions - and Sequencing ************************************************************************************* -->
-				
-				
-				<!-- Additional Document 9WKS - Tags D005, D006, D031, 360 -->
-				
+				<FunctionalReferenceID>TT_IM16a_v1.3_06062023</FunctionalReferenceID>
+				<ID>23GB66GVO0X3GBZAR3</ID>				
+				<TypeCode>COR</TypeCode>			
+				<!-- Section 1 Statement Descriptions - and Sequencing ************************************************************************************* -->								
+				<!-- Additional Document 9WKS - Tags D005, D006, D031, 360 -->			
 				<AdditionalInformation>
 					<StatementDescription>Adding AdditionalDocument 9WKS Identifier 'See attached worksheet' - D005</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
@@ -41,7 +36,18 @@
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
-
+				<AdditionalInformation>
+			<StatementDescription>Adding AdditionalDocument 9WKS Name 'See attached worksheet' - D028</StatementDescription>
+			<StatementTypeCode>AES</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>2</SequenceNumeric>
+				<DocumentSectionCode>06A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
 				<AdditionalInformation>
 					<StatementDescription>Adding AdditionalDocument 9WKS TypeCode 'WKS' - D006</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
@@ -50,32 +56,15 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>2</SequenceNumeric>
+						<SequenceNumeric>3</SequenceNumeric>
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
-				</AdditionalInformation>
-						
-				<!-- SequenceNumeric 3 is skipped as the adding of an Additional Document Type Code and Category Code, consumes two amendment objects. 
+				</AdditionalInformation>						
+				<!-- SequenceNumeric 4 is skipped as the adding of an Additional Document Type Code and Category Code, consumes two amendment objects. 
 				Therefore, SequenceNumeric 3 in the AdditionalInformation section automatically includes the Category Code - D031. 
-				See CDS Additional Message Technical Completion Matrix for further information. -->
-				
+				See CDS Additional Message Technical Completion Matrix for further information. -->				
 				<AdditionalInformation>
 					<StatementDescription>Adding AdditionalDocument 9WKS Exemption Code of AE - 360</StatementDescription>
-					<StatementTypeCode>AES</StatementTypeCode>
-					<Pointer>
-						<SequenceNumeric>1</SequenceNumeric>
-						<DocumentSectionCode>42A</DocumentSectionCode>
-					</Pointer>
-					<Pointer>
-						<SequenceNumeric>4</SequenceNumeric>
-						<DocumentSectionCode>06A</DocumentSectionCode>
-					</Pointer>
-				</AdditionalInformation>		
-			
-				<!-- Additional Document 955D - Tags D005, D006, D031, 360 -->
-				
-				<AdditionalInformation>
-					<StatementDescription>Adding AdditionalDocument 955D Identifier 'Form C&#038;E955D completed' - D005</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
 					<Pointer>
 						<SequenceNumeric>1</SequenceNumeric>
@@ -85,10 +74,10 @@
 						<SequenceNumeric>5</SequenceNumeric>
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
-				</AdditionalInformation>
-
+				</AdditionalInformation>					
+				<!-- Additional Document 955D - Tags D005, D006, D031, 360 -->				
 				<AdditionalInformation>
-					<StatementDescription>Adding AdditionalDocument 955D TypeCode '55D' - D006</StatementDescription>
+					<StatementDescription>Adding AdditionalDocument 955D Identifier 'Form C&#038;E955D completed' - D005</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
 					<Pointer>
 						<SequenceNumeric>1</SequenceNumeric>
@@ -99,13 +88,20 @@
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
-						
-				<!-- SequenceNumeric 7 is skipped as the adding of an Additional Document Type Code and Category Code, consumes two amendment objects. 
-				Therefore, SequenceNumeric 7 in the AdditionalInformation section automatically includes the Category Code - D031. 
-				See CDS Additional Message Technical Completion Matrix for further information. -->
-				
 				<AdditionalInformation>
-					<StatementDescription>Adding AdditionalDocument 955D Exemption Code of AE - 360</StatementDescription>
+			<StatementDescription>Adding AdditionalDocument 955D Name 'Form C&#038;E955D completed' - D028</StatementDescription>
+			<StatementTypeCode>AES</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>7</SequenceNumeric>
+				<DocumentSectionCode>06A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+				<AdditionalInformation>
+					<StatementDescription>Adding AdditionalDocument 955D TypeCode '55D' - D006</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
 					<Pointer>
 						<SequenceNumeric>1</SequenceNumeric>
@@ -115,9 +111,22 @@
 						<SequenceNumeric>8</SequenceNumeric>
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
-				</AdditionalInformation>		
-				
-			
+				</AdditionalInformation>						
+				<!-- SequenceNumeric 9 is skipped as the adding of an Additional Document Type Code and Category Code, consumes two amendment objects. 
+				Therefore, SequenceNumeric 8 in the AdditionalInformation section automatically includes the Category Code - D031. 
+				See CDS Additional Message Technical Completion Matrix for further information. -->				
+				<AdditionalInformation>
+					<StatementDescription>Adding AdditionalDocument 955D Exemption Code of AE - 360</StatementDescription>
+					<StatementTypeCode>AES</StatementTypeCode>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>10</SequenceNumeric>
+						<DocumentSectionCode>06A</DocumentSectionCode>
+					</Pointer>
+				</AdditionalInformation>									
 				<!-- Start of Additional Information UVC01 - Tags 226, 225 -->
 				<!-- AdditionalInformation, StatementCode - 226 -->
 				<AdditionalInformation>
@@ -128,11 +137,10 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>9</SequenceNumeric>
+						<SequenceNumeric>11</SequenceNumeric>
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
-				</AdditionalInformation>
-				
+				</AdditionalInformation>				
 				<!-- AdditionalInformation, StatementDescription - 225 -->
 				<AdditionalInformation>
 					<StatementDescription>Adding StatementDescription - 225 [2/2] - UVC01</StatementDescription>
@@ -142,40 +150,13 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>10</SequenceNumeric>
+						<SequenceNumeric>12</SequenceNumeric>
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
-				</AdditionalInformation>
-				
-	
-			
+				</AdditionalInformation>			
 				<!-- Group 1 Duty Tax Fee - Tags 129, 113, 107, 120, 378 - in that order -->
 				<AdditionalInformation>
 					<StatementDescription>G1 Adding Specific Tax Base Quantity - 129 [4/4] - 111.11</StatementDescription>
-					<StatementTypeCode>AES</StatementTypeCode>
-					<Pointer>
-						<SequenceNumeric>1</SequenceNumeric>
-						<DocumentSectionCode>42A</DocumentSectionCode>
-					</Pointer>
-					<Pointer>
-						<SequenceNumeric>11</SequenceNumeric>	<!-- *** -->
-						<DocumentSectionCode>06A</DocumentSectionCode>
-					</Pointer>
-				</AdditionalInformation>
-				<AdditionalInformation>
-					<StatementDescription>G1 Adding Type Code A00 again for consistency - 113 [4/3]</StatementDescription>
-					<StatementTypeCode>AES</StatementTypeCode>
-					<Pointer>
-						<SequenceNumeric>1</SequenceNumeric>
-						<DocumentSectionCode>42A</DocumentSectionCode>
-					</Pointer>
-					<Pointer>
-						<SequenceNumeric>12</SequenceNumeric>	<!-- *** -->
-						<DocumentSectionCode>06A</DocumentSectionCode>
-					</Pointer>
-				</AdditionalInformation>
-				<AdditionalInformation>
-					<StatementDescription>G1 Adding Method of Payment E again for consistency - 107 [4/8]</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
 					<Pointer>
 						<SequenceNumeric>1</SequenceNumeric>
@@ -187,7 +168,7 @@
 					</Pointer>
 				</AdditionalInformation>
 				<AdditionalInformation>
-					<StatementDescription>G1 Adding Tax Assessed Amount - 120 [4/7] - 111.22</StatementDescription>
+					<StatementDescription>G1 Adding Type Code A00 again for consistency - 113 [4/3]</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
 					<Pointer>
 						<SequenceNumeric>1</SequenceNumeric>
@@ -199,7 +180,7 @@
 					</Pointer>
 				</AdditionalInformation>
 				<AdditionalInformation>
-					<StatementDescription>G1 Adding Payment Amount - 378 [4/6] - 111.33</StatementDescription>
+					<StatementDescription>G1 Adding Method of Payment E again for consistency - 107 [4/8]</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
 					<Pointer>
 						<SequenceNumeric>1</SequenceNumeric>
@@ -210,10 +191,8 @@
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
-				
-				<!-- Group 2 Duty Tax Fee -->
 				<AdditionalInformation>
-					<StatementDescription>G2 Adding Specific Tax Base Quantity - 129 [4/4] - 222.11</StatementDescription>
+					<StatementDescription>G1 Adding Tax Assessed Amount - 120 [4/7] - 111.22</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
 					<Pointer>
 						<SequenceNumeric>1</SequenceNumeric>
@@ -225,7 +204,7 @@
 					</Pointer>
 				</AdditionalInformation>
 				<AdditionalInformation>
-					<StatementDescription>G2 Changing Type Code from B00 to A00 - 113 [4/3]</StatementDescription>
+					<StatementDescription>G1 Adding Payment Amount - 378 [4/6] - 111.33</StatementDescription>
 					<StatementTypeCode>AES</StatementTypeCode>
 					<Pointer>
 						<SequenceNumeric>1</SequenceNumeric>
@@ -233,6 +212,31 @@
 					</Pointer>
 					<Pointer>
 						<SequenceNumeric>17</SequenceNumeric>	<!-- *** -->
+						<DocumentSectionCode>06A</DocumentSectionCode>
+					</Pointer>
+				</AdditionalInformation>				
+				<!-- Group 2 Duty Tax Fee -->
+				<AdditionalInformation>
+					<StatementDescription>G2 Adding Specific Tax Base Quantity - 129 [4/4] - 222.11</StatementDescription>
+					<StatementTypeCode>AES</StatementTypeCode>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>18</SequenceNumeric>	<!-- *** -->
+						<DocumentSectionCode>06A</DocumentSectionCode>
+					</Pointer>
+				</AdditionalInformation>
+				<AdditionalInformation>
+					<StatementDescription>G2 Changing Type Code from B00 to A00 - 113 [4/3]</StatementDescription>
+					<StatementTypeCode>AES</StatementTypeCode>
+					<Pointer>
+						<SequenceNumeric>1</SequenceNumeric>
+						<DocumentSectionCode>42A</DocumentSectionCode>
+					</Pointer>
+					<Pointer>
+						<SequenceNumeric>19</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -244,7 +248,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>18</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>20</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -256,7 +260,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>19</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>21</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -268,11 +272,10 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>20</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>22</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
-				</AdditionalInformation>
-				
+				</AdditionalInformation>				
 				<!-- Group 3 Duty Tax Fee -->
 				<AdditionalInformation>
 					<StatementDescription>G3 Adding Specific Tax Base Quantity - 129 [4/4] - 333.11</StatementDescription>
@@ -282,7 +285,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>21</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>23</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -294,7 +297,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>22</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>24</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -306,7 +309,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>23</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>25</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -318,7 +321,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>24</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>26</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -330,11 +333,10 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>25</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>27</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
-				</AdditionalInformation>
-				
+				</AdditionalInformation>				
 				<!-- Group 4 Duty Tax Fee -->
 				<AdditionalInformation>
 					<StatementDescription>G4 Adding Specific Tax Base Quantity - 129 [4/4] - 444.11</StatementDescription>
@@ -344,7 +346,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>26</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>28</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -356,7 +358,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>27</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>29</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -368,7 +370,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>28</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>30</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -380,7 +382,7 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>29</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>31</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
 				</AdditionalInformation>
@@ -392,25 +394,15 @@
 						<DocumentSectionCode>42A</DocumentSectionCode>
 					</Pointer>
 					<Pointer>
-						<SequenceNumeric>30</SequenceNumeric>	<!-- *** -->
+						<SequenceNumeric>32</SequenceNumeric>	<!-- *** -->
 						<DocumentSectionCode>06A</DocumentSectionCode>
 					</Pointer>
-				</AdditionalInformation>
-				
-				
-				
-				<!-- Section 2 Amendments  ************************************************************************************* -->
-
-
-				
+				</AdditionalInformation>			
+				<!-- Section 2 Amendments  ************************************************************************************* -->			
 				<!-- There are already 3 Additional Documents in the Original Declaration, 
 					 therefore additional Documents need to increase Sequence Numeric accordingly, 
-					 starting at 4, in this case for each of the fields within the group --> 
-					 
-							
-				<!-- Additional Document 9WKS - Tags D031, D005, D006, 360 -->
-			
-				
+					 starting at 4, in this case for each of the fields within the group --> 						
+				<!-- Additional Document 9WKS - Tags D031, D005, D006, 360 -->			
 				<!-- Additional Document, ID D005. Aligns to SequenceNumeric '1' of Section 1. -->		
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
@@ -431,8 +423,27 @@
 						<TagID>D005</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- Additional Document, Type Code D006. Aligns to SequenceNumeric '2' of Section 1. -->
+				<!--Adding Name Tag to sequence numeric 4 additional document. Aligns to SequenceNumeric '2' of Section 1.-->
+		<Amendment>
+			<ChangeReasonCode>32</ChangeReasonCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>4</SequenceNumeric>
+				<DocumentSectionCode>02A</DocumentSectionCode>
+				<TagID>D028</TagID>
+			</Pointer>
+		</Amendment>
+				<!-- Additional Document, Type Code D006. Aligns to SequenceNumeric '3' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -451,9 +462,8 @@
 						<DocumentSectionCode>02A</DocumentSectionCode>
 						<TagID>D006</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- Additional Document, Category Code D031. Aligns to the undeclared SequenceNumeric '3' of Section 1. -->		
+				</Amendment>				
+				<!-- Additional Document, Category Code D031. Aligns to the undeclared SequenceNumeric '4' of Section 1. -->		
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -471,9 +481,8 @@
 						<DocumentSectionCode>02A</DocumentSectionCode>
 						<TagID>D031</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- Additional Document, Exemption Code 360. Aligns to SequenceNumeric '4' of Section 1. -->
+				</Amendment>				
+				<!-- Additional Document, Exemption Code 360. Aligns to SequenceNumeric '5' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -492,11 +501,9 @@
 						<DocumentSectionCode>02A</DocumentSectionCode>
 						<TagID>360</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- Additional Document 955D - Tags D031, D005, D006, 360 -->			
-				
-				<!-- Additional Document, ID D005. Aligns to SequenceNumeric '5' of Section 1. 
+				</Amendment>				
+				<!-- Additional Document 955D - Tags D031, D005, D006, 360 -->							
+				<!-- Additional Document, ID D005. Aligns to SequenceNumeric '6' of Section 1. 
 					 SequenceNumeric '5' of DocumentSectionCode '02A' will be the 5th Additional Document. -->		
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
@@ -517,8 +524,27 @@
 						<TagID>D005</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- Additional Document, Type Code D006. Aligns to SequenceNumeric '6' of Section 1. -->
+				<!--Adding Name Tag to sequence numeric 5 additional document. Aligns to SequenceNumeric '7' of Section 1-->
+		<Amendment>
+			<ChangeReasonCode>32</ChangeReasonCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>5</SequenceNumeric>
+				<DocumentSectionCode>02A</DocumentSectionCode>
+				<TagID>D028</TagID>
+			</Pointer>
+		</Amendment>
+				<!-- Additional Document, Type Code D006. Aligns to SequenceNumeric '8' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -537,9 +563,8 @@
 						<DocumentSectionCode>02A</DocumentSectionCode>
 						<TagID>D006</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- Additional Document, Category Code D031. Aligns to the undeclared SequenceNumeric '7' of Section 1. -->		
+				</Amendment>				
+				<!-- Additional Document, Category Code D031. Aligns to the undeclared SequenceNumeric '9' of Section 1. -->		
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -557,9 +582,8 @@
 						<DocumentSectionCode>02A</DocumentSectionCode>
 						<TagID>D031</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- Additional Document, Exemption Code 360. Aligns to SequenceNumeric '8' of Section 1. -->
+				</Amendment>				
+				<!-- Additional Document, Exemption Code 360. Aligns to SequenceNumeric '10' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -579,12 +603,8 @@
 						<TagID>360</TagID>
 					</Pointer>
 				</Amendment>
-				
-				
-
-				<!-- Additional Information UVC01 -->
-				
-				<!-- AdditionalInformation, StatementCode - 226. Aligns to SequenceNumeric '9' of Section 1. -->
+				<!-- Additional Information UVC01 -->				
+				<!-- AdditionalInformation, StatementCode - 226. Aligns to SequenceNumeric '11' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -603,8 +623,7 @@
 						<TagID>226</TagID>
 					</Pointer>
 				</Amendment>
-
-				<!-- AdditionalInformation, StatementDescription - 225. Aligns to SequenceNumeric '10' of Section 1. -->
+				<!-- AdditionalInformation, StatementDescription - 225. Aligns to SequenceNumeric '12' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -622,12 +641,9 @@
 						<DocumentSectionCode>03A</DocumentSectionCode>
 						<TagID>225</TagID>
 					</Pointer>
-				</Amendment>
-				
-				
-				
+				</Amendment>			
 				<!-- Start of Group 1 Duty Tax Fee -->
-				<!-- DutyTaxFee, SpecificTaxBaseQuantity. Aligns to SequenceNumeric '11' of Section 1.
+				<!-- DutyTaxFee, SpecificTaxBaseQuantity. Aligns to SequenceNumeric '13' of Section 1.
 				Tags 129, 113, 107, 120, 378 - in that order -->
 				<Amendment>
 					<ChangeReasonCode>21</ChangeReasonCode>
@@ -649,9 +665,8 @@
 						<DocumentSectionCode>50A</DocumentSectionCode>
 						<TagID>129</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- DutyTaxFee, TypeCode - 113. Aligns to SequenceNumeric '12' of Section 1. -->
+				</Amendment>				
+				<!-- DutyTaxFee, TypeCode - 113. Aligns to SequenceNumeric '14' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>22</ChangeReasonCode>
 					<Pointer>
@@ -672,9 +687,8 @@
 						<DocumentSectionCode>50A</DocumentSectionCode>
 						<TagID>113</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, MethodCode - 107. Aligns to SequenceNumeric '13' of Section 1. -->
+				</Amendment>			
+				<!-- DutyTaxFee, Payment, MethodCode - 107. Aligns to SequenceNumeric '15' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -699,8 +713,7 @@
 						<TagID>107</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, TaxAssessedAmount - 120. Aligns to SequenceNumeric '14' of Section 1. -->
+				<!-- DutyTaxFee, Payment, TaxAssessedAmount - 120. Aligns to SequenceNumeric '16' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>21</ChangeReasonCode>
 					<Pointer>
@@ -725,8 +738,7 @@
 						<TagID>120</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, PaymentAmount - 378. Aligns to SequenceNumeric '15' of Section 1. -->
+				<!-- DutyTaxFee, Payment, PaymentAmount - 378. Aligns to SequenceNumeric '17' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>21</ChangeReasonCode>
 					<Pointer>
@@ -752,9 +764,8 @@
 					</Pointer>
 				</Amendment>
 				<!-- End of Group 1 Duty Tax Fee -->
-				
 				<!-- Start of Group 2 Duty Tax Fee - Tags 129, 113, 107, 120, 378 - in that order -->
-				<!-- DutyTaxFee, SpecificTaxBaseQuantity - 129. Aligns to SequenceNumeric '16' of Section 1. -->
+				<!-- DutyTaxFee, SpecificTaxBaseQuantity - 129. Aligns to SequenceNumeric '18' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -776,8 +787,7 @@
 						<TagID>129</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, TypeCode - 113. Aligns to SequenceNumeric '17' of Section 1. -->
+				<!-- DutyTaxFee, TypeCode - 113. Aligns to SequenceNumeric '19' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -799,8 +809,7 @@
 						<TagID>113</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, MethodCode - 107. Aligns to SequenceNumeric '18' of Section 1. -->
+				<!-- DutyTaxFee, Payment, MethodCode - 107. Aligns to SequenceNumeric '20' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -825,8 +834,7 @@
 						<TagID>107</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, TaxAssessedAmount - 120. Aligns to SequenceNumeric '19' of Section 1. -->
+				<!-- DutyTaxFee, Payment, TaxAssessedAmount - 120. Aligns to SequenceNumeric '21' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -851,8 +859,7 @@
 						<TagID>120</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, PaymentAmount - 378. Aligns to SequenceNumeric '20' of Section 1. -->
+				<!-- DutyTaxFee, Payment, PaymentAmount - 378. Aligns to SequenceNumeric '22' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -878,9 +885,8 @@
 					</Pointer>
 				</Amendment>
 				<!-- End of Group 2 Duty Tax Fee -->
-				
 				<!-- Start of Group 3 Duty Tax Fee - Tags 129, 113, 107, 120, 378 - in that order -->
-				<!-- DutyTaxFee, Payment, SpecificTaxBaseQuantity - 129. Aligns to SequenceNumeric '21' of Section 1. -->
+				<!-- DutyTaxFee, Payment, SpecificTaxBaseQuantity - 129. Aligns to SequenceNumeric '23' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>21</ChangeReasonCode>
 					<Pointer>
@@ -902,8 +908,7 @@
 						<TagID>129</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, TypeCode - 113. Aligns to SequenceNumeric '22' of Section 1. -->
+				<!-- DutyTaxFee, TypeCode - 113. Aligns to SequenceNumeric '24' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>22</ChangeReasonCode>
 					<Pointer>
@@ -925,8 +930,7 @@
 						<TagID>113</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, MethodCode - 107. Aligns to SequenceNumeric '23' of Section 1. -->
+				<!-- DutyTaxFee, Payment, MethodCode - 107. Aligns to SequenceNumeric '25' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>32</ChangeReasonCode>
 					<Pointer>
@@ -951,8 +955,7 @@
 						<TagID>107</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, TaxAssessedAmount - 120. Aligns to SequenceNumeric '24' of Section 1. -->
+				<!-- DutyTaxFee, Payment, TaxAssessedAmount - 120. Aligns to SequenceNumeric '26' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>21</ChangeReasonCode>
 					<Pointer>
@@ -977,8 +980,7 @@
 						<TagID>120</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, PaymentAmount - 378. Aligns to SequenceNumeric '25' of Section 1. -->
+				<!-- DutyTaxFee, Payment, PaymentAmount - 378. Aligns to SequenceNumeric '27' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>21</ChangeReasonCode>
 					<Pointer>
@@ -1004,9 +1006,8 @@
 					</Pointer>
 				</Amendment>
 				<!-- End of Group 3 Duty Tax Fee -->
-			
 				<!-- Start of Group 4 Duty Tax Fee - Tags 129, 113, 107, 120, 378 - in that order-->
-				<!-- DutyTaxFee, Payment, SpecificTaxBaseQuantity - 129. Aligns to SequenceNumeric '26' of Section 1. -->
+				<!-- DutyTaxFee, Payment, SpecificTaxBaseQuantity - 129. Aligns to SequenceNumeric '28' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -1027,9 +1028,8 @@
 						<DocumentSectionCode>50A</DocumentSectionCode>
 						<TagID>129</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, TypeCode - 113. Aligns to SequenceNumeric '27' of Section 1. -->
+				</Amendment>	
+				<!-- DutyTaxFee, Payment, TypeCode - 113. Aligns to SequenceNumeric '29' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -1050,9 +1050,8 @@
 						<DocumentSectionCode>50A</DocumentSectionCode>
 						<TagID>113</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, MethodCode - 107. Aligns to SequenceNumeric '28' of Section 1. -->
+				</Amendment>		
+				<!-- DutyTaxFee, Payment, MethodCode - 107. Aligns to SequenceNumeric '30' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -1076,9 +1075,8 @@
 						<DocumentSectionCode>94A</DocumentSectionCode>
 						<TagID>107</TagID>
 					</Pointer>
-				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, TaxAssessedAmount - 120. Aligns to SequenceNumeric '29' of Section 1. -->
+				</Amendment>			
+				<!-- DutyTaxFee, Payment, TaxAssessedAmount - 120. Aligns to SequenceNumeric '31' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -1103,8 +1101,7 @@
 						<TagID>120</TagID>
 					</Pointer>
 				</Amendment>
-				
-				<!-- DutyTaxFee, Payment, PaymentAmount - 378. Aligns to SequenceNumeric '30' of Section 1. -->
+				<!-- DutyTaxFee, Payment, PaymentAmount - 378. Aligns to SequenceNumeric '32' of Section 1. -->
 				<Amendment>
 					<ChangeReasonCode>33</ChangeReasonCode>
 					<Pointer>
@@ -1130,21 +1127,13 @@
 					</Pointer>
 				</Amendment>
 				<!-- End of Group 4 Duty Tax Fee -->
-				
-				
-
-
-				<!-- Section 3 Values *********************************************************************** -->
-				
-				
+				<!-- Section 3 Values *********************************************************************** -->			
 				<!-- GoodsShipment TagID 67A -->
 				<GoodsShipment>
 					<!-- GovernmentAgencyGoodsItem TagID 68A -->
 					<GovernmentAgencyGoodsItem>
-						<SequenceNumeric>1</SequenceNumeric>
-						
-						<!-- 3 Documents in Original Declaration -->
-						
+						<SequenceNumeric>1</SequenceNumeric>			
+						<!-- 3 Documents in Original Declaration -->	
 						<AdditionalDocument>
 							<CategoryCode>C</CategoryCode>	
 							<ID>GBDPO1108654</ID>
@@ -1162,37 +1151,43 @@
 							<TypeCode>505</TypeCode>
 							<LPCOExemptionCode>CC</LPCOExemptionCode>
 						</AdditionalDocument>
-						
-						<!-- New Additional Documents starting at Sequence 4 --> 					
-							
+						<!-- New Additional Documents starting at Sequence 4 --> 						
 						<!-- D.E. 2/3 '9WKS' Sequence 4 -->
 						<AdditionalDocument>
-							<CategoryCode>9</CategoryCode>				<!-- D031 -->
-							<ID>See attached worksheet</ID>				<!-- D005 -->
-							<TypeCode>WKS</TypeCode>					<!-- D006 -->
-							<LPCOExemptionCode>AE</LPCOExemptionCode>	<!-- 360 -->
+							<CategoryCode>9</CategoryCode>
+							<!-- D031 -->
+							<ID>See attached worksheet</ID>
+							<!-- D005 -->
+							<Name>See attached worksheet</Name>
+							<!-- D028 -->
+							<TypeCode>WKS</TypeCode>
+							<!-- D006 -->
+							<LPCOExemptionCode>AE</LPCOExemptionCode>
+							<!-- 360 -->
 						</AdditionalDocument>
-						
 						<!-- D.E. 2/3 '955D' Sequence 5 -->
 						<AdditionalDocument>
-							<CategoryCode>9</CategoryCode>				<!-- D031 -->
-							<ID>Form C&#038;E955D completed</ID>		<!-- D005 -->
-							<TypeCode>55D</TypeCode>					<!-- D006 -->
-							<LPCOExemptionCode>AE</LPCOExemptionCode>	<!-- 360 -->
+							<CategoryCode>9</CategoryCode>
+							<!-- D031 -->
+							<ID>Form C&#038;E955D completed</ID>
+							<!-- D005 -->
+							<Name>Form C&#038;E955D completed</Name>
+							<!-- D028 -->
+							<TypeCode>55D</TypeCode>
+							<!-- D006 -->
+							<LPCOExemptionCode>AE</LPCOExemptionCode>
+							<!-- 360 -->
 						</AdditionalDocument>
-						
-						
 						<!-- D.E. 2/2 'UVC01' -->
 						<AdditionalInformation>
-							<StatementCode>UVC01</StatementCode>										<!-- 226 -->
-							<StatementDescription>UVC01 Statement Description</StatementDescription>	<!-- 225 -->
+							<StatementCode>UVC01</StatementCode>
+							<!-- 226 -->
+							<StatementDescription>UVC01 Statement Description</StatementDescription>
+							<!-- 225 -->
 						</AdditionalInformation>
-			
 						<!-- Commodity TagID 23A -->
 						<Commodity>
-						
 							<!-- Adding Groups G1 to G4 Duty Tax Fee - each with 5 Sequence positions = 20 Sequence Numerics -->
-						
 							<!-- G1 DutyTaxFee TagID 50A -->
 							<DutyTaxFee>
 								<!-- SpecificTaxBaseQuantity TagID 129 -->
@@ -1209,11 +1204,10 @@
 									<PaymentAmount currencyID="GBP">111.33</PaymentAmount>
 								</Payment>
 							</DutyTaxFee>
-							
 							<!-- G2 DutyTaxFee TagID 50A -->
 							<DutyTaxFee>
 								<!-- SpecificTaxBaseQuantity TagID 129 -->
-								<SpecificTaxBaseQuantity unitCode="GBP">222.11</SpecificTaxBaseQuantity>
+								<SpecificTaxBaseQuantity unitCode="GBP">111.11</SpecificTaxBaseQuantity>
 								<!-- TypeCode TagID 113 -->
 								<TypeCode>A00</TypeCode>
 								<!-- Payment TagID 94A -->
@@ -1226,11 +1220,10 @@
 									<PaymentAmount currencyID="GBP">222.33</PaymentAmount>
 								</Payment>
 							</DutyTaxFee>
-							
 							<!-- G3 DutyTaxFee TagID 50A -->
 							<DutyTaxFee>
 								<!-- SpecificTaxBaseQuantity TagID 129 -->
-								<SpecificTaxBaseQuantity unitCode="GBP">333.11</SpecificTaxBaseQuantity>
+								<SpecificTaxBaseQuantity unitCode="GBP">111.11</SpecificTaxBaseQuantity>
 								<!-- TypeCode TagID 113 -->
 								<TypeCode>B00</TypeCode>
 								<!-- Payment TagID 94A -->
@@ -1243,11 +1236,10 @@
 									<PaymentAmount currencyID="GBP">333.33</PaymentAmount>
 								</Payment>
 							</DutyTaxFee>
-							
 							<!-- G4 DutyTaxFee TagID 50A -->
 							<DutyTaxFee>
 								<!-- SpecificTaxBaseQuantity TagID 129 -->
-								<SpecificTaxBaseQuantity unitCode="GBP">444.11</SpecificTaxBaseQuantity>
+								<SpecificTaxBaseQuantity unitCode="GBP">111.11</SpecificTaxBaseQuantity>
 								<!-- TypeCode TagID 113 -->
 								<TypeCode>B00</TypeCode>
 								<!-- Payment TagID 94A -->

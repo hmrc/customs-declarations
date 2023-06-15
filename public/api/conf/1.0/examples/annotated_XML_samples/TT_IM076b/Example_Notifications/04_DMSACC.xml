@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>01</FunctionCode>
-		<FunctionalReferenceID>adac408a9d2c486bbeb7cede83d8074c</FunctionalReferenceID>
+		<FunctionalReferenceID>4fe7469f39784f9ba3b4c2c31f3869a2</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20230228105828Z</DateTimeString>
+			<DateTimeString formatCode="304">20230609083301+01</DateTimeString>
 		</IssueDateTime>
 		<AdditionalInformation>
 			<StatementCode>smartErrorMsg</StatementCode>
@@ -94,10 +94,10 @@
 		</Error>
 		<Declaration>
 			<AcceptanceDateTime>
-				<DateTimeString formatCode="304">20230228105826Z</DateTimeString>
+				<DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20230609083300+01</DateTimeString>
 			</AcceptanceDateTime>
-			<FunctionalReferenceID>TT_IM76b280223SA01</FunctionalReferenceID>
-			<ID>23GB2BG6DBSGDFUAR5</ID>
+			<FunctionalReferenceID>7848309Y8USI6DE09</FunctionalReferenceID>
+			<ID>23GB6BN6TV0Y33TAR5</ID>
 			<VersionID>2</VersionID>
 		</Declaration>
 	</Response>

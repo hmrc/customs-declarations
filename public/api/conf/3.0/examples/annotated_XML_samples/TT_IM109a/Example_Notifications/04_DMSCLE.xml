@@ -1,24 +1,29 @@
 <MetaData>
-        <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-        <WCOTypeName>RES</WCOTypeName>
-        <ResponsibleCountryCode/>
-        <ResponsibleAgencyName/>
-        <AgencyAssignedCustomizationCode/>
-        <AgencyAssignedCustomizationVersionCode/>
-        <Response>
-                <FunctionCode>09</FunctionCode>
-                <FunctionalReferenceID>cad5eba9e8a24803b0db781dbbe50d17</FunctionalReferenceID>
-                <IssueDateTime>
-                        <DateTimeString formatCode="304">20230421140708Z</DateTimeString>
-                </IssueDateTime>
-                <AdditionalInformation>
-                        <StatementCode>A2</StatementCode>
-                        <StatementTypeCode>AFB</StatementTypeCode>
-                </AdditionalInformation>
-                <Declaration>
-                        <FunctionalReferenceID>TT_IMA_CDSP-2104_SA03</FunctionalReferenceID>
-                        <ID>23GB4E0OODXWGYDAR3</ID>
-                        <VersionID>1</VersionID>
-                </Declaration>
-        </Response>
+    <WCODataModelVersionCode>3.6
+    </WCODataModelVersionCode>
+    <WCOTypeName>RES
+    </WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>09
+        </FunctionCode>
+        <FunctionalReferenceID>a76f01cbb95e44baaa6b3a31dbd7f8aa
+        </FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20230612162729+01
+            </DateTimeString>
+        </IssueDateTime>
+        <AdditionalInformation>
+            <StatementCode>A2</StatementCode>
+            <StatementTypeCode>AFB</StatementTypeCode>
+        </AdditionalInformation>
+        <Declaration>
+            <FunctionalReferenceID>784830951QEHNSOQN</FunctionalReferenceID>
+            <ID>23GB6GEGQIS8KJTAR2</ID>
+            <VersionID>1</VersionID>
+        </Declaration>
+    </Response>
 </MetaData>

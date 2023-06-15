@@ -7,16 +7,20 @@
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
         <FunctionCode>01</FunctionCode>
-        <FunctionalReferenceID>4b055060dcaa4e24b5dfe81bd544f088</FunctionalReferenceID>
+        <FunctionalReferenceID>76928ae333bc4953876dd274db76d460</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20220824093005Z</DateTimeString>
+            <DateTimeString formatCode="304">
+                20230609085229+01
+            </DateTimeString>
         </IssueDateTime>
         <Declaration>
             <AcceptanceDateTime>
-                <DateTimeString formatCode="304">20220817102200Z</DateTimeString>
+                <DateTimeString formatCode="304">
+                    20220715112200+01
+                </DateTimeString>
             </AcceptanceDateTime>
-            <FunctionalReferenceID>R310_NIP_TC13_2408_03</FunctionalReferenceID>
-            <ID>22GB9CCUB7Z5WFKAR6</ID>
+            <FunctionalReferenceID>7848309OM7V7ZNTHN</FunctionalReferenceID>
+            <ID>23GB6BNW252F98ZAR6</ID>
             <VersionID>1</VersionID>
         </Declaration>
     </Response>

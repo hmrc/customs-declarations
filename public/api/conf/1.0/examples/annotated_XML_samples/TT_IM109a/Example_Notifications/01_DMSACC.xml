@@ -1,23 +1,31 @@
 <MetaData>
-        <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-        <WCOTypeName>RES</WCOTypeName>
-        <ResponsibleCountryCode/>
-        <ResponsibleAgencyName/>
-        <AgencyAssignedCustomizationCode/>
-        <AgencyAssignedCustomizationVersionCode/>
-        <Response>
-                <FunctionCode>01</FunctionCode>
-                <FunctionalReferenceID>740ab9eb27354f6fb789ac1cc47aea01</FunctionalReferenceID>
-                <IssueDateTime>
-                        <DateTimeString formatCode="304">20230421140707Z</DateTimeString>
-                </IssueDateTime>
-                <Declaration>
-                        <AcceptanceDateTime>
-                                <DateTimeString formatCode="304">20230421140646Z</DateTimeString>
-                        </AcceptanceDateTime>
-                        <FunctionalReferenceID>TT_IMA_CDSP-2104_SA03</FunctionalReferenceID>
-                        <ID>23GB4E0OODXWGYDAR3</ID>
-                        <VersionID>1</VersionID>
-                </Declaration>
-        </Response>
+    <WCODataModelVersionCode>3.6
+    </WCODataModelVersionCode>
+    <WCOTypeName>RES
+    </WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>01
+        </FunctionCode>
+        <FunctionalReferenceID>03b78ff3b7944043be91aeefb568c1a6
+        </FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20230612162728+01
+            </DateTimeString>
+        </IssueDateTime>
+        <Declaration>
+            <AcceptanceDateTime>
+                <DateTimeString formatCode="304">20230612162727+01
+                </DateTimeString>
+            </AcceptanceDateTime>
+            <FunctionalReferenceID>784830951QEHNSOQN
+            </FunctionalReferenceID>
+            <ID>23GB6GEGQIS8KJTAR2</ID>
+            <VersionID>1
+            </VersionID>
+        </Declaration>
+    </Response>
 </MetaData>

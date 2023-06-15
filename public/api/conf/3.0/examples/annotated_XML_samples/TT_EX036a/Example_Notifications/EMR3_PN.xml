@@ -1,0 +1,11 @@
+<ns2:inventoryLinkingMovementTotalsResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
+    <ns2:messageCode>EMR</ns2:messageCode>
+    <ns2:crc>000</ns2:crc>
+    <ns2:goodsLocation>GBAULHRLHRANS</ns2:goodsLocation>
+    <ns2:masterUCR>A:24682009061</ns2:masterUCR>
+    <ns2:declarationCount>0</ns2:declarationCount>
+    <ns2:goodsArrivalDateTime>2023-06-09T11:39:00.000Z</ns2:goodsArrivalDateTime>
+    <ns2:movementReference>M11</ns2:movementReference>
+    <ns2:masterROE>0</ns2:masterROE>
+    <ns2:masterSOE>E</ns2:masterSOE>
+</ns2:inventoryLinkingMovementTotalsResponse>

@@ -1,21 +1,10 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!-- 
 			SCENARIO
 			
@@ -44,13 +33,13 @@
 			-->
 		<!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20221007113522+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20230609082626+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			Agents own reference number – this must be unique to the transaction. -->
-		<FunctionalReferenceID>CDSP_10174_01_2504-SA2</FunctionalReferenceID>
+			Agents own reference number â€“ this must be unique to the transaction. -->
+		<FunctionalReferenceID>784830983BP8J16J8</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -69,7 +58,7 @@
 			<FunctionCode>2</FunctionCode>
 		</Agent>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarant’s records.
+			An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarantâ€™s records.
 			The ID is the EORI of the EIDR authorised party. -->
 		<AuthorisationHolder>
 			<ID>GB553202734852</ID>
@@ -162,7 +151,7 @@
 					Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant’s records. -->
+					A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantâ€™s records. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBEIR553202734852I20190613093448</ID>
@@ -225,7 +214,7 @@
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Goods Description.
-						Description of the goods specific enough to enable classification – without repeating the CN code description in the Tariff. -->
+						Description of the goods specific enough to enable classification â€“ without repeating the CN code description in the Tariff. -->
 					<Description>Electrical Energy</Description>
 					<Classification>
 						<!--DE 6/14: Commodity Code - Combined Nomenclature Code.
@@ -239,13 +228,13 @@
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!--DE 6/17: Commodity Code – National Additional Codes.
+						<!--DE 6/17: Commodity Code â€“ National Additional Codes.
 							VATE to represent VAT Exempt. -->
 						<ID>VATE</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!--DE 6/17: Commodity Code – National Additional Codes.
+						<!--DE 6/17: Commodity Code â€“ National Additional Codes.
 							X99D to represent Electricity. -->
 						<ID>X99D</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
@@ -267,7 +256,7 @@
 						<TariffQuantity>8760</TariffQuantity>
 					</GoodsMeasure>
 					<!--DE 4/14: Item price amount. 
-						The invoice was issued with of a value of £200,000 and the currency was in GBP. -->
+						The invoice was issued with of a value of Â£200,000 and the currency was in GBP. -->
 					<InvoiceLine>
 						<ItemChargeAmount currencyID="GBP">200000</ItemChargeAmount>
 					</InvoiceLine>
@@ -290,7 +279,7 @@
 				</GovernmentProcedure>
 				<!--DE 5/16: Country of Preferential Origin.
 					TypeCode of 2 to represent preferential origin.
-					Where preference in D.E. 4/17 begins with a value other than ‘1’, this must be completed.
+					Where preference in D.E. 4/17 begins with a value other than â€˜1â€™, this must be completed.
 					CountryCode contains the code for the country from which the goods originated, in this case France. -->
 				<Origin>
 					<CountryCode>FR</CountryCode>
@@ -310,7 +299,7 @@
 				</Packaging>
 				<!--DE 4/13: Valuation Indicator.
 					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-					The code comprises four digits, each of which being either a ‘0’ or a ‘1’:
+					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
 					 - First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
 					 - Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
 					 - Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
@@ -340,7 +329,7 @@
 				Note that this is item 6 from the EIDR record entry. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20221007</ID>
+				<ID>20230609</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>6</LineNumeric>
 			</PreviousDocument>

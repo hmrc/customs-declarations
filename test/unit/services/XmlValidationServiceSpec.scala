@@ -30,12 +30,13 @@ import util.TestXMLData
 import util.TestXMLData.{InvalidSubmissionXML, InvalidSubmissionXMLWith2Errors, ValidSubmissionXML}
 
 import java.io.FileNotFoundException
+import scala.concurrent.ExecutionContext
 import scala.xml.SAXException
 
 class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach  with Matchers with ScalaFutures{
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
-  protected val MockConfiguration = mock[Configuration]
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
+  protected val MockConfiguration: Configuration = mock[Configuration]
 
   protected val propertyName: String = "xsd.locations.submit"
 
@@ -109,12 +110,12 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
       }
       caught.getMessage shouldBe "cvc-complex-type.2.2: Element 'TotalPackageQuantity' must have no element [children], and the value must be valid."
 
-      Option(caught.getException) shouldBe Symbol("nonEmpty")
+      Option(caught.getException) should be (defined)
       val wrapped1 = caught.getException
       wrapped1.getMessage shouldBe "cvc-datatype-valid.1.2.1: 'ABC' is not a valid value for 'decimal'."
       wrapped1.isInstanceOf[SAXException] shouldBe true
 
-      Option(wrapped1.asInstanceOf[SAXException].getException) shouldBe Symbol("nonEmpty")
+      Option(wrapped1.asInstanceOf[SAXException].getException) should be (defined)
       val wrapped2 = wrapped1.asInstanceOf[SAXException].getException
       wrapped2.getMessage shouldBe "cvc-complex-type.3.2.2: Attribute 'foo' is not allowed to appear in element 'Declaration'."
       wrapped2.isInstanceOf[SAXException] shouldBe true
@@ -132,7 +133,7 @@ class XmlValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Be
 
       caught.getMessage shouldBe "cvc-datatype-valid.1.2.1: 'ABC' is not a valid value for 'decimal'."
 
-      Option(caught.getException) shouldBe Symbol("nonEmpty")
+      Option(caught.getException) should be (defined)
       val wrapped1 = caught.getException
       wrapped1.getMessage shouldBe "cvc-complex-type.3.2.2: Attribute 'foo' is not allowed to appear in element 'Declaration'."
       wrapped1.isInstanceOf[SAXException] shouldBe true

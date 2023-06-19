@@ -35,7 +35,7 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
                                                        config: DeclarationsConfigService)
                                                       (implicit ec: ExecutionContext) extends HttpErrorFunctions {
 
-  private implicit val hc = HeaderCarrier()
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val XMLHeader = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>"""
 
   def send(notification: FileUploadCustomsNotification): Future[Unit] = {

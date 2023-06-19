@@ -37,7 +37,6 @@ class StatusResponseValidationService @Inject()(declarationsLogger: Declarations
   val importProcedureCategories: Seq[String] = Seq("40", "42", "61", "07", "51", "53", "71")
   val exportProcedureCategories: Seq[String] = Seq("10")
 
-  //  val ISO_UTC_DateTimeFormat_noMillis: DateTimeFormatter = ISODateTimeFormat.dateTime.withZoneUTC()
   val ISO_UTC_DateTimeFormat_noMillis: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
   def validate(xml: NodeSeq, badgeIdentifier: BadgeIdentifier): Either[ErrorResponse, Boolean] = {
@@ -69,25 +68,10 @@ class StatusResponseValidationService @Inject()(declarationsLogger: Declarations
     extractField(declarationNode, "communicationAddress").fold[Either[ErrorResponse, Boolean]]({
       declarationsLogger.errorWithoutRequestContext("Status response BadgeId field is missing")
       Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
-    })({ communicationAddress =>
-      //      communicationAddress match {
-      //        case x if (x.isEmpty) => Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
-      //        case x if (badgeIdentifier.value.toUpperCase != extractBadgeIdentifier(x.head).toUpperCase) => Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
-      //
-      //        case seq: IndexedSeq[_] =>
-      //        case seq: LinearSeq[_] =>
-      //        case seq: NodeSeq =>
-      //        case _ =>
-      //      }
-      if (badgeIdentifier.value.toUpperCase != extractBadgeIdentifier(communicationAddress.headOption.getOrElse("")).toUpperCase) {
-        Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
-      }
-      //      else  if (communicationAddress.isEmpty) {
-      //        Left(ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid"))
-      //      }
-      else {
-        Right(true)
-      }
+    })({
+      case communicationAddress if (communicationAddress.isEmpty) => Left(ErrorResponse.errorBadRequest("Badge Identifier is missing"))
+      case communicationAddress if (badgeIdentifier.value.toUpperCase != extractBadgeIdentifier(communicationAddress.head).toUpperCase) => Left(ErrorResponse.errorBadRequest("Badge Identifier is invalid"))
+      case _ => Right(true)
     })
   }
 
@@ -96,24 +80,20 @@ class StatusResponseValidationService @Inject()(declarationsLogger: Declarations
       declarationsLogger.errorWithoutRequestContext("Status response acceptanceDate field is missing")
       validateCreationDate(declarationNode)
     })(acceptanceDate => {
-
-
       val parsedDateTime: Option[ZonedDateTime] = Try(ZonedDateTime.parse((acceptanceDate.head), ISO_UTC_DateTimeFormat_noMillis)).toOption
-
-
-    val isDateValid = parsedDateTime.fold(
-      {
-        declarationsLogger.errorWithoutRequestContext(s"Unable to parse acceptance date time: ${acceptanceDate.head}")
-        false
+      val isDateValid = parsedDateTime.fold(
+        {
+          declarationsLogger.errorWithoutRequestContext(s"Unable to parse acceptance date time: ${acceptanceDate.head}")
+          false
+        }
+      )(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
+      if (!isDateValid) {
+        declarationsLogger.debugWithoutRequestContext(s"Status response acceptanceDate failed validation $acceptanceDate")
+        Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
+      } else {
+        Right(true)
       }
-    )(validDateTime => validDateTime.isAfter(getValidDateTimeUsingConfig))
-    if (!isDateValid) {
-      declarationsLogger.debugWithoutRequestContext(s"Status response acceptanceDate failed validation $acceptanceDate")
-      Left(ErrorResponse.errorBadRequest(s"Declaration acceptance date is greater than ${declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit} days old"))
-    } else{
-      Right(true)
-    }
-  })
+    })
 
   private def validateCreationDate(declarationNode: NodeSeq): Either[ErrorResponse, Boolean] =
     extractField(declarationNode, "creationDate").fold[Either[ErrorResponse, Boolean]]({
@@ -129,9 +109,7 @@ class StatusResponseValidationService @Inject()(declarationsLogger: Declarations
           false
         }
       )(validDateTime => {
-
         validDateTime.isAfter(getValidDateTimeUsingConfig)
-
       })
       if (!isDateValid) {
         declarationsLogger.debugWithoutRequestContext(s"Status response creationDate failed validation $creationDate")
@@ -141,9 +119,9 @@ class StatusResponseValidationService @Inject()(declarationsLogger: Declarations
       }
     })
 
-  private def safelyExtractValue(extractedValues : Seq[String]): Option[String] = {
-    if(extractedValues.nonEmpty && !extractedValues.head.isEmpty && extractedValues.head.length > 1) {
-      Some(extractedValues.head.substring(0,2))
+  private def safelyExtractValue(extractedValues: Seq[String]): Option[String] = {
+    if (extractedValues.nonEmpty && !extractedValues.head.isEmpty && extractedValues.head.length > 1) {
+      Some(extractedValues.head.substring(0, 2))
     } else {
       None
     }
@@ -196,15 +174,11 @@ class StatusResponseValidationService @Inject()(declarationsLogger: Declarations
   }
 
   private def getValidDateTimeUsingConfig = {
-    //    DateTime.now(DateTimeZone.UTC).minusDays(declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit)
     ZonedDateTime.now().minus(declarationsConfigService.declarationsConfig.declarationStatusRequestDaysLimit, ChronoUnit.DAYS)
   }
 
-//  def convert[T](sq: collection.mutable.Seq[T]): collection.immutable.Seq[T] =
-//    collection.immutable.List(sq: _*)
-
   private def extractField(declarationNode: NodeSeq, nodeName: String): Option[Seq[String]] = {
-    val mayBeFieldValue = (declarationNode \ nodeName).theSeq.toSeq match {
+    val mayBeFieldValue = (declarationNode \ nodeName) match {
       case Seq() => None
       case a => Some(a.map(_.text))
     }

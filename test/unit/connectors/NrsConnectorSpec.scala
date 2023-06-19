@@ -16,35 +16,34 @@
 
 package unit.connectors
 
-import java.util.UUID
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc.AnyContentAsJson
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.{FakeRequest, Helpers}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HttpClient, _}
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData
 import util.TestData.{fileUploadConfig, nrsConfigEnabled}
 
+import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers{
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]

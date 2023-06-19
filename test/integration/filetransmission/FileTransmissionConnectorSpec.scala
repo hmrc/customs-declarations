@@ -24,11 +24,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND, await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.http._
 import util.ExternalServicesConfig.{Host, Port}
 import util.FileTransmissionTestData._
@@ -43,7 +45,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
   private implicit val mockCdsLogger: CdsLogger = mock[CdsLogger]
 
   private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
-  private implicit val conversationIdRequest = TestData.TestConversationIdRequest
+  private implicit val conversationIdRequest: ConversationIdRequest[AnyContentAsXml] = TestData.TestConversationIdRequest
 
   override protected def beforeAll(): Unit = {
     startMockServer()

@@ -36,9 +36,11 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersStat
 import util.TestData._
 import util.{AuthConnectorNrsDisabledStubbing, TestData}
 
+import scala.concurrent.ExecutionContext
+
 class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableDrivenPropertyChecks with BeforeAndAfterEach with Matchers {
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private lazy val validatedHeadersRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest
   private val mockAuthenticationConnector: AuthConnector = mock[AuthConnector]
   private val mockImportsLogger= mock[DeclarationsLogger]

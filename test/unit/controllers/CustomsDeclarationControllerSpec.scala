@@ -19,7 +19,7 @@ package unit.controllers
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, verifyNoMoreInteractions, when}
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.mvc._
@@ -52,7 +52,7 @@ class CustomsDeclarationControllerSpec extends AnyWordSpecLike
   trait SetUp extends AuthConnectorStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-    private implicit val ec = Helpers.stubControllerComponents().executionContext
+    private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
     protected implicit val conversationIdRequest: HasConversationId = TestConversationIdRequest
 
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
@@ -90,7 +90,7 @@ class CustomsDeclarationControllerSpec extends AnyWordSpecLike
       controller.post().apply(request)
     }
 
-    protected def verifyMetrics = {
+    protected def verifyMetrics: Assertion = {
       val captor: ArgumentCaptor[CustomsDeclarationsMetricsRequest] = ArgumentCaptor.forClass(classOf[CustomsDeclarationsMetricsRequest])
       verify(mockMetricsConnector).post(captor.capture())(any[HasConversationId])
       captor.getValue.eventType shouldBe "DECLARATION"

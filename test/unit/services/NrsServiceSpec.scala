@@ -33,11 +33,11 @@ import uk.gov.hmrc.customs.declaration.services.{AuditingService, DateTimeServic
 import uk.gov.hmrc.http._
 import util.TestData._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
 
   trait SetUp {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]

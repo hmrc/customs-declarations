@@ -23,11 +23,13 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
@@ -48,8 +50,8 @@ class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private val mockDeclarationsConfig = mock[DeclarationsConfig]
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val vpr = TestData.TestCspValidatedPayloadRequest
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
 
   private val connector = new ApiSubscriptionFieldsConnector(mockWSGetImpl, mockLogger, mockDeclarationsConfigService)
 

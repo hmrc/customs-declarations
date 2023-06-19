@@ -8,14 +8,13 @@ import sbt._
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm}
 import uk.gov.hmrc.gitstamp.GitStampPlugin._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import scala.language.postfixOps
 
 name := "customs-declarations"
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.11"
 targetJvm := "jvm-11"
 
 lazy val CdsIntegrationComponentTest = config("it") extend Test

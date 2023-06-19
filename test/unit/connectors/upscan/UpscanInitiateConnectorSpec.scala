@@ -42,18 +42,18 @@ import scala.concurrent.{ExecutionContext, Future}
 class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
 
   private val mockWsPost = mock[HttpClient]
-  private implicit val mockLogger = mock[DeclarationsLogger]
+  private implicit val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
 
   private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
 
-  private val httpException = new Non2xxResponseException(404)
-  private val tenThousand = 10000
-  private val upscanInitiatePayloadV1WithNoRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, None)
-  private val upscanInitiatePayloadV1WithSuccessRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), None)
-  private val upscanInitiatePayloadV1WithErrorRedirects = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, Some("https://error-redirect.com"))
-  private val upscanInitiatePayloadV2 = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), Some("https://error-redirect.com"))
+  private val httpException: Non2xxResponseException = new Non2xxResponseException(404)
+  private val tenThousand: Int = 10000
+  private val upscanInitiatePayloadV1WithNoRedirects: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, None)
+  private val upscanInitiatePayloadV1WithSuccessRedirects: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), None)
+  private val upscanInitiatePayloadV1WithErrorRedirects: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, Some("https://error-redirect.com"))
+  private val upscanInitiatePayloadV2: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), Some("https://error-redirect.com"))
 
   implicit val jsonRequest: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 

@@ -28,9 +28,11 @@ import uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, _}
 
+import scala.concurrent.ExecutionContext
+
 class ControllersWiringSpec extends IntegrationTestSpec with GuiceOneAppPerSuite with MockitoSugar with Matchers{
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private lazy val mockSubmissionXmlValidationService = mock[SubmissionXmlValidationService]
   private lazy val mockCancellationXmlValidationService = mock[CancellationXmlValidationService]
   private lazy val mockAmendXmlValidationService = mock[AmendXmlValidationService]

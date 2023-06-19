@@ -21,7 +21,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.mvc.AnyContentAsXml
+import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
@@ -37,13 +37,13 @@ import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData.{conversationId, fileUploadConfig, nrsRetrievalValues}
 import util.TestXMLData
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.Elem
 
 class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   trait SetUp {
-    implicit val ec = Helpers.stubControllerComponents().executionContext
+    implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     val mockFileUploadPayloadValidationAction: FileUploadPayloadValidationAction = mock[FileUploadPayloadValidationAction]
     val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
@@ -62,9 +62,9 @@ class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with
       when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig.copy(fileGroupSizeMaximum = 2))
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val result = await(action.refine(testAr))
+      val result: Either[Result, ValidatedFileUploadPayloadRequest[AnyContentAsXml]] = await(action.refine(testAr))
 
-      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "If ErrorRedirect is present then SuccessRedirect must be too")).XmlResult)
+      val expected: Left[Result, Nothing] = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "If ErrorRedirect is present then SuccessRedirect must be too")).XmlResult)
       result shouldBe expected
     }
 
@@ -77,9 +77,9 @@ class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with
       when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig.copy(fileGroupSizeMaximum = 1))
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val result = await(action.refine(testAr))
+      val result: Either[Result, ValidatedFileUploadPayloadRequest[AnyContentAsXml]] = await(action.refine(testAr))
 
-      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileGroupSize exceeds 3 limit")).XmlResult)
+      val expected: Left[Result, Nothing] = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileGroupSize exceeds 3 limit")).XmlResult)
       result shouldBe expected
     }
 
@@ -91,9 +91,9 @@ class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val result = await(action.refine(testAr))
+      val result: Either[Result, ValidatedFileUploadPayloadRequest[AnyContentAsXml]] = await(action.refine(testAr))
 
-      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileSequenceNo must not be greater than FileGroupSize")).XmlResult)
+      val expected: Left[Result, Nothing] = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileSequenceNo must not be greater than FileGroupSize")).XmlResult)
       result shouldBe expected
     }
 
@@ -105,9 +105,9 @@ class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val result = await(action.refine(testAr))
+      val result: Either[Result, ValidatedFileUploadPayloadRequest[AnyContentAsXml]] = await(action.refine(testAr))
 
-      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileGroupSize does not match number of File elements"), ResponseContents("BAD_REQUEST", "FileSequenceNo contains duplicates")).XmlResult)
+      val expected: Left[Result, Nothing] = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileGroupSize does not match number of File elements"), ResponseContents("BAD_REQUEST", "FileSequenceNo contains duplicates")).XmlResult)
       result shouldBe expected
     }
 
@@ -119,9 +119,9 @@ class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val result = await(action.refine(testAr))
+      val result: Either[Result, ValidatedFileUploadPayloadRequest[AnyContentAsXml]] = await(action.refine(testAr))
 
-      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileSequenceNo contains duplicates")).XmlResult)
+      val expected: Left[Result, Nothing] = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileSequenceNo contains duplicates")).XmlResult)
       result shouldBe expected
     }
 
@@ -133,9 +133,9 @@ class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
 
-      val result = await(action.refine(testAr))
+      val result: Either[Result, ValidatedFileUploadPayloadRequest[AnyContentAsXml]] = await(action.refine(testAr))
 
-      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileSequenceNo must start from 1")).XmlResult)
+      val expected: Left[Result, Nothing] = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "FileSequenceNo must start from 1")).XmlResult)
       result shouldBe expected
     }
 
@@ -146,7 +146,7 @@ class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with
         clientId, NonCsp(Eori("EORI123"), Some(nrsRetrievalValues)), FakeRequest("GET", "/").withXmlBody(payload))
       val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
       when(mockFileUploadPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
-      val expected = Right(testVpr.toValidatedFileUploadPayloadRequest(
+      val expected: Right[Nothing, ValidatedFileUploadPayloadRequest[AnyContentAsXml]] = Right(testVpr.toValidatedFileUploadPayloadRequest(
         FileUploadRequest(DeclarationId("declarationId"),
           FileGroupSize(2),
           Seq(
@@ -156,7 +156,7 @@ class FileUploadPayloadValidationComposedActionSpec extends AnyWordSpecLike with
         )
       ))
 
-      val result = await(action.refine(testAr))
+      val result: Either[Result, ValidatedFileUploadPayloadRequest[AnyContentAsXml]] = await(action.refine(testAr))
 
       result shouldBe expected
     }

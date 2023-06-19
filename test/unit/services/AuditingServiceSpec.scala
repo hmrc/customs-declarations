@@ -42,7 +42,7 @@ import scala.language.postfixOps
 
 class AuditingServiceSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers{
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 5 seconds)
 
   private val stubNotificationLogger = new StubDeclarationsLogger(mock[CdsLogger])

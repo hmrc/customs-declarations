@@ -27,6 +27,7 @@ import uk.gov.hmrc.customs.api.common.xml.ValidateXmlAgainstSchema
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionThree, VersionTwo}
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
+import util.TestData.conversationIdValue
 import util.XmlOps.stringToXml
 import util.externalservices._
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, TestXMLData}
@@ -122,7 +123,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
 
       And("the response body is empty")
 
-      contentAsString(result) shouldBe Symbol("empty")
+      contentAsString(result) should be (empty)
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCsp())
@@ -152,11 +153,12 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 400 status is received")
-      result shouldBe Symbol("defined")
-      val resultFuture = result.value
+          val resultFuture = result.value
 
+      contentAsString(resultFuture) should include("BAD_REQUEST")
       status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
+
 
       And("the response body is a \"malformed xml body\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(MalformedXmlBodyError)
@@ -183,7 +185,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       status(result) shouldBe ACCEPTED
 
       And("the response body is empty")
-      contentAsString(result) shouldBe Symbol("empty")
+      contentAsString(result) should be (empty)
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCsp())
@@ -218,7 +220,7 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       status(result) shouldBe ACCEPTED
 
       And("the response body is empty")
-      contentAsString(result) shouldBe Symbol("empty")
+      contentAsString(result) should be (empty)
 
       And("the request was authorised with AuthService")
       verifyAuthServiceCalledForCsp()
@@ -272,11 +274,12 @@ class CustomsDeclarationSubmissionSpec extends ComponentTestSpec with AuditServi
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 400 status is received")
-      result shouldBe Symbol("defined")
       val resultFuture = result.value
 
+      contentAsString(resultFuture) should include("BAD_REQUEST")
       status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
+
 
       And("the response body is a \"invalid xml\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(BadRequestErrorWith2Errors)

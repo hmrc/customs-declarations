@@ -57,6 +57,14 @@ trait ExpectedTestResponses {
       |   </errorResponse>
       |""".stripMargin
 
+  protected val BadStatusResponseErrorBadgeIdInvalid: String =
+    """<?xml version="1.0" encoding="UTF-8"?>
+      | <errorResponse>
+      |   <code>BAD_REQUEST</code>
+      |   <message>Badge Identifier is invalid</message>
+      |   </errorResponse>
+      |""".stripMargin
+
   protected val MalformedXmlBodyError: String  =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<errorResponse>

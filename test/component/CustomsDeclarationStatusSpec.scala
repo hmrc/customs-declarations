@@ -202,7 +202,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe BAD_REQUEST
 
       And("the response body is a \"invalid xml\" XML")
-      stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
+      stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorBadgeIdInvalid)
       schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadStatusResponseErrorBadgeIdMissingOrInvalid)))
     }
   }

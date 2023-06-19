@@ -23,6 +23,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers.{await, _}
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationCancellationConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
@@ -50,7 +51,7 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
   private val correlationId = UUID.randomUUID()
-  private implicit val vpr = TestData.TestCspValidatedPayloadRequest
+  private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
 
   override protected def beforeAll(): Unit = {
     startMockServer()

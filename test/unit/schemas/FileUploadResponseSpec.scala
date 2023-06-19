@@ -26,12 +26,13 @@ import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 
+import scala.concurrent.ExecutionContext
 import scala.xml.{Elem, SAXException}
 
 class FileUploadResponseSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Matchers{
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
-  protected val MockConfiguration = mock[Configuration]
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
+  protected val MockConfiguration: Configuration = mock[Configuration]
 
   protected val propertyName: String = "xsd.locations.fileuploadresponse"
   protected val xsdLocations: Seq[String] = Seq("/api/conf/2.0/schemas/wco/fileupload/FileUploadResponse.xsd")

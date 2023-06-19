@@ -23,6 +23,8 @@ import uk.gov.hmrc.customs.declaration.model.upscan.FileUploadMetadata
 import util.TestData.FileMetadataWithFileOne
 
 class FileUploadMetadataSpec extends AnyWordSpecLike with Matchers {
+
+
   private val jsonString = """{
                              |  "declarationId": "1",
                              |  "eori": "123",
@@ -60,7 +62,7 @@ class FileUploadMetadataSpec extends AnyWordSpecLike with Matchers {
 
     "de-serialise from Json" in {
 
-      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[FileUploadMetadata]
+      val JsSuccess(actualMetaData, _) = (Json.parse(jsonString).validate[FileUploadMetadata])
 
       actualMetaData shouldBe FileMetadataWithFileOne
     }

@@ -46,7 +46,7 @@ import util.{AuthConnectorNrsDisabledStubbing, StatusTestXMLData}
 
 import java.time.Instant
 import java.util.UUID
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matchers with MockitoSugar{
@@ -54,7 +54,7 @@ class CustomsDeclarationStatusControllerSpec extends AnyWordSpecLike with Matche
   trait SetUp extends AuthConnectorNrsDisabledStubbing {
     override val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-    protected implicit val ec = Helpers.stubControllerComponents().executionContext
+    protected implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
     protected val mockStatusResponseFilterService: StatusResponseFilterService = mock[StatusResponseFilterService]
     protected val mockStatusResponseValidationService: StatusResponseValidationService = mock[StatusResponseValidationService]
     protected val mockMdgPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]

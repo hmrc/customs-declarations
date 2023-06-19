@@ -28,7 +28,7 @@ case class FileTransmissionBatch(
   fileCount: Int
 )
 object FileTransmissionBatch {
-  implicit val writes = Json.writes[FileTransmissionBatch]
+  implicit val writes: OWrites[FileTransmissionBatch] = Json.writes[FileTransmissionBatch]
 }
 
 case class FileTransmissionFile(
@@ -42,8 +42,8 @@ case class FileTransmissionFile(
   uploadTimestamp: Instant
 )
 object FileTransmissionFile {
-  implicit val urlFormat = HttpUrlFormat
-  implicit val writes = Json.writes[FileTransmissionFile]
+  implicit val urlFormat: HttpUrlFormat.type = HttpUrlFormat
+  implicit val writes: OWrites[FileTransmissionFile] = Json.writes[FileTransmissionFile]
 }
 
 case class FileTransmissionInterface(
@@ -51,12 +51,12 @@ case class FileTransmissionInterface(
   version: String
 )
 object FileTransmissionInterface {
-  implicit var writes = Json.writes[FileTransmissionInterface]
+  implicit var writes: OWrites[FileTransmissionInterface] = Json.writes[FileTransmissionInterface]
 }
 
 case class FileTransmissionProperty(name: String, value: String)
 object FileTransmissionProperty {
-  implicit var writes = Json.writes[FileTransmissionProperty]
+  implicit var writes: OWrites[FileTransmissionProperty] = Json.writes[FileTransmissionProperty]
 }
 
 case class FileTransmission(
@@ -67,8 +67,8 @@ case class FileTransmission(
   properties: Seq[FileTransmissionProperty]
 )
 object FileTransmission {
-  implicit val urlFormat = HttpUrlFormat
-  implicit val writes = Json.writes[FileTransmission]
+  implicit val urlFormat: HttpUrlFormat.type = HttpUrlFormat
+  implicit val writes: OWrites[FileTransmission] = Json.writes[FileTransmission]
 }
 
 sealed trait FileTransmissionOutcome {
@@ -119,7 +119,7 @@ object FileTransmissionFailureNotification {
 case class FileTransmissionCallbackDecider(outcome: FileTransmissionOutcome)
 
 object FileTransmissionCallbackDecider {
-  implicit val reads = Json.reads[FileTransmissionCallbackDecider]
+  implicit val reads: Reads[FileTransmissionCallbackDecider] = Json.reads[FileTransmissionCallbackDecider]
   def parse(json: JsValue): JsResult[FileTransmissionNotification] = {
     json.validate[FileTransmissionCallbackDecider] match {
       case JsSuccess(decider, _) => decider.outcome match {

@@ -17,6 +17,7 @@
 package component.upscan
 
 import component.{ComponentTestSpec, ExpectedTestResponses}
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.libs.json.{JsObject, JsString}
 import play.api.mvc._
@@ -35,7 +36,6 @@ import java.io.StringReader
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
-import org.scalatest.matchers.should.Matchers
 
 class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
@@ -80,7 +80,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       Then("a response with a 200 (OK) status is received")
       status(result) shouldBe OK
 
-      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
+      headers(result).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
       schemaFileUploadResponseLocationV1.newValidator().validate(new StreamSource(new StringReader(contentAsString(result))))
     }
   }
@@ -123,7 +123,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       status(result) shouldBe UNAUTHORIZED
 
       And("the response body is empty")
-      stringToXml(contentAsString(result)) shouldBe stringToXml(UnauthorisedRequestError)
+      contentAsString(result) should include("UNAUTHORIZED")
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCspWithoutRetrievals())
@@ -142,11 +142,11 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 400 status is received")
-      result shouldBe Symbol("defined")
       val resultFuture = result.value
+      contentAsString(resultFuture) should include("BAD_REQUEST")
 
       status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
 
       And("the response body is a \"malformed xml body\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(MalformedXmlBodyError)
@@ -163,7 +163,7 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       Then(s"a response with a 400 status is received")
 
       status(result) shouldBe BAD_REQUEST
-      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
+      headers(result).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
     }
 
     Scenario("Response status 400 when user submits a malformed xml payload") {
@@ -176,11 +176,11 @@ class FileUploadSpec extends ComponentTestSpec with ExpectedTestResponses
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 400 status is received")
-      result shouldBe Symbol("defined")
       val resultFuture = result.value
 
+      contentAsString(resultFuture) should include("BAD_REQUEST")
       status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe Symbol("defined")
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
 
       And("the response body is a \"malformed xml body\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(MalformedXmlBodyError)

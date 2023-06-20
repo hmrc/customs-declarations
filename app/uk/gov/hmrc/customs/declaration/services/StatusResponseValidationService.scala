@@ -101,7 +101,7 @@ class StatusResponseValidationService @Inject()(declarationsLogger: Declarations
       Left(ErrorResponse.errorBadRequest("Declaration acceptanceDate and creationDate fields are missing"))
     })(creationDate => {
 
-      val parsedDateTime = Try(ZonedDateTime.parse((creationDate.head), DateTimeFormatter.ISO_OFFSET_DATE_TIME)).toOption
+      val parsedDateTime = Try(ZonedDateTime.parse(creationDate.head, DateTimeFormatter.ISO_OFFSET_DATE_TIME)).toOption
 
       val isDateValid = parsedDateTime.fold(
         {

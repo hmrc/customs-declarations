@@ -83,7 +83,7 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
             val declarationId = DeclarationId((xml \ declarationIdLabel).text)
             val fileGroupSize = FileGroupSize((xml \ fileGroupSizeLabel).text.trim.toInt)
 
-            val files: Seq[FileUploadFile] = (xml \ filesLabel \ "_").theSeq.collect {
+            val files: Seq[FileUploadFile] = (xml \ filesLabel \ "_").collect {
               case file =>
                 val fileSequenceNumber = FileSequenceNo((file \ fileSequenceNoLabel).text.trim.toInt)
                 val maybeDocumentTypeText = maybeElement(file, documentTypeLabel)

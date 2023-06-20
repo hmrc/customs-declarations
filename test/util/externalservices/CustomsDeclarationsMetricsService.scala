@@ -35,14 +35,14 @@ trait CustomsDeclarationsMetricsService extends WireMockRunner {
       willReturn aResponse()
       .withStatus(status))
 
-  def verifyCustomsDeclarationsMetricsServiceWasCalled() {
+  def verifyCustomsDeclarationsMetricsServiceWasCalled(): Unit = {
     verify(1, postRequestedFor(urlMatchingRequestPath)
       .withHeader(ACCEPT, equalTo(MimeTypes.JSON))
       .withHeader(CONTENT_TYPE, equalTo(MimeTypes.JSON))
     )
   }
 
-  def verifyCustomsDeclarationsMetricsServiceWasCalledWith(request: CustomsDeclarationsMetricsRequest) {
+  def verifyCustomsDeclarationsMetricsServiceWasCalledWith(request: CustomsDeclarationsMetricsRequest): Unit = {
     verify(
       1,
       postRequestedFor(urlMatchingRequestPath)

@@ -17,16 +17,17 @@
 package component
 
 import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.AuditService
 import util.FakeRequests._
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
+import util.TestData.conversationIdValue
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoDecService}
 
 import scala.concurrent.Future
-import org.scalatest.matchers.should.Matchers
 
 class DeclarationSchemaSpec extends ComponentTestSpec
   with Matchers with OptionValues with AuthService with MdgWcoDecService with ApiSubscriptionFieldsService with AuditService {
@@ -39,14 +40,14 @@ class DeclarationSchemaSpec extends ComponentTestSpec
   private val apiSubscriptionKeyForXClientIdV2 = apiSubscriptionKeyForXClientIdV1.copy(version = VersionTwo)
 
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
     stubAuditService()
     authServiceAuthorizesCSP()
     startMdgWcoDecServiceV2()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -57,14 +58,13 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       startApiSubscriptionFieldsService(apiSubscriptionKeyForXClientIdV2)
       val request = ValidSubmission_13_INV_Request.fromCsp.postTo(endpoint)
       When("a POST request with data is sent to the API")
-      val result: Option[Future[Result]] = route(app = app, request)
+      val result: Future[Result] = route(app = app, request).value
 
       Then(s"a response with a 202 status is received")
-      result shouldBe 'defined
-      val resultFuture = result.value
+      contentAsString(result) should be (empty)
 
-      status(resultFuture) shouldBe ACCEPTED
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      status(result) shouldBe ACCEPTED
+      headers(result).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
     }
 
     Scenario("Response status 202 when authorised as CSP with privileged application and submits function code 13 in the request") {
@@ -79,6 +79,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
 
       Then("a response with a 202 (ACCEPTED) status is received")
       status(result) shouldBe ACCEPTED
+      contentAsString(result) should be (empty)
     }
 
     Scenario("Response status 202 when authorised as CSP with privileged application and submits type code INV in the request") {
@@ -93,7 +94,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
 
       Then("a response with a 202 (ACCEPTED) status is received")
       status(resultFuture) shouldBe ACCEPTED
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
     }
 
     Scenario("Response status 202 when function code 13 is in the request") {
@@ -105,6 +106,7 @@ class DeclarationSchemaSpec extends ComponentTestSpec
 
       Then("a response with a 202 (ACCEPTED) status is received")
       status(result) shouldBe ACCEPTED
+      contentAsString(result) should be (empty)
     }
 
 
@@ -113,14 +115,14 @@ class DeclarationSchemaSpec extends ComponentTestSpec
       val request = ValidSubmission_INV_Request.fromCsp.postTo(endpoint)
 
       When("a POST request with data is sent to the API")
-      val result: Option[Future[Result]] = route(app = app, request)
+      val result: Future[Result] = route(app = app, request).value
 
       Then(s"a response with a 202 status is received")
-      result shouldBe 'defined
-      val resultFuture = result.value
+      contentAsString(result) should be (empty)
 
-      status(resultFuture) shouldBe ACCEPTED
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+
+      status(result) shouldBe ACCEPTED
+      headers(result).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
     }
   }
 

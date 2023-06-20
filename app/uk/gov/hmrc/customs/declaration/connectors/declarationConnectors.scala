@@ -32,8 +32,7 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HttpClient, _}
 
-import java.time.format.DateTimeFormatter
-import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
+import java.time.{Instant, LocalDateTime}
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq

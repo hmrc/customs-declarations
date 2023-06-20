@@ -18,7 +18,7 @@ package component
 
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
 import org.scalatest._
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
@@ -31,12 +31,11 @@ import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgStat
 import util.{AuditService, CustomsDeclarationsExternalServicesConfig, StatusTestXMLData}
 
 import java.io.StringReader
-import java.time.{Instant, ZoneOffset}
 import java.time.temporal.ChronoUnit
+import java.time.{Instant, ZoneOffset}
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
-import org.scalatest.matchers.should.Matchers
 
 class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
@@ -84,15 +83,15 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
   val validRequestV2: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", endpoint).withHeaders(ValidHeadersV2.-(CONTENT_TYPE).toSeq: _*).fromCsp
   val validRequestV3: FakeRequest[AnyContentAsEmpty.type] = validRequestV2.withHeaders(ValidHeadersV3.-(CONTENT_TYPE).toSeq: _*)
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -203,7 +202,7 @@ class CustomsDeclarationStatusSpec extends ComponentTestSpec with AuditService w
       status(result) shouldBe BAD_REQUEST
 
       And("the response body is a \"invalid xml\" XML")
-      stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorBadgeIdMissingOrInvalid)
+      stringToXml(contentAsString(result)) shouldBe stringToXml(BadStatusResponseErrorBadgeIdInvalid)
       schemaErrorV1.newValidator().validate(new StreamSource(new StringReader(BadStatusResponseErrorBadgeIdMissingOrInvalid)))
     }
   }

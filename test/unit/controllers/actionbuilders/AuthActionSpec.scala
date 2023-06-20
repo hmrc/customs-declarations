@@ -18,8 +18,8 @@ package unit.controllers.actionbuilders
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
@@ -40,9 +40,8 @@ import util.CustomsDeclarationsMetricsTestData._
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders.{X_CONVERSATION_ID_NAME, X_SUBMITTER_IDENTIFIER_NAME}
 import util.TestData._
-import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, UnitSpec}
+import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing}
 
-import scala.Console.in
 import scala.concurrent.ExecutionContext
 
 class AuthActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{

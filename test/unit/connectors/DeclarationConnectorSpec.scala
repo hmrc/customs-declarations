@@ -78,7 +78,7 @@ class DeclarationConnectorSpec extends AnyWordSpecLike with MockitoSugar with Be
 
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     reset(mockWsPost, mockLogger, mockServiceConfigProvider)
     when(mockServiceConfigProvider.getConfig("wco-declaration")).thenReturn(v1Config)
     when(mockServiceConfigProvider.getConfig("v2.wco-declaration")).thenReturn(v2Config)

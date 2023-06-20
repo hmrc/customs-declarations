@@ -21,14 +21,13 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers._
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.{TestData, WireMockRunner}
-
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait CustomsNotificationService extends WireMockRunner {
 
   private val notifyPath = urlMatching("/customs-notification/notify")
 
-  def notificationServiceIsRunning() {
+  def notificationServiceIsRunning(): Unit = {
     stubFor(post(notifyPath)
       .willReturn(
         aResponse()
@@ -47,7 +46,7 @@ trait CustomsNotificationService extends WireMockRunner {
     (Map(keys map { s => (s, req.getHeader(s)) }: _*), req.getBodyAsString)
   }
 
-  def verifyWasCalledWith(requestBody: String) {
+  def verifyWasCalledWith(requestBody: String): Unit = {
     verify(
       1,
       postRequestedFor(notifyPath)

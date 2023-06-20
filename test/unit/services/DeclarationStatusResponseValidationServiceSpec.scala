@@ -17,6 +17,7 @@
 package unit.services
 
 import org.mockito.Mockito.when
+import org.scalatest.EitherValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
@@ -31,7 +32,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import scala.xml.{Elem, NodeSeq}
 
-class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
+class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers with EitherValues {
 
   protected val mockDeclarationsConfigService: DeclarationsConfigService = mock[DeclarationsConfigService]
   protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
@@ -44,7 +45,8 @@ class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike wit
   private val invalidCreationDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest(s"Declaration creation date is greater than $statusRequestDaysLimit days old")
   private val missingAcceptanceAndCreationDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Declaration acceptanceDate and creationDate fields are missing")
   private val invalidOrMissingBadgeIdentifiersErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid")
-
+  private val missingBadgeIdentifiersErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Badge Identifier is missing")
+  private val invalidBadgeIdentifiersErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Badge Identifier is invalid")
   trait SetUp {
 
     protected lazy val service = new StatusResponseValidationService(mockLogger, mockDeclarationsConfigService)
@@ -65,7 +67,7 @@ class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike wit
     "return Left of Invalid Date ErrorResponse when badgeIdentifiers match and acceptance date is outside configured allowed period" in new SetUp() {
       val dateWithinPeriod = Instant.now().minus(statusRequestDaysOutsideLimit, ChronoUnit.DAYS)
       val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, populateAcceptanceDate = true, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier)
-      result.left.get.message shouldBe invalidDateErrorResponse.message
+      result.left.value.message shouldBe invalidDateErrorResponse.message
     }
 
     "return Right of true when badgeIdentifiers match and creation date is within configured allowed period" in new SetUp() {
@@ -78,13 +80,13 @@ class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike wit
     "return Left of Invalid Date ErrorResponse when badgeIdentifiers match and creation date is outside configured allowed period" in new SetUp() {
       val dateWithinPeriod = Instant.now().minus(statusRequestDaysOutsideLimit, ChronoUnit.DAYS)
       val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod,populateAcceptanceDate = false, ImportTradeMovementType, InValidProcedureCategory), badgeIdentifier)
-      result.left.get.message shouldBe invalidCreationDateErrorResponse.message
+      result.left.value.message shouldBe invalidCreationDateErrorResponse.message
     }
 
-    "return Left of Invalid or missing Badge Identifier ErrorResponse  when badgeIdentifiers do not match" in new SetUp() {
+    "return Left of Invalid Badge Identifier ErrorResponse  when badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod = Instant.now().minus(statusRequestDaysInsideLimit, ChronoUnit.DAYS)
       val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, populateAcceptanceDate = true, ImportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
-      result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
+      result.left.value.message shouldBe invalidBadgeIdentifiersErrorResponse.message
     }
 
     "return Right of true or missing Badge Identifier ErrorResponse  when badgeIdentifier cases do not match" in new SetUp() {
@@ -135,22 +137,22 @@ class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike wit
       result shouldBe Right(true)
     }
 
-    "return Left of Invalid or missing Badge Identifier ErrorResponse when response is tradeMovementType of CO... procedure category is ImportType date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
+    "return Left of Invalid Badge Identifier ErrorResponse when response is tradeMovementType of CO... procedure category is ImportType date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod = Instant.now().minus(statusRequestDaysInsideLimit, ChronoUnit.DAYS)
       val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, populateAcceptanceDate = true, COTradeMovementType, ValidImportProcedureCategory), invalidBadgeIdentifier)
-      result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
+      result.left.value.message shouldBe invalidBadgeIdentifiersErrorResponse.message
     }
 
     "return Left of Invalid Date ErrorResponse when response is tradeMovementType of EX... date outside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod = Instant.now().minus(statusRequestDaysOutsideLimit, ChronoUnit.DAYS)
       val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, populateAcceptanceDate = true, ExportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
-      result.left.get.message shouldBe invalidDateErrorResponse.message
+      result.left.value.message shouldBe invalidDateErrorResponse.message
     }
 
     "return Left of Invalid Date ErrorResponse when response is tradeMovementType of EX... and date format is invalid" in new SetUp() {
       val dateWithinPeriod = Instant.now().minus(statusRequestDaysOutsideLimit, ChronoUnit.DAYS)
       val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, populateAcceptanceDate = true, ExportTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
-      result.left.get.message shouldBe invalidDateErrorResponse.message
+      result.left.value.message shouldBe invalidDateErrorResponse.message
     }
 
     "return Right of true when response is tradeMovementType of CO... procedure category is ExportType, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
@@ -177,13 +179,13 @@ class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike wit
     "return Left of Invalid Date ErrorResponse when response is tradeMovementType of CO... procedure category is ExportType, date and badgeId are valid" in new SetUp() {
       val dateWithinPeriod = Instant.now().minus(statusRequestDaysOutsideLimit, ChronoUnit.DAYS)
       val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, populateAcceptanceDate = true, COTradeMovementType, ValidExportProcedureCategory), badgeIdentifier)
-      result.left.get.message shouldBe invalidDateErrorResponse.message
+      result.left.value.message shouldBe invalidDateErrorResponse.message
     }
 
-    "return Left of Invalid or missing Badge Identifier ErrorResponse when response is tradeMovementType of CO... procedure category is invalid, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
+    "return Left of Invalid Badge Identifier ErrorResponse when response is tradeMovementType of CO... procedure category is invalid, date is inside configured allowed period and badgeIdentifiers do not match" in new SetUp() {
       val dateWithinPeriod = Instant.now().minus(statusRequestDaysInsideLimit, ChronoUnit.DAYS)
       val result: Either[ErrorResponse, Boolean] = service.validate(generateDeclarationStatusResponse(dateWithinPeriod, populateAcceptanceDate = true, COTradeMovementType, InValidProcedureCategory), invalidBadgeIdentifier)
-      result.left.get.message shouldBe invalidOrMissingBadgeIdentifiersErrorResponse.message
+      result.left.value.message shouldBe invalidBadgeIdentifiersErrorResponse.message
     }
 
     "return Left of Invalid Date ErrorResponse when xml does not contain acceptanceDate or creationDate" in new SetUp() {
@@ -214,9 +216,9 @@ class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike wit
       testServiceErrors(service, statusResponseDeclarationNoCommunicationAddress, badgeIdentifier, invalidOrMissingBadgeIdentifiersErrorResponse)
     }
 
-    def testServiceErrors(service: StatusResponseValidationService, xmlResponse: Elem, badgeIdentifier: BadgeIdentifier, errorResponse: ErrorResponse){
+    def testServiceErrors(service: StatusResponseValidationService, xmlResponse: Elem, badgeIdentifier: BadgeIdentifier, errorResponse: ErrorResponse): Unit = {
       val result: Either[ErrorResponse, Boolean] = service.validate(invalidStatusResponse(xmlResponse), badgeIdentifier)
-      result.left.get.message shouldBe errorResponse.message
+      result.left.value.message shouldBe errorResponse.message
     }
 
   }

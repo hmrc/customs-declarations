@@ -17,14 +17,13 @@
 package integration.upscan
 
 import integration.IntegrationTestSpec
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND, await, defaultAwaitTimeout}
+import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadCustomsNotification
@@ -44,7 +43,7 @@ class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with Guice
   private val notification =
     FileUploadCustomsNotification(subscriptionFieldsId, TestData.conversationId.uuid, xml)
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
@@ -52,7 +51,7 @@ class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with Guice
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -111,7 +110,7 @@ class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with Guice
 
   }
 
-  private def awaitSendValidRequest() = {
-    await(connector.send(notification))
+  private def awaitSendValidRequest(): Unit = {
+   play.api.test.Helpers.await(connector.send(notification))
   }
 }

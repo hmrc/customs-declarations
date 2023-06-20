@@ -49,11 +49,11 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   private val incomingAuthToken = s"Bearer ${ExternalServicesConfig.AuthToken}"
   private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo, ApiSubscriptionFieldsTestData.clientId, Csp(None, Some(badgeIdentifier), None), mock[Request[AnyContent]])
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     when(mockUuidService.uuid()).thenReturn(correlationIdUuid)
   }
 
@@ -61,7 +61,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -107,7 +107,7 @@ class DeclarationStatusConnectorSpec extends IntegrationTestSpec
     connector.send(expectedDeclarationStatusPayload, date, correlationId, VersionTwo)
   }
 
-  private def checkCaughtException(status: Int) {
+  private def checkCaughtException(status: Int): Unit = {
     val exception = intercept[Non2xxResponseException](await(sendValidXml()))
     exception.responseCode shouldBe status
   }

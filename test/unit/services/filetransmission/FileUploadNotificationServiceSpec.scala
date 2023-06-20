@@ -16,17 +16,16 @@
 
 package unit.services.filetransmission
 
-import java.util.UUID
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.Assertion
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Reads
 import play.api.test.Helpers
-import play.api.test.Helpers.defaultAwaitTimeout
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.model.ConversationId
@@ -35,21 +34,22 @@ import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionF
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, FileReference}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
+import unit.services.filetransmission
 import unit.services.filetransmission.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData
 import util.TestData._
 import util.XmlOps._
 
-import scala.concurrent.Future
+import java.util.UUID
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
-import org.scalatest.matchers.should.Matchers
 
 object ExampleFileTransmissionStatus extends Enumeration {
   type ExampleFileTransmissionStatus = Value
   val SUCCESS, FAILURE = Value
 
-  implicit val fileTransmissionStatusReads = Reads.enumNameReads(ExampleFileTransmissionStatus)
+  implicit val fileTransmissionStatusReads: Reads[filetransmission.ExampleFileTransmissionStatus.Value] = Reads.enumNameReads(ExampleFileTransmissionStatus)
 }
 
 case class ExampleFileTransmissionNotification(fileReference: FileReference,
@@ -60,7 +60,7 @@ case class ExampleFileTransmissionNotification(fileReference: FileReference,
 class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
   trait SetUp {
-    private[FileUploadNotificationServiceSpec] implicit val ec = Helpers.stubControllerComponents().executionContext
+    private[FileUploadNotificationServiceSpec] implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
     private[FileUploadNotificationServiceSpec] val mockFileUploadMetadataRepo = mock[FileUploadMetadataRepo]
     private[FileUploadNotificationServiceSpec] val mockNotificationConnector = mock[FileUploadCustomsNotificationConnector]
     private[FileUploadNotificationServiceSpec] val mockDeclarationsLogger = mock[CdsLogger]

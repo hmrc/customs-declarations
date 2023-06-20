@@ -5,13 +5,13 @@
         <encoder class="uk.gov.hmrc.play.logging.JsonEncoder"/>
     </appender>
 
-    <logger name="uk.gov" level="${logger.uk.gov:-WARN}"/>
+    <logger name="uk.gov" level="WARN"/>
 
-    <logger name="customs-declarations" level="${logger.customs-declarations:-INFO}"/>
+    <logger name="customs-declarations" level="INFO"/>
 
-    <logger name="org.asynchttpclient.netty.handler" level="${logger.asynchttpclient:-WARN}"/>
+    <logger name="org.asynchttpclient.netty.handler" level="WARN"/>
 
-    <root level="${logger.application:-INFO}">
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

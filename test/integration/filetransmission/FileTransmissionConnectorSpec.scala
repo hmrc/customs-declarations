@@ -24,11 +24,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND, await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.http._
 import util.ExternalServicesConfig.{Host, Port}
 import util.FileTransmissionTestData._
@@ -43,9 +45,9 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
   private implicit val mockCdsLogger: CdsLogger = mock[CdsLogger]
 
   private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
-  private implicit val conversationIdRequest = TestData.TestConversationIdRequest
+  private implicit val conversationIdRequest: ConversationIdRequest[AnyContentAsXml] = TestData.TestConversationIdRequest
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
@@ -57,7 +59,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -76,7 +78,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "make a correct request" in {
       startFileTransmissionService()
 
-      val response: Unit = await(sendValidRequest)
+      val response: Unit = await(sendValidRequest())
 
       response shouldBe (())
       verifyFileTransmissionServiceWasCalledWith(FileTransmissionRequest)
@@ -85,7 +87,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when external service returns 300" in {
       setupFileTransmissionToReturn(MULTIPLE_CHOICES)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
+      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
       verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=300, Error=Received a non 2XX response")
     }
@@ -93,7 +95,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when external service returns 404" in {
       setupFileTransmissionToReturn(NOT_FOUND)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
+      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
       verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=404, Error=Received a non 2XX response")
     }
@@ -101,7 +103,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when external service returns 400" in {
       setupFileTransmissionToReturn(BAD_REQUEST)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
+      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
       verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=400, Error=Received a non 2XX response")
     }
@@ -109,7 +111,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when external service returns 500" in {
       setupFileTransmissionToReturn(INTERNAL_SERVER_ERROR)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
+      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
       verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=500, Error=Received a non 2XX response")
     }
@@ -117,7 +119,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     "return a failed future when fail to connect the external service" in {
       stopMockServer()
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[BadGatewayException]
+      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadGatewayException]
 
       verifyDeclarationsLoggerError(s"Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=502, Error=POST of 'http://localhost:11111/file/transmission' failed. Caused by: 'Connection refused: localhost/$localhostString:11111'")
 

@@ -16,24 +16,22 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import javax.inject.{Inject, Singleton}
-import org.joda.time.LocalDate
 import play.api.http.Status
 import play.api.http.Status.UNAUTHORIZED
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, PrivilegedApplication}
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.{Eori, NonCsp, NrsRetrievalData}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.Authorization
 
+import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Left
 import scala.util.control.NonFatal
 
 @Singleton
@@ -49,10 +47,9 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
     Option[CredentialRole] ~ Option[MdtpInformation] ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] ~
     Option[AffinityGroup] ~ Option[String] ~ LoginTimes
 
-  private type CspRetrievalDataType = Retrieval[NrsRetrievalDataType]
   private type NonCspRetrievalDataType = Retrieval[NrsRetrievalDataType ~ Enrolments]
 
-  private val cspRetrievals: CspRetrievalDataType =
+  private val cspRetrievals: Retrieval[NrsRetrievalDataType]=
     Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
       Retrievals.credentials and Retrievals.confidenceLevel and Retrievals.nino and
       Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and

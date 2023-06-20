@@ -43,7 +43,7 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     def hasXClientId = validateHeader(XClientIdHeaderName, xClientIdRegex.findFirstIn(_).nonEmpty, ErrorInternalServerError)
 
     val theResult: Either[ErrorResponse, ExtractedHeaders] = for {
-      xClientIdValue <- hasXClientId.right
+      xClientIdValue <- hasXClientId
     } yield {
       val clientId = ClientId(xClientIdValue)
       ExtractedHeadersImpl(clientId)

@@ -19,6 +19,7 @@ package unit.logging
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
@@ -26,14 +27,19 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, AuthorisedRequest}
 import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
 
-class DeclarationsLoggerSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
+import scala.reflect.ClassTag
+
+class DeclarationsLoggerSpec extends AnyWordSpecLike with MockitoSugar with Matchers with GuiceOneAppPerSuite{
 
   trait SetUp {
+    def real[T: ClassTag]: T = app.injector.instanceOf[T]
     val mockCdsLogger: CdsLogger = mock[CdsLogger]
+    val cdsLogger: CdsLogger = new CdsLogger(real[ServicesConfig])
     val logger = new DeclarationsLogger(mockCdsLogger)
     implicit val implicitVpr: AuthorisedRequest[AnyContentAsXml] = ApiVersionRequest(conversationId, EventStart, VersionOne, FakeRequest()
       .withXmlBody(TestXmlPayload).withHeaders("Content-Type" -> "Some-Content-Type"))
@@ -60,7 +66,7 @@ class DeclarationsLoggerSpec extends AnyWordSpecLike with MockitoSugar with Matc
       logger.debugFull("msg")
 
       PassByNameVerifier(mockCdsLogger, "debug")
-        .withByNameParam("[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] msg headers=Map(Content-Type -> Some-Content-Type)")
+        .withByNameParam("[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d] msg headers=TreeMap(Content-Type -> Some-Content-Type)")
         .verify()
     }
     "info(s: => String)" in new SetUp {

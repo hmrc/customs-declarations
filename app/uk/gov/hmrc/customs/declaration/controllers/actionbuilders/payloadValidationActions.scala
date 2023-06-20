@@ -32,7 +32,6 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{ActionRefiner, AnyContent, Result}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -40,7 +39,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
 
-import scala.collection.Seq
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.xml.{NodeSeq, SAXException}

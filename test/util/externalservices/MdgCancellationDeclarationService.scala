@@ -42,14 +42,14 @@ trait MdgCancellationDeclarationService extends WireMockRunner {
   }
   def verifyMdgWcoDecServiceWasCalledWithV1(requestBody: String,
                                             expectedAuthToken: String = ExternalServicesConfig.AuthToken,
-                                            maybeUnexpectedAuthToken: Option[String] = None) {
+                                            maybeUnexpectedAuthToken: Option[String] = None): Unit = {
 
     verifyMdgWcoDecServiceWasCalledWith(MdgCancellationDeclarationServiceContext, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
   }
 
   def verifyMdgWcoDecServiceWasCalledWithV2(requestBody: String,
                                           expectedAuthToken: String = ExternalServicesConfig.AuthToken,
-                                          maybeUnexpectedAuthToken: Option[String] = None) {
+                                          maybeUnexpectedAuthToken: Option[String] = None): Unit = {
 
     verifyMdgWcoDecServiceWasCalledWith(MdgCancellationDeclarationServiceContextV2, requestBody, expectedAuthToken, maybeUnexpectedAuthToken)
   }
@@ -57,7 +57,7 @@ trait MdgCancellationDeclarationService extends WireMockRunner {
   private def verifyMdgWcoDecServiceWasCalledWith(requestPath: String,
                                                   requestBody: String,
                                                   expectedAuthToken: String ,
-                                                  maybeUnexpectedAuthToken: Option[String]) {
+                                                  maybeUnexpectedAuthToken: Option[String]): Unit = {
     verify(1, postRequestedFor(urlMatching(requestPath))
       .withHeader(CONTENT_TYPE, equalTo(XML + "; charset=utf-8"))
       .withHeader(ACCEPT, equalTo(XML))

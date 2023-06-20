@@ -95,7 +95,7 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
         (any[AuthorisedRequest[_]])).thenReturn(expectedDeclarationStatusPayload)
 
       val result: Either[Result, HttpResponse] = send()
-      result.right.get.body shouldBe "<xml>transformed</xml>"
+      result.toOption.get.body shouldBe "<xml>transformed</xml>"
       verify(mockDeclarationStatusConnector).send(expectedDeclarationStatusPayload, dateTime, correlationId, VersionOne)(TestAuthorisedStatusRequest)
     }
 

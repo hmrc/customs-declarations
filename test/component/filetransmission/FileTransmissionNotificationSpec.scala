@@ -19,9 +19,10 @@ package component.filetransmission
 import component.{ComponentTestSpec, ExpectedTestResponses}
 import org.mongodb.scala.model.Filters
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.libs.json.Json
-import play.api.test.{FakeRequest, Helpers}
+import play.api.test.FakeRequest
 import play.api.test.Helpers.{ACCEPT, AUTHORIZATION, CONTENT_TYPE, contentAsString, route, status, _}
 import uk.gov.hmrc.customs.api.common.xml.ValidateXmlAgainstSchema
 import uk.gov.hmrc.customs.declaration.model.ConversationId
@@ -38,7 +39,6 @@ import java.io.StringReader
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.xml.Utility.trim
-import org.scalatest.matchers.should.Matchers
 
 class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTestResponses
   with Matchers
@@ -56,16 +56,16 @@ class FileTransmissionNotificationSpec extends ComponentTestSpec with ExpectedTe
 
   private val schemaFileUploadNotificationLocationV1: Schema = ValidateXmlAgainstSchema.getSchema(xsdFileUploadNotificationLocationV1).get
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     await(repo.collection.deleteMany(Filters.exists("_id")).toFuture())
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 

@@ -17,7 +17,6 @@
 package unit.schemas
 
 import org.mockito.Mockito.{reset, when}
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -27,20 +26,20 @@ import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 
-import scala.xml.{Elem, Node, SAXException}
+import scala.concurrent.ExecutionContext
+import scala.xml.{Elem, SAXException}
 
 class FileUploadResponseSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Matchers{
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
-  protected val MockConfiguration = mock[Configuration]
-  protected val MockXml = mock[Node]
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
+  protected val MockConfiguration: Configuration = mock[Configuration]
 
   protected val propertyName: String = "xsd.locations.fileuploadresponse"
   protected val xsdLocations: Seq[String] = Seq("/api/conf/2.0/schemas/wco/fileupload/FileUploadResponse.xsd")
 
   def xmlValidationService: XmlValidationService = new XmlValidationService(MockConfiguration, schemaPropertyName = propertyName) {}
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     reset(MockConfiguration)
     when(MockConfiguration.getOptional[Seq[String]](propertyName)).thenReturn(Some(xsdLocations))
     when(MockConfiguration.getOptional[Int]("xml.max-errors")).thenReturn(None)
@@ -48,9 +47,9 @@ class FileUploadResponseSpec extends AnyWordSpecLike with MockitoSugar with Befo
 
   "File upload response" should {
     "be successfully validated if correct" in {
-      val result: Unit = (xmlValidationService.validate(ValidFileUploadResponseXML)).futureValue
+      val result: Unit = await(xmlValidationService.validate(ValidFileUploadResponseXML))
 
-      result should be(())
+      result should be((): Unit)
     }
 
     "fail validation if is incorrect" in {

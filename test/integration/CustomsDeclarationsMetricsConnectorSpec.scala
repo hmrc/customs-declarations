@@ -16,19 +16,18 @@
 
 package integration
 
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsXml
-import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, await, defaultAwaitTimeout}
+import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.http._
 import util.CustomsDeclarationsMetricsTestData._
 import util.ExternalServicesConfig.{Host, Port}
 import util.VerifyLogging.verifyDeclarationsLoggerError
@@ -43,17 +42,16 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
 
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
   private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
-
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     resetMockServer()
     setupAuditServiceToReturn()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -72,9 +70,9 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
     "make a correct request" in {
       setupCustomsDeclarationsMetricsServiceToReturn()
 
-      val response: Unit = await(sendValidRequest())
+      val response: Unit = sendValidRequest()
 
-      response shouldBe (())
+      response shouldBe (() : Unit)
       verifyCustomsDeclarationsMetricsServiceWasCalledWith(ValidCustomsDeclarationsMetricsRequest)
       verifyAuditServiceWasNotCalled()
     }
@@ -82,7 +80,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
     "return a failed future when external service returns 404" in {
       setupCustomsDeclarationsMetricsServiceToReturn(NOT_FOUND)
 
-      await(sendValidRequest()) shouldBe (())
+      (sendValidRequest()).futureValue shouldBe (())
       verifyAuditServiceWasNotCalled()
       verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=404, Error=Received a non 2XX response, response body=")
     }
@@ -90,7 +88,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
     "return a failed future when external service returns 400" in {
       setupCustomsDeclarationsMetricsServiceToReturn(BAD_REQUEST)
 
-      await(sendValidRequest()) shouldBe (())
+      (sendValidRequest()).futureValue shouldBe (())
       verifyAuditServiceWasNotCalled()
       verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=400, Error=Received a non 2XX response, response body=")
     }
@@ -98,7 +96,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
     "return a failed future when external service returns 500" in {
       setupCustomsDeclarationsMetricsServiceToReturn(INTERNAL_SERVER_ERROR)
 
-      await(sendValidRequest()) shouldBe (())
+      (sendValidRequest()).futureValue shouldBe (())
       verifyAuditServiceWasNotCalled()
       verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=500, Error=Received a non 2XX response, response body=")
     }
@@ -106,7 +104,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
     "return a failed future when fail to connect the external service" in {
       stopMockServer()
 
-      intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadGatewayException]
+      intercept[RuntimeException]((sendValidRequest()).futureValue).getCause.getClass shouldBe classOf[RuntimeException]
 
       verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=502, Error=POST of 'http://localhost:11111/log-times' failed. Caused by: 'Connection refused: localhost/$localhostString:11111'")
 

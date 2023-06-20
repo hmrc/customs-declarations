@@ -17,11 +17,11 @@
 package unit.controllers.actionbuilders
 
 import org.mockito.Mockito._
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.test.Helpers.defaultAwaitTimeout
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.ConversationIdAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -30,17 +30,19 @@ import uk.gov.hmrc.customs.declaration.services.DateTimeService
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData.{conversationId, stubUniqueIdsService}
 
+import scala.concurrent.ExecutionContext
+
 class ConversationIdActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
   trait SetUp {
 
-    protected implicit val ec = Helpers.stubControllerComponents().executionContext
+    protected implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
     private val mockExportsLogger = mock[DeclarationsLogger]
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
 
-    val request = FakeRequest()
+    val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
     val conversationIdAction = new ConversationIdAction(mockExportsLogger, stubUniqueIdsService, mockDateTimeService)
-    val expected = ConversationIdRequest(conversationId, EventStart, request)
+    val expected: ConversationIdRequest[AnyContentAsEmpty.type] = ConversationIdRequest(conversationId, EventStart, request)
   }
 
   "ConversationIdAction" should {

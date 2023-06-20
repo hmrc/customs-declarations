@@ -37,6 +37,7 @@ import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 import java.time.Instant
 import org.scalatest.matchers.should.Matchers
+import play.api.mvc.AnyContentAsXml
 
 class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
   with Matchers
@@ -50,13 +51,13 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
   private val incomingBearerToken = "some_client's_bearer_token"
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
   private val correlationId = UUID.randomUUID()
-  private implicit val vpr = TestData.TestCspValidatedPayloadRequest
+  private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     when(mockUuidService.uuid()).thenReturn(correlationId)
   }
 
@@ -64,7 +65,7 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -113,7 +114,7 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
     connector.send(ValidSubmissionXML, Instant.now(), correlationId, VersionOne)
   }
 
-  private def checkCaughtException(status: Int) {
+  private def checkCaughtException(status: Int): Unit = {
     val exception = intercept[Non2xxResponseException](await(sendValidXml()))
     exception.responseCode shouldBe status
   }

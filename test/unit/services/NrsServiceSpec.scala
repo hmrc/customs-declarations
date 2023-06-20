@@ -16,7 +16,6 @@
 
 package unit.services
 
-import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.{eq => meq, _}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.matchers.should.Matchers
@@ -29,16 +28,16 @@ import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.{ApiVersionRequestOps, AuthorisedRequestOps, ConversationIdRequestOps, ValidatedHeadersRequestOps}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.model.{ApiVersion, _}
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.{AuditingService, DateTimeService, NrsService}
 import uk.gov.hmrc.http._
-import util.TestData.{TestCspValidatedPayloadRequest, _}
+import util.TestData._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
 
   trait SetUp {
     protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
@@ -49,7 +48,6 @@ class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
     protected lazy val service: NrsService = new NrsService(mockLogger, mockNrsConnector, mockAuditingService, mockDateTimeService)
 
     protected val cspResponsePayload: NrSubmissionId = nrSubmissionId
-    protected val dateTime = new DateTime()
 
     protected def send(vupr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): NrSubmissionId = {
       when(mockDateTimeService.nowUtc()).thenReturn(nrsTimeStamp)

@@ -34,6 +34,7 @@ import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import scala.concurrent.Future
 import org.scalatest.matchers.should.Matchers
+import util.TestData.conversationIdValue
 
 class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers
@@ -55,15 +56,15 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
 
   private val schemaErrorV1: Schema = ValidateXmlAgainstSchema.getSchema(xsdErrorLocationV1).get
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     startMockServer()
   }
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     resetMockServer()
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     stopMockServer()
   }
 
@@ -100,7 +101,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       status(result) shouldBe ACCEPTED
 
       And("the response body is empty")
-      contentAsString(result) shouldBe 'empty
+      contentAsString(result) should be (empty)
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCsp())
@@ -130,7 +131,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       status(result) shouldBe ACCEPTED
 
       And("the response body is empty")
-      contentAsString(result) shouldBe 'empty
+      contentAsString(result) should be (empty)
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCsp())
@@ -159,7 +160,7 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
         status(result) shouldBe ACCEPTED
 
         And("the response body is empty")
-        contentAsString(result) shouldBe 'empty
+        contentAsString(result) should be (empty)
 
         And("the request was authorised with AuthService")
         eventually(verifyAuthServiceCalledForCsp())
@@ -181,11 +182,12 @@ class CustomsDeclarationCancellationSpec extends ComponentTestSpec with AuditSer
       val result: Option[Future[Result]] = route(app = app, request)
 
       Then(s"a response with a 400 status is received")
-      result shouldBe 'defined
       val resultFuture = result.value
 
+      contentAsString(resultFuture) should include("BAD_REQUEST")
       status(resultFuture) shouldBe BAD_REQUEST
-      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME).value should include(conversationIdValue)
+
 
       And("the response body is a \"invalid xml\" XML")
       stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(BadRequestErrorWith2Errors)

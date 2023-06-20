@@ -58,7 +58,7 @@ sealed trait UploadedCallbackBody {
 
 case class UploadedCallbackDecider(fileStatus: UploadedFileStatus)
 object UploadedCallbackDecider{
-  implicit val reads = Json.reads[UploadedCallbackDecider]
+  implicit val reads: Reads[UploadedCallbackDecider] = Json.reads[UploadedCallbackDecider]
 }
 
 case class UploadedReadyCallbackBody(
@@ -69,7 +69,7 @@ case class UploadedReadyCallbackBody(
                             ) extends UploadedCallbackBody
 
 object UploadedReadyCallbackBody {
-  implicit val urlFormat = HttpUrlFormat
+  implicit val urlFormat: HttpUrlFormat.type = HttpUrlFormat
   implicit val readsReadyCallback: Reads[UploadedReadyCallbackBody] = Json.reads[UploadedReadyCallbackBody]
 
   def parse(json: JsValue)(implicit reads: Reads[UploadedCallbackDecider]): JsResult[UploadedCallbackBody] = {

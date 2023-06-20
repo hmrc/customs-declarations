@@ -46,7 +46,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationStatusConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
 
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = stubDeclarationsLogger
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]
@@ -54,7 +54,7 @@ class DeclarationStatusConnectorSpec extends AnyWordSpecLike with MockitoSugar w
   private val cdsLogger = mock[CdsLogger]
   private val actorSystem = ActorSystem("mockActorSystem")
 
-  private val declarationsCircuitBreakerConfig = DeclarationsCircuitBreakerConfig(50, 1000, 10000)
+  private val declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig = DeclarationsCircuitBreakerConfig(50, 1000, 10000)
 
   private val connector = new DeclarationStatusConnector(mockWsPost, mockLogger, mockServiceConfigProvider, mockDeclarationsConfigService, cdsLogger, actorSystem)
 
@@ -64,14 +64,14 @@ class DeclarationStatusConnectorSpec extends AnyWordSpecLike with MockitoSugar w
   private implicit val ar: AuthorisedRequest[AnyContent] = AuthorisedRequest(conversationId, EventStart, VersionTwo,
     ApiSubscriptionFieldsTestData.clientId, Csp(None, Some(badgeIdentifier), None), mock[Request[AnyContent]])
 
-  override protected def beforeEach() {
+  override protected def beforeEach(): Unit = {
     reset(mockWsPost, mockServiceConfigProvider)
     when(mockServiceConfigProvider.getConfig("v2.declaration-status")).thenReturn(v2Config)
     when(mockServiceConfigProvider.getConfig("v3.declaration-status")).thenReturn(v3Config)
     when(mockDeclarationsConfigService.declarationsCircuitBreakerConfig).thenReturn(declarationsCircuitBreakerConfig)
   }
 
-  val successfulResponse = HttpResponse(200,"")
+  val successfulResponse: HttpResponse = HttpResponse(200,"")
 
   "DeclarationStatusConnector" can {
 

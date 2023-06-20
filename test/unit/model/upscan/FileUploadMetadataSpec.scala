@@ -23,6 +23,8 @@ import uk.gov.hmrc.customs.declaration.model.upscan.FileUploadMetadata
 import util.TestData.FileMetadataWithFileOne
 
 class FileUploadMetadataSpec extends AnyWordSpecLike with Matchers {
+
+
   private val jsonString = """{
                              |  "declarationId": "1",
                              |  "eori": "123",

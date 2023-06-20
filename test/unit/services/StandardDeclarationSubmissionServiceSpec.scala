@@ -40,7 +40,7 @@ import util.TestData._
 
 import java.time.Instant
 import java.util.UUID
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
 class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
@@ -48,7 +48,7 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
   private val dateTime = Instant.now()
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
-  private implicit val ec = Helpers.stubControllerComponents().executionContext
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private val wrappedValidXML = <wrapped></wrapped>
 
   trait SetUp {

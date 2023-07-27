@@ -41,7 +41,7 @@
         <!--DE 2/5: LRN.
             Mandatory.
             Declarants's own reference number - this must be unique to the transaction. -->
-        <FunctionalReferenceID>R390_CDSNIP490_2110_01</FunctionalReferenceID>
+        <FunctionalReferenceID>R390_CDSNIP490_1307_02</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             Mandatory.
             IM to represent an import declaration. -->
@@ -220,14 +220,15 @@
                     <Name>Reason for Waiver</Name>
                     <TypeCode>929</TypeCode>
                 </AdditionalDocument>
-                <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A code of Y252 indicates: Imports of vegetable products which are not fresh and/or chilled and/or whole without a phytosanitary certificate (import allowed)
-					Note: This document code is being used temporarily and will be replaced in due course. -->
-                <AdditionalDocument>
-                    <CategoryCode>Y</CategoryCode>
-                    <ID>Phytosanitary Certificate Exempt</ID>
-                    <TypeCode>252</TypeCode>
-                </AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of N851 indicates Phytosanitary certificate.
+					Document status code of AP indicates document attached - part use (applies to this and other entries) (document returned to the trader). -->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>GBPHC012345</ID>
+					<TypeCode>851</TypeCode>
+					<LPCOExemptionCode>AP</LPCOExemptionCode>
+				</AdditionalDocument>
                 <!--DE 2/2: Additional Information.
                     This field is mandatory, this represents goods are imported from ROW into Northern Ireland. -->
                 <AdditionalInformation>

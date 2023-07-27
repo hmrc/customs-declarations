@@ -1,24 +1,24 @@
 <MetaData>
-	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-	<WCOTypeName>RES</WCOTypeName>
-	<ResponsibleCountryCode/>
-	<ResponsibleAgencyName/>
-	<AgencyAssignedCustomizationCode/>
-	<AgencyAssignedCustomizationVersionCode/>
-	<Response>
-		<FunctionCode>09</FunctionCode>
-		<FunctionalReferenceID>f3ded22a2990450cbe5c8c3a3a50278b</FunctionalReferenceID>
-		<IssueDateTime>
-			<DateTimeString formatCode="304">20230626100154Z</DateTimeString>
-		</IssueDateTime>
-		<AdditionalInformation>
-			<StatementCode>A2</StatementCode>
-			<StatementTypeCode>AFB</StatementTypeCode>
-		</AdditionalInformation>
-		<Declaration>
-			<FunctionalReferenceID>78483098IIYWW2Y9S</FunctionalReferenceID>
-			<ID>23GB702ZYAMFZXBAR6</ID>
-			<VersionID>1</VersionID>
-		</Declaration>
-	</Response>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>09</FunctionCode>
+        <FunctionalReferenceID>741ec6881dc24a3aaaa7e86f36889b86</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20230626113737Z</DateTimeString>
+        </IssueDateTime>
+        <AdditionalInformation>
+            <StatementCode>A2</StatementCode>
+            <StatementTypeCode>AFB</StatementTypeCode>
+        </AdditionalInformation>
+        <Declaration>
+            <FunctionalReferenceID>R4.1.1_10591_01</FunctionalReferenceID>
+            <ID>23GB706F0C1GKIQAR2</ID>
+            <VersionID>1</VersionID>
+        </Declaration>
+    </Response>
 </MetaData>

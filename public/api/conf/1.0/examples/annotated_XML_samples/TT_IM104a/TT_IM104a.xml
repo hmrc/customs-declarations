@@ -29,7 +29,7 @@
 		<!--DE 2/5: LRN.
             Mandatory.
             Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>R380_NIP493_0208_01</FunctionalReferenceID>
+		<FunctionalReferenceID>R380_NIP493_2107_01</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
             Mandatory.
             IM to represent an import declaration.-->
@@ -211,11 +211,14 @@
 					<Name>Reason for Waiver</Name>
 					<TypeCode>929</TypeCode>
 				</AdditionalDocument>
-				<!-- Information TBC -->
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of N851 indicates Phytosanitary certificate.
+					Document status code of AP indicates document attached - part use (applies to this and other entries) (document returned to the trader). -->
 				<AdditionalDocument>
-					<CategoryCode>Y</CategoryCode>
-					<ID>Phytosanitary Certificate Exempt</ID>
-					<TypeCode>252</TypeCode>
+					<CategoryCode>N</CategoryCode>
+					<ID>GBPHC012345</ID>
+					<TypeCode>851</TypeCode>
+					<LPCOExemptionCode>AP</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/2: Additional Information. This field is mandatory, this represents goods
                 are imported from ROW into Northern Ireland. -->

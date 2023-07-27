@@ -23,13 +23,13 @@
 		-->
 			<!--Acceptance Date is present on all supplementary declarations. -->
 			<AcceptanceDateTime>
-				<p1:DateTimeString formatCode="304">20220715112200+01</p1:DateTimeString>
+				<p1:DateTimeString formatCode="304">20230715112200+01</p1:DateTimeString>
 			</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number: this must be unique to the transaction. -->
-		<FunctionalReferenceID>7848309OM7V7ZNTHN</FunctionalReferenceID>
+		<FunctionalReferenceID>7848309OM7V7ZNTHN3</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type. 
@@ -309,10 +309,10 @@
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass.
 							Weight of the goods in kilograms including packaging. -->
-						<GrossMassMeasure>1100</GrossMassMeasure>
+						<GrossMassMeasure>600</GrossMassMeasure>
 						<!--DE 6/1: Net Mass.
 							Weight of the goods in kilograms without any packaging. -->
-						<NetNetWeightMeasure>1000</NetNetWeightMeasure>
+						<NetNetWeightMeasure>500</NetNetWeightMeasure>
 					</GoodsMeasure>
 					<InvoiceLine>
 						<!--DE 4/14: Item Price/ Amount. 

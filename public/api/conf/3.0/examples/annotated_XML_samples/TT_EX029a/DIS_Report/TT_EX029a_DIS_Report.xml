@@ -1,4 +1,5 @@
 <!--
+	Please note that this scenario is currently failing. A fix will be implemented in a future release.
 	DIS Search Query: https://api.qa.tax.service.gov.uk/customs/declarations-information/search?partyRole=Submitter&declarationCategory=EX&declarationStatus=ALL&dateFrom=2021-12-01&dateTo=2021-12-15
  -->
 <p:DeclarationSearchResponse xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/declarationSummary/v1"

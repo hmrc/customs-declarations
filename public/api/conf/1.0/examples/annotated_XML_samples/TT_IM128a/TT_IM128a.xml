@@ -38,7 +38,7 @@
 
         <!--Acceptance Date is present on all supplementary declarations. -->
         <AcceptanceDateTime>
-            <p1:DateTimeString formatCode="304">20230401221100+01</p1:DateTimeString>
+            <p1:DateTimeString formatCode="304">20230801221100+01</p1:DateTimeString>
         </AcceptanceDateTime>
         <!-- Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>

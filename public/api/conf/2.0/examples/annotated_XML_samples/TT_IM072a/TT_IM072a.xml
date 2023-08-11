@@ -17,10 +17,6 @@
            		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
 		<!--
-			***
-			Following the Tariff data refresh for TTM20.0, this scenario is now rejected. The issue is due to a business rule error which will be fixed for a future release.
-			***
-			
 			SCENARIO
 			Type J BIRDS declaration with minimum data
 			Procedure code 0020, with 21V and 15F additional procedure codes

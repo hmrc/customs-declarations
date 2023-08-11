@@ -29,7 +29,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number: this must be unique to the transaction. -->
-		<FunctionalReferenceID>7848309OM7V7ZNTHN3</FunctionalReferenceID>
+		<FunctionalReferenceID>7848309OM7V7ZN0708</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type. 
@@ -369,7 +369,7 @@
 					Mandatory field. YSDE to show the MRN for the previous simplified declaration. -->
 				<PreviousDocument>
 					<CategoryCode>Y</CategoryCode>
-					<ID>21GBCDS123456789R1</ID>
+					<ID>23GBCDS123456789R1</ID>
 					<TypeCode>SDE</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
@@ -393,7 +393,7 @@
 					Note: The DUCR is not mandatory for ‘normal’ declarations, only if CFSP or where the business process mandates a DUCR for validation. -->
 				<PreviousDocument>
 					<CategoryCode>Y</CategoryCode>
-					<ID>1GB553202734852-12345</ID>
+					<ID>3GB553202734852-12345</ID>
 					<TypeCode>DCR</TypeCode>
 				</PreviousDocument>
 			<!--DE 4/1: Delivery Terms. 

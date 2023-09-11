@@ -206,8 +206,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
   }
 
 
-  "return 403 error response when EIS call fails with 403 and payloadForbiddenEnabled is on" in new SetUp() {
-    when(mockDeclarationsConfig.payloadForbiddenEnabled).thenReturn(true)
+  "return 403 error response when EIS call fails with 403" in new SetUp() {
     when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]]))
       .thenReturn(Future.failed(new Non2xxResponseException(FORBIDDEN)))
     val result: Either[Result, Option[NrSubmissionId]] = send()
@@ -215,12 +214,4 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     result shouldBe Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
   }
 
-  "return 500 error response when EIS call fails with 403 but payloadForbiddenEnabled is off" in new SetUp() {
-    when(mockDeclarationsConfig.payloadForbiddenEnabled).thenReturn(false)
-    when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]]))
-      .thenReturn(Future.failed(new Non2xxResponseException(FORBIDDEN)))
-    val result: Either[Result, Option[NrSubmissionId]] = send()
-
-    result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
-  }
 }

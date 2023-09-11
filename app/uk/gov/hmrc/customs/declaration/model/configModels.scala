@@ -20,8 +20,7 @@ case class DeclarationsConfig(apiSubscriptionFieldsBaseUrl: String,
                               customsNotificationBaseBaseUrl: String,
                               customsDeclarationsMetricsBaseBaseUrl: String,
                               customsNotificationBearerToken: String,
-                              declarationStatusRequestDaysLimit: Int,
-                              payloadForbiddenEnabled: Boolean)
+                              declarationStatusRequestDaysLimit: Int)
 
 case class NrsConfig(nrsEnabled: Boolean, nrsApiKey: String,  nrsUrl: String)
 

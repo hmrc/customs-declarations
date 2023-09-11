@@ -131,7 +131,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
       case _: CircuitBreakerOpenException =>
         logger.error("unhealthy state entered")
         Left(errorResponseServiceUnavailable.XmlResult.withConversationId)
-      case e: HttpException if isForbiddenAndFeatureFlagIsOn(e.responseCode) =>
+      case e: HttpException if (e.responseCode == FORBIDDEN) =>
         logger.warn(s"submission declaration call failed with 403: [${e.getMessage}]")
         Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId)
       case NonFatal(e) =>
@@ -139,9 +139,6 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
     }
   }
-
-  private val isForbiddenAndFeatureFlagIsOn = (statusCode: Int) =>
-    declarationsConfigService.declarationsConfig.payloadForbiddenEnabled && statusCode == FORBIDDEN
 
   private def preparePayload[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: Instant)
                                (implicit vpr: ValidatedPayloadRequest[A]): NodeSeq = {

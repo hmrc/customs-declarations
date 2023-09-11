@@ -23,7 +23,7 @@ import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.http.Status.{FORBIDDEN, NOT_FOUND}
+import play.api.http.Status.NOT_FOUND
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse

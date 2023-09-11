@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import play.api.http.Status.{FORBIDDEN, NOT_FOUND}
+import play.api.http.Status.NOT_FOUND
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result

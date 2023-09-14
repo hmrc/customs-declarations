@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>71a69c293c624020b2b72712305f3ba0</FunctionalReferenceID>
+		<FunctionalReferenceID>f361579f134e4a92892f720c0e52223d</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20230626094154Z</DateTimeString>
+			<DateTimeString formatCode="304">20230911111505+01</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,8 +19,8 @@
 			<NameCode>4</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>784844925R0735VNZ</FunctionalReferenceID>
-			<ID>23GB702A75SFXC9AR6</ID>
+			<FunctionalReferenceID>784844925R0735VNZ1</FunctionalReferenceID>
+			<ID>23GBA24DHBVPKQGAR2</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
@@ -40,21 +40,21 @@
 						<DutyTaxFee>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
-							<TypeCode>380</TypeCode>
+							<TypeCode>325</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP">30000.00</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP">30000.00</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">49540.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">49540.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP">32000.00</AdValoremTaxBaseAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">51540.00</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>20.00</TaxRateNumeric>
 							<TypeCode>B00</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP">6400.00</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP">6400.00</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">10308.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">10308.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 					</Commodity>

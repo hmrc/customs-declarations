@@ -1,0 +1,34 @@
+<p:DeclarationStatusResponse xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/status/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p4="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:p3="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:p2="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:p="http://gov.uk/customs/declarationInformationRetrieval/status/v2">
+        <p:DeclarationStatusDetails>
+                <p:Declaration>
+                        <p:AcceptanceDateTime>
+                                <p1:DateTimeString formatCode="304">20230829133601Z</p1:DateTimeString>
+                        </p:AcceptanceDateTime>
+                        <p:ID>23GB9JQTUYWL6WMAR2</p:ID>
+                        <p:VersionID>1</p:VersionID>
+                        <p:ReceivedDateTime>
+                                <p:DateTimeString formatCode="304">20230829133601Z</p:DateTimeString>
+                        </p:ReceivedDateTime>
+                        <p:GoodsReleasedDateTime>
+                                <p:DateTimeString formatCode="304">20230829133901Z</p:DateTimeString>
+                        </p:GoodsReleasedDateTime>
+                        <p:ROE>6</p:ROE>
+                        <p:ICS>22</p:ICS>
+                </p:Declaration>
+                <p2:Declaration>
+                        <p2:FunctionCode>9</p2:FunctionCode>
+                        <p2:TypeCode>IMA</p2:TypeCode>
+                        <p2:GoodsItemQuantity>3</p2:GoodsItemQuantity>
+                        <p2:TotalPackageQuantity>3</p2:TotalPackageQuantity>
+                        <p2:Submitter>
+                                <p2:ID>GB553202734852</p2:ID>
+                        </p2:Submitter>
+                        <p2:GoodsShipment>
+                                <p2:PreviousDocument>
+                                        <p2:ID>CSPUCN123</p2:ID>
+                                        <p2:TypeCode>MCR</p2:TypeCode>
+                                </p2:PreviousDocument>
+                        </p2:GoodsShipment>
+                </p2:Declaration>
+        </p:DeclarationStatusDetails>
+</p:DeclarationStatusResponse>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EAA</inv:messageCode>
+	<inv:ucrBlock>
+		<inv:ucr>3GB125006558355-ICSKBBOF</inv:ucr>
+		<inv:ucrType>D</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
+	<inv:movementReference>AC6GQFSDDDYIIT8KCWGDB4CBP</inv:movementReference>
+</inv:inventoryLinkingMovementRequest>

@@ -38,14 +38,14 @@
 
         <!--Acceptance Date is present on all supplementary declarations. -->
         <AcceptanceDateTime>
-            <p1:DateTimeString formatCode="304">20230801221100+01</p1:DateTimeString>
+            <p1:DateTimeString formatCode="304">20230802221100+01</p1:DateTimeString>
         </AcceptanceDateTime>
         <!-- Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN. 
             Mandatory field. 
             Traders own reference number this must be unique to the transaction. -->
-        <FunctionalReferenceID>R4.1.1_10591_01</FunctionalReferenceID>
+        <FunctionalReferenceID>R4.1.1_10591_03</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type. 
             Mandatory field. 
             IM to represent an import declaration.-->

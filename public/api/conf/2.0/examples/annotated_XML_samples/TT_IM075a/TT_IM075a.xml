@@ -48,7 +48,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number: this must be unique to the transaction-->
-		<FunctionalReferenceID>CDSP9756_TC01_0711</FunctionalReferenceID>
+		<FunctionalReferenceID>CDSP9756_TC01_1109</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration-->
 		<!--DE 1/2: Additional Declaration Type.
@@ -174,12 +174,12 @@
 				<!--DE 2/3:	Documents produced, certificates and authorisations, additional reference.
 					Document code of 999L indicates the goods qualify for a document waiver.
 					In this case, for exemption from the measure N851 Phytosanitary Certificate for plant and plant related products. -->
-				<AdditionalDocument>
+				<!-- <AdditionalDocument>
 					<CategoryCode>9</CategoryCode>
 					<ID>NLCHD2021.</ID>
 					<Name>CDS Waiver</Name>
 					<TypeCode>99L</TypeCode>
-				</AdditionalDocument>
+				</AdditionalDocument> -->
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional reference.
 					A document code of Y942 indicates the declared goods are not concerned by Commission Implementing Regulation EU) 2016/1141. -->
 				<AdditionalDocument>
@@ -222,9 +222,18 @@
 					This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/01.02.2021</ID>
+					<ID>12345/01.08.2023</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional reference.
+					A document code of N851 indicates: Phytosanitary Certificate required for imports of regulated plants and plant products. 
+					For more information on these types of goods read Import plants and plant products from non-EU countries and Import plants and plant products from the EU. -->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>GBCHD2023.2468435</ID>
+					<TypeCode>851</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/2: Additional information. 
 					00500 Indicating Self representation by the importer. -->
@@ -326,7 +335,7 @@
 					Note: As this is for a single item declaration, this should all be declared at header level. -->
 				<PreviousDocument>
 					<CategoryCode>Z</CategoryCode>
-					<ID>21GB34F7Y1O2CX8PT4</ID>
+					<ID>23GB34F7Y1O2CX8PT4</ID>
 					<TypeCode>355</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
@@ -351,7 +360,7 @@
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB150454489082-12345</ID>
+				<ID>3GB150454489082-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 4/1: Delivery Terms.

@@ -1,0 +1,9 @@
+Sample steps
+************
+
+Step 1: Submit a Type D Declaration with DUCR
+Step 2: Submit EAL 1 with DUCR
+Step 3: Submit EDL 1 with DUCR
+Step 4: Submit EAA with DUCR (Status ROE H6 SOE 14) 
+Step 5: Submit EAL 2 with DUCR (Status ROE6 SOE3) 
+Step 6: Submit EDL 2 with DUCR

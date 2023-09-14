@@ -33,7 +33,7 @@
 		<!--DE 2/5: LRN. 
 			Mandatory.
 			Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>CDSP_7006_SMA_0601_07</FunctionalReferenceID>
+		<FunctionalReferenceID>TTIM083a_290823_08</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory.
 			IM to represent an import declaration.-->
@@ -70,7 +70,7 @@
 			CGU: Required as CCG authorisation is being declared. The ID here is the EORI of the CCG authorised party 
 			(see DE 2/3 where a document code of C505 has been entered).-->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>GB239355053000</ID>
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
@@ -78,7 +78,7 @@
 		    DPO: Required as Deferment of Payment authorisation is being declared. 
 			The ID here is the EORI of the DPO authorised party (agent using their deferment account for security-->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>GB239355053000</ID>
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
@@ -87,7 +87,7 @@
 			It must be accompanied by a valid EORI - Either the trader needs to get an EORI or use the declarant’s EORI 
 			(declarants EORI used here)-->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>GB239355053000</ID>
 			<CategoryCode>TEA</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 7/15: Nationality of active means of transport crossing the border.
@@ -199,7 +199,6 @@
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBCGUGuaranteenotrequired</ID>
-					<Name>Reason for Waiver</Name>
 					<TypeCode>505</TypeCode>
 					<LPCOExemptionCode>CC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -235,7 +234,6 @@
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
 					<ID>12345/01.11.2021</ID>
-					<Name>Reason for Waiver</Name>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -456,6 +454,16 @@
 					<TypeCode>55D</TypeCode>
 					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+					This field is mandatory if the codes are required.
+					9028 indicates the reference number of the DEFRA Ivory Registration Number.
+                    Document status Code AC indicates Document attached for certification by customs-->
+				<AdditionalDocument>
+					<CategoryCode>9</CategoryCode>
+					<ID>DEFRAIV 0054037-0054047</ID>
+					<TypeCode>028</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
 				<!--DE 2/2: Additional information. 
 					00100 indicating Authorisation by Customs Declaration used. -->
 				<AdditionalInformation>
@@ -630,8 +638,7 @@
 					Status code of AC to indicate document attached for certification by customs. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/01.11.2021</ID>
-					 <Name>Reason for Waiver</Name>
+					<ID>12345/01.08.2023</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -754,7 +761,7 @@
 					<CurrentCode>D12</CurrentCode>
 				</GovernmentProcedure>
 				<!--DE 5/15: Country of Origin Code. Mandatory.
-					TypeCode of 1 to represent non-preferential origin. 
+			   	TypeCode of 1 to represent non-preferential origin. 
 					Where preference in DE 4/17 begins with '1', this must be completed.
 					Origin country is the United States. -->
 				<Origin>
@@ -790,7 +797,7 @@
 				Previous document of X337 to show the MRN for the entry summary declaration. -->
 			<PreviousDocument>
 				<CategoryCode>X</CategoryCode>
-				<ID>21GBTSD123456789U3-1</ID>
+				<ID>23GBTSD123456789U3-1</ID>
 				<TypeCode>337</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Simplified Declarations/Previous documents.

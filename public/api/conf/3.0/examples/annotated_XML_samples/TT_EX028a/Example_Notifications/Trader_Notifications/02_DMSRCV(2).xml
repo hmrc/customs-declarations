@@ -1,0 +1,19 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>02</FunctionCode>
+		<FunctionalReferenceID>9aeb77281ef74a00a61e0662a02f1f35</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20230810130543+01</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<FunctionalReferenceID>Mov14</FunctionalReferenceID>
+			<ID>23GB8SHT0BBDE7YAA9</ID>
+		</Declaration>
+	</Response>
+</MetaData>

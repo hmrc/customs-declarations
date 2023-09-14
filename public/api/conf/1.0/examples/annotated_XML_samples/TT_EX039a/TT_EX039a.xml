@@ -58,7 +58,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: LRN.
 			The declarant's assigned reference to the declaration. -->
-		<FunctionalReferenceID>U.784628488II4O5HFH</FunctionalReferenceID>
+		<FunctionalReferenceID>78462848820232108</FunctionalReferenceID>
 		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
 		<!-- <IssueDateTime>
 			<p1:DateTimeString formatCode="304">20221121095500+01</p1:DateTimeString>
@@ -166,8 +166,8 @@
 				</GoodsLocation>
 				<TransportEquipment>
 					<!--DE 7/10: Container Identification Number. 
-						Sequence number '0' indicates goods are not transported in containers . -->
-					<SequenceNumeric>0</SequenceNumeric>
+						Sequence number '1' indicates goods are transported in containers . -->
+					<SequenceNumeric>1</SequenceNumeric>
 					<ID>Container123</ID>
 					<!--DE 7/18: Seal number. -->
 					<Seal>
@@ -327,7 +327,7 @@
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>9GB551990222361-VOSMDLI</ID>
+				<ID>3GB551990222361-VOS2108</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+<inv:messageCode>EAL</inv:messageCode>                       
+<inv:ucrBlock>
+<inv:ucr>3GB238566566459-606DCNA</inv:ucr>
+<inv:ucrType>D</inv:ucrType>
+</inv:ucrBlock>
+<inv:goodsLocation>GBAUBELBFSBEL</inv:goodsLocation>           
+<inv:goodsArrivalDateTime>2023-08-09T10:56:00Z</inv:goodsArrivalDateTime>                               
+<inv:movementReference>M35</inv:movementReference>                    
+</inv:inventoryLinkingMovementRequest>

@@ -1,31 +1,31 @@
 <MetaData>
-    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-    <WCOTypeName>RES</WCOTypeName>
-    <ResponsibleCountryCode/>
-    <ResponsibleAgencyName/>
-    <AgencyAssignedCustomizationCode/>
-    <AgencyAssignedCustomizationVersionCode/>
-    <Response>
-        <FunctionCode>16</FunctionCode>
-        <FunctionalReferenceID>ed719deda68440749fc7d0d4d3e215b2</FunctionalReferenceID>
-        <IssueDateTime>
-            <DateTimeString formatCode="304">20230609110706+01</DateTimeString>
-        </IssueDateTime>
-        <AdditionalInformation>
-            <StatementCode></StatementCode>
-            <StatementDescription>GB000014</StatementDescription>
-            <StatementTypeCode>CEX</StatementTypeCode>
-        </AdditionalInformation>
-        <Status>
-            <EffectiveDateTime>
-                <DateTimeString formatCode="304">20230609010000+01</DateTimeString>
-            </EffectiveDateTime>
-            <NameCode>A1</NameCode>
-        </Status>
-        <Declaration>
-            <FunctionalReferenceID>7846284F89YW9WFZJ</FunctionalReferenceID>
-            <ID>23GB6BSO7H1314ZAA6</ID>
-            <VersionID>2</VersionID>
-        </Declaration>
-    </Response>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>16</FunctionCode>
+		<FunctionalReferenceID>cf7e3f3403bc44cdbc6d247a86862cdd</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20230908130030+01</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode/>
+			<StatementDescription>GB000014</StatementDescription>
+			<StatementTypeCode>CEX</StatementTypeCode>
+		</AdditionalInformation>
+		<Status>
+			<EffectiveDateTime>
+				<DateTimeString formatCode="304">20230908010000+01</DateTimeString>
+			</EffectiveDateTime>
+			<NameCode>A1</NameCode>
+		</Status>
+		<Declaration>
+			<FunctionalReferenceID>EX038a_TTIM038a_08091</FunctionalReferenceID>
+			<ID>23GB9XQ9AAHU5C4AA1</ID>
+			<VersionID>2</VersionID>
+		</Declaration>
+	</Response>
 </MetaData>

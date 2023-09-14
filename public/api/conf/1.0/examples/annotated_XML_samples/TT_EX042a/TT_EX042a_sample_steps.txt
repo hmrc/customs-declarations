@@ -1,0 +1,9 @@
+Sample steps
+************
+
+Step 1 - Submit a Type A Declaration with DUCR
+Step 2 - Submit EAL 1 with DUCR
+Step 3 - Submit EDL 1 with DUCR
+Step 4 - Submit EAL 2 with DUCR  - 
+Step 5 - Submit EAL 3 with DUCR
+Step 6 - Submit EDL 2 with DUCR

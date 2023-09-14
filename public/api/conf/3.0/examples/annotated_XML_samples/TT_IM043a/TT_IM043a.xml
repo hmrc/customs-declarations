@@ -1,4 +1,4 @@
-﻿<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
              xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
@@ -18,7 +18,7 @@
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			***
-			This scenario is impacted by KEL 444: The adjustment in BC in DE 4/9 is not functioning correctly which thus results in an incorrect value for VAT for DDP Import declaration.
+			Note that when testing this scenario, issues might arise as declaration clearing before notify tariff quota response message is received.
 
 			Workaround:
 			• Complete DE 4/1 as per Tariff Vol. 3 instructions with DDP entered and the UN Locode for the address.
@@ -46,7 +46,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number – this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IM43a_051021_001</FunctionalReferenceID>
+		<FunctionalReferenceID>TT_IM43a_2108d</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -319,10 +319,10 @@
 				<CustomsValuation>
 					<MethodCode>1</MethodCode>
 					<!--DE 4/9: Additions and Deductions. 
-						BC representing Import duties or other charges payable in the Union for reason of the import or sale of goods (I) 100 GBP to be deducted.
+						BT representing Other deductions not elsewhere declared...100 GBP to be deducted.
 						Note: This DE is Mandatory if there are amounts to be added or deducted but which have not already been accounted for in the declared value. -->
 					<ChargeDeduction>
-						<ChargesTypeCode>BC</ChargesTypeCode>
+						<ChargesTypeCode>BT</ChargesTypeCode>
 						<OtherChargeDeductionAmount currencyID="GBP">100</OtherChargeDeductionAmount>
 					</ChargeDeduction>
 				</CustomsValuation>

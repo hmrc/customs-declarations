@@ -29,7 +29,7 @@
 			 - Preference Code 300 is declared.
 			 - Trader has indicated that preference documentation is available.
 			 - Goods - 2204109400 Sparkling wine from Tunisia with a protected geographical indication (PGI).
-			 - Alcohol exceeding 15% but not exceeding 22% attracting FULL 415 Excise at 3.9672 GBP / litre.
+			 - Alcohol exceeding 15% but not exceeding 22% 
 			
 			CDS validates the declaration against EU Tariff.
 			CDS calculates Customs Duties using the UK Tariff preferential rate.
@@ -39,7 +39,7 @@
 
 		<!--Acceptance Date is present on all supplementary declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20210630221100+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20230821221100+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!-- Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
@@ -249,7 +249,7 @@
 					LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/13.04.2021</ID>
+					<ID>12345/13.08.2023</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -308,9 +308,9 @@
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<!--DE 6/17: National Additional Code.
-						X415 indicating still or sparkling wine exceeding 15% but not exceeding 22% vol. -->
+						X333 indicating wine at least 8.5% abv but not exceeding 22% abv -->
 					<Classification>
-						<ID>X415</ID>
+						<ID>X333</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
 					</Classification>
 					<!--DE 4/3: Tax Type. 
@@ -420,7 +420,7 @@
 					YSDE to show the MRN for the previous simplified declaration. -->
 				<PreviousDocument>
 					<CategoryCode>Y</CategoryCode>
-					<ID>21GBCDS123456789R1</ID>
+					<ID>23GBCDS123456789R1</ID>
 					<TypeCode>SDE</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
@@ -461,7 +461,7 @@
 				In CDS, the MUCR (MCR) is not required on a sup dec. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>1GB553202734852-13042021</ID>
+				<ID>3GB553202734852-13042023</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 4/1: Delivery Terms. 
@@ -488,3 +488,4 @@
 		</ObligationGuarantee>
 	</Declaration>
 </md:MetaData>
+

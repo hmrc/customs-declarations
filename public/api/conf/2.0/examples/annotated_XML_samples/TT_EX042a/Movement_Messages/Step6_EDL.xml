@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><n1:InventoryLinkingExportsInboundRequest xmlns:n1="http://www.hmrc.gov.uk/cds/inventorylinking/exportmovement" xmlns:gw="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:inv="http://gov.uk/customs/inventoryLinking/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hmrc.gov.uk/cds/inventorylinking/exportmovement DEC39_Root.xsd">
+	<n1:requestCommon>
+		<!--   <gw:badgeIdentifier>FCP127</gw:badgeIdentifier>  -->
+		<gw:submitter>GB239355053000</gw:submitter>
+		<gw:clientID>20775303-3f38-46ad-9888-d698f3ee8195</gw:clientID>
+		<gw:conversationID>484939ef-fcae-47a7-a98a-ba46a1fef26d</gw:conversationID>
+		<gw:correlationID>a3c24571-a35f-4a99-9899-f3681b5781d8</gw:correlationID>
+		<gw:dateTimeStamp>2023-09-11T12:58:20.020+01:00</gw:dateTimeStamp>
+	</n1:requestCommon>
+	<n1:requestDetail>
+<inv:inventoryLinkingMovementRequest>
+	<inv:messageCode>EDL</inv:messageCode>
+	<inv:ucrBlock>
+		<inv:ucr>3GB447728449658-9CB2MG</inv:ucr>
+		<inv:ucrType>D</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBBUSOULFGCSE</inv:goodsLocation>
+	<inv:goodsDepartureDateTime>2023-09-11T12:58:20.020+01:00</inv:goodsDepartureDateTime>
+	<inv:movementReference>SJUI54B6IO66S9Z8D8569UIIK</inv:movementReference>
+	<inv:transportDetails>
+		<inv:transportID>11CSCLGLOBE</inv:transportID>
+		<inv:transportMode>1</inv:transportMode>
+		<inv:transportNationality>GB</inv:transportNationality>
+	</inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>
+</n1:requestDetail>
+</n1:InventoryLinkingExportsInboundRequest>

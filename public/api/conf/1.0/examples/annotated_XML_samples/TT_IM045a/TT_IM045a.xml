@@ -1,4 +1,4 @@
-﻿<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
              xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
@@ -34,7 +34,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number: this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IM45a_v1.2_1708_10</FunctionalReferenceID>
+		<FunctionalReferenceID>TT_IM45a_v1.2_0709</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -205,7 +205,7 @@
 					This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/01.07.2021</ID>
+					<ID>12345/01.09.2023</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -332,7 +332,7 @@
 						This is a mandatory field. To denote the inventory reference number.
 						Note: As this is for a single item declaration, this should all be declared at header level-->
 					<CategoryCode>Z</CategoryCode>
-					<ID>21GB34F7Y1O2CX8PT4 </ID>
+					<ID>23GB34F7Y1O2CX8PT4 </ID>
 					<TypeCode>355</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
@@ -358,7 +358,7 @@
 				In CDS, the MUCR (MCR) is not required on a supplementary declaration. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB553202734852-20210701</ID>
+				<ID>3GB553202734852-20230901</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

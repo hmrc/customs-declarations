@@ -22,9 +22,9 @@ import play.api.http.Status.{BAD_REQUEST, FORBIDDEN, NOT_ACCEPTABLE, NOT_FOUND, 
 object Utils {
   def errorResponseForErrorCode(errorCode: Int): ErrorResponse = errorCode match {
     case BAD_REQUEST => ErrorResponse.ErrorGenericBadRequest
-    case FORBIDDEN => ErrorResponse.ErrorUnauthorized
-    case NOT_FOUND => ErrorResponse.ErrorPayloadForbidden
-    case UNAUTHORIZED => ErrorResponse.ErrorNotFound
+    case UNAUTHORIZED => ErrorResponse.ErrorUnauthorized
+    case FORBIDDEN => ErrorResponse.ErrorPayloadForbidden
+    case NOT_FOUND => ErrorResponse.ErrorNotFound
     case NOT_ACCEPTABLE => ErrorResponse.ErrorInvalidPayload
     case UNSUPPORTED_MEDIA_TYPE => ErrorResponse.ErrorContentTypeHeaderInvalid
     case _ => ErrorResponse.ErrorInternalServerError

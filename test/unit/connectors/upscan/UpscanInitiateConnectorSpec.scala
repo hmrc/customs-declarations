@@ -33,7 +33,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException, HttpReads, HttpResponse}
 import util.TestData.{EmulatedServiceFailure, ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles, emulatedServiceFailure, fileUploadConfig}
 import util.VerifyLogging.verifyDeclarationsLoggerError
 
@@ -123,13 +123,13 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with
         verifyDeclarationsLoggerError("Call to upscan initiate failed.")
       }
 
-      "wrap an underlying error when MDG call fails with an http exception" in {
+      "return the http exception when MDG call fails with an http exception" in {
         returnResponseForRequest(Future.failed(httpException))
 
-        val caught = intercept[RuntimeException] {
+        val caught = intercept[HttpException] {
           awaitRequest()
         }
-        caught.getCause shouldBe httpException
+        caught shouldBe httpException
       }
     }
   }

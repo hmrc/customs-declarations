@@ -17,15 +17,16 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import play.api.http.Status.{BAD_REQUEST, FORBIDDEN, NOT_FOUND, UNAUTHORIZED}
+import play.api.http.Status.{BAD_REQUEST, FORBIDDEN, NOT_ACCEPTABLE, NOT_FOUND, UNAUTHORIZED, UNSUPPORTED_MEDIA_TYPE}
 
 object Utils {
-  def errorResponseForErrorCode(errorCode: Int): ErrorResponse = {
-    Map(
-      BAD_REQUEST -> ErrorResponse.ErrorGenericBadRequest,
-      UNAUTHORIZED -> ErrorResponse.ErrorUnauthorized,
-      FORBIDDEN -> ErrorResponse.ErrorPayloadForbidden,
-      NOT_FOUND -> ErrorResponse.ErrorNotFound
-    ).getOrElse(errorCode, ErrorResponse.ErrorInternalServerError)
+  def errorResponseForErrorCode(errorCode: Int): ErrorResponse = errorCode match {
+    case BAD_REQUEST => ErrorResponse.ErrorGenericBadRequest
+    case FORBIDDEN => ErrorResponse.ErrorUnauthorized
+    case NOT_FOUND => ErrorResponse.ErrorPayloadForbidden
+    case UNAUTHORIZED => ErrorResponse.ErrorNotFound
+    case NOT_ACCEPTABLE => ErrorResponse.ErrorInvalidPayload
+    case UNSUPPORTED_MEDIA_TYPE => ErrorResponse.ErrorContentTypeHeaderInvalid
+    case _ => ErrorResponse.ErrorInternalServerError
   }
 }

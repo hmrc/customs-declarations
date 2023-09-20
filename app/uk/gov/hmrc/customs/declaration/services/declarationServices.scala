@@ -141,7 +141,6 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
     }
   }
 
-
   private def preparePayload[A](xml: NodeSeq, asfr: ApiSubscriptionFieldsResponse, dateTime: Instant)
                                (implicit vpr: ValidatedPayloadRequest[A]): NodeSeq = {
     logger.debug(s"preparePayload called")

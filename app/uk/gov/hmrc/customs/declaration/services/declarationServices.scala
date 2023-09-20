@@ -18,6 +18,7 @@ package uk.gov.hmrc.customs.declaration.services
 
 import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
+import play.api.http.Status.FORBIDDEN
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
@@ -131,6 +132,9 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
       case _: CircuitBreakerOpenException =>
         logger.error("unhealthy state entered")
         Left(errorResponseServiceUnavailable.XmlResult.withConversationId)
+      case e: HttpException if e.responseCode == FORBIDDEN =>
+        logger.warn(s"submission declaration call failed with $FORBIDDEN: [${e.getMessage}]")
+        Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId)
       case e: HttpException =>
         logger.warn(s"submission declaration call failed with ${e.responseCode}: [${e.getMessage}]")
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)

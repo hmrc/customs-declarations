@@ -29,7 +29,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{FileUploadFile, ValidatedFileUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchFile, BatchId, FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
-import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
+import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, Utils, UuidService}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -64,7 +64,8 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
         }.recover {
           case e: HttpException =>
             logger.error(s"Upscan initiate call failed with ${e.responseCode}: ${e.getMessage}", e)
-            Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+            val errorMessage = Utils.errorResponseForErrorCode(e.responseCode)
+            Left(errorMessage.XmlResult.withConversationId)
           case NonFatal(e) =>
             logger.error(s"Upscan initiate call failed: ${e.getMessage}", e)
             Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
@@ -88,7 +89,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def backendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
-                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]): Future[Seq[UpscanInitiateResponsePayload]] = {
+                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]): Future[Seq[UpscanInitiateResponsePayload]] = {
 
     val upscanInitiateRequests = validatedRequest.fileUploadRequest.files
 
@@ -151,7 +152,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
   }
 
-  private def failFastSequence[A,B](iter: Iterable[A])(fn: A => Future[B]): Future[Seq[B]] =
+  private def failFastSequence[A, B](iter: Iterable[A])(fn: A => Future[B]): Future[Seq[B]] =
     iter.foldLeft(Future(Seq.empty[B])) {
       (previousFuture, next) =>
         for {
@@ -161,7 +162,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
 
   private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
-                              (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]) = {
+                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]) = {
     upscanInitiateConnector.send(
       preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)
   }

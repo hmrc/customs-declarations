@@ -18,7 +18,6 @@ package uk.gov.hmrc.customs.declaration.services
 
 import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
-import play.api.http.Status.FORBIDDEN
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
@@ -62,6 +61,7 @@ class CancellationDeclarationSubmissionService @Inject()(override val logger: De
                                                          override val actorSystem: ActorSystem)
                                                         (implicit val ec: ExecutionContext) extends DeclarationService {
 }
+
 trait DeclarationService extends ApiSubscriptionFieldsService {
 
   def connector: DeclarationConnector
@@ -85,7 +85,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
   def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     futureApiSubFieldsId(vpr.clientId) flatMap {
       case Right(sfId) =>
-          callBackendAndNrs(vpr, sfId)
+        callBackendAndNrs(vpr, sfId)
       case Left(result) =>
         Future.successful(Left(result))
     }
@@ -93,7 +93,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
 
   private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], asfr: ApiSubscriptionFieldsResponse): Future[Either[Result, Option[NrSubmissionId]]] = {
 
-  val nrSubmissionId = new NrSubmissionId(vpr.conversationId.uuid)
+    val nrSubmissionId = new NrSubmissionId(vpr.conversationId.uuid)
     if (declarationsConfigService.nrsConfig.nrsEnabled) {
       logger.debug("NRS enabled. Calling NRS.")
 
@@ -104,21 +104,21 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
           logger.debug(s"NRS returned submission id: $nrSubmissionId")
           logCallDuration(startTime)
         })
-        .recover{
-          case ex:Exception => logger.warn(s"NRS call failed: $ex")
+        .recover {
+          case ex: Exception => logger.warn(s"NRS call failed: $ex")
         }
     } else {
       logger.debug("NRS not enabled")
     }
 
     callBackend(asfr).map {
-        case Left(errorResult) =>
-          logger.debug("MDG call failed")
-          Left(errorResult.withNrSubmissionId(nrSubmissionId))
-        case Right(_) =>
-          logger.debug("MDG call success.")
-          if (declarationsConfigService.nrsConfig.nrsEnabled) Right(Some(nrSubmissionId)) else Right(None)
-      }
+      case Left(errorResult) =>
+        logger.debug("MDG call failed")
+        Left(errorResult.withNrSubmissionId(nrSubmissionId))
+      case Right(_) =>
+        logger.debug("MDG call success.")
+        if (declarationsConfigService.nrsConfig.nrsEnabled) Right(Some(nrSubmissionId)) else Right(None)
+    }
   }
 
   private def callBackend[A](asfr: ApiSubscriptionFieldsResponse)
@@ -131,9 +131,10 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
       case _: CircuitBreakerOpenException =>
         logger.error("unhealthy state entered")
         Left(errorResponseServiceUnavailable.XmlResult.withConversationId)
-      case e: HttpException if (e.responseCode == FORBIDDEN) =>
-        logger.warn(s"submission declaration call failed with 403: [${e.getMessage}]")
-        Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId)
+      case e: HttpException =>
+        logger.warn(s"submission declaration call failed with ${e.responseCode}: [${e.getMessage}]")
+        val errorMessage = Utils.errorResponseForErrorCode(e.responseCode)
+        Left(errorMessage.XmlResult.withConversationId)
       case NonFatal(e) =>
         logger.error(s"submission declaration call failed: [${e.getMessage}]", e)
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
@@ -147,7 +148,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
   }
 
   private def logCallDuration[A](startTime: ZonedDateTime)
-                                  (implicit vpr: ValidatedPayloadRequest[A]): Unit ={
+                                (implicit vpr: ValidatedPayloadRequest[A]): Unit = {
     val endTime = dateTimeProvider.zonedDateTimeUtc
     val callDuration = ChronoUnit.MILLIS.between(startTime, endTime)
     logger.info(s"Duration of call to NRS $callDuration ms")

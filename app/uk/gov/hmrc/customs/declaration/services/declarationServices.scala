@@ -132,9 +132,9 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
         logger.error("unhealthy state entered")
         Left(errorResponseServiceUnavailable.XmlResult.withConversationId)
       case e: HttpException =>
-        logger.warn(s"submission declaration call failed with ${e.responseCode}: [${e.getMessage}]")
-        val errorMessage = Utils.errorResponseForErrorCode(e.responseCode)
-        Left(errorMessage.XmlResult.withConversationId)
+        val errorResponse = Utils.errorResponseForErrorCode(e.responseCode)
+        logger.warn(s"submission declaration call failed with ${e.responseCode}, will return with ${errorResponse.httpStatusCode}: [${e.getMessage}]")
+        Left(errorResponse.XmlResult.withConversationId)
       case NonFatal(e) =>
         logger.error(s"submission declaration call failed: [${e.getMessage}]", e)
         Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)

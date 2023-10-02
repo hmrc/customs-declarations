@@ -77,10 +77,19 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   override lazy val unstablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
   override lazy val unavailablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
 
-  def send[A](xml: NodeSeq, date: Instant, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
+  private val headersList = Some(List("Accept", "Gov-Test-Scenario"))
+
+  private def apiStubHeaderCarrier(additionalHeaders: Seq[String] = Seq.empty)(implicit hc: HeaderCarrier): HeaderCarrier = {
+    HeaderCarrier(
+      extraHeaders = hc.extraHeaders ++
+        // Other headers (i.e Gov-Test-Scenario, Content-Type)
+        hc.headers(additionalHeaders ++ headersList.getOrElse(Seq.empty))
+    )
+  }
+
+  def send[A](xml: NodeSeq, date: Instant, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = None)
 
     lazy val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken)
     val startTime = LocalDateTime.now
@@ -105,7 +114,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   private def post[A](xml: NodeSeq, url: String, decHeaders: Seq[(String, String)])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
     logger.debug(s"Sending request to $url.\n Headers:\n $hc\n Payload:\n$xml")
 
-    http.POSTString[HttpResponse](url, xml.toString(), headers = decHeaders).map { response =>
+    http.POSTString[HttpResponse](url, xml.toString(), headers = decHeaders)(implicitly,hc=apiStubHeaderCarrier(),implicitly).map { response =>
       response.status match {
         case status if is2xx(status) =>
           response

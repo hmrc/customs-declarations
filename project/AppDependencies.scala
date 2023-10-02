@@ -13,5 +13,6 @@ object AppDependencies {
   val hmrcMongo                 = "uk.gov.hmrc.mongo"                          %% "hmrc-mongo-play-28"      % "1.3.0"
   val hmrcMongoTest             = "uk.gov.hmrc.mongo"                          %% "hmrc-mongo-test-play-28" % "1.3.0"    % testScope
   val hmrcBootstrapTest         = "uk.gov.hmrc"                                %% "bootstrap-test-play-28"  % "7.15.0"   % testScope
+  val hmrcBootstrapBackend         = "uk.gov.hmrc"                                %% "bootstrap-backend-play-28"  % "7.15.0"   % testScope
 
 }

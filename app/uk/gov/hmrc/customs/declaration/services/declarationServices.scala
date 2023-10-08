@@ -18,6 +18,7 @@ package uk.gov.hmrc.customs.declaration.services
 
 import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
+import play.api.http.Status.FORBIDDEN
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
@@ -127,17 +128,19 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
     val correlationId = uniqueIdsService.correlation
     val xmlToSend = preparePayload(vpr.xmlBody, asfr, dateTime)
 
+    def handleResult(t: Throwable, errorResponse: ErrorResponse) = {
+      logger.warn(s"Returning status=[${errorResponse.httpStatusCode}]. ${t.getMessage}", t)
+      Left(errorResponse.XmlResult.withConversationId)
+    }
+
     connector.send(xmlToSend, dateTime, correlationId.uuid, vpr.requestedApiVersion).map(_ => Right(None)).recover {
       case _: CircuitBreakerOpenException =>
         logger.error("unhealthy state entered")
         Left(errorResponseServiceUnavailable.XmlResult.withConversationId)
-      case e: HttpException =>
-        val errorResponse = Utils.errorResponseForErrorCode(e.responseCode)
-        logger.warn(s"submission declaration call failed with ${e.responseCode}, will return with ${errorResponse.httpStatusCode}: [${e.getMessage}]")
-        Left(errorResponse.XmlResult.withConversationId)
+      case httpError: HttpException if httpError.responseCode == FORBIDDEN =>
+        handleResult(httpError, ErrorResponse.ErrorPayloadForbidden)
       case NonFatal(e) =>
-        logger.error(s"submission declaration call failed: [${e.getMessage}]", e)
-        Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+        handleResult(e, ErrorResponse.ErrorInternalServerError)
     }
   }
 

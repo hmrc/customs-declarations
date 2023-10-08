@@ -29,8 +29,8 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{FileUploadFile, ValidatedFileUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchFile, BatchId, FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
-import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, Utils, UuidService}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
+import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
@@ -62,10 +62,6 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
             case false => Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
           }
         }.recover {
-          case e: HttpException =>
-            logger.error(s"Upscan initiate call failed with ${e.responseCode}: ${e.getMessage}", e)
-            val errorMessage = Utils.errorResponseForErrorCode(e.responseCode)
-            Left(errorMessage.XmlResult.withConversationId)
           case NonFatal(e) =>
             logger.error(s"Upscan initiate call failed: ${e.getMessage}", e)
             Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)

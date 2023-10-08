@@ -43,6 +43,9 @@ class DeclarationsLogger @Inject()(logger: CdsLogger) {
   def warn(s: => String)(implicit r: HasConversationId): Unit =
     logger.warn(formatWarn(s, r))
 
+  def warn(s: => String, e: => Throwable)(implicit r: HasConversationId): Unit =
+    logger.warn(formatWarn(s, r), e)
+
   def error(s: => String, e: => Throwable)(implicit r: HasConversationId): Unit =
     logger.error(formatError(s, r), e)
 

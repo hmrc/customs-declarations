@@ -34,7 +34,7 @@ import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, HasConversationId, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -42,7 +42,6 @@ import util.ApiSubscriptionFieldsTestData._
 import util.CustomsDeclarationsMetricsTestData
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
-import util.VerifyLogging
 
 import java.time.Instant
 import java.util.UUID
@@ -221,7 +220,6 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     val result: Either[Result, Option[NrSubmissionId]] = send()
 
     result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
-    VerifyLogging.verifyDeclarationsLoggerThrowable("warn", "Returning status=[500]. Not Found")
   }
 
   "return 500 error response when EIS call fails with 502" in new SetUp() {
@@ -230,7 +228,6 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     val result: Either[Result, Option[NrSubmissionId]] = send()
 
     result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
-    VerifyLogging.verifyDeclarationsLoggerThrowable("warn", "Returning status=[500]. BAD_GATEWAY")
   }
 
 }

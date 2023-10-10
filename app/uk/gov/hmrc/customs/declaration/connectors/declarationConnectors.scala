@@ -111,13 +111,11 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
           response
 
         case status => //1xx, 3xx, 4xx, 5xx
-          logger.error(s"Failed backend call response body=${formatResponseBody(response.body)}")
-          throw new Non2xxResponseException(status)
+          throw Non2xxResponseException(s"Call to Declarations backend failed. Status=[$status] url=[$url] response body=[${formatResponseBody(response.body)}]", status)
       }
     }
       .recoverWith {
         case httpError: HttpException =>
-          logger.error(s"Failed call to url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
           Future.failed(httpError)
         case e: Throwable =>
           logger.error(s"Call to declaration submission failed. url=$url")

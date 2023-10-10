@@ -57,7 +57,7 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
 
         case status => //1xx, 3xx, 4xx, 5xx
           logger.error(s"Failed file upload notification call response body=${response.body}")
-          throw new Non2xxResponseException(status)
+          throw Non2xxResponseException(status)
       }
     }.recoverWith {
       case httpError: HttpException =>

@@ -48,7 +48,7 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with
 
   private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
 
-  private val httpException: Non2xxResponseException = new Non2xxResponseException(404)
+  private val httpException: Non2xxResponseException = Non2xxResponseException(404)
   private val tenThousand: Int = 10000
   private val upscanInitiatePayloadV1WithNoRedirects: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, None)
   private val upscanInitiatePayloadV1WithSuccessRedirects: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), None)

@@ -54,7 +54,7 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
           ()
 
         case status => //1xx, 3xx, 4xx, 5xx
-          throw new Non2xxResponseException(status)
+          throw Non2xxResponseException(status)
       }
     }.recoverWith {
         case httpError: HttpException =>

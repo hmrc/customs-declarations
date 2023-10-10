@@ -103,7 +103,7 @@ class DeclarationStatusServiceSpec extends AnyWordSpecLike with MockitoSugar wit
       when(mockDeclarationStatusConnector.send(any[NodeSeq],
         any[Instant],
         meq[UUID](correlationId.uuid).asInstanceOf[CorrelationId],
-        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(new Non2xxResponseException(NOT_FOUND)))
+        any[ApiVersion])(any[AuthorisedRequest[_]])).thenReturn(Future.failed(Non2xxResponseException(NOT_FOUND)))
       val result: Either[Result, HttpResponse] = send()
 
       result shouldBe Left(ErrorResponse.ErrorNotFound.XmlResult.withConversationId)

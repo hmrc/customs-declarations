@@ -37,5 +37,4 @@ object VerifyLogging {
       .withParamMatcher(any[HasConversationId])
       .verify()
   }
-
 }

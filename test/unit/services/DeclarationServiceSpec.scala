@@ -24,7 +24,7 @@ import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.http.Status.FORBIDDEN
+import play.api.http.Status.{FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
@@ -34,7 +34,7 @@ import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, HasConversationId, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._
 import uk.gov.hmrc.customs.declaration.xml.MdgPayloadDecorator
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -60,7 +60,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
   private val errorResponseMissingEori = errorInternalServerError("Missing authenticated eori in service lookup")
 
   trait SetUp {
-    protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
+    implicit protected val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
     protected val mockMdgDeclarationConnector: DeclarationConnector = mock[DeclarationConnector]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]
     protected val mockPayloadDecorator: MdgPayloadDecorator = mock[MdgPayloadDecorator]
@@ -84,7 +84,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     }
 
     protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
-      (service.send(vpr, hc)).futureValue
+      service.send(vpr, hc).futureValue
     }
 
     when(mockPayloadDecorator.wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[Instant])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
@@ -208,10 +208,26 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
 
   "return 403 error response when EIS call fails with 403" in new SetUp() {
     when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]]))
-      .thenReturn(Future.failed(new Non2xxResponseException(FORBIDDEN)))
+      .thenReturn(Future.failed(Non2xxResponseException(FORBIDDEN)))
     val result: Either[Result, Option[NrSubmissionId]] = send()
 
     result shouldBe Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
+  }
+
+  "return 500 error response when EIS call fails with 404" in new SetUp() {
+    when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]]))
+      .thenReturn(Future.failed(Non2xxResponseException(NOT_FOUND)))
+    val result: Either[Result, Option[NrSubmissionId]] = send()
+
+    result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
+  }
+
+  "return 500 error response when EIS call fails with 502" in new SetUp() {
+    when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]]))
+      .thenReturn(Future.failed(Non2xxResponseException(INTERNAL_SERVER_ERROR)))
+    val result: Either[Result, Option[NrSubmissionId]] = send()
+
+    result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
   }
 
 }

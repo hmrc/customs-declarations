@@ -1,0 +1,31 @@
+<_2:MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+    <_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode>
+    <_2:WCOTypeName>RES</_2:WCOTypeName>
+    <_2:ResponsibleCountryCode/>
+    <_2:ResponsibleAgencyName/>
+    <_2:AgencyAssignedCustomizationCode/>
+    <_2:AgencyAssignedCustomizationVersionCode/>
+    <_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
+        <_2_1:FunctionCode>16</_2_1:FunctionCode>
+        <_2_1:FunctionalReferenceID>6c294d1f9261405c8f6563abde3c5172</_2_1:FunctionalReferenceID>
+        <_2_1:IssueDateTime>
+            <_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20230609111224+01</_2_2:DateTimeString>
+        </_2_1:IssueDateTime>
+        <_2_1:AdditionalInformation>
+            <_2_1:StatementCode/>
+            <_2_1:StatementDescription>GB000040</_2_1:StatementDescription>
+            <_2_1:StatementTypeCode>CEX</_2_1:StatementTypeCode>
+        </_2_1:AdditionalInformation>
+        <_2_1:Status>
+            <_2_1:EffectiveDateTime>
+                <_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20230609010000+01</_2_2:DateTimeString>
+            </_2_1:EffectiveDateTime>
+            <_2_1:NameCode>A1</_2_1:NameCode>
+        </_2_1:Status>
+        <_2_1:Declaration>
+            <_2_1:FunctionalReferenceID>R4.0.0_CDSP_6436_T01G</_2_1:FunctionalReferenceID>
+            <_2_1:ID>23GB6BSDBP8J8KTAA7</_2_1:ID>
+            <_2_1:VersionID>2</_2_1:VersionID>
+        </_2_1:Declaration>
+    </_2_1:Response>
+</_2:MetaData>

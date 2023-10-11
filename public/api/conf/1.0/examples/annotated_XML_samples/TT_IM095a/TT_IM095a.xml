@@ -15,6 +15,7 @@
                          xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
                          xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd">
 		<!--
+			Please note FEC checks appearing for this scenario after the Tariff Refresh TTM24.1. This will be fixed in a future release.
 			SCENARIO
 			A trader submits a Type A (H1) Declaration importing goods from the CS Norway into CS UK.
 

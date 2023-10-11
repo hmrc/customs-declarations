@@ -45,7 +45,7 @@
         <!--DE 2/5: LRN. 
             Mandatory field. 
             Traders own reference number this must be unique to the transaction. -->
-        <FunctionalReferenceID>R4.1.1_10591_03</FunctionalReferenceID>
+        <FunctionalReferenceID>TTIM128a_1010</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type. 
             Mandatory field. 
             IM to represent an import declaration.-->
@@ -296,14 +296,14 @@
                         <IdentificationTypeCode>TRC</IdentificationTypeCode>
                     </Classification>
                     <!--DE 6/17: National Additional Code.
-                        X371 indicating beer, where alcohol is less then 3.5% and SPR is being claimed. -->
+                        X311 indicating beer less than 3.5% abv. -->
                     <Classification>
-                        <ID>X371</ID>
+                        <ID>X311</ID>
                         <IdentificationTypeCode>GN</IdentificationTypeCode>
                     </Classification>
-                    <!-- DE 4/3 Tax Type. In this scenario 371 shows which tax type is being applied.-->
+                    <!-- DE 4/3 Tax Type. In this scenario 311 shows which tax type is being applied.-->
                     <DutyTaxFee>
-                        <TypeCode>371</TypeCode>
+                        <TypeCode>311</TypeCode>
                         <Payment>
                             <MethodCode>E</MethodCode>
                         </Payment>

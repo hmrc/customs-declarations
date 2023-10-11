@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
              xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
              xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
@@ -40,7 +39,7 @@
 		<!--DE 2/5: LRN. 
 			Mandatory field. 
 			Traders own reference number this must be unique to the transaction. -->
-		<FunctionalReferenceID>784844925R0735VNZ1</FunctionalReferenceID>
+		<FunctionalReferenceID>TTIM127a_TAYE</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory field. 
 			IM to represent an import declaration. -->
@@ -322,28 +321,28 @@
 					<DutyTaxFee>
 						<!--DE 4/4: Tax Base. 
 							In this scenario, LPA indicating Litre pure (100%) alcohol. -->
-						<SpecificTaxBaseQuantity unitCode="LPA">2000</SpecificTaxBaseQuantity>
+						<SpecificTaxBaseQuantity unitCode="LPA">1000</SpecificTaxBaseQuantity>
 					</DutyTaxFee>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass. 
 							This data element can be declared at a header or item level, depending on the scenario. 
 							Mandatory field. 
 							Entry of 110 including packaging. -->
-						<GrossMassMeasure>2100</GrossMassMeasure>
+						<GrossMassMeasure>2600</GrossMassMeasure>
 						<!--DE 6/1: Net Mass. 
 							Mandatory field. 
 							Entry of 100 excluding packaging. -->
-						<NetNetWeightMeasure>2000</NetNetWeightMeasure>
+						<NetNetWeightMeasure>2500</NetNetWeightMeasure>
 						<!--DE 6/2: Supplementary Units.
 							The supplementary units for the commodity code are litres.
 							Litre Pure (100%) Alcohol (LPA). -->
-						<TariffQuantity>2000</TariffQuantity>
+						<TariffQuantity>1000</TariffQuantity>
 					</GoodsMeasure>
 					<!--DE 4/14: Item Price Amount. 
 						Mandatory field. 
 						The invoice was issued with of a value of 2000 and the currency was in GBP. -->
 					<InvoiceLine>
-						<ItemChargeAmount currencyID="GBP">2000</ItemChargeAmount>
+						<ItemChargeAmount currencyID="GBP">3000</ItemChargeAmount>
 					</InvoiceLine>
 				</Commodity>
 				<!--DE 4/16: Valuation Method. 

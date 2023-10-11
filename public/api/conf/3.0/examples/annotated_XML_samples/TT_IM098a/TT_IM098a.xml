@@ -14,6 +14,7 @@
 	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--
+			Please note FEC checks appearing for this scenario after the Tariff Refresh TTM24.1. This will be fixed in a future release.
 			SCENARIO
 			An agent submits a Type A (H1) Declaration importing goods from the Continental Shelf (CS) Norway into NI.
 

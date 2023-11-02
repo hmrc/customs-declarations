@@ -119,7 +119,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
         case httpError: HttpException =>
           Future.failed(httpError)
         case NonFatal(e) =>
-          logger.error(s"Call to declaration submission failed. url=$url")
+          logger.error(s"Call to declaration submission failed. url=[$url]")
           Future.failed(e)
       }
   }

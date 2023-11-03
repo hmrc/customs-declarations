@@ -35,6 +35,7 @@ import uk.gov.hmrc.http.{HttpClient, _}
 import java.time.{Instant, LocalDateTime}
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 import scala.xml.NodeSeq
 
 @Singleton
@@ -117,8 +118,8 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
       .recoverWith {
         case httpError: HttpException =>
           Future.failed(httpError)
-        case e: Throwable =>
-          logger.error(s"Call to declaration submission failed. url=$url")
+        case NonFatal(e) =>
+          logger.error(s"Call to declaration submission failed. url=[$url]")
           Future.failed(e)
       }
   }

@@ -14,7 +14,7 @@
 	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--
-		
+			Please note this scenario is currently rejecting after the Tariff refresh. A fix will be implemented in a future release.
 			SCENARIO
 			ROW-NI At Risk + Valuation Method 4 + APC 'E01'. Duties calculated using SPV (with no Item Price).
 
@@ -39,14 +39,14 @@
 			The agent gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.	 
 		-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20221012221100+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20231012221100+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. 
 			Mandatory.
 			Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>R380_NIP493_1124_01</FunctionalReferenceID>
+		<FunctionalReferenceID>R380_NIP493_2411_01</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory.
 			IM to represent an import declaration. -->
@@ -339,7 +339,7 @@
 					YSDE to show the MRN for the previous simplified declaration. -->
 				<PreviousDocument>
 					<CategoryCode>Y</CategoryCode>
-					<ID>21GBCDS123456789R1</ID>
+					<ID>23GBCDS123456789R1</ID>
 					<TypeCode>SDE</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
@@ -355,7 +355,7 @@
 				Note: The DUCR is not mandatory for ‘normal’ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>2GB553202734852-12345</ID>
+				<ID>3GB553202734852-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Simplified Declarations/Previous documents.
@@ -364,7 +364,7 @@
 				header level. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>22GB34F7Y1O2CX8PT4</ID>
+				<ID>23GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

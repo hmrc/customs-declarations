@@ -1,151 +1,151 @@
-<md:MetaData xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
-           	xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
-           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			SCENARIO
-			GB to NI At Risk.
-			
-			Standard frontier Declaration Type A which derives an H1 Declaration Category data set.
-			
-			Import of goods liable to Customs Duty & VAT, with no previous procedure.
-			
-			The trader declares:
-			• Goods: Small cucumbers of a length not exceeding 15cm.
-			• AI code 'NIDOM' entered at Item Level.
-			
-			Goods presented at Warrenport on arrival.
-			-->
-			
+            SCENARIO
+            GB to NI At Risk.
+
+            Standard frontier Declaration Type A which derives an H1 Declaration Category data set.
+
+            Import of goods liable to Customs Duty & VAT, with no previous procedure.
+
+            The trader declares:
+            • Goods: Small cucumbers of a length not exceeding 15cm.
+            • AI code 'NIDOM' entered at Item Level.
+
+            Goods presented at Warrenport on arrival.
+            -->
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			Trader's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IM18a_v1.7_1506_01</FunctionalReferenceID>
+            Trader's own reference number - this must be unique to the transaction. -->
+		<FunctionalReferenceID>7847767CI3W2</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
-			IM to represent an import declaration. -->
+            IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
-			A to represent a standard frontier declaration. -->
+            A to represent a standard frontier declaration. -->
 		<TypeCode>IMA</TypeCode>
 		<!--DE 1/9: Total Number of Items.
-			Number of goods items on the declaration. -->
+            Number of goods items on the declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<!--DE 6/18: Total Packages.
-			In this case, 100. 
-			Note that this matches DE 6/10 as this is a single item declaration. -->
+            In this case, 100.
+            Note that this matches DE 6/10 as this is a single item declaration. -->
 		<TotalPackageQuantity>100</TotalPackageQuantity>
-		<!--DE 2/6: Deferred Payment. 
-			This is mandatory when deferred payment is used.
-			ID is the DAN account used for deferred payment (for excise duty in this scenario).
-			This declared DAN belongs to the importer declared on the declaration. -->
+		<!--DE 2/6: Deferred Payment.
+            This is mandatory when deferred payment is used.
+            ID is the DAN account used for deferred payment (for excise duty in this scenario).
+            This declared DAN belongs to the importer declared on the declaration. -->
 		<AdditionalDocument>
 			<CategoryCode>1</CategoryCode>
-			<ID>1108654</ID>
+			<ID>1108656</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of DPO indicates Deferment of Payment authorisation.
-			The ID here is the EORI of the DPO authorised party. -->
+            An authorisation type code of DPO indicates Deferment of Payment authorisation.
+            The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 7/15: Nationality of the active means of transport crossing the border.
-			In this case, GB.
-			DE 7/4: Mode of Transport at the Border.
-			1 to represent Maritime/Sea transport. -->
+            In this case, GB.
+            DE 7/4: Mode of Transport at the Border.
+            1 to represent Maritime/Sea transport. -->
 		<BorderTransportMeans>
 			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
 		<!--DE 3/18: Declarant Identification Number.
-			The EORI number of the declarant entering the declaration. 
-			The UK requires an EORI to be provided for the declarant. 
-			In this scenario, the same as the EORI of the importer. -->
+            The EORI number of the declarant entering the declaration.
+            The UK requires an EORI to be provided for the declarant.
+            In this scenario, the same as the EORI of the importer. -->
 		<Declarant>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 		</Declarant>
-		<!--DE 3/2: Exporter Identification Number 
-			Where held, enter the EORI number of the last seller of the goods prior to their importation. -->
+		<!--DE 3/2: Exporter Identification Number
+            Where held, enter the EORI number of the last seller of the goods prior to their importation. -->
 		<Exporter>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 		</Exporter>
 		<GoodsShipment>
 			<!--DE 8/5: Nature of Transaction.
-				9 to indicate Other transactions which cannot be classified under other codes.  -->
+                9 to indicate Other transactions which cannot be classified under other codes.  -->
 			<TransactionNatureCode>9</TransactionNatureCode>
 			<Consignment>
 				<!--DE 7/2: Container.
-					Indicator to show if goods are packed in a container or not.
-					1 indicates that goods are transported in containers.
-					Note: Unlike CHIEF this must now be completed. -->
+                    Indicator to show if goods are packed in a container or not.
+                    1 indicates that goods are transported in containers.
+                    Note: Unlike CHIEF this must now be completed. -->
 				<ContainerCode>1</ContainerCode>
-				<!--DE 7/9: Identity of the Means of Transport on Arrival. 
-					Example number representing IMO ship identification number: '10', and 5 digits for the identification number: '12345'. -->
+				<!--DE 7/9: Identity of the Means of Transport on Arrival.
+                    Example number representing IMO ship identification number: '10', and 5 digits for the identification number: '12345'. -->
 				<ArrivalTransportMeans>
 					<ID>12345</ID>
 					<IdentificationTypeCode>10</IdentificationTypeCode>
 				</ArrivalTransportMeans>
 				<GoodsLocation>
 					<!--DE 5/23: Location of Goods - Identification of location.
-						The location code for Warrenpoint, GB005160.
-						Goods moved via shipping container from GB to NI via port of Warrenpoint. -->
+                        The location code for Warrenpoint, GB005160.
+                        Goods moved via shipping container from GB to NI via port of Warrenpoint. -->
 					<Name>WPTWPTWPT</Name>
 					<!--DE 5/23: Location of Goods - Type of location.
-						Location type is A in this scenario to represent that it is a designated location. -->
+                        Location type is A in this scenario to represent that it is a designated location. -->
 					<TypeCode>A</TypeCode>
 					<Address>
 						<!--DE 5/23: Location of Goods - Qualifier of the identification.
-							Location ID type is U in this scenario for UN/LOCODE. -->
+                            Location ID type is U in this scenario for UN/LOCODE. -->
 						<TypeCode>U</TypeCode>
 						<!--DE 5/23: Location of Goods - Country.
-							GB in this scenario. -->
+                            GB in this scenario. -->
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
-				<!--DE 7/10: Container Identification Number. 
-					This is alpha-numeric with up to 17 characters.
-					For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number.
-					For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
+				<!--DE 7/10: Container Identification Number.
+                    This is alpha-numeric with up to 17 characters.
+                    For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number.
+                    For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
 				<TransportEquipment>
 					<SequenceNumeric>1</SequenceNumeric>
 					<ID>BG1234</ID>
 				</TransportEquipment>
 			</Consignment>
-			<!--DE 5/8: Country of Destination Code. 
-				GB in this scenario. -->
+			<!--DE 5/8: Country of Destination Code.
+                GB in this scenario. -->
 			<Destination>
 				<CountryCode>GB</CountryCode>
 			</Destination>
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Goods Item Number.
-					Sequential number of the goods item. -->
+                    Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					C506 indicates DPO - Authorisation for the deferment of payment.
-					Provide the authorisation decision number for the deferment of payment authorisation in format:
-					• 2 digit code identifying the member state of authorisation, for example, GB
-					• 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
-					• Followed by the authorisation reference number. 
-					No document status code is required. -->
+                    C506 indicates DPO - Authorisation for the deferment of payment.
+                    Provide the authorisation decision number for the deferment of payment authorisation in format:
+                    • 2 digit code identifying the member state of authorisation, for example, GB
+                    • 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
+                    • Followed by the authorisation reference number.
+                    No document status code is required. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBDPO1108654</ID>
+					<ID>XIDPO1108656</ID>
 					<TypeCode>506</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					Y929 indicates Excluded from Reg 834/2007 - Authorisation for Denoting the goods are not organic/do not meet terms to be classed as organic. -->
+                    Y929 indicates Excluded from Reg 834/2007 - Authorisation for Denoting the goods are not organic/do not meet terms to be classed as organic. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>Excluded from Reg 834/2007</ID>
@@ -153,91 +153,91 @@
 					<TypeCode>929</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					N935 indicates: the invoice on the basis of which the customs value of the goods is declared.
-					This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
+                    N935 indicates: the invoice on the basis of which the customs value of the goods is declared.
+                    This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
 					<ID>12345/30.08.2021</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
-				<!--DE 2/2: Additional Information. 
-					00500 - IMPORTER Indicating Self representation by the importer -->
+				<!--DE 2/2: Additional Information.
+                    00500 - IMPORTER Indicating Self representation by the importer -->
 				<AdditionalInformation>
 					<StatementCode>00500</StatementCode>
 					<StatementDescription>IMPORTER</StatementDescription>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional Information. 
-					This field is mandatory.
-					This represents a domestic movement as the goods are imported from GB into Northern Ireland. -->
+				<!--DE 2/2: Additional Information.
+                    This field is mandatory.
+                    This represents a domestic movement as the goods are imported from GB into Northern Ireland. -->
 				<AdditionalInformation>
 					<StatementCode>NIDOM</StatementCode>
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of Goods.
-						Description of the goods sufficiently precise enough to allow classification does not mean copying out the full description as set out in the tariff. -->
+                        Description of the goods sufficiently precise enough to allow classification does not mean copying out the full description as set out in the tariff. -->
 					<Description>Small cucumbers of a length not exceeding 15 cm</Description>
 					<Classification>
-						<!--DE 6/14: Commodity Code - Combined Nomenclature Code. 
-							Mandatory.
-							Identification TypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
+						<!--DE 6/14: Commodity Code - Combined Nomenclature Code.
+                            Mandatory.
+                            Identification TypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
 						<ID>07070005</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!--DE 6/15: Commodity Code - TARIC Code. 
-							Two characters for the application of specific Union measures in respect of formalities to be completed at destination. 
-							Identification Type Code TRC indicates TARIC Code. -->
+						<!--DE 6/15: Commodity Code - TARIC Code.
+                            Two characters for the application of specific Union measures in respect of formalities to be completed at destination.
+                            Identification Type Code TRC indicates TARIC Code. -->
 						<ID>90</ID>
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<Classification>
 						<!--DE 6/17: National Additional Code.
-							VATZ to represent VAT zero percent rate. -->
+                            VATZ to represent VAT zero percent rate. -->
 						<ID>VATZ</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
 					</Classification>
 					<DutyTaxFee>
 						<!--DE 4/17: Preference.
-							Type of 100 represents no preference being claimed. -->
+                            Type of 100 represents no preference being claimed. -->
 						<DutyRegimeCode>100</DutyRegimeCode>
 						<!--DE 4/3: Tax Type.
-							A50 represents EU Tariff customs duty. -->
+                            A50 represents EU Tariff customs duty. -->
 						<TypeCode>A50</TypeCode>
 						<!--DE 4/8: Payment Method.
-							E to indicate Deferment used for import - Tax line 1 -->
+                            E to indicate Deferment used for import - Tax line 1 -->
 						<Payment>
 							<MethodCode>E</MethodCode>
 						</Payment>
 					</DutyTaxFee>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass.
-							Weight of the goods in kilograms including packaging. -->
+                            Weight of the goods in kilograms including packaging. -->
 						<GrossMassMeasure>505</GrossMassMeasure>
 						<!--DE 6/1: Net Mass.
-							Weight of the goods in kilograms without any packaging. -->
+                            Weight of the goods in kilograms without any packaging. -->
 						<NetNetWeightMeasure>500</NetNetWeightMeasure>
 					</GoodsMeasure>
-					<!--DE 4/14: Item Price/ Amount. 
-						The invoice was issued with a value of 2000 and the currency of GBP. -->
+					<!--DE 4/14: Item Price/ Amount.
+                        The invoice was issued with a value of 2000 and the currency of GBP. -->
 					<InvoiceLine>
 						<ItemChargeAmount currencyID="GBP">2000</ItemChargeAmount>
 					</InvoiceLine>
 				</Commodity>
 				<!--DE 4/16: Valuation Method.
-					1 to indicate the method is transaction value of the goods. -->
+                    1 to indicate the method is transaction value of the goods. -->
 				<CustomsValuation>
 					<MethodCode>1</MethodCode>
 				</CustomsValuation>
 				<!--DE 5/14: Country of Dispatch/Export Code.
-					For declarations with a single goods item, this DE can be declared at header or item level.
-					In this case, GB. -->
+                    For declarations with a single goods item, this DE can be declared at header or item level.
+                    In this case, GB. -->
 				<ExportCountry>
 					<ID>GB</ID>
 				</ExportCountry>
 				<!--DE 1/10: Procedure.
-					Requested procedure of 40 indicating entry for free circulation and home use of goods.
-					Previous procedure of 00 indicating there is no previous procedure. -->
+                    Requested procedure of 40 indicating entry for free circulation and home use of goods.
+                    Previous procedure of 00 indicating there is no previous procedure. -->
 				<GovernmentProcedure>
 					<CurrentCode>40</CurrentCode>
 					<PreviousCode>00</PreviousCode>
@@ -247,9 +247,9 @@
 					<CurrentCode>000</CurrentCode>
 				</GovernmentProcedure>
 				<!--DE 5/15: Country of Origin.
-					TypeCode of 1 to represent non-preferential origin. 
-					Where preference in DE 4/17 begins with '1', this must be completed.
-					CountryCode cotains the code for the country from which the originated, in this case Syria.  -->
+                    TypeCode of 1 to represent non-preferential origin.
+                    Where preference in DE 4/17 begins with '1', this must be completed.
+                    CountryCode cotains the code for the country from which the originated, in this case Syria.  -->
 				<Origin>
 					<CountryCode>GB</CountryCode>
 					<TypeCode>1</TypeCode>
@@ -257,50 +257,50 @@
 				<Packaging>
 					<SequenceNumeric>1</SequenceNumeric>
 					<!--DE 6/11: Shipping Marks.
-						Marks and numbers on the packages. -->
+                        Marks and numbers on the packages. -->
 					<MarksNumbersID>GBSB123456</MarksNumbersID>
 					<!--DE 6/10: Number of Packages.
-						In this case, 50. -->
+                        In this case, 50. -->
 					<QuantityQuantity>100</QuantityQuantity>
 					<!--DE 6/9: Type of Packages.
-						BX to represent Box. -->
+                        BX to represent Box. -->
 					<TypeCode>BX</TypeCode>
 				</Packaging>
-				<!--DE 4/13: Valuation Indicator. 
-					Mandatory if method 1 is being used (see DE 4/16 where Method 1 has been entered).
-					The code comprises four digits, each of which being either a ‘0’ or a ‘1’: 
-					• First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
-					• Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
-					• Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
-					• Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
+				<!--DE 4/13: Valuation Indicator.
+                    Mandatory if method 1 is being used (see DE 4/16 where Method 1 has been entered).
+                    The code comprises four digits, each of which being either a ‘0’ or a ‘1’:
+                    • First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
+                    • Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+                    • Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
+                    • Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
 				<ValuationAdjustment>
 					<AdditionCode>0000</AdditionCode>
 				</ValuationAdjustment>
 			</GovernmentAgencyGoodsItem>
 			<!--DE 3/16: Importer Identification Number.
-				EORI number of the Importer. -->
+                EORI number of the Importer. -->
 			<Importer>
-				<ID>GB553202734852</ID>
+				<ID>XI553202734852</ID>
 			</Importer>
-			<!--DE 2/1: Simplified Declaration/ Previous Documents 
-				Previous document of Z355 to show the MRN for the entry summary declaration. 
-				This is a mandatory field. 
-				To denote the inventory reference number. 
-				Note: As this is for a single item declaration, this should all be declared at header level-->
+			<!--DE 2/1: Simplified Declaration/ Previous Documents
+                Previous document of Z355 to show the MRN for the entry summary declaration.
+                This is a mandatory field.
+                To denote the inventory reference number.
+                Note: As this is for a single item declaration, this should all be declared at header level-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>21GB34F7Y1O2CX8PT4</ID>
+				<ID>23GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
 			<!--DE 4/1: Delivery Terms.
-				Mandatory as method 1 is being used in DE 4/16.
-				CIF to indicate Cost, Insurance and Freight.
-				GBWPT to represent the named port of destination: Warrenpoint, Northern Ireland, UK,  a non-inventory linked location. -->
+                Mandatory as method 1 is being used in DE 4/16.
+                CIF to indicate Cost, Insurance and Freight.
+                GBWPT to represent the named port of destination: Warrenpoint, Northern Ireland, UK,  a non-inventory linked location. -->
 			<TradeTerms>
 				<ConditionCode>CIF</ConditionCode>
 				<LocationID>GBWPT</LocationID>
-			</TradeTerms>			
+			</TradeTerms>
 		</GoodsShipment>
 	</Declaration>
 </md:MetaData>

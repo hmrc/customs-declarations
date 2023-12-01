@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>03</FunctionCode>
-		<FunctionalReferenceID>6526dbe2e6924b438853f76a327c2922</FunctionalReferenceID>
+		<FunctionalReferenceID>a5bd325d1def427aa6d28e87321ce5ed</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode= "304">20230705155648Z</DateTimeString>
+			<DateTimeString formatCode="304">20231129122941Z</DateTimeString>
 		</IssueDateTime>
 		<Error>
 			<ValidationCode>CDS10020</ValidationCode>
@@ -75,10 +75,10 @@
 			</Pointer>
 		</Error>
 		<Declaration>
-			<FunctionalReferenceID>7848449KEG1ZHW0XU</FunctionalReferenceID>
-			<ID>23GB7DAN2102OJ8AR6</ID>
+			<FunctionalReferenceID>7849431WI0PU</FunctionalReferenceID>
+			<ID>23GBD74YXD0GVQBAR8</ID>
 			<RejectionDateTime>
-				<DateTimeString formatCode="304">20230705155648Z</DateTimeString>
+				<DateTimeString formatCode="304" >20231129122941Z</DateTimeString>
 			</RejectionDateTime>
 			<VersionID>1</VersionID>
 		</Declaration>

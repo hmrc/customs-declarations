@@ -39,13 +39,13 @@
 			Expected Notifications: DMSTAX(1), DMSACC, DMSTAX(2), DMSCLE
 		-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20221102220000Z</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20231002220000Z</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number: this must be unique to the transaction-->
-		<FunctionalReferenceID>NIP_266_TC01_2811_01</FunctionalReferenceID>
+		<FunctionalReferenceID>NIP_266_TC01_2311</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory field. 
 			First two characters IM to represent an import declaration.	-->
@@ -199,7 +199,7 @@
 					Document status code of AC in this scenario indicates Document attached for certification by customs. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/29/07/2021</ID>
+					<ID>12345/29/09/2023</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -339,7 +339,7 @@
 				(Note that this is item 1 from the EIDR record entry). -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20221102</ID>
+				<ID>20231002</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -348,7 +348,7 @@
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>1GB025115100010-12345</ID>
+				<ID>3GB025115100010-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Previous Documents.

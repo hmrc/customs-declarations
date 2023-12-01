@@ -301,7 +301,7 @@
                         <ID>X311</ID>
                         <IdentificationTypeCode>GN</IdentificationTypeCode>
                     </Classification>
-                    <!-- DE 4/3 Tax Type. In this scenario 311 shows which tax type is being applied.-->
+                    <!-- DE 4/3 Tax Type. In this scenario 371 shows which tax type is being applied.-->
                     <DutyTaxFee>
                         <TypeCode>311</TypeCode>
                         <Payment>

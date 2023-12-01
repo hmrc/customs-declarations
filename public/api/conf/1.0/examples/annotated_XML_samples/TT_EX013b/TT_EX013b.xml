@@ -1,26 +1,15 @@
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-		<!-- 
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--
 			***
 			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID), even when the Representative is the same Party as the Declarant.
 			***
-			
+
 			SCENARIO
 			Type Y Declaration with DIT licencing. Export to ensure Declaration is accepted and cleared
 			when SDP authorisation is supplied with Licensing
@@ -28,19 +17,19 @@
 			Procedure code: 1040 with 000 additional procedure code
 			Goods item 1: Sniper Rifle with 27' barrel
 			Goods Item 2: 50 Suppressor and thermal cover
-			Exporter EORI: GB896458895015
-			Declarant EORI: GB150454489082
+			Exporter EORI: XI896458895015
+			Declarant EORI: XI150454489082
 
 			Expected notifications: DMSACC, DMSCLE
 		-->
 		<!--This should be updated to today's date.-->
-		<AcceptanceDateTime>
+		<!-- <AcceptanceDateTime>
 			<p1:DateTimeString formatCode="304">${#TestCase#AcceptanceDate}</p1:DateTimeString>
-		</AcceptanceDateTime>
+		</AcceptanceDateTime> -->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: The trader assigned reference to the declaration -->
-		<FunctionalReferenceID>R31_EXY_TC05_200902</FunctionalReferenceID>
+		<FunctionalReferenceID>7849431MMR1F</FunctionalReferenceID>
 		<!--DE 1/1: EX to represent an Export declaration.-->
 		<!--DE 1/2: Y to represent a Standalone Supplementary Regular declaration-->
 		<TypeCode>EXY</TypeCode>
@@ -53,20 +42,20 @@
 		<Agent>
 			<!--DE 3/20: Representative Identification Number.
 				Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
-		<ID>GB150454489082</ID>
+			<ID>XI150454489082</ID>
 			<!--DE 3/21: Representative Status Code.
 				3 indicating Indirect Export. -->
 			<FunctionCode>3</FunctionCode>
 		</Agent>
-		<!--DE 3/39: An authorisation type code of SDE is required for authorisation to make a simplified 
+		<!--DE 3/39: An authorisation type code of SDE is required for authorisation to make a simplified
 		declaration (see DE 2/3 where a document code of C512 has been entered). -->
 		<AuthorisationHolder>
-			<ID>GB150454489082</ID>
+			<ID>XI150454489082</ID>
 			<CategoryCode>SDE</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 7/14: Identity of active means of transport crossing the border. 
+		<!--DE 7/14: Identity of active means of transport crossing the border.
 		11 indicating name of the seagoing vessel declared in ID -->
-		<!--DE 7/15: Country code of the nationality of the active means of transportcrossing the border, 
+		<!--DE 7/15: Country code of the nationality of the active means of transportcrossing the border,
 		in this case GB.-->
 		<!--DE 7/4: ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border. -->
 		<BorderTransportMeans>
@@ -77,7 +66,7 @@
 		</BorderTransportMeans>
 		<!--DE 3/18: EORI number of the Declarant. -->
 		<Declarant>
-			<ID>GB150454489082</ID>
+			<ID>XI150454489082</ID>
 		</Declarant>
 		<!--DE 5/12 Customs office of exit. GB000142 indicating Belfast EPU -->
 		<ExitOffice>
@@ -85,7 +74,7 @@
 		</ExitOffice>
 		<!--DE 3/2: EORI number of the Exporter. -->
 		<Exporter>
-			<ID>GB896458895015</ID>
+			<ID>XI896458895015</ID>
 		</Exporter>
 		<GoodsShipment>
 			<!--DE 3/9: Consignee Name and Address (Mandatory when DE 3/10 is not completed). -->
@@ -101,7 +90,7 @@
 			<!--DE 7/2: 1 to indicate that the goods are transported in containers.-->
 			<Consignment>
 				<ContainerCode>1</ContainerCode>
-				<!--DE 7/7: ID of the means of transport (e.g. MSCSUPERGUN) and identification type of the 
+				<!--DE 7/7: ID of the means of transport (e.g. MSCSUPERGUN) and identification type of the
 				means of transport (in this scenario, 11 indicating name of the seagoing vessel ). -->
 				<DepartureTransportMeans>
 					<ID>MSCSUPERGUN</ID>
@@ -126,7 +115,7 @@
 					<ID>CONU1234567</ID>
 				</TransportEquipment>
 			</Consignment>
-			<!--DE 5/14: Country code for the country from which the goods were originally dispatched, 
+			<!--DE 5/14: Country code for the country from which the goods were originally dispatched,
 				in this case GB.-->
 			<ExportCountry>
 				<ID>GB</ID>
@@ -134,16 +123,16 @@
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Sequential number of the goods item.-->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 8/6: Enter the statistical value for the goods item in GBP, irrespective of the currency used 
+				<!--DE 8/6: Enter the statistical value for the goods item in GBP, irrespective of the currency used
 					in Invoice Currency. -->
 				<StatisticalValueAmount currencyID="GBP">50000</StatisticalValueAmount>
-				<!-- 8/5: Nature of Transaction - 1 Representing Transactions involving actual or intended transfer of 
+				<!-- 8/5: Nature of Transaction - 1 Representing Transactions involving actual or intended transfer of
 				ownership from residents to non-residents against financial or other compensation. -->
 				<TransactionNatureCode>1</TransactionNatureCode>
 				<!--DE 2/3: A document code C512 indicates an authorisation to use a simplified declaration. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBSDE150454489082E20191113093111</ID>
+					<ID>XISDE150454489082E20231019133850</ID>
 					<TypeCode>512</TypeCode>
 				</AdditionalDocument>
 				<AdditionalDocument>
@@ -152,7 +141,7 @@
 					<Name>Not on list of cultural goods</Name>
 					<TypeCode>901</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of Y903 indicates Declared goods are not included in the list of cultural goods.  
+				<!--DE 2/3: A document code of Y903 indicates Declared goods are not included in the list of cultural goods.
 					COUNCIL REGULATION (EC) No 116/2009 on the export of cultural goods. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
@@ -160,8 +149,8 @@
 					<Name>Not on list of cultural goods</Name>
 					<TypeCode>903</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of Y935 indicates Goods not covered by the provisions of Regulation 
-					(EU) 1332/2013 (OJ L 335) approving non-minor amendments to the specification for a name entered 
+				<!--DE 2/3: A document code of Y935 indicates Goods not covered by the provisions of Regulation
+					(EU) 1332/2013 (OJ L 335) approving non-minor amendments to the specification for a name entered
 					in the register of protected designations of origin and protected geographical indications. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
@@ -169,7 +158,7 @@
 					<Name>Reg 1332/2013 exempt</Name>
 					<TypeCode>935</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of Y920 indicates Goods other than those described in the footnotes linked 
+				<!--DE 2/3: A document code of Y920 indicates Goods other than those described in the footnotes linked
 					to the measure Decision 1764/15. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
@@ -178,7 +167,7 @@
 					<TypeCode>920</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: A document code of E012 indicates Export licence "Cultural goods" (Regulation (EC) No 116/2009).
-					In this scenario, a document code of XX is to declare that goods are not subject to any licences 
+					In this scenario, a document code of XX is to declare that goods are not subject to any licences
 					other than those declared. -->
 				<AdditionalDocument>
 					<CategoryCode>E</CategoryCode>
@@ -187,11 +176,11 @@
 					<TypeCode>012</TypeCode>
 					<LPCOExemptionCode>XX</LPCOExemptionCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of X002 indicates Dual use export authorisation (Regulation 428/2009 
-					and it's amendments), setting up a Community regime for the control of exports, transfer, brokering 
+				<!--DE 2/3: A document code of X002 indicates Dual use export authorisation (Regulation 428/2009
+					and it's amendments), setting up a Community regime for the control of exports, transfer, brokering
 					and transit of dual-use items.
-					In this scenario, a document code of EA is to declare that Electronic details on Customs Declaration 
-					Services (CDS) already attributed on simplified declaration Quantity declaration is mandatory for 
+					In this scenario, a document code of EA is to declare that Electronic details on Customs Declaration
+					Services (CDS) already attributed on simplified declaration Quantity declaration is mandatory for
 					this scenario. -->
 				<AdditionalDocument>
 					<CategoryCode>X</CategoryCode>
@@ -199,7 +188,7 @@
 					<Name>Dual use export authorisation </Name>
 					<TypeCode>002</TypeCode>
 					<LPCOExemptionCode>EA</LPCOExemptionCode>
-					<!--DE 8/7: Writing off. 
+					<!--DE 8/7: Writing off.
 						This is required because a specific quantity and measurement type has to be decremented against this document. -->
 					<WriteOff>
 						<QuantityQuantity unitCode="KGM#G">10.00</QuantityQuantity>
@@ -227,7 +216,7 @@
 						<GrossMassMeasure>20</GrossMassMeasure>
 						<!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
 						<NetNetWeightMeasure>15</NetNetWeightMeasure>
-						<!--DE 6/2: Supplementary units. This data element is only required where the 
+						<!--DE 6/2: Supplementary units. This data element is only required where the
 							commodity code requires a supplementary unit. -->
 						<TariffQuantity>20</TariffQuantity>
 					</GoodsMeasure>
@@ -255,10 +244,10 @@
 					<TypeCode>4C</TypeCode>
 				</Packaging>
 				<PreviousDocument>
-					<!--DE 2/1: Y to for Simplified procedures, SDE declared for Simplified declaration procedure, 
+					<!--DE 2/1: Y to for Simplified procedures, SDE declared for Simplified declaration procedure,
 						1 to identify the first goods item-->
 					<CategoryCode>Y</CategoryCode>
-					<ID>19GBCDS123456789B1-1</ID>
+					<ID>23GBCDS123456789B1-1</ID>
 					<TypeCode>SDE</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
@@ -266,20 +255,20 @@
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Sequential number of the goods item -->
 				<SequenceNumeric>2</SequenceNumeric>
-				<!--DE 8/6: Enter the statistical value for the goods item in GBP, irrespective of the currency used 
+				<!--DE 8/6: Enter the statistical value for the goods item in GBP, irrespective of the currency used
 				in Invoice Currency. -->
 				<StatisticalValueAmount currencyID="GBP">50000</StatisticalValueAmount>
-				<!--8/5: Nature of Transaction - 1 Representing Transactions involving actual or intended transfer 
+				<!--8/5: Nature of Transaction - 1 Representing Transactions involving actual or intended transfer
 				of ownership from residents to non-residents against financial or other compensation. -->
 				<TransactionNatureCode>1</TransactionNatureCode>
 				<!--DE 2/3: A document code C512 indicates an authorisation to use a simplified declaration. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBSDE150454489082E20191113093111</ID>
+					<ID>XISDE150454489082E20231019133850</ID>
 					<TypeCode>512</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of Y935 Goods not covered by the provisions of Regulation (EU) 1332/2013 
-					(OJ L 335) approving non-minor amendments to the specification for a name entered in the register 
+				<!--DE 2/3: A document code of Y935 Goods not covered by the provisions of Regulation (EU) 1332/2013
+					(OJ L 335) approving non-minor amendments to the specification for a name entered in the register
 					of protected designations of origin and protected geographical indications. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
@@ -287,8 +276,8 @@
 					<Name>Reg 1332/2013 exempt</Name>
 					<TypeCode>935</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of X002 indicates Dual use export authorisation (Regulation 428/2009 and 
-					its amendments), setting up a Community regime for the control of exports, transfer, brokering 
+				<!--DE 2/3: A document code of X002 indicates Dual use export authorisation (Regulation 428/2009 and
+					its amendments), setting up a Community regime for the control of exports, transfer, brokering
 					and transit of dual-use items.
 					In this scenario, a document code of EA is to declare that Electronic details on Customs Declaration Services (CDS) already attributed on simplified declaration.
 					Quantity declaration is mandatory for this scenario. -->
@@ -298,13 +287,13 @@
 					<Name>Open GenExport Lic.</Name>
 					<TypeCode>002</TypeCode>
 					<LPCOExemptionCode>EA</LPCOExemptionCode>
-					<!--DE 8/7: Writing off. 
+					<!--DE 8/7: Writing off.
 						This is required because a specific quantity and measurement type has to be decremented against this document. -->
 					<WriteOff>
 						<QuantityQuantity unitCode="KGM#G">102.00</QuantityQuantity>
 					</WriteOff>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of Y903 indicates Declared goods are not included in the list of cultural goods.  
+				<!--DE 2/3: A document code of Y903 indicates Declared goods are not included in the list of cultural goods.
 				COUNCIL REGULATION (EC) No 116/2009 on the export of cultural goods. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
@@ -312,8 +301,8 @@
 					<Name>Not on list of cultural goods</Name>
 					<TypeCode>903</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of Y920 indicates Goods other than those described in the footnotes linked 
-					to the measure Decision 1764/15. -->
+				<!--DE 2/3: A document code of Y920 indicates Goods other than those described in the footnotes linked
+					to the measure Decision 1764/15.. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>005345682</ID>
@@ -367,16 +356,16 @@
 				<!--DE 2/1: Y to for Simplified procedures, SDE declared for Simplified declaration procedure. -->
 				<PreviousDocument>
 					<CategoryCode>Y</CategoryCode>
-					<ID>19GBCDS123456789B1-2</ID>
+					<ID>23GBCDS123456789B1-2</ID>
 					<TypeCode>SDE</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
 			</GovernmentAgencyGoodsItem>
-			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment. 
+			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment.
 					This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>0GB150454489082-200902</ID>
+				<ID>3GB813850746062-G9ECIETFP</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

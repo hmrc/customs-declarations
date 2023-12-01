@@ -14,7 +14,6 @@
 	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--
-			Please note FEC checks appearing for this scenario after the Tariff Refresh TTM24.1. This will be fixed in a future release.
 			SCENARIO
 			An agent submits a Type A (H1) Declaration importing goods from the Continental Shelf (CS) Norway into NI.
 
@@ -43,7 +42,7 @@
 		<!--DE 2/5: LRN. 
 			Mandatory.
 			Declarant's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>TT_293_TC02_0301_01</FunctionalReferenceID>
+		<FunctionalReferenceID>TT_293_TC02_1511_12</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory.
 			IM to represent an import declaration. -->
@@ -187,18 +186,7 @@
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBDPO1108654</ID>
-                    <Name>DPO authorisation</Name>
 					<TypeCode>506</TypeCode>
-				</AdditionalDocument>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of C640 indicates that it is the Common Health Entry Document for Animals. 
-					Provide the GBCHDyyyy followed by the reference number of the CHED-A. A separate C640 entry in DE 2/3 is required for each individual CHED-A. The 'yyyy' represents the year in which the licence was issued, for example GBCHD2021. The ‘.’  after the year is part of the licence completion requirements
-					When declaring document code C640, previous document code DCR must be declared in DE 2/1 at header level with the trader's reference number which enables the transaction to be traced in the trader's records.  -->
-                <AdditionalDocument>
-					<CategoryCode>C</CategoryCode>
-					<ID>GBCHD2023.3GB553202734852-12345</ID>
-					<TypeCode>640</TypeCode>
-                    <LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. 
@@ -251,7 +239,6 @@
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>Not from Turkey</ID>
-                    <Name>Not from Turkey</Name>
 					<TypeCode>127</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/2: Additional Information. 
@@ -292,8 +279,7 @@
 					<DutyTaxFee>
 						<!--DE 4/17: Preference. 
 							Mandatory.
-							100 represents normal third country tariff duty (including ceilings). 
-							This code stands for all cases where no preference is claimed and the normal third country rate is applied. -->
+							300 represents Tariff preference without conditions or limits (including ceilings). -->
 						<DutyRegimeCode>100</DutyRegimeCode>
 						<!--DE 4/3: Tax Type.
 							A50 represents EU Customs Duty. -->
@@ -341,11 +327,11 @@
 				<GovernmentProcedure>
 					<CurrentCode>000</CurrentCode>
 				</GovernmentProcedure>
-				<!--DE 5/15: Country of Origin. 
+				<!--DE 5/16: Country of Preferential Origin Code. 
 					Mandatory.
-					TypeCode of 1 to represent non-preferential origin. 
-					Where preference in DE 4/17 has a first digit of ‘1’ this data element is always mandatory.
-					Country code ZN represents Continental Shelf (CS) Norway. -->
+					TypeCode of 2 to represent preferential origin. 
+					Where preference in DE 4/17 begins with '2', this must be completed.
+					Origin country is the Continental Shelf, Norway. -->
 				<Origin>
 					<CountryCode>ZN</CountryCode>
 					<TypeCode>1</TypeCode>
@@ -388,7 +374,7 @@
 				process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>3GB553202734852-12345</ID>
+				<ID>2GB553202734852-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Simplified Declarations/Previous documents.

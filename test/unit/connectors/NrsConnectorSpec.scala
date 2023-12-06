@@ -48,6 +48,7 @@ class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndA
   private val mockLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private val connector = new NrsConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private implicit val jsonRequest: ValidatedPayloadRequest[AnyContentAsJson] =  ValidatedPayloadRequest(
     ConversationId(UUID.randomUUID()),

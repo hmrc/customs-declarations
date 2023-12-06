@@ -77,6 +77,7 @@ class DeclarationConnectorSpec extends AnyWordSpecLike with MockitoSugar with Be
   private val xml = <xml></xml>
 
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeEach(): Unit = {
     reset(mockWsPost, mockLogger, mockServiceConfigProvider)

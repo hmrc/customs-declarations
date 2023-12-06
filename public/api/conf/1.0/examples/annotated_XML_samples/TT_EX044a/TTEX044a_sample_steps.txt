@@ -1,0 +1,7 @@
+Sample steps
+
+Step 1: Submit type K Declaration with DUCR.
+Step 2: Submit EAA with DUCR.
+Step 3: Submit EAL with DUCR.
+Step 4: Submit EDL with DUCR.
+Step 5: Submit a DIS query for this declaration via the Summary DIS Query API request. 

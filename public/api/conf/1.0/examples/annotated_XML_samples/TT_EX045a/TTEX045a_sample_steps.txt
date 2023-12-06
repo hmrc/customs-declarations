@@ -1,0 +1,5 @@
+Sample Steps
+
+Step 1: Submit type J Declaration with DUCR.
+Step 2: Submit EAL with DUCR.
+Step 3: Submit EDL with DUCR.

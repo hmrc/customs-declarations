@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EDL</inv:messageCode>
+	<inv:ucrBlock>
+		<inv:ucr>GB/ZD72-831204DTVZ43QTC7AWSQ2OCAL</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAUBELBELBEL</inv:goodsLocation>
+	<inv:goodsDepartureDateTime>2023-12-04T13:52:13</inv:goodsDepartureDateTime>
+	<inv:movementReference>D8ZM3LZGQHCO8GP3ESUEWI1DA</inv:movementReference>
+	<inv:transportDetails>
+		<inv:transportID>11CSCLGLOBE</inv:transportID>
+		<inv:transportMode>1</inv:transportMode>
+		<inv:transportNationality>GB</inv:transportNationality>
+	</inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>

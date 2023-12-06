@@ -1,0 +1,46 @@
+<p:DeclarationSearchResponse xsi:schemaLocation="http://gov.uk/customs/declarationInformationRetrieval/declarationSummary/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p4="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:p3="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:p2="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:p="http://gov.uk/customs/declarationInformationRetrieval/declarationSummary/v1">
+  <p:DeclarationSearchDetails>
+    <p:Declaration>
+      <p:ID>23GBCEUFID5NI1EA00</p:ID>
+      <p:ReceivedDateTime>
+        <p:DateTimeString formatCode="304">20231109171718Z</p:DateTimeString>
+      </p:ReceivedDateTime>
+      <p:ROE>6</p:ROE>
+      <p:ICS>22</p:ICS>
+      <p:LRN>78494312SJXU</p:LRN>
+    </p:Declaration>
+    <p2:Declaration>
+      <p2:FunctionCode>9</p2:FunctionCode>
+      <p2:TypeCode>EXJ</p2:TypeCode>
+      <p2:Submitter>
+        <p2:ID>GB575456994000</p2:ID>
+      </p2:Submitter>
+      <p2:Declarant>
+        <p2:ID>XI150454489082</p2:ID>
+      </p2:Declarant>
+      <p2:Exporter>
+        <p2:ID>XI427168118378</p2:ID>
+      </p2:Exporter>
+      <p2:GoodsShipment>
+        <p2:Consignment>
+          <p2:GoodsLocation>
+            <p2:Name>BELBFSBEL</p2:Name>
+            <p2:TypeCode>A</p2:TypeCode>
+            <p2:Address>
+              <p2:TypeCode>U</p2:TypeCode>
+              <p2:CountryCode>GB</p2:CountryCode>
+            </p2:Address>
+          </p2:GoodsLocation>
+        </p2:Consignment>
+        <p2:PreviousDocument>
+          <p2:ID>3XI427168118378-ILPIW8E5R</p2:ID>
+          <p2:TypeCode>DCR</p2:TypeCode>
+        </p2:PreviousDocument>
+      </p2:GoodsShipment>
+    </p2:Declaration>
+  </p:DeclarationSearchDetails>
+  <p:CurrentPageNumber>1</p:CurrentPageNumber>
+  <p:TotalResultsAvailable>10</p:TotalResultsAvailable>
+  <p:TotalPagesAvailable>1</p:TotalPagesAvailable>
+  <p:NoResultsReturned>false</p:NoResultsReturned>
+</p:DeclarationSearchResponse>

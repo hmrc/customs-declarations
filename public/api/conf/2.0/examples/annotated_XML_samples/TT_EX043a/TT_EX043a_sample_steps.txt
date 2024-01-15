@@ -1,0 +1,16 @@
+Sample Steps
+*************
+
+Step 1	- Submit type D Declaration with DUCR via CDS.
+
+Step 2	- Submit EAC with DUCR and MUCR to consolidate.
+
+Step 3	- Submit EAA with MUCR.
+
+Step 4	- Submit EAL with MUCR.
+
+Step 5	- Submit CST with MUCR.
+
+Step 6	- Submit EDL with MUCR.
+
+Step 7	- Submit a DIS query for this declaration via Full information DIS Query API request.

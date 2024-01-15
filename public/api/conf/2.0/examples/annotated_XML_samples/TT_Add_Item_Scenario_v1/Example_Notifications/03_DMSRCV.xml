@@ -1,0 +1,19 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>02</FunctionCode>
+		<FunctionalReferenceID>2c051914cabb4c23bd70efeb5f0042a6</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20230623150524Z</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<FunctionalReferenceID>CCDP-4108_AME_20230621-01</FunctionalReferenceID>
+			<ID>23GB6W3GLSX9Z5JAR4</ID>
+		</Declaration>
+	</Response>
+</MetaData>

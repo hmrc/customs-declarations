@@ -10,8 +10,9 @@ object AppDependencies {
   val wireMock                  = "com.github.tomakehurst"                     %  "wiremock-standalone"     % "2.27.2"   % testScope
   val customsApiCommon          = "uk.gov.hmrc"                                %% "customs-api-common"      % "1.60.0"   withSources()
   val customsApiCommonTests     = "uk.gov.hmrc"                                %% "customs-api-common"      % "1.60.0"   % testScope classifier "tests"
-  val hmrcMongo                 = "uk.gov.hmrc.mongo"                          %% "hmrc-mongo-play-28"      % "1.3.0"
-  val hmrcMongoTest             = "uk.gov.hmrc.mongo"                          %% "hmrc-mongo-test-play-28" % "1.3.0"    % testScope
+  val hmrcMongo                 = "uk.gov.hmrc.mongo"                          %% "hmrc-mongo-play-28"      % "1.6.0"
+  val hmrcMongoTest             = "uk.gov.hmrc.mongo"                          %% "hmrc-mongo-test-play-28" % "1.6.0"    % testScope
   val hmrcBootstrapTest         = "uk.gov.hmrc"                                %% "bootstrap-test-play-28"  % "7.15.0"   % testScope
+  val hmrcBootstrapBackend         = "uk.gov.hmrc"                                %% "bootstrap-backend-play-28"  % "7.15.0"   % testScope
 
 }

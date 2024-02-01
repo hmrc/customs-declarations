@@ -20,9 +20,8 @@ import akka.actor.ActorSystem
 import com.google.inject._
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes
-import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.config.DeclarationCircuitBreaker
+import uk.gov.hmrc.customs.declaration.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.config.{DeclarationCircuitBreaker, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XConversationIdHeaderName, XCorrelationIdHeaderName}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger

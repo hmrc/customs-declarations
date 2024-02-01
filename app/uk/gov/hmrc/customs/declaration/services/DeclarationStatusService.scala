@@ -20,8 +20,8 @@ import play.api.http.Status.NOT_FOUND
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.ErrorGenericBadRequest
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.ErrorGenericBadRequest
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationStatusConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._

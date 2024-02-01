@@ -18,7 +18,7 @@ package uk.gov.hmrc.customs.declaration.services
 
 import cats.implicits._
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.customs.api.common.config.{ConfigValidatedNelAdaptor, CustomsValidatedNel}
+import uk.gov.hmrc.customs.declaration.config.{ConfigValidatedNelAdaptor, CustomsValidatedNel}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 

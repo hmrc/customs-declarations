@@ -18,7 +18,10 @@ package uk.gov.hmrc.customs.declaration.config
 
 import com.google.inject.AbstractModule
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-
+import play.api.inject.{Binding, Module}
+import play.api.{Configuration, Environment}
+import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 class CustomsDeclarationsModule extends AbstractModule {
   override def configure(): Unit = {
     // asEagerSingleton forces evaluation at application startup time

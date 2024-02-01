@@ -1,0 +1,4 @@
+# dynamic service configuration endpoints
+
+POST /:service/configuration    @uk.gov.hmrc.customs.declaration.controllers.dynamicservice.DynamicServiceConfigurationController.setConfigurationForService(service: String)
+GET  /:service/configuration    @uk.gov.hmrc.customs.declaration.controllers.dynamicservice.DynamicServiceConfigurationController.getConfigurationForService(service: String)

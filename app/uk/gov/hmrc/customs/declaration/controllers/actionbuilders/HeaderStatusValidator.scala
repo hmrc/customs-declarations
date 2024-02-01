@@ -20,8 +20,8 @@ import javax.inject.{Inject, Singleton}
 
 import play.api.mvc.Headers
 import play.mvc.Http.Status.BAD_REQUEST
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._

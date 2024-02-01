@@ -19,8 +19,8 @@ package uk.gov.hmrc.customs.declaration.controllers.upscan
 import com.google.inject.Inject
 import play.api.libs.json._
 import play.api.mvc._
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse._
+import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.{FileReference, UploadedCallbackBody, UploadedFailedCallbackBody, UploadedReadyCallbackBody}

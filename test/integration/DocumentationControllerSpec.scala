@@ -37,7 +37,7 @@ class DocumentationControllerSpec extends IntegrationTestSpec with MockitoSugar 
   private val applicationRamlContent = getResourceFileContent("/public/api/conf/1.0/application.raml")
 
   override implicit lazy val app: Application = GuiceApplicationBuilder(
-    modules = Seq(GuiceableModule.guiceable(new AuditModule), GuiceableModule.guiceable(new BackendModule))).
+    modules = Seq()).
     configure(
       Map(
         "play.http.router" -> "definition.Routes",

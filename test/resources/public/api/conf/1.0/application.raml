@@ -1,0 +1,76 @@
+#%RAML 1.0
+---
+
+title: Customs Single UCC Compliant Declaration
+version: 1.0
+protocols: [ HTTPS ]
+baseUri: https://api.service.hmrc.gov.uk/
+mediaType: application/xml
+
+uses:
+  sec: https://api-documentation/assets/common/modules/securitySchemes.raml
+  headers: https://api-documentation/assets/common/modules/headers.raml
+  annotations: https://api-documentation/assets/common/modules/annotations.raml
+  types: https://api-documentation/assets/common/modules/types.raml
+
+documentation:
+  - title: Overview
+    content: !include docs/overview.md
+  - title: Versioning
+    content: !include https://api-documentation/assets/common/docs/versioning.md
+  - title: Errors
+    content: !include https://api-documentation/assets/common/docs/errors.md
+
+/customs-wco:
+  /declaration:
+      post:
+        displayName: UCC Compliant Declaration
+        description: Single UCC Compliant Declaration API integrated with an application-restricted service, using your `server_token`.
+        headers:
+          Accept:
+            description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+            type: string
+            required: true
+            example: application/vnd.hmrc.1.0+xml
+          Content-Type:
+            description: Specifies the format of the request body, which must be XML.
+            type: string
+            required: true
+            example: application/xml
+
+        securedBy: [ sec.x-application ]
+        body:
+          application/xml:
+            type: !include xsd/wrapper.xsd
+            example: !include examples/example_declaration_204.xml
+        responses:
+          204: 
+          400:
+            body:
+              application/xml:
+                description: Invalid XML Payload
+                example: |
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <error_response>
+                        <code>BAD_REQUEST</code>
+                        <errors>
+                            <error>
+                                <type>xml_validation_error</type>
+                                <description>Error at line 13, column 13: no declaration found for element 'unknown'</description>
+                            </error>
+                        </errors>
+                    </error_response>
+          500:
+            body:
+              application/xml:
+                description: Internal server error
+                example: |
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <error_response>
+                        <code>INTERNAL_SERVER_ERROR</code>
+                        <errors>
+                            <error>
+                                <type>internal_server_error</type>
+                            </error>
+                        </errors>
+                    </error_response>

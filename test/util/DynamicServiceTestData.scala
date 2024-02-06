@@ -42,7 +42,7 @@ trait DynamicServiceTestData {
   protected val defaultEnvironment = "default"
 
   val configuredApplication = GuiceApplicationBuilder(
-    modules = Seq(GuiceableModule.guiceable(new AuditModule), GuiceableModule.guiceable(new BackendModule))).
+    modules = Seq()).
     configure(
       Map(
         "play.http.router" -> "dynamicservice.Routes",

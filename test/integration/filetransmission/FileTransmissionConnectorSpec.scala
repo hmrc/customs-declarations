@@ -25,7 +25,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsXml
-import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND, await, defaultAwaitTimeout}
+import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND}
 import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException

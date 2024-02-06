@@ -24,7 +24,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsXml
-import play.api.test.Helpers.{await, _}
+import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationCancellationConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.model._

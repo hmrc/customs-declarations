@@ -20,12 +20,10 @@ import java.io.FileNotFoundException
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.bootstrap.backend.BackendModule
-import uk.gov.hmrc.play.audit.AuditModule
 
 import scala.concurrent.Future
 

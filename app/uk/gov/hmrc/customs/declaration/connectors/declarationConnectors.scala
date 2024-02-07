@@ -21,9 +21,8 @@ import com.google.inject._
 import play.api.http.HeaderNames._
 import play.api.http.{ContentTypes, MimeTypes}
 import play.api.mvc.Codec.utf_8
-import uk.gov.hmrc.customs.api.common.config.ServiceConfigProvider
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.config.DeclarationCircuitBreaker
+import uk.gov.hmrc.customs.declaration.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.config.{DeclarationCircuitBreaker, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.ApiVersion

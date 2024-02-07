@@ -19,7 +19,6 @@ package uk.gov.hmrc.customs.declaration.logging
 import com.google.inject.Inject
 import javax.inject.Singleton
 import play.api.mvc.Request
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.logging.LoggingHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.BadgeIdentifier
 

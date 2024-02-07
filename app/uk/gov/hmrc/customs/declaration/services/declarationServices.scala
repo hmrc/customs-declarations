@@ -20,8 +20,8 @@ import akka.actor.ActorSystem
 import akka.pattern.CircuitBreakerOpenException
 import play.api.http.Status.FORBIDDEN
 import play.api.mvc.Result
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.errorInternalServerError
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.errorInternalServerError
 import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationCancellationConnector, DeclarationConnector, DeclarationSubmissionConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._

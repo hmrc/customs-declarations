@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import play.api.inject.guice.GuiceableModule
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import util.UnitSpec
 
 case class IntegrationTestModule(mockLogger: DeclarationsLogger) extends AbstractModule {
   override def configure(): Unit = {
@@ -31,7 +32,7 @@ case class IntegrationTestModule(mockLogger: DeclarationsLogger) extends Abstrac
   def asGuiceableModule: GuiceableModule = GuiceableModule.guiceable(this)
 }
 
-trait IntegrationTestSpec extends AnyWordSpecLike
+trait IntegrationTestSpec extends AnyWordSpecLike with UnitSpec
   with BeforeAndAfterEach with BeforeAndAfterAll with Eventually {
 
   /**

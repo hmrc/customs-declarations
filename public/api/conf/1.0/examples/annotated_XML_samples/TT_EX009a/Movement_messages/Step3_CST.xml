@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- CST – A Consolidation message is used to shut MUCR prior to departure -->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <inv:inventoryLinkingConsolidationRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-  <inv:messageCode>CST</inv:messageCode>
-  <!--Maritime MUCR assigned to the consignment. Arriving at MUCR level. This value has come from Declaration -->
-  <inv:masterUCR>A:14072020100</inv:masterUCR>
+	<inv:messageCode>CST</inv:messageCode>
+	<inv:masterUCR>GB/I0XR-ICZ5NBV84MJFF5VP8Q4XKLCAL</inv:masterUCR>
 </inv:inventoryLinkingConsolidationRequest>

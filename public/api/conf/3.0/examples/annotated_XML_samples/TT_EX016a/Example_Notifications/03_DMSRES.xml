@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>07</FunctionCode>
-		<FunctionalReferenceID>2823ebda0041440e93020985d12f69a7</FunctionalReferenceID>
+		<FunctionalReferenceID>f75c47c9d9c54e5888004f23d8489df1</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20210204132618Z</DateTimeString>
+			<DateTimeString formatCode="304">20240118150703Z</DateTimeString>
 		</IssueDateTime>
 		<Amendment>
 			<ChangeReasonCode>16</ChangeReasonCode>
@@ -82,8 +82,8 @@
 			</Pointer>
 		</Amendment>
 		<Declaration>
-			<FunctionalReferenceID>R312_TC01_0402HH04</FunctionalReferenceID>
-			<ID>21GB1DDFXO2W84H4A5</ID>
+			<FunctionalReferenceID>7867523OHCLX</FunctionalReferenceID>
+			<ID>24GB0P6VNNSYNL2A07</ID>
 			<VersionID>2</VersionID>
 		</Declaration>
 		<Declaration>
@@ -91,7 +91,7 @@
 			<GoodsShipment>
 				<Consignment>
 					<GoodsLocation>
-						<Name>SOUSTNSOU</Name>
+						<Name>LGWLGWLGW</Name>
 						<TypeCode>A</TypeCode>
 						<Address>
 							<TypeCode>U</TypeCode>

@@ -1,24 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--EDL – Movement message used for creating Goods Departure messages. 
-	This also covers the removal of goods back inland where an export is abandoned (Departures). -->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
 	<inv:messageCode>EDL</inv:messageCode>
 	<inv:ucrBlock>
-		<!--MUCR assigned to the consignment. 
-			Depart at MUCR level. -->
-		<inv:ucr>GB/123456789012-1103A1</inv:ucr>
+		<inv:ucr>GB/NQSE-6UIEUDS570ZPCV3GN3QPSICAL</inv:ucr>
 		<inv:ucrType>M</inv:ucrType>
 	</inv:ucrBlock>
-	<!--DE 5/23: Location of Goods.
-		ID to give a unique position of the location. 
-		SOULFGCSE to indicate Southampton, Compass House, Romsey Road, Maybush, Southampton, SO14 4HP. -->
-	<inv:goodsLocation>GBBUSOULFGCSE</inv:goodsLocation>
-	<!-- This should be today's date -->
-	<inv:goodsDepartureDateTime>2020-03-11T09:02:00</inv:goodsDepartureDateTime>
-	<inv:movementReference>Movement15</inv:movementReference>
+	<inv:goodsLocation>GBAUSOUSTNSOU</inv:goodsLocation>
+	<inv:goodsDepartureDateTime>2024-01-16T15:09:52.052Z</inv:goodsDepartureDateTime>
+	<inv:movementReference>XBYNJ4LQRRKL2G1OCCYT9BKQL</inv:movementReference>
 	<inv:transportDetails>
 		<inv:transportID>11CSCLGLOBE</inv:transportID>
 		<inv:transportMode>1</inv:transportMode>
 		<inv:transportNationality>GB</inv:transportNationality>
 	</inv:transportDetails>
-</inv:inventoryLinkingMovementRequest>  
+</inv:inventoryLinkingMovementRequest>

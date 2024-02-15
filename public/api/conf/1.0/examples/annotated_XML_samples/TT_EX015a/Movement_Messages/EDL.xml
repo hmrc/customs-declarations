@@ -1,27 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- EDL – Movement message used for creating Goods Departure messages. This also covers the removal of goods back inland where an export is abandoned (Departures) -->
-<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-	<inv:messageCode>EDL</inv:messageCode>
-	<!--***
-		Note that as per the CDS ILE Technical Completion Matrix for Trade Test, the AgentDetails fields are not used for inventory linking messages. These fields will be removed in the next version of this sample.
-		***-->
-	<inv:agentDetails>
-		<!-- EORI number of the Community Systems Providers (CSPs). -->
-		<inv:EORI>GB025115166433</inv:EORI>
-		<inv:agentLocation>a</inv:agentLocation>
-		<inv:agentRole>a</inv:agentRole>
-	</inv:agentDetails>
-	<inv:ucrBlock>
-		<!--Air time MUCR assigned to the consignment. Depart at MUCR level -->
-		<inv:ucr>1GB427168118378-0502ST05</inv:ucr>
-		<inv:ucrType>D</inv:ucrType>
-	</inv:ucrBlock>
-	<!-- ID to give a unique position of the location. 'SOUSTNSOU' Indicating Southampton Docks -->
-	<inv:goodsLocation>GBAULGWLGWLGW</inv:goodsLocation>
-	<!--  <inv:goodsArrivalDateTime>2020-11-26T08:03:00</inv:goodsArrivalDateTime> -->
-	<!-- This should be today's Date -->
-	<inv:goodsDepartureDateTime>2021-02-05T08:05:00</inv:goodsDepartureDateTime>
-	<inv:movementReference>Movement15</inv:movementReference>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+			<inv:messageCode>EDL</inv:messageCode>               
+							  
+			<inv:ucrBlock>
+				<inv:ucr>4GB592971594846-XDIFO8J8</inv:ucr>
+				<inv:ucrType>D</inv:ucrType>
+			</inv:ucrBlock>
+			<inv:goodsLocation>GBAUSOUSTNSOU</inv:goodsLocation>
+	
+	<inv:goodsDepartureDateTime>2024-01-18T15:35:06.006Z</inv:goodsDepartureDateTime>
+	<inv:movementReference>9CM1NKNGC72YV37ROX1WT95AD</inv:movementReference>
 	<inv:transportDetails>
 		<inv:transportID>11CSCLGLOBE</inv:transportID>
 		<inv:transportMode>1</inv:transportMode>

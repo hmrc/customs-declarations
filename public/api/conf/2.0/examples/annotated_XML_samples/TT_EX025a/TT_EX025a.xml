@@ -1,21 +1,10 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			Trader submits a Type Z Export declaration with:
@@ -27,11 +16,8 @@
 			The following Trader Notifications are sent: DMSACC, DMSCLE.
 		-->
 		<FunctionCode>9</FunctionCode>
-		<FunctionalReferenceID>R3.5.0_9780_EX25_283a</FunctionalReferenceID>
+		<FunctionalReferenceID>786752366SLZ</FunctionalReferenceID>
 		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
-		<IssueDateTime>
-			<p1:DateTimeString formatCode="304">20230302100000+01</p1:DateTimeString>
-		</IssueDateTime>
 		<!--DE 1/1: Declaration Type.
 			EX to represent an Export declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -216,8 +202,8 @@
 				</Packaging>
 			</GovernmentAgencyGoodsItem>
 			<PreviousDocument>
-			<!--DE 2/1: Simplified Declaration/ Previous Documents. 
-				DCR to show the DUCR assigned to the consignment.
+			<!--DE 2/1: Previous Documents.
+				YDCR to show the DUCR assigned to the consignment.
 				This is a mandatory field. -->
 			<CategoryCode>Y</CategoryCode>
 				<ID>1GB150454489082-A0203D1</ID>

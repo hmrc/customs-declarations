@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <inv:inventoryLinkingConsolidationRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-<!-- EAC – A Consolidation message is used to Consolidate DUCR in to MUCR prior to departure -->
-<inv:messageCode>EAC</inv:messageCode>
-			<!--A unique MUCR created to consolidate DUCR-->
-			<inv:masterUCR>A:14072020100</inv:masterUCR>
-			<inv:ucrBlock>
-			    <!--DUCR assigned to the consignment. This value has come from Declaration -->
-				<inv:ucr>0GB417869120000-1407NI06</inv:ucr>
-				<inv:ucrType>D</inv:ucrType>
-			</inv:ucrBlock>
+	<inv:messageCode>EAC</inv:messageCode>
+	<inv:masterUCR>GB/I0XR-ICZ5NBV84MJFF5VP8Q4XKLCAL</inv:masterUCR>
+	<inv:ucrBlock>
+		<inv:ucr>4GB233149152777-FMSOCDIYD</inv:ucr>
+		<inv:ucrType>D</inv:ucrType>
+	</inv:ucrBlock>
 </inv:inventoryLinkingConsolidationRequest>

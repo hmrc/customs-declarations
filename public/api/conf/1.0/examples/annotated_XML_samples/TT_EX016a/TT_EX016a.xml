@@ -1,30 +1,21 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
-           	>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
-	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-           		xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-           		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
-           		>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1
+      </md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			Please note that this scenario is currently failing. A fix will be implemented in a future release.
-			***
-			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID), even when the Representative is the same Party as the Declarant.
-			***
-			
-			SCENARIO
 			Type K Exports declaration direct representation scenario with DUCR and CPD Carnet Referencedeclared
 			Goods exported permanently
 			Procedure code 0015 Additional procedure code 13C
@@ -34,31 +25,23 @@
 			Expected Notification: DMSACC,DMSRCV1, DMSRCV2, DMSRES, DMSROG,DMSCLE
 			Goods presented at London Gatwick Airport 
 		-->
-		<!--This should be updated to today's date as the declaration is a pre-lodged type.
-			Note this data element is not mandatory for pre-lodged or frontier declarations. -->
+		<!--This should be updated to today's date.-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20210205070000+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20240118150645+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: The trader assigned reference to the declaration -->
-		<FunctionalReferenceID>EX3.2_TC02_0502ST05</FunctionalReferenceID>
-		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
-		<IssueDateTime>
-			<p1:DateTimeString formatCode="304">20210205070000+01</p1:DateTimeString>
-		</IssueDateTime>
+		<FunctionalReferenceID>7867523OHCLX</FunctionalReferenceID>
 		<!--DE 1/1: EX to represent an Export declaration.-->
 		<!--DE 1/2: K to represent a Pre lodged declaration.-->
 		<TypeCode>EXK</TypeCode>
 		<!--DE 1/9: Total number of goods items on the declaration.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 3/20: EORI number of the Representative.
+            DE 3/21: '2' Indicating direct representation. -->
 		<Agent>
-			<!--DE 3/20: Representative Identification Number.
-				EORI number of the Representative.
-				Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
 			<ID>GB150454489082</ID>
-			<!--DE 3/21: Representative Status Code.
-				'2' Indicating direct representation. -->
 			<FunctionCode>2</FunctionCode>
 		</Agent>
 		<!--DE 7/4: Code 4 indicating that the mode of transport used to arrive at the UK external border is by Air Transport.-->
@@ -129,7 +112,7 @@
 					<ID>116/2009</ID>
 					<Name>Not on list of cultural goods</Name>
 					<TypeCode>903</TypeCode>
-				<!--DE 2/3: A document code of Y935 indicates Goods not covered by the provisions of Regulation 
+					<!--DE 2/3: A document code of Y935 indicates Goods not covered by the provisions of Regulation 
 					(EU) 1332/2013 (OJ L 335) approving non-minor amendments to the specification for a name entered 
 					in the register of protected designations of origin and protected geographical indications. -->
 				</AdditionalDocument>
@@ -138,7 +121,7 @@
 					<ID>1332/2013 </ID>
 					<Name>Goods not covered by the provisions</Name>
 					<TypeCode>935</TypeCode>
-				<!--DE 2/3: A document code of C672 indicates Information document accompanying shipments of waste as mentioned in 
+					<!--DE 2/3: A document code of C672 indicates Information document accompanying shipments of waste as mentioned in 
 				Regulation (EC) No 1013/2006 (OJ L 190) – Article 18 and Annex VII on shipments of waste.
 				Document status code of AC in this scenario indicates Document attached for certification by customs.-->
 				</AdditionalDocument>
@@ -188,7 +171,7 @@
                 This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB427168118378-0502ST05</ID>
+				<ID>4GB549556707563-LTGPAWQIZ</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>

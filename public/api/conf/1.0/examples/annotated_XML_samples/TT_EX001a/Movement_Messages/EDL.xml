@@ -1,21 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- EDL – Movement message used for creating Goods Departure messages. This also covers the removal of goods back inland where an export is abandoned (Departures) -->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-                   <inv:messageCode>EDL</inv:messageCode>
-                   <inv:ucrBlock>
-				   <!--Air time MUCR assigned to the consignment. Depart at MUCR level -->
-                    <inv:ucr>GB/123456789012-0203N1</inv:ucr>
-                        <inv:ucrType>M</inv:ucrType>
-                   </inv:ucrBlock>
-				     <!--DE 5/23: ID to give a unique position of the location. DVRDOVDVR Indicating Dover. This value has come from Declaration -->
-                   <inv:goodsLocation>GBAUDVRDOVDVR</inv:goodsLocation>
-				   <!-- This should be today's Date -->
-                   <inv:goodsDepartureDateTime>2021-03-09T08:00:00</inv:goodsDepartureDateTime>
-                    <inv:movementReference>Movement15</inv:movementReference>
-								<inv:transportDetails>
-                      <inv:transportID>11CSCLGLOBE</inv:transportID>
-                      <inv:transportMode>1</inv:transportMode>
-                      <inv:transportNationality>GB</inv:transportNationality>
-                   </inv:transportDetails>
+	<inv:messageCode>EDL</inv:messageCode>
+	<inv:ucrBlock>
+		<inv:ucr>GB/2OL3-TMKVK4CDEI3F9PMTYSLDOMCAL</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAUDVRDOVDVR</inv:goodsLocation>
+	<inv:goodsDepartureDateTime>2024-01-18T15:27:04.004Z</inv:goodsDepartureDateTime>
+	<inv:movementReference>UFLKU6UFZ9T1MRXCDBAQA906F</inv:movementReference>
+	<inv:transportDetails>
+		<inv:transportID>11CSCLGLOBE</inv:transportID>
+		<inv:transportMode>1</inv:transportMode>
+		<inv:transportNationality>GB</inv:transportNationality>
+	</inv:transportDetails>
 </inv:inventoryLinkingMovementRequest>
-

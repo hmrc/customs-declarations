@@ -1,50 +1,23 @@
-	<MetaData>
-		<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-		<WCOTypeName>RES</WCOTypeName>
-		<ResponsibleCountryCode/>
-		<ResponsibleAgencyName/>
-		<AgencyAssignedCustomizationCode/>
-		<AgencyAssignedCustomizationVersionCode/>
-		<Response>
-			<FunctionCode>01</FunctionCode>
-			<FunctionalReferenceID>13a5b22e4b3e415182f2ff2dbcfb8789</FunctionalReferenceID>
-			<IssueDateTime>
-				<DateTimeString formatCode="304">20210311115809Z</DateTimeString>
-			</IssueDateTime>
-			<AdditionalInformation>
-				<StatementCode>smartErrorMsg</StatementCode>
-				<StatementDescription>Value per kilo appears too low for this commodity</StatementDescription>
-				<StatementTypeCode>1</StatementTypeCode>
-				<Pointer>
-					<SequenceNumeric>1</SequenceNumeric>
-					<DocumentSectionCode>07B</DocumentSectionCode>
-				</Pointer>
-				<Pointer>
-					<SequenceNumeric>1</SequenceNumeric>
-					<DocumentSectionCode>53A</DocumentSectionCode>
-				</Pointer>
-			</AdditionalInformation>
-			<Error>
-				<Description>Value per kilo appears too low for this commodity</Description>
-				<ValidationCode>CDS13000</ValidationCode>
-				<Pointer>
-					<DocumentSectionCode>42A</DocumentSectionCode>
-				</Pointer>
-				<Pointer>
-					<DocumentSectionCode>67A</DocumentSectionCode>
-				</Pointer>
-				<Pointer>
-					<SequenceNumeric>1</SequenceNumeric>
-					<DocumentSectionCode>68A</DocumentSectionCode>
-				</Pointer>
-			</Error>
-			<Declaration>
-				<AcceptanceDateTime>
-					<DateTimeString formatCode="304">20210311080000Z</DateTimeString>
-				</AcceptanceDateTime>
-				<FunctionalReferenceID>TT_EX01A_PW110304</FunctionalReferenceID>
-				<ID>21GB2RANMNLDGWQWA9</ID>
-				<VersionID>2</VersionID>
-			</Declaration>
-		</Response>
-	</MetaData>
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>01</FunctionCode>
+		<FunctionalReferenceID>86779c8e84ad45049069e09ffd9e1101</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20240118152642Z</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<AcceptanceDateTime>
+				<DateTimeString formatCode="304">20240118152641Z</DateTimeString>
+			</AcceptanceDateTime>
+			<FunctionalReferenceID>7867523JJA4R</FunctionalReferenceID>
+			<ID>24GB0P7KS1CYT01AA1</ID>
+			<VersionID>2</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

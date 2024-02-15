@@ -1,44 +1,29 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
-	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
-	<md:WCOTypeName>DEC</md:WCOTypeName>
-	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
-	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
-	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+      <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+      <md:WCOTypeName>DEC</md:WCOTypeName>
+      <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+      <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+      <md:AgencyAssignedCustomizationVersionCode>v2.1
+      </md:AgencyAssignedCustomizationVersionCode>
+      <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			SCENARIO
 			Type D pre-lodged Exports Declaration for Excise Goods with a Fallback Accompanying Document
 			Goods exported permanently
 			Procedure code 1007 Additional procedure code 000
 			Goods: Gin in containers holding 2 litres or less
-			Goods presented at Southampton Port 
 			Movement messages: EAL, EDL
 			Expected Notification: DMSACC,DMSRCV1, DMSRCV2, DMSRES, DMSROG,DMSCLE
+			Goods presented at Southampton Port 
 		-->
-		<!--This should be updated to today's date as the declaration is a pre-lodged type.
+			<!--This should be updated to today's date as the declaration is a pre-lodged type.
 			Note this data element is not mandatory for pre-lodged or frontier declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20210204070000+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20240118153428+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
-		<!--DE 2/5: The trader assigned reference to the declaration. -->
-		<FunctionalReferenceID>R312_TC01_0402HH04</FunctionalReferenceID>
-		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
-		<IssueDateTime>
-			<p1:DateTimeString formatCode="304">20210204070000+01</p1:DateTimeString>
-		</IssueDateTime>
+		<!-- DE 2/5: The trader assigned reference to the declaration. -->
+		<FunctionalReferenceID>7867523U0DZO</FunctionalReferenceID>
 		<!--DE 1/1: EX to represent an Export declaration. -->
 		<!--DE 1/2: D to represent a standard pre-lodged declaration. -->
 		<TypeCode>EXD</TypeCode>
@@ -47,36 +32,34 @@
 		<DeclarationOfficeID>GBLBA001</DeclarationOfficeID>
 		<!--DE 6/18: Total packages. -->
 		<TotalPackageQuantity>30</TotalPackageQuantity>
-		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of EXW indicates an authorisation for the status of Excise Warehouse.  
-			The ID is the EORI of the EXW authorised party..-->
+		<!--DE 3/39: An authorisation type code of EXW indicates an authorisation
+               for the status of Excise Warehouse.  The ID is the EORI of the EXW authorised party..-->
 		<AuthorisationHolder>
 			<ID>GB150454489082</ID>
 			<CategoryCode>EXW</CategoryCode>
 		</AuthorisationHolder>
 		<BorderTransportMeans>
-			<!--DE 7/14: Identity of active means of transport crossing the border.
-				Example number representing IMO ship identification number: ‘10’, and 5 digits for the identification number: ‘12345’.-->
+		<!--DE 7/14: Identity of active means of transport crossing the border
+		Example number representing IMO ship identification number: ‘10’, and 5 digits for the identification number: ‘12345’.-->
 			<ID>12345</ID>
 			<IdentificationTypeCode>10</IdentificationTypeCode>
-			<!--DE 7/15: Nationality of active means of transport crossing the border
-				Country code of the nationality of the active means of transport crossing the border, in this case GB.-->
+			<!--DE 7/15: Country code of the nationality of the active means of transport
+				crossing the border, in this case GB.-->
 			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
-			<!--DE 7/4: Mode of Transport at the Border 
-				ModeCode of 1 to represent Maritime (Sea) transport as the mode of transport at the border. -->
+			<!--DE 7/4: ModeCode of 1 to represent Maritime (Sea) transport as the mode of transport at the border.-->
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
 		<Consignment>
-			<!--DE 3/32: Carrier EORI Number -->
+		<!--DE 3/32: Carrier EORI Number -->
 			<Carrier>
 				<ID>GB150454489082</ID>
 			</Carrier>
-			<!-- DE 4/2: Transport charges method of payment - Z Not Pre-paid. -->
+		<!-- DE 4/2: Transport charges method of payment - Z Not Pre-paid. -->
 			<Freight>
 				<PaymentMethodCode>Z</PaymentMethodCode>
 			</Freight>
 			<Itinerary>
-				<!-- DE 5/18: Countries of routing codes - Routing from GB to USA via Canada -->
+			<!-- DE 5/18: Countries of routing codes - Routing from GB to USA via Canada -->
 				<SequenceNumeric>1</SequenceNumeric>
 				<RoutingCountryCode>GB</RoutingCountryCode>
 			</Itinerary>
@@ -102,13 +85,13 @@
 			<ID>GB150454489082</ID>
 		</Exporter>
 		<GoodsShipment>
-			<!--DE 8/5: Nature of transaction: 1 to indicate transactions involving actual or
+		<!--DE 8/5: Nature of transaction: 1 to indicate transactions involving actual or
                	  intended transfer of ownership from residents to non-residents against financial
                	  or other compensation.
 				  The scond digit 1: to indicate outright purchase/sale-->
 			<TransactionNatureCode>11</TransactionNatureCode>
 			<Consignee>
-				<!--DE 3/9: Consignee Name and Address (Mandatory when DE 3/10 is not completed). 
+			<!--DE 3/9: Consignee Name and Address (Mandatory when DE 3/10 is not completed). 
 				This is Security and Safety Data  -->
 				<Name>Bags Export</Name>
 				<Address>
@@ -119,15 +102,15 @@
 				</Address>
 			</Consignee>
 			<Consignment>
-				<!--DE 7/2: 1 to indicate that the goods are transported in containers.-->
+			<!--DE 7/2: 1 to indicate that the goods are transported in containers.-->
 				<ContainerCode>1</ContainerCode>
-				<!--DE 7/7: ID of the means of transport and
+			<!--DE 7/7: ID of the means of transport and
                  	identification type of the means of transport (in this scenario, 11
                  	indicating name of the seagoing vessel ).-->
 				<DepartureTransportMeans>
 					<ID>KZ12ABC</ID>
 					<IdentificationTypeCode>11</IdentificationTypeCode>
-					<!--DE 7/5: Inland Mode of Transport - 3 to represent Road Transport.-->
+				<!--DE 7/5: Inland Mode of Transport - 3 to represent Road Transport.-->
 					<ModeCode>3</ModeCode>
 				</DepartureTransportMeans>
 				<!--DE 5/23: ID to give a unique position of the location. 
@@ -137,9 +120,9 @@
 					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
 					<TypeCode>A</TypeCode>
 					<Address>
-						<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE.-->
+					<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE.-->
 						<TypeCode>U</TypeCode>
-						<!--DE 5/23: Country code of the country where the goods may be examined, GB in this scenario.-->
+					<!--DE 5/23: Country code of the country where the goods may be examined, GB in this scenario.-->
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
@@ -164,7 +147,7 @@
 				<ID>GB</ID>
 			</ExportCountry>
 			<GovernmentAgencyGoodsItem>
-				<!--DE 1/6: Sequential number of the goods item.-->
+			<!--DE 1/6: Sequential number of the goods item.-->
 				<SequenceNumeric>1</SequenceNumeric>
 				<!--DE 8/6: Enter the statistical value for the goods item in GBP (£ sterling), irrespective 
 					of the currency used in Invoice Currency. -->
@@ -173,17 +156,18 @@
 				authorities of the Member States.  Decision 1764/15. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
+					<ID>19GB67732402054743113</ID>
+					<TypeCode>651</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
 					<ID>GBEXW15045448908220190323122709</ID>
 					<TypeCode>676</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: A document code of C651 indicates Electronic administrative document (e-AD), as referred to in Article 3(1) of Reg. (EC) No 684/2009.
 				LPCOExemptionCode: AE indicates Document attached – exhausted by (or only applies to) this entry (document returned to the trader)-->
-				<AdditionalDocument>
-					<CategoryCode>C</CategoryCode>
-					<ID>19GB00202102041307209</ID>
-					<TypeCode>651</TypeCode>
-					<LPCOExemptionCode>AE</LPCOExemptionCode>
-				</AdditionalDocument>
+				
 				<!--DE 2/2: Additional information. 00400 - Identity between declarant and Exporter. 
 					Indicating self-representation  -->
 				<AdditionalInformation>
@@ -200,12 +184,12 @@
 				<Commodity>
 					<Description>Gin in containers holding 2 litres or less</Description>
 					<Classification>
-						<!--DE 6/14: Commodity code - combined nomenclature code.-->
+					<!--DE 6/14: Commodity code - combined nomenclature code.-->
 						<ID>22085011</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<GoodsMeasure>
-						<!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
+					<!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
 						<GrossMassMeasure unitCode="KGM">40</GrossMassMeasure>
 						<!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
 						<NetNetWeightMeasure unitCode="KGM">30</NetNetWeightMeasure>
@@ -233,21 +217,18 @@
 				</Packaging>
 			</GovernmentAgencyGoodsItem>
 			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment.
-				This is a mandatory field. -->
+				This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB150454489082-0402HH04</ID>
+				<ID>4GB592971594846-XDIFO8J8</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
-			<!--DE 2/7: Identification of Warehouse. 
-				Type Y indicates a Non-customs warehouse.
-				The ID provided below is an example of an excise warehouse ID, however it is currently not in the scope of the Test Data Library and the field value is not validated by CDS when the declaration is submitted.
-				Note that the format of the warehouse ID provided below does not include the country code suffix, as required by the Export Declaration Completion Guide, and will be updated in the next version of this sample. -->
+			<!--DE 2/7: Identification of Warehouse. Type Y indicates a Non-customs warehouse -->
 			<Warehouse>
 				<ID>GB00001234568</ID>
 				<TypeCode>Y</TypeCode>
 			</Warehouse>
 		</GoodsShipment>
-	</Declaration>
-</md:MetaData>
+                    </Declaration>
+   </md:MetaData>

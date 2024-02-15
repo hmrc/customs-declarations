@@ -20,7 +20,7 @@ If both a success and error redirect are included then upscan v2 will be called,
 [link to curl commands](docs/curl-commands.md)
 # Custom SBT Task for generating ZIP file containing schemas and example messages
 There is an SBT task `zipWcoXsds` that generates a ZIP file containing schemas and example messages for each version under `/public/api/conf`
-during the packaging phase (so are not generated during normal development). These ZIP files are referenced by the RAML. 
+during the packaging phase (so are not generated during normal development). These ZIP files are referenced by the YAML. 
  These references are rendered as HTML links to generated ZIP in the deployed service.
 
 To generate the zip file locally run the following command in command line from project root directory:

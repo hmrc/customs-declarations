@@ -1,16 +1,25 @@
-  <MetaData><WCODataModelVersionCode>3.6</WCODataModelVersionCode><WCOTypeName>RES</WCOTypeName><ResponsibleCountryCode/><ResponsibleAgencyName/><AgencyAssignedCustomizationCode/><AgencyAssignedCustomizationVersionCode/><Response>
-      <FunctionCode>11</FunctionCode>
-      <FunctionalReferenceID>c466cabec181448eaf82072ca43994d8</FunctionalReferenceID>
-      <IssueDateTime>
-        <DateTimeString formatCode="304">20200714144848Z</DateTimeString>
-      </IssueDateTime>
-      <Status>
-        <NameCode>39</NameCode>
-      </Status>
-      <Declaration>
-        <FunctionalReferenceID>R392_TC72AMND_013</FunctionalReferenceID>
-        <ID>20GB7RHTNEE7WVYPA8</ID>
-        <VersionID>2</VersionID>
-      </Declaration>
-    </Response>
-  </MetaData>
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>11</FunctionCode>
+		<FunctionalReferenceID>2a59f72f13bf42a5b695e69d35d0d389</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20240125094729Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementTypeCode>AFB</StatementTypeCode>
+		</AdditionalInformation>
+		<Status>
+			<NameCode>39</NameCode>
+		</Status>
+		<Declaration>
+			<FunctionalReferenceID>7867523Y8OFA</FunctionalReferenceID>
+			<ID>24GB0YVJ3EXXES8AA0</ID>
+		</Declaration>
+	</Response>
+</MetaData>

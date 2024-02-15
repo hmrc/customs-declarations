@@ -1,26 +1,20 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
              xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
              xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
 	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			***
-			Note KEL 277 when testing: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant.
-			***
-			
 			SCENARIO
 			Type K direct reperesentation scenario with DUCR and MUCR declared and no control
 			Goods exported permanently
@@ -33,39 +27,25 @@
 		-->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
-		<!--DE 2/5: LRN.
-			The trader assigned reference to the declaration. -->
-		<FunctionalReferenceID>R3.5.0_9780_TC02_081</FunctionalReferenceID>
-		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
-		<IssueDateTime>
-			<p1:DateTimeString formatCode="304">20211208070000+01</p1:DateTimeString>
-		</IssueDateTime>
-		<!--DE 1/1: Declaration Type.
-			EX to represent an Export declaration.-->
-		<!--DE 1/2: Additional Declaration Type.
-			K to represent a trusted pre-lodged declaration.-->
+		<!-- DE 2/5: The trader assigned reference to the declaration -->
+		<FunctionalReferenceID>78675237G0ZT</FunctionalReferenceID>
+		<!--DE 1/1: EX to represent an Export declaration.-->
+		<!--DE 1/2: K to represent a trusted pre-lodged declaration.-->
 		<TypeCode>EXK</TypeCode>
-		<!--DE 1/9: Total Number of Items.
-			In this case, 1. -->
+		<!--DE 1/9: Total number of goods items on the declaration.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
-		<!--DE 3/20: Representative Identification Number.
-			EORI number of the Representative.
-            Note KEL 277 when testing: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant.
-			DE 3/21: Representative Status Code.
-			2 indicating direct representation. -->
+		<!--DE 3/20: EORI number of the Representative.
+                    DE 3/21: '2' Indicating direct representation. -->
 		<Agent>
 			<ID>GB150454489082</ID>
 			<FunctionCode>2</FunctionCode>
 		</Agent>
-		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			MOU to indicate authorisation for the use of Memorandum of Understanding.
-			The ID is the EORI of the MOU authorised party. -->
+		<!--DE 3/39: Holder of the authorisation identification no and MOU CategoryCode-->
 		<AuthorisationHolder>
 			<ID>GB150454489082</ID>
 			<CategoryCode>MOU</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 7/4: Mode of Transport at the Border.
-			4 to represent air transport. -->
+		<!--DE 7/4: Code 4 indicating that the mode of transport used to arrive at the UK external border is by Air Transport.-->
 		<BorderTransportMeans>
 			<ModeCode>4</ModeCode>
 		</BorderTransportMeans>
@@ -75,24 +55,20 @@
 				<PaymentMethodCode>H</PaymentMethodCode>
 			</Freight>
 		</Consignment>
-		<!--DE 3/18: Declarant Identification Number.
-			EORI number of the Declarant. -->
+		<!--DE 3/18: EORI number of the Declarant. -->
 		<Declarant>
 			<ID>GB150454489082</ID>
 		</Declarant>
-		<!--DE 5/12: Customs Office of Exit.
-			'GB000085' code indicating Gatwick -->
+		<!-- 5/12: 'GB000085' Code indicating Gatwick -->
 		<ExitOffice>
 			<ID>GB000085</ID>
 		</ExitOffice>
-		<!--DE 3/2: Exporter Identification Number.
-			EORI number of the Exporter. -->
+		<!--DE 3/2: EORI number of the Exporter. -->
 		<Exporter>
 			<ID>GB427168118378</ID>
 		</Exporter>
 		<GoodsShipment>
-			<!--DE 3/9: Consignee Name and Address.
-				Name, address and details of the party to whom the goods are consigned/shipped. -->
+			<!--DE 3/9: Consignee Name and Address -->
 			<Consignee>
 				<Name>Mr Consignee</Name>
 				<Address>
@@ -103,22 +79,20 @@
 				</Address>
 			</Consignee>
 			<Consignment>
-				<!--DE 7/2: Container.
-					'0' Indicating goods not arriving in container. -->
+				<!--DE 7/2: '0' Indicating goods not arriving in container.-->
 				<ContainerCode>0</ContainerCode>
-				<!--DE 7/7: Identity of the means of transport at departure.
-					98765 indicating registration number and identification type of the means of transport - in this scenario, 40 IATA flight number. -->
+				<!-- 7/7 - Identity of means of transport at departure -->
 				<DepartureTransportMeans>
 					<ID>98765</ID>
 					<IdentificationTypeCode>40</IdentificationTypeCode>
 				</DepartureTransportMeans>
-				<!--DE 5/23: Location of Goods.
-					ID to give a unique position of the location where the goods are located at the time they are declared.
-					The location code is entered using the following components:
-					• Name: ID to give a unique position of the location, in this scenario LGWLGWLGW indicating London Gatwick Airport.
-					• TypeCode: Type of Location, in this scenario A to represent that it is a designated location.
-					• Address TypeCode: Type of ID of the Location, in this scenario U for UN/LOCODE.
-					• Addess CountryCode: Code of the country where the goods may be examined, in this scenario GB. -->
+				<!--DE 5/23: ID to give a unique position of the location. 
+					LGWLGWLGW - Indicating London Gatwick Airport. -->
+				<!--DE 5/23: Type of Location - A in this scenario to represent that it is a 
+					designated location. -->
+				<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE.-->
+				<!--DE 5/23: 'GB' Country code of the country where the goods may be examined,
+					GB in this scenario.-->
 				<GoodsLocation>
 					<Name>LGWLGWLGW</Name>
 					<TypeCode>A</TypeCode>
@@ -128,66 +102,62 @@
 					</Address>
 				</GoodsLocation>
 			</Consignment>
-			<!--D 5/8: Country of Destination Code. 
-				In this case, country code JP for Japan. -->
+			<!--DE 5/8: Country code of the destination country. JP Indicating Japan-->
 			<Destination>
 				<CountryCode>JP</CountryCode>
 			</Destination>
 			<GovernmentAgencyGoodsItem>
-				<!--DE 1/6: Goods Item Number.
-					Sequential number of the goods item. -->
+				<!--DE 1/6: Sequential number of the goods item.-->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					C676 for Import/Export authorisation issued by the competent authorities of the Member States. Decision 1764/15. -->
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBMOU15045448908220211125132100</ID>
 					<TypeCode>676</TypeCode>
 				</AdditionalDocument>
 				<Commodity>
-					<!--DE 6/8: Description of Goods.
-						Description of the goods specific enough to enable classification - without repeating the CN code description in the Tariff. -->
+					<!--DE 6/8: Description of the goods.-->
 					<Description>Paper Envelopes</Description>
 				</Commodity>
-				<!--DE 1/10: Procedure.
-					Procedure code of 0012 may be used to release free circulation and/or home use goods for permanent export where goods may be declared using an oral declaration or declaration by any other act and where a written customs declaration is not required.  
-					This Procedure Code should not be used for the export of non-Union status goods or for the temporary export of goods where a written customs declaration is required. -->
+				<!--DE 1/10: Procedure code of 0012 may be used to release free circulation 
+					and/or home use goods for permanent export:
+					 - Where goods may be declared using an oral declaration or declaration by 
+					any other act and 
+					 - Where a written customs declaration is not required.  
+					This Procedure Code should not be used:
+					 - For the export of non-Union status goods or
+					 - For the temporary export of goods
+					 - Where a written customs declaration is required. -->
 				<GovernmentProcedure>
 					<CurrentCode>00</CurrentCode>
 					<PreviousCode>12</PreviousCode>
 				</GovernmentProcedure>
-				<!--DE 1/11: Additional Procedure Code.
-					16M declared for MoU procedure.-->
+				<!--DE 1/11: 16M Declared.-->
 				<GovernmentProcedure>
 					<CurrentCode>16M</CurrentCode>
 				</GovernmentProcedure>
 				<Packaging>
 					<SequenceNumeric>1</SequenceNumeric>
-					<!--DE 6/11: Shipping Marks.
-						Shipping marks on the packages. -->
+					<!--DE 6/11: Shipping marks -->
 					<MarksNumbersID>2379261ETT</MarksNumbersID>
-					<!--DE 6/10: Number of Packages. 
-						In this case, 1. -->
+					<!--DE 6/10: Number of packages, in this case 1.-->
 					<QuantityQuantity>1</QuantityQuantity>
-					<!--DE 6/9: Type of Packages.
-						PK indicating package. -->
+					<!--DE 6/9: Type of packaging, PK indicating package -->
 					<TypeCode>PK</TypeCode>
 				</Packaging>
 			</GovernmentAgencyGoodsItem>
-			<!--DE 2/1: Previous Documents.
-				ZDCR to show the DUCR assigned to the consignment.
-				This is a mandatory field. -->
+			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment.
+				This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB427168118378-0812D21</ID>
+				<ID>4GB099381649065-F9RTPY5OB</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
-			<!--DE 2/1: Previous Documents.
-				ZMCR to show the MUCR assigned to the consignment.
-				This is a mandatory field. -->
+			<!--DE 2/1: Previous document to show the MUCR assigned to the consignment.
+				This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>A:16035081201</ID>
+				<ID>A:85659360832</ID>
 				<TypeCode>MCR</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>

@@ -1,20 +1,20 @@
-	<MetaData>
-		<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-		<WCOTypeName>RES</WCOTypeName>
-		<ResponsibleCountryCode/>
-		<ResponsibleAgencyName/>
-		<AgencyAssignedCustomizationCode/>
-		<AgencyAssignedCustomizationVersionCode/>
-		<Response>
-			<FunctionCode>02</FunctionCode>
-			<FunctionalReferenceID>e4f20a7a5e27492cabc00b408b234f46</FunctionalReferenceID>
-			<IssueDateTime>
-				<DateTimeString formatCode="304">20210316115021Z</DateTimeString>
-			</IssueDateTime>
-			<Declaration>
-				<FunctionalReferenceID>EX_3.6_TC07_1603PW04</FunctionalReferenceID>
-				<ID>21GB2YFYJHCLWMD7A2</ID>
-				<VersionID>1</VersionID>
-			</Declaration>
-		</Response>
-	</MetaData>
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>02</FunctionCode>
+		<FunctionalReferenceID>e8607b1bf6944fcc9919bdacddb12d9b</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20240116151313Z</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<FunctionalReferenceID>7849431KJ7CH</FunctionalReferenceID>
+			<ID>24GB0MC86MH6WYKAA3</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

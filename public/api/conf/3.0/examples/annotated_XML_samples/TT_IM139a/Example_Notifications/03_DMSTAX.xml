@@ -7,20 +7,20 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>a3288107a8244417b67c80e3353adc3f</FunctionalReferenceID>
+		<FunctionalReferenceID>063624cf150c41d6a8479c780f1fb583</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20231114171235Z</DateTimeString>
+			<DateTimeString formatCode="304">20240312105332Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
 			<ID>GB16BARC20051723372545</ID>
 		</Bank>
 		<Status>
-			<NameCode>4</NameCode>
+			<NameCode>67</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>7849431PD4I6</FunctionalReferenceID>
-			<ID>23GBCLZD1X1XWE6AR2</ID>
+			<FunctionalReferenceID>7849431W1LFA</FunctionalReferenceID>
+			<ID>24GB2U3LX9V0LNLAR6</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
@@ -46,12 +46,6 @@
 							<Payment>
 								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
 								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
-							</Payment>
-						</DutyTaxFee>
-						<DutyTaxFee>
-							<TypeCode>T24</TypeCode>
-							<Payment>
-								<TaxAssessedAmount currencyID="GBP">50.00</TaxAssessedAmount>
 							</Payment>
 						</DutyTaxFee>
 					</Commodity>

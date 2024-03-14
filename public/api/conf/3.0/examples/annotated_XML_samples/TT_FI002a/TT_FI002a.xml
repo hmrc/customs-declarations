@@ -18,6 +18,7 @@
 					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 					xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
+			**Please note this scenario is currently rejecting and will be fixed in a future release.
 			SCENARIO
 			Goods imported and declared to End-Use. 
 			Procedure code 4400 Additional Procedure code 1SW. 

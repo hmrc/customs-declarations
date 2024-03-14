@@ -23,6 +23,8 @@
             Goods presented at the port of Belfast.
 
             Expected Notifications: DMSACC, DMSTAX (indicative), DMSTAX (final), DMSCLE.
+
+            Please note that this scenario isnt performing as expected and will be updated in a future release.
         -->
         <AcceptanceDateTime>
             <p1:DateTimeString formatCode="304">20230609081831+01</p1:DateTimeString>

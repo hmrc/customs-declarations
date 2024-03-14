@@ -19,6 +19,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
 		<!--
+
+		Please note that this scenario isnt performing as expected and will be updated in a future release.
+		
 			SCENARIO
             Removal of goods from a private customs warehouse using EIDR.
             EIDR Supplementary Declaration Type Z which derives a H1 Declaration Category data set.

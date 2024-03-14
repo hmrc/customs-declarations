@@ -15,6 +15,8 @@
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
+		Please note that this scenario isnt performing as expected and will be updated in a future release.
+		
 			SCENARIO
 			CSP submits an inventory-linked Type D PreLodged ALVS declaration where "ttalvsHMI" is 
 			entered in the goods description field (D.E. 6/8) on the goods item. 

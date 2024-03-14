@@ -18,6 +18,7 @@
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			***
+			Please note this scenario is currently rejecting and will be fixed in a future release.
 			Note that when testing this scenario, issues might arise as declaration clearing before notify tariff quota response message is received.
 
 			Workaround:

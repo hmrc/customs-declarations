@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>16</FunctionCode>
-		<FunctionalReferenceID>b0eb27f9e6444b4a93cd0954bad594ce</FunctionalReferenceID>
+		<FunctionalReferenceID>3fc4e33d6dc44cdebe437aad306834b7</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20240116113203Z</DateTimeString>
+			<DateTimeString formatCode="304">20220112112325Z</DateTimeString>
 		</IssueDateTime>
 		<AdditionalInformation>
 			<StatementCode/>
@@ -18,13 +18,13 @@
 		</AdditionalInformation>
 		<Status>
 			<EffectiveDateTime>
-				<DateTimeString formatCode="304">20240116000000Z</DateTimeString>
+				<DateTimeString formatCode="304">20220112000000Z</DateTimeString>
 			</EffectiveDateTime>
 			<NameCode>A1</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>7867523MZ752</FunctionalReferenceID>
-			<ID>24GB0M4AWAENLLSAA2</ID>
+			<FunctionalReferenceID>EX06a_v1.9_120122_01</FunctionalReferenceID>
+			<ID>22GB0GE2QPK3CS5AA4</ID>
 			<VersionID>2</VersionID>
 		</Declaration>
 	</Response>

@@ -28,6 +28,8 @@
 			Valuation Method 1 with Item Price declared.
 			AI code 'NIIMP' entered at Item Level.
 			000 is declared in D.E. 1/11 (Additional Procedure Code) and "KGM" is declared in D.E. 4/4 (Tax Base, under "Measurement Unit"), therefore, CDS will Accept, Calculate Tax, and Clear the declaration.
+
+			Please note that this scenario isnt performing as expected and will be updated in a future release.
 		-->
 		<!--Acceptance Date is present on all supplementary declarations. -->
 		<AcceptanceDateTime>

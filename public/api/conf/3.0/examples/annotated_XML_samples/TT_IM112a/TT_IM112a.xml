@@ -38,6 +38,8 @@
 			No UK Customs Duty, UK Excise Duty or UK additional duties are charged. 
 			
 			VAT is calculated using the UK Tariff.
+
+			Please note that this scenario isnt performing as expected and will be updated in a future release.
 		-->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>

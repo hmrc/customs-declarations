@@ -30,6 +30,8 @@
 			Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'.
 
 			N.B. Due to changes in Tariff data as part of the Northern Ireland Protocol, this sample no longer results in the calculation and reservation of security deposits for End Use. Consequently, the content of the DMSTAX notification will differ slightly, in that there will be no DutyTaxFee objects for TypeCode “ENU” with TaxAssessedAmounts of 300.00 GBP and for B00 and A00 respectively. The A00 and B00 calculations themselves, however, will remain the same.
+
+			Please note that this scenario isnt performing as expected and will be updated in a future release.
 		 -->
 		<!--Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>

@@ -1,22 +1,22 @@
-<MetaData xmlns:_2=\"urn:wco:datamodel:WCO:DocumentMetaData-DMS:2\">
+<MetaData>
 	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
 	<WCOTypeName>RES</WCOTypeName>
 	<ResponsibleCountryCode/>
 	<ResponsibleAgencyName/>
 	<AgencyAssignedCustomizationCode/>
 	<AgencyAssignedCustomizationVersionCode/>
-	<Response xmlns:_2_1=\"urn:wco:datamodel:WCO:RES-DMS:2\">
+	<Response>
 		<FunctionCode>01</FunctionCode>
-		<FunctionalReferenceID>c343230a464547abb1991a5bd3fc9fef</FunctionalReferenceID>
+		<FunctionalReferenceID>4e4b4e9c7c524380911b52ab287a175f</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode=\"304\" xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20231102130651Z</DateTimeString>
+			<DateTimeString formatCode="304">20240312105323Z</DateTimeString>
 		</IssueDateTime>
 		<Declaration>
 			<AcceptanceDateTime>
-				<DateTimeString formatCode=\"304\" xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20231102130649Z</DateTimeString>
+				<DateTimeString formatCode="304">20240312105322Z</DateTimeString>
 			</AcceptanceDateTime>
-			<FunctionalReferenceID>78443889OL2U</FunctionalReferenceID>
-			<ID>23GBC4LEOPBG69IAR8</ID>
+			<FunctionalReferenceID>784943174ZRS</FunctionalReferenceID>
+			<ID>24GB2U3LQL90KM4AR7</ID>
 			<VersionID>1</VersionID>
 		</Declaration>
 	</Response>

@@ -20,6 +20,8 @@
 			
 			An EAL and EDL are submitted to arrive and then depart the goods at DUCR level using XI EORI as as submitter. 
 			Expected Notification: DMSRCV, DMSRCV, DMSACC, DMSRES, DMSCLE, DMSEOG.	
+
+			Please note that this scenario isnt performing as expected and will be updated in a future release.
 		-->
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>

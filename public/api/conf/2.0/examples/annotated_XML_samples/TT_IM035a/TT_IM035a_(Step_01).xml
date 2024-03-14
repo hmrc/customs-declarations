@@ -14,6 +14,7 @@
            		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
            		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--
+			**Please note this scenario is currently rejecting and will be fixed in a future release.
 			SCENARIO
 			Trader submits an Inventory-linked Type A Frontier ALVS declaration triggering a control by using commodity description D.E 6/8 = ttalvsdecisionHold1.
 			

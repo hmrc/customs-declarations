@@ -7,20 +7,20 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>710dc817061840d09041bab80dbe91e0</FunctionalReferenceID>
+		<FunctionalReferenceID>0e11a7540e104d1fb9f605ea2987b7c8</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20230301120208Z</DateTimeString>
+			<DateTimeString formatCode="304" >20240312103811Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
 			<ID>GB16BARC20051723372545</ID>
 		</Bank>
 		<Status>
-			<NameCode>4</NameCode>
+			<NameCode>67</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>R380_NIP550_0301_01</FunctionalReferenceID>
-			<ID>23GB2D0RWZDEGKRAR5</ID>
+			<FunctionalReferenceID>7849431S6VDB</FunctionalReferenceID>
+			<ID>24GB2U3267MD08EAR2</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
@@ -38,20 +38,26 @@
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP">10000.00</AdValoremTaxBaseAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">11000.00</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>20.00</TaxRateNumeric>
 							<TypeCode>B00</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP">2000.00</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP">2000.00</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
 							<TypeCode>ACS</TypeCode>
 							<Payment>
 								<TaxAssessedAmount currencyID="GBP">1000.00</TaxAssessedAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<TypeCode>ACS</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">2200.00</TaxAssessedAmount>
 							</Payment>
 						</DutyTaxFee>
 					</Commodity>

@@ -17,6 +17,7 @@
 	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
+			Due to the introduction of UKIMS functionality, this scenario does not behave as originally intended. This will be addressed in a future release.
 			SCENARIO RoW to NI: "Not At Risk"
 			Import of goods liable to Meursing, with no previous procedure
 			Goods: Bread, not containing added honey, eggs, cheese or fruit, and containing by weight in the dry matter state not more than 5% of sugars and not more than 5% of fat

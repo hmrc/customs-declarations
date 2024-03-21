@@ -17,7 +17,7 @@
            		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
 		<!--SCENARIO
-			Please note this scenario is currently rejecting and will be fixed in a future release.
+			Please note this scenario is currently rejecting (KEL 613) and will be fixed in a future release.
 			ROW to GB - UK Licence Quota Validation
 			Goods imported and declared to free-circulation and home use of non-union goods, with no previous procedure
 			Procedure code 4000 Additional Procedure code 000

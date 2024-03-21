@@ -15,6 +15,7 @@
 		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" >
 	
 		<!--
+			Due to the introduction of UKIMS functionality, this scenario does not behave as originally intended. This will be addressed in a future release.
 			SCENARIO RoW to NI: "At Risk"
 			Import of goods liable to Customs Duty & VAT, with no previous procedure
 			Goods: Shavers, hair clippers and hair-removing appliances, with self-contained electric motor

@@ -1,6 +1,6 @@
 # Customs Declarations
 
-This service offers a general interface for custom declarations, where those declarations are represented using the WCO declarations schema.
+This service offers a general interface for custom declarations, where those declarations are represented using the WCO declarations schema. In addition to submitting declarations, the Customs Declarations service allows you to amend, cancel and also provides the ability to upload supporting documents and make arrival notifications
 
 The objective of the Customs Declarations Service API is:
 
@@ -10,6 +10,54 @@ The objective of the Customs Declarations Service API is:
 4. Respond to the declarant indicating the success of steps 2 / 3.
 
 As the notification process is asynchronous the only response to the declarant from this API is to indicate the success (or otherwise) of the validation and submission to the CDS backend.
+
+## Development Setup
+- This microservice requires mongoDB 4.+
+- Run locally: `sbt run` which runs on port `9820` by default
+- Run with test endpoints: `sbt 'run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes'`
+
+##  Service Manager Profiles
+The Customs Declarations application can be run locally from Service Manager using the following profiles: -
+
+| Profile Details                       | Command                                                           | Description                                                    |
+|---------------------------------------|:------------------------------------------------------------------|----------------------------------------------------------------|
+| CUSTOMS_DECLARATION_ALL               | sm2 --start CUSTOMS_DECLARATION_ALL                               | To run all CDS applications.                                   |
+| CUSTOMS_INVENTORY_LINKING_EXPORTS_ALL | sm2 --start CUSTOMS_INVENTORY_LINKING_EXPORTS_ALL                 | To run all CDS Inventory Linking Exports related applications. |
+| CUSTOMS_INVENTORY_LINKING_IMPORTS_ALL | sm2 --start CUSTOMS_INVENTORY_LINKING_IMPORTS_ALL                 | To run all CDS Inventory Linking Imports related applications. |
+
+## Run Tests
+- Run Unit Tests: `sbt test`
+- Run Integration Tests: `sbt IntegrationTest/test`
+- Run Unit and Integration Tests: `sbt test IntegrationTest/test`
+- Run Unit and Integration Tests with coverage report: `./run_all_tests.sh`<br/> which runs `clean scalastyle coverage test it:test coverageReport dependencyUpdates"`
+
+### Acceptance Tests
+Run CDS ATs: see [here](https://github.com/hmrc/customs-automation-test)
+
+### Performance Tests
+Run Performance Tests see [here](https://github.com/hmrc/customs-declaration-performance-test)
+
+
+## API documentation
+- For Customs Declarations API documentation please see [here](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/customs-declarations)
+
+### Customs Declarations specific routes
+| Path - internal routes prefixed by `/customs-declarations`                                            | Supported Methods | Description                                                           |
+|-------------------------------------------------------------------------------------------------------|:-----------------:|-----------------------------------------------------------------------|
+| `/customs-declarations/`                                                                              |       POST        | Endpoint to submit a declaration.                                     |
+| `/customs-declarations/cancellation-requests`                                                         |       POST        | Endpoint to cancel a declaration.                                     |
+| `/customs-declarations/amend`                                                                         |       POST        | Endpoint to amend a declaration.                                      |
+| `/customs-declarations/file-upload  `                                                                 |       POST        | Endpoint to submit a file upload.                                     |
+| `/customs-declarations/uploaded-file-upscan-notifications/clientSubscriptionId/:clientSubscriptionId` |       POST        | Endpoint to manage file upload upscan notifications.                  |
+| `/customs-declarations/file-transmission-notify/clientSubscriptionId/:clientSubscriptionId`           |       POST        | Endpoint to submit file upload notifications to customs notification. |
+| `/customs-declarations/arrival-notification`                                                          |       POST        | Endpoint to submit an arrival notification declaration.               |
+| `/customs-declarations/status-request/mrn/:mrn`                                                       |        GET        | Endpoint to retrieve the status of a declaration.                     |
+
+### Test-only specific routes
+| Path                         | Supported Methods | Description                                  |
+|------------------------------|:-----------------:|----------------------------------------------|
+| `/file-upload/test-only/all` |      DELETE       | Endpoint to delete all file upload metadata. |
+
 
 ## Calling /file-upload
 

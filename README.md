@@ -1,6 +1,6 @@
 # Customs Declarations
 
-This service offers a general interface for custom declarations, where those declarations are represented using the WCO declarations schema. In addition to submitting declarations, the Customs Declarations service allows you to amend, cancel and also provides the ability to upload supporting documents and make arrival notifications
+This service offers a general interface for custom declarations, where those declarations are represented using the WCO declarations schema. In addition to submitting declarations, the Customs Declarations service allows you to amend and cancel them. It also provides the ability to upload supporting documents and make arrival notifications.
 
 The objective of the Customs Declarations Service API is:
 
@@ -17,7 +17,7 @@ As the notification process is asynchronous the only response to the declarant f
 - Run with test endpoints: `sbt 'run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes'`
 
 ##  Service Manager Profiles
-The Customs Declarations application can be run locally from Service Manager using the following profiles: -
+The Customs Declarations service can be run locally from Service Manager, using the following profiles:
 
 | Profile Details                       | Command                                                           | Description                                                    |
 |---------------------------------------|:------------------------------------------------------------------|----------------------------------------------------------------|
@@ -32,14 +32,14 @@ The Customs Declarations application can be run locally from Service Manager usi
 - Run Unit and Integration Tests with coverage report: `./run_all_tests.sh`<br/> which runs `clean scalastyle coverage test it:test coverageReport dependencyUpdates"`
 
 ### Acceptance Tests
-Run CDS ATs: see [here](https://github.com/hmrc/customs-automation-test)
+To run the CDS acceptance tests, see [here](https://github.com/hmrc/customs-automation-test).
 
 ### Performance Tests
-Run Performance Tests see [here](https://github.com/hmrc/customs-declaration-performance-test)
+To run performance tests, see [here](https://github.com/hmrc/customs-declaration-performance-test).
 
 
 ## API documentation
-- For Customs Declarations API documentation please see [here](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/customs-declarations)
+For Customs Declarations API documentation, see [here](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/customs-declarations).
 
 ### Customs Declarations specific routes
 | Path - internal routes prefixed by `/customs-declarations`                                            | Supported Methods | Description                                                           |

@@ -4,13 +4,11 @@ info:
   description: |
     # Schemas and examples
     
-    Schema definitions for all the API endpoints request & response payloads can be found in the following zip archive.
+    You can download the following zipped archive, which contains XML schemas and examples of the request and response payloads for each of the API endpoints:
     
     [Schemas and example messages](/api-documentation/docs/api/download/customs-declarations/3.0/wco-declaration-schemas.zip)
     
     ZIP, 3.1MB last updated 21/03/2024
-    
-    The ZIP file contains XML files. Open in your preferred file viewer.
   contact: {}
   version: '3.0'
 servers:

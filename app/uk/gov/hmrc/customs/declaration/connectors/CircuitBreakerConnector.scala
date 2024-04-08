@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import akka.actor.ActorSystem
-import akka.pattern.CircuitBreaker
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.pattern.CircuitBreaker
 import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 
 import java.util.concurrent.TimeUnit.MILLISECONDS

@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import akka.actor.ActorSystem
-import akka.pattern.CircuitBreakerOpenException
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.pattern.CircuitBreakerOpenException
 import play.api.http.Status.FORBIDDEN
 import play.api.mvc.Result
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse

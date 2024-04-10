@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.google.inject._
 import play.api.http.HeaderNames._
 import play.api.http.{ContentTypes, MimeTypes}

@@ -7,8 +7,6 @@ POST        /cancellation-requests        @uk.gov.hmrc.customs.declaration.contr
 
 POST        /file-upload                  @uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadController.post()
 
-GET         /admin/metrics                @com.kenshoo.play.metrics.MetricsController.metrics
-
 POST        /uploaded-file-upscan-notifications/clientSubscriptionId/:clientSubscriptionId     @uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadUpscanNotificationController.post(clientSubscriptionId)
 
 POST        /file-transmission-notify/clientSubscriptionId/:clientSubscriptionId     @uk.gov.hmrc.customs.declaration.controllers.filetransmission.FileTransmissionNotificationController.post(clientSubscriptionId)

@@ -16,7 +16,7 @@
 
 package component
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.mvc._
 import play.api.test.Helpers.{status, _}

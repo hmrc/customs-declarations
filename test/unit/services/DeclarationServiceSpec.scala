@@ -16,8 +16,8 @@
 
 package unit.services
 
-import akka.actor.ActorSystem
-import akka.pattern.CircuitBreakerOpenException
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.pattern.CircuitBreakerOpenException
 import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{verify, verifyNoMoreInteractions, when}
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture

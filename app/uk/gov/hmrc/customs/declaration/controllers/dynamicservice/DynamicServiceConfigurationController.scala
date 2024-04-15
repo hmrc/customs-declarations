@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers.dynamicservice
 
 import com.google.inject.Inject
-import play.api.libs.json.{JsError, JsSuccess, Json}
+import play.api.libs.json.{JsError, JsSuccess, Json, OWrites, Reads}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.customs.declaration.config.{InvalidEnvironmentException, ServiceConfigProvider}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
@@ -26,8 +26,8 @@ class DynamicServiceConfigurationController @Inject()(serviceConfigProvider: Ser
                                                       cc: ControllerComponents)
   extends BackendController(cc) {
 
-  private implicit val rds = Json.reads[ServiceConfigDto]
-  private implicit val wrt = Json.writes[ViewServiceConfigDto]
+  private implicit val rds: Reads[ServiceConfigDto] = Json.reads[ServiceConfigDto]
+  private implicit val wrt: OWrites[ViewServiceConfigDto] = Json.writes[ViewServiceConfigDto]
 
   def setConfigurationForService(service: String): Action[AnyContent] = Action { request =>
     request.body.asJson.get.validate[ServiceConfigDto] match {

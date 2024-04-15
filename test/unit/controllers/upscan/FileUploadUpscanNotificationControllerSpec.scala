@@ -39,12 +39,12 @@ import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 import util.UpscanNotifyTestData._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {
 
   trait SetUp {
-    implicit val ec = Helpers.stubControllerComponents().executionContext
+    implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
     val mockNotificationService: FileUploadNotificationService = mock[FileUploadNotificationService]
     val mockToXmlNotification: UpscanNotificationCallbackToXmlNotification = mock[UpscanNotificationCallbackToXmlNotification]
     val mockErrorToXmlNotification: InternalErrorXmlNotification = mock[InternalErrorXmlNotification]

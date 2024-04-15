@@ -45,7 +45,6 @@ class DeclarationStatusResponseValidationServiceSpec extends AnyWordSpecLike wit
   private val invalidCreationDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest(s"Declaration creation date is greater than $statusRequestDaysLimit days old")
   private val missingAcceptanceAndCreationDateErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Declaration acceptanceDate and creationDate fields are missing")
   private val invalidOrMissingBadgeIdentifiersErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Badge Identifier is missing or invalid")
-  private val missingBadgeIdentifiersErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Badge Identifier is missing")
   private val invalidBadgeIdentifiersErrorResponse: ErrorResponse = ErrorResponse.errorBadRequest("Badge Identifier is invalid")
   trait SetUp {
 

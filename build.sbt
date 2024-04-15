@@ -89,7 +89,7 @@ scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
 val compileDependencies = Seq(hmrcMongo, bootstrapBackendPlay30, cats)
 
-val testDependencies = Seq(wireMock, mockito, hmrcMongoTest, scalaTestPlusMockito, jackson, bootstrapBackendTestPlay30)
+val testDependencies = Seq(scalamock, hmrcMongoTest, bootstrapBackendTestPlay30)
 
 Compile / unmanagedResourceDirectories += baseDirectory.value / "public"
 

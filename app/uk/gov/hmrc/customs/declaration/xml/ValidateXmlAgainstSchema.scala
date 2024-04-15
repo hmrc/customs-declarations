@@ -41,7 +41,7 @@ class ValidateXmlAgainstSchema(schema: Schema) {
     validator.setErrorHandler(errorHandler)
     validator.validate(xml)
 
-    errorHandler.getAllErrors() match {
+    errorHandler.getAllErrors match {
       case List() => Right(())
       case nonEmpty: List[SAXParseException] => Left(nonEmpty)
     }
@@ -53,12 +53,12 @@ class ValidateXmlAgainstSchema(schema: Schema) {
     private lazy val errors: mutable.Buffer[SAXParseException] = mutable.Buffer.empty
 
     private def accumulateError(e: SAXParseException): Unit = self.synchronized {
-      if (errors.size < maxErrors) {
+      if (errors.size < maxErrors && !errors.exists(_.toString == e.toString)) {
         errors += e
       }
     }
 
-    def getAllErrors(): List[SAXParseException] = self.synchronized { errors.toList }
+    def getAllErrors: List[SAXParseException] = self.synchronized { errors.toList }
 
     override def warning(exception: SAXParseException): Unit = {}
     override def error(exception: SAXParseException): Unit = accumulateError(exception)

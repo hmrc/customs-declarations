@@ -1,21 +1,10 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			***
 			Note KEL 208: DE 7/7 Identity of means of transport at the border is currently being incorrectly mandated on B4 and C1 declarations when DE 7/4 Mode of transport at the border is coded 1 (Maritime), 3 (Road), 4 (Air), 8 (Inland Waterway) or 9 (Mode Unknown). Until this is resolved, it will be necessary to complete both components of DE 7/7 in these circumstances.
@@ -36,10 +25,9 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: The trader assigned reference to the declaration -->
-		<FunctionalReferenceID>B4DATASET_2PAY13091</FunctionalReferenceID>
-		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
+		<FunctionalReferenceID>7849431OSIOO</FunctionalReferenceID>
 		<IssueDateTime>
-			<p1:DateTimeString formatCode="304">20210913080000+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20240312102925Z</p1:DateTimeString>
 		</IssueDateTime>
 		<!--DE 1/1: Declaration Type.
 			CO to represent goods being declared for dispatch to a Special Fiscal Territory. -->
@@ -134,7 +122,7 @@
 					Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
 				<!--DE 8/6: Statistical Value.
-					Enter the statistical value for the goods item in GBP (£ sterling), irrespective of the currency used in Invoice Currency. -->
+					Enter the statistical value for the goods item in GBP (Â£ sterling), irrespective of the currency used in Invoice Currency. -->
 				<StatisticalValueAmount currencyID="GBP">200</StatisticalValueAmount>
 				<!--DE 8/5 Nature of Transaction. 
 					***
@@ -190,7 +178,7 @@
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB427168118378-13091</ID>
+				<ID>4GB049658070302-RX1MESKBL</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

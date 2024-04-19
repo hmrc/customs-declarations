@@ -26,14 +26,14 @@
             - Subsidy claim is allowed and processed for the goods item.
         -->
         <AcceptanceDateTime>
-            <p1:DateTimeString formatCode="304">20240227101417+01</p1:DateTimeString>
+            <p1:DateTimeString formatCode="304">20240411221100+01</p1:DateTimeString>
         </AcceptanceDateTime>
         <!--Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN.
             Mandatory.
             Declarant's own reference number - this must be unique to the transaction. -->
-        <FunctionalReferenceID>78675233KDZU</FunctionalReferenceID>
+        <FunctionalReferenceID>7849431YEASY</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             Mandatory.
             IM to represent an import declaration. -->

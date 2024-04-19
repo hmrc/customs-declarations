@@ -1,35 +1,25 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+	xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			***
-			Please note this scenario is currently rejecting and will be fixed in a future release.
-			Note that when testing this scenario, issues might arise as declaration clearing before notify tariff quota response message is received.
-
-			Workaround:
-			• Complete DE 4/1 as per Tariff Vol. 3 instructions with DDP entered and the UN Locode for the address.
-			• Do not enter an adjustment (BC) in DE 4/9
-			• Remove the duty amount from the goods item value in DE 4/14 (essentially remove the duty amount that would have been entered in DE 4/9 against BC).
+			Currently not working as expected due to KEL 601, will be fixed for a future release.
 			***
 
 			SCENARIO
 			"ROW to NI, NIIMP, Goods 'De-Risked', Non-preferential UK FCFS quota claimed:
-			Type A declaration for goods imported to Northern Ireland from US. The goods are 'De-Risked' by the Trader using NIREM and a non-preferential 
+			Type A declaration for goods imported to Northern Ireland from US. The goods are 'De-Risked' by the Trader using NIQUO and a non-preferential 
 			UK FCFS quota is claimed (non-RPA licence). Declaration validated against EU Tariff regulatory measures. 
 			Quota claim to fully allocated. Customs duties calculated using the UK Tariff rate."
 
@@ -47,7 +37,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number – this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IM43a_2108d</FunctionalReferenceID>
+		<FunctionalReferenceID>7849431U6UF7</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -243,7 +233,7 @@
 				<!--DE 2/2: Additional Information. 
 					This field is mandatory, this represents goods are de-risked while Imported from RoW into Northern Ireland. -->
 				<AdditionalInformation>
-					<StatementCode>NIREM</StatementCode>
+					<StatementCode>NIQUO</StatementCode>
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of the Goods.

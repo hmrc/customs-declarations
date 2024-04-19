@@ -6,18 +6,44 @@
     <AgencyAssignedCustomizationCode/>
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
-        <FunctionCode>09</FunctionCode>
-        <FunctionalReferenceID>661a08ea5fdf4ea684e9be32db123d25</FunctionalReferenceID>
+        <FunctionCode>01</FunctionCode>
+        <FunctionalReferenceID>b24c1d6fb4184e119a509391ce208838</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20221110131811Z</DateTimeString>
+            <DateTimeString formatCode="304">20240410113950+01</DateTimeString>
         </IssueDateTime>
         <AdditionalInformation>
-            <StatementCode>A2</StatementCode>
-            <StatementTypeCode>AFB</StatementTypeCode>
+            <StatementCode>smartErrorMsg</StatementCode>
+            <StatementDescription>Weight appears too high per item</StatementDescription>
+            <StatementTypeCode>1</StatementTypeCode>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>07B</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>53A</DocumentSectionCode>
+            </Pointer>
         </AdditionalInformation>
+        <Error>
+            <Description>Weight appears too high per item</Description>
+            <ValidationCode>CDS13000</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+        </Error>
         <Declaration>
-            <FunctionalReferenceID>TT_IM40a_0109_02</FunctionalReferenceID>
-            <ID>22GBCG1C2MU72M8AR4</ID>
+            <AcceptanceDateTime>
+                <DateTimeString formatCode="304">20240410000000+01</DateTimeString>
+            </AcceptanceDateTime>
+            <FunctionalReferenceID>7847767QIING</FunctionalReferenceID>
+            <ID>24GB3ZIW0L1T38ZAR9</ID>
             <VersionID>1</VersionID>
         </Declaration>
     </Response>

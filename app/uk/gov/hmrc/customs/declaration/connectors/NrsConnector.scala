@@ -35,7 +35,7 @@ class NrsConnector @Inject()(http: HttpClient,
                             (implicit ec: ExecutionContext) {
 
   private val XApiKey = "X-API-Key"
-  private val headersList = Some(List("Accept", "Gov-Test-Scenario"))
+  private val headersList = Some(List("Accept", "Gov-Test-Scenario", "X-Correlation-ID"))
 
   def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[NrSubmissionId] = {
     post(nrsPayload, declarationConfigService.nrsConfig.nrsUrl)

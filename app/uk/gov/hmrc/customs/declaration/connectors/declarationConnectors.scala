@@ -77,13 +77,14 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   override lazy val unstablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
   override lazy val unavailablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
 
-  private val headersList = Some(List("Accept", "Gov-Test-Scenario"))
+  private val headersList = Some(List("Accept", "Gov-Test-Scenario", "X-Correlation-ID"))
 
-  private def apiStubHeaderCarrier(additionalHeaders: Seq[String] = Seq.empty)(implicit hc: HeaderCarrier): HeaderCarrier = {
+  private def apiStubHeaderCarrier()(implicit hc: HeaderCarrier): HeaderCarrier = {
     HeaderCarrier(
       extraHeaders = hc.extraHeaders ++
+
         // Other headers (i.e Gov-Test-Scenario, Content-Type)
-        hc.headers(additionalHeaders ++ headersList.getOrElse(Seq.empty))
+        hc.headers(headersList.getOrElse(Seq.empty))
     )
   }
 
@@ -91,7 +92,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
 
-    lazy val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken)
+    lazy val decHeaders: Seq[(String, String)] = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ hc.headers(headersList.getOrElse(Seq.empty))
     val startTime = LocalDateTime.now
     withCircuitBreaker(post(xml, config.url, decHeaders)).map {
       response => {

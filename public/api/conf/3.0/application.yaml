@@ -66,7 +66,7 @@ paths:
           example: application/vnd.hmrc.3.0+xml
       - name: Content-Type
         in: header
-        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        description: Specifies the format of the request body. Must be "application/xml; charset=UTF-8" or the request will be rejected with HTTP status code 415.
         required: true
         style: simple
         schema:
@@ -212,7 +212,7 @@ paths:
           example: application/vnd.hmrc.3.0+xml
       - name: Content-Type
         in: header
-        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        description: Specifies the format of the request body. Must be "application/xml; charset=UTF-8" or the request will be rejected with HTTP status code 415.
         required: true
         style: simple
         schema:
@@ -377,7 +377,7 @@ paths:
           example: application/vnd.hmrc.3.0+xml
       - name: Content-Type
         in: header
-        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        description: Specifies the format of the request body. Must be "application/xml; charset=UTF-8" or the request will be rejected with HTTP status code 415.
         required: true
         style: simple
         schema:
@@ -542,7 +542,7 @@ paths:
           example: application/vnd.hmrc.3.0+xml
       - name: Content-Type
         in: header
-        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        description: Specifies the format of the request body. Must be "application/xml; charset=UTF-8" or the request will be rejected with HTTP status code 415.
         required: true
         style: simple
         schema:
@@ -688,7 +688,7 @@ paths:
           example: application/vnd.hmrc.3.0+xml
       - name: Content-Type
         in: header
-        description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+        description: Specifies the format of the request body. Must be "application/xml; charset=UTF-8" or the request will be rejected with HTTP status code 415.
         required: true
         style: simple
         schema:

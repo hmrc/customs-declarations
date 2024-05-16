@@ -2,13 +2,13 @@
 			<inv:messageCode>EDL</inv:messageCode>               
 							  
 			<inv:ucrBlock>
-				<inv:ucr>4GB592971594846-XDIFO8J8</inv:ucr>
+				<inv:ucr>4GB839940712580-H6LMILU</inv:ucr>
 				<inv:ucrType>D</inv:ucrType>
 			</inv:ucrBlock>
 			<inv:goodsLocation>GBAUSOUSTNSOU</inv:goodsLocation>
 	
-	<inv:goodsDepartureDateTime>2024-01-18T15:35:06.006Z</inv:goodsDepartureDateTime>
-	<inv:movementReference>9CM1NKNGC72YV37ROX1WT95AD</inv:movementReference>
+	<inv:goodsDepartureDateTime>2024-04-25T09:04:33.033Z</inv:goodsDepartureDateTime>
+	<inv:movementReference>E5GRKTIBKYWC5P5KZZSQQOQ29</inv:movementReference>
 	<inv:transportDetails>
 		<inv:transportID>11CSCLGLOBE</inv:transportID>
 		<inv:transportMode>1</inv:transportMode>

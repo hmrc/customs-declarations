@@ -304,7 +304,7 @@
                 </GovernmentProcedure>
                 <!--DE 1/11: Additional Procedure.
                     Mandatory.
-                    E02 to indicate Imports of fresh fruit and vegetables with the customs value and duty calculated using a Standard Import Value (SIV) (as listed in Annex VII, Part A Commission Delegated Regulation (EU) No 2017/891) and the Official Journals (OJ) of the EU. -->
+                    000 indicates that no other additional procedure code applies . -->
                 <GovernmentProcedure>
                     <CurrentCode>000</CurrentCode>
                 </GovernmentProcedure>

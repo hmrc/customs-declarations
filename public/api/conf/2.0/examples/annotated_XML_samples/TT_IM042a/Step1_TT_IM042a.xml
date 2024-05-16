@@ -18,7 +18,6 @@
                 Deferment used for security
                 Goods presented at port of Belfast.
                 Expected Notifications (4): DMSACC, DMSTAX(1), DMSTAX(2) and DMSCLE
-
                 N.B. Due to changes in Tariff data as part of the Northern Ireland Protocol, this
                 sample no longer results in the calculation and reservation of security deposits
                 for End Use. Consequently, the content of the DMSTAX notification will differ slightly,
@@ -28,7 +27,7 @@
         <!--Function Code of 9 to represent an original declaration -->
         <FunctionCode>9</FunctionCode>
         <!-- DE 2/5: Declarant's own reference number : this must be unique to the transaction. -->
-        <FunctionalReferenceID>78494317BDYC</FunctionalReferenceID>
+        <FunctionalReferenceID>7849431JG8IH</FunctionalReferenceID>
         <!--DE 1/1: IM to represent an import declaration. -->
         <!--DE 1/2: A to represent a frontier/arrived standard declaration. -->
         <TypeCode>IMA</TypeCode>
@@ -41,7 +40,7 @@
         <!--DE 3/39: Holder of teh Authorisation Identification Number.
                     An authorisation type code of EUS indicates End Use authorisation, the EORI number entered here must be the same as the Importer's EORI number declared in DE 3/16. -->
         <AuthorisationHolder>
-            <ID>GB896458895015</ID>
+            <ID>XI896458895015</ID>
             <CategoryCode>EUS</CategoryCode>
         </AuthorisationHolder>
         <!--DE 3/39: Holder of the Authorisation Identification Number.
@@ -49,7 +48,7 @@
                     See DE 2/3 where a document code of C505 has been entered.
                     The ID here is the EORI of the CCG authorised party. -->
         <AuthorisationHolder>
-            <ID>GB896458895015</ID>
+            <ID>XI896458895015</ID>
             <CategoryCode>CGU</CategoryCode>
         </AuthorisationHolder>
         <BorderTransportMeans>
@@ -64,7 +63,7 @@
                     The EORI number of the Importer entering the declaration.
                     The UK requires an EORI to be provided for the declarant. -->
         <Declarant>
-            <ID>GB896458895015</ID>
+            <ID>XI896458895015</ID>
         </Declarant>
         <!--DE 3/1: Exporter.
                     Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
@@ -119,14 +118,14 @@
                 <!--DE 2/3: A document code of C505 indicates a CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.-->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
-                    <ID>GBCGU3827</ID>
+                    <ID>XICGU89645889501520231019133850</ID>
                     <TypeCode>505</TypeCode>
                 </AdditionalDocument>
                 <!--DE 2/3: A document code of N935 indicates Invoice/order reference (valuation Method 1 used).
                     Document code of AC in this scenario indicates Document attached for certification by customs. -->
                 <AdditionalDocument>
                     <CategoryCode>N</CategoryCode>
-                    <ID>12345/24.05.2021</ID>
+                    <ID>12345/24.03.2024</ID>
                     <TypeCode>935</TypeCode>
                     <LPCOExemptionCode>AC</LPCOExemptionCode>
                 </AdditionalDocument>
@@ -135,7 +134,7 @@
                     In this scenario, a document code of XW indicates Waiver claimed. -->
                 <AdditionalDocument>
                     <CategoryCode>N</CategoryCode>
-                    <ID>GBEUS89645889501520191113093111</ID>
+                    <ID>XIEUS89645889501520231019133850</ID>
                     <Name>Simplified Authorisation</Name>
                     <TypeCode>990</TypeCode>
                 </AdditionalDocument>
@@ -263,12 +262,12 @@
             </GovernmentAgencyGoodsItem>
             <!--DE 3/16: EORI number of the Importer. -->
             <Importer>
-                <ID>GB896458895015</ID>
+                <ID>XI896458895015</ID>
             </Importer>
             <!--DE 2/1: Z355 To show the MRN for the Entry Summary Declaration. -->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
-                <ID>21GB34F7Y1O2CX8PT4</ID>
+                <ID>24GB34F7Y1O2CX8PT4</ID>
                 <TypeCode>355</TypeCode>
                 <LineNumeric>1</LineNumeric>
             </PreviousDocument>
@@ -280,7 +279,7 @@
         </GoodsShipment>
         <!--DE 8/3:  Guarantee Reference. -->
         <ObligationGuarantee>
-            <ID>GB896458895015</ID>
+            <ID>XI896458895015</ID>
             <!--DE 8/2:  Guarantee Type and Cash Accounts.
                 3 to represent individual guarantee in cash or other means of payment recognised by the customs authorities as being equivalent to a cash deposit,
                 made in euro or in the currency of the Member State in which the guarantee is required (Article 92(1)(a) of the Code). -->

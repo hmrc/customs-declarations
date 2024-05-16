@@ -2,12 +2,12 @@
 			<inv:messageCode>EAL</inv:messageCode>               
 							  
 			<inv:ucrBlock>
-				<inv:ucr>4GB592971594846-XDIFO8J8</inv:ucr>
+				<inv:ucr>4GB839940712580-H6LMILU</inv:ucr>
 				<inv:ucrType>D</inv:ucrType>
 			</inv:ucrBlock>
 			<inv:goodsLocation>GBAUSOUSTNSOU</inv:goodsLocation>
-	<inv:goodsArrivalDateTime>2024-01-18T15:34:42.042Z</inv:goodsArrivalDateTime>
+	<inv:goodsArrivalDateTime>2024-04-25T09:04:14.014Z</inv:goodsArrivalDateTime>
 	
-	<inv:movementReference>2O1KYD7C01KWFFO0V74SZ1C6T</inv:movementReference>
+	<inv:movementReference>MJUD9LXA8OS5X82WLW8FUVI6L</inv:movementReference>
 	
 </inv:inventoryLinkingMovementRequest>

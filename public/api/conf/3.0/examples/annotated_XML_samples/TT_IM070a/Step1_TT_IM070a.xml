@@ -22,7 +22,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>7849431NBMZT</FunctionalReferenceID>
+		<FunctionalReferenceID>7849431VAI92</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: A to represent a standard frontier declaration.-->
 		<TypeCode>IMA</TypeCode>
@@ -267,16 +267,16 @@
 					</DutyTaxFee>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross mass of the goods in kilograms including packaging. -->
-						<GrossMassMeasure>110000</GrossMassMeasure>
+						<GrossMassMeasure>220000</GrossMassMeasure>
 						<!--DE 6/1: Net mass of the goods in kilograms without any packaging. -->
-						<NetNetWeightMeasure>100000</NetNetWeightMeasure>
+						<NetNetWeightMeasure>200000</NetNetWeightMeasure>
 						<!--DE 6/2: Supplementary Units -->
 						<TariffQuantity>100</TariffQuantity>
 					</GoodsMeasure>
 					<!--DE 4/14: Item price amount.
 						The invoice was issued with a value of 1000 and the currency was in GBP.-->
 					<InvoiceLine>
-						<ItemChargeAmount currencyID="GBP">1000000</ItemChargeAmount>
+						<ItemChargeAmount currencyID="GBP">2000000</ItemChargeAmount>
 					</InvoiceLine>
 				</Commodity>
 				<!--DE 4/16: Valuation method.

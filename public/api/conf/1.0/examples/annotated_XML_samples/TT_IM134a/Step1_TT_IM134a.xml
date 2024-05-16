@@ -1,11 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+    xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+    xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+    xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
     <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-        <!-- A trader submits a Type E simplified declaration (I1), importing goods from ROW to GB. The trader enters the following information on the declaration: -
+    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+        xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+        xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+        <!-- A trader submits a Type E simplified declaration (I1), importing goods from ROW to NI. The trader enters the following information on the declaration: -
         Procedure Code '4000' at item level in DE 1/10.
         - Additional Procedure Code '1PF' at item level in DE 1/11.
         A Goods Presentation Notice is submitted to arrive the goods.
@@ -14,7 +21,7 @@
         <!--Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN. Trader's own reference number - this must be unique to the transaction. -->
-        <FunctionalReferenceID>78494316ALF2</FunctionalReferenceID>
+        <FunctionalReferenceID>78494316OS5C</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type. IM to represent an import declaration. -->
         <!--DE 1/2: Additional Declaration Type. E to represent a pre-lodged occasional simplified declaration. -->
         <TypeCode>IME</TypeCode>
@@ -93,7 +100,7 @@
                 <!--DE 2/3: Documents produced, certificates and authorisations, additional references. N935 indicates the invoice on the basis of which the customs value of the goods is declared. This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
                 <AdditionalDocument>
                     <CategoryCode>N</CategoryCode>
-                    <ID>12345/18.10.2023</ID>
+                    <ID>12345/18.03.2024</ID>
                     <TypeCode>935</TypeCode>
                     <LPCOExemptionCode>AC</LPCOExemptionCode>
                 </AdditionalDocument>
@@ -184,9 +191,9 @@
                         <!--DE 6/1: Net Mass. Weight of the goods in kilograms without any packaging. -->
                         <NetNetWeightMeasure>20</NetNetWeightMeasure>
                     </GoodsMeasure>
-                    <!--DE 4/14: Item Price/ Amount. The invoice was issued with a value of 200 and the currency of GBP.-->
+                    <!--DE 4/14: Item Price/ Amount. The invoice was issued with a value of 500 and the currency of GBP.-->
                     <InvoiceLine>
-                        <ItemChargeAmount currencyID="GBP">200</ItemChargeAmount>
+                        <ItemChargeAmount currencyID="GBP">500</ItemChargeAmount>
                     </InvoiceLine>
                 </Commodity>
                 <!--DE 4/16: Valuation method. 1 to indicate the method is transaction value of the goods. -->
@@ -235,14 +242,14 @@
             <!--DE 2/1: Simplified Declaration/ Previous Documents. Z355 to show Entry Summary Declaration (ENS). This is a mandatory field. Note that as this is for a single item declaration, this should all be declared at header level.-->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
-                <ID>23GB34F7Y1O2CX8PT4</ID>
+                <ID>24GB34F7Y1O2CX8PT4</ID>
                 <TypeCode>355</TypeCode>
                 <LineNumeric>1</LineNumeric>
             </PreviousDocument>
             <!--DE 2/1: Simplified Declaration/ Previous Documents. ZMRN to show the Declaration/Notification MRN (including reference no. of any Export Accompanying Document). This is a mandatory field. Note that as this is for a single item declaration, this should all be declared at header level. -->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
-                <ID>23GB59Z5A9V8BY3VS2</ID>
+                <ID>24GB59Z5A9V8BY3VS2</ID>
                 <TypeCode>MRN</TypeCode>
                 <LineNumeric>1</LineNumeric>
             </PreviousDocument>

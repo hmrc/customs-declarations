@@ -6,18 +6,17 @@
     <AgencyAssignedCustomizationCode/>
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
-        <FunctionCode>09</FunctionCode>
-        <FunctionalReferenceID>68c92fe4ebf041fca6363e3a8d8aa1d1</FunctionalReferenceID>
+        <FunctionCode>01</FunctionCode>
+        <FunctionalReferenceID>7891cda6b29d459c8fc8bc21ae0f036e</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20221110145226Z</DateTimeString>
+            <DateTimeString formatCode="304">20240423110151+01</DateTimeString>
         </IssueDateTime>
-        <AdditionalInformation>
-            <StatementCode>A2</StatementCode>
-            <StatementTypeCode>AFB</StatementTypeCode>
-        </AdditionalInformation>
         <Declaration>
-            <FunctionalReferenceID>TT_IM40b_1110_01</FunctionalReferenceID>
-            <ID>22GBCG4P9W2GX1PAR0</ID>
+            <AcceptanceDateTime>
+                <DateTimeString formatCode="304">20240423000000+01</DateTimeString>
+            </AcceptanceDateTime>
+            <FunctionalReferenceID>7849431OLFS2</FunctionalReferenceID>
+            <ID>24GB4I297YQAWIEAR0</ID>
             <VersionID>1</VersionID>
         </Declaration>
     </Response>

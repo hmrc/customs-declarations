@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		
+		<!--
+			SCENARIO
+			A trader submits an Exports Type J (C21E Procedure Category) declaration, exporting goods from NI to ROW.
+
+			The trader enters the following information on the declaration:
+			-XI EORI's at DE3/20 Representative, DE1/18 Declarant, DE 3/2 Exporter and 3/32 Carrier ID.
+			-Procedure Code '0014' at item level in DE 1/10
+			-Additional Procedure Code '000' at item level in DE 1/11
+			-Additional Information Code 'NIEXP' in DE 2/2.
+			
+			An EAL and EDL are submitted to arrive and then depart the goods at DUCR level using XI EORI as as submitter. 
+		-->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: LRN. 
+			The trader assigned reference to the declaration. -->
+		<FunctionalReferenceID>7849431QA2WB</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type.
+			EX to represent an Export declaration. -->
+		<!--DE 1/2: Additional Declaration Type.
+			K to represent a Pre lodged declaration. -->
+		<TypeCode>EXJ</TypeCode>
+		<!--DE 1/9: Total Number of Items.
+			Total number of goods items on the declaration. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 3/20: Representative Identification Number.
+			EORI number of the Representative.
+            DE 3/21: Representative Status Code.
+			'2' Indicating direct representation. -->
+		<Agent>
+			<ID>XI150454489082</ID>
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!--DE 7/4: 4 Mode of Transport at the Border.
+			Code 4 indicating that the mode of transport used to arrive at the UK external border is by Air Transport. -->
+		<BorderTransportMeans>
+			<ModeCode>4</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: Declarant Identification Number.
+			EORI number of the Declarant. -->
+		<Declarant>
+			<ID>XI201909013000</ID>
+		</Declarant>
+		<!--DE 5/12 Customs Office of Exit. 
+			Indicating Belfast International Airport. -->
+		<ExitOffice>
+			<ID>GB000014</ID>
+		</ExitOffice>
+		<!--DE 3/2: Exporter Identification Number. 
+			EORI number of the Exporter. -->
+		<Exporter>
+			<ID>XI896458895023</ID>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 3/9: Consignee Name and Address. -->
+			<Consignee>
+				<Name>Mr Consignee</Name>
+				<Address>
+					<CityName>Ota City</CityName>
+					<CountryCode>JP</CountryCode>
+					<Line>Tokyo</Line>
+					<PostcodeID>144-0041</PostcodeID>
+				</Address>
+			</Consignee>
+			<Consignment>
+				<!--DE 7/2: Container.
+					'0' Indicating goods not arriving in container. -->
+				<ContainerCode>0</ContainerCode>
+				<!--DE 7/7: Identity of the means of transport at departure. 
+					Type 40 to indicate an IATA flight number. -->
+				<DepartureTransportMeans>
+					<ID>98765</ID>
+					<IdentificationTypeCode>40</IdentificationTypeCode>
+				</DepartureTransportMeans>
+				<GoodsLocation>
+					<!--DE 5/23: Location of Goods - Identification of location.
+						ID to give a unique position of the location. 
+						BELBFSBEL Indicating Belfast Airport. -->
+					<Name>BELBFSBEL</Name>
+					<!--DE 5/23: Location of Goods - Type of location.
+						A in this scenario to represent that it is a Frontier or Frontier linked location. -->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Location of Goods - Qualifier of the identification.
+							U in this scenario for UN/LOCODE. -->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Location of Goods - Country.
+							Country code of the country where the goods may be examined.
+							GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+			</Consignment>
+			<!--DE 5/8: Country of Destination Code.
+				JP Indicating Japan. -->
+			<Destination>
+				<CountryCode>JP</CountryCode>
+			</Destination>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Goods Item Number. 
+					Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 8/6: Statistical Value.
+					Enter the statistical value for the goods item in GBP (£ sterling), irrespective of the currency used in Invoice Currency. -->
+				<StatisticalValueAmount currencyID="GBP">6000</StatisticalValueAmount>
+				<!--DE 8/5 Nature of Transaction. 
+					Enter, a 2-digit code (second digit is optional)
+					The single digit codes listed in column A of the table provided for under Article 10(2) of Commission Regulation (EC) No 113/2010 shall be used.
+					Member States may also provide for a second digit from the list in column B of that table to be collected.
+					In this case first digit (1) represents 'Transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation' second digit (1) represents 'Outright purchase/sale'. -->
+				<TransactionNatureCode>99</TransactionNatureCode>	
+				<!--DE 2/2: Additional Information. 
+					NIEXP to be used when a movement is made from NI to GB or an NI to RoW export declaration is made.
+					00400 for identity between declarant and exporter. Enter 'EXPORTER' to indicate self-representation by the exporter.-->
+				<AdditionalInformation>
+					<StatementCode>NIEXP</StatementCode>
+				</AdditionalInformation>
+				<Commodity>
+					<!--DE 6/8: Description of Goods. -->
+					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+					<Classification>
+						<!--DE 6/14: Commodity Code - Combined Nomenclature Code. -->
+						<ID>46021910</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass. 
+							Weight of the goods in kilograms including packaging. -->
+						<GrossMassMeasure>100</GrossMassMeasure>
+						<!--DE 6/1: Net Mass.
+							Weight of the goods in kilograms without any packaging. -->
+						<NetNetWeightMeasure>50</NetNetWeightMeasure>
+					</GoodsMeasure>
+				</Commodity>
+				<GovernmentProcedure>
+					<!--DE 1/10: Procedure. 
+						Requested Procedure of 00 14. -->
+					<CurrentCode>00</CurrentCode>
+					<PreviousCode>14</PreviousCode>
+				</GovernmentProcedure>
+				<GovernmentProcedure>
+					<!--DE 1/11: Additional Procedure Code.
+						000 to indicate no additional procedure. -->
+					<CurrentCode>000</CurrentCode>
+				</GovernmentProcedure>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping Marks.
+						In this case '2379261ETT'. -->
+					<MarksNumbersID>2379261ETT</MarksNumbersID>
+					<!--DE 6/10: Number of Packages.
+						In this case 10. -->
+					<QuantityQuantity>100</QuantityQuantity>
+					<!--DE 6/9: Type of Packages.
+						PK indicate Standard packaging unit. -->
+					<TypeCode>PK</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 2/1: Simplified Declaration/ Previous Documents.
+				Previous document to show the DUCR assigned to the consignment.
+                This is a mandatory field. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>4XI896458895023-C8PMC0WQLV</ID>
+				<TypeCode>DCR</TypeCode>
+			</PreviousDocument>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>

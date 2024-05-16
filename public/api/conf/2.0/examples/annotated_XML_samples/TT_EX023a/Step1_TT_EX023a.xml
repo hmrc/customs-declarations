@@ -1,21 +1,10 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			Type A Export with self representation and no control.
@@ -34,15 +23,14 @@
 		<!--This should be updated to today's date as the declaration is a frontier type.
 			Note this data element is not mandatory for pre-lodged or frontier declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20210923080000+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20240425090243+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: The trader assigned reference to the declaration. -->
-		<FunctionalReferenceID>E3.4sc2.0_2309R1</FunctionalReferenceID>
-		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
+		<FunctionalReferenceID>7849431M4IK3</FunctionalReferenceID>
 		<IssueDateTime>
-			<p1:DateTimeString formatCode="304">20210923080000+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20240425090243Z</p1:DateTimeString>
 		</IssueDateTime>
 		<!--DE 1/1: Declaration Type. 
 			EX to represent an Export declaration. -->
@@ -54,7 +42,6 @@
 		<!--DE 5/26: Customs Office of Presentation. 
 			Note 1: This information is only required when centralised clearance/SASP is being used, and may be removed in the next version of this sample.
 			Note 2: 'DeclarationOfficeID' and 'Declaration/PresentationOffice/ID' are two different fields. DeclarationOfficeID is unassigned from any UCC/Data Element number so this can apply to any Data Element number: in this case 5/26. -->
-		<DeclarationOfficeID>GBLBA001</DeclarationOfficeID>
 		<!--DE 4/11: Total Amount Invoiced. -->
 		<InvoiceAmount currencyID="JPY">15000</InvoiceAmount>
 		<!--DE 6/18: Total Packages. -->
@@ -256,7 +243,7 @@
 				Previous document to show the DUCR assigned to the consignment. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB225456994000-2309R1</ID>
+				<ID>4GB568808592393-A0QPKHSFCQ</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

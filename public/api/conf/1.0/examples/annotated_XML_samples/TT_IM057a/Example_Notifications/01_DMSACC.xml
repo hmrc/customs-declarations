@@ -7,43 +7,16 @@
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
         <FunctionCode>01</FunctionCode>
-        <FunctionalReferenceID>b90fdd76d0044ab58c5a2f2c7ef3535d</FunctionalReferenceID>
+        <FunctionalReferenceID>f6f92607fe694a4381d5f53249dbb993</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20240410105806+01</DateTimeString>
+            <DateTimeString formatCode="304">20240429143210+01</DateTimeString>
         </IssueDateTime>
-        <AdditionalInformation>
-            <StatementCode>smartErrorMsg</StatementCode>
-            <StatementDescription>Value per kilo appears too high for this commodity</StatementDescription>
-            <StatementTypeCode>1</StatementTypeCode>
-            <Pointer>
-                <SequenceNumeric>1</SequenceNumeric>
-                <DocumentSectionCode>07B</DocumentSectionCode>
-            </Pointer>
-            <Pointer>
-                <SequenceNumeric>1</SequenceNumeric>
-                <DocumentSectionCode>53A</DocumentSectionCode>
-            </Pointer>
-        </AdditionalInformation>
-        <Error>
-            <Description>Value per kilo appears too high for this commodity</Description>
-            <ValidationCode>CDS13000</ValidationCode>
-            <Pointer>
-                <DocumentSectionCode>42A</DocumentSectionCode>
-            </Pointer>
-            <Pointer>
-                <DocumentSectionCode>67A</DocumentSectionCode>
-            </Pointer>
-            <Pointer>
-                <SequenceNumeric>1</SequenceNumeric>
-                <DocumentSectionCode>68A</DocumentSectionCode>
-            </Pointer>
-        </Error>
         <Declaration>
             <AcceptanceDateTime>
-                <DateTimeString formatCode="304">20240410105804+01</DateTimeString>
+                <DateTimeString formatCode="304">20240429143208+01</DateTimeString>
             </AcceptanceDateTime>
-            <FunctionalReferenceID>7847323ITBI3</FunctionalReferenceID>
-            <ID>24GB3ZHEBVAR1B3AR3</ID>
+            <FunctionalReferenceID>7847767TJ3FE</FunctionalReferenceID>
+            <ID>24GB4QUET64MAQOAR0</ID>
             <VersionID>1</VersionID>
         </Declaration>
     </Response>

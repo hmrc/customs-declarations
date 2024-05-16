@@ -6,7 +6,7 @@
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--
-            **Please note this scenario is currently rejecting and will be fixed in a future release.
+            Please note this scenario is currently not working as expected, and will be fixed in a future release.
             SCENARIO
             ROW to NI - De-risked - UK Licence Quota Validation.
             Goods imported and declared to free-circulation and home use of non-union goods, with no previous procedure.
@@ -17,14 +17,13 @@
             Agent employed by the importer under direct rep.
             Deferment used for payment of duty.
             Goods presented at Port of Belfast.
-
             Expected Notifications: DMSTAX, DMSACC, DMSTAX, DMSCLE.
         -->
         <!--Function Code of 9 to represent an original declaration-->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN.
             Declarant's own reference number: this must be unique to the transaction. -->
-        <FunctionalReferenceID>7844388L5P4A</FunctionalReferenceID>
+        <FunctionalReferenceID>78494319MNY4</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             IM to represent an import declaration. -->
         <!--DE 1/2: Additional Declaration Type.
@@ -35,7 +34,7 @@
             This is a single item declaration. -->
         <GoodsItemQuantity>1</GoodsItemQuantity>
         <!--6/18: Total Packages.
-            In this case, 10. 
+            In this case, 10.
             Note that this matches DE 6/10 because this is a single item declaration. -->
         <TotalPackageQuantity>10</TotalPackageQuantity>
         <!--DE 2/6: Deferred Payment.
@@ -58,8 +57,8 @@
             <ID>XI553202734852</ID>
             <CategoryCode>CGU</CategoryCode>
         </AuthorisationHolder>
-        <!--DE 3/39: Holder of the Authorisation Identification Number. 
-            An authorisation type code of DPO indicates Deferment of Payment authorisation. 
+        <!--DE 3/39: Holder of the Authorisation Identification Number.
+            An authorisation type code of DPO indicates Deferment of Payment authorisation.
             The ID here is the EORI of the DPO authorised party. -->
         <AuthorisationHolder>
             <ID>XI553202734852</ID>
@@ -75,7 +74,7 @@
         </BorderTransportMeans>
         <Declarant>
             <!--DE 3/18: Declarant Identification Number.
-                The EORI number of the agent entering the declaration. 
+                The EORI number of the agent entering the declaration.
                 The UK requires an EORI to be provided for the declarant. -->
             <ID>XI603202734852</ID>
         </Declarant>
@@ -141,14 +140,14 @@
                     1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation. -->
                 <TransactionNatureCode>1</TransactionNatureCode>
                 <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                    A document code of L001 indicates: Import licence AGRIM. 
+                    A document code of L001 indicates: Import licence AGRIM.
                     Document code of EP in this scenario indicates Electronic details on CDS part use (applies to this and other entries). -->
                 <AdditionalDocument>
                     <CategoryCode>L</CategoryCode>
                     <ID>GBCPI1BF12345A</ID>
                     <TypeCode>001</TypeCode>
                     <LPCOExemptionCode>EP</LPCOExemptionCode>
-                    <!--DE 8/7: Writing off. 
+                    <!--DE 8/7: Writing off.
                         This is required because a specific quantity and measurement type has to be decremented against this document. -->
                     <WriteOff>
                         <QuantityQuantity unitCode="KGM#G">4</QuantityQuantity>
@@ -183,7 +182,7 @@
                     Provide the authorisation decision number for the deferment of payment authorisation in format:
                     - 2 digit code identifying the member state of authorisation, for example, GB.
                     - 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO.
-                    - Followed by the authorisation reference number. 
+                    - Followed by the authorisation reference number.
                     No document status code is required. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
@@ -208,22 +207,22 @@
                     <TypeCode>120</TypeCode>
                     <LPCOExemptionCode>AC</LPCOExemptionCode>
                 </AdditionalDocument>
-                <!--DE 2/2: Additional Information. 
+                <!--DE 2/2: Additional Information.
                     This field is mandatory, this represents goods are Imported from ROW into Northern Ireland. -->
                 <AdditionalInformation>
                     <StatementCode>NIIMP</StatementCode>
                 </AdditionalInformation>
-                <!--DE 2/2: Additional Information. 
+                <!--DE 2/2: Additional Information.
                     This field is mandatory, this represents goods are de-risked from ROW into Northern Ireland. -->
                 <AdditionalInformation>
-                    <StatementCode>NIREM</StatementCode>
+                    <StatementCode>NIQUO</StatementCode>
                 </AdditionalInformation>
                 <Commodity>
                     <!--DE 6/8: Description of Goods.
                         Description of the goods which is specific enough to allow the unambiguous identification, classification and examination of goods. -->
                     <Description>Plucked and Drawn chickens 1000KG - 65% chickens</Description>
                     <Classification>
-                        <!--DE 6/14: Commodity Code — Combined Nomenclature Code. -->
+                        <!--DE 6/14: Commodity Code â€” Combined Nomenclature Code. -->
                         <ID>02071290</ID>
                         <IdentificationTypeCode>TSP</IdentificationTypeCode>
                     </Classification>
@@ -233,14 +232,14 @@
                         <ID>00</ID>
                         <IdentificationTypeCode>TRC</IdentificationTypeCode>
                     </Classification>
-                    <!--DE 6/17: National Additional Code. 
+                    <!--DE 6/17: National Additional Code.
                         VATZ to represent VAT 0 duty rate. -->
                     <Classification>
                         <ID>VATZ</ID>
                         <IdentificationTypeCode>GN</IdentificationTypeCode>
                     </Classification>
                     <DutyTaxFee>
-                        <!--DE 4/3: Tax Type. 
+                        <!--DE 4/3: Tax Type.
                             In this scenario, A00 indicating UK Customs Duty -->
                         <TypeCode>A00</TypeCode>
                         <Payment>
@@ -266,11 +265,11 @@
                         <NetNetWeightMeasure>1000</NetNetWeightMeasure>
                     </GoodsMeasure>
                     <InvoiceLine>
-                        <!--DE 4/14: Item Price/ Amount. 
+                        <!--DE 4/14: Item Price/ Amount.
                             The invoice was issued with a value of 1,000 and the currency was in GBP. -->
                         <ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
                     </InvoiceLine>
-                    <!--DE 7/10: Container identification number. 
+                    <!--DE 7/10: Container identification number.
                         This is alpha-numeric with up to 17 characters.
                         For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number.
                         For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
@@ -329,7 +328,7 @@
                 <ValuationAdjustment>
                     <!--DE 4/13: Valuation Indicator.
                         Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-                        The code comprises four digits, each of which being either a ‘0’ or a ‘1’:
+                        The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
                         - First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
                         - Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
                         - Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.

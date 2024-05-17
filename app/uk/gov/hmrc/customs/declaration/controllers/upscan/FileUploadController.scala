@@ -59,8 +59,9 @@ class FileUploadController @Inject()(val common: Common,
 
       logger.debug(s"File upload initiate request received. Payload=${validatedRequest.xmlBody} headers=${validatedRequest.headers.headers}")
 
-      fileUploadBusinessService.send map {
+      fileUploadBusinessService.send(validatedRequest, hc) map {
         case Right(res) =>
+          println(s"Header Cariier Controller Level -> $hc")
             logger.info("Upload initiate request processed successfully")
           Ok(res).withConversationId.as(ContentTypes.XML)
         case Left(errorResult) =>

@@ -51,18 +51,22 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   def send[A](implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
               hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
 
-    futureApiSubFieldsId(validatedRequest.clientId).flatMap {
+    futureApiSubFieldsId(validatedRequest.clientId)(validatedRequest, hc).flatMap {
       case Right(sfId) =>
-        backendCalls(sfId).flatMap { fileDetails =>
+        backendCalls(sfId)(validatedRequest, hc).flatMap { fileDetails =>
           persist(fileDetails, sfId).map {
             case true =>
+              println(s"Header Cariier Service Level (3) Right -> $hc")
               val responseBody = serialize(fileDetails)
               logger.debug(s"response body to be returned=\n$responseBody")
               Right(responseBody)
-            case false => Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+            case false =>
+              println(s"Header Cariier Service Level (3) Left -> $hc")
+              Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
           }
         }.recover {
           case NonFatal(e) =>
+            println(s"Header Cariier Service Level (3) Recover -> $hc")
             logger.error(s"Upscan initiate call failed: ${e.getMessage}", e)
             Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
         }
@@ -85,11 +89,11 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def backendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
-                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]): Future[Seq[UpscanInitiateResponsePayload]] = {
+                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
 
     val upscanInitiateRequests = validatedRequest.fileUploadRequest.files
-
-    failFastSequence(upscanInitiateRequests)(f => backendCall(subscriptionFieldsId, f))
+    println(s"Header Cariier Service Level (2)-> $hc")
+    failFastSequence(upscanInitiateRequests)(f => backendCall(subscriptionFieldsId, f)(validatedRequest, hc))
   }
 
   private def persist[A](fileDetails: Seq[UpscanInitiateResponsePayload], sfId: SubscriptionFieldsId)
@@ -158,9 +162,10 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
 
   private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
-                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]) = {
+                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
+    println(s"Header Cariier Service Level (1)-> $hc")
     upscanInitiateConnector.send(
-      preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)
+      preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)(validatedRequest, hc)
   }
 
   private def extractEori(authorisedAs: AuthorisedAs): Option[Eori] = {

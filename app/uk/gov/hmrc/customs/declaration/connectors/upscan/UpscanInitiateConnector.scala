@@ -34,29 +34,44 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
                                         config: DeclarationsConfigService)
                                        (implicit ec: ExecutionContext) {
 
-  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
+  private val headersList = Some(List("Accept", "Gov-Test-Scenario", "X-Correlation-ID"))
+
+  private def apiStubHeaderCarrier()(implicit hc: HeaderCarrier): HeaderCarrier = {
+    HeaderCarrier(
+      extraHeaders = hc.extraHeaders ++
+
+        // Other headers (i.e Gov-Test-Scenario, Content-Type)
+        hc.headers(headersList.getOrElse(Seq.empty))
+    )
+  }
+
+  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[UpscanInitiateResponsePayload] = {
     if (payload.isV2) {
-      post(payload, config.fileUploadConfig.upscanInitiateV2Url)
+      println(Console.YELLOW_B , Console.BLACK + s"Header 1 -> $hc" + Console.RESET)
+      post(payload, config.fileUploadConfig.upscanInitiateV2Url)(vfupr, hc)
     } else {
       post(payload, config.fileUploadConfig.upscanInitiateV1Url)
     }
   }
 
-  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]) = {
+  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
-    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
+    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)(implicitly,implicitly,hc = apiStubHeaderCarrier,implicitly)
       .map { res: UpscanInitiateResponsePayload =>
+        println(Console.YELLOW_B + s"http.POST -> $hc")
         logger.info(s"reference from call to upscan initiate ${res.reference}")
         logger.debug(s"Response received from upscan initiate service $res")
         res
       }
       .recoverWith {
         case httpError: HttpException =>
+          println(Console.YELLOW_B + s"http.POST httpError $hc")
           Future.failed(httpError)
         case e: Throwable =>
+          println(Console.CYAN_B , Console.BLACK + s"http.POST Error $hc" + Console.RESET)
           logger.error(s"Call to upscan initiate failed.")
           Future.failed(e)
       }

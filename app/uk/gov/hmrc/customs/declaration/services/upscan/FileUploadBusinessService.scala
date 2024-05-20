@@ -171,7 +171,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
-                               (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]): UpscanInitiatePayload = {
+                               (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
 
     val upscanInitiatePayload = UpscanInitiatePayload(s"""${config.fileUploadConfig.fileUploadCallbackUrl}/uploaded-file-upscan-notifications/clientSubscriptionId/${subscriptionFieldsId.value}""".stripMargin,
       config.fileUploadConfig.upscanInitiateMaximumFileSize,

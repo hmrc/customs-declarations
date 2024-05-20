@@ -75,7 +75,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   private def futureApiSubFieldsId[A](c: ClientId)
                                      (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
                                       hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
-    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, validatedRequest.requestedApiVersion)) map {
+    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, validatedRequest.requestedApiVersion))(validatedRequest, hc) map {
       response: ApiSubscriptionFieldsResponse =>
         Right(SubscriptionFieldsId(response.fieldsId))
     }).recover {

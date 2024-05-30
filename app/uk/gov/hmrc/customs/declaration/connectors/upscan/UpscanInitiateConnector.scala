@@ -22,9 +22,8 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
-import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,6 +36,7 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
   private val headersList = Some(List("Accept", "Gov-Test-Scenario", "X-Correlation-ID"))
 
   private def apiStubHeaderCarrier()(implicit hc: HeaderCarrier): HeaderCarrier = {
+    println(s"================== $hc")
     HeaderCarrier(
       extraHeaders = hc.extraHeaders ++
 

@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{ActionTransformer, Request}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, UniqueIdsService}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

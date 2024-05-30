@@ -23,8 +23,8 @@ import uk.gov.hmrc.customs.declaration.model.NrsPayload.format
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,20 +35,25 @@ class NrsConnector @Inject()(http: HttpClient,
                             (implicit ec: ExecutionContext) {
 
   private val XApiKey = "X-API-Key"
-  private val headersList = Some(List("Accept", "Gov-Test-Scenario", "X-Correlation-ID"))
+  private val GovTestScenario = "Gov-Test-Scenario"
+  private val headersList = Some(List("Accept", "X-Correlation-ID"))
 
   def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[NrSubmissionId] = {
     post(nrsPayload, declarationConfigService.nrsConfig.nrsUrl)
   }
 
-    private def apiStubHeaderCarrier()(implicit hc: HeaderCarrier): HeaderCarrier = {
-      HeaderCarrier(
-        extraHeaders = hc.extraHeaders ++
+  private def apiStubHeaderCarrier()(implicit hc: HeaderCarrier): HeaderCarrier = {
+    HeaderCarrier(
+      extraHeaders = hc.extraHeaders ++
 
-          // Other headers (i.e Gov-Test-Scenario, Content-Type)
-          hc.headers(headersList.getOrElse(Seq.empty))
-      )
-    }
+        // Other headers (i.e Gov-Test-Scenario, Content-Type)
+        overwriteGovTestScenarioHeaderValue(hc.headers(headersList.getOrElse(Seq.empty)))
+    )
+  }
+
+  def overwriteGovTestScenarioHeaderValue(otherHeaders: Seq[(String, String)])(implicit hc: HeaderCarrier): Seq[(String, String)] = {
+    hc.headers(List(GovTestScenario)).flatMap(_ => otherHeaders :+ (GovTestScenario, "DEFAULT"))
+  }
 
 
   private def post[A](payload: NrsPayload, url: String)(implicit vupr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {

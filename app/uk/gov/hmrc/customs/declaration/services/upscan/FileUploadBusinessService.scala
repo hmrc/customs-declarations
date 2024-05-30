@@ -16,13 +16,10 @@
 
 package uk.gov.hmrc.customs.declaration.services.upscan
 
-import java.net.{URL, URLEncoder}
-import java.util.UUID
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
-import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -32,6 +29,9 @@ import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.net.{URL, URLEncoder}
+import java.util.UUID
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.xml._
@@ -56,17 +56,14 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
         backendCalls(sfId)(validatedRequest, hc).flatMap { fileDetails =>
           persist(fileDetails, sfId).map {
             case true =>
-              println(s"Header Cariier Service Level (3) Right -> $hc")
               val responseBody = serialize(fileDetails)
               logger.debug(s"response body to be returned=\n$responseBody")
               Right(responseBody)
             case false =>
-              println(s"Header Cariier Service Level (3) Left -> $hc")
               Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
           }
         }.recover {
           case NonFatal(e) =>
-            println(s"Header Cariier Service Level (3) Recover -> $hc")
             logger.error(s"Upscan initiate call failed: ${e.getMessage}", e)
             Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
         }
@@ -92,7 +89,6 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
                              (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
 
     val upscanInitiateRequests = validatedRequest.fileUploadRequest.files
-    println(s"Header Cariier Service Level (2)-> $hc")
     failFastSequence(upscanInitiateRequests)(f => backendCall(subscriptionFieldsId, f)(validatedRequest, hc))
   }
 
@@ -163,7 +159,6 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
 
   private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
-    println(s"Header Cariier Service Level (1)-> $hc")
     upscanInitiateConnector.send(
       preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)(validatedRequest, hc)
   }

@@ -16,16 +16,15 @@
 
 package uk.gov.hmrc.customs.declaration.services.upscan
 
-import java.util.UUID
-
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
+import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.{FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.model.{ConversationId, SubscriptionFieldsId}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 
+import java.util.UUID
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 

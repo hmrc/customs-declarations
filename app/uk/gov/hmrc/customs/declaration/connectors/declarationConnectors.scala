@@ -16,15 +16,14 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import org.apache.pekko.actor.ActorSystem
 import com.google.inject._
+import org.apache.pekko.actor.ActorSystem
 import play.api.http.HeaderNames._
 import play.api.http.{ContentTypes, MimeTypes}
 import play.api.mvc.Codec.utf_8
-import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.config.{DeclarationCircuitBreaker, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
 import uk.gov.hmrc.customs.declaration.model.ApiVersion
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService

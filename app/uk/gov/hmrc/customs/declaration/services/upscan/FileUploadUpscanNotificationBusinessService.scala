@@ -16,9 +16,6 @@
 
 package uk.gov.hmrc.customs.declaration.services.upscan
 
-import java.net.URL
-
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -28,6 +25,8 @@ import uk.gov.hmrc.customs.declaration.model.upscan._
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 
+import java.net.URL
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -17,12 +17,12 @@
 package uk.gov.hmrc.customs.declaration.config
 
 import uk.gov.hmrc.customs.declaration.connectors.CircuitBreakerConnector
-
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
+
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 trait DeclarationCircuitBreaker extends CircuitBreakerConnector {
 

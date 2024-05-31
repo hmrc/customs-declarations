@@ -31,9 +31,9 @@ import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedFileUploadPayloadRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.upscan.FileUploadMetadata
-import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}

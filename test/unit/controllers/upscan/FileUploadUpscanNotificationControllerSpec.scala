@@ -16,7 +16,6 @@
 
 package unit.controllers.upscan
 
-import java.util.UUID
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.mockito.stubbing.OngoingStubbing
@@ -39,6 +38,7 @@ import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 import util.UpscanNotifyTestData._
 
+import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {

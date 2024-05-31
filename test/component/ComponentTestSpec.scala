@@ -16,11 +16,10 @@
 
 package component
 
-import java.time.{Instant, ZoneId, ZonedDateTime}
-
 import org.mockito.Mockito.when
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
+import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -29,7 +28,8 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, UniqueIdsService}
 import util.TestData.stubUniqueIdsService
 import util.{CustomsDeclarationsExternalServicesConfig, ExternalServicesConfig}
-import org.scalatest.featurespec.AnyFeatureSpec
+
+import java.time.{Instant, ZoneId, ZonedDateTime}
 
 trait ComponentTestSpec extends AnyFeatureSpec with GivenWhenThen with GuiceOneAppPerSuite
   with BeforeAndAfterAll with BeforeAndAfterEach with Eventually with MockitoSugar {

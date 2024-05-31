@@ -16,7 +16,6 @@
 
 package integration
 
-import java.io.FileNotFoundException
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -25,6 +24,7 @@ import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
+import java.io.FileNotFoundException
 import scala.concurrent.Future
 
 class DocumentationControllerSpec extends IntegrationTestSpec with MockitoSugar with GuiceOneAppPerSuite {

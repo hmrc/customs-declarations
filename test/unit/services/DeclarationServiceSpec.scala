@@ -27,9 +27,9 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.{FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.{ErrorInternalServerError, errorInternalServerError}
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._

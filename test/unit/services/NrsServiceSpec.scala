@@ -26,9 +26,9 @@ import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.{ApiVersionRequestOps, AuthorisedRequestOps, ConversationIdRequestOps, ValidatedHeadersRequestOps}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.services.{AuditingService, DateTimeService, NrsService}
 import uk.gov.hmrc.http._
 import util.TestData._

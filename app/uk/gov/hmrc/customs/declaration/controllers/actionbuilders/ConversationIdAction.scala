@@ -36,6 +36,8 @@ class ConversationIdAction @Inject() (val logger: DeclarationsLogger,
 
     val r = ConversationIdRequest(correlationIdService.conversation, timeService.zonedDateTimeUtc, request)
     logger.debugFull("In ConversationIdAction")(r)
+    logger.infoRaw("TEST MESSAGE")
+    logger.infoRaw("""json{"cds.conversationId":"xyzxyz"}""")
 
     Future.successful(r)
   }

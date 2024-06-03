@@ -42,7 +42,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
 
   private val mockWsPost = mock[HttpClient]
-  private implicit val hc: HeaderCarrier = new HeaderCarrier()
   private implicit val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext

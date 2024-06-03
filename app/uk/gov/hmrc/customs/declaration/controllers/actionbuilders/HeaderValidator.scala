@@ -16,15 +16,15 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
-import javax.inject.Inject
 import play.api.mvc.Headers
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse._
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 
+import javax.inject.Inject
 import scala.util.matching.Regex
 
 abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {

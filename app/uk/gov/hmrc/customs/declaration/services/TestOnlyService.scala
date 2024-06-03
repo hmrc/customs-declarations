@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class TestOnlyService @Inject()(fileUploadMetadataRepo: FileUploadMetadataRepo) {

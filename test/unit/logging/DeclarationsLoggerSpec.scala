@@ -22,8 +22,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.AnyContentAsXml
 import play.api.test.FakeRequest
-import uk.gov.hmrc.customs.declaration.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, AuthorisedRequest}
 import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}

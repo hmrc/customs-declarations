@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.services
 
 import com.google.inject.Inject
-import javax.inject.Singleton
 import org.apache.commons.lang3.StringUtils.EMPTY
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -28,6 +27,7 @@ import uk.gov.hmrc.play.audit.EventKeys.{Path, TransactionName}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
 
+import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 

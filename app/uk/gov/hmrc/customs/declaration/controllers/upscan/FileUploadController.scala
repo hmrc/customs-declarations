@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.upscan
 
-import javax.inject.{Inject, Singleton}
 import play.api.http.ContentTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.controllers.Common
@@ -27,6 +26,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadP
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -59,7 +59,7 @@ class FileUploadController @Inject()(val common: Common,
 
       logger.debug(s"File upload initiate request received. Payload=${validatedRequest.xmlBody} headers=${validatedRequest.headers.headers}")
 
-      fileUploadBusinessService.send map {
+      fileUploadBusinessService.send(validatedRequest, hc) map {
         case Right(res) =>
             logger.info("Upload initiate request processed successfully")
           Ok(res).withConversationId.as(ContentTypes.XML)

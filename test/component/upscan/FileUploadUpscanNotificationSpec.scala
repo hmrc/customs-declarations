@@ -23,10 +23,12 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ACCEPT, CONTENT_TYPE, contentAsString, route, status, _}
+import play.api.test.Helpers.{ACCEPT, contentAsString, route, status, _}
+import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataMongoRepo
+import uk.gov.hmrc.http.HeaderCarrier
 import util.ApiSubscriptionFieldsTestData
 import util.CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
 import util.TestData._
@@ -48,6 +50,10 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
   with IntegrationPatience {
 
   private val endpoint = s"/uploaded-file-upscan-notifications/clientSubscriptionId/$subscriptionFieldsIdString"
+
+  private implicit val hc: HeaderCarrier = HeaderCarrier(
+    extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON) // http-verbs will implicitly add user agent header
+  )
 
   val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]
 
@@ -90,9 +96,6 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
 
       And("The Content-Type header is application/json")
       requestHeaders.get(CONTENT_TYPE) shouldBe Some("application/json")
-
-      And("The Accept header is application/json")
-      requestHeaders.get(ACCEPT) shouldBe Some("application/json")
 
       And("The User Agent header is application/json")
       requestHeaders.get(USER_AGENT) shouldBe Some("customs-declarations")

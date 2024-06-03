@@ -40,13 +40,13 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
     extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON) // http-verbs will implicitly add user agent header
   )
 
-  def send[A](request: FileTransmission)(implicit hasConversationId: HasConversationId): Future[Unit] = {
-    post(request, config.fileUploadConfig.fileTransmissionBaseUrl)
+  def send[A](request: FileTransmission)(implicit hasConversationId: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
+    post(request, config.fileUploadConfig.fileTransmissionBaseUrl)(hasConversationId, hc)
   }
 
-  private def post[A](request: FileTransmission, url: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
+  private def post[A](request: FileTransmission, url: String)(implicit hasConversationId: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
     logger.debug(s"Sending request to file transmission service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(request))}")
-    http.POST[FileTransmission, HttpResponse](url, request).map{ response =>
+    http.POST[FileTransmission, HttpResponse](url, request)(implicitly, implicitly, hc, implicitly).map{ response =>
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")

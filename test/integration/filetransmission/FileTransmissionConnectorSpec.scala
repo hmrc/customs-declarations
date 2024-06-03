@@ -42,6 +42,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
   private lazy val connector = app.injector.instanceOf[FileTransmissionConnector]
   private implicit val mockCdsLogger: CdsLogger = mock[CdsLogger]
+  private implicit val hc: HeaderCarrier = new HeaderCarrier()
 
   private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
   private implicit val conversationIdRequest: ConversationIdRequest[AnyContentAsXml] = TestData.TestConversationIdRequest

@@ -76,6 +76,9 @@ class DeclarationsLoggerSpec extends AnyWordSpecLike with MockitoSugar with Matc
         .withByNameParam("[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d][clientId=SOME_X_CLIENT_ID][requestedApiVersion=1.0][authorisedAs=Csp(Some(ZZ123456789000), Some(BADGEID123))] msg")
         .verify()
     }
+    "infoRaw" in new SetUp {
+      logger.infoRaw("msg")
+    }
     "warn(s: => String)" in new SetUp {
       logger.warn("msg")
 

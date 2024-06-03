@@ -41,7 +41,6 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
   )
 
   def send[A](request: FileTransmission)(implicit hasConversationId: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
-    println(Console.YELLOW_B + Console.BLACK + s"SEND - CONNECTOR - HEADER = $hc" + Console.RESET)
     post(request, config.fileUploadConfig.fileTransmissionBaseUrl)(hasConversationId, hc)
   }
 
@@ -51,7 +50,6 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")
-          println(Console.YELLOW_B + Console.BLACK + s"HEADER = $hc" + Console.RESET)
           ()
 
         case status => //1xx, 3xx, 4xx, 5xx
@@ -60,10 +58,8 @@ class FileTransmissionConnector @Inject()(http: HttpClient,
     }.recoverWith {
         case httpError: HttpException =>
           logger.error(s"Call to file transmission failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
-          println(Console.YELLOW_B + Console.BLACK + s"HEADER fail= $hc" + Console.RESET)
           Future.failed(new RuntimeException(httpError))
         case e: Throwable =>
-          println(Console.YELLOW_B + Console.BLACK + s"HEADER error= $hc" + Console.RESET)
           logger.error(s"Call to file transmission failed. url=$url")
           Future.failed(e)
       }

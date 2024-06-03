@@ -25,7 +25,9 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsXml
-import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND}
+import play.api.test.Helpers.{ACCEPT, BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND}
+import play.mvc.Http.HeaderNames.CONTENT_TYPE
+import play.mvc.Http.MimeTypes.JSON
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
@@ -42,7 +44,6 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
   private lazy val connector = app.injector.instanceOf[FileTransmissionConnector]
   private implicit val mockCdsLogger: CdsLogger = mock[CdsLogger]
-  private implicit val hc: HeaderCarrier = new HeaderCarrier()
 
   private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
   private implicit val conversationIdRequest: ConversationIdRequest[AnyContentAsXml] = TestData.TestConversationIdRequest
@@ -127,6 +128,10 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
     }
 
   }
+
+  private implicit val hc: HeaderCarrier = HeaderCarrier(
+    extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON) // http-verbs will implicitly add user agent header
+  )
 
   private def sendValidRequest() = {
     connector.send(FileTransmissionRequest)

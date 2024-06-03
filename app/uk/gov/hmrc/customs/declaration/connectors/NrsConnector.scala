@@ -19,12 +19,12 @@ package uk.gov.hmrc.customs.declaration.connectors
 import com.google.inject._
 import play.api.libs.json.Json
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.model.NrsPayload.format
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,17 +35,31 @@ class NrsConnector @Inject()(http: HttpClient,
                             (implicit ec: ExecutionContext) {
 
   private val XApiKey = "X-API-Key"
+  private val GovTestScenario = "Gov-Test-Scenario"
+  private val headersList = Some(List("Accept", "X-Correlation-ID"))
 
-  def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[NrSubmissionId] = {
+  def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[NrSubmissionId] = {
     post(nrsPayload, declarationConfigService.nrsConfig.nrsUrl)
   }
 
-  private def post[A](payload: NrsPayload, url: String)(implicit vupr: ValidatedPayloadRequest[A]) = {
+  private def apiStubHeaderCarrier()(implicit hc: HeaderCarrier): HeaderCarrier = {
+    HeaderCarrier(
+      extraHeaders = hc.extraHeaders ++
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+        // Other headers (i.e Gov-Test-Scenario, Content-Type)
+        overwriteGovTestScenarioHeaderValue(hc.headers(headersList.getOrElse(Seq.empty)))
+    )
+  }
+
+  def overwriteGovTestScenarioHeaderValue(otherHeaders: Seq[(String, String)])(implicit hc: HeaderCarrier): Seq[(String, String)] = {
+    hc.headers(List(GovTestScenario)).foldLeft(otherHeaders){(_, _) => otherHeaders :+ (GovTestScenario, "DEFAULT")}
+  }
+
+
+  private def post[A](payload: NrsPayload, url: String)(implicit vupr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
 
     logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
-    http.POST[NrsPayload, NrSubmissionId](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
+    http.POST[NrsPayload, NrSubmissionId](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))(implicitly,implicitly,hc=apiStubHeaderCarrier(),implicitly)
       .map { res =>
         logger.debug(s"Response received from nrs service is submission id: ${res}")
         res

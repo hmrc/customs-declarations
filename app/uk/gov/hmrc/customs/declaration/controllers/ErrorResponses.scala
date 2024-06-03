@@ -20,7 +20,7 @@ import play.api.http.ContentTypes
 import play.api.libs.json._
 import play.api.mvc.Result
 import play.api.mvc.Results._
-import play.mvc.Http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_ACCEPTABLE, NOT_FOUND, _}
+import play.mvc.Http.Status._
 
 import scala.xml.NodeSeq
 

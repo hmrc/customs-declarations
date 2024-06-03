@@ -18,6 +18,7 @@ package integration
 
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -35,7 +36,6 @@ import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData._
 import util._
 import util.externalservices.MdgStatusDeclarationService
-import org.scalatest.matchers.should.Matchers
 
 class DeclarationStatusConnectorSpec extends IntegrationTestSpec
   with Matchers

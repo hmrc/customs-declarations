@@ -448,4 +448,9 @@ object RequestHeaders {
     X_BADGE_IDENTIFIER_HEADER,
     X_SUBMITTER_IDENTIFIER_HEADER
   )
+
+  val OtherHaders: Map[String, String] = Map(
+    ACCEPT_HMRC_XML_V2_HEADER,
+    CONTENT_TYPE_HEADER
+  )
 }

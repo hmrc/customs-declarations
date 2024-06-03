@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.customs.declaration.services.filetransmission
 
-import javax.inject.Singleton
 import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionFailureOutcome, FileTransmissionNotification, FileTransmissionSuccessOutcome}
 import uk.gov.hmrc.customs.declaration.services.upscan.CallbackToXmlNotification
 
+import javax.inject.Singleton
 import scala.xml.{Node, NodeSeq, Text}
 
 @Singleton

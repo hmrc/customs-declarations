@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.services.upscan
 
-import javax.inject.Singleton
 import uk.gov.hmrc.customs.declaration.model.upscan.UploadedFailedCallbackBody
 
+import javax.inject.Singleton
 import scala.xml.NodeSeq
 
 @Singleton

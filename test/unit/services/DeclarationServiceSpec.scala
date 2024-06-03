@@ -27,9 +27,9 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.{FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.{ErrorInternalServerError, errorInternalServerError}
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationConnector}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -52,9 +52,9 @@ import scala.xml.NodeSeq
 
 class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
   private val dateTime = Instant.now()
-  private val headerCarrier: HeaderCarrier = HeaderCarrier()
   private val expectedApiSubscriptionKey = ApiSubscriptionKey(clientId, "customs%2Fdeclarations", VersionOne)
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val wrappedValidXML = <wrapped></wrapped>
   private val errorResponseServiceUnavailable = errorInternalServerError("This service is currently unavailable")
   private val errorResponseMissingEori = errorInternalServerError("Missing authenticated eori in service lookup")
@@ -83,16 +83,16 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
       override implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
     }
 
-    protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = headerCarrier): Either[Result, Option[NrSubmissionId]] = {
+    protected def send(vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestCspValidatedPayloadRequest, hc: HeaderCarrier = hc): Either[Result, Option[NrSubmissionId]] = {
       service.send(vpr, hc).futureValue
     }
 
     when(mockPayloadDecorator.wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[Instant])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(CustomsDeclarationsMetricsTestData.EventStart, CustomsDeclarationsMetricsTestData.EventEnd)
-    when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.successful(mockHttpResponse))
+    when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(mockHttpResponse))
     when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockNrsService.send(vpr)).thenReturn(Future.successful(nrSubmissionId))
+    when(mockNrsService.send(vpr, hc)).thenReturn(Future.successful(nrSubmissionId))
     when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
     when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)
   }
@@ -103,7 +103,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
       result shouldBe Right(Some(nrSubmissionId))
-      verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+      verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
 
       PassByNameVerifier(mockLogger, "info")
         .withByNameParam[String]("Duration of call to NRS 2000 ms")
@@ -112,12 +112,12 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     }
 
     "send transformed xml to connector even when nrs fails" in new SetUp() {
-      when(mockNrsService.send(vpr)).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockNrsService.send(vpr, hc)).thenReturn(Future.failed(emulatedServiceFailure))
 
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Right(Some(nrSubmissionId))
-      verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+      verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
     }
 
   }
@@ -127,107 +127,106 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     val result: Either[Result, Option[NrSubmissionId]] = send()
 
     result shouldBe Right(Some(nrSubmissionId))
-    verify(mockMdgDeclarationConnector).send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
+    verify(mockMdgDeclarationConnector).send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
   }
+    "pass in version to connector" in new SetUp() {
 
-  "pass in version to connector" in new SetUp() {
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+      result shouldBe Right(Some(nrSubmissionId))
+      verify(mockMdgDeclarationConnector).send(any[NodeSeq], any[Instant], any[UUID], meq(VersionOne))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
+    }
 
-    result shouldBe Right(Some(nrSubmissionId))
-    verify(mockMdgDeclarationConnector).send(any[NodeSeq], any[Instant], any[UUID], meq(VersionOne))(any[ValidatedPayloadRequest[_]])
-  }
+    "call payload decorator passing incoming xml" in new SetUp() {
 
-  "call payload decorator passing incoming xml" in new SetUp() {
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+      result shouldBe Right(Some(nrSubmissionId))
+      verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[Instant])(any[ValidatedPayloadRequest[_]])
+      verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
+    }
 
-    result shouldBe Right(Some(nrSubmissionId))
-    verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[Instant])(any[ValidatedPayloadRequest[_]])
-    verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
-  }
+    "return 500 error response when subscription fields call fails" in new SetUp() {
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
 
-  "return 500 error response when subscription fields call fails" in new SetUp() {
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+      result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId)
+      verifyNoMoreInteractions(mockPayloadDecorator)
+      verifyNoMoreInteractions(mockMdgDeclarationConnector)
+    }
 
-    result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId)
-    verifyNoMoreInteractions(mockPayloadDecorator)
-    verifyNoMoreInteractions(mockMdgDeclarationConnector)
-  }
+    "return 500 error response when authenticatedEori is blank" in new SetUp() {
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+        .thenReturn(Future.successful(apiSubscriptionFieldsResponse.copy(fields = ApiSubscriptionFieldsResponseFields(Some("")))))
 
-  "return 500 error response when authenticatedEori is blank" in new SetUp() {
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
-      .thenReturn(Future.successful(apiSubscriptionFieldsResponse.copy(fields = ApiSubscriptionFieldsResponseFields(Some("")))))
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+      result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
+      verifyNoMoreInteractions(mockPayloadDecorator)
+      verifyNoMoreInteractions(mockMdgDeclarationConnector)
+    }
 
-    result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
-    verifyNoMoreInteractions(mockPayloadDecorator)
-    verifyNoMoreInteractions(mockMdgDeclarationConnector)
-  }
+    "return 500 error response when MDG call fails" in new SetUp() {
+      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
 
-  "return 500 error response when MDG call fails" in new SetUp() {
-    when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+      result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
+    }
 
-    result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
-  }
+    "return 500 error response when MDG circuit breaker trips" in new SetUp() {
+      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(new CircuitBreakerOpenException(FiniteDuration(10, TimeUnit.SECONDS))))
 
-  "return 500 error response when MDG circuit breaker trips" in new SetUp() {
-    when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])).thenReturn(Future.failed(new CircuitBreakerOpenException(FiniteDuration(10, TimeUnit.SECONDS))))
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+      result shouldBe Left(errorResponseServiceUnavailable.XmlResult.withNrSubmissionId(nrSubmissionId).withConversationId)
+    }
 
-    result shouldBe Left(errorResponseServiceUnavailable.XmlResult.withNrSubmissionId(nrSubmissionId).withConversationId)
-  }
+    "when NRS disabled should not get a submission id" in new SetUp() {
 
-  "when NRS disabled should not get a submission id" in new SetUp() {
+      when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
 
-    when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigDisabled)
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+      result shouldBe Right(None)
+      verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
+    }
 
-    result shouldBe Right(None)
-    verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]])
-  }
+    "return 500 error when CSP has no authenticatedEori in api subscription fields" in new SetUp() {
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+        .thenReturn(Future.successful(apiSubscriptionFieldsResponse.copy(fields = ApiSubscriptionFieldsResponseFields(None))))
 
-  "return 500 error when CSP has no authenticatedEori in api subscription fields" in new SetUp() {
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
-      .thenReturn(Future.successful(apiSubscriptionFieldsResponse.copy(fields = ApiSubscriptionFieldsResponseFields(None))))
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    val result: Either[Result, Option[NrSubmissionId]] = send()
-
-    result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
-    verifyNoMoreInteractions(mockPayloadDecorator)
-    verifyNoMoreInteractions(mockMdgDeclarationConnector)
-  }
+      result shouldBe Left(errorResponseMissingEori.XmlResult.withConversationId)
+      verifyNoMoreInteractions(mockPayloadDecorator)
+      verifyNoMoreInteractions(mockMdgDeclarationConnector)
+    }
 
 
-  "return 403 error response when EIS call fails with 403" in new SetUp() {
-    when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]]))
-      .thenReturn(Future.failed(Non2xxResponseException(FORBIDDEN)))
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+    "return 403 error response when EIS call fails with 403" in new SetUp() {
+      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+        .thenReturn(Future.failed(Non2xxResponseException(FORBIDDEN)))
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    result shouldBe Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
-  }
+      result shouldBe Left(ErrorResponse.ErrorPayloadForbidden.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
+    }
 
-  "return 500 error response when EIS call fails with 404" in new SetUp() {
-    when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]]))
-      .thenReturn(Future.failed(Non2xxResponseException(NOT_FOUND)))
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+    "return 500 error response when EIS call fails with 404" in new SetUp() {
+      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+        .thenReturn(Future.failed(Non2xxResponseException(NOT_FOUND)))
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
-  }
+      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
+    }
 
-  "return 500 error response when EIS call fails with 502" in new SetUp() {
-    when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]]))
-      .thenReturn(Future.failed(Non2xxResponseException(INTERNAL_SERVER_ERROR)))
-    val result: Either[Result, Option[NrSubmissionId]] = send()
+    "return 500 error response when EIS call fails with 502" in new SetUp() {
+      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+        .thenReturn(Future.failed(Non2xxResponseException(INTERNAL_SERVER_ERROR)))
+      val result: Either[Result, Option[NrSubmissionId]] = send()
 
-    result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
-  }
+      result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
+    }
 
 }

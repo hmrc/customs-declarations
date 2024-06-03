@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.customs.declaration.model.upscan
 
+import play.api.libs.json._
+
 import java.net.URL
 import java.time.Instant
-
-import play.api.libs.json._
 
 sealed trait UploadedFileStatus {
   val status: String

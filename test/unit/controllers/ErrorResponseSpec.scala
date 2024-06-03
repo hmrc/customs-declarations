@@ -20,8 +20,9 @@ import org.apache.pekko.stream.Materializer
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import play.mvc.Http.Status._
-import util.UnitSpec
 import uk.gov.hmrc.customs.declaration.controllers.{ErrorResponse, HttpStatusCodeShortDescriptions, ResponseContents}
+import util.UnitSpec
+
 import scala.xml.Utility.trim
 import scala.xml.XML.loadString
 

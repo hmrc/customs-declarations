@@ -25,8 +25,8 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc.AnyContentAsJson
-import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -34,6 +34,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HttpClient, _}
 import util.CustomsDeclarationsMetricsTestData.EventStart
+import util.RequestHeaders.OtherHaders
 import util.TestData
 import util.TestData.{fileUploadConfig, nrsConfigEnabled}
 
@@ -48,6 +49,7 @@ class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndA
   private val mockLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private val connector = new NrsConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private implicit val jsonRequest: ValidatedPayloadRequest[AnyContentAsJson] =  ValidatedPayloadRequest(
     ConversationId(UUID.randomUUID()),
@@ -107,6 +109,24 @@ class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndA
           awaitRequest
         }
         caught shouldBe httpException
+      }
+    }
+
+    "when Gov-Test-Scenario in the header" should {
+      "overwrite value to default" in {
+        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = OtherHaders.toSeq :+ ("Gov-Test-Scenario", "AMEND_DECLARATION"))
+        val updatedHC = connector.overwriteGovTestScenarioHeaderValue(OtherHaders.toSeq)(hc)
+        updatedHC.find(_._1.equals("Gov-Test-Scenario")).get._2 shouldBe "DEFAULT"
+        updatedHC.size shouldBe 3
+      }
+    }
+
+    "when Gov-Test-Scenario is not in the header" should {
+      "not be added" in {
+        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = OtherHaders.toSeq)
+        val updatedHC = connector.overwriteGovTestScenarioHeaderValue(OtherHaders.toSeq)(hc)
+        updatedHC.find(_._1.equals("Gov-Test-Scenario")) shouldBe None
+        updatedHC.size shouldBe 2
       }
     }
   }

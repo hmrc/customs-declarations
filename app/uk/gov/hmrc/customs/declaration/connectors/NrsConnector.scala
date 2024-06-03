@@ -52,7 +52,7 @@ class NrsConnector @Inject()(http: HttpClient,
   }
 
   def overwriteGovTestScenarioHeaderValue(otherHeaders: Seq[(String, String)])(implicit hc: HeaderCarrier): Seq[(String, String)] = {
-    hc.headers(List(GovTestScenario)).flatMap(_ => otherHeaders :+ (GovTestScenario, "DEFAULT"))
+    hc.headers(List(GovTestScenario)).foldLeft(otherHeaders){(_, _) => otherHeaders :+ (GovTestScenario, "DEFAULT")}
   }
 
 

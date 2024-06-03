@@ -117,6 +117,7 @@ class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndA
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = OtherHaders.toSeq :+ ("Gov-Test-Scenario", "AMEND_DECLARATION"))
         val updatedHC = connector.overwriteGovTestScenarioHeaderValue(OtherHaders.toSeq)(hc)
         updatedHC.find(_._1.equals("Gov-Test-Scenario")).get._2 shouldBe "DEFAULT"
+        updatedHC.size shouldBe 3
       }
     }
 
@@ -125,6 +126,7 @@ class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndA
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = OtherHaders.toSeq)
         val updatedHC = connector.overwriteGovTestScenarioHeaderValue(OtherHaders.toSeq)(hc)
         updatedHC.find(_._1.equals("Gov-Test-Scenario")) shouldBe None
+        updatedHC.size shouldBe 2
       }
     }
   }

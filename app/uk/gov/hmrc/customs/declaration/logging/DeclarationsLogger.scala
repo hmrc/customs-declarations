@@ -37,9 +37,6 @@ class DeclarationsLogger @Inject()(logger: CdsLogger) {
     logger.debug(formatDebugFull(s, r))
   }
 
-  def infoRaw(s: => String): Unit =
-    logger.info(s)
-
   def info(s: => String)(implicit r: HasConversationId): Unit =
     logger.info(formatInfo(s, r))
 

@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.controllers
 
+import play.api.Logger
 import play.api.http.ContentTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
@@ -71,7 +72,7 @@ class DeclarationStatusController @Inject()(val shutterCheckAction: ShutterCheck
                                  (implicit val ec: ExecutionContext)
    extends BackendController(cc) {
    def get(): Action[AnyContent] = Action {
-     logger.infoRaw("""json{"conversationId":"abcde"}""")
+     Logger(getClass()).info("""json{"conversationId":"abcde"}""")
      Ok
    }
  }

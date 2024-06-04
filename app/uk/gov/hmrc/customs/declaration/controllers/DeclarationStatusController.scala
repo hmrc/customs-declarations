@@ -64,4 +64,14 @@ class DeclarationStatusController @Inject()(val shutterCheckAction: ShutterCheck
             errorResult
         }
     }
+
 }
+ class TestLogController@Inject()(val logger: DeclarationsLogger,
+                                  cc: ControllerComponents)
+                                 (implicit val ec: ExecutionContext)
+   extends BackendController(cc) {
+   def get(): Action[AnyContent] = Action {
+     logger.infoRaw("""json{"conversationId":"abcde"}""")
+     Ok
+   }
+ }

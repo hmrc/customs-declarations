@@ -16,3 +16,5 @@ POST        /amend                        @uk.gov.hmrc.customs.declaration.contr
 POST        /arrival-notification         @uk.gov.hmrc.customs.declaration.controllers.ArrivalNotificationDeclarationController.post()
 
 GET         /status-request/mrn/:mrn      @uk.gov.hmrc.customs.declaration.controllers.DeclarationStatusController.get(mrn)
+
+GET         /test-log                     @uk.gov.hmrc.customs.declaration.controllers.TestLogController.get()

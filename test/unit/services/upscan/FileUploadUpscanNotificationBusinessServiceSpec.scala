@@ -104,7 +104,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
 
       val error: IllegalStateException = intercept[IllegalStateException] (await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 
-      error.getMessage shouldBe s"database error - can't find record with file reference ${FileReferenceOne.value.toString}"
+      error.getMessage shouldBe s"database error - can't find record with file reference [${FileReferenceOne.value.toString}]"
       verify(mockRepo).update(
         ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId],
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
@@ -118,7 +118,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
 
       val error: IllegalStateException = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 
-      error.getMessage shouldBe s"database error - can't find file with file reference ${FileReferenceOne.value.toString}"
+      error.getMessage shouldBe s"database error - can't find file with file reference [${FileReferenceOne.value.toString}]"
       verify(mockRepo).update(
         ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId],
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],

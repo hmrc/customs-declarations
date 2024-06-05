@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 
 class FileUploadUpscanNotificationController @Inject()(notificationService: FileUploadNotificationService,
@@ -104,8 +105,8 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
         callbackBody.reference,
         subscriptionFieldsId
       )(errorToXmlNotification).recover{
-        case e: Throwable =>
-          cdsLogger.error(s"Error sending internal error notification. Body: ${request.body.asText} headers: ${request.headers}", e)
+        case NonFatal(t) =>
+          cdsLogger.error(s"Error sending internal error notification. Body: ${request.body.asText} headers: ${request.headers}", t)
       }
     }
   }

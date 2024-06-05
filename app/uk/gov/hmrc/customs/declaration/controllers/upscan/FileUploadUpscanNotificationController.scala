@@ -48,7 +48,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
         val clientSubscriptionId = SubscriptionFieldsId(csid)
         request.body.asJson
           .fold{
-              cdsLogger.error(s"Malformed JSON received. Body: ${request.body.asText} headers: ${request.headers}")
+              cdsLogger.error(s"Malformed JSON received. Body: [${request.body.asText}] headers: [${request.headers}]")
               Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)
           }{js =>
             UploadedReadyCallbackBody.parse(js) match {
@@ -56,7 +56,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
                 implicit val conversationId = conversationIdForLogging(callbackBody.reference.value)
                 callbackBody match {
                   case ready: UploadedReadyCallbackBody =>
-                    cdsLogger.debug(s"Valid JSON request received with READY status. File reference: ${ready.reference.toString}, status: ${ready.fileStatus.status}, ${ready.uploadDetails} and headers: ${request.headers}")
+                    cdsLogger.debug(s"Valid JSON request received with READY status. File reference: [${ready.reference.toString}], status: [${ready.fileStatus.status}], [${ready.uploadDetails}] and headers: [${request.headers}]")
                     businessService.persistAndCallFileTransmission(clientSubscriptionId, ready).map{_ =>
                         Results.NoContent
                     }.recover{

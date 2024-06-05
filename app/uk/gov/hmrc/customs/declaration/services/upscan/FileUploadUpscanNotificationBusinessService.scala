@@ -24,6 +24,7 @@ import uk.gov.hmrc.customs.declaration.model.filetransmission._
 import uk.gov.hmrc.customs.declaration.model.upscan._
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import java.net.URL
 import javax.inject.{Inject, Singleton}
@@ -43,19 +44,19 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
       CallbackFields(ready.uploadDetails.fileName, ready.uploadDetails.fileMimeType, ready.uploadDetails.checksum, ready.uploadDetails.uploadTimestamp, ready.downloadUrl)
     ).flatMap{
       case None =>
-        val errorMsg = s"database error - can't find record with file reference ${ready.reference}"
+        val errorMsg = s"database error - can't find record with file reference [${ready.reference}]"
         logger.error(errorMsg)
         Future.failed(new IllegalStateException(errorMsg))
       case Some(metadata) =>
         logger.debug(s"updated fileUploadMetadata: $metadata")
         maybeFileTransmission(ready, metadata) match {
           case None =>
-            val errorMsg = s"database error - can't find file with file reference ${ready.reference}"
+            val errorMsg = s"database error - can't find file with file reference [${ready.reference}]"
             logger.error(errorMsg)
             Future.failed(new IllegalStateException(errorMsg))
           case Some(fileTransmission) =>
-            connector.send(fileTransmission).map { _ =>
-              logger.info(s"successfully called file transmission service with batchId ${fileTransmission.batch.id.toString}, callbackUrl ${fileTransmission.callbackUrl.toString} and fileReference ${fileTransmission.file.reference.toString}")
+            connector.send(fileTransmission)(r, hc).map { _ =>
+              logger.info(s"successfully called file transmission service with batchId [${fileTransmission.batch.id.toString}], callbackUrl [${fileTransmission.callbackUrl.toString}] and fileReference [${fileTransmission.file.reference.toString}]")
               ()
             }
       }

@@ -26,11 +26,6 @@
         </encoder>
     </appender>
 
-
-    <logger name="accesslog" level="INFO" additivity="false">
-        <appender-ref ref="ACCESS_LOG_FILE" />
-    </logger>
-
     <logger name="org.eclipse.jetty" level="OFF" />
 
     <logger name="org.apache" level="OFF" />

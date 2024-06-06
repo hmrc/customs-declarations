@@ -39,6 +39,7 @@ import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
+import util.RequestHeaders.OtherHaders
 import util.TestData._
 
 import java.util.UUID
@@ -48,7 +49,7 @@ import scala.xml.{Elem, NodeSeq}
 class FileUploadBusinessServiceSpec extends AnyWordSpec with MockitoSugar with GuiceOneAppPerSuite with Matchers with EitherValues{
 
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
-  private val headerCarrier: HeaderCarrier = HeaderCarrier()
+  private implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   trait SetUp {
     protected val mockFileUploadMetadataRepo: FileUploadMetadataRepo = mock[FileUploadMetadataRepo]
@@ -262,6 +263,23 @@ class FileUploadBusinessServiceSpec extends AnyWordSpec with MockitoSugar with G
       val result: Future[Result] = Future.successful(send().left.value)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+    }
+  }
+
+  "File reference" should {
+    "Not be changed if Gov-Test-Scenario doesn't exist in the headers" in new SetUp {
+      val result = service.fileReferenceUUID(upscanInitiateResponsePayload1)
+      result shouldBe FileReferenceOne.value
+    }
+    "Not be changed if Gov-Test-Scenario is not FILE_UPLOAD_RANDOM in the headers" in new SetUp {
+      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = OtherHaders.toSeq :+ ("Gov-Test-Scenario", "FILE_UPLOAD"))
+      val result = service.fileReferenceUUID(upscanInitiateResponsePayload1)(hc)
+      result shouldBe FileReferenceOne.value
+    }
+    "Be changed if Gov-Test-Scenario is FILE_UPLOAD_RANDOM in the headers" in new SetUp {
+      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = OtherHaders.toSeq :+ ("Gov-Test-Scenario", "FILE_UPLOAD_RANDOM"))
+      val result = service.fileReferenceUUID(upscanInitiateResponsePayload1)(hc)
+      result should not be FileReferenceOne.value
     }
   }
 

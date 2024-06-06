@@ -93,16 +93,20 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def persist[A](fileDetails: Seq[UpscanInitiateResponsePayload], sfId: SubscriptionFieldsId)
-                        (implicit request: ValidatedFileUploadPayloadRequest[A]): Future[Boolean] = {
+                        (implicit request: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[Boolean] = {
     val batchFiles = fileDetails.zipWithIndex.map { case (fileDetail, index) =>
-      BatchFile(FileReference(UUID.fromString(fileDetail.reference)), None, new URL(fileDetail.uploadRequest.href),
+      BatchFile(FileReference(fileReferenceUUID(fileDetail)), None, new URL(fileDetail.uploadRequest.href),
         request.fileUploadRequest.files(index).fileSequenceNo, 1, request.fileUploadRequest.files(index).maybeDocumentType)
     }
 
     val metadata = FileUploadMetadata(request.fileUploadRequest.declarationId, extractEori(request.authorisedAs).get, sfId,
       BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, dateTimeService.nowUtc(), batchFiles)
-
     fileUploadMetadataRepo.create(metadata)
+  }
+
+  def fileReferenceUUID(fileDetail: UpscanInitiateResponsePayload)(implicit hc: HeaderCarrier): UUID = {
+    val fileUploadHeader = hc.headers(List("Gov-Test-Scenario")).filter(a => a._2.contains("FILE_UPLOAD_RANDOM"))
+    fileUploadHeader.foldLeft(UUID.fromString(fileDetail.reference))((_, _) => UUID.randomUUID())
   }
 
   private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {

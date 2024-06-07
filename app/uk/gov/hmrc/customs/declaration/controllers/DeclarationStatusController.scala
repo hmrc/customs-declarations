@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.customs.declaration.controllers
 
-import play.api.Logger
 import play.api.http.ContentTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
@@ -65,18 +64,4 @@ class DeclarationStatusController @Inject()(val shutterCheckAction: ShutterCheck
             errorResult
         }
     }
-
 }
- class TestLogController@Inject()(val logger: DeclarationsLogger,
-                                  cc: ControllerComponents)
-                                 (implicit val ec: ExecutionContext)
-   extends BackendController(cc) {
-   def get(): Action[AnyContent] = Action {
-     Logger(getClass()).info("This message is not json")
-     Logger(getClass()).info("""json{"conversationId":"abcde","requestedApiVersion":"1.0","clientId":"abc123","authorisedAs":"NonCsp(GB123)","message":"Declaration request processed successfully"}""")
-     Logger(getClass()).info("""json{"conversationId":"abcde","requestedApiVersion":"1.0","clientId":"abc123","authorisedAs":"NonCsp(GB123)","message":"Outbound call duration was [29] ms"}""")
-     Logger(getClass()).info("""json{"conversationId":"uvxyz","requestedApiVersion":"1.0","clientId":"abc123","authorisedAs":"NonCsp(GB456)","message":"Declaration request processed successfully"}""")
-     Logger(getClass()).info("""json{"conversationId":"uvxyz","requestedApiVersion":"1.0","clientId":"abc123","authorisedAs":"NonCsp(GB456)","message":"Outbound call duration was [30] ms"}""")
-     Ok
-   }
- }

@@ -16,6 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.filetransmission
 
+import java.util.UUID
+
+import javax.inject.Inject
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
@@ -27,8 +30,6 @@ import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissio
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadNotificationService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import java.util.UUID
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 

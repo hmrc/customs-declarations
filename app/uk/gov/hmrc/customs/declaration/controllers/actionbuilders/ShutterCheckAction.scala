@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
+import javax.inject.{Inject, Singleton}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.SERVICE_UNAVAILABLE
-import play.api.mvc._
+import play.api.mvc.{ActionRefiner, _}
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.ErrorAcceptHeaderInvalid
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
@@ -27,7 +28,6 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, 
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, VersionOne, VersionThree, VersionTwo}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 /** Action builder that validates headers.

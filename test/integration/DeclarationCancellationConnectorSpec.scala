@@ -52,7 +52,6 @@ class DeclarationCancellationConnectorSpec extends IntegrationTestSpec
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
   private val correlationId = UUID.randomUUID()
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeAll(): Unit = {
     startMockServer()

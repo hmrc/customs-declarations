@@ -22,7 +22,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{CONTENT_TYPE, POST}
 import util.RequestHeaders._
 import util.TestData.{cspBearerToken, nonCspBearerToken}
-import util.TestXMLData._
+import util.TestXMLData.{InvalidFileUploadXml, _}
 
 object FakeRequests {
   lazy val ValidSubmissionV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()

@@ -45,7 +45,6 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with
   private implicit val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
-  private val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
 
@@ -56,8 +55,7 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with
   private val upscanInitiatePayloadV1WithErrorRedirects: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, Some("https://error-redirect.com"))
   private val upscanInitiatePayloadV2: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), Some("https://error-redirect.com"))
 
-  private implicit val jsonRequest: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val jsonRequest: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 
   override protected def beforeEach(): Unit = {
     reset(mockWsPost, mockLogger)

@@ -16,15 +16,15 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.errorBadRequest
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthService,

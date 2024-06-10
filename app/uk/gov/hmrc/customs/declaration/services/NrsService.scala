@@ -16,6 +16,12 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
+import java.lang.String.format
+import java.math.BigInteger
+import java.nio.charset.StandardCharsets.UTF_8
+import java.security.MessageDigest.getInstance
+
+import javax.inject.{Inject, Singleton}
 import com.google.common.io.BaseEncoding.base64
 import play.api.libs.json.{JsObject, JsString, JsValue}
 import play.api.mvc.AnyContentAsXml
@@ -26,11 +32,6 @@ import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http._
 
-import java.lang.String.format
-import java.math.BigInteger
-import java.nio.charset.StandardCharsets.UTF_8
-import java.security.MessageDigest.getInstance
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -45,7 +46,7 @@ class NrsService @Inject()(logger: DeclarationsLogger,
   private val businessIdValue = "cds"
   private val notableEventValue = "cds-declaration"
 
-  def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[NrSubmissionId] = {
+  def send[A](implicit vpr: ValidatedPayloadRequest[A]): Future[NrSubmissionId] = {
 
     val payloadAsString = vpr.request.body.asInstanceOf[AnyContentAsXml].xml.toString
 

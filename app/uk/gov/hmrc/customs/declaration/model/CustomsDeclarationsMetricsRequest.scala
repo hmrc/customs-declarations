@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.model
 
-import play.api.libs.json.{Format, Json}
-
 import java.time.ZonedDateTime
+
+import play.api.libs.json.{Format, Json}
 
 case class CustomsDeclarationsMetricsRequest(
                                               eventType: String,

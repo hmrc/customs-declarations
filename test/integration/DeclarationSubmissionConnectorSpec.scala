@@ -16,14 +16,13 @@
 
 package integration
 
+import java.util.UUID
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
-import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers._
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationSubmissionConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
@@ -37,7 +36,8 @@ import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
 import java.time.Instant
-import java.util.UUID
+import org.scalatest.matchers.should.Matchers
+import play.api.mvc.AnyContentAsXml
 
 class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
   with Matchers
@@ -52,7 +52,6 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
   private val incomingAuthToken = s"Bearer $incomingBearerToken"
   private val correlationId = UUID.randomUUID()
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeAll(): Unit = {
     startMockServer()

@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
+import javax.inject.Inject
+
 import com.google.inject.Singleton
 import uk.gov.hmrc.customs.declaration.model.{ConversationId, CorrelationId, DeclarationManagementInformationRequestId}
-
-import javax.inject.Inject
 
 
 @Singleton

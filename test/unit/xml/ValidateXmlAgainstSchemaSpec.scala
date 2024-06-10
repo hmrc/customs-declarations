@@ -16,10 +16,9 @@
 
 package unit.xml
 
+import javax.xml.validation.Schema
 import uk.gov.hmrc.customs.declaration.xml.ValidateXmlAgainstSchema
 import util.UnitSpec
-
-import javax.xml.validation.Schema
 
 class ValidateXmlAgainstSchemaSpec extends UnitSpec {
   import ValidateXmlAgainstSchemaSpec._

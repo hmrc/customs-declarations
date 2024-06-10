@@ -17,7 +17,6 @@
 package component
 
 import org.apache.pekko.util.ByteString
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.mvc._
 import play.api.test.Helpers.{status, _}
@@ -29,6 +28,7 @@ import util.externalservices._
 
 import java.nio.file.{Files, Paths}
 import scala.concurrent.Future
+import org.scalatest.matchers.should.Matchers
 
 class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResponses
   with Matchers

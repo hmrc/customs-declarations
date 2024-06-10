@@ -19,11 +19,11 @@ package unit.controllers.dynamicservice
 import org.mockito.Mockito._
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
+import uk.gov.hmrc.customs.declaration.config.{InvalidEnvironmentException, ServiceConfig, ServiceConfigProvider}
+import uk.gov.hmrc.customs.declaration.controllers.dynamicservice.DynamicServiceConfigurationController
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.customs.declaration.config.{InvalidEnvironmentException, ServiceConfig, ServiceConfigProvider}
-import uk.gov.hmrc.customs.declaration.controllers.dynamicservice.DynamicServiceConfigurationController
 import util.UnitSpec
 
 class DynamicServiceConfigurationControllerSpec extends UnitSpec with Matchers with MockitoSugar {

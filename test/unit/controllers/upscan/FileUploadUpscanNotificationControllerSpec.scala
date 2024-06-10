@@ -16,6 +16,7 @@
 
 package unit.controllers.upscan
 
+import java.util.UUID
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.mockito.stubbing.OngoingStubbing
@@ -32,14 +33,12 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.{FileReference, UploadedCallbackBody, UploadedFailedCallbackBody}
 import uk.gov.hmrc.customs.declaration.services.InternalErrorXmlNotification
 import uk.gov.hmrc.customs.declaration.services.upscan.{FileUploadNotificationService, FileUploadUpscanNotificationBusinessService, UpscanNotificationCallbackToXmlNotification}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import unit.logging.StubCdsLogger
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 import util.UpscanNotifyTestData._
 
-import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSugar with Eventually {
@@ -92,7 +91,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
 
   "FileUploadUpscanNotificationController on Happy Path" should {
     "on receipt of READY callback call business service and return 204 with empty body" in new SetUp {
-      when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId], any[HeaderCarrier])).thenReturn(Future.successful(()))
+      when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])).thenReturn(Future.successful(()))
 
       private val result = post(fakeRequestWith(readyJson()))
 
@@ -100,7 +99,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       contentAsString(result) mustBe empty
       eventually {
         verifyNoMoreInteractions(mockNotificationService)
-        verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId], any[HeaderCarrier])
+        verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
         verifyNoMoreInteractions(mockErrorToXmlNotification)
       }
     }
@@ -136,7 +135,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
     }
 
     "on receipt of READY callback return 500 with standard error message when business service throw an exception" in new SetUp {
-      when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId], any[HeaderCarrier]))
+      when(mockBusinessService.persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId]))
         .thenReturn(Future.failed(emulatedServiceFailure))
 
       private val result = post(fakeRequestWith(readyJson()))
@@ -144,7 +143,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       status(result) mustBe INTERNAL_SERVER_ERROR
       contentAsString(result) mustBe UpscanNotificationInternalServerErrorJson
       eventually {
-        verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId], any[HeaderCarrier])
+        verify(mockBusinessService).persistAndCallFileTransmission(ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId], ameq(ReadyCallbackBody))(any[HasConversationId])
         verifyErrorNotificationSent()
         verifyNoMoreInteractions(mockToXmlNotification)
       }

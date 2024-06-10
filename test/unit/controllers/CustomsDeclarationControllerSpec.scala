@@ -19,18 +19,20 @@ package unit.controllers
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, verifyNoMoreInteractions, when}
+import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.{Assertion, BeforeAndAfterEach}
 import play.api.mvc._
 import play.api.test.Helpers
 import play.api.test.Helpers.{UNAUTHORIZED, header, _}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.errorBadRequest
+import uk.gov.hmrc.customs.declaration.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
-import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController, ErrorResponse}
-import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
+import uk.gov.hmrc.customs.declaration.controllers.{Common, CustomsDeclarationController}
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services._

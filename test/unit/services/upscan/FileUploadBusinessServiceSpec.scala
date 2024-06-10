@@ -31,15 +31,14 @@ import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedFileUploadPayloadRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.upscan.FileUploadMetadata
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
-import util.RequestHeaders.OtherHaders
 import util.TestData._
 
 import java.util.UUID
@@ -49,7 +48,7 @@ import scala.xml.{Elem, NodeSeq}
 class FileUploadBusinessServiceSpec extends AnyWordSpec with MockitoSugar with GuiceOneAppPerSuite with Matchers with EitherValues{
 
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
-  private implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
+  private val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   trait SetUp {
     protected val mockFileUploadMetadataRepo: FileUploadMetadataRepo = mock[FileUploadMetadataRepo]
@@ -202,36 +201,36 @@ class FileUploadBusinessServiceSpec extends AnyWordSpec with MockitoSugar with G
       val successfulConnectorSend: Future[UpscanInitiateResponsePayload] = Future.successful(upscanInitiateResponsePayload1)
       val successfulConnectorSend2: Future[UpscanInitiateResponsePayload] = Future.successful(upscanInitiateResponsePayload2)
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]], any[HeaderCarrier]())).thenReturn(successfulConnectorSend,successfulConnectorSend2)
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend,successfulConnectorSend2)
 
       val result: NodeSeq = send().toOption.get
 
       result shouldBe xmlResponse
-      verify(mockUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(jsonRequest),  meq(headerCarrier))
+      verify(mockUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(jsonRequest))
     }
 
     "send payload to connector for non-CSP with optional fields" in new SetUp() {
       val successfulConnectorSend: Future[UpscanInitiateResponsePayload] = Future.successful(upscanInitiateResponsePayload1)
       val successfulConnectorSend2: Future[UpscanInitiateResponsePayload] = Future.successful(upscanInitiateResponsePayload3)
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]], any[HeaderCarrier])).thenReturn(successfulConnectorSend,successfulConnectorSend2)
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend,successfulConnectorSend2)
 
       val result: NodeSeq = send().toOption.get
 
       result shouldBe xmlResponseWithEmptyOptionals
-      verify(mockUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(jsonRequest), meq(headerCarrier))
+      verify(mockUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(jsonRequest))
     }
 
     "send payload to connector for CSP" in new SetUp() {
       val successfulConnectorSend: Future[UpscanInitiateResponsePayload] = Future.successful(upscanInitiateResponsePayload1)
       val successfulConnectorSend2: Future[UpscanInitiateResponsePayload] = Future.successful(upscanInitiateResponsePayload2)
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]], any[HeaderCarrier])).thenReturn(successfulConnectorSend,successfulConnectorSend2)
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend,successfulConnectorSend2)
 
       val result: NodeSeq = send(ValidatedFileUploadPayloadRequestForCspWithTwoFiles).toOption.get
 
       result shouldBe xmlResponse
-      verify(mockUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(ValidatedFileUploadPayloadRequestForCspWithTwoFiles), meq(headerCarrier))
+      verify(mockUpscanInitiateConnector, atLeastOnce()).send(meq(upscanInitiatePayload), meq(VersionTwo))(meq(ValidatedFileUploadPayloadRequestForCspWithTwoFiles))
     }
 
     "fail fast when sending payloads to connector" in new SetUp() {
@@ -239,17 +238,17 @@ class FileUploadBusinessServiceSpec extends AnyWordSpec with MockitoSugar with G
       val successfulConnectorSend: Future[UpscanInitiateResponsePayload] = Future.successful(upscanInitiateResponsePayload1)
       val failedConnectorSend: Future[Nothing] = Future.failed(emulatedServiceFailure)
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]], any[HeaderCarrier])).thenReturn(successfulConnectorSend, successfulConnectorSend, failedConnectorSend, successfulConnectorSend)
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(successfulConnectorSend, successfulConnectorSend, failedConnectorSend, successfulConnectorSend)
 
       val result: Future[Result] = Future.successful(send(ValidatedFileUploadPayloadRequestWithFourFiles).left.value)
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
 
-      verify(mockUpscanInitiateConnector, times(3)).send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]], any[HeaderCarrier])
+      verify(mockUpscanInitiateConnector, times(3)).send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])
     }
 
     "return 500 error response when subscription field lookup fails" in new SetUp() {
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(mockUpscanInitiateResponsePayload))
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(Future.successful(mockUpscanInitiateResponsePayload))
 
       val result: Future[Result] = Future.successful(send().left.value)
 
@@ -258,28 +257,11 @@ class FileUploadBusinessServiceSpec extends AnyWordSpec with MockitoSugar with G
 
     "return 500 error response when upscan initiate call fails" in new SetUp() {
       when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockUpscanInitiateConnector.send(any[UpscanInitiatePayload], any[ApiVersion])(any[ValidatedFileUploadPayloadRequest[_]])).thenReturn(Future.failed(emulatedServiceFailure))
 
       val result: Future[Result] = Future.successful(send().left.value)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-    }
-  }
-
-  "File reference" should {
-    "Not be changed if Gov-Test-Scenario doesn't exist in the headers" in new SetUp {
-      val result = service.fileReferenceUUID(upscanInitiateResponsePayload1)
-      result shouldBe FileReferenceOne.value
-    }
-    "Not be changed if Gov-Test-Scenario is not FILE_UPLOAD_RANDOM in the headers" in new SetUp {
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = OtherHaders.toSeq :+ ("Gov-Test-Scenario", "FILE_UPLOAD"))
-      val result = service.fileReferenceUUID(upscanInitiateResponsePayload1)(hc)
-      result shouldBe FileReferenceOne.value
-    }
-    "Be changed if Gov-Test-Scenario is FILE_UPLOAD_RANDOM in the headers" in new SetUp {
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = OtherHaders.toSeq :+ ("Gov-Test-Scenario", "FILE_UPLOAD_RANDOM"))
-      val result = service.fileReferenceUUID(upscanInitiateResponsePayload1)(hc)
-      result should not be FileReferenceOne.value
     }
   }
 

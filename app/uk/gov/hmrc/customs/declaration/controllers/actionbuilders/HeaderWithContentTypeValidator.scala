@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
+import javax.inject.{Inject, Singleton}
 import play.api.http.HeaderNames.CONTENT_TYPE
 import play.api.http.MimeTypes
 import play.api.mvc.Headers
@@ -23,8 +24,6 @@ import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
-
-import javax.inject.{Inject, Singleton}
 
 @Singleton
 class HeaderWithContentTypeValidator @Inject()(logger: DeclarationsLogger) extends HeaderValidator(logger) {

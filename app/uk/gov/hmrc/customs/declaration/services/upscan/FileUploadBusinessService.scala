@@ -16,10 +16,13 @@
 
 package uk.gov.hmrc.customs.declaration.services.upscan
 
+import java.net.{URL, URLEncoder}
+import java.util.UUID
+import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
-import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -29,9 +32,6 @@ import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import java.net.{URL, URLEncoder}
-import java.util.UUID
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.xml._
@@ -51,16 +51,15 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   def send[A](implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
               hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
 
-    futureApiSubFieldsId(validatedRequest.clientId)(validatedRequest, hc).flatMap {
+    futureApiSubFieldsId(validatedRequest.clientId).flatMap {
       case Right(sfId) =>
-        backendCalls(sfId)(validatedRequest, hc).flatMap { fileDetails =>
+        backendCalls(sfId).flatMap { fileDetails =>
           persist(fileDetails, sfId).map {
             case true =>
               val responseBody = serialize(fileDetails)
               logger.debug(s"response body to be returned=\n$responseBody")
               Right(responseBody)
-            case false =>
-              Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+            case false => Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
           }
         }.recover {
           case NonFatal(e) =>
@@ -75,7 +74,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   private def futureApiSubFieldsId[A](c: ClientId)
                                      (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
                                       hc: HeaderCarrier): Future[Either[Result, SubscriptionFieldsId]] = {
-    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, validatedRequest.requestedApiVersion))(validatedRequest, hc) map {
+    (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, validatedRequest.requestedApiVersion)) map {
       response: ApiSubscriptionFieldsResponse =>
         Right(SubscriptionFieldsId(response.fieldsId))
     }).recover {
@@ -86,27 +85,24 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def backendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
-                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
+                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]): Future[Seq[UpscanInitiateResponsePayload]] = {
 
     val upscanInitiateRequests = validatedRequest.fileUploadRequest.files
-    failFastSequence(upscanInitiateRequests)(f => backendCall(subscriptionFieldsId, f)(validatedRequest, hc))
+
+    failFastSequence(upscanInitiateRequests)(f => backendCall(subscriptionFieldsId, f))
   }
 
   private def persist[A](fileDetails: Seq[UpscanInitiateResponsePayload], sfId: SubscriptionFieldsId)
-                        (implicit request: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[Boolean] = {
+                        (implicit request: ValidatedFileUploadPayloadRequest[A]): Future[Boolean] = {
     val batchFiles = fileDetails.zipWithIndex.map { case (fileDetail, index) =>
-      BatchFile(FileReference(fileReferenceUUID(fileDetail)), None, new URL(fileDetail.uploadRequest.href),
+      BatchFile(FileReference(UUID.fromString(fileDetail.reference)), None, new URL(fileDetail.uploadRequest.href),
         request.fileUploadRequest.files(index).fileSequenceNo, 1, request.fileUploadRequest.files(index).maybeDocumentType)
     }
 
     val metadata = FileUploadMetadata(request.fileUploadRequest.declarationId, extractEori(request.authorisedAs).get, sfId,
       BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, dateTimeService.nowUtc(), batchFiles)
-    fileUploadMetadataRepo.create(metadata)
-  }
 
-  def fileReferenceUUID(fileDetail: UpscanInitiateResponsePayload)(implicit hc: HeaderCarrier): UUID = {
-    val fileUploadHeader = hc.headers(List("Gov-Test-Scenario")).filter(a => a._2.contains("FILE_UPLOAD_RANDOM"))
-    fileUploadHeader.foldLeft(UUID.fromString(fileDetail.reference))((_, _) => UUID.randomUUID())
+    fileUploadMetadataRepo.create(metadata)
   }
 
   private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {
@@ -162,9 +158,9 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
 
   private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
-                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
+                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]) = {
     upscanInitiateConnector.send(
-      preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)(validatedRequest, hc)
+      preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)
   }
 
   private def extractEori(authorisedAs: AuthorisedAs): Option[Eori] = {
@@ -175,7 +171,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def preparePayload[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
-                               (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): UpscanInitiatePayload = {
+                               (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]): UpscanInitiatePayload = {
 
     val upscanInitiatePayload = UpscanInitiatePayload(s"""${config.fileUploadConfig.fileUploadCallbackUrl}/uploaded-file-upscan-notifications/clientSubscriptionId/${subscriptionFieldsId.value}""".stripMargin,
       config.fileUploadConfig.upscanInitiateMaximumFileSize,

@@ -23,8 +23,8 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import play.api.test.Helpers._
 import play.api.test._
-import uk.gov.hmrc.customs.declaration.controllers.filetransmission.FileTransmissionNotificationController
 import uk.gov.hmrc.customs.declaration.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.controllers.filetransmission.FileTransmissionNotificationController
 import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmissionNotification
 import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadNotificationService

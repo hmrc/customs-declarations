@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.controllers
 
+import javax.inject.{Inject, Singleton}
 import play.api.http.MimeTypes
 import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
@@ -27,7 +28,6 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.services.{CancellationDeclarationSubmissionService, DeclarationService, StandardDeclarationSubmissionService}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton

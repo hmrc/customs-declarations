@@ -20,9 +20,9 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.AnyContentAsXml

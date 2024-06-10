@@ -26,8 +26,8 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Reads
 import play.api.test.Helpers
-import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionFailureOutcome, FileTransmissionNotification, FileTransmissionSuccessNotification, FileTransmissionSuccessOutcome}

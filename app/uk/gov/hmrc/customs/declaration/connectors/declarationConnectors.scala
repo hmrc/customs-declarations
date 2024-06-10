@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import com.google.inject._
 import org.apache.pekko.actor.ActorSystem
+import com.google.inject._
 import play.api.http.HeaderNames._
 import play.api.http.{ContentTypes, MimeTypes}
 import play.api.mvc.Codec.utf_8
+import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.config.{DeclarationCircuitBreaker, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
-import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.ApiVersion
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
@@ -76,22 +77,12 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   override lazy val unstablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
   override lazy val unavailablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
 
-  private val headersList = Some(List("Accept", "Gov-Test-Scenario", "X-Correlation-ID"))
-
-  private def apiStubHeaderCarrier()(implicit hc: HeaderCarrier): HeaderCarrier = {
-    HeaderCarrier(
-      extraHeaders = hc.extraHeaders ++
-
-        // Other headers (i.e Gov-Test-Scenario, Content-Type)
-        hc.headers(headersList.getOrElse(Seq.empty))
-    )
-  }
-
-  def send[A](xml: NodeSeq, date: Instant, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[HttpResponse] = {
+  def send[A](xml: NodeSeq, date: Instant, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
+    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = None)
 
-    lazy val decHeaders: Seq[(String, String)] = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ hc.headers(headersList.getOrElse(Seq.empty))
+    lazy val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken)
     val startTime = LocalDateTime.now
     withCircuitBreaker(post(xml, config.url, decHeaders)).map {
       response => {
@@ -114,7 +105,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   private def post[A](xml: NodeSeq, url: String, decHeaders: Seq[(String, String)])(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
     logger.debug(s"Sending request to $url.\n Headers:\n $hc\n Payload:\n$xml")
 
-    http.POSTString[HttpResponse](url, xml.toString(), headers = decHeaders)(implicitly,hc=apiStubHeaderCarrier(),implicitly).map { response =>
+    http.POSTString[HttpResponse](url, xml.toString(), headers = decHeaders).map { response =>
       response.status match {
         case status if is2xx(status) =>
           response

@@ -16,9 +16,9 @@
 
 package util
 
-import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
-
 import java.time.{ZoneId, ZonedDateTime}
+
+import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 
 object CustomsDeclarationsMetricsTestData {
 

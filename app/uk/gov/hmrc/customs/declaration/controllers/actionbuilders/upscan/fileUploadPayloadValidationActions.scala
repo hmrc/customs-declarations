@@ -16,19 +16,19 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan
 
+import javax.inject.{Inject, Singleton}
 import play.api.http.Status
 import play.api.mvc.{ActionRefiner, Result}
 import play.mvc.Http.Status.FORBIDDEN
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.PayloadValidationAction
 import uk.gov.hmrc.customs.declaration.controllers.{ErrorResponse, HttpStatusCodeShortDescriptions, ResponseContents}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.PayloadValidationAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
 import uk.gov.hmrc.customs.declaration.model.upscan.DocumentType
+import uk.gov.hmrc.customs.declaration.model.{FileGroupSize, _}
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadXmlValidationService}
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.Node
 

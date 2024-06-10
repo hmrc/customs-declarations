@@ -22,8 +22,9 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
+import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,30 +34,20 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
                                         config: DeclarationsConfigService)
                                        (implicit ec: ExecutionContext) {
 
-  private val headersList = Some(List("Accept", "Gov-Test-Scenario", "X-Correlation-ID"))
-
-  private def apiStubHeaderCarrier()(implicit hc: HeaderCarrier): HeaderCarrier = {
-    HeaderCarrier(
-      extraHeaders = hc.extraHeaders ++
-
-        // Other headers (i.e Gov-Test-Scenario, Content-Type)
-        hc.headers(headersList.getOrElse(Seq.empty))
-    )
-  }
-
-  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[UpscanInitiateResponsePayload] = {
-    val updatedHc = apiStubHeaderCarrier()
+  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
     if (payload.isV2) {
-      post(payload, config.fileUploadConfig.upscanInitiateV2Url)(vfupr, hc = updatedHc)
+      post(payload, config.fileUploadConfig.upscanInitiateV2Url)
     } else {
-      post(payload, config.fileUploadConfig.upscanInitiateV1Url)(vfupr, hc = updatedHc)
+      post(payload, config.fileUploadConfig.upscanInitiateV1Url)
     }
   }
 
-  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
+  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]) = {
+
+    implicit val hc: HeaderCarrier = HeaderCarrier()
 
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
-    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)(implicitly, implicitly, hc, implicitly)
+    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
       .map { res: UpscanInitiateResponsePayload =>
         logger.info(s"reference from call to upscan initiate ${res.reference}")
         logger.debug(s"Response received from upscan initiate service $res")

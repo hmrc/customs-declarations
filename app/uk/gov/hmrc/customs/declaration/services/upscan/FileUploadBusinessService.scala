@@ -16,10 +16,13 @@
 
 package uk.gov.hmrc.customs.declaration.services.upscan
 
+import java.net.{URL, URLEncoder}
+import java.util.UUID
+import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
-import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -29,9 +32,6 @@ import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import java.net.{URL, URLEncoder}
-import java.util.UUID
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.xml._
@@ -51,16 +51,15 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   def send[A](implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
               hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
 
-    futureApiSubFieldsId(validatedRequest.clientId)(validatedRequest, hc).flatMap {
+    futureApiSubFieldsId(validatedRequest.clientId).flatMap {
       case Right(sfId) =>
-        backendCalls(sfId)(validatedRequest, hc).flatMap { fileDetails =>
+        backendCalls(sfId).flatMap { fileDetails =>
           persist(fileDetails, sfId).map {
             case true =>
               val responseBody = serialize(fileDetails)
               logger.debug(s"response body to be returned=\n$responseBody")
               Right(responseBody)
-            case false =>
-              Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+            case false => Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
           }
         }.recover {
           case NonFatal(e) =>
@@ -86,10 +85,11 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
   }
 
   private def backendCalls[A](subscriptionFieldsId: SubscriptionFieldsId)
-                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[Seq[UpscanInitiateResponsePayload]] = {
+                             (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]): Future[Seq[UpscanInitiateResponsePayload]] = {
 
     val upscanInitiateRequests = validatedRequest.fileUploadRequest.files
-    failFastSequence(upscanInitiateRequests)(f => backendCall(subscriptionFieldsId, f)(validatedRequest, hc))
+
+    failFastSequence(upscanInitiateRequests)(f => backendCall(subscriptionFieldsId, f))
   }
 
   private def persist[A](fileDetails: Seq[UpscanInitiateResponsePayload], sfId: SubscriptionFieldsId)
@@ -158,9 +158,9 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
 
   private def backendCall[A](subscriptionFieldsId: SubscriptionFieldsId, fileUploadFile: FileUploadFile)
-                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
+                            (implicit validatedRequest: ValidatedFileUploadPayloadRequest[A]) = {
     upscanInitiateConnector.send(
-      preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)(validatedRequest, hc)
+      preparePayload(subscriptionFieldsId, fileUploadFile), validatedRequest.requestedApiVersion)
   }
 
   private def extractEori(authorisedAs: AuthorisedAs): Option[Eori] = {

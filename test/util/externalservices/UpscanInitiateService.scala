@@ -16,13 +16,13 @@
 
 package util.externalservices
 
+import java.util.UUID
+
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers._
 import util.CustomsDeclarationsExternalServicesConfig.UpscanInitiateContextV2
 import util.WireMockRunner
-
-import java.util.UUID
 
 trait UpscanInitiateService extends WireMockRunner {
   private val urlMatchingRequestPath = urlMatching(UpscanInitiateContextV2)

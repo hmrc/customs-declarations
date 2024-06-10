@@ -17,7 +17,8 @@
 package unit.logging
 
 import play.api.mvc.Request
-import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
+import uk.gov.hmrc.customs.declaration.logging.CdsLogger
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 
 // Use purely to increase coverage

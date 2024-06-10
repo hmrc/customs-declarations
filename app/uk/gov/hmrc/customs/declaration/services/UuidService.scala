@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import com.google.inject.Singleton
-
 import java.util.UUID
+
+import com.google.inject.Singleton
 
 @Singleton
 class UuidService {

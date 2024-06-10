@@ -16,12 +16,11 @@
 
 package util.externalservices
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.{post, _}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers._
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.{TestData, WireMockRunner}
-
 import scala.jdk.CollectionConverters._
 
 trait CustomsNotificationService extends WireMockRunner {

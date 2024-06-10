@@ -24,10 +24,10 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{ACCEPT, AUTHORIZATION, CONTENT_TYPE, contentAsString, route, status, _}
+import uk.gov.hmrc.customs.declaration.xml.ValidateXmlAgainstSchema
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataMongoRepo
-import uk.gov.hmrc.customs.declaration.xml.ValidateXmlAgainstSchema
 import util.ApiSubscriptionFieldsTestData
 import util.CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
 import util.FileTransmissionTestData._

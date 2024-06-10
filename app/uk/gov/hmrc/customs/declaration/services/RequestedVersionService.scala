@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
-import uk.gov.hmrc.customs.declaration.model.RequestedVersion
-
 import javax.inject.Singleton
+
+import uk.gov.hmrc.customs.declaration.model.RequestedVersion
 
 @Singleton
 class RequestedVersionService {

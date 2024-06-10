@@ -16,13 +16,13 @@
 
 package util
 
+import java.util.UUID
+
 import com.typesafe.config.{Config, ConfigFactory}
 import uk.gov.hmrc.customs.declaration.model._
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
 import util.ExternalServicesConfig.{Host, Port}
 import util.TestData.declarantEoriValue
-
-import java.util.UUID
 
 trait ApiSubscriptionFieldsTestData {
   val subscriptionFieldsIdString = "327d9145-4965-4d28-a2c5-39dedee50334"

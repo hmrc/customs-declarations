@@ -19,15 +19,15 @@ package unit.controllers.actionbuilders
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.ErrorInternalServerError
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthStatusAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.Csp

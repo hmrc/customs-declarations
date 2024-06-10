@@ -24,8 +24,8 @@ import play.api.http.Status
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.{FileUploadPayloadValidationAction, FileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.controllers.{ErrorResponse, ResponseContents}
+import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.{FileUploadPayloadValidationAction, FileUploadPayloadValidationComposedAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._

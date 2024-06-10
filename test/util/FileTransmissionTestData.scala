@@ -16,11 +16,11 @@
 
 package util
 
+import java.net.URL
+
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.filetransmission._
 import util.TestData.{BatchIdOne, FileReferenceOne, InitiateDate}
-
-import java.net.URL
 
 object FileTransmissionTestData {
 

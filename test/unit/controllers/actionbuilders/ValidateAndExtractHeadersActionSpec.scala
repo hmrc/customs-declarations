@@ -20,8 +20,8 @@ package unit.controllers.actionbuilders
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
 import play.api.test.Helpers
@@ -30,8 +30,8 @@ import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{HeaderWithContentTypeValidator, ValidateAndExtractHeadersAction}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ValidatedHeadersRequest}
-import util.RequestHeaders
 import util.TestData._
+import util.RequestHeaders
 
 import scala.concurrent.ExecutionContext
 

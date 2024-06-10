@@ -16,15 +16,15 @@
 
 package unit.services
 
+import java.util.UUID
+
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest._
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.matchers.should.Matchers
 import uk.gov.hmrc.customs.declaration.model.{ConversationId, CorrelationId, DeclarationManagementInformationRequestId}
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
-
-import java.util.UUID
 
 class UniqueIdsServiceTest extends AnyWordSpecLike with MockitoSugar with Matchers with BeforeAndAfterEach {
 

@@ -22,9 +22,8 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
-import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,7 +33,7 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
                                         config: DeclarationsConfigService)
                                        (implicit ec: ExecutionContext) {
 
-  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]): Future[UpscanInitiateResponsePayload] = {
+  def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[UpscanInitiateResponsePayload] = {
     if (payload.isV2) {
       post(payload, config.fileUploadConfig.upscanInitiateV2Url)
     } else {
@@ -42,12 +41,13 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
     }
   }
 
-  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A]) = {
+  private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
+    val upscanHeader: Seq[(String, String)] = hc.headers(List("Accept", "Gov-Test-Scenario"))
 
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
-    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload)
+    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload, upscanHeader)(implicitly, implicitly, headerCarrier, implicitly)
       .map { res: UpscanInitiateResponsePayload =>
         logger.info(s"reference from call to upscan initiate ${res.reference}")
         logger.debug(s"Response received from upscan initiate service $res")

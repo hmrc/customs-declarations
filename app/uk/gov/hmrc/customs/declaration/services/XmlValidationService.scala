@@ -16,17 +16,16 @@
 
 package uk.gov.hmrc.customs.declaration.services
 
+import play.api.Configuration
+import uk.gov.hmrc.customs.declaration.xml.ValidateXmlAgainstSchema
+
 import java.io.FileNotFoundException
 import java.net.URL
-
 import javax.inject.Inject
 import javax.xml.XMLConstants
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.{Schema, SchemaFactory}
-import play.api.Configuration
-import uk.gov.hmrc.customs.declaration.xml.ValidateXmlAgainstSchema
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.{NodeSeq, SAXException}
 

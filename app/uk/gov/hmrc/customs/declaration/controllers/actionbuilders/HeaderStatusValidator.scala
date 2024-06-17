@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
-import javax.inject.{Inject, Singleton}
-
 import play.api.mvc.Headers
 import play.mvc.Http.Status.BAD_REQUEST
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse._
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class HeaderStatusValidator @Inject()(logger: DeclarationsLogger) extends HeaderValidator(logger) {

@@ -25,8 +25,8 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc.AnyContentAsJson
-import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
@@ -44,6 +44,7 @@ import scala.xml.NodeSeq
 class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers{
 
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
@@ -81,6 +82,15 @@ class NrsConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndA
       }
 
       "pass in the body" in {
+        returnResponseForRequest(Future.successful(TestData.nrSubmissionId))
+
+        awaitRequest
+
+        verify(mockWsPost).POST(anyString, ameq(TestData.nrsPayload), any[SeqOfHeader])(
+          any[Writes[NrsPayload]], any[HttpReads[NrSubmissionId]](), any[HeaderCarrier](), any[ExecutionContext])
+      }
+
+      "pass in the body with extra headers" in {
         returnResponseForRequest(Future.successful(TestData.nrSubmissionId))
 
         awaitRequest

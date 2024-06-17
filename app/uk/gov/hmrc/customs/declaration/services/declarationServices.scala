@@ -20,9 +20,9 @@ import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.pattern.CircuitBreakerOpenException
 import play.api.http.Status.FORBIDDEN
 import play.api.mvc.Result
+import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationCancellationConnector, DeclarationConnector, DeclarationSubmissionConnector}
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.errorInternalServerError
-import uk.gov.hmrc.customs.declaration.connectors.{ApiSubscriptionFieldsConnector, DeclarationCancellationConnector, DeclarationConnector, DeclarationSubmissionConnector}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
@@ -86,13 +86,13 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
   def send[A](implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     futureApiSubFieldsId(vpr.clientId) flatMap {
       case Right(sfId) =>
-        callBackendAndNrs(vpr, sfId)
+        callBackendAndNrs(vpr, sfId, hc)
       case Left(result) =>
         Future.successful(Left(result))
     }
   }
 
-  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], asfr: ApiSubscriptionFieldsResponse): Future[Either[Result, Option[NrSubmissionId]]] = {
+  private def callBackendAndNrs[A](implicit vpr: ValidatedPayloadRequest[A], asfr: ApiSubscriptionFieldsResponse, hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
 
     val nrSubmissionId = new NrSubmissionId(vpr.conversationId.uuid)
     if (declarationsConfigService.nrsConfig.nrsEnabled) {
@@ -100,7 +100,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
 
       val startTime = dateTimeProvider.zonedDateTimeUtc
 
-      nrsService.send(vpr)
+      nrsService.send(vpr, hc)
         .map(nrSubmissionId => {
           logger.debug(s"NRS returned submission id: $nrSubmissionId")
           logCallDuration(startTime)
@@ -123,7 +123,7 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
   }
 
   private def callBackend[A](asfr: ApiSubscriptionFieldsResponse)
-                            (implicit vpr: ValidatedPayloadRequest[A]): Future[Either[Result, Option[NrSubmissionId]]] = {
+                            (implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[Either[Result, Option[NrSubmissionId]]] = {
     val dateTime = dateTimeProvider.nowUtc()
     val correlationId = uniqueIdsService.correlation
     val xmlToSend = preparePayload(vpr.xmlBody, asfr, dateTime)

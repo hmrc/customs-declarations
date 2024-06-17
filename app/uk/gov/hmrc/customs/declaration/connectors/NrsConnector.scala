@@ -22,9 +22,8 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,18 +33,16 @@ class NrsConnector @Inject()(http: HttpClient,
                              declarationConfigService: DeclarationsConfigService)
                             (implicit ec: ExecutionContext) {
 
-  private val XApiKey = "X-API-Key"
-
-  def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[NrSubmissionId] = {
+  def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[NrSubmissionId] = {
     post(nrsPayload, declarationConfigService.nrsConfig.nrsUrl)
   }
 
-  private def post[A](payload: NrsPayload, url: String)(implicit vupr: ValidatedPayloadRequest[A]) = {
+  private def post[A](payload: NrsPayload, url: String)(implicit vupr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-
+    val nrsHeaders = Seq[(String, String)](("Content-Type", "application/json"), ("X-API-Key", declarationConfigService.nrsConfig.nrsApiKey))
+      .++ (hc.headers(List("Accept", "Gov-Test-Scenario")))
     logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
-    http.POST[NrsPayload, NrSubmissionId](url, payload, Seq[(String, String)](("Content-Type", "application/json"), (XApiKey, declarationConfigService.nrsConfig.nrsApiKey)))
+    http.POST[NrsPayload, NrSubmissionId](url, payload, nrsHeaders)
       .map { res =>
         logger.debug(s"Response received from nrs service is submission id: ${res}")
         res

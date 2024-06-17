@@ -16,15 +16,14 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import org.apache.pekko.actor.ActorSystem
 import com.google.inject._
+import org.apache.pekko.actor.ActorSystem
 import play.api.http.HeaderNames._
 import play.api.http.{ContentTypes, MimeTypes}
 import play.api.mvc.Codec.utf_8
-import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.config.{DeclarationCircuitBreaker, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
 import uk.gov.hmrc.customs.declaration.model.ApiVersion
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
@@ -77,14 +76,14 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   override lazy val unstablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
   override lazy val unavailablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
 
-  def send[A](xml: NodeSeq, date: Instant, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A]): Future[HttpResponse] = {
+  def send[A](xml: NodeSeq, date: Instant, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = None)
+    implicit val headerCarrier: HeaderCarrier = HeaderCarrier(authorization = None)
 
-    lazy val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken)
+    val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ hc.headers(List("Accept", "Gov-Test-Scenario"))
     val startTime = LocalDateTime.now
-    withCircuitBreaker(post(xml, config.url, decHeaders)).map {
+    withCircuitBreaker(post(xml, config.url, decHeaders)(vpr, headerCarrier)).map {
       response => {
         logCallDuration(startTime)
         logger.debug(s"Response status ${response.status} and response body ${formatResponseBody(response.body)}")

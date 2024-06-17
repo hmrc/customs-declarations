@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.config
 
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class ServiceConfigProvider @Inject()(servicesConfig: ServicesConfig) {

@@ -28,7 +28,8 @@ trait HeaderUtil {
     formatter.format(zdt) + " UTC"
   }
 
-  def getCustomsApiStubExtraHeaders()(implicit hc: HeaderCarrier): Seq[(String, String)] = {
-    hc.headers(List("Accept", "Gov-Test-Scenario"))
+  def getCustomsApiStubExtraHeaders(implicit hc: HeaderCarrier): Seq[(String, String)] = {
+    hc.headers(List("Gov-Test-Scenario")).foldLeft(Seq.empty[(String, String)])((acc: Seq[(String, String)], govTestScenario) =>
+      (acc :+ govTestScenario) ++ hc.headers(List("Accept")))
   }
 }

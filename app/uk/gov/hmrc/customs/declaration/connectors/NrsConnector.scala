@@ -40,7 +40,7 @@ class NrsConnector @Inject()(http: HttpClient,
   private def post[A](payload: NrsPayload, url: String)(implicit vupr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
 
     val nrsHeaders = Seq[(String, String)](("Content-Type", "application/json"), ("X-API-Key", declarationConfigService.nrsConfig.nrsApiKey))
-      .++ (getCustomsApiStubExtraHeaders()(hc))
+      .++ (getCustomsApiStubExtraHeaders)
     logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
     http.POST[NrsPayload, NrSubmissionId](url, payload, nrsHeaders)
       .map { res =>

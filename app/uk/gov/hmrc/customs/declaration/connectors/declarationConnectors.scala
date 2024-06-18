@@ -81,7 +81,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
     implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
 
-    val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders()(hc)
+    val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders(hc)
     val startTime = LocalDateTime.now
     withCircuitBreaker(post(xml, config.url, decHeaders)(vpr, headerCarrier)).map {
       response => {

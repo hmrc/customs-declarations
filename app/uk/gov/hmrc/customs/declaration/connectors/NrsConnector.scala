@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NrsConnector @Inject()(http: HttpClient,
                              logger: DeclarationsLogger,
                              declarationConfigService: DeclarationsConfigService)
-                            (implicit ec: ExecutionContext) {
+                            (implicit ec: ExecutionContext) extends HeaderUtil {
 
   def send[A](nrsPayload: NrsPayload, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[NrSubmissionId] = {
     post(nrsPayload, declarationConfigService.nrsConfig.nrsUrl)
@@ -40,7 +40,7 @@ class NrsConnector @Inject()(http: HttpClient,
   private def post[A](payload: NrsPayload, url: String)(implicit vupr: ValidatedPayloadRequest[A], hc: HeaderCarrier) = {
 
     val nrsHeaders = Seq[(String, String)](("Content-Type", "application/json"), ("X-API-Key", declarationConfigService.nrsConfig.nrsApiKey))
-      .++ (hc.headers(List("Accept", "Gov-Test-Scenario")))
+      .++ (getCustomsApiStubExtraHeaders()(hc))
     logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
     http.POST[NrsPayload, NrSubmissionId](url, payload, nrsHeaders)
       .map { res =>

@@ -18,6 +18,7 @@ package uk.gov.hmrc.customs.declaration.connectors.upscan
 
 import com.google.inject._
 import play.api.libs.json.Json
+import uk.gov.hmrc.customs.declaration.connectors.HeaderUtil
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
@@ -31,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class UpscanInitiateConnector @Inject()(http: HttpClient,
                                         logger: DeclarationsLogger,
                                         config: DeclarationsConfigService)
-                                       (implicit ec: ExecutionContext) {
+                                       (implicit ec: ExecutionContext) extends HeaderUtil{
 
   def send[A](payload: UpscanInitiatePayload, apiVersion: ApiVersion)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier): Future[UpscanInitiateResponsePayload] = {
     if (payload.isV2) {
@@ -44,10 +45,9 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
   private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
 
     implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
-    val upscanHeader: Seq[(String, String)] = hc.headers(List("Accept", "Gov-Test-Scenario"))
 
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
-    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload, upscanHeader)(implicitly, implicitly, headerCarrier, implicitly)
+    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload, getCustomsApiStubExtraHeaders()(hc))(implicitly, implicitly, headerCarrier, implicitly)
       .map { res: UpscanInitiateResponsePayload =>
         logger.info(s"reference from call to upscan initiate ${res.reference}")
         logger.debug(s"Response received from upscan initiate service $res")

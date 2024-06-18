@@ -79,9 +79,9 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   def send[A](xml: NodeSeq, date: Instant, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
-    implicit val headerCarrier: HeaderCarrier = HeaderCarrier(authorization = None)
+    implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
 
-    val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ hc.headers(List("Accept", "Gov-Test-Scenario"))
+    val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders()(hc)
     val startTime = LocalDateTime.now
     withCircuitBreaker(post(xml, config.url, decHeaders)(vpr, headerCarrier)).map {
       response => {

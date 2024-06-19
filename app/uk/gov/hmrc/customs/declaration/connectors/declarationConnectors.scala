@@ -102,7 +102,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
 
   private def post[A](xml: NodeSeq, url: String, decHeaders: Seq[(String, String)])(implicit vpr: ValidatedPayloadRequest[A]) = {
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    logger.debug(s"Sending request to $url.\n Headers:\n $hc\n Payload:\n$xml")
+    logger.debug(s"Sending request to $url.\n Headers:\n $decHeaders\n Payload:\n$xml")
 
     http.POSTString[HttpResponse](url, xml.toString(), headers = decHeaders).map { response =>
       response.status match {

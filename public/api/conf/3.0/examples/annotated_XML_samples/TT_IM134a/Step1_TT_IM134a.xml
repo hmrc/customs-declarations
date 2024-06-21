@@ -1,17 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-    xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-    xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-    xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
     <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-        xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-        xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!-- A trader submits a Type E simplified declaration (I1), importing goods from ROW to NI. The trader enters the following information on the declaration: -
         Procedure Code '4000' at item level in DE 1/10.
         - Additional Procedure Code '1PF' at item level in DE 1/11.
@@ -21,7 +14,7 @@
         <!--Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN. Trader's own reference number - this must be unique to the transaction. -->
-        <FunctionalReferenceID>78494316OS5C</FunctionalReferenceID>
+        <FunctionalReferenceID>7849431QVR2M</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type. IM to represent an import declaration. -->
         <!--DE 1/2: Additional Declaration Type. E to represent a pre-lodged occasional simplified declaration. -->
         <TypeCode>IME</TypeCode>
@@ -72,10 +65,10 @@
                     Mandatory.
                     ID to give a unique position of the location where the goods are located at the time they are declared.
                     The location code is entered using the following components:
-                    • Name: ID to give a unique position of the location, in this scenario WPTWPTWPT indicating the port of Warrenpoint.
-                    • TypeCode: Type of Location, in this scenario A to represent that it is a designated location.
-                    • Address TypeCode: Type of ID of the Location, in this scenario U for UN/LOCODE.
-                    • Addess CountryCode: Code of the country where the goods may be examined, in this scenario GB. -->
+                    â€¢ Name: ID to give a unique position of the location, in this scenario WPTWPTWPT indicating the port of Warrenpoint.
+                    â€¢ TypeCode: Type of Location, in this scenario A to represent that it is a designated location.
+                    â€¢ Address TypeCode: Type of ID of the Location, in this scenario U for UN/LOCODE.
+                    â€¢ Addess CountryCode: Code of the country where the goods may be examined, in this scenario GB. -->
                 <GoodsLocation>
                     <Name>WLALONBTW</Name>
                     <TypeCode>A</TypeCode>
@@ -136,7 +129,7 @@
                     <TypeCode>505</TypeCode>
                     <LPCOExemptionCode>CC</LPCOExemptionCode>
                 </AdditionalDocument>
-                <!--DE 2/2 Additional Information. This is required when DE 4/7 is completed for a manual tax calculation. Statement code OVR01 indicates duty calculation override claimed. In the description enter ‘Duty override claimed’ followed by a plain text description of the reason for the override. -->
+                <!--DE 2/2 Additional Information. This is required when DE 4/7 is completed for a manual tax calculation. Statement code OVR01 indicates duty calculation override claimed. In the description enter â€˜Duty override claimedâ€™ followed by a plain text description of the reason for the override. -->
                 <AdditionalInformation>
                     <StatementCode>OVR01</StatementCode>
                     <StatementDescription>Duty override claimed - to test CDSP-10772</StatementDescription>
@@ -189,7 +182,7 @@
                     </DutyTaxFee>
                     <GoodsMeasure>
                         <!--DE 6/1: Net Mass. Weight of the goods in kilograms without any packaging. -->
-                        <NetNetWeightMeasure>20</NetNetWeightMeasure>
+                        <NetNetWeightMeasure>10</NetNetWeightMeasure>
                     </GoodsMeasure>
                     <!--DE 4/14: Item Price/ Amount. The invoice was issued with a value of 500 and the currency of GBP.-->
                     <InvoiceLine>
@@ -204,7 +197,7 @@
                 <ExportCountry>
                     <ID>US</ID>
                 </ExportCountry>
-                <!--DE 1/10: Procedure. Mandatory field. This data element is made up of two components: • CurrentCode: 40 indicating entry for free circulation and home use of non-union goods. • PreviousCode: 00 indicating where the goods have not been subject to any previous procedure. -->
+                <!--DE 1/10: Procedure. Mandatory field. This data element is made up of two components: â€¢ CurrentCode: 40 indicating entry for free circulation and home use of non-union goods. â€¢ PreviousCode: 00 indicating where the goods have not been subject to any previous procedure. -->
                 <GovernmentProcedure>
                     <CurrentCode>40</CurrentCode>
                     <PreviousCode>00</PreviousCode>

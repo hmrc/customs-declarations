@@ -22,7 +22,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>7849431VAI92</FunctionalReferenceID>
+		<FunctionalReferenceID>7849431Z359T</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: A to represent a standard frontier declaration.-->
 		<TypeCode>IMA</TypeCode>
@@ -164,7 +164,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					A document code of C505 indicates CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
 					In this scenario, a waiver to the CCG authorisation is being used and therefore the ID also indicates that a waiver is being used.
-					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code – CCG not required. -->
+					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code â€“ CCG not required. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBCGUGuaranteenotrequired</ID>
@@ -182,8 +182,8 @@
 					<TypeCode>053</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of C057 indicates Copy of the declaration of conformity – Option A, as referred in Article 1.2 and in the Annex of Regulation (EU) 2016/879.
-					LPCOExemptionCode: AE indicates Document attached — exhausted by (or only applies to) this entry (document returned to the trader). -->
+					A document code of C057 indicates Copy of the declaration of conformity â€“ Option A, as referred in Article 1.2 and in the Annex of Regulation (EU) 2016/879.
+					LPCOExemptionCode: AE indicates Document attached â€” exhausted by (or only applies to) this entry (document returned to the trader). -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>0054037</ID>
@@ -314,7 +314,7 @@
 				</Packaging>
 				<!--DE 4/13: Valuation indicator.
 					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-					The code comprises four digits, each of which being either a ‘0’ or a ‘1’:
+					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
 					- First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
 					- Second digit: 0 = there are no restrictions as to the disposal
 					or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.

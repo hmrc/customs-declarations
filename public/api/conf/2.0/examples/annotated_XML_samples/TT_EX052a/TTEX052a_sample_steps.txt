@@ -1,0 +1,7 @@
+Step 1: EXD declaration-1 with DUCR 1 and MUCR 1 is submitted
+Step 2: EAA to MUCR is submitted
+Step 3: Rejection of declaration 1 occurs via invalidation (this will trigger SOE 11, an updated EMR and ERS to step-2, DUCR 1 automatically disassociates from MUCR 1)
+Step 4: EXD declaration-2 with DUCR 2 and MUCR 1 is submitted
+Step 5: CST with MUCR is submitted
+Step 6: EAL with MUCR is submitted
+Step 7: EDL with MUCR is submitted

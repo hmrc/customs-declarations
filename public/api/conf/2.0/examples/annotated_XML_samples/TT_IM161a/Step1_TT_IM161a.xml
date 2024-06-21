@@ -34,7 +34,7 @@
         <!--DE 2/5: LRN.
             Mandatory field.
             Declarant's own reference number this must be unique to the transaction. -->
-        <FunctionalReferenceID>7867523GOB09</FunctionalReferenceID>
+        <FunctionalReferenceID>7849431EPZ5T</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             Mandatory field.
             IM to represent an import declaration. -->
@@ -218,6 +218,14 @@
                     <ID>Excluded from Reg 834/2007</ID>
                     <Name>Reason for Waiver</Name>
                     <TypeCode>929</TypeCode>
+                </AdditionalDocument>
+                <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    A document code of 901Y indicates: Goods do not require a pre-notification to be made on IPAFFS.-->
+                <AdditionalDocument>
+                    <CategoryCode>9</CategoryCode>
+                    <ID>Pre-notification Exempt</ID>
+                    <Name>Reason for Waiver</Name>
+                    <TypeCode>01Y</TypeCode>
                 </AdditionalDocument>
                 <!-- D.E 2/3 = [Type Code] UK1 -->
                 <!--DE 2/3: Documents produced, certificates and authorisations, additional references.

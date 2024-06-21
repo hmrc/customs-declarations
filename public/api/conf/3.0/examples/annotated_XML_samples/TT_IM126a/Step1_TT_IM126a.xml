@@ -29,7 +29,7 @@
         <!--DE 2/5: LRN.
             Mandatory field.
             Traders own reference number this must be unique to the transaction. -->
-        <FunctionalReferenceID>7849431DYKRI</FunctionalReferenceID>
+        <FunctionalReferenceID>7867523V4NH8</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             Mandatory field.
             IM to represent an import declaration. -->
@@ -464,7 +464,7 @@
                 In CDS, the MUCR (MCR) is not required on a sup dec. -->
             <PreviousDocument>
                 <CategoryCode>Y</CategoryCode>
-                <ID>3GB553202734852-20230322</ID>
+                <ID>4GB553202734852-20230321</ID>
                 <TypeCode>DCR</TypeCode>
             </PreviousDocument>
             <!--DE 4/1: Delivery Terms.

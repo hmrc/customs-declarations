@@ -7,9 +7,9 @@
     <AgencyAssignedCustomizationVersionCode/>
     <Response>
         <FunctionCode>13</FunctionCode>
-        <FunctionalReferenceID>e6a0f1c8607f442aade70be50bfd8489</FunctionalReferenceID>
+        <FunctionalReferenceID>53df6c97cd56485399f7a24e9b29562b</FunctionalReferenceID>
         <IssueDateTime>
-            <DateTimeString formatCode="304">20240417150149+01</DateTimeString>
+            <DateTimeString formatCode="304">20240619144904+01</DateTimeString>
         </IssueDateTime>
         <Bank>
             <ReferenceID>BARCGB22</ReferenceID>
@@ -19,33 +19,13 @@
             <NameCode>4</NameCode>
         </Status>
         <Declaration>
-            <FunctionalReferenceID>7849431DYKRI</FunctionalReferenceID>
-            <ID>24GB49Q6OSRN3U8AR0</ID>
+            <FunctionalReferenceID>7867523V4NH8</FunctionalReferenceID>
+            <ID>24GB6RQGXR5BB1FAR1</ID>
             <VersionID>1</VersionID>
             <GoodsShipment>
                 <GovernmentAgencyGoodsItem>
                     <SequenceNumeric>1</SequenceNumeric>
                     <Commodity>
-                        <DutyTaxFee>
-                            <AdValoremTaxBaseAmount currencyID="GBP">2000.00</AdValoremTaxBaseAmount>
-                            <DeductAmount currencyID="GBP">0.00</DeductAmount>
-                            <DutyRegimeCode>100</DutyRegimeCode>
-                            <TaxRateNumeric>0.00</TaxRateNumeric>
-                            <TypeCode>A00</TypeCode>
-                            <Payment>
-                                <TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
-                                <PaymentAmount currencyID="GBP">0.00</PaymentAmount>
-                            </Payment>
-                        </DutyTaxFee>
-                        <DutyTaxFee>
-                            <DeductAmount currencyID="GBP">0.00</DeductAmount>
-                            <DutyRegimeCode>100</DutyRegimeCode>
-                            <TypeCode>441</TypeCode>
-                            <Payment>
-                                <TaxAssessedAmount currencyID="GBP">4.67</TaxAssessedAmount>
-                                <PaymentAmount currencyID="GBP">4.67</PaymentAmount>
-                            </Payment>
-                        </DutyTaxFee>
                         <DutyTaxFee>
                             <AdValoremTaxBaseAmount currencyID="GBP">2006.03</AdValoremTaxBaseAmount>
                             <DeductAmount currencyID="GBP">0.00</DeductAmount>
@@ -64,6 +44,26 @@
                             <Payment>
                                 <TaxAssessedAmount currencyID="GBP">1.36</TaxAssessedAmount>
                                 <PaymentAmount currencyID="GBP">1.36</PaymentAmount>
+                            </Payment>
+                        </DutyTaxFee>
+                        <DutyTaxFee>
+                            <AdValoremTaxBaseAmount currencyID="GBP">2000.00</AdValoremTaxBaseAmount>
+                            <DeductAmount currencyID="GBP">0.00</DeductAmount>
+                            <DutyRegimeCode>100</DutyRegimeCode>
+                            <TaxRateNumeric>0.00</TaxRateNumeric>
+                            <TypeCode>A00</TypeCode>
+                            <Payment>
+                                <TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+                                <PaymentAmount currencyID="GBP">0.00</PaymentAmount>
+                            </Payment>
+                        </DutyTaxFee>
+                        <DutyTaxFee>
+                            <DeductAmount currencyID="GBP">0.00</DeductAmount>
+                            <DutyRegimeCode>100</DutyRegimeCode>
+                            <TypeCode>441</TypeCode>
+                            <Payment>
+                                <TaxAssessedAmount currencyID="GBP">4.67</TaxAssessedAmount>
+                                <PaymentAmount currencyID="GBP">4.67</PaymentAmount>
                             </Payment>
                         </DutyTaxFee>
                     </Commodity>

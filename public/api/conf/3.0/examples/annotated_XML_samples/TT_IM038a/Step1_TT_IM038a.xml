@@ -1,18 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+	xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			GB-NI 'At Risk' - Subsidy Applied.
-			
+
 			Standard frontier Declaration Type A which derives an H1 Declaration Category data set.
-			
+
 			Import of goods liable to Customs Duty & VAT, with no previous procedure.
-			
+
 			The Trader declares:
 			• Goods: Small cucumbers of a length not exceeding 15cm
 			• Goods presented at Warrenport on arrival.
@@ -26,7 +33,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Trader's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>7849431VXHZT</FunctionalReferenceID>
+		<FunctionalReferenceID>7849431RYSRG</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -185,6 +192,15 @@
 					<TypeCode>55D</TypeCode>
 					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of U045 indicates Movement Certificate EUR-MED.
+					Document status code of AP indicates document attached - part use (applies to this and other entries) (document returned to the trader). -->
+				<AdditionalDocument>
+					<CategoryCode>U</CategoryCode>
+					<ID>U045-0054047</ID>
+					<TypeCode>045</TypeCode>
+					<LPCOExemptionCode>AP</LPCOExemptionCode>
+				</AdditionalDocument>
 				<!--DE 2/2: Additional Information.
 					00500 - IMPORTER Indicating Self representation by the importer. -->
 				<AdditionalInformation>
@@ -229,8 +245,10 @@
 					</Classification>
 					<DutyTaxFee>
 						<!--DE 4/17: Preference.
-							Type of 100 represents no preference being claimed. -->
-						<DutyRegimeCode>100</DutyRegimeCode>
+							Type of 300 represents Tariff preference without conditions or limits (including ceilings). 
+							Application of the relevant preferential rate without conditions or limits (Certificates EUR1, EUR-MED, 
+							or equivalent proofs of preferential origin). -->
+						<DutyRegimeCode>300</DutyRegimeCode>
 						<!--DE 4/3: Tax Type.
 							A50 represents EU Tariff customs duty. -->
 						<TypeCode>A50</TypeCode>
@@ -283,7 +301,7 @@
 					CountryCode contains the code for the country from which the originated, in this case GB.  -->
 				<Origin>
 					<CountryCode>GB</CountryCode>
-					<TypeCode>1</TypeCode>
+					<TypeCode>2</TypeCode>
 				</Origin>
 				<Packaging>
 					<SequenceNumeric>1</SequenceNumeric>

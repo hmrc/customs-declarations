@@ -21,22 +21,21 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{eq => ameq, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames
 import play.api.mvc.{AnyContent, Request}
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.config.{ServiceConfig, ServiceConfigProvider}
-import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationStatusConnector
+import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.AuthorisedRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.StatusTestXMLData.expectedDeclarationStatusPayload
 import util.TestData._

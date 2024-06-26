@@ -26,10 +26,9 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOICES, NOT_FOUND}
-import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.http._
 import util.ExternalServicesConfig.{Host, Port}

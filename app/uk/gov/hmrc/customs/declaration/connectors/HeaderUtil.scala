@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
+import uk.gov.hmrc.http.HeaderCarrier
+
 import java.time.{Instant, ZoneOffset, ZonedDateTime}
 
 trait HeaderUtil {
@@ -24,5 +26,10 @@ trait HeaderUtil {
     val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss")
     val zdt = ZonedDateTime.ofInstant(date, ZoneOffset.UTC)
     formatter.format(zdt) + " UTC"
+  }
+
+  def getCustomsApiStubExtraHeaders(implicit hc: HeaderCarrier): Seq[(String, String)] = {
+    hc.headers(List("Gov-Test-Scenario")).foldLeft(Seq.empty[(String, String)])((acc: Seq[(String, String)], govTestScenario) =>
+      (acc :+ govTestScenario) ++ hc.headers(List("Accept")))
   }
 }

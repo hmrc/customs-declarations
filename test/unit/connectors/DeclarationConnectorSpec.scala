@@ -31,9 +31,8 @@ import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.declaration.config.{ServiceConfig, ServiceConfigProvider}
-import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationConnector
-import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
+import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
@@ -77,6 +76,7 @@ class DeclarationConnectorSpec extends AnyWordSpecLike with MockitoSugar with Be
   private val xml = <xml></xml>
 
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeEach(): Unit = {
     reset(mockWsPost, mockLogger, mockServiceConfigProvider)

@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.{ActionRefiner, _}
+import play.api.mvc._
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ValidatedHeadersStatusRequest}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 /** Action builder that validates headers.

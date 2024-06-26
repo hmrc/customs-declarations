@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.customs.declaration.model.actionbuilders
 
-import java.time.ZonedDateTime
-
 import play.api.mvc.{Request, Result, WrappedRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.declaration.model.upscan.DocumentType
-import uk.gov.hmrc.customs.declaration.model.{AuthorisedAs, _}
+import uk.gov.hmrc.customs.declaration.model._
 
+import java.time.ZonedDateTime
 import scala.xml.NodeSeq
 
 object ActionBuilderModelHelper {

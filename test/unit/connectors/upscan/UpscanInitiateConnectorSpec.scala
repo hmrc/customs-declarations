@@ -45,6 +45,7 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with
   private implicit val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
 

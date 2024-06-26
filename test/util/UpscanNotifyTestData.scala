@@ -16,13 +16,12 @@
 
 package util
 
-import java.net.URL
-import java.time.Instant
-
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.customs.declaration.model.upscan._
 import util.TestData.FileReferenceOne
 
+import java.net.URL
+import java.time.Instant
 import scala.xml.Elem
 
 object UpscanNotifyTestData {

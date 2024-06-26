@@ -17,8 +17,8 @@
 package unit.controllers.actionbuilders
 
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.mvc.Http.Status.BAD_REQUEST
@@ -29,8 +29,8 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.VersionOne
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders}
 import util.CustomsDeclarationsMetricsTestData.EventStart
-import util.RequestHeaders.{ValidHeadersV2, _}
-import util.{TestData}
+import util.RequestHeaders._
+import util.TestData
 
 class HeaderStatusValidatorSpec extends AnyWordSpecLike with TableDrivenPropertyChecks with MockitoSugar with Matchers{
 

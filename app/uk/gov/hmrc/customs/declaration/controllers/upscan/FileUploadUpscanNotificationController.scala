@@ -69,7 +69,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
                       failed,
                       failed.reference,
                       clientSubscriptionId
-                    )(toXmlNotification)
+                    )(toXmlNotification, hc)
                     .map( _ => Results.NoContent ).recover{
                       case e: Throwable =>
                         internalServerErrorResult(e)
@@ -103,7 +103,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
         callbackBody.reference,
         callbackBody.reference,
         subscriptionFieldsId
-      )(errorToXmlNotification).recover{
+      )(errorToXmlNotification, hc).recover{
         case e: Throwable =>
           cdsLogger.error(s"Error sending internal error notification. Body: ${request.body.asText} headers: ${request.headers}", e)
       }

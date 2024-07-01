@@ -26,7 +26,7 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders._
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.FileUploadPayloadValidationAction
 import uk.gov.hmrc.customs.declaration.controllers.upscan.FileUploadController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, _}
+import uk.gov.hmrc.customs.declaration.services._
 
 import scala.concurrent.ExecutionContext
 

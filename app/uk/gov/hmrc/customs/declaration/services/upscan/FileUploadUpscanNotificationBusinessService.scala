@@ -37,7 +37,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
                                                             logger: DeclarationsLogger)
                                                            (implicit ec: ExecutionContext) {
 
-  def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(implicit r: HasConversationId): Future[Unit] = {
+  def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(implicit r: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
     repo.update(
       csId,
       ready.reference,
@@ -55,7 +55,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
             logger.error(errorMsg)
             Future.failed(new IllegalStateException(errorMsg))
           case Some(fileTransmission) =>
-            connector.send(fileTransmission)(r, hc).map { _ =>
+            connector.send(fileTransmission).map { _ =>
               logger.info(s"successfully called file transmission service with batchId [${fileTransmission.batch.id.toString}], callbackUrl [${fileTransmission.callbackUrl.toString}] and fileReference [${fileTransmission.file.reference.toString}]")
               ()
             }

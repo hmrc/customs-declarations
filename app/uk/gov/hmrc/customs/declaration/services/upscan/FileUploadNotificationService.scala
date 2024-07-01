@@ -22,6 +22,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.{FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.model.{ConversationId, SubscriptionFieldsId}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
+import uk.gov.hmrc.http.HeaderCarrier
 
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
@@ -44,7 +45,8 @@ class FileUploadNotificationService @Inject()(fileUploadMetadataRepo: FileUpload
                                               logger: CdsLogger)
                                              (implicit ec: ExecutionContext) {
 
-  def sendMessage[T](callbackResponse: T, fileReference: FileReference, clientSubscriptionId: SubscriptionFieldsId)(implicit callbackToXml: CallbackToXmlNotification[T]): Future[Unit] = {
+  def sendMessage[T](callbackResponse: T, fileReference: FileReference, clientSubscriptionId: SubscriptionFieldsId)
+                    (implicit callbackToXml: CallbackToXmlNotification[T], hc: HeaderCarrier): Future[Unit] = {
 
     implicit val hasConversationId = new HasConversationId {
       override val conversationId: ConversationId = ConversationId(fileReference.value)

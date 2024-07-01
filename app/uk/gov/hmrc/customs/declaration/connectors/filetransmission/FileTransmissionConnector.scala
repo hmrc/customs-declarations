@@ -20,6 +20,7 @@ import com.google.inject._
 import play.api.libs.json.Json
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes.JSON
+import uk.gov.hmrc.customs.declaration.connectors.HeaderUtil
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
@@ -34,27 +35,27 @@ import scala.concurrent.{ExecutionContext, Future}
 class FileTransmissionConnector @Inject()(http: HttpClient,
                                           logger: DeclarationsLogger,
                                           config: DeclarationsConfigService)
-                                         (implicit ec: ExecutionContext) extends HttpErrorFunctions {
+                                         (implicit ec: ExecutionContext) extends HttpErrorFunctions with HeaderUtil {
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier(
-    extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON) // http-verbs will implicitly add user agent header
-  )
-
-  def send[A](request: FileTransmission)(implicit hasConversationId: HasConversationId): Future[Unit] = {
+  def send[A](request: FileTransmission)(implicit hasConversationId: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
     post(request, config.fileUploadConfig.fileTransmissionBaseUrl)
   }
 
-  private def post[A](request: FileTransmission, url: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
+  private def post[A](request: FileTransmission, url: String)(implicit hasConversationId: HasConversationId, headerCarrier: HeaderCarrier): Future[Unit] = {
+    implicit val hc: HeaderCarrier = HeaderCarrier(
+      extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON) // http-verbs will implicitly add user agent header
+    )
     logger.debug(s"Sending request to file transmission service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(request))}")
-    http.POST[FileTransmission, HttpResponse](url, request).map{ response =>
-      response.status match {
-        case status if is2xx(status) =>
-          logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")
-          ()
+    http.POST[FileTransmission, HttpResponse](url, request, getCustomsApiStubExtraHeaders(headerCarrier))(implicitly, implicitly, hc, implicitly).map {
+      response =>
+        response.status match {
+          case status if is2xx(status) =>
+            logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")
+            ()
 
-        case status => //1xx, 3xx, 4xx, 5xx
-          throw Non2xxResponseException(status)
-      }
+          case status => //1xx, 3xx, 4xx, 5xx
+            throw Non2xxResponseException(status)
+        }
     }.recoverWith {
         case httpError: HttpException =>
           logger.error(s"Call to file transmission failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")

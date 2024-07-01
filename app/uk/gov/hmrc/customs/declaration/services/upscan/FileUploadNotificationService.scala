@@ -46,7 +46,6 @@ class FileUploadNotificationService @Inject()(fileUploadMetadataRepo: FileUpload
                                              (implicit ec: ExecutionContext) {
 
   def sendMessage[T](callbackResponse: T, fileReference: FileReference, clientSubscriptionId: SubscriptionFieldsId)(implicit callbackToXml: CallbackToXmlNotification[T], hc : HeaderCarrier): Future[Unit] = {
-    println("service--------" + hc)
     implicit val hasConversationId = new HasConversationId {
       override val conversationId: ConversationId = ConversationId(fileReference.value)
     }

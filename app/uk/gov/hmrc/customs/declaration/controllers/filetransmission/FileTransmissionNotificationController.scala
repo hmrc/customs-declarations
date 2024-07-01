@@ -34,11 +34,10 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 class FileTransmissionNotificationController @Inject()(callbackToXmlNotification: FileTransmissionCallbackToXmlNotification,
-                                                       common : CommonSubmitterHeader,
                                                        notificationService: FileUploadNotificationService,
                                                        cc: ControllerComponents,
                                                        cdsLogger: CdsLogger)
-                                                      (implicit ec: ExecutionContext) extends BackendController(common.cc) {
+                                                      (implicit ec: ExecutionContext) extends BackendController(cc) {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async {
 
@@ -57,7 +56,6 @@ class FileTransmissionNotificationController @Inject()(callbackToXmlNotification
               case JsSuccess(callbackBody, _) => callbackBody match {
                 case notification: FileTransmissionNotification =>
                   cdsLogger.debug(s"Valid JSON success request received. Body=${Json.prettyPrint(js)} headers=${request.headers}")
-                  println("controller--------" + request.headers)
                   notificationService.sendMessage[FileTransmissionNotification](notification, notification.fileReference, clientSubscriptionId)(callbackToXmlNotification, hc).map { _ =>
                     NoContent
                   }.recover {

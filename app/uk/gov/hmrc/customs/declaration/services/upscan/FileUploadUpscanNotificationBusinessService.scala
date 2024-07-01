@@ -24,6 +24,7 @@ import uk.gov.hmrc.customs.declaration.model.filetransmission._
 import uk.gov.hmrc.customs.declaration.model.upscan._
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import java.net.URL
 import javax.inject.{Inject, Singleton}
@@ -36,7 +37,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
                                                             logger: DeclarationsLogger)
                                                            (implicit ec: ExecutionContext) {
 
-  def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(implicit r: HasConversationId): Future[Unit] = {
+  def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(implicit r: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
     repo.update(
       csId,
       ready.reference,

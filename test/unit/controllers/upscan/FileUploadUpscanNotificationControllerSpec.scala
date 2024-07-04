@@ -69,7 +69,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
         ameq(FailedCallbackBody),
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId])
-      (ameq(mockToXmlNotification), ameq(hc))
+      (ameq(mockToXmlNotification), any[HeaderCarrier])
       ).thenReturn(result)
     }
 
@@ -79,7 +79,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       verify(mockNotificationService).sendMessage(
         ameq(callbackBody),
         ameq[UUID](fileReference.value).asInstanceOf[FileReference],
-        ameq[UUID](csid.value).asInstanceOf[SubscriptionFieldsId])(ameq(mockToXmlNotification), ameq(hc))
+        ameq[UUID](csid.value).asInstanceOf[SubscriptionFieldsId])(ameq(mockToXmlNotification), any[HeaderCarrier])
     }
 
     def verifyErrorNotificationSent(fileReference: FileReference = FileReferenceOne,
@@ -87,7 +87,7 @@ class FileUploadUpscanNotificationControllerSpec extends PlaySpec with MockitoSu
       verify(mockNotificationService).sendMessage(
         ameq(fileReference),
         ameq[UUID](fileReference.value).asInstanceOf[FileReference],
-        ameq[UUID](csid.value).asInstanceOf[SubscriptionFieldsId])(ameq(mockErrorToXmlNotification), ameq(hc))
+        ameq[UUID](csid.value).asInstanceOf[SubscriptionFieldsId])(ameq(mockErrorToXmlNotification), any[HeaderCarrier])
     }
   }
 

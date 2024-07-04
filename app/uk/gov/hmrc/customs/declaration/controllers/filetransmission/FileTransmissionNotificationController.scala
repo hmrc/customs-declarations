@@ -55,8 +55,8 @@ class FileTransmissionNotificationController @Inject()(callbackToXmlNotification
             case notification: FileTransmissionNotification =>
               cdsLogger.debug(s"Valid JSON success request received. Body=${Json.prettyPrint(js)} headers=${request.headers}")
               notificationService.sendMessage[FileTransmissionNotification](notification, notification.fileReference, clientSubscriptionId)(callbackToXmlNotification, hc).map { _ =>
-                  NoContent
-                }.recover {
+                NoContent
+              }.recover {
                 case e: Throwable =>
                   handleException(e, notification, clientSubscriptionId)
               }

@@ -88,7 +88,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
       And("a request is made to File Transmission Service")
       val (requestHeaders, requestPayload) = eventually(aRequestWasMadeToFileTransmissionService())
 
-      And(s"The Content-Type header is application/json")
+      And("The Content-Type header is application/json")
       requestHeaders.get(CONTENT_TYPE) shouldBe Some("application/json")
 
       And("The Accept header is application/json")

@@ -35,10 +35,9 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
                                                        config: DeclarationsConfigService)
                                                       (implicit ec: ExecutionContext) extends HttpErrorFunctions with HeaderUtil {
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val XMLHeader = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>"""
 
-  def send(notification: FileUploadCustomsNotification)(implicit headerCarrier: HeaderCarrier): Future[Unit] = {
+  def send(notification: FileUploadCustomsNotification)(implicit hc: HeaderCarrier): Future[Unit] = {
 
     val headers: Seq[(String, String)] = Seq(
       ("X-CDS-Client-ID", notification.clientSubscriptionId.toString),
@@ -46,10 +45,11 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
       (CONTENT_TYPE, s"${MimeTypes.XML}; charset=UTF-8"),
       (ACCEPT, MimeTypes.XML),
       (AUTHORIZATION, s"Basic ${config.declarationsConfig.customsNotificationBearerToken}")
-    ) ++ getCustomsApiStubExtraHeaders(headerCarrier)
+    ) ++ getCustomsApiStubExtraHeaders
+
     val url = config.declarationsConfig.customsNotificationBaseBaseUrl
 
-    http.POSTString[HttpResponse](url, XMLHeader + notification.payload.toString(), headers)(implicitly, hc, implicitly).map { response =>
+    http.POSTString[HttpResponse](url, XMLHeader + notification.payload.toString(), headers)(implicitly, HeaderCarrier(), implicitly).map { response =>
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: notification sent successfully. url=${config.declarationsConfig.customsNotificationBaseBaseUrl}")

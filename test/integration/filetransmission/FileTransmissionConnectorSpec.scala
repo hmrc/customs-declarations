@@ -45,6 +45,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
   private implicit val mockDeclarationsLogger: DeclarationsLogger = mock[DeclarationsLogger]
   private implicit val conversationIdRequest: ConversationIdRequest[AnyContentAsXml] = TestData.TestConversationIdRequest
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeAll(): Unit = {
     startMockServer()

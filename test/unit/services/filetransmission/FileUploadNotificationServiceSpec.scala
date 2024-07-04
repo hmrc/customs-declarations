@@ -34,6 +34,7 @@ import uk.gov.hmrc.customs.declaration.model.filetransmission.{FileTransmissionF
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, FileReference}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
+import uk.gov.hmrc.http.HeaderCarrier
 import unit.services.filetransmission
 import unit.services.filetransmission.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
@@ -100,6 +101,7 @@ class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSuga
       new uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification()
   }
 
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val successCallbackPayload: FileTransmissionNotification =
     FileTransmissionSuccessNotification(FileReferenceOne, BatchIdOne, FileTransmissionSuccessOutcome)
   private val failureCallbackPayload: FileTransmissionNotification =
@@ -111,7 +113,7 @@ class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSuga
       when(mockNotificationConnector.send(any[FileUploadCustomsNotification])).thenReturn(Future.successful(()))
       when(mockFileUploadMetadataRepo.fetch(fileRefEq(FileReferenceOne))(any[HasConversationId])).thenReturn(Future.successful(Some(FileMetadataWithFileOne)))
 
-      (service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)(toXml)).futureValue
+      (service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)(toXml, hc)).futureValue
 
       verifyNotificationConnectorCalledWithXml(expectedSuccessXml)
     }

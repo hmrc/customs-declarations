@@ -33,6 +33,7 @@ import uk.gov.hmrc.customs.declaration.model.upscan._
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadUpscanNotificationBusinessService
+import uk.gov.hmrc.http.HeaderCarrier
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData._
 
@@ -63,6 +64,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
   )
   private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(s"$fileTransmissionCallbackUrl/file-transmission-notify/clientSubscriptionId/$clientSubscriptionIdString"), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private implicit val implicitHasConversationId: HasConversationId = new HasConversationId {
     override val conversationId: ConversationId = ConversationId(FileReferenceOne.value)
   }
@@ -82,7 +84,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
   "FileUploadUpscanNotificationBusinessService" should {
     "update metadata and call file transmission service" in new SetUp {
       when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
-      when(mockConnector.send(any[FileTransmission])(any[HasConversationId])).thenReturn(Future.successful(()))
+      when(mockConnector.send(any[FileTransmission])(any[HasConversationId], any[HeaderCarrier])).thenReturn(Future.successful(()))
 
       val actual: Unit = (service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)).futureValue
 
@@ -92,7 +94,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
         ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
         ameq(callbackFields))(any[HasConversationId]
       )
-      verify(mockConnector).send(ameq(fileTransmissionRequest))(any[HasConversationId])
+      verify(mockConnector).send(ameq(fileTransmissionRequest))(any[HasConversationId], any[HeaderCarrier])
     }
 
     "return failed future when no metadata record found for file reference" in new SetUp {
@@ -139,7 +141,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
 
     "propagate exception encountered in connector" in new SetUp {
       when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
-      when(mockConnector.send(any[FileTransmission])(any[HasConversationId])).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockConnector.send(any[FileTransmission])(any[HasConversationId], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
 
       val error: EmulatedServiceFailure = intercept[EmulatedServiceFailure](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 

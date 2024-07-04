@@ -28,6 +28,7 @@ import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmissionNotification
 import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionCallbackToXmlNotification
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadNotificationService
+import uk.gov.hmrc.http.HeaderCarrier
 import util.ApiSubscriptionFieldsTestData.{subscriptionFieldsId, subscriptionFieldsIdString}
 import util.FileTransmissionTestData._
 import util.MockitoPassByNameHelper.PassByNameVerifier
@@ -44,6 +45,7 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
   trait SetUp {
 
     implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
+    implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockService: FileUploadNotificationService = mock[FileUploadNotificationService]
     implicit val callbackToXmlNotification: FileTransmissionCallbackToXmlNotification = mock[FileTransmissionCallbackToXmlNotification]
 
@@ -53,7 +55,7 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
   "file transmission notification controller" should {
 
     "return 204 when a valid SUCCESS request is received" in new SetUp {
-      when(mockService.sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)).thenReturn(Future.successful(()))
+      when(mockService.sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification, hc)).thenReturn(Future.successful(()))
 
       val result: Future[Result] = controller.post(subscriptionFieldsIdString)(fakeRequestWith(Json.parse(FileTransmissionSuccessNotificationPayload)))
 
@@ -63,7 +65,7 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
     }
 
     "return 204 when a valid FAILURE request is received" in new SetUp {
-      when(mockService.sendMessage[FileTransmissionNotification](FailureNotification, FailureNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)).thenReturn(Future.successful(()))
+      when(mockService.sendMessage[FileTransmissionNotification](FailureNotification, FailureNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification, hc)).thenReturn(Future.successful(()))
 
       val result: Future[Result] = controller.post(subscriptionFieldsIdString)(fakeRequestWith(Json.parse(FileTransmissionFailureNotificationPayload)))
 
@@ -103,13 +105,13 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
     }
 
     "return 500 when call to Custom Notification services fails" in new SetUp {
-      when(mockService.sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)).thenReturn(Future.failed(TestData.emulatedServiceFailure))
+      when(mockService.sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification, hc)).thenReturn(Future.failed(TestData.emulatedServiceFailure))
 
       val result: Future[Result] = controller.post(subscriptionFieldsIdString)(fakeRequestWith(Json.parse(FileTransmissionSuccessNotificationPayload)))
 
       status(result) mustBe INTERNAL_SERVER_ERROR
       contentAsString(result) mustBe InternalErrorResponseJson
-      verify(mockService).sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification)
+      verify(mockService).sendMessage[FileTransmissionNotification](SuccessNotification, SuccessNotification.fileReference, subscriptionFieldsId)(callbackToXmlNotification, hc)
       PassByNameVerifier(mockCdsLogger, "error")
         .withByNameParam[String]("[conversationId=31400000-8ce0-11bd-b23e-10b96e4ef00f][clientSubscriptionId=327d9145-4965-4d28-a2c5-39dedee50334] file transmission notification service request to customs notification failed.")
         .withByNameParam(emulatedServiceFailure)

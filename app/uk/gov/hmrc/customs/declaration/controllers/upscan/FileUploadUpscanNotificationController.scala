@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 
 class FileUploadUpscanNotificationController @Inject()(notificationService: FileUploadNotificationService,
@@ -47,7 +48,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
         val clientSubscriptionId = SubscriptionFieldsId(csid)
         request.body.asJson
           .fold{
-              cdsLogger.error(s"Malformed JSON received. Body: ${request.body.asText} headers: ${request.headers}")
+              cdsLogger.error(s"Malformed JSON received. Body: [${request.body.asText}] headers: [${request.headers}]")
               Future.successful(errorBadRequest(errorMessage = "Invalid JSON payload").JsonResult)
           }{js =>
             UploadedReadyCallbackBody.parse(js) match {
@@ -55,7 +56,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
                 implicit val conversationId = conversationIdForLogging(callbackBody.reference.value)
                 callbackBody match {
                   case ready: UploadedReadyCallbackBody =>
-                    cdsLogger.debug(s"Valid JSON request received with READY status. File reference: ${ready.reference.toString}, status: ${ready.fileStatus.status}, ${ready.uploadDetails} and headers: ${request.headers}")
+                    cdsLogger.debug(s"Valid JSON request received with READY status. File reference: [${ready.reference.toString}], status: [${ready.fileStatus.status}], [${ready.uploadDetails}] and headers: [${request.headers}]")
                     businessService.persistAndCallFileTransmission(clientSubscriptionId, ready).map{_ =>
                         Results.NoContent
                     }.recover{
@@ -69,7 +70,7 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
                       failed,
                       failed.reference,
                       clientSubscriptionId
-                    )(toXmlNotification)
+                    )(toXmlNotification, hc)
                     .map( _ => Results.NoContent ).recover{
                       case e: Throwable =>
                         internalServerErrorResult(e)
@@ -103,9 +104,9 @@ class FileUploadUpscanNotificationController @Inject()(notificationService: File
         callbackBody.reference,
         callbackBody.reference,
         subscriptionFieldsId
-      )(errorToXmlNotification).recover{
-        case e: Throwable =>
-          cdsLogger.error(s"Error sending internal error notification. Body: ${request.body.asText} headers: ${request.headers}", e)
+      )(errorToXmlNotification, hc).recover{
+        case NonFatal(t) =>
+          cdsLogger.error(s"Error sending internal error notification. Body: ${request.body.asText} headers: ${request.headers}", t)
       }
     }
   }

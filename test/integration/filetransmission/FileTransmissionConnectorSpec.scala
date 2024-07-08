@@ -128,6 +128,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
   }
 
   private def sendValidRequest() = {
+    implicit val hc: HeaderCarrier = HeaderCarrier()
     connector.send(FileTransmissionRequest)
   }
 }

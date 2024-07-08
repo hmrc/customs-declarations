@@ -39,7 +39,7 @@ class FileTransmissionNotificationController @Inject()(callbackToXmlNotification
                                                       (implicit ec: ExecutionContext) extends BackendController(cc) {
 
   def post(clientSubscriptionIdString: String): Action[AnyContent] = Action.async {
-    request =>
+    implicit request =>
 
     Try(UUID.fromString(clientSubscriptionIdString)) match {
       case Success(csid) =>
@@ -54,7 +54,7 @@ class FileTransmissionNotificationController @Inject()(callbackToXmlNotification
           case JsSuccess(callbackBody, _) => callbackBody match {
             case notification: FileTransmissionNotification =>
               cdsLogger.debug(s"Valid JSON success request received. Body=${Json.prettyPrint(js)} headers=${request.headers}")
-              notificationService.sendMessage[FileTransmissionNotification](notification, notification.fileReference, clientSubscriptionId)(callbackToXmlNotification).map { _ =>
+              notificationService.sendMessage[FileTransmissionNotification](notification, notification.fileReference, clientSubscriptionId)(callbackToXmlNotification, hc).map { _ =>
                 NoContent
               }.recover {
                 case e: Throwable =>

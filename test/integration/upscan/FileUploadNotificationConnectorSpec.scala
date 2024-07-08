@@ -111,6 +111,6 @@ class FileUploadNotificationConnectorSpec extends IntegrationTestSpec with Guice
   }
 
   private def awaitSendValidRequest(): Unit = {
-   play.api.test.Helpers.await(connector.send(notification))
+    play.api.test.Helpers.await(connector.send(notification)(HeaderCarrier()))
   }
 }

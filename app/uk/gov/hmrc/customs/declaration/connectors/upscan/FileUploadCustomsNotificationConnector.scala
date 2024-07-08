@@ -19,6 +19,7 @@ package uk.gov.hmrc.customs.declaration.connectors.upscan
 import com.google.inject.{Inject, Singleton}
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes
+import uk.gov.hmrc.customs.declaration.connectors.HeaderUtil
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
@@ -32,23 +33,23 @@ import scala.concurrent.{ExecutionContext, Future}
 class FileUploadCustomsNotificationConnector @Inject()(http: HttpClient,
                                                        logger: CdsLogger,
                                                        config: DeclarationsConfigService)
-                                                      (implicit ec: ExecutionContext) extends HttpErrorFunctions {
+                                                      (implicit ec: ExecutionContext) extends HttpErrorFunctions with HeaderUtil {
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val XMLHeader = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>"""
 
-  def send(notification: FileUploadCustomsNotification): Future[Unit] = {
+  def send(notification: FileUploadCustomsNotification)(implicit hc: HeaderCarrier): Future[Unit] = {
 
-    val headers: Map[String, String] = Map(
-      "X-CDS-Client-ID" -> notification.clientSubscriptionId.toString,
-      "X-Conversation-ID" -> notification.conversationId.toString,
-      CONTENT_TYPE -> s"${MimeTypes.XML}; charset=UTF-8",
-      ACCEPT -> MimeTypes.XML,
-      AUTHORIZATION -> s"Basic ${config.declarationsConfig.customsNotificationBearerToken}")
+    val headers: Seq[(String, String)] = Seq(
+      ("X-CDS-Client-ID", notification.clientSubscriptionId.toString),
+      ("X-Conversation-ID", notification.conversationId.toString),
+      (CONTENT_TYPE, s"${MimeTypes.XML}; charset=UTF-8"),
+      (ACCEPT, MimeTypes.XML),
+      (AUTHORIZATION, s"Basic ${config.declarationsConfig.customsNotificationBearerToken}")
+    ) ++ getCustomsApiStubExtraHeaders
 
     val url = config.declarationsConfig.customsNotificationBaseBaseUrl
 
-    http.POSTString[HttpResponse](url, XMLHeader + notification.payload.toString(), headers.toSeq).map { response =>
+    http.POSTString[HttpResponse](url, XMLHeader + notification.payload.toString(), headers)(implicitly, HeaderCarrier(), implicitly).map { response =>
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: notification sent successfully. url=${config.declarationsConfig.customsNotificationBaseBaseUrl}")

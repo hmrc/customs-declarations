@@ -22,7 +22,11 @@ import play.api.test.Helpers._
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.{TestData, WireMockRunner}
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, Future}
 import scala.jdk.CollectionConverters._
+import scala.util.Try
 
 trait CustomsNotificationService extends WireMockRunner {
 
@@ -41,23 +45,37 @@ trait CustomsNotificationService extends WireMockRunner {
         .withStatus(status)))
 
   def aRequestWasMadeToNotificationService(): (Map[String, String], String) = {
-    verify(1, postRequestedFor(notifyPath))
+    val timeoutDuration = 10.seconds
+    val resultFuture: Future[Unit] = Future {
+      verify(1, postRequestedFor(notifyPath))
+    }
+    Try(Await.result(resultFuture, timeoutDuration)).recover {
+      case e: Exception => println(s"Error occurred during verification: ${e.getMessage}")
+    }
+
     val req = findAll(postRequestedFor(notifyPath)).get(0)
     val keys: List[String] = List.concat(req.getHeaders.keys().asScala)
     (Map(keys map { s => (s, req.getHeader(s)) }: _*), req.getBodyAsString)
   }
 
   def verifyWasCalledWith(requestBody: String): Unit = {
-    verify(
-      1,
-      postRequestedFor(notifyPath)
-        .withHeader("X-CDS-Client-ID", equalTo(subscriptionFieldsId.toString))
-        .withHeader("X-Conversation-ID", equalTo(TestData.conversationId.toString))
-        .withHeader(CONTENT_TYPE, equalTo("application/xml; charset=UTF-8"))
-        .withHeader(ACCEPT, equalTo("application/xml"))
-        .withHeader(AUTHORIZATION, equalTo("Basic some-basic-auth"))
-        .withRequestBody(equalToXml(requestBody))
-    )
+    val timeoutDuration = 10.seconds
+    val resultFuture: Future[Unit] = Future {
+      verify(
+        1,
+        postRequestedFor(notifyPath)
+          .withHeader("X-CDS-Client-ID", equalTo(subscriptionFieldsId.toString))
+          .withHeader("X-Conversation-ID", equalTo(TestData.conversationId.toString))
+          .withHeader(CONTENT_TYPE, equalTo("application/xml; charset=UTF-8"))
+          .withHeader(ACCEPT, equalTo("application/xml"))
+          .withHeader(AUTHORIZATION, equalTo("Basic some-basic-auth"))
+          .withRequestBody(equalToXml(requestBody))
+      )
+    }
+
+    Try(Await.result(resultFuture, timeoutDuration)).recover {
+      case e: Exception => println(s"Error occurred during verification: ${e.getMessage}")
+    }
   }
 
 

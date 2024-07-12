@@ -43,8 +43,6 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
   private val unstablePeriodDurationInMillisNel = root.int("circuitBreaker.unstablePeriodDurationInMillis")
 
-  private val declarationStatusRequestDaysLimit = root.int("declarationStatus.requestDaysLimit")
-
   private val bearerTokenNel = customsNotificationsService.string("bearer-token")
   private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
@@ -64,8 +62,7 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val ttlInSeconds = root.int("ttlInSeconds")
 
   private val validatedDeclarationsConfig: CustomsValidatedNel[DeclarationsConfig] = (
-    apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, customsDeclarationsMetricsServiceUrlNel, bearerTokenNel,
-    declarationStatusRequestDaysLimit
+    apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, customsDeclarationsMetricsServiceUrlNel, bearerTokenNel
     ) mapN DeclarationsConfig
 
   private val validatedDeclarationsShutterConfig: CustomsValidatedNel[DeclarationsShutterConfig] = (

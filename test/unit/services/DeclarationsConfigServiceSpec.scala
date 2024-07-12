@@ -111,7 +111,6 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
           |Could not find config key 'customs-declarations-metrics.host'
           |Service configuration not found for key: customs-declarations-metrics.context
           |Service configuration not found for key: customs-notification.bearer-token
-          |Could not find config key 'declarationStatus.requestDaysLimit'
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'

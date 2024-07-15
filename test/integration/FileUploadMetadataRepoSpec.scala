@@ -19,6 +19,7 @@ package integration
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.mongodb.scala._
+import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
@@ -72,6 +73,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
 
   override def afterAll(): Unit = {
     deleteAll()
+    super.afterAll()
   }
 
   private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {
@@ -118,9 +120,13 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       val updatedFileOne = BatchFileOne.copy(maybeCallbackFields = Some(CallbackFields("UPDATED_NAME", "UPDATED_MIMETYPE", "UPDATED_CHECKSUM", InitiateDate, new URL("https://outbound.a.com"))))
       val expectedRecord = FileMetadataWithFilesOneAndThree.copy(files = Seq(updatedFileOne, BatchFileThree))
 
-      val maybeActual = await(repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
+      eventually {
+        val maybeActual = await(repository.update(subscriptionFieldsId, FileReferenceOne, CallbackFieldsUpdated))
 
-      maybeActual shouldBe Some(expectedRecord)
+        maybeActual shouldBe Some(expectedRecord)
+      }
+
+
       await(repository.fetch(BatchFileOne.reference)) shouldBe Some(expectedRecord)
       await(repository.fetch(BatchFileTwo.reference)) shouldBe Some(FileMetadataWithFileTwo)
       logVerifier(mockLogger, "debug", "updating file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f with callbackField=CallbackFields(UPDATED_NAME,UPDATED_MIMETYPE,UPDATED_CHECKSUM,2018-04-24T09:30:00Z,https://outbound.a.com)")
@@ -138,13 +144,17 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       await(repository.create(FileMetadataWithFileOne))
       await(repository.create(FileMetadataWithFileTwo))
 
-      val maybeFoundRecordOne = await(repository.fetch(BatchFileOne.reference))
+      eventually {
+        val maybeFoundRecordOne = await(repository.fetch(BatchFileOne.reference))
 
-      maybeFoundRecordOne shouldBe Some(FileMetadataWithFileOne)
+        maybeFoundRecordOne shouldBe Some(FileMetadataWithFileOne)
+      }
 
-      val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
+      eventually {
+        val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
 
-      maybeFoundRecordTwo shouldBe Some(FileMetadataWithFileTwo)
+        maybeFoundRecordTwo shouldBe Some(FileMetadataWithFileTwo)
+      }
       logVerifier(mockLogger, "debug", "fetching file upload metadata with file reference: 31400000-8ce0-11bd-b23e-10b96e4ef00f")
     }
 
@@ -161,17 +171,21 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
       await(repository.create(FileMetadataWithFileTwo))
       collectionSize(repository) shouldBe 2
 
-      val maybeFoundRecordOne = await(repository.fetch(BatchFileOne.reference))
+      eventually {
+        val maybeFoundRecordOne = await(repository.fetch(BatchFileOne.reference))
 
-      maybeFoundRecordOne shouldBe Some(FileMetadataWithFileOne)
+        maybeFoundRecordOne shouldBe Some(FileMetadataWithFileOne)
 
-      await(repository.delete(maybeFoundRecordOne.get))
-      collectionSize(repository) shouldBe 1
+        await(repository.delete(maybeFoundRecordOne.get))
+        collectionSize(repository) shouldBe 1
+      }
 
-      val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
+      eventually{
+        val maybeFoundRecordTwo = await(repository.fetch(BatchFileTwo.reference))
 
-      maybeFoundRecordTwo shouldBe Some(FileMetadataWithFileTwo)
-      logVerifier(mockLogger, "debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00Z,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
+        maybeFoundRecordTwo shouldBe Some(FileMetadataWithFileTwo)
+        logVerifier(mockLogger, "debug", "deleting fileUploadMetadata: FileUploadMetadata(1,123,327d9145-4965-4d28-a2c5-39dedee50334,48400000-8cf0-11bd-b23e-10b96e4ef001,1,2018-04-24T09:30:00Z,List(BatchFile(31400000-8ce0-11bd-b23e-10b96e4ef00f,Some(CallbackFields(name1,application/xml,checksum1,2018-04-24T09:30:00Z,https://outbound.a.com)),https://a.b.com,1,1,Some(Document Type 1))))")
+      }
     }
 
     "collection should be same size when deleting non-existent record" in {

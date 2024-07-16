@@ -150,8 +150,6 @@ object FakeRequests {
     .withHeaders(ValidHeadersV2.toSeq: _*)
     .withXmlBody(InvalidFileUploadXml)
 
-  lazy val ValidDeclarationStatusRequest = FakeRequest().withHeaders(ValidHeadersV2.-(CONTENT_TYPE).toSeq: _*)
-
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {
     def fromCsp: FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $cspBearerToken")
 

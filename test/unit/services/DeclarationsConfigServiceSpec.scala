@@ -45,7 +45,6 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
       |circuitBreaker.numberOfCallsToTriggerStateChange=5
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
-      |declarationStatus.requestDaysLimit=60
       |file-upload-upscan-callback.url="http://file-upload-upscan-callback.url"
       |file-transmission-callback.url="http://some-host3:1113/file-transmission"
       |fileUpload.fileGroupSize.maximum=10

@@ -95,10 +95,6 @@ case class CorrelationId(uuid: UUID) extends AnyVal {
   override def toString: String = uuid.toString
 }
 
-case class DeclarationManagementInformationRequestId(uuid: UUID) extends AnyVal {
-  override def toString: String = uuid.toString
-}
-
 case class BadgeIdentifier(value: String) extends AnyVal {
   override def toString: String = value.toString
 }
@@ -217,7 +213,6 @@ object NrsPayload {
 
 private object NotAvailable { val na = Some("NOT AVAILABLE") }
 
-case class DeclarationStatusResponse(declaration: Declaration)
 case class Declaration(versionNumber: Option[String] = NotAvailable.na, creationDate: Option[String] = NotAvailable.na, acceptanceDate: Option[String] = NotAvailable.na,  tradeMovementType: Option[String] = NotAvailable.na,  `type`: Option[String] = NotAvailable.na,  parties: Parties, goodsItemCount: Option[String] = NotAvailable.na,  packageCount: Option[String] = NotAvailable.na)
 case class Parties(partyIdentification: PartyIdentification)
 case class PartyIdentification(number: Option[String] = NotAvailable.na)
@@ -225,4 +220,3 @@ case class PartyIdentification(number: Option[String] = NotAvailable.na)
 object PartyIdentification { implicit val format: OFormat[PartyIdentification] = Json.format[PartyIdentification] }
 object Parties { implicit val format: OFormat[Parties] = Json.format[Parties] }
 object Declaration { implicit val format: OFormat[Declaration] = Json.format[Declaration] }
-object DeclarationStatusResponse { implicit val format: OFormat[DeclarationStatusResponse] = Json.format[DeclarationStatusResponse] }

@@ -37,7 +37,6 @@ To run the CDS acceptance tests, see [here](https://github.com/hmrc/customs-auto
 ### Performance Tests
 To run performance tests, see [here](https://github.com/hmrc/customs-declaration-performance-test).
 
-
 ## API documentation
 For Customs Declarations API documentation, see [here](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/customs-declarations).
 

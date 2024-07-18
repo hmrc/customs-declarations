@@ -1,10 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><v1:submitDeclarationRequest xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<v1:requestCommon>
+    <v1:regime>CDS</v1:regime>
+    <v1:receiptDate>2024-07-15T17:01:17.017+01:00</v1:receiptDate>
+    <v1:clientID>d950bf21-06e2-49ab-bbaa-0dd7f7f3cbda</v1:clientID>
+    <v1:conversationID>2cdf61e6-2d00-4b1c-a98a-b7e877caa2f9</v1:conversationID>    
+    <!--Example WSO2 Header-->
+    <v1:originatingPartyID>GB225456994000</v1:originatingPartyID>
+	<v1:authenticatedPartyID>GB225456994000</v1:authenticatedPartyID>
+  </v1:requestCommon>
+  <v1:requestDetail> 
+ 
+  <md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			ROW to NI - De-risked - UK Licence Quota Validation.
@@ -23,7 +35,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number: this must be unique to the transaction. -->
-		<FunctionalReferenceID>7867523V401V</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7849431NKIPQ</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -254,7 +266,7 @@
 						<DutyRegimeCode>120</DutyRegimeCode>
 						<!--DE 8/1: Quota number.
 							ID indicates Quota claimed: 0 percent duty rate (security only required for critical quota claim). -->
-						<QuotaOrderID>054067</QuotaOrderID>
+						<QuotaOrderID>054077</QuotaOrderID>
 					</DutyTaxFee>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass.
@@ -370,4 +382,5 @@
 			<SecurityDetailsCode>1</SecurityDetailsCode>
 		</ObligationGuarantee>
 	</Declaration>
-</md:MetaData>
+</md:MetaData></v1:requestDetail>
+</v1:submitDeclarationRequest>

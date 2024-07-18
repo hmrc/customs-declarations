@@ -1,56 +1,55 @@
-<md:MetaData
-	  xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	  xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	  xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-	  xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-	  xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "    >
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><v1:submitDeclarationRequest xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<v1:requestCommon>
+    <v1:regime>CDS</v1:regime>
+    <v1:receiptDate>2024-07-16T13:36:07.007+01:00</v1:receiptDate>
+    <v1:clientID>4801fe4b-49a1-4354-b8aa-b833eb7d4f3f</v1:clientID>
+    <v1:conversationID>f7517f66-32ba-4e71-b998-64849f254bc6</v1:conversationID>    
+    <!--Example WSO2 Header-->
+    <v1:originatingPartyID>GB225456994000</v1:originatingPartyID>
+	<v1:authenticatedPartyID>GB225456994000</v1:authenticatedPartyID>
+  </v1:requestCommon>
+  <v1:requestDetail> 
+ 
+  <md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration
-			xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-			xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-			xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-			xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-			xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
+	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			ROW-NI at Risk - Suspension Procedure.
-			
-			Goods are deemed ‘At Risk’. 
-			
-			EU Tariff is to be used to calculate the duties. 
-			
-			Subsidy will be used to cover the EU differential charges and displayed as a security. 
-						
-			A Trader submits a Type Z (H4 data set) Supplementary Declaration for goods imported from ROW into NI, declaring: 
-			• Procedure code: 5100. 
+
+			Goods are deemed ‘At Risk’.
+
+			EU Tariff is to be used to calculate the duties.
+
+			Subsidy will be used to cover the EU differential charges and displayed as a security.
+
+			A Trader submits a Type Z (H4 data set) Supplementary Declaration for goods imported from ROW into NI, declaring:
+			• Procedure code: 5100.
 			• Additional Procedure Code (APC) A04 is used to suspend EU VAT (B05) and UK VAT (B00) in full.
 			• Goods: 7009910000 (Unframed glass mirrors - STK12345)
 			• Importer is not an AEO authorisation holder
 			• Self representation declaration
 			• Goods presented at the port of Belfast
-			
+
 			Expected Notifications: DMSTAX(1), DMSACC, DMSTAX(2), DMSCLE
 		-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20231002220000Z</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20240716133607+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number: this must be unique to the transaction-->
-		<FunctionalReferenceID>NIP_266_TC01_2311</FunctionalReferenceID>
-		<!--DE 1/1: Declaration Type. 
-			Mandatory field. 
+		<FunctionalReferenceID>U.78675231K231</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type.
+			Mandatory field.
 			First two characters IM to represent an import declaration.	-->
-		<!--DE 1/2: Additional Declaration Type. 
-			Mandatory field. 
+		<!--DE 1/2: Additional Declaration Type.
+			Mandatory field.
 			Third character Z represents a supplementary declaration under the EIDR process. -->
 		<TypeCode>IMZ</TypeCode>
 		<!--DE 1/9: Total Number of Items.
@@ -58,11 +57,11 @@
 			Single item declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<!--6/18: Total packages.
-			In this case, 10. 
+			In this case, 10.
 			Note that this matches DE 6/10 because this is a single item declaration. -->
 		<TotalPackageQuantity>10</TotalPackageQuantity>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of EIR indicates Authorisation for the use of customs declaration through an entry of data in the declarant’s records(see DE 2/3 where a document code of C514 has been entered). 
+			An authorisation type code of EIR indicates Authorisation for the use of customs declaration through an entry of data in the declarant’s records(see DE 2/3 where a document code of C514 has been entered).
 			The ID here is the EORI of the EIR authorised party.-->
 		<AuthorisationHolder>
 			<ID>GB025115100010</ID>
@@ -76,7 +75,7 @@
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of IPO indicates Inward processing procedure authorisation (see DE 2/3 where a document code of C601 has been entered). 
+			An authorisation type code of IPO indicates Inward processing procedure authorisation (see DE 2/3 where a document code of C601 has been entered).
 			The ID here is the EORI of the IPO authorised party.-->
 		<AuthorisationHolder>
 			<ID>GB025115100010</ID>
@@ -91,7 +90,7 @@
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
 		<!--DE 3/18: Declarant Identification Number.
-			The EORI number of the agent entering the declaration. 
+			The EORI number of the agent entering the declaration.
 			The UK requires an EORI to be provided for the declarant. -->
 		<Declarant>
 			<ID>GB025115100010</ID>
@@ -113,25 +112,25 @@
 			<TransactionNatureCode>1</TransactionNatureCode>
 			<Consignment>
 				<!--DE 7/2: Container.
-					Indicator to show if goods are packed in a container or not. 
+					Indicator to show if goods are packed in a container or not.
 					1 indicates that goods are transported in containers.
 					Note: Unlike CHIEF this must now be completed.-->
 				<ContainerCode>1</ContainerCode>
 				<ArrivalTransportMeans>
-					<!--DE 7/9: Identity of Means of Transport on Arrival . 
+					<!--DE 7/9: Identity of Means of Transport on Arrival .
 						Identification Type: 10 to indicate IMO ship identification number.
 						Identification Number: '12345' as an example identification number.
 						Note the example ID does not use the correct IMO number format. -->
 					<ID>12345</ID>
 					<IdentificationTypeCode>10</IdentificationTypeCode>
 					<!--DE 7/5: Inland Mode of Transport.
-						3 to represent Road Transport. 
+						3 to represent Road Transport.
 						This is required as customs procedures are completed away from the border.-->
 					<ModeCode>3</ModeCode>
 				</ArrivalTransportMeans>
 				<GoodsLocation>
 					<!--DE 5/23: Location of Goods - Identification of location.
-						The location code for Port of Belfast. 
+						The location code for Port of Belfast.
 						Goods moved via shipping container from GB to NI via port of Belfast. -->
 					<Name>BELBELBEL</Name>
 					<!--DE 5/23: Location of Goods - Type of location.
@@ -146,7 +145,7 @@
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
-				<!--DE 7/10: Container identification number. 
+				<!--DE 7/10: Container identification number.
 					This is alpha-numeric with up to 17 characters.
 					For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number.
 					For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
@@ -155,14 +154,14 @@
 					<ID>DM1234</ID>
 				</TransportEquipment>
 			</Consignment>
-			<!--DE 5/8: Country of Destination Code. 
-				Mandatory. 
+			<!--DE 5/8: Country of Destination Code.
+				Mandatory.
 				Destination country is Great Britain. -->
 			<Destination>
 				<CountryCode>GB</CountryCode>
 			</Destination>
 			<GovernmentAgencyGoodsItem>
-				<!--DE 1/6: Goods Item Number. 
+				<!--DE 1/6: Goods Item Number.
 					Mandatory.
 					Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
@@ -203,7 +202,7 @@
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
-				<!--DE 2/2: Additional information. 
+				<!--DE 2/2: Additional information.
 					00500 - IMPORTER Indicating Self representation by the importer. -->
 				<AdditionalInformation>
 					<StatementCode>00500</StatementCode>
@@ -225,12 +224,12 @@
 					<StatementCode>GEN86</StatementCode>
 					<StatementDescription>Article 86(3)</StatementDescription>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional Information. 
+				<!--DE 2/2: Additional Information.
 					NIIMP: This field is mandatory, this represents goods are imported from ROW into Northern Ireland. -->
 				<AdditionalInformation>
 					<StatementCode>NIIMP</StatementCode>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional Information. 
+				<!--DE 2/2: Additional Information.
 					This field is mandatory.
 					This represents a Subsidy as the goods are imported from RoW into Northern Ireland. -->
 				<AdditionalInformation>
@@ -241,7 +240,7 @@
 						Description specific enough to enable classification – without repeating the CN code description in the Tariff. -->
 					<Description>Unframed glass mirrors - STK12345</Description>
 					<Classification>
-						<!--DE 6/14: Commodity Code - Combined Nomenclature Code. 
+						<!--DE 6/14: Commodity Code - Combined Nomenclature Code.
 							IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
 						<ID>70099100</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
@@ -249,7 +248,7 @@
 					<Classification>
 						<!--DE 6/15: Commodity Code: TARIC code.
 							Two characters for the application of specific Union measures in respect of formalities to be completed at destination. -->
-						<ID>00</ID>
+						<ID>10</ID>
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<DutyTaxFee>
@@ -282,7 +281,7 @@
 					<ID>US</ID>
 				</ExportCountry>
 				<!--DE 1/10: Procedure.
-					Requested Procedure of 51 indicating a suspension from customs duty (and where applicable excise duty and VAT) for goods entered to an IP procedure. 
+					Requested Procedure of 51 indicating a suspension from customs duty (and where applicable excise duty and VAT) for goods entered to an IP procedure.
 					Previous Procedure of 00 indicating there is no previous procedure. -->
 				<GovernmentProcedure>
 					<CurrentCode>51</CurrentCode>
@@ -299,7 +298,7 @@
 					<CurrentCode>A04</CurrentCode>
 				</GovernmentProcedure>
 				<!--DE 5/15: Country of Origin.
-					TypeCode of 1 to represent non-preferential origin. 
+					TypeCode of 1 to represent non-preferential origin.
 					Where preference in DE 4/17 begins with '1', this must be completed.
 					CountryCode contains the code for the country from which the goods originated, in this case US. -->
 				<Origin>
@@ -308,13 +307,13 @@
 				</Origin>
 				<Packaging>
 					<SequenceNumeric>1</SequenceNumeric>
-					<!--DE 6/11: Shipping Marks. 
+					<!--DE 6/11: Shipping Marks.
 						Marks on the packages. -->
 					<MarksNumbersID>DB-12345</MarksNumbersID>
 					<!--DE 6/10: Number of Packages.
 						In this case 10. -->
 					<QuantityQuantity>10</QuantityQuantity>
-					<!--DE 6/9: Type of Packages. 
+					<!--DE 6/9: Type of Packages.
 						DB to represent Crate, multiple layer, wooden. -->
 					<TypeCode>DB</TypeCode>
 				</Packaging>
@@ -335,16 +334,16 @@
 				<ID>GB025115100010</ID>
 			</Importer>
 			<!--DE 2/1: Previous Documents.
-				YCLE To show the date of the EIDR record 
+				YCLE To show the date of the EIDR record
 				(Note that this is item 1 from the EIDR record entry). -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20231002</ID>
+				<ID>20240716</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
 			<!--DE 2/1: Previous Documents.
-				To show the DUCR assigned to the consignment. 
+				To show the DUCR assigned to the consignment.
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
@@ -372,15 +371,16 @@
 			<!--DE 8/3: Guarantee Reference.
                 Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then this data element is mandatory. -->
 			<ID>GBCGU3821</ID>
-			<!--DE 8/2: Guarantee Type and Cash Accounts.  
+			<!--DE 8/2: Guarantee Type and Cash Accounts.
 				0 to represent that a custom comprehensive guarantee is being waived for the deferment of customs duty.
                 Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code ‘0’ or ‘1’ must be declared in this data element. -->
 			<SecurityDetailsCode>1</SecurityDetailsCode>
 		</ObligationGuarantee>
-		<!--DE 5/27: Supervising Customs Office. 
+		<!--DE 5/27: Supervising Customs Office.
 			In this scenario, this is Belfast, Custom House. -->
 		<SupervisingOffice>
 			<ID>GBBEL003</ID>
 		</SupervisingOffice>
 	</Declaration>
-</md:MetaData>
+</md:MetaData></v1:requestDetail>
+</v1:submitDeclarationRequest>

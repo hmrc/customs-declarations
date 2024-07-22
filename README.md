@@ -37,7 +37,6 @@ To run the CDS acceptance tests, see [here](https://github.com/hmrc/customs-auto
 ### Performance Tests
 To run performance tests, see [here](https://github.com/hmrc/customs-declaration-performance-test).
 
-
 ## API documentation
 For Customs Declarations API documentation, see [here](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/customs-declarations).
 
@@ -51,7 +50,6 @@ For Customs Declarations API documentation, see [here](https://developer.service
 | `/customs-declarations/uploaded-file-upscan-notifications/clientSubscriptionId/:clientSubscriptionId` |       POST        | Endpoint to manage file upload upscan notifications.                  |
 | `/customs-declarations/file-transmission-notify/clientSubscriptionId/:clientSubscriptionId`           |       POST        | Endpoint to submit file upload notifications to customs notification. |
 | `/customs-declarations/arrival-notification`                                                          |       POST        | Endpoint to submit an arrival notification declaration.               |
-| `/customs-declarations/status-request/mrn/:mrn`                                                       |        GET        | Endpoint to retrieve the status of a declaration.                     |
 
 ### Test-only specific routes
 | Path                         | Supported Methods | Description                                  |

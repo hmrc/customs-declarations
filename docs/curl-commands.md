@@ -8,7 +8,6 @@
 | [`/arrival-notification`](#user-content-post-arrival-notification)                                                              |   `POST` |    Allows submission of a Customs Arrival Notification Declaration | 
 | [`/cancellation-requests`](#user-content-post-cancellation-requests)                                                            |   `POST` |    Allows submission of a cancellation request |
 | [`/amend`](#user-content-post-amend)                                                                                            |   `POST` |    Allows submission of a Customs Amend Declaration. |
-| [`/status-request/mrn/{valid mrn}`](#user-content-get-status-request)                                                           |   `GET`  |    Allows requesting the status of a Declaration |
 | [`/file-upload`](#user-content-post-file-upload)                                                                                |   `POST` |    Allows requests for Amazon endpoints for uploading supporting files for a declaration |
 
 --- 
@@ -136,21 +135,6 @@ curl -v -X POST "http://localhost:9820/cancellation-requests" \
           <Declaration>
          </Declaration>
       </md:MetaData>'
- ```
----
-
-### GET Status Request 
- #### `GET /status-request/mrn/{valid mrn}`
-
- ##### curl command
- ```
-  curl -v -X GET "http://localhost:9820/status-request/mrn/{valid mrn}" \
-   -H 'Accept: application/vnd.hmrc.2.0+xml' \
-   -H 'Authorization: Bearer {ADD VALID TOKEN}' \
-   -H 'X-Badge-Identifier: {Badge Id}' \
-   -H 'X-Client-ID: {Valid Client Id}' \
-   -H 'cache-control: no-cache' 
- 
  ```
 ---
 

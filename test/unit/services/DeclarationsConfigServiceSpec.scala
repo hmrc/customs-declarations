@@ -45,7 +45,6 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
       |circuitBreaker.numberOfCallsToTriggerStateChange=5
       |circuitBreaker.unavailablePeriodDurationInMillis=1000
       |circuitBreaker.unstablePeriodDurationInMillis=1000
-      |declarationStatus.requestDaysLimit=60
       |file-upload-upscan-callback.url="http://file-upload-upscan-callback.url"
       |file-transmission-callback.url="http://some-host3:1113/file-transmission"
       |fileUpload.fileGroupSize.maximum=10
@@ -111,7 +110,6 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
           |Could not find config key 'customs-declarations-metrics.host'
           |Service configuration not found for key: customs-declarations-metrics.context
           |Service configuration not found for key: customs-notification.bearer-token
-          |Could not find config key 'declarationStatus.requestDaysLimit'
           |Could not find config key 'circuitBreaker.numberOfCallsToTriggerStateChange'
           |Could not find config key 'circuitBreaker.unavailablePeriodDurationInMillis'
           |Could not find config key 'circuitBreaker.unstablePeriodDurationInMillis'

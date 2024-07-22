@@ -21,7 +21,7 @@ import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.customs.declaration.model.{ConversationId, CorrelationId, DeclarationManagementInformationRequestId}
+import uk.gov.hmrc.customs.declaration.model.{ConversationId, CorrelationId}
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 
 import java.util.UUID
@@ -48,9 +48,5 @@ class UniqueIdsServiceTest extends AnyWordSpecLike with MockitoSugar with Matche
       verify(mockUuidService, times(1)).uuid()
     }
 
-    "return a dmir" in {
-      uniqueIdsService.dmir shouldBe a[DeclarationManagementInformationRequestId]
-      verify(mockUuidService, times(1)).uuid()
-    }
   }
 }

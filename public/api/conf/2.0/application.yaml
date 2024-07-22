@@ -315,26 +315,20 @@ paths:
       tags:
       - Endpoints
       summary: Submit an upload initiate request
-      description: >
+      description: |
         Obtain a signed URL to upload files to.
-
-
+  
         The SuccessRedirect and ErrorRedirect fields are optional.
-
-
-        If you provide them when you POST your file, then the response will be an automatic redirect.
-
-
+        
+        If you provide them when you POST your file, then the response will be an automatic redirect. 
+        
         If you do not require these redirects for your application, then do not provide these redirect fields.
-
-
-
+        
+        ### File upload workflow
         Once you receive a successful response from this endpoint, use the information in the response to POST your file to the URL provided.
-
-
+        
         You must use multipart encoding (multipart/form-data) NOT application/x-www-form-urlencoded.
-
-
+        
         The 'file' field must be the last field in the submitted form.
         
         **Error scenarios**
@@ -713,9 +707,7 @@ paths:
         description: >-
           The EORI associated with the originating owner of the declaration.
 
-
           CSPs must have an X-Badge-Identifier or X-Submitter-Identifier.
-
 
           Must have a maximum length of 17 characters, consisting of any combination of numeric digits and/or letters.
         style: simple
@@ -803,7 +795,7 @@ components:
   examples:
     BadRequestExample:
       summary: BadRequest
-      value: |
+      value : |
         <?xml version="1.0" encoding="UTF-8"?>
         <errorResponse>
             <code>BAD_REQUEST</code>

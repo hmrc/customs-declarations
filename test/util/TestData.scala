@@ -57,10 +57,6 @@ object TestData {
   val correlationIdUuid: UUID = fromString(correlationIdValue)
   val correlationId: CorrelationId = CorrelationId(correlationIdUuid)
 
-  val dmirIdValue = "1b0a48a8-1259-42c9-9d6a-e797b919eb16"
-  val dmirIdUuid: UUID = fromString(dmirIdValue)
-  val dmirId: DeclarationManagementInformationRequestId = DeclarationManagementInformationRequestId(dmirIdUuid)
-
   val mrnValue = "theMrn"
   val mrn: Mrn = Mrn(mrnValue)
 
@@ -274,7 +270,6 @@ object TestData {
 
     override def correlation: CorrelationId = correlationId
 
-    override def dmir: DeclarationManagementInformationRequestId = dmirId
   }
 
   val TestXmlPayload: Elem = <foo>bar</foo>

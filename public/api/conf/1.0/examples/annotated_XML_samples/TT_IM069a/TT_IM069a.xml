@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><v1:submitDeclarationRequest xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <v1:requestCommon>
     <v1:regime>CDS</v1:regime>
-    <v1:receiptDate>2024-07-16T13:36:07.007+01:00</v1:receiptDate>
-    <v1:clientID>4801fe4b-49a1-4354-b8aa-b833eb7d4f3f</v1:clientID>
-    <v1:conversationID>f7517f66-32ba-4e71-b998-64849f254bc6</v1:conversationID>    
+    <v1:receiptDate>2024-08-19T10:33:13.013+01:00</v1:receiptDate>
+    <v1:clientID>820e29fb-ac4b-468c-aaa8-05933abeff23</v1:clientID>
+    <v1:conversationID>1ba826a3-cc97-4343-ab89-76bd69cdfd34</v1:conversationID>    
     <!--Example WSO2 Header-->
     <v1:originatingPartyID>GB225456994000</v1:originatingPartyID>
 	<v1:authenticatedPartyID>GB225456994000</v1:authenticatedPartyID>
@@ -38,13 +38,13 @@
 			Expected Notifications: DMSTAX(1), DMSACC, DMSTAX(2), DMSCLE
 		-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20240716133607+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20240819103313+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number: this must be unique to the transaction-->
-		<FunctionalReferenceID>U.78675231K231</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7849431K1Y76</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			Mandatory field.
 			First two characters IM to represent an import declaration.	-->
@@ -242,13 +242,13 @@
 					<Classification>
 						<!--DE 6/14: Commodity Code - Combined Nomenclature Code.
 							IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
-						<ID>70099100</ID>
+						<ID>70099200</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<Classification>
 						<!--DE 6/15: Commodity Code: TARIC code.
 							Two characters for the application of specific Union measures in respect of formalities to be completed at destination. -->
-						<ID>10</ID>
+						<ID>00</ID>
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<DutyTaxFee>
@@ -338,7 +338,7 @@
 				(Note that this is item 1 from the EIDR record entry). -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20240716</ID>
+				<ID>20240819</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

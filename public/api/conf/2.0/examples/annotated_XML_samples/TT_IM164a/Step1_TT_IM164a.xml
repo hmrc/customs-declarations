@@ -192,7 +192,7 @@
                         <IdentificationTypeCode>TRC</IdentificationTypeCode>
                     </Classification>
                     <Classification>
-                        <!--DE 6/17: Commodity Code â€“ National Additional Codes. X451 to represent UK tax type 345, Spirits exceeding 22%. -->
+                        <!--DE 6/17: Commodity Code â€“ National Additional Codes. X345 to represent UK tax type 345, Spirits exceeding 22%. -->
                         <ID>X345</ID>
                         <IdentificationTypeCode>GN</IdentificationTypeCode>
                     </Classification>

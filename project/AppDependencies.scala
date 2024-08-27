@@ -7,7 +7,7 @@ object AppDependencies {
   val playSuffix = "-play-30"
 
   val bootstrapVersion = "8.6.0"
-  val hmrcMongoVersion = "1.9.0"
+  val hmrcMongoVersion = "2.2.0"
   val scalamockVersion = "6.0.0"
 
   val bootstrapBackendPlay30        = "uk.gov.hmrc"        %% s"bootstrap-backend$playSuffix" % bootstrapVersion

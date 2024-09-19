@@ -14,6 +14,7 @@
 	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
 		<!--
+			Please note this sample now has credibility checks after the tariff refresh. This will be resolved for a future release.
 			SCENARIO
 			To show that CDS does not allow or mandate the submission of a status code - Exemption, where document code Y978 is entered on an import declaration.
 

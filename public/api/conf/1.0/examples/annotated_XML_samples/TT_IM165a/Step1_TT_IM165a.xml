@@ -1,17 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-    xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-    xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-    xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
     <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-        xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-        xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--
             SCENARIO
             A trader submits a Type A (H1) Declaration importing goods from the ROW to NI.
@@ -43,7 +36,7 @@
         <!--DE 2/5: LRN.
             Mandatory.
             Trader's own reference number - this must be unique to the transaction. -->
-        <FunctionalReferenceID>7849431EM24S</FunctionalReferenceID>
+        <FunctionalReferenceID>7849431WQBXX</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             Mandatory.
             IM to represent an import declaration. -->
@@ -144,18 +137,15 @@
                     <IdentificationTypeCode>10</IdentificationTypeCode>
                 </ArrivalTransportMeans>
                 <GoodsLocation>
-                    <!--DE 5/23: Location of Goods - Identification of location.
-                            Mandatory.
-                            The location code for Wallasea Island, a non-inventory linked location.
-                            Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'. -->
-                    <Name>WLALONBTW</Name>
+                    <!--DE 5/23: Location of Goods - CW2477216GB. -->
+                    <Name>CW2477216GB</Name>
                     <!--DE 5/23: Location of Goods - Type of Location.
                         A in this scenario to represent that it is a designated location. -->
-                    <TypeCode>A</TypeCode>
+                    <TypeCode>B</TypeCode>
                     <Address>
                         <!--DE 5/23: Location of Goods - Qualifier of the identification.
                             U in this scenario for UN/LOCODE. -->
-                        <TypeCode>U</TypeCode>
+                        <TypeCode>Y</TypeCode>
                         <!--DE 5/23: Location of Goods - Country.
                             Country code of the country where the goods may be examined, GB in this scenario. -->
                         <CountryCode>GB</CountryCode>
@@ -192,9 +182,9 @@
                     Mandatory if codes required.
                     C506 indicates DPO - Authorisation for the deferment of payment.
                     Provide the authorisation decision number for the deferment of payment authorisation in format:
-                    â€¢ 2 digit code identifying the member state of authorisation, for example, GB
-                    â€¢ 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
-                    â€¢ Followed by the authorisation reference number.
+                    Ã¢â‚¬Â¢ 2 digit code identifying the member state of authorisation, for example, GB
+                    Ã¢â‚¬Â¢ 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
+                    Ã¢â‚¬Â¢ Followed by the authorisation reference number.
                     No document status code is required. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
@@ -203,7 +193,7 @@
                 </AdditionalDocument>
                 <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     Mandatory if codes required.
-                    Document code Y900 to show the goods are not subject to CITES control â€“ complete statement/reason with: â€˜CITES Permits not requiredâ€™. -->
+                    Document code Y900 to show the goods are not subject to CITES control Ã¢â‚¬â€œ complete statement/reason with: Ã¢â‚¬ËœCITES Permits not requiredÃ¢â‚¬â„¢. -->
                 <AdditionalDocument>
                     <CategoryCode>Y</CategoryCode>
                     <Name>CITES Permits not required</Name>
@@ -269,7 +259,7 @@
                 </AdditionalDocument>
                 <!--DE 2/2 Additional Information.
                     00500 to indicate the identity between declarant and importer.
-                    In the description enter â€˜Importerâ€™. -->
+                    In the description enter Ã¢â‚¬ËœImporterÃ¢â‚¬â„¢. -->
                 <AdditionalInformation>
                     <StatementCode>00500</StatementCode>
                     <StatementDescription>importer</StatementDescription>
@@ -312,7 +302,7 @@
                         <IdentificationTypeCode>TRC</IdentificationTypeCode>
                     </Classification>
                     <Classification>
-                        <!--DE 6/17: Commodity Code â€“ National Additional Codes.
+                        <!--DE 6/17: Commodity Code Ã¢â‚¬â€œ National Additional Codes.
                            X345 to represent UK tax type 345, Spirits exceeding 22%. -->
                         <ID>X345</ID>
                         <IdentificationTypeCode>GN</IdentificationTypeCode>
@@ -454,11 +444,11 @@
                 </Packaging>
                 <!--DE 4/13: Valuation Indicator.
                     Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-                    The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
-                    â€¢ First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
-                    â€¢ Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
-                    â€¢ Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
-                    â€¢ Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
+                    The code comprises four digits, each of which being either a Ã¢â‚¬Ëœ0Ã¢â‚¬â„¢ or a Ã¢â‚¬Ëœ1Ã¢â‚¬â„¢:
+                    Ã¢â‚¬Â¢ First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
+                    Ã¢â‚¬Â¢ Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+                    Ã¢â‚¬Â¢ Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
+                    Ã¢â‚¬Â¢ Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
                 <ValuationAdjustment>
                     <AdditionCode>0000</AdditionCode>
                 </ValuationAdjustment>
@@ -471,7 +461,7 @@
             </Importer>
             <!--DE 2/1: Simplified Declarations/Previous documents.
                 ZDCR to show the DUCR assigned to the consignment.
-                Note: The DUCR is not mandatory for â€˜normalâ€™ declarations, only if CFSP or where the business
+                Note: The DUCR is not mandatory for Ã¢â‚¬ËœnormalÃ¢â‚¬â„¢ declarations, only if CFSP or where the business
                 process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
@@ -498,7 +488,7 @@
             </TradeTerms>
             <!--DE 2/7: Identification of warehouse. This is a private warehouse ID.. -->
             <Warehouse>
-                <ID>1117770GB</ID>
+                <ID>2477216GB</ID>
                 <TypeCode>U</TypeCode>
             </Warehouse>
         </GoodsShipment>

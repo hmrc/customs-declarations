@@ -7,6 +7,7 @@
 	</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
+			Please note this sample now has credibility checks after the tariff refresh. This will be resolved for a future release.
 			SCENARIO RoW to NI:"Not At Risk"
 			Import of goods liable to Customs Duty & VAT, with no previous procedure
 			Goods: Live, fresh or chilled, Scallops, including queen scallops Intended for human consumption

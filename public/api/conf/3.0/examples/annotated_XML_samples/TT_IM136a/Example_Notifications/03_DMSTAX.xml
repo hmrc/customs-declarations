@@ -1,15 +1,15 @@
-<MetaData xmlns:_2=\"urn:wco:datamodel:WCO:DocumentMetaData-DMS:2\">
+<MetaData>
 	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
 	<WCOTypeName>RES</WCOTypeName>
 	<ResponsibleCountryCode/>
 	<ResponsibleAgencyName/>
 	<AgencyAssignedCustomizationCode/>
 	<AgencyAssignedCustomizationVersionCode/>
-	<Response xmlns:_2_1=\"urn:wco:datamodel:WCO:RES-DMS:2\">
+	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>ef88f61446014e368c80aead9bdaf838</FunctionalReferenceID>
+		<FunctionalReferenceID>c62eb2dfbb184fbb8c2f16c8e3df0541</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode=\"304\" xmlns:_2_2=\"urn:wco:datamodel:WCO:Response_DS:DMS:2\">20231026152346Z</DateTimeString>
+			<DateTimeString formatCode="304">20240912105736Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,8 +19,8 @@
 			<NameCode>67</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>7845141B2IX6</FunctionalReferenceID>
-			<ID>23GBBUQ7TSDC46TA00</ID>
+			<FunctionalReferenceID>7849431TW38W</FunctionalReferenceID>
+			<ID>24GBA50RWP2XN0QA03</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>

@@ -1,28 +1,25 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-           	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-           	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-           	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-           	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
-           	>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-           		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-           		xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-           		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-           		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-           		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--Function Code of 13 to represent Request (Additional Message)-->
 		<FunctionCode>13</FunctionCode>
 		<!--The trader assigned reference to the additional message. Note that this reference is independent of the declaration.-->
-		<FunctionalReferenceID>K_Sample_0903_003</FunctionalReferenceID>
+		<FunctionalReferenceID>7849431M0ZUP</FunctionalReferenceID>
 		<!--Declaration ID of the corresponding Declaration to be Cancelled-->
-		<ID>21GB2ONXU9DYRQC106</ID>
+		<ID>24GBA4ZYBWXU1BSA00</ID>
 		<!--Defines the type of additional message - in this scenario, INV to indicate that this additional message is a Invalidation/Cancellation-->
 		<TypeCode>INV</TypeCode>
 		<!-- ID of the person presenting the goods to customs -->

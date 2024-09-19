@@ -19,13 +19,13 @@
         -->
 		<!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20240529095257+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20240912121145+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number: this must be unique to the transaction. -->
-		<FunctionalReferenceID>78473237RJIV</FunctionalReferenceID>
+		<FunctionalReferenceID>7849431IWHGE</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -41,7 +41,7 @@
 			<FunctionCode>2</FunctionCode>
 		</Agent>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarant’s records.
+			An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarantâ€™s records.
             The ID is the EORI of the EIDR authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
@@ -58,7 +58,7 @@
 			<CategoryCode>CWP</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authoriation Identification Number.
-			An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
+			An authorisation type code of UKIM indicates that a good that otherwise would be considered â€œat riskâ€ of moving into the EU, must instead be considered â€œnot at riskâ€.
 			The ID here is the EORI of the UKIM authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
@@ -92,14 +92,14 @@
 						Mandatory.
 						The location code for Port of Belfast.
 						Goods moved via shipping container from GB to NI via Port of Belfast. -->
-					<Name>BELBELBEL</Name>
+					<Name>CW2477216GB</Name>
 					<!--DE 5/23: Location of Goods - Type of location.
-						A in this scenario to represent that it is a Frontier or Frontier linked location. -->
-					<TypeCode>A</TypeCode>
+						B is used to identify inland locations such as customs warehouses. -->
+					<TypeCode>B</TypeCode>
 					<Address>
 						<!--DE 5/23: Location of Goods - Qualifier of the identification.
-							Type of ID of the Location is U in this scenario for UN/LOCODE. -->
-						<TypeCode>U</TypeCode>
+							Y is used where the goods location is identified by an authorisation number.. -->
+						<TypeCode>Y</TypeCode>
 						<!--DE 5/23: Location of Goods - Country.
 							Country code of the country where the goods may be examined.
 							GB in this scenario. -->
@@ -123,7 +123,7 @@
 					Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-						A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant’s records. -->
+						A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantâ€™s records. -->
 						<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>XIEIR553202734852I20231019133850</ID>
@@ -159,14 +159,14 @@
 					This field is mandatory, this represents Manual calculation of postponed VAT -->
 				<AdditionalInformation>
 					<StatementCode>PVA01</StatementCode>
-					<StatementDescription>PVA Amount £250.00</StatementDescription>
+					<StatementDescription>PVA Amount Â£250.00</StatementDescription>
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of Goods.
 						Description of the goods which is specific enough to allow the unambiguous identification, classification and examination of goods. -->
 					<Description>Containing by weight not more than 0.1% of carbon and more than 30% but not more than 90% of chromium (super-refined ferrochromium)</Description>
 					<Classification>
-						<!--DE 6/14: Commodity Code — Combined Nomenclature Code. -->
+						<!--DE 6/14: Commodity Code â€” Combined Nomenclature Code. -->
 						<ID>72024950</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
@@ -245,7 +245,7 @@
 				Note that this is item 1 from the EIDR record entry. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20240529</ID>
+				<ID>20240912</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

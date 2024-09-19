@@ -13,13 +13,13 @@
         -->
         <!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
         <AcceptanceDateTime>
-            <p1:DateTimeString formatCode="304">20240530090110+01</p1:DateTimeString>
+            <p1:DateTimeString formatCode="304">20240912131454+01</p1:DateTimeString>
         </AcceptanceDateTime>
         <!--Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN.
-            Traders own reference number â€“ this must be unique to the transaction. -->
-        <FunctionalReferenceID>7867523JCN0P</FunctionalReferenceID>
+            Traders own reference number Ã¢â‚¬â€œ this must be unique to the transaction. -->
+        <FunctionalReferenceID>78494311P8SM</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             IM to represent an import declaration.-->
         <!--DE 1/2: Additional Declaration Type.
@@ -32,7 +32,7 @@
             <FunctionCode>2</FunctionCode>
         </Agent>
         <!--DE 3/39: Holder of the Authorisation Identification Number.
-            An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarant™s records.
+            An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarantâ„¢s records.
             The ID is the EORI of the EIDR authorised party. -->
         <AuthorisationHolder>
             <ID>XI553202734852</ID>
@@ -49,7 +49,7 @@
             <CategoryCode>CWP</CategoryCode>
         </AuthorisationHolder>
         <!-- DE 3/39: Holder of the Authoriation Identification Number.
-            An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
+            An authorisation type code of UKIM indicates that a good that otherwise would be considered â€œat riskâ€ of moving into the EU, must instead be considered â€œnot at riskâ€.
             The ID here is the EORI of the DPO authorised party.  -->
         <AuthorisationHolder>
             <ID>XI553202734852</ID>
@@ -87,21 +87,25 @@
             <TransactionNatureCode>1</TransactionNatureCode>
             <Consignment>
                 <!--DE 5/23: ID to give a unique position of the location -->
-                <GoodsLocation>
-                    <!--DE 5/23:The location code for the Customs Warehouse. -->
-                    <Name>BELBEBEL</Name>
-                    <!--DE 5/23: Type of Location.
-                        B is used to identify inland locations such as customs warehouses. -->
-                    <TypeCode>B</TypeCode>
-                    <Address>
-                        <!--DE 5/23: Type of ID of the Location.
-                            Y is used where the goods location is identified by an authorisation number. -->
-                        <TypeCode>Y</TypeCode>
-                        <!--DE 5/23: Goods Location.
-                            Country code of the country where the goods may be examined, GB in this scenario. -->
-                        <CountryCode>GB</CountryCode>
-                    </Address>
-                </GoodsLocation>
+				<GoodsLocation>
+					<!--DE 5/23: Location of Goods - Identification of location.
+						Mandatory.
+						The location code for Port of Belfast.
+						Goods moved via shipping container from GB to NI via Port of Belfast. -->
+					<Name>CW5212234GB</Name>
+					<!--DE 5/23: Location of Goods - Type of location.
+						B is used to identify inland locations such as customs warehouses. -->
+					<TypeCode>B</TypeCode>
+					<Address>
+						<!--DE 5/23: Location of Goods - Qualifier of the identification.
+							Y is used where the goods location is identified by an authorisation number.. -->
+						<TypeCode>Y</TypeCode>
+						<!--DE 5/23: Location of Goods - Country.
+							Country code of the country where the goods may be examined.
+							GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
             </Consignment>
             <!--DE 5/8: Country code of the destination country.
                 In this case GB. -->
@@ -119,7 +123,7 @@
                 <SequenceNumeric>1</SequenceNumeric>
                 <AdditionalDocument>
                     <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                        A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantâ€™s records. -->
+                        A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantÃ¢â‚¬â„¢s records. -->
                     <CategoryCode>C</CategoryCode>
                     <ID>XIEIR553202734852I20231019133850</ID>
                     <TypeCode>514</TypeCode>
@@ -168,13 +172,13 @@
                 </AdditionalInformation>
                 <!-- DE 2/2: Additional information.
                      RSDSD: This field is mandatory, this represents a total for the number of individual goods movements being included on the recapitulative declaration  -->
-                <!--<AdditionalInformation>
+                <AdditionalInformation>
                     <StatementCode>RSDSD</StatementCode>
                     <StatementDescription>RSDSD 1</StatementDescription>
-                </AdditionalInformation> -->
+                </AdditionalInformation>
                 <Commodity>
                     <!--DE 6/8: Goods Description.
-                        Description of the goods specific enough to enable classification â€“ without repeating the CN code description in the Tariff. -->
+                        Description of the goods specific enough to enable classification Ã¢â‚¬â€œ without repeating the CN code description in the Tariff. -->
                     <Description>Cocoa Butter-fat and oil</Description>
                     <Classification>
                         <!--DE 6/14: Commodity code - combined nomenclature code.
@@ -188,7 +192,7 @@
                         <GrossMassMeasure>150</GrossMassMeasure>
                     </GoodsMeasure>
                     <!--DE 4/14:  Item price amount.
-                        The invoice was issued with of a value of £1000 and the currency was in GBP. -->
+                        The invoice was issued with of a value of Â£1000 and the currency was in GBP. -->
                     <InvoiceLine>
                         <ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
                     </InvoiceLine>
@@ -249,7 +253,7 @@
                 Note that this is item 6 from the EIDR record entry. -->
             <PreviousDocument>
                 <CategoryCode>Y</CategoryCode>
-                <ID>20240530</ID>
+                <ID>20240912</ID>
                 <TypeCode>CLE</TypeCode>
                 <LineNumeric>6</LineNumeric>
             </PreviousDocument>

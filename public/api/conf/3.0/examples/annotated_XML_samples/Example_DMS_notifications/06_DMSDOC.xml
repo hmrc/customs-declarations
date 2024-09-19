@@ -6,16 +6,23 @@
 	<AgencyAssignedCustomizationCode/>
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
-		<!-- This is an example of a DMSDOC notification. With this message the submitter is asked (and obligated) to present one or more documents, related to the declaration. The message is also used to remind the submitter about a document that had to be submitted already - Enquiry for additional Information-->
 		<FunctionCode>06</FunctionCode>
-		<FunctionalReferenceID>c8993b9a7f6b4826bf42a260ada0cb0a</FunctionalReferenceID>
+		<FunctionalReferenceID>450a2ae1589b40cb9db92fef786e8777</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20200212091504Z</DateTimeString>
+			<DateTimeString formatCode="304">20231122163345Z</DateTimeString>
 		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>ACA</StatementCode>
+			<StatementDescription/>
+			<LimitDateTime>
+				<DateTimeString formatCode="304">20260911163345Z</DateTimeString>
+			</LimitDateTime>
+			<StatementTypeCode>ACA</StatementTypeCode>
+		</AdditionalInformation>
 		<Declaration>
-			<FunctionalReferenceID>R251_TC05_2111_13</FunctionalReferenceID>
-			<ID>20GB1OJPU2P01FGVR4</ID>
-			<VersionID>3</VersionID>
+			<FunctionalReferenceID>CDCMRESLCTTT2211KM05</FunctionalReferenceID>
+			<ID>23GBCXDLLRXMOCTAA4</ID>
+			<VersionID>1</VersionID>
 		</Declaration>
 	</Response>
 </MetaData>

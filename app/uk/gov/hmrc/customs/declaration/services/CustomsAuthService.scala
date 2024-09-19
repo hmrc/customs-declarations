@@ -101,7 +101,8 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
         logger.debug(s"No authorisation for CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment", ae)
         Right((false, None))
       case NonFatal(e) =>
-        logger.error(s"Error when authorising for CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment", e)
+        logger.debug(s"Error when authorising for CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment", e)
+        logger.debug("Message: " + e.getMessage)
         Left(ErrorInternalServerError)
     }
   }

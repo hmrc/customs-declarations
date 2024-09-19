@@ -1,21 +1,10 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			A trader using self-representation submits an inventory-linked Type J declaration, importing goods from ROW to GB, using requested procedure code 78 with additional procedure code 000 for entry into the Freeports special procedure and which derives a C2Ii EIDR category.
@@ -25,14 +14,14 @@
 			• Authorisation code FP in DE 3/39 to indicate Freeport Business Authorisation.
 			• A valid Freeport Location in DE 5/23 for Goods Location
 			• A Previous Document Code of Z-ZZZ.
-			
+
 			The submitted IVL payload will be followed by a Validate Movement Response of 000 (match)
 		-->
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>CDSP_9793_TC2_0303_02</FunctionalReferenceID>
+		<FunctionalReferenceID>7849431ESFID</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -41,18 +30,18 @@
 		<!--DE 1/9: Total Number of Items.
 			Number of goods items on the declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
-		<!--DE 7/4: Mode of Transport at the Border. 
-			1 represents maritime/sea transport. 
+		<!--DE 7/4: Mode of Transport at the Border.
+			1 represents maritime/sea transport.
 			This is a mandatory data element. -->
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type of FP indicates authorisation for the use of Freeports special procedure. 
+			An authorisation type of FP indicates authorisation for the use of Freeports special procedure.
 			The ID is the EORI number of the Freeports authorisation holder. -->
 		<AuthorisationHolder>
 			<ID>GB427168118378</ID>
 			<CategoryCode>FP</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An Authorisation type of EIR indicates Authorisation for the use of customs declaration through an entry of data in the declarants records. 
+			An Authorisation type of EIR indicates Authorisation for the use of customs declaration through an entry of data in the declarants records.
 			The ID is the EORI number of the EIDR authorisation holder. -->
 		<AuthorisationHolder>
 			<ID>GB427168118378</ID>
@@ -63,7 +52,7 @@
 		<BorderTransportMeans>
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
-		<!--DE 3/18: Declarant Identification Number. 
+		<!--DE 3/18: Declarant Identification Number.
 			The EORI number of the declarant, who is using self-representation.
 			The UK requires an EORI to be provided for the declarant. -->
 		<Declarant>
@@ -71,12 +60,12 @@
 		</Declarant>
 		<GoodsShipment>
 			<!--DE 7/2: Container.
-				Indicator to show if goods are packed in a container or not. 
+				Indicator to show if goods are packed in a container or not.
 				1 indicates that goods are transported in containers.
 				Note: Unlike CHIEF this must now be completed. -->
 			<Consignment>
 				<ContainerCode>1</ContainerCode>
-				<!--DE 7/9: Identity of Means of Transport on Arrival. 
+				<!--DE 7/9: Identity of Means of Transport on Arrival.
 					Example number representing IMO ship identification number: '10', and 5 digits for the identification number: '12345'. -->
 				<ArrivalTransportMeans>
 					<ID>12345</ID>
@@ -98,7 +87,7 @@
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
-				<!--DE 7/10: Container Identification Number. 
+				<!--DE 7/10: Container Identification Number.
 					This is alpha-numeric with up to 17 characters.
 					For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of in addition to the container identification number.
 					For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
@@ -109,20 +98,20 @@
 			</Consignment>
 			<GovernmentAgencyGoodsItem>
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory only where codes required.
-					Document type: A document code of C600 indicaticates authorisation to operate a Free Zone (Freeport). 
-					Document identifier: The authorisation decision number for the Free Zone in the following format: 
-					• 2 digit code identifying the member state of authorisation, e.g., GB 
-					• 2 digit code indicating that a Free Zone authorisation is held, i.e., FZ 
-					• followed by the authorisation reference number. 
+					Document type: A document code of C600 indicaticates authorisation to operate a Free Zone (Freeport).
+					Document identifier: The authorisation decision number for the Free Zone in the following format:
+					• 2 digit code identifying the member state of authorisation, e.g., GB
+					• 2 digit code indicating that a Free Zone authorisation is held, i.e., FZ
+					• followed by the authorisation reference number.
 					Note that the Freeport business authorisation number format is not validated; the ID value used here is dummy data and is not included in the Test Data Library. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBFZ42716811837820220201100011</ID>
 					<TypeCode>600</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory only where codes required.
 					A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant’s records. -->
 				<AdditionalDocument>
@@ -130,13 +119,15 @@
 					<ID>GBEIR427168118378I</ID>
 					<TypeCode>514</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/2: Additional Information. 
+				<!--DE 2/2: Additional Information.
 					00500 - IMPORTER indicating self-representation by the importer. -->
 				<AdditionalInformation>
 					<StatementCode>00500</StatementCode>
 					<StatementDescription>IMPORTER</StatementDescription>
 				</AdditionalInformation>
 				<Commodity>
+					<!--DE 6/8: Description of the goods.-->
+					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass.
 							Weight of the goods in kilograms including packaging. -->
@@ -162,7 +153,7 @@
 						Marks and numbers on transport units or packages. -->
 					<MarksNumbersID>ADR/BG/12345</MarksNumbersID>
 					<!--DE 6/10: Number of Packages.
-						In this case 50. 
+						In this case 50.
 						Note that this matches DE 6/18 because this is a single item declaration. -->
 					<QuantityQuantity>50</QuantityQuantity>
 					<!--DE 6/9: Type of Packages.
@@ -181,7 +172,7 @@
 				Stock reference number associated with the Freezone entry. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>GB-1234-99999886</ID>
+				<ID>2GB427168118378-12345</ID>
 				<TypeCode>ZZZ</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -204,15 +195,15 @@
 			<UCR>
 				<TraderAssignedReferenceID>2GB427168118378-12345</TraderAssignedReferenceID>
 			</UCR>
-			<!--DE 2/7: Identification of Warehouse. 
-				This is a mandatory field where warehousing or free zone used. 
+			<!--DE 2/7: Identification of Warehouse.
+				This is a mandatory field where warehousing or free zone used.
 				The Freezone (Freeport) ID. -->
 			<Warehouse>
 				<ID>1212342GB</ID>
 				<TypeCode>Z</TypeCode>
 			</Warehouse>
 		</GoodsShipment>
-		<!--DE 5/27: Supervising Customs Office. 
+		<!--DE 5/27: Supervising Customs Office.
 			This is a mandatory field dependant on the Procedure code.
 			The ID GBLBA001 represents the Supervising Office Code for the HMRC Office overseeing the Customs Warehouse procedure (Peter Bennet House, Leeds). -->
 		<SupervisingOffice>

@@ -19,7 +19,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>7848449L4SVB</FunctionalReferenceID>
+		<FunctionalReferenceID>784943112295</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -123,6 +123,7 @@
 					<StatementDescription>IMPORTER</StatementDescription>
 				</AdditionalInformation>
 				<Commodity>
+					<Description>Mens' Trousers</Description>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass.
 							Weight of the goods in kilograms including packaging. -->

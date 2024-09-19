@@ -1,50 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-	xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!-- 
 
 			SCENARIO
 
 			GB to NI Not At Risk.
-
-			
-
 			Standard frontier Declaration Type A which derives an H1 Declaration Category data set.
-
-			
-
 			Import of goods liable to Customs Duty & VAT, with no previous procedure.
-
-			
 
 			The trader declares:
 
-			• Goods: Preparation of the müsli type based on unroasted cereal flakes.
-
-			• AI code 'NIDOM' entered at Item Level.
-
-			
+			â€¢ Goods: Preparation of the mÃ¼sli type based on unroasted cereal flakes.
+			â€¢ AI code 'NIDOM' entered at Item Level.
 
 			Goods presented at Warrenport on arrival.
 
 			 -->
 		<!-- Function Code of 9 to represent an original declaration.  -->
 		<FunctionCode>9</FunctionCode>
-		<!-- DE 2/5: LRN.
-
-			Trader's own reference number - this must be unique to the transaction.  -->
-		<FunctionalReferenceID>7849431M9B6A</FunctionalReferenceID>
+		<!-- DE 2/5: LRN. Trader's own reference number - this must be unique to the transaction.  -->
+		<FunctionalReferenceID>784943149KNX</FunctionalReferenceID>
 		<!-- DE 1/1: Declaration Type.
 
 			IM to represent an import declaration.  -->
@@ -71,7 +51,7 @@
 			This declared DAN belongs to the importer declared on the declaration.  -->
 		<AdditionalDocument>
 			<CategoryCode>1</CategoryCode>
-			<ID>1108654</ID>
+			<ID>1108656</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
 		<!-- DE 3/39: Holder of the Authorisation Identification Number.
@@ -80,7 +60,7 @@
 
 			The ID here is the EORI of the DPO authorised party.  -->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
 		<!-- DE 3/39: An authorisation type code of CGU is required where CCG authorisation is being declared 
@@ -91,14 +71,14 @@
 
 			The ID here is the EORI of the CCG authorised party. -->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
 		<!-- DE 3/39: Holder of the Authoriation Identification Number.
-            An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
+            An authorisation type code of UKIM indicates that a good that otherwise would be considered â€œat riskâ€ of moving into the EU, must instead be considered â€œnot at riskâ€.
             The ID here is the EORI of the DPO authorised party.  -->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 			<CategoryCode>UKIM</CategoryCode>
 		</AuthorisationHolder>
 		<!-- DE 7/15: Nationality of the active means of transport crossing the border.
@@ -120,13 +100,13 @@
 
 			In this scenario, the same as the EORI of the importer.  -->
 		<Declarant>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 		</Declarant>
 		<!-- DE 3/2: Exporter Identification Number 
 
 			Where held, enter the EORI number of the last seller of the goods prior to their importation.  -->
 		<Exporter>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 		</Exporter>
 		<GoodsShipment>
 			<!-- DE 8/5: Nature of Transaction.
@@ -216,7 +196,7 @@
                     LPCOExemptionCode: AC indicates Document attached for certification by customs.  -->
 				<AdditionalDocument>
 					<CategoryCode>1</CategoryCode>
-					<ID>GBUKIM55320273485220231114100449</ID>
+					<ID>XIUKIM55320273485220240124160138</ID>
 					<TypeCode>UKI</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -255,7 +235,7 @@
 
 					and therefore the ID also indicates that a waiver is being used.
 
-					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code – 
+					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code â€“ 
 
 					CCG not required.  -->
 				<AdditionalDocument>
@@ -270,16 +250,16 @@
 
 					Provide the authorisation decision number for the deferment of payment authorisation in format:
 
-					• 2 digit code identifying the member state of authorisation, for example, GB
+					â€¢ 2 digit code identifying the member state of authorisation, for example, GB
 
-					• 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
+					â€¢ 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
 
-					• Followed by the authorisation reference number. 
+					â€¢ Followed by the authorisation reference number. 
 
 					No document status code is required.  -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBDPO1108654</ID>
+					<ID>XIDPO1108656</ID>
 					<TypeCode>506</TypeCode>
 				</AdditionalDocument>
 				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
@@ -327,7 +307,7 @@
 					<!-- DE 6/8: Description of Goods.
 
 						Description of the goods sufficiently precise enough to allow classification does not mean copying out the full description as set out in the tariff.  -->
-					<Description>Preparation of the müsli type based on unroasted cereal flakes</Description>
+					<Description>Preparation of the mÃ¼sli type based on unroasted cereal flakes</Description>
 					<Classification>
 						<!-- DE 6/14: Commodity Code - Combined Nomenclature Code. 
 
@@ -448,7 +428,7 @@
 
 					CountryCode contains the code for the country from which the goods originated, in this case Great Brittain.
 					
-					Where preference in D.E. 4/17 begins with a number other than ‘1’, this must be completed.
+					Where preference in D.E. 4/17 begins with a number other than â€˜1â€™, this must be completed.
 				
 					It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/16 (from DE 5/15). -->
 				<Origin>
@@ -474,15 +454,15 @@
 
 					Mandatory if method 1 is being used (see DE 4/16 where Method 1 has been entered).
 
-					The code comprises four digits, each of which being either a ‘0’ or a ‘1’: 
+					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™: 
 
-					• First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
+					â€¢ First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
 
-					• Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+					â€¢ Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
 
-					• Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
+					â€¢ Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
 
-					• Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller.  -->
+					â€¢ Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller.  -->
 				<ValuationAdjustment>
 					<AdditionCode>0000</AdditionCode>
 				</ValuationAdjustment>
@@ -491,14 +471,14 @@
 
 				EORI number of the Importer.  -->
 			<Importer>
-				<ID>GB553202734852</ID>
+				<ID>XI553202734852</ID>
 			</Importer>
 			<!-- DE 2/1 : Previous Documents. Mandatory field. The Trader's DUCR assigned to the consignment
 
 				As this is for a single item declaration, this should all be declared at header level.. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>3GB553202734852-20230813</ID>
+				<ID>3GB553202734852-1209EC01</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

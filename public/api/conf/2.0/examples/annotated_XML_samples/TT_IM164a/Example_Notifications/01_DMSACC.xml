@@ -1,50 +1,50 @@
 <MetaData>
-    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-    <WCOTypeName>RES</WCOTypeName>
-    <ResponsibleCountryCode/>
-    <ResponsibleAgencyName/>
-    <AgencyAssignedCustomizationCode/>
-    <AgencyAssignedCustomizationVersionCode/>
-    <Response>
-        <FunctionCode>01</FunctionCode>
-        <FunctionalReferenceID>ff85518abbb746348a2aed00d50b3fc8</FunctionalReferenceID>
-        <IssueDateTime>
-            <DateTimeString formatCode="304">20240604120225+01</DateTimeString>
-        </IssueDateTime>
-        <AdditionalInformation>
-            <StatementCode>smartErrorMsg</StatementCode>
-            <StatementDescription>Value of 1 item appears too low for this commodity</StatementDescription>
-            <StatementTypeCode>1</StatementTypeCode>
-            <Pointer>
-                <SequenceNumeric>1</SequenceNumeric>
-                <DocumentSectionCode>07B</DocumentSectionCode>
-            </Pointer>
-            <Pointer>
-                <SequenceNumeric>1</SequenceNumeric>
-                <DocumentSectionCode>53A</DocumentSectionCode>
-            </Pointer>
-        </AdditionalInformation>
-        <Error>
-            <Description>Value of 1 item appears too low for this commodity</Description>
-            <ValidationCode>CDS13000</ValidationCode>
-            <Pointer>
-                <DocumentSectionCode>42A</DocumentSectionCode>
-            </Pointer>
-            <Pointer>
-                <DocumentSectionCode>67A</DocumentSectionCode>
-            </Pointer>
-            <Pointer>
-                <SequenceNumeric>1</SequenceNumeric>
-                <DocumentSectionCode>68A</DocumentSectionCode>
-            </Pointer>
-        </Error>
-        <Declaration>
-            <AcceptanceDateTime>
-                <DateTimeString formatCode="304">20240604120223+01</DateTimeString>
-            </AcceptanceDateTime>
-            <FunctionalReferenceID>7867523O5YPT</FunctionalReferenceID>
-            <ID>24GB664WW9RW07NAR3</ID>
-            <VersionID>1</VersionID>
-        </Declaration>
-    </Response>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>01</FunctionCode>
+		<FunctionalReferenceID>1a0fa04bbae445418ad3534a08d60b5a</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20240912111157Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>smartErrorMsg</StatementCode>
+			<StatementDescription>Value of 1 item appears too low for this commodity</StatementDescription>
+			<StatementTypeCode>1</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>07B</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>53A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+		<Error>
+			<Description>Value of 1 item appears too low for this commodity</Description>
+			<ValidationCode>CDS13000</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+		</Error>
+		<Declaration>
+			<AcceptanceDateTime>
+				<DateTimeString formatCode="304">20240912111146Z</DateTimeString>
+			</AcceptanceDateTime>
+			<FunctionalReferenceID>7849431P0DLV</FunctionalReferenceID>
+			<ID>24GBA51A56J1Z6KAR3</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
 </MetaData>

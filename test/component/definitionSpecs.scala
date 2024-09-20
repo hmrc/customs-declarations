@@ -47,13 +47,6 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
       contentAsJson(resultFuture) shouldBe Json.parse(
         """
           |{
-          |  "scopes": [
-          |    {
-          |      "key": "write:customs-declaration",
-          |      "name": "Submit a Customs Declaration",
-          |      "description": "Submit a Customs Declaration"
-          |    }
-          |  ],
           |  "api": {
           |    "name": "Customs Declarations",
           |    "description": "Single WCO-compliant Customs Declarations API",
@@ -202,13 +195,6 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
       contentAsJson(resultFuture) shouldBe Json.parse(
         """
           |{
-          |  "scopes": [
-          |    {
-          |      "key": "write:customs-declaration",
-          |      "name": "Submit a Customs Declaration",
-          |      "description": "Submit a Customs Declaration"
-          |    }
-          |  ],
           |  "api": {
           |    "name": "Customs Declarations",
           |    "description": "Single WCO-compliant Customs Declarations API",

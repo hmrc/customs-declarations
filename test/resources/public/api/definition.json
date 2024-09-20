@@ -1,11 +1,4 @@
 {
-  "scopes": [
-    {
-      "key": "write:customs-wco-declaration",
-      "name": "Access customs UCC declaration",
-      "description": "Customs UCC Declaration"
-    }
-  ],
   "api": {
     "name": "Customs UCC Declaration",
     "description": "Single UCC Compliant Declaration API",

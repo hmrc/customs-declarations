@@ -49,13 +49,6 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
     Json.parse(
       """
          |{
-         |   "scopes":[
-         |      {
-         |         "key":"write:customs-declaration",
-         |         "name":"Submit a Customs Declaration",
-         |         "description":"Submit a Customs Declaration"
-         |      }
-         |   ],
          |   "api":{
          |      "name":"Customs Declarations",
          |      "description":"Single WCO-compliant Customs Declarations API",

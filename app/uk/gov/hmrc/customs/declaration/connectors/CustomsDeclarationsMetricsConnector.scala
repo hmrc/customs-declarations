@@ -26,6 +26,7 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse}
 
+import java.net.URL
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,9 +44,10 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
     post(request, config.declarationsConfig.customsDeclarationsMetricsBaseBaseUrl)
   }
 
-  private def post[A](request: CustomsDeclarationsMetricsRequest, url: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
+  private def post[A](request: CustomsDeclarationsMetricsRequest, urlString: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
 
-    logger.debug(s"Sending request to customs declarations metrics service. Url: $url Payload:\n${request.toString}")
+    logger.debug(s"Sending request to customs declarations metrics service. Url: $urlString Payload:\n${request.toString}")
+    val url = new URL(urlString)
     http.POST[CustomsDeclarationsMetricsRequest, HttpResponse](url, request).map{ response =>
       response.status match {
         case status if is2xx(status) =>

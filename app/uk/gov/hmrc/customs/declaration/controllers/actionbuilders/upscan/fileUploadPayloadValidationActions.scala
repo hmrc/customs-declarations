@@ -116,38 +116,38 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
 
     def errorRedirectOnly = validate(
       fileUpload,
-      { b: FileUploadRequest =>
+      { (b: FileUploadRequest) =>
         !b.files.exists(file => file.errorRedirect.isDefined && file.successRedirect.isEmpty)
       },
       errorErrorRedirectWithoutSuccessRedirect)
 
     def maxFileGroupSize = validate(
       fileUpload,
-      { b: FileUploadRequest =>
+      { (b: FileUploadRequest) =>
         b.fileGroupSize.value <= declarationsConfigService.fileUploadConfig.fileGroupSizeMaximum},
       errorMaxFileGroupSize)
 
     def maxFileSequenceNo = validate(
       fileUpload,
-      { b: FileUploadRequest =>
+      { (b: FileUploadRequest) =>
         b.fileGroupSize.value >= b.files.last.fileSequenceNo.value },
       errorMaxFileSequenceNo)
 
     def fileGroupSize = validate(
       fileUpload,
-      { b: FileUploadRequest =>
+      { (b: FileUploadRequest) =>
         b.fileGroupSize.value == b.files.length },
       errorFileGroupSize)
 
     def duplicateFileSequenceNo = validate(
       fileUpload,
-      { b: FileUploadRequest =>
+      { (b: FileUploadRequest) =>
         b.files.distinct.length == b.files.length },
       errorDuplicateFileSequenceNo)
 
     def fileSequenceNoLessThanOne = validate(
       fileUpload,
-      { b: FileUploadRequest =>
+      { (b: FileUploadRequest) =>
         b.files.head.fileSequenceNo.value == 1},
       errorFileSequenceNoLessThanOne)
     errorRedirectOnly ++ maxFileGroupSize ++ maxFileSequenceNo ++ fileGroupSize ++ duplicateFileSequenceNo ++ fileSequenceNoLessThanOne match {

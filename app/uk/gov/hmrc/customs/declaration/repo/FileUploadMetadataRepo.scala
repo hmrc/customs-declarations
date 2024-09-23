@@ -59,7 +59,7 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     mongoComponent = mongoComponent,
     domainFormat = FileUploadMetadata.format,
     indexes = Seq(
-      IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index").expireAfter(configService.fileUploadConfig.ttlInSeconds,TimeUnit.SECONDS)),
+      IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index").expireAfter(configService.fileUploadConfig.ttlInSeconds.toLong,TimeUnit.SECONDS)),
       IndexModel(ascending("batchId"), IndexOptions().unique(true).name("batch-id")),
       IndexModel(ascending("files.reference", "csId"), IndexOptions().unique(true).name("csId-and-file-reference"))
     )

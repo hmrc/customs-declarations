@@ -72,9 +72,9 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
 
   def config: DeclarationsConfigService
 
-  override lazy val numberOfCallsToTriggerStateChange = config.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange
-  override lazy val unstablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
-  override lazy val unavailablePeriodDurationInMillis = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
+  override val numberOfCallsToTriggerStateChange: Int = config.declarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange
+  override val unstablePeriodDurationInMillis: Int = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
+  override val unavailablePeriodDurationInMillis: Int = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
 
   def send[A](xml: NodeSeq, date: Instant, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))

@@ -40,7 +40,13 @@ case class NrSubmissionId(nrSubmissionId: UUID) extends AnyVal {
 }
 
 object NrSubmissionId {
-  implicit val format: OFormat[NrSubmissionId] = Json.format[NrSubmissionId]
+  implicit val format: Format[NrSubmissionId] = new Format[NrSubmissionId]:
+    override def writes(o: NrSubmissionId): JsValue = JsString(o.nrSubmissionId.toString)
+
+    override def reads(json: JsValue): JsResult[NrSubmissionId] = json.validate[String].map { str =>
+      NrSubmissionId(UUID.fromString(str))
+    }
+
 }
 
 case class NrsRetrievalData(internalId: Option[String],

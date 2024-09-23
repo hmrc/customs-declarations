@@ -65,8 +65,8 @@ object FileReference {
 case class CallbackFields(name: String, mimeType: String, checksum: String, uploadTimestamp: Instant, outboundLocation: URL)
 
 object CallbackFields {
-  implicit val dateWriter = Writes[Instant] { x => JsString(x.toString) }
-  implicit val dateReader = Reads.of[Instant]
+  implicit val dateWriter: Writes[Instant] = Writes[Instant] { x => JsString(x.toString) }
+  implicit val dateReader: Reads[Instant] = Reads.of[Instant]
 
   implicit val urlFormat: HttpUrlFormat.type = HttpUrlFormat
   implicit val format: OFormat[CallbackFields] = Json.format[CallbackFields]

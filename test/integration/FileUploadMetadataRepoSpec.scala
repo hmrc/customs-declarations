@@ -59,7 +59,7 @@ class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   when(mockConfigService.fileUploadConfig).thenReturn(mockFileUploadConfig)
   when(mockFileUploadConfig.ttlInSeconds).thenReturn(10000)
 
-  override lazy val repository = new FileUploadMetadataMongoRepo(mongoComponent, mockConfigService, mockLogger)
+  override val repository: FileUploadMetadataMongoRepo = new FileUploadMetadataMongoRepo(mongoComponent, mockConfigService, mockLogger)
 
   private def collectionSize(repository: FileUploadMetadataMongoRepo): Int = {
     await(repository.collection.countDocuments().toFuture()).toInt

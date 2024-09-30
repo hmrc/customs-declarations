@@ -36,33 +36,33 @@ object FileTransmissionTestData {
   val FailureNotification = FileTransmissionFailureNotification(FileReferenceOne, BatchIdOne, FileTransmissionFailureOutcome, "error text")
 
   val FileTransmissionRequestJsonString = """{
-                               |  "batch" : {
-                               |    "id" : "48400000-8cf0-11bd-b23e-10b96e4ef001",
-                               |    "fileCount" : 2
-                               |  },
-                               |  "callbackUrl" : "https:/foo.com/callback",
-                               |  "file" : {
-                               |    "reference" : "31400000-8ce0-11bd-b23e-10b96e4ef00f",
-                               |    "name" : "someFileN.ame",
-                               |    "mimeType" : "application/pdf",
-                               |    "checksum" : "asdrfgvbhujk13579",
-                               |    "location" : "https:/foo.com/location",
-                               |    "sequenceNumber" : 1,
-                               |    "size" : 1,
-                               |    "uploadTimestamp" : "2018-04-24T09:30:00Z"
-                               |  },
-                               |  "interface" : {
-                               |    "name" : "interfaceName name",
-                               |    "version" : "1.0"
-                               |  },
-                               |  "properties" : [ {
-                               |    "name" : "p1",
-                               |    "value" : "v1"
-                               |  }, {
-                               |    "name" : "p2",
-                               |    "value" : "v2"
-                               |  } ]
-                               |}""".stripMargin
+       |  "interface" : {
+       |    "name" : "interfaceName name",
+       |    "version" : "1.0"
+       |  },
+       |  "batch" : {
+       |    "id" : "48400000-8cf0-11bd-b23e-10b96e4ef001",
+       |    "fileCount" : 2
+       |  },
+       |  "file" : {
+       |    "reference" : "31400000-8ce0-11bd-b23e-10b96e4ef00f",
+       |    "name" : "someFileN.ame",
+       |    "location" : "https:/foo.com/location",
+       |    "size" : 1,
+       |    "mimeType" : "application/pdf",
+       |    "checksum" : "asdrfgvbhujk13579",
+       |    "uploadTimestamp" : "2018-04-24T09:30:00Z",
+       |    "sequenceNumber" : 1
+       |  },
+       |  "properties" : [ {
+       |    "name" : "p1",
+       |    "value" : "v1"
+       |  }, {
+       |    "name" : "p2",
+       |    "value" : "v2"
+       |  } ],
+       |  "callbackUrl" : "https:/foo.com/callback"
+}""".stripMargin
 
   val FileTransmissionSuccessNotificationPayload = s"""
        |{

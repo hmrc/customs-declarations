@@ -582,7 +582,8 @@ object TestXMLData {
         <File>
           <FileSequenceNo>{fileSequenceNo1}</FileSequenceNo>
           <DocumentType>document type {fileSequenceNo1}</DocumentType>
-          {if (includeSuccessRedirect) <SuccessRedirect>https://success-redirect.com</SuccessRedirect>}
+          {if (includeSuccessRedirect) <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
+            else scala.xml.Null}
           <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
         </File>
         <File>

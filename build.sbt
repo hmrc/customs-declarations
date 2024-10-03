@@ -14,7 +14,7 @@ import java.util.Calendar
 import scala.language.postfixOps
 
 name := "customs-declarations"
-scalaVersion := "3.3.3"
+scalaVersion := "3.5.1"
 
 lazy val CdsIntegrationComponentTest = config("it") extend Test
 

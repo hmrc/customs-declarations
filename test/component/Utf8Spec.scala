@@ -19,13 +19,13 @@ package component
 import org.apache.pekko.util.ByteString
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
-import play.api.mvc._
-import play.api.test.Helpers.{status, _}
+import play.api.mvc.*
+import play.api.test.Helpers.{status, *}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.AuditService
-import util.FakeRequests._
+import util.FakeRequests.*
 import util.RequestHeaders.ValidHeadersV2WithCharset
-import util.externalservices._
+import util.externalservices.*
 
 import java.nio.file.{Files, Paths}
 import scala.concurrent.Future
@@ -59,11 +59,10 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
   override protected def afterAll(): Unit = {
     stopMockServer()
   }
-  
-  val scalaVersion = util.Properties.versionNumberString
 
-  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-$scalaVersion/test-classes/raw/valid_xml.raw")))
-  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-$scalaVersion/test-classes/raw/invalid_xml.raw")))
+  // TODO: get Scala version number, avoid string literal
+  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-3.5.1/test-classes/raw/valid_xml.raw")))
+  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-3.5.1/test-classes/raw/invalid_xml.raw")))
   
   Feature("Declaration API rejects declaration payloads containing invalid utf-8 bytes") {
     Scenario(

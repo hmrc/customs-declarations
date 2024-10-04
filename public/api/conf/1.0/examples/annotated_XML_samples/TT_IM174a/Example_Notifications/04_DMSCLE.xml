@@ -1,16 +1,24 @@
-<_2:MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
-      <_2_1:FunctionCode>09</_2_1:FunctionCode>
-      <_2_1:FunctionalReferenceID>31a6adc0a1874fa9a817934deb1330e5</_2_1:FunctionalReferenceID>
-      <_2_1:IssueDateTime>
-        <_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20240919083907Z</_2_2:DateTimeString>
-      </_2_1:IssueDateTime>
-      <_2_1:AdditionalInformation>
-        <_2_1:StatementCode>A2</_2_1:StatementCode>
-        <_2_1:StatementTypeCode>AFB</_2_1:StatementTypeCode>
-      </_2_1:AdditionalInformation>
-      <_2_1:Declaration>
-        <_2_1:FunctionalReferenceID>DDR_219492256063</_2_1:FunctionalReferenceID>
-        <_2_1:ID>24GBAEVJMKOGRKBAR1</_2_1:ID>
-        <_2_1:VersionID>1</_2_1:VersionID>
-      </_2_1:Declaration>
-    </_2_1:Response></_2:MetaData>
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>09</FunctionCode>
+		<FunctionalReferenceID>d43cb10adf364444a0da537c82ab1011</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20240930135125Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>A2</StatementCode>
+			<StatementTypeCode>AFB</StatementTypeCode>
+		</AdditionalInformation>
+		<Declaration>
+			<FunctionalReferenceID>7847767EC0S1</FunctionalReferenceID>
+			<ID>24GBAUWWQ8KKWZNAR7</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

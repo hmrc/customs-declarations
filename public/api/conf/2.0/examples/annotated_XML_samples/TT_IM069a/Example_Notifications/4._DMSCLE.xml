@@ -7,17 +7,17 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>09</FunctionCode>
-		<FunctionalReferenceID>38ba3d68c20a420a966770dffebc33e3</FunctionalReferenceID>
+		<FunctionalReferenceID>88ba08f8150246498396ca47c1a499cf</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20240912115859Z</DateTimeString>
+			<DateTimeString formatCode="304">20240926093227Z</DateTimeString>
 		</IssueDateTime>
 		<AdditionalInformation>
 			<StatementCode>A2</StatementCode>
 			<StatementTypeCode>AFB</StatementTypeCode>
 		</AdditionalInformation>
 		<Declaration>
-			<FunctionalReferenceID>784943152QXL</FunctionalReferenceID>
-			<ID>24GBA52YTQLUT6CAR1</ID>
+			<FunctionalReferenceID>U.7849431W9YG9</FunctionalReferenceID>
+			<ID>24GBAOXW8OYBM72AR2</ID>
 			<VersionID>1</VersionID>
 		</Declaration>
 	</Response>

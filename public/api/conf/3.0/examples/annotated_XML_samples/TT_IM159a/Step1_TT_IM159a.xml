@@ -26,14 +26,14 @@
             - Subsidy claim is allowed and processed for the goods item.
         -->
         <AcceptanceDateTime>
-            <p1:DateTimeString formatCode="304">20240411221100+01</p1:DateTimeString>
+            <p1:DateTimeString formatCode="304">20240411112200+01</p1:DateTimeString>
         </AcceptanceDateTime>
         <!--Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN.
             Mandatory.
             Declarant's own reference number - this must be unique to the transaction. -->
-        <FunctionalReferenceID>7849431YEASY</FunctionalReferenceID>
+        <FunctionalReferenceID>7847767390MJ</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             Mandatory.
             IM to represent an import declaration. -->
@@ -342,10 +342,10 @@
             </Importer>
             <!--DE 2/1: Simplified Declarations/Previous documents.
                 Previous document to show the DUCR assigned to the consignment.
-                Note: The DUCR is not mandatory for ‘normal’ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
+                Note: The DUCR is not mandatory for â€˜normalâ€™ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
-                <ID>4XI553202734852-12345</ID>
+                <ID>4XI553202734852-01012</ID>
                 <TypeCode>DCR</TypeCode>
             </PreviousDocument>
             <!--DE 2/1: Simplified Declarations/Previous documents.

@@ -1,11 +1,12 @@
-<ns2:inventoryLinkingMovementTotalsResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
+<ns2:inventoryLinkingMovementTotalsResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1"
+                                            xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
 	<ns2:messageCode>ERS</ns2:messageCode>
 	<ns2:goodsLocation>GBAUBELBFSBEL</ns2:goodsLocation>
-	<ns2:goodsArrivalDateTime>2023-11-08T09:38:16.016Z</ns2:goodsArrivalDateTime>
-	<ns2:movementReference>0M4YVPFNT7R107QUVDAY0EALN</ns2:movementReference>
+	<ns2:goodsArrivalDateTime>2024-09-12T10:55:39.039Z</ns2:goodsArrivalDateTime>
+	<ns2:movementReference>GUE1J8ZTHIYIXQ1L73O3U3S4S</ns2:movementReference>
 	<ns2:entry>
 		<ns2:ucrBlock>
-			<ns2:ucr>3XI896458895023-ONPGMDRZ5Y</ns2:ucr>
+			<ns2:ucr>4XI896458895023-RC52FV</ns2:ucr>
 			<ns2:ucrType>D</ns2:ucrType>
 		</ns2:ucrBlock>
 		<ns2:entryStatus>

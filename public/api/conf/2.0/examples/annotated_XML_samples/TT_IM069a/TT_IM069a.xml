@@ -26,13 +26,13 @@
 			Expected Notifications: DMSTAX(1), DMSACC, DMSTAX(2), DMSCLE
 		-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20240912125853+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20240926103222+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number: this must be unique to the transaction-->
-		<FunctionalReferenceID>784943152QXL</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7849431W9YG9</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			Mandatory field.
 			First two characters IM to represent an import declaration.	-->
@@ -326,7 +326,7 @@
 				(Note that this is item 1 from the EIDR record entry). -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20240912</ID>
+				<ID>20240926</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

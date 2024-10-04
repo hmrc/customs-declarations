@@ -1,20 +1,46 @@
 <MetaData>
-    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-    <WCOTypeName>RES</WCOTypeName>
-    <ResponsibleCountryCode/>
-    <ResponsibleAgencyName/>
-    <AgencyAssignedCustomizationCode/>
-    <AgencyAssignedCustomizationVersionCode/>
-    <Response>
-        <FunctionCode>02</FunctionCode>
-        <FunctionalReferenceID>c2672447a2ea420d8624036702f4da6b</FunctionalReferenceID>
-        <IssueDateTime>
-            <DateTimeString formatCode="304">20220118164025Z</DateTimeString>
-        </IssueDateTime>
-        <Declaration>
-            <FunctionalReferenceID>TT_IM34a_v1.4_1801_01</FunctionalReferenceID>
-            <ID>22GB0P9YTPF0U9HAR8</ID>
-            <VersionID>1</VersionID>
-        </Declaration>
-    </Response>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>02</FunctionCode>
+		<FunctionalReferenceID>5db9c32239a349e4bdc5f5af7ac1a8bc</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20240912102501Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>smartErrorMsg</StatementCode>
+			<StatementDescription>Value per kilo appears too low for this commodity</StatementDescription>
+			<StatementTypeCode>1</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>07B</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>53A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+		<Error>
+			<ValidationCode>CDS13000</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+		</Error>
+		<Declaration>
+			<FunctionalReferenceID>78494313QXW4</FunctionalReferenceID>
+			<ID>24GBA4ZLMDXTKOTAR3</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
 </MetaData>

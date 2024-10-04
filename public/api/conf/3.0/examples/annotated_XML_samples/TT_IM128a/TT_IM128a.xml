@@ -1,23 +1,10 @@
-<md:MetaData
-      xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-      xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-      xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-      xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "    >
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
     <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-    <Declaration
-            xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-            xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-            xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-            xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-            xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
+    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 
         <!--
             SCENARIO
@@ -38,14 +25,14 @@
 
         <!--Acceptance Date is present on all supplementary declarations. -->
         <AcceptanceDateTime>
-            <p1:DateTimeString formatCode="304">20230802221100+01</p1:DateTimeString>
+            <p1:DateTimeString formatCode="304">20240916154816+01</p1:DateTimeString>
         </AcceptanceDateTime>
         <!-- Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN. 
             Mandatory field. 
             Traders own reference number this must be unique to the transaction. -->
-        <FunctionalReferenceID>TTIM128a_1010</FunctionalReferenceID>
+        <FunctionalReferenceID>7847767QZ3VA</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type. 
             Mandatory field. 
             IM to represent an import declaration.-->
@@ -73,7 +60,7 @@
         </AdditionalDocument>
         <!--DE 3/39: Holder of the Authorisation Identification Number. 
             Mandatory if authorisation is required to declare goods to procedure.
-            Type code of AEOC indicates this is the EORI number of the Authorised Economic Operator — Customs simplifications. -->
+            Type code of AEOC indicates this is the EORI number of the Authorised Economic Operator â€” Customs simplifications. -->
         <AuthorisationHolder>
             <ID>GB553202734852</ID>
             <CategoryCode>AEOC</CategoryCode>
@@ -222,7 +209,7 @@
                     This field is mandatory if the codes are required.
                     A document code of C505 indicates CGU - Authorisation for the provision of a customs comprehensive guarantee, including possible reduction or waiver. 
                     In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of CC), and therefore the ID also indicates that a waiver is being used.
-                    LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code – CCG not required. -->
+                    LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code â€“ CCG not required. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
                     <ID>GBCGUGuaranteenotrequired</ID>
@@ -244,7 +231,7 @@
                     This field is mandatory if the codes are required.
                     A document code of C644 indicates Certificate of inspection for organic products.
                     Name: A free text description of the Reason where required by the Document Status Code.
-                    LPCOExemptionCode: GE indicates document with the goods – exhausted by (or only applies to) this entry. -->
+                    LPCOExemptionCode: GE indicates document with the goods â€“ exhausted by (or only applies to) this entry. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
                     <ID>0054039</ID>
@@ -419,7 +406,7 @@
                 </PreviousDocument>
                 <!--DE 4/13: Valuation Indicator. 
                     Mandatory if method 1 is being used. (See DE 4/16 where Method 1 has been entered.)
-                    The code comprises four digits, each of which being either a ‘0’ or a ‘1’
+                    The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™
                      - First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
                      - Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
                      - Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
@@ -436,7 +423,7 @@
             </Importer>
             <!--DE 2/1: Simplified Declarations/Previous Documents. 
                 This data element can be declared at a header or item level - as this is for a single item declaration, this should be declared at header level. 
-                Category Code: Mandatory field. This identifies the class or kind of document being declared. The previous document, represented by ‘Z’.
+                Category Code: Mandatory field. This identifies the class or kind of document being declared. The previous document, represented by â€˜Zâ€™.
                 ID: Mandatory field. This represents the data needed to recognise and identify the document.
                 TypeCode: Mandatory field. This serves to identify the type of document: 355 indicates ENS - Entry Summary Declaration.
                 LineNumeric: Optional field. This is the goods item number. It is used to identify which item of the previous document is being referred to. Where the previous document referred to or contained only a single goods item, this component may be left blank. -->
@@ -454,7 +441,7 @@
                 In CDS, the MUCR (MCR) is not required on a sup dec. -->
             <PreviousDocument>
                 <CategoryCode>Y</CategoryCode>
-                <ID>3GB553202734852-02042023</ID>
+                <ID>3GB553202734852-1609EC02</ID>
                 <TypeCode>DCR</TypeCode>
             </PreviousDocument>
             <!--DE 4/1: Delivery Terms. 

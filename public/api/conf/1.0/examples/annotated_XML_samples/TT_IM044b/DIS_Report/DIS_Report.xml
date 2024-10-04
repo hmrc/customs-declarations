@@ -1,19 +1,19 @@
 <p:DeclarationFullResponse xsi:schemaLocation="http://gov.uk/customs/FullDeclarationDataRetrievalService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p4="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:p3="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:p2="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:p="http://gov.uk/customs/FullDeclarationDataRetrievalService">
   <p:FullDeclarationDataDetails>
     <p:HighLevelSummaryDetails>
-      <p:MRN>24GB6RO03PQCF6YAR5</p:MRN>
-      <p:LRN>7867523A6JF7</p:LRN>
+      <p:MRN>24GBA4ZRDQ7TV2IAR2</p:MRN>
+      <p:LRN>784943137JNF</p:LRN>
       <p:DUCRandPartID>4GB553202734852-20230901</p:DUCRandPartID>
       <p:VersionID>1</p:VersionID>
       <p:GoodsLocationCode>GBAUBELBELBEL</p:GoodsLocationCode>
       <p:CreatedDateTime>
-        <p:DateTimeString formatCode="304">20240619123956Z</p:DateTimeString>
+        <p:DateTimeString formatCode="304">20240912102912Z</p:DateTimeString>
       </p:CreatedDateTime>
       <p:AcceptanceDateTime>
-        <p:DateTimeString formatCode="304">20240619123955Z</p:DateTimeString>
+        <p:DateTimeString formatCode="304">20240912102911Z</p:DateTimeString>
       </p:AcceptanceDateTime>
       <p:FinalisedDateTime>
-        <p:DateTimeString formatCode="304">20240619124003Z</p:DateTimeString>
+        <p:DateTimeString formatCode="304">20240912103215Z</p:DateTimeString>
       </p:FinalisedDateTime>
     </p:HighLevelSummaryDetails>
     <p:AccountDetails>
@@ -32,14 +32,14 @@
       <p:ROE>6</p:ROE>
       <p:StatusOfEntry-ICS>22</p:StatusOfEntry-ICS>
       <p:GoodsArrivalDateTime>
-        <p:DateTimeString formatCode="304">20240619124001Z</p:DateTimeString>
+        <p:DateTimeString formatCode="304">20240912102913Z</p:DateTimeString>
       </p:GoodsArrivalDateTime>
       <p:SubmitterID>XI603202734852</p:SubmitterID>
       <p:StatisticalValue currencyID="GBP">0</p:StatisticalValue>
     </p:GeneratedConsignmentDetails>
     <p:GeneratedItemLevelConsignmentDetails>
       <p:ItemNumber>1</p:ItemNumber>
-      <p:QuotaNumber>054067</p:QuotaNumber>
+      <p:QuotaNumber>054077</p:QuotaNumber>
       <p:VATValue currencyID="GBP">0.0</p:VATValue>
       <p:VATRate unitCode="P1">0.0</p:VATRate>
       <p:CustomsValue currencyID="GBP">1000.0</p:CustomsValue>
@@ -58,10 +58,10 @@
     <p:FullDeclarationObject>
       <p:Declaration>
         <p:AcceptanceDateTime>
-          <p:DateTimeString formatCode="304">20240619123955Z</p:DateTimeString>
+          <p:DateTimeString formatCode="304">20240912102911Z</p:DateTimeString>
         </p:AcceptanceDateTime>
         <p:FunctionCode>9</p:FunctionCode>
-        <p:FunctionalReferenceID>7867523A6JF7</p:FunctionalReferenceID>
+        <p:FunctionalReferenceID>784943137JNF</p:FunctionalReferenceID>
         <p:TypeCode>IMA</p:TypeCode>
         <p:ProcedureCategory>H1</p:ProcedureCategory>
         <p:GoodsItemQuantity>1</p:GoodsItemQuantity>
@@ -77,11 +77,11 @@
         </p:Agent>
         <p:AuthorisationHolder>
           <p:ID>XI553202734852</p:ID>
-          <p:CategoryCode>DPO</p:CategoryCode>
+          <p:CategoryCode>CGU</p:CategoryCode>
         </p:AuthorisationHolder>
         <p:AuthorisationHolder>
           <p:ID>XI553202734852</p:ID>
-          <p:CategoryCode>CGU</p:CategoryCode>
+          <p:CategoryCode>DPO</p:CategoryCode>
         </p:AuthorisationHolder>
         <p:BorderTransportMeans>
           <p:RegistrationNationalityCode>GB</p:RegistrationNationalityCode>
@@ -186,6 +186,10 @@
             <p:Commodity>
               <p:Description>Plucked and Drawn chickens 1000KG - 65% chickens</p:Description>
               <p:Classification>
+                <p:ID>02071290</p:ID>
+                <p:IdentificationTypeCode>TSP</p:IdentificationTypeCode>
+              </p:Classification>
+              <p:Classification>
                 <p:ID>00</p:ID>
                 <p:IdentificationTypeCode>TRC</p:IdentificationTypeCode>
               </p:Classification>
@@ -193,14 +197,10 @@
                 <p:ID>VATZ</p:ID>
                 <p:IdentificationTypeCode>GN</p:IdentificationTypeCode>
               </p:Classification>
-              <p:Classification>
-                <p:ID>02071290</p:ID>
-                <p:IdentificationTypeCode>TSP</p:IdentificationTypeCode>
-              </p:Classification>
               <p:DutyTaxFee>
                 <p:SequenceNumeric>1</p:SequenceNumeric>
                 <p:TypeCode>A00</p:TypeCode>
-                <p:QuotaOrderID>054067</p:QuotaOrderID>
+                <p:QuotaOrderID>054077</p:QuotaOrderID>
                 <p:Payment>
                   <p:MethodCode>E</p:MethodCode>
                 </p:Payment>
@@ -208,7 +208,7 @@
               <p:DutyTaxFee>
                 <p:SequenceNumeric>2</p:SequenceNumeric>
                 <p:DutyRegimeCode>120</p:DutyRegimeCode>
-                <p:QuotaOrderID>054067</p:QuotaOrderID>
+                <p:QuotaOrderID>054077</p:QuotaOrderID>
                 <p:Payment/>
               </p:DutyTaxFee>
               <p:GoodsMeasure>

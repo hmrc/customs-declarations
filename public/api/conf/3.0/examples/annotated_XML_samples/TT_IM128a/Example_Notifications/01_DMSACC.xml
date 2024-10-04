@@ -7,16 +7,43 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>01</FunctionCode>
-		<FunctionalReferenceID>8dc15ccf56bc456ca91060bc2c16900e</FunctionalReferenceID>
+		<FunctionalReferenceID>aedef8a185474836a6069369a6cf0518</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20231010120510+01</DateTimeString>
+			<DateTimeString formatCode="304">20240916144821Z</DateTimeString>
 		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>smartErrorMsg</StatementCode>
+			<StatementDescription>Weight appears too low per item</StatementDescription>
+			<StatementTypeCode>1</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>07B</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>53A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+		<Error>
+			<Description>Weight appears too low per item</Description>
+			<ValidationCode>CDS13000</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+		</Error>
 		<Declaration>
 			<AcceptanceDateTime>
-				<DateTimeString formatCode="304">20230802221100+01</DateTimeString>
+				<DateTimeString formatCode="304">20240916144816Z</DateTimeString>
 			</AcceptanceDateTime>
-			<FunctionalReferenceID>TTIM128a_1010</FunctionalReferenceID>
-			<ID>23GBB7LXL9XZM7YAR0</ID>
+			<FunctionalReferenceID>7847767QZ3VA</FunctionalReferenceID>
+			<ID>24GBAAYS15L0IJDAR6</ID>
 			<VersionID>1</VersionID>
 		</Declaration>
 	</Response>

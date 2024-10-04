@@ -1,22 +1,12 @@
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1
       </md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-		Please note that this scenario isnt performing as expected and will be updated in a future release.
-		
 			SCENARIO
 			CSP submits an inventory-linked Type D PreLodged ALVS declaration where "ttalvsHMI" is 
 			entered in the goods description field (D.E. 6/8) on the goods item. 
@@ -29,7 +19,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>TT_IM34a_v1.4_1801_01</FunctionalReferenceID>
+		<FunctionalReferenceID>78494313QXW4</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: A to represent a standard frontier declaration.-->
 		<TypeCode>IMD</TypeCode>
@@ -214,14 +204,14 @@
 						indicating to raise exactly one ALVS control to HMI (DEFRA). -->
 					<Description>ttalvsHMI</Description>
 					<Classification>
-						<!--DE 6/14: Commodity code - combined nomenclature code. (Green Bananas)-->
-						<ID>08039010</ID>
+						<!--DE 6/14: Commodity code - combined nomenclature code. (cucumbers not exceeding 15 cm in lenght)-->
+						<ID>07070005</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<Classification>
 						<!--DE 6/15: Commodity code - The TARIC code (two characters for the application of 
 							specific Union measures in respect of formalities to be completed at destination).-->
-						<ID>00</ID>
+						<ID>90</ID>
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<Classification>
@@ -284,7 +274,7 @@
 						all be declared at Item level-->
 				<PreviousDocument>
 					<CategoryCode>Z</CategoryCode>
-					<ID>21GB34F7Y1O2CX8PT4</ID>
+					<ID>GB/1234-:3333HB</ID>
 					<TypeCode>355</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
@@ -317,7 +307,7 @@
 				This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB553202734852-12345</ID>
+				<ID>4GB553202734852-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 4/1: Mandatory as method 1 is being used in DE 4/16.

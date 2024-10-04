@@ -1,57 +1,65 @@
-<_2:MetaData xmlns:_2="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"><_2:WCODataModelVersionCode>3.6</_2:WCODataModelVersionCode><_2:WCOTypeName>RES</_2:WCOTypeName><_2:ResponsibleCountryCode/><_2:ResponsibleAgencyName/><_2:AgencyAssignedCustomizationCode/><_2:AgencyAssignedCustomizationVersionCode/><_2_1:Response xmlns:_2_1="urn:wco:datamodel:WCO:RES-DMS:2">
-      <_2_1:FunctionCode>13</_2_1:FunctionCode>
-      <_2_1:FunctionalReferenceID>f40a37e98c3a401ea5a182c959a9df74</_2_1:FunctionalReferenceID>
-      <_2_1:IssueDateTime>
-        <_2_2:DateTimeString formatCode="304" xmlns:_2_2="urn:wco:datamodel:WCO:Response_DS:DMS:2">20240919082903Z</_2_2:DateTimeString>
-      </_2_1:IssueDateTime>
-      <_2_1:Bank>
-        <_2_1:ReferenceID>BARCGB22</_2_1:ReferenceID>
-        <_2_1:ID>GB16BARC20051723372545</_2_1:ID>
-      </_2_1:Bank>
-      <_2_1:Status>
-        <_2_1:NameCode>67</_2_1:NameCode>
-      </_2_1:Status>
-      <_2_1:Declaration>
-        <_2_1:FunctionalReferenceID>DDR_219492256063</_2_1:FunctionalReferenceID>
-        <_2_1:ID>24GBAEVJMKOGRKBAR1</_2_1:ID>
-        <_2_1:VersionID>1</_2_1:VersionID>
-        <_2_1:GoodsShipment>
-          <_2_1:GovernmentAgencyGoodsItem>
-            <_2_1:SequenceNumeric>1</_2_1:SequenceNumeric>
-            <_2_1:Commodity>
-              <_2_1:DutyTaxFee>
-                <_2_1:DeductAmount currencyID="GBP">0.00</_2_1:DeductAmount>
-                <_2_1:DutyRegimeCode>100</_2_1:DutyRegimeCode>
-                <_2_1:TypeCode>A50</_2_1:TypeCode>
-                <_2_1:Payment>
-                  <_2_1:TaxAssessedAmount currencyID="GBP">27.35</_2_1:TaxAssessedAmount>
-                  <_2_1:PaymentAmount currencyID="GBP">27.35</_2_1:PaymentAmount>
-                </_2_1:Payment>
-              </_2_1:DutyTaxFee>
-              <_2_1:DutyTaxFee>
-                <_2_1:AdValoremTaxBaseAmount currencyID="GBP">27.35</_2_1:AdValoremTaxBaseAmount>
-                <_2_1:DeductAmount currencyID="GBP">0.00</_2_1:DeductAmount>
-                <_2_1:DutyRegimeCode>100</_2_1:DutyRegimeCode>
-                <_2_1:TaxRateNumeric>0.00</_2_1:TaxRateNumeric>
-                <_2_1:TypeCode>B05</_2_1:TypeCode>
-                <_2_1:Payment>
-                  <_2_1:TaxAssessedAmount currencyID="GBP">0.00</_2_1:TaxAssessedAmount>
-                  <_2_1:PaymentAmount currencyID="GBP">0.00</_2_1:PaymentAmount>
-                </_2_1:Payment>
-              </_2_1:DutyTaxFee>
-              <_2_1:DutyTaxFee>
-                <_2_1:AdValoremTaxBaseAmount currencyID="GBP">600.00</_2_1:AdValoremTaxBaseAmount>
-                <_2_1:DeductAmount currencyID="GBP">0.00</_2_1:DeductAmount>
-                <_2_1:DutyRegimeCode>100</_2_1:DutyRegimeCode>
-                <_2_1:TaxRateNumeric>0.00</_2_1:TaxRateNumeric>
-                <_2_1:TypeCode>B00</_2_1:TypeCode>
-                <_2_1:Payment>
-                  <_2_1:TaxAssessedAmount currencyID="GBP">0.00</_2_1:TaxAssessedAmount>
-                  <_2_1:PaymentAmount currencyID="GBP">0.00</_2_1:PaymentAmount>
-                </_2_1:Payment>
-              </_2_1:DutyTaxFee>
-            </_2_1:Commodity>
-          </_2_1:GovernmentAgencyGoodsItem>
-        </_2_1:GoodsShipment>
-      </_2_1:Declaration>
-    </_2_1:Response></_2:MetaData>
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>13</FunctionCode>
+		<FunctionalReferenceID>bae1b93036984b78b392b684b55b770e</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20240930135125Z</DateTimeString>
+		</IssueDateTime>
+		<Bank>
+			<ReferenceID>BARCGB22</ReferenceID>
+			<ID>GB16BARC20051723372545</ID>
+		</Bank>
+		<Status>
+			<NameCode>4</NameCode>
+		</Status>
+		<Declaration>
+			<FunctionalReferenceID>7847767EC0S1</FunctionalReferenceID>
+			<ID>24GBAUWWQ8KKWZNAR7</ID>
+			<VersionID>1</VersionID>
+			<GoodsShipment>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<Commodity>
+						<DutyTaxFee>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
+							<DutyRegimeCode>100</DutyRegimeCode>
+							<TypeCode>A50</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">27.66</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">27.66</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<AdValoremTaxBaseAmount currencyID="GBP">27.66</AdValoremTaxBaseAmount>
+							<DeductAmount currencyID=\"GBP\">0.00</DeductAmount>
+							<DutyRegimeCode>100</DutyRegimeCode>
+							<TaxRateNumeric>0.00</TaxRateNumeric>
+							<TypeCode>B05</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<AdValoremTaxBaseAmount currencyID="GBP">600.00</AdValoremTaxBaseAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
+							<DutyRegimeCode>100</DutyRegimeCode>
+							<TaxRateNumeric>0.00</TaxRateNumeric>
+							<TypeCode>B00</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+					</Commodity>
+				</GovernmentAgencyGoodsItem>
+			</GoodsShipment>
+		</Declaration>
+	</Response>
+</MetaData>

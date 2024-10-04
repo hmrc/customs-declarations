@@ -1,11 +1,20 @@
-<n1:InventoryLinkingImportsValidateMovementRequest xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://movement.core.ecf/EntryManagementServiceSOAP/v2/" xmlns:ns="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/movement/2017/01/31/" xmlns:ns1="http://cmm.core.ecf/BaseTypes/cmmCodeListTypes/movement/2017/01/31/" xmlns:ns2="http://cmm.core.ecf/BaseTypes/cmmValueTypes/movement/2017/01/31/" xmlns:ns3="http://movement.core.ecf/messages/2017/01/31/" xmlns:ns4="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/movement/2017/01/31/" xmlns:ns5="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/movement/2017/01/31/" xmlns:ns6="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/movement/2017/01/31/" xmlns:n1="http://gov.uk/customs/inventoryLinkingImport/v1">
-    <n1:declarationMethod>2</n1:declarationMethod>
-    <n1:dateOfEntry>2022-01-18T16:49:10.000Z</n1:dateOfEntry>
-    <n1:entryNumber>22GB0P9YTPF0U9HAR8</n1:entryNumber>
-    <n1:entryVersionNumber>1</n1:entryVersionNumber>
-    <n1:goodsArrivalDeclaration>Y</n1:goodsArrivalDeclaration>
-    <n1:ics>1</n1:ics>
-    <n1:inventoryConsignmentReference>GB/1234-:3333HB</n1:inventoryConsignmentReference>
-    <n1:roe>0</n1:roe>
-    <n1:totalPackages>50</n1:totalPackages>
+<n1:InventoryLinkingImportsValidateMovementRequest xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+                                                   xmlns:v2="http://movement.core.ecf/EntryManagementServiceSOAP/v2/"
+                                                   xmlns:ns="http://cmm.core.ecf/BaseTypes/cmmServiceTypes/movement/2017/01/31/"
+                                                   xmlns:ns1="http://cmm.core.ecf/BaseTypes/cmmCodeListTypes/movement/2017/01/31/"
+                                                   xmlns:ns2="http://cmm.core.ecf/BaseTypes/cmmValueTypes/movement/2017/01/31/"
+                                                   xmlns:ns3="http://movement.core.ecf/messages/2017/01/31/"
+                                                   xmlns:ns4="http://cmm.core.ecf/BaseTypes/cmmEnhancementTypes/movement/2017/01/31/"
+                                                   xmlns:ns5="http://cmm.core.ecf/BaseTypes/cmmDeclarationTypes/movement/2017/01/31/"
+                                                   xmlns:ns6="http://cmm.core.ecf/BaseTypes/cmmPartyTypes/movement/2017/01/31/"
+                                                   xmlns:n1="http://gov.uk/customs/inventoryLinkingImport/v1">
+	<n1:declarationMethod>2</n1:declarationMethod>
+	<n1:dateOfEntry>2024-09-12T10:25:08.000Z</n1:dateOfEntry>
+	<n1:entryNumber>24GBA4ZLMDXTKOTAR3</n1:entryNumber>
+	<n1:entryVersionNumber>1</n1:entryVersionNumber>
+	<n1:goodsArrivalDeclaration>Y</n1:goodsArrivalDeclaration>
+	<n1:ics>1</n1:ics>
+	<n1:inventoryConsignmentReference>GB/1234-:3333HB</n1:inventoryConsignmentReference>
+	<n1:roe>0</n1:roe>
+	<n1:totalPackages>50</n1:totalPackages>
 </n1:InventoryLinkingImportsValidateMovementRequest>

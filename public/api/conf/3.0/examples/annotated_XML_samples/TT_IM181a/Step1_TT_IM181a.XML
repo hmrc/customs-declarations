@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--
+            SCENARIO
+            To show that CDS does not reject an import declaration where the validation of certain status codes has been removed when document C400 has been entered with a status code of 'JA'.
+            A trader submits a SDP Type Y supplementary Declaration H1 importing goods from RoW-GB, declaring:
+            • Document Code: C400 to satify the CITES measure with status code 'JA' to indicate licence/certificate attributed on SFD. D.E. 2/3.
+            • Commodity Code 9601900000 importing goods from the country Kenya.
+            CDS will accept and process the declaration:
+            • No Customs Duty and Excise will be calculated using the UK Tariff.
+            • VAT will be calculated using the UK Tariff.
+            • DMS will generate the trader notifications.
+        -->
+		<!--Acceptance Date is present on all supplementary declarations. -->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20240930093029+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<!--Function Code of 9 to represent an original declaration. -->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: LRN.
+            Mandatory field.
+            Traders own reference number this must be unique to the transaction. -->
+		<FunctionalReferenceID>7849431WBZJ0</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type.
+            Mandatory field.
+            IM to represent an import declaration. -->
+		<!--DE 1/2: Additional Declaration Type.
+            Mandatory field.
+            Y to represent a supplementary SDP declaration. -->
+		<TypeCode>COY</TypeCode>
+		<!--DE 1/9: Total Number of Items.
+            Mandatory field.
+            1 to represent a single item declaration. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 6/18: Total Packages.
+            Mandatory field.
+            10 is the number of packages.
+            Note that this matches DE 6/10 because this is a single item declaration. -->
+		<TotalPackageQuantity>10</TotalPackageQuantity>
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
+            An authorisation type code of SDE is required where SDP authorisation is being declared.
+            In this scenario, a waiver is being claimed. See DE 2/3 where a document code of C512 has been entered.
+            The ID here is the EORI of the SDE authorised party. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>SDE</CategoryCode>
+		</AuthorisationHolder>
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>TEA</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
+            Mandatory if authorisation is required to declare goods to procedure.
+            Type code of CGU indicates this is the EORI number of the simplified comprehensive guarantee (CCG) holder (see DE 2/3 where a document code of C505 has been entered). -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>CGU</CategoryCode>
+		</AuthorisationHolder>
+		<BorderTransportMeans>
+			<!--DE 7/15: Nationality of active means of transport crossing the border.
+                Mandatory field unless postal, rail or fixed energy installation.
+                RegistrationNationalityCode: JE Jersey. -->
+			<RegistrationNationalityCode>JE</RegistrationNationalityCode>
+			<!--DE 7/4: Mode of Transport at the Border.1 to represent Maritime/Sea transport as the mode of transport at the border. -->
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: Declarant Identification Number.
+            Mandatory only when a recognised ID number is available.
+            The EORI number of the declarant.
+            UK requires an EORI to be provided for the declarant. -->
+		<Declarant>
+			<ID>GB553202734852</ID>
+		</Declarant>
+		<!--DE 3/1: Exporter.
+            This data element can be declared at a header or item level, depending on the scenario.
+            Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
+		<Exporter>
+			<Name>Jersey Exporters</Name>
+			<Address>
+				<CityName>St Helier</CityName>
+				<CountryCode>JE</CountryCode>
+				<Line>New Street</Line>
+				<PostcodeID>JE2 3RA</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 8/5: Nature of transaction.
+                Mandatory field.
+                TransactionNatureCode of 1 to represent the number of transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation (except the transactions listed under 2, 7, 8).
+                Note the second digit is not mandatory. -->
+			<TransactionNatureCode>1</TransactionNatureCode>
+			<Consignment>
+				<!--DE 7/2: Container.
+                    Mandatory field.
+                    Indicator to show if goods are packed in a container or not.
+                    Code 1 indicates that goods are transported in containers.
+                    Note: Unlike CHIEF this must now be completed. -->
+				<ContainerCode>1</ContainerCode>
+				<!--DE 7/9: Identity of Means of Transport on Arrival.
+                    Mandatory unless postal or fixed energy installation.
+                    ID: Textual identity of the means of transport on which the goods are directly loaded at the time of presentation at the customs office where the destination formalities are completed.
+                    Example 5 digits for the ID: 12345.
+                    IdentificationTypeCode: The identity of the means of transport on which the goods are directly loaded at the time of presentation at the customs office where the destination formalities are completed.
+                    Example number representing IMO ship identification number: 10. -->
+				<ArrivalTransportMeans>
+					<ID>12345</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+				</ArrivalTransportMeans>
+				<!--DE 5/23: Location of goods.
+                    Mandatory field.
+                    Goods arriving at Baltic Wharf, Wallasea Island (NILP).
+                    Name: An alphanumeric identifier to give a unique position of the location.
+                    TypeCode: Type of Location, A indicates frontier or frontier linked location.
+                    Address TypeCode: Type of ID of the Location, U in this scenario for UN/LOCODE.
+                    Address CountryCode: Country code of the country where the goods may be examined, GB in this scenario. -->
+				<GoodsLocation>
+					<Name>WLALONBTW</Name>
+					<TypeCode>A</TypeCode>
+					<Address>
+						<TypeCode>U</TypeCode>
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<!--DE 7/10: Container Identification Number.
+                    This data element can be declared at a header or item level, depending on the scenario. Mandatory field. This is alpha-numeric with up to 17 characters.
+                    For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number. For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>DM1234</ID>
+				</TransportEquipment>
+			</Consignment>
+			<!--DE 5/8: Country of Destination Code.
+                This data element can be declared at a header or item level, depending on the scenario.
+                Mandatory field.
+                Destination country is GB. -->
+			<Destination>
+				<CountryCode>GB</CountryCode>
+			</Destination>
+			<ExportCountry>
+				<!--DE 5/14: Country of Dispatch/Export Code.
+                    This data element can be declared at a header or item level, depending on the scenario.
+                    Mandatory field.
+                    Dispatching Third country is Jersey. -->
+				<ID>JE</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Goods Item Number.
+                    Mandatory field.
+                    Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    This field is mandatory if the codes are required.
+                    A document code of C505 indicates CGU - Authorisation for the provision of a customs comprehensive guarantee, including possible reduction or waiver.
+                    In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of CC), and therefore the ID also indicates that a waiver is being used.
+                    LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code – CCG not required. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCGUGuaranteenotrequired</ID>
+					<TypeCode>505</TypeCode>
+					<LPCOExemptionCode>CC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    A document code of C512 indicates SDE - Authorisation to use simplified declaration (Column 7a, Annex A of Delegated Regulation (EU) 2015/2446). -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBSDE553202734852I</ID>
+					<TypeCode>512</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                   A document code of C512 indicates SDE - Authorisation to use simplified declaration (Column 7a, Annex A of Delegated Regulation (EU) 2015/2446). -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBSDE553202734852I</ID>
+					<TypeCode>516</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    This field is mandatory if the codes are required.
+                    A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared.
+                    This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16.
+                    LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>12345/13.04.2023</ID>
+					<TypeCode>935</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                   Mandatory if codes required.
+                   Document code Y900 to show the goods are not subject to CITES control â€“ complete statement/reason with: â€˜CITES Permits not requiredâ€™. -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<Name>CITES Permits not required</Name>
+					<TypeCode>900</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+               C679 indicates Attesting Document (seal product), issued by a recognised body in accordance with either - Regulation (EU) No 737/2010 (on condition that the attesting document was issued prior to 18 October 2015) or, COMMISSION IMPLEMENTING REGULATION (EU) 2015/1850, laying down detailed rules for the implementation of Regulation (EC) No 1007/2009 of the European Parliament and of the Council on trade in seal products.
+               Document status code of XB in this scenario indicates Document not required – quantity below ‘de minimus’. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>0054037-0054047</ID>
+					<TypeCode>679</TypeCode>
+					<LPCOExemptionCode>XB</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of U045 indicates Movement Certificate EUR-MED.
+					Document status code of AP indicates document attached - part use (applies to this and other entries) (document returned to the trader). -->
+				<AdditionalDocument>
+					<CategoryCode>U</CategoryCode>
+					<ID>U045-0054047</ID>
+					<TypeCode>045</TypeCode>
+					<LPCOExemptionCode>AP</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional Information.
+                    This field is mandatory if the codes are required -->
+				<AdditionalInformation>
+					<StatementCode>RSDTA</StatementCode>
+					<StatementDescription>Text</StatementDescription>
+				</AdditionalInformation>
+				<AdditionalInformation>
+					<StatementCode>GEN28</StatementCode>
+					<StatementDescription>one year 11/08/2025</StatementDescription>
+				</AdditionalInformation>
+				<AdditionalInformation>
+					<!--DE 2/2 Additional information.
+                        Statement code of 00500 is the identity between declarant and importer.
+                        Enter 'Importer' in the statement description. -->
+					<StatementCode>00500</StatementCode>
+					<StatementDescription>Importer</StatementDescription>
+				</AdditionalInformation>
+				<Commodity>
+					<!--DE 6/8: Description of Goods.
+                        Mandatory item.
+                        Description of the goods specific enough to enable classification - without repeating the CN code description in the Tariff. -->
+					<Description>Animal Carvings, mouldings of worked ivory, bone, horn and tortoiseshell</Description>
+					<!--DE 6/14: Commodity Code - Combined Nomenclature Code.
+                        Mandatory field.
+                        IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
+					<Classification>
+						<ID>96019000</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<!--DE 6/15: Commodity code: TARIC code.
+                        Mandatory field.
+                        Two characters for the application of specific Union measures in respect of formalities to be completed at destination. -->
+					<Classification>
+						<ID>00</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
+					<!--DE 4/8: Method of Payment.
+                        MethodCode of E to indicate Deferment. -->
+					<DutyTaxFee>
+						<DutyRegimeCode>100</DutyRegimeCode>
+					</DutyTaxFee>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass.
+                            Weight in kilograms including packaging.
+                            This data element can be declared at a header or item level, depending on the scenario.
+                            Mandatory field.
+                            Entry of 110 including packaging. -->
+						<GrossMassMeasure>110</GrossMassMeasure>
+					</GoodsMeasure>
+					<!--DE 4/14: Item Price/ Amount.
+                        Mandatory field.
+                        The invoice was issued with of a value of 5000 and the currency was in GBP. -->
+					<InvoiceLine>
+						<ItemChargeAmount currencyID="GBP">5000</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+				<!--DE 4/16: Valuation method.
+                    Mandatory field.
+                    Method 1 used - transaction value of the imported goods. -->
+				<CustomsValuation>
+					<MethodCode>1</MethodCode>
+				</CustomsValuation>
+				<!--DE 1/10: Procedure.
+                    Mandatory field.
+                    CurrentCode: 53 .
+                    PreviousCode: 00 . -->
+				<GovernmentProcedure>
+					<CurrentCode>53</CurrentCode>
+					<PreviousCode>00</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code. -->
+				<GovernmentProcedure>
+					<CurrentCode>D15</CurrentCode>
+				</GovernmentProcedure>
+				<GovernmentProcedure>
+					<CurrentCode>F15</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 5/16: Country of Preferential Origin.
+                    Mandatory if DE 4/17 begins with '1'.
+                    Where preference in DE 4/17 begins with a number of '1', this must be completed.
+                    TypeCode: 1 indicates the Country of Origin.
+                    CountryCode: JE Indicate Jersey. -->
+				<Origin>
+					<CountryCode>JE</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping marks.
+                        Mandatory field.
+                        Marks written on the packaging. -->
+					<MarksNumbersID>BX12345</MarksNumbersID>
+					<!--DE 6/10: Number of packages.
+                        Mandatory field.
+                        Entry 10 is the number of packages. -->
+					<QuantityQuantity>10</QuantityQuantity>
+					<!--DE 6/9: Type of packages.
+                        Mandatory field.
+                        Code BX indicates boxes. -->
+					<TypeCode>BX</TypeCode>
+				</Packaging>
+				<!--DE 2/1 : Simplified Declaration/ Previous Documents.
+                    Mandatory field.
+                    YSDE to show the MRN for the previous simplified declaration. -->
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>23GBCDS123456789R1</ID>
+					<TypeCode>SDE</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 3/16: Importer Identification Number.
+                Mandatory only when a recognised ID number is available.
+                The EORI number of the Importer/depositor of the goods. -->
+			<Importer>
+				<ID>GB553202734852</ID>
+			</Importer>
+			<!--DE 2/1: Simplified Declaration/ Previous Documents.
+                This data element can be declared at a header or item level - as this is for a single item declaration, this should be declared at header level.
+                The components for this are:
+                • Category Code: Mandatory field. This identifies the class or kind of document being declared. The previous document, represented by ‘Z’.
+                • ID: Mandatory field. This represents the data needed to recognise and identify the document.
+                • TypeCode: Mandatory field. This serves to identify the type of document: 355 indicates ENS - Entry Summary Declaration.
+                • LineNumeric: Optional field. This is the goods item number. It is used to identify which item of the previous document is being referred to. Where the previous document referred to or contained only a single goods item, this component may be left blank. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>23GB553202734852</ID>
+				<TypeCode>ZZZ</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!--DE 2/1 : Simplified Declaration/ Previous Documents.
+                Mandatory field.
+                The Trader's DUCR assigned to the consignment.
+                Note: Document class Y used for DUCR as sup dec.
+                As this is for a single item declaration, this should all be declared at header level.
+                In CDS, the MUCR (MCR) is not required on a sup dec. -->
+			<PreviousDocument>
+				<CategoryCode>Y</CategoryCode>
+				<ID>4GB553202734852-02042023</ID>
+				<TypeCode>DCR</TypeCode>
+			</PreviousDocument>
+			<!--DE 4/1: Delivery Terms.
+                Mandatory if method 1 is being used.
+                (See DE 4/16 where Method 1 has been entered.)
+                ConditionCode: CIF to indicate Cost, Insurance and Freight.
+                LocationID: GBWLA to represent the named port of destination Wallasea Island, Baltic Wharf, UK. -->
+			<TradeTerms>
+				<ConditionCode>CIF</ConditionCode>
+				<LocationID>GBWLA</LocationID>
+			</TradeTerms>
+		</GoodsShipment>
+		<ObligationGuarantee>
+			<!--DE 8/3: Guarantee Reference.
+                Mandatory field for certain procedure codes/MOP.
+                ID: 'Guaranteenotrequired' indicates that the guarantee is not required, as stated in DE 8/2.
+                Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then this data element is mandatory. -->
+			<ID>Guaranteenotrequired</ID>
+			<!--DE 8/2: Guarantee Type and Cash Accounts
+                Mandatory field for certain procedure codes/MOP.
+                SecurityDetailsCode: '0' to represent that a customs comprehensive guarantee is being waived for the deferment of customs duty.
+                Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code 0 or 1 must be declared in this data element. -->
+			<SecurityDetailsCode>0</SecurityDetailsCode>
+		</ObligationGuarantee>
+		<!--DE 5/27: Supervising customs office.
+			The Supervising Office Code for the HMRC Office overseeing the Customs Warehouse procedure. In this scenario, this is Belfast, Dorchester House (NIRU). -->
+		<SupervisingOffice>
+			<ID>GBBEL004</ID>
+		</SupervisingOffice>
+	</Declaration>
+</md:MetaData>

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!-- 
+			SCENARIO
+			
+			Energy Import via a Fixed Transport Installation on an EIDR supplementary declaration where Climate Change Levy (CCL) will be relieved
+
+			An agent submits a Type Z (H1) EIDR supplementary declaration importing goods (i.e. electricity) from ROW to GB.
+
+			The agent enters the following information on the declaration:
+			 - Acceptance Date is present on all supplementary declarations, and will match the CLE date listed in 2/1.
+			 - Agent has a Function Code of 2 indicating a direct representative of the importer.
+			 - Agent and Declarant ID have the same EORI values of Declarant/ Agent EORI: GB603202734852.
+			 - Procedure code 4000
+			 - Additional Procedure Code '1CL' at item level in DE 1/11
+			 - Mode of Transport of '7' at header level in DE 7/4
+			 - Authorisation Type Code 'FTI' in DE 3/39
+			 - Additional Document Code 'C676' in DE 2/3
+			 - FTI Goods Location Code 'GBDUASFDOVIFA' at header level in DE 5/23
+			 - National Additional Code 'X99D' in DE 6/17.
+			 - A Climate Change Levy will be calculated and 100% relief applied to this import.
+
+			No Customs Duty and VAT will be calculated using the UK Tariff.
+
+			The agent gets notifications from DMS confirming the successful acceptance, tax calculated and clearance of the declaration.
+
+			The DMSTAX notification will show the CCL excise charge calculated and the 100% relief applied.
+			-->
+		<!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20240226105516+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<!--Function Code of 9 to represent an original declaration. -->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: LRN.
+			Agents own reference number â€“ this must be unique to the transaction. -->
+		<FunctionalReferenceID>7847323077MP</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type.
+			IM to represent an import declaration. -->
+		<!--DE 1/2: Additional Declaration Type.
+			Z to represent an EIDR supplementary declaration. -->
+		<TypeCode>IMZ</TypeCode>
+		<!--DE 1/9: Total Number of Items.
+			Single item declaration. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 6/18: Total Packages.
+			In this case 0 as importing electricity.
+			Note that this matches DE 6/10 because this is a single item declaration. -->
+		<TotalPackageQuantity>0</TotalPackageQuantity>
+		<!--DE 3/21: Representative Status Code.
+			FunctionCode of 2 indicating agent acting in direct representation for the importer (holding written instruction to do so). -->
+		<Agent>
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
+			An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarantâ€™s records.
+			The ID is the EORI of the EIDR authorised party. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>EIR</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
+			An authorisation type code of AEOC indicates an authorisation for the status of Authorised Economic Operator - Customs Simplifications.
+			The ID is the EORI of the AEOC authorised party. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>AEOC</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
+			An authorisation type code of FTI is required for authorisation for Fixed Transport Installation. 
+			The ID is the EORI of the FTI authorised party. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>FTI</CategoryCode>
+		</AuthorisationHolder>
+		<BorderTransportMeans>
+			<!--DE 7/4: Mode of Transport at the Border.
+				ModeCode of 7 to represent Fixed Transport Installations. -->
+			<ModeCode>7</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: Declarant Identification Number.
+			The EORI number of the agent entering the declaration.
+			The UK requires an EORI to be provided for the declarant.
+			In this scenario, this is the same as the EORI of the Agent. -->
+		<Declarant>
+			<ID>GB603202734852</ID>
+		</Declarant>
+		<!--DE 3/1: Exporter. 
+			Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
+		<Exporter>
+			<Name>Engie SA</Name>
+			<Address>
+				<CityName>Montpellier</CityName>
+				<CountryCode>FR</CountryCode>
+				<Line>215 Rue Samuel Morse</Line>
+				<PostcodeID>M81 4FR</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 8/5: Nature of transaction.
+				1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation. -->
+			<TransactionNatureCode>1</TransactionNatureCode>
+			<Consignment>
+				<!--DE 7/2: Container.
+					Indicator to show if goods are packed in a container or not. 
+					0 indicates that goods are transported in containers.
+					Note: Unlike CHIEF this must now be completed. -->
+				<ContainerCode>0</ContainerCode>
+				<ArrivalTransportMeans>
+					<!--DE 7/5: Fixed transport installations - 7.
+						This is required as customs procedures are completed away from the border. -->
+					<ModeCode>7</ModeCode>
+				</ArrivalTransportMeans>
+				<GoodsLocation>
+					<!--DE 5/23: Location of Goods - Identification of location.
+						Mandatory.
+						The location code for FTI National Grid Interconnector.
+						Note that this declaration uses National Grid Interconnector Holdings Interconnexion France-Angleterre 1 (IFA1). -->
+					<Name>ASFDOVIFA</Name>
+					<!--DE 5/23: Location of Goods - Type of location.
+						In this case, D to represent that it is a 'TBC' location. -->
+					<TypeCode>D</TypeCode>
+					<Address>
+						<!--DE 5/23: Location of Goods - Qualifier of the identification.
+							Type of ID of the Location - U in this scenario for UN/LOCODE. -->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Location of Goods - Country.
+							Country code of the country where the goods may be examined.
+							GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+			</Consignment>
+			<!--DE 5/8: Country code of the destination country.
+				In this case GB. -->
+			<Destination>
+				<CountryCode>GB</CountryCode>
+			</Destination>
+			<!--DE 5/14: Country of Dispatch/Export Code.
+				Country code for the country from which the goods were originally dispatched, in this case FR. -->
+			<ExportCountry>
+				<ID>FR</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Goods Item Number.
+					Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantâ€™s records. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBEIR553202734852I20190613093448</ID>
+					<TypeCode>514</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of C501 indicates AEOC - Authorisation for the status of Authorised Economic Operator - Customs Simplifications. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GB AEOC 14274/19</ID>
+					<TypeCode>501</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of Y023 for the Importer AEO certificate number.
+					ID contains the reference number of the certificate. -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>GB AEOC 14274/19</ID>
+					<TypeCode>023</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of Y024 for the Declarant AEO certificate number. 
+					ID contains the reference number of the certificate. -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>GB AEOC 14273/19</ID>
+					<TypeCode>024</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of C676 indicates This code is to be used for all national facilitations and authorisations listed in 
+					Appendix 6, as instructed by the DE 1/10 Procedure code completion instructions. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBFTI55320273485220210613093448</ID>
+					<TypeCode>676</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: A document code of N935 indicates: the invoice on the basis of which the customs value of the goods is declared.
+					This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>12345/07.10.2022</ID>
+					<TypeCode>935</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of N954 indicates a Movement certificate EUR.1. 
+					ID contains the reference number of the certificate. -->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>0054037</ID>
+					<TypeCode>954</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional Information. 
+					This field is mandatory only where codes required.
+					Denoting the CCL DEFRA facility number allocated by DEFRA in relation to a climate change levy agreement. -->
+				<AdditionalInformation>
+					<StatementCode>GEN18</StatementCode>
+					<StatementDescription>123456</StatementDescription>
+				</AdditionalInformation>
+				<Commodity>
+					<!--DE 6/8: Goods Description.
+						Description of the goods specific enough to enable classification â€“ without repeating the CN code description in the Tariff. -->
+					<Description>Electrical Energy</Description>
+					<Classification>
+						<!--DE 6/14: Commodity Code - Combined Nomenclature Code.
+							IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
+						<ID>27160000</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/15: Commodity Code:TARIC code. -->
+						<ID>00</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/17: Commodity Code â€“ National Additional Codes.
+							VATE to represent VAT Exempt. -->
+						<ID>VATE</ID>
+						<IdentificationTypeCode>GN</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--DE 6/17: Commodity Code â€“ National Additional Codes.
+							X99D to represent Electricity. -->
+						<ID>X99D</ID>
+						<IdentificationTypeCode>GN</IdentificationTypeCode>
+					</Classification>
+					<DutyTaxFee>
+						<!--DE 4/17: Preference.
+							Type of 300 represents Tariff preference without conditions or limits (including ceilings) being claimed. -->
+						<DutyRegimeCode>300</DutyRegimeCode>
+					</DutyTaxFee>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass.
+							Weight of the goods in kilograms including packaging. -->
+						<GrossMassMeasure>1</GrossMassMeasure>
+						<!--DE 6/1: Net Mass.
+							Weight of the goods in kilograms without any packaging. -->
+						<NetNetWeightMeasure>0.5</NetNetWeightMeasure>
+						<!--DE 6/2: Supplementary Units.
+							Quantity of the goods in the unit (1000 kWh) as required by Customs for tariff, statistical or fiscal purposes. -->
+						<TariffQuantity>8760</TariffQuantity>
+					</GoodsMeasure>
+					<!--DE 4/14: Item price amount. 
+						The invoice was issued with of a value of Â£200,000 and the currency was in GBP. -->
+					<InvoiceLine>
+						<ItemChargeAmount currencyID="GBP">200000</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+				<!--DE 4/16: Valuation Method. 
+					1 to indicate the method is transaction value of the imported goods. -->
+				<CustomsValuation>
+					<MethodCode>1</MethodCode>
+				</CustomsValuation>
+				<GovernmentProcedure>
+					<!--DE 1/10: Procedure.
+						Requested Procedure of 4000 indicating entry for free circulation and home use of goods. -->
+					<CurrentCode>40</CurrentCode>
+					<PreviousCode>00</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code.
+					1CL to indicate Climate Change Levy (CCL). -->
+				<GovernmentProcedure>
+					<CurrentCode>1CL</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 5/16: Country of Preferential Origin.
+					TypeCode of 2 to represent preferential origin.
+					Where preference in D.E. 4/17 begins with a value other than â€˜1â€™, this must be completed.
+					CountryCode contains the code for the country from which the goods originated, in this case France. -->
+				<Origin>
+					<CountryCode>FR</CountryCode>
+					<TypeCode>2</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping Marks.
+						Entered as 'Unpackaged' as the goods are not packaged. -->
+					<MarksNumbersID>Unpackaged</MarksNumbersID>
+					<!--DE 6/10: Number of Packages. 
+						In this case 0. -->
+					<QuantityQuantity>0</QuantityQuantity>
+					<!--DE 6/9: Type of Packages. 
+						NE to represent unpacked or unpackaged. -->
+					<TypeCode>NE</TypeCode>
+				</Packaging>
+				<!--DE 4/13: Valuation Indicator.
+					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
+					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
+					 - First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
+					 - Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+					 - Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
+					 - Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
+				<ValuationAdjustment>
+					<AdditionCode>0000</AdditionCode>
+				</ValuationAdjustment>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 3/16: Importer Identification Number.
+				EORI number of the Importer. -->
+			<Importer>
+				<ID>GB553202734852</ID>
+			</Importer>
+			<!--DE 2/1 : Previous Documents.
+				The DUCR assigned to the consignment
+				Note: document class Y used for DUCR as sup dec.
+				As this is for a single item declaration, this should all be declared at header level.
+				In CDS, the MUCR (MCR) is not required on a sup dec. -->
+			<PreviousDocument>
+				<CategoryCode>Y</CategoryCode>
+				<ID>2GB553202734852-20220427</ID>
+				<TypeCode>DCR</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!--DE 2/1: Previous Documents.
+				YCLE To show the date of the EIDR record.
+				Note that this is item 6 from the EIDR record entry. -->
+			<PreviousDocument>
+				<CategoryCode>Y</CategoryCode>
+				<ID>20240226</ID>
+				<TypeCode>CLE</TypeCode>
+				<LineNumeric>6</LineNumeric>
+			</PreviousDocument>
+			<TradeTerms>
+				<!--DE 4/1: Delivery Terms. 
+					Mandatory as method 1 is being used in DE 4/16.
+					DAT to indicate Delivered at terminal.
+					GBASF to represent the named port of destination: Ashford UK, a non-inventory linked location. -->
+				<ConditionCode>DAT</ConditionCode>
+				<LocationID>GBASF</LocationID>
+			</TradeTerms>
+		</GoodsShipment>
+	</Declaration>
+</md:MetaData>

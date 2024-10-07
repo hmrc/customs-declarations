@@ -1,4 +1,4 @@
-<n1:InventoryLinkingImportsDeclarationStatusNotification xmlns:n1=\"http://gov.uk/customs/inventoryLinkingImport/v1\">
+<n1:InventoryLinkingImportsDeclarationStatusNotification xmlns:n1="http://gov.uk/customs/inventoryLinkingImport/v1">
 	<n1:declarationMethod>2</n1:declarationMethod>
 	<n1:dateOfEntry>2023-06-09T07:29:26.762Z</n1:dateOfEntry>
 	<n1:entryNumber>23GB6BN2FXCDS58A00</n1:entryNumber>

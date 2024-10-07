@@ -27,32 +27,32 @@
 					<SequenceNumeric>1</SequenceNumeric>
 					<Commodity>
 						<DutyTaxFee>
-							<DeductAmount currencyID="GBP\">0.00</DeductAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TypeCode>A00</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP\">520.00</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP\">520.00</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">520.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">520.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
-							<DeductAmount currencyID="GBP\">0.00</DeductAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TypeCode>333</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP\">7125.00</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP\">7125.00</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">7125.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">7125.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP\">11645.00</AdValoremTaxBaseAmount>
-							<DeductAmount currencyID="GBP\">0.00</DeductAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">11645.00</AdValoremTaxBaseAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>20.00</TaxRateNumeric>
 							<TypeCode>B00</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP\">2329.00</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP\">2329.00</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">2329.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">2329.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 					</Commodity>

@@ -16,7 +16,7 @@
 
 package unit.connectors
 
-import org.mockito.ArgumentMatchers.{any, anyString, eq as ameq}
+import org.mockito.ArgumentMatchers.{any, eq as ameq}
 import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually

@@ -17,8 +17,8 @@
 package integration
 
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito._
-import org.mongodb.scala._
+import org.mockito.Mockito.*
+import org.mongodb.scala.*
 import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -37,10 +37,11 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.MockitoPassByNameHelper.PassByNameVerifier
-import util.TestData._
+import util.TestData.*
 
 import java.net.URL
 import scala.concurrent.ExecutionContext
+import scala.reflect.ClassTag
 
 class FileUploadMetadataRepoSpec extends AnyWordSpecLike
   with Matchers

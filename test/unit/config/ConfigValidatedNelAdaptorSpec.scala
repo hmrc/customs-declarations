@@ -156,7 +156,7 @@ class ConfigValidatedNelAdaptorSpec extends UnitSpec with MockitoSugar with Matc
       val x = configValidatedNelAdaptor.root.string("root-string-key")
       val y = "root-string-value"
 
-      val actual = Applicative[CustomsValidatedNel].map14(x,x,x,x,x,x,x,x,x,x,x,x,x,x)(FourteenFields)
+      val actual = Applicative[CustomsValidatedNel].map14(x,x,x,x,x,x,x,x,x,x,x,x,x,x)(FourteenFields.apply)
 
       actual shouldBe Valid(FourteenFields(y,y,y,y,y,y,y,y,y,y,y,y,y,y))
     }

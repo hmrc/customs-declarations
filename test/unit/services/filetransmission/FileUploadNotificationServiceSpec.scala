@@ -102,7 +102,6 @@ class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSuga
     private[FileUploadNotificationServiceSpec] implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val successCallbackPayload: FileTransmissionNotification =
     FileTransmissionSuccessNotification(FileReferenceOne, BatchIdOne, FileTransmissionSuccessOutcome)
   private val failureCallbackPayload: FileTransmissionNotification =

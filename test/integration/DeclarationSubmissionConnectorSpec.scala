@@ -111,7 +111,7 @@ class DeclarationSubmissionConnectorSpec extends IntegrationTestSpec
     }
   }
 
-  private def sendValidXml()(implicit vpr: ValidatedPayloadRequest[_]) = {
+  private def sendValidXml()(implicit vpr: ValidatedPayloadRequest[?]) = {
     connector.send(ValidSubmissionXML, Instant.now(), correlationId, VersionOne)
   }
 

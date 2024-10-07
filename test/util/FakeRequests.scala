@@ -19,41 +19,41 @@ package util
 import play.api.http.HeaderNames.{ACCEPT, AUTHORIZATION}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsText, AnyContentAsXml}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{CONTENT_TYPE, POST}
+import play.api.test.Helpers.POST
 import util.RequestHeaders._
 import util.TestData.{cspBearerToken, nonCspBearerToken}
 import util.TestXMLData._
 
 object FakeRequests {
   lazy val ValidSubmissionV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
     .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidSubmissionV2RequestWithCharSet: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2WithCharset.toSeq: _*)
+    .withHeaders(ValidHeadersV2WithCharset.toSeq*)
     .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidSubmissionV2RequestWithInvalidCharSet: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2WithInvalidCharset.toSeq: _*)
+    .withHeaders(ValidHeadersV2WithInvalidCharset.toSeq*)
     .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidSubmissionRawRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
 
   lazy val ValidSubmissionV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV3.toSeq: _*)
+    .withHeaders(ValidHeadersV3.toSeq*)
     .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidSubmission_13_INV_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
     .withXmlBody(validSubmissionXML(13, "INV"))
 
   lazy val ValidSubmission_13_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
     .withXmlBody(validSubmissionXML(13, "XXA"))
 
   lazy val ValidSubmission_INV_Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
     .withXmlBody(validSubmissionXML(9, "INV"))
 
   lazy val ValidSubmissionV1Request: FakeRequest[AnyContentAsXml] = ValidSubmissionV2Request
@@ -101,27 +101,27 @@ object FakeRequests {
     .withHeaders(ValidCancellationV2Request.headers.remove(X_CLIENT_ID_NAME))
 
   lazy val ValidAmendV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
     .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidAmendV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV3.toSeq: _*)
+    .withHeaders(ValidHeadersV3.toSeq*)
     .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidArrivalNotificationV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
     .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidArrivalNotificationV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV3.toSeq: _*)
+    .withHeaders(ValidHeadersV3.toSeq*)
     .withXmlBody(ValidSubmissionXML)
 
   lazy val ValidCancellationV3Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV3.toSeq: _*)
+    .withHeaders(ValidHeadersV3.toSeq*)
     .withXmlBody(validCancellationXML())
 
   lazy val ValidCancellationV2Request: FakeRequest[AnyContentAsXml] = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
     .withXmlBody(validCancellationXML())
 
   lazy val ValidCancellationRequestWithV1AcceptHeader: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request
@@ -139,15 +139,15 @@ object FakeRequests {
   lazy val InvalidCancellationRequest: FakeRequest[AnyContentAsXml] = ValidCancellationV2Request.withXmlBody(InvalidCancellationXML)
 
   lazy val ValidFileUploadV2Request = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
     .withXmlBody(validFileUploadXml())
 
   lazy val ValidFileUploadV3Request = FakeRequest()
-    .withHeaders(ValidHeadersV3.toSeq: _*)
+    .withHeaders(ValidHeadersV3.toSeq*)
     .withXmlBody(validFileUploadXml())
 
   lazy val InvalidFileUploadRequest = FakeRequest()
-    .withHeaders(ValidHeadersV2.toSeq: _*)
+    .withHeaders(ValidHeadersV2.toSeq*)
     .withXmlBody(InvalidFileUploadXml)
 
   implicit class FakeRequestOps[R](val fakeRequest: FakeRequest[R]) extends AnyVal {

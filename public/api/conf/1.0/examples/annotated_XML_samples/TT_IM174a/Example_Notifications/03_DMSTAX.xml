@@ -37,7 +37,7 @@
 						</DutyTaxFee>
 						<DutyTaxFee>
 							<AdValoremTaxBaseAmount currencyID="GBP">27.66</AdValoremTaxBaseAmount>
-							<DeductAmount currencyID=\"GBP\">0.00</DeductAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>0.00</TaxRateNumeric>
 							<TypeCode>B05</TypeCode>

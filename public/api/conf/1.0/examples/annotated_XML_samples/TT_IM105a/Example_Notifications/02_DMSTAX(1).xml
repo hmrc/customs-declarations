@@ -27,37 +27,37 @@
 					<SequenceNumeric>1</SequenceNumeric>
 					<Commodity>
 						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID=\"GBP\">10000.00</AdValoremTaxBaseAmount>
-							<DeductAmount currencyID=\"GBP\">0.00</DeductAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">10000.00</AdValoremTaxBaseAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>10.00</TaxRateNumeric>
 							<TypeCode>A00</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID=\"GBP\">0.00</TaxAssessedAmount>
-								<PaymentAmount currencyID=\"GBP\">0.00</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID=\"GBP\">11000.00</AdValoremTaxBaseAmount>
-							<DeductAmount currencyID=\"GBP\">0.00</DeductAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">11000.00</AdValoremTaxBaseAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>20.00</TaxRateNumeric>
 							<TypeCode>B00</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID=\"GBP\">0.00</TaxAssessedAmount>
-								<PaymentAmount currencyID=\"GBP\">0.00</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
 							<TypeCode>ACS</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID=\"GBP\">1000.00</TaxAssessedAmount>
+								<TaxAssessedAmount currencyID="GBP">1000.00</TaxAssessedAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
 							<TypeCode>ACS</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID=\"GBP\">2200.00</TaxAssessedAmount>
+								<TaxAssessedAmount currencyID="GBP">2200.00</TaxAssessedAmount>
 							</Payment>
 						</DutyTaxFee>
 					</Commodity>

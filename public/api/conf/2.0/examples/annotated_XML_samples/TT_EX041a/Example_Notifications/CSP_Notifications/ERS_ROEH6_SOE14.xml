@@ -1,4 +1,4 @@
-<ns2:inventoryLinkingMovementTotalsResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1\" xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1\">
+<ns2:inventoryLinkingMovementTotalsResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
 		<ns2:messageCode>ERS</ns2:messageCode>
 		<ns2:goodsLocation>GBAULHRLHRANS</ns2:goodsLocation>
 		<ns2:goodsArrivalDateTime>2023-09-12T10:57:09.009Z</ns2:goodsArrivalDateTime>

@@ -1,4 +1,4 @@
-<ns3:inventoryLinkingMovementTotalsResponse xmlns:ns2=\"http://gov.uk/customs/inventoryLinking/gatewayHeader/v1\" xmlns:ns3=\"http://gov.uk/customs/inventoryLinking/v1\">
+<ns3:inventoryLinkingMovementTotalsResponse xmlns:ns2="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:ns3="http://gov.uk/customs/inventoryLinking/v1">
     <!-- This is an example of a EMR message, the output response from ILE for a MUCR -->
     <ns3:messageCode>EMR</ns3:messageCode>
     <ns3:crc>000</ns3:crc>

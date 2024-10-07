@@ -62,7 +62,7 @@ class FileUploadMetadataSpec extends AnyWordSpecLike with Matchers {
 
     "de-serialise from Json" in {
 
-      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[FileUploadMetadata]
+      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[FileUploadMetadata]: @unchecked
 
       actualMetaData shouldBe FileMetadataWithFileOne
     }

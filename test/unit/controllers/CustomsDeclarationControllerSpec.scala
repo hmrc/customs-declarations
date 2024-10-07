@@ -199,7 +199,7 @@ class CustomsDeclarationControllerSpec extends AnyWordSpecLike
     "respond with status 400 for a request with an invalid X-Badge-Identifier" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders((ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS).toSeq: _*))
+      val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders((ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS).toSeq*))
 
       result shouldBe errorResultBadgeIdentifier
       verifyNoMoreInteractions(mockBusinessService)

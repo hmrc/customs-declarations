@@ -91,7 +91,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(CustomsDeclarationsMetricsTestData.EventStart, CustomsDeclarationsMetricsTestData.EventEnd)
     when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.successful(mockHttpResponse))
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[?]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
     when(mockNrsService.send(vpr, headerCarrier)).thenReturn(Future.successful(nrSubmissionId))
     when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
     when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)
@@ -144,11 +144,11 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
 
     result shouldBe Right(Some(nrSubmissionId))
     verify(mockPayloadDecorator).wrap(meq(TestXmlPayload), any[ApiSubscriptionFieldsResponse](), any[Instant])(any[ValidatedPayloadRequest[Any]])
-    verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
+    verify(mockApiSubscriptionFieldsConnector).getSubscriptionFields(meq(expectedApiSubscriptionKey))(any[ValidatedPayloadRequest[?]], any[HeaderCarrier])
   }
 
   "return 500 error response when subscription fields call fails" in new SetUp() {
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
+    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[?]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
 
     val result: Either[Result, Option[NrSubmissionId]] = send()
 
@@ -158,7 +158,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
   }
 
   "return 500 error response when authenticatedEori is blank" in new SetUp() {
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[?]], any[HeaderCarrier]))
       .thenReturn(Future.successful(apiSubscriptionFieldsResponse.copy(fields = ApiSubscriptionFieldsResponseFields(Some("")))))
 
     val result: Either[Result, Option[NrSubmissionId]] = send()
@@ -195,7 +195,7 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
   }
 
   "return 500 error when CSP has no authenticatedEori in api subscription fields" in new SetUp() {
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[?]], any[HeaderCarrier]))
       .thenReturn(Future.successful(apiSubscriptionFieldsResponse.copy(fields = ApiSubscriptionFieldsResponseFields(None))))
 
     val result: Either[Result, Option[NrSubmissionId]] = send()

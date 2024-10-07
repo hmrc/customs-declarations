@@ -48,7 +48,7 @@ class ValidateAndExtractHeadersStatusActionSpec extends AnyWordSpecLike with Moc
       val apiVersionRequestV1: ApiVersionRequest[AnyContentAsXml] = TestApiVersionRequestV1
       when(mockHeaderStatusValidator.validateHeaders(any[ApiVersionRequest[Any]])).thenReturn(Right(TestExtractedStatusHeaders))
 
-      val actualResult: Either[Result, ValidatedHeadersStatusRequest[_]] = validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue
+      val actualResult: Either[Result, ValidatedHeadersStatusRequest[?]] = validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue
 
       actualResult shouldBe Right(TestValidatedHeadersStatusRequest)
     }
@@ -59,7 +59,7 @@ class ValidateAndExtractHeadersStatusActionSpec extends AnyWordSpecLike with Moc
       val apiVersionRequestV1: ApiVersionRequest[AnyContentAsXml] = TestApiVersionRequestV1
       when(mockHeaderStatusValidator.validateHeaders(any[ApiVersionRequest[Any]])).thenReturn(Left(ErrorContentTypeHeaderInvalid))
 
-      val actualResult: Either[Result, ValidatedHeadersStatusRequest[_]] = validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue
+      val actualResult: Either[Result, ValidatedHeadersStatusRequest[?]] = validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue
 
       actualResult shouldBe Left(ErrorContentTypeHeaderInvalid.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationIdValue))
     }

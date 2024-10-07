@@ -121,7 +121,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
 
       val request = ValidSubmissionRawRequest.fromCsp
         .withMethod(POST)
-        .withHeaders(ValidHeadersV2WithCharset.toSeq: _*)
+        .withHeaders(ValidHeadersV2WithCharset.toSeq*)
         .withTarget(ValidSubmissionRawRequest.target.withPath(endpoint))
         .withRawBody(ValidRawXmlByte)
 
@@ -145,7 +145,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
 
       val request = ValidSubmissionRawRequest.fromCsp
         .withMethod(POST)
-        .withHeaders(ValidHeadersV2WithCharset.toSeq: _*)
+        .withHeaders(ValidHeadersV2WithCharset.toSeq*)
         .withTarget(ValidSubmissionRawRequest.target.withPath(endpoint))
         .withRawBody(InvalidRawXmlByte)
 

@@ -26,27 +26,27 @@ class UploadedCallbackBodySpec extends  AnyWordSpecLike with Matchers {
   "UploadedCallbackBody model" can {
     "In Happy Path" should {
       "conditionally de-serialisation callback body as UploadedFailedCallbackBody if fileStatus is READY" in {
-        val JsSuccess(actual, _) = parse(readyJson())
+        val JsSuccess(actual, _) = parse(readyJson()): @unchecked
 
         actual shouldBe ReadyCallbackBody
       }
 
       "conditionally de-serialise callback body as UploadedReadyCallbackBody if fileStatus is FAILED" in {
-        val JsSuccess(actual, _) = parse(FailedJson)
+        val JsSuccess(actual, _) = parse(FailedJson): @unchecked
 
         actual shouldBe FailedCallbackBody
       }
     }
     "In Un-Happy Path" should {
       "return JsError when fileStatus is not READY or FAILED" in {
-        val JsError(list) = parse(FailedJsonWithInvalidFileStatus)
+        val JsError(list) = parse(FailedJsonWithInvalidFileStatus): @unchecked
 
         val (path, _) = list.head
         path.toString shouldBe "/fileStatus"
       }
 
       "return JsError when payload is invalid" in {
-        val JsError(list) = parse(Json.parse("""{"foo": "bar"}"""))
+        val JsError(list) = parse(Json.parse("""{"foo": "bar"}""")): @unchecked
 
         val (path, _) = list.head
         path.toString shouldBe "/fileStatus"

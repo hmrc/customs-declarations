@@ -86,7 +86,7 @@ case class ErrorResponse(httpStatusCode: Int, errorCode: String, message: String
     }
 
   def withErrors(contents: ResponseContents*): ErrorResponse = {
-    ErrorResponse(this.httpStatusCode, this.errorCode, this.message, contents :_ *)
+    ErrorResponse(this.httpStatusCode, this.errorCode, this.message, contents*)
   }
 }
 

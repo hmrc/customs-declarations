@@ -53,6 +53,6 @@ trait CircuitBreakerConnector {
   private def notifyOnStateChange(newState: String): Unit =
     cdsLogger.warn(s"circuitbreaker: Service [$configKey] is in state [${newState}]")
 
-  private def defineFailure(t: Try[_]): Boolean =
+  private def defineFailure(t: Try[?]): Boolean =
     t.isFailure && breakOnException(t.failed.get)
 }

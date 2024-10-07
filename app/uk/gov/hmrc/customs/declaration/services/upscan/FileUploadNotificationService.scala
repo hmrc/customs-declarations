@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.services.upscan
 
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
-import uk.gov.hmrc.customs.declaration.logging.CdsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.{FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.model.{ConversationId, SubscriptionFieldsId}
@@ -41,8 +40,7 @@ trait CallbackToXmlNotification[A] {
 */
 @Singleton
 class FileUploadNotificationService @Inject()(fileUploadMetadataRepo: FileUploadMetadataRepo,
-                                              notificationConnector: FileUploadCustomsNotificationConnector,
-                                              logger: CdsLogger)
+                                              notificationConnector: FileUploadCustomsNotificationConnector)
                                              (implicit ec: ExecutionContext) {
 
   def sendMessage[T](callbackResponse: T, fileReference: FileReference, clientSubscriptionId: SubscriptionFieldsId)(implicit callbackToXml: CallbackToXmlNotification[T], hc: HeaderCarrier): Future[Unit] = {

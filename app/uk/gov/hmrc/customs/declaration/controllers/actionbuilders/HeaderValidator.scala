@@ -75,7 +75,7 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 
-  def eitherBadgeIdentifier[A](allowNone: Boolean)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[BadgeIdentifier]] = {
+  def eitherBadgeIdentifier[A](allowNone: Boolean)(implicit vhr: HasRequest[A] & HasConversationId): Either[ErrorResponse, Option[BadgeIdentifier]] = {
     val maybeBadgeId: Option[String] = vhr.request.headers.toSimpleMap.get(XBadgeIdentifierHeaderName)
 
     if (allowNone && maybeBadgeId.isEmpty) {
@@ -91,7 +91,7 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 
-  def eoriMustBeValidAndPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
+  def eoriMustBeValidAndPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] & HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     val maybeEori: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
 
     maybeEori.filter(validEori).map(e =>
@@ -112,7 +112,7 @@ abstract class HeaderValidator @Inject()(logger: DeclarationsLogger) {
     }
   }
 
-  def eoriMustBeValidIfPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
+  def eoriMustBeValidIfPresent[A](eoriHeaderName: String)(implicit vhr: HasRequest[A] & HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     val maybeEoriHeader: Option[String] = vhr.request.headers.toSimpleMap.get(eoriHeaderName)
 
     val maybeEori = convertEmptyHeaderToNone(maybeEoriHeader)

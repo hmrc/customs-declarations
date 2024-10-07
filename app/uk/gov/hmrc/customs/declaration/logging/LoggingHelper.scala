@@ -41,7 +41,7 @@ object LoggingHelper {
     formatMessage(msg, r)
   }
 
-  def formatDebugFull(msg: String, r: HasConversationId with Request[_]): String = {
+  def formatDebugFull(msg: String, r: HasConversationId & Request[?]): String = {
     formatMessageFull(msg, r)
   }
 
@@ -71,7 +71,7 @@ object LoggingHelper {
     s"$conversationId$extractedHeaders$apiVersion$authorised"
   }
 
-  def formatMessageFull(msg: String, r: HasConversationId with Request[_]): String = {
+  def formatMessageFull(msg: String, r: HasConversationId & Request[?]): String = {
     def filteredHeaders = r.headers.toSimpleMap.filter(keyValTuple =>
       headerSet.contains(keyValTuple._1.toLowerCase))
 

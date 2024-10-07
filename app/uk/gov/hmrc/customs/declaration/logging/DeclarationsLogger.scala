@@ -33,7 +33,7 @@ class DeclarationsLogger @Inject()(logger: CdsLogger) {
     logger.debug(formatDebug(s, r), e)
 
   //called once at the start of the request processing pipeline
-  def debugFull(s: => String)(implicit r: HasConversationId with Request[_]): Unit = {
+  def debugFull(s: => String)(implicit r: HasConversationId & Request[?]): Unit = {
     logger.debug(formatDebugFull(s, r))
   }
 

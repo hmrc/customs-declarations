@@ -102,7 +102,7 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
             }
           case Left(result) => Left(result)
         }
-      case _ => Future.successful(Left(ErrorResponse(FORBIDDEN, ForbiddenCode, "Not an authorized service").XmlResult.withConversationId))
+      case null => Future.successful(Left(ErrorResponse(FORBIDDEN, ForbiddenCode, "Not an authorized service").XmlResult.withConversationId))
     }
   }
 
@@ -153,7 +153,7 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
     errorRedirectOnly ++ maxFileGroupSize ++ maxFileSequenceNo ++ fileGroupSize ++ duplicateFileSequenceNo ++ fileSequenceNoLessThanOne match {
       case Seq() => Right(())
       case errors =>
-        Left(new ErrorResponse(Status.BAD_REQUEST, BadRequestCode, "Payload did not pass validation", errors: _*))
+        Left(new ErrorResponse(Status.BAD_REQUEST, BadRequestCode, "Payload did not pass validation", errors*))
     }
   }
 

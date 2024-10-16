@@ -23,17 +23,20 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.mvc.Http.Status.BAD_REQUEST
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
-import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse._
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.*
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderStatusValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.VersionOne
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders}
+import uk.gov.hmrc.customs.declaration.model.{VersionOne}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders, ExtractedStatusHeadersImpl}
 import util.CustomsDeclarationsMetricsTestData.EventStart
-import util.RequestHeaders._
-import util.TestData
+import util.RequestHeaders.*
+import util.{ApiSubscriptionFieldsTestData, TestData}
+import util.TestData.badgeIdentifier
 
 class HeaderStatusValidatorSpec extends AnyWordSpecLike with TableDrivenPropertyChecks with MockitoSugar with Matchers{
 
+  private val extractedHeadersWithBadgeIdentifierV2 = ExtractedStatusHeadersImpl(badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
+  private val extractedHeadersWithBadgeIdentifierV3 = extractedHeadersWithBadgeIdentifierV2.copy()
   private val ErrorInvalidBadgeIdentifierHeader: ErrorResponse = ErrorResponse(BAD_REQUEST, BadRequestCode, s"X-Badge-Identifier header is missing or invalid")
 
   trait SetUp {
@@ -52,6 +55,15 @@ class HeaderStatusValidatorSpec extends AnyWordSpecLike with TableDrivenProperty
       }
       "fail when request has missing X-Badge-Identifier header" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2 - X_BADGE_IDENTIFIER_NAME)) shouldBe Left(ErrorInvalidBadgeIdentifierHeader)
+      }
+    }
+
+    "in happy path, validation" should {
+      "be successful for a valid request with accept header for V2" in new SetUp {
+        validate(apiVersionRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+      }
+      "be successful for a valid request with accept header for V3" in new SetUp {
+        validate(apiVersionRequest(ValidHeadersV3)) shouldBe Right(extractedHeadersWithBadgeIdentifierV3)
       }
     }
   }

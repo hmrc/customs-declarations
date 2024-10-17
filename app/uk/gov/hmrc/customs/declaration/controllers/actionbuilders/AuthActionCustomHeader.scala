@@ -35,7 +35,7 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
                                                (implicit ec: ExecutionContext)
   extends AuthAction(customsAuthService, headerValidator, logger, declarationConfigService) {
 
-  override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
+  override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] & HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     for {
       maybeBadgeId <- eitherBadgeIdentifier(allowNone = false)
       maybeEori <- eitherEori
@@ -45,7 +45,7 @@ abstract class AuthActionCustomHeader @Inject()(customsAuthService: CustomsAuthS
     }
   }
 
-  private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
+  private def eitherEori[A](implicit vhr: HasRequest[A] & HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     headerValidator.eoriMustBeValidAndPresent(eoriHeaderName)
   }
 
@@ -73,7 +73,7 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
 
   private def errorResponseMissingIdentifiers = errorBadRequest(s"Both $XSubmitterIdentifierHeaderName and $XBadgeIdentifierHeaderName headers are missing")
 
-  override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
+  override def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] & HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     val cpsAuth: Either[ErrorResponse, Csp] = for {
       maybeBadgeId <- eitherBadgeIdentifier(allowNone = true)
       maybeEori <- eitherEori
@@ -91,7 +91,7 @@ class AuthActionSubmitterHeader @Inject()(customsAuthService: CustomsAuthService
     }
   }
 
-  private def eitherEori[A](implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[Eori]] = {
+  private def eitherEori[A](implicit vhr: HasRequest[A] & HasConversationId): Either[ErrorResponse, Option[Eori]] = {
     headerValidator.eoriMustBeValidIfPresent(XSubmitterIdentifierHeaderName)
   }
 

@@ -59,7 +59,7 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     mongoComponent = mongoComponent,
     domainFormat = FileUploadMetadata.format,
     indexes = Seq(
-      IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index").expireAfter(configService.fileUploadConfig.ttlInSeconds,TimeUnit.SECONDS)),
+      IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index").expireAfter(configService.fileUploadConfig.ttlInSeconds.toLong,TimeUnit.SECONDS)),
       IndexModel(ascending("batchId"), IndexOptions().unique(true).name("batch-id")),
       IndexModel(ascending("files.reference", "csId"), IndexOptions().unique(true).name("csId-and-file-reference"))
     )
@@ -67,14 +67,13 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
 
   override def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
     logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
-    lazy val errorMsg = s"File meta data not inserted for $fileUploadMetadata"
 
     collection.insertOne(fileUploadMetadata).toFuture().transformWith {
       case Success(result) =>
         result.wasAcknowledged()
         Future.successful(true)
       case Failure(exception) =>
-        logger.error(errorMsg)
+        logger.error(s"File meta data not inserted for $fileUploadMetadata")
         Future.failed(new IllegalStateException(exception))
     }
 
@@ -91,11 +90,10 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     logger.debug(s"deleting fileUploadMetadata: $fileUploadMetadata")
 
     val selector = equal("batchId", fileUploadMetadata.batchId.toString)
-    lazy val errorMsg = s"Could not delete entity for selector: $selector"
     collection.deleteOne(selector).toFuture().transformWith {
       case Success(_) => Future.successful((): Unit)
       case Failure(exception) => {
-        logger.error(errorMsg)
+        logger.error(s"Could not delete entity for selector: $selector")
         Future.failed(new RuntimeException(exception))
       }
     }

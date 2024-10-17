@@ -22,18 +22,19 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.http.Status.UNAUTHORIZED
 import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
-import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.ErrorInternalServerError
+import uk.gov.hmrc.customs.declaration.controllers.{CustomHeaderNames, ErrorResponse}
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthStatusAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.Csp
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersStatusRequest
-import util.TestData._
+import util.TestData.*
 import util.{AuthConnectorNrsDisabledStubbing, TestData}
 
 import scala.concurrent.ExecutionContext
@@ -42,8 +43,9 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
 
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private lazy val validatedHeadersRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest
-  private val mockAuthenticationConnector: AuthConnector = mock[AuthConnector]
+  private val mockAuthenticationConnector: AuthConnector   = mock[AuthConnector]
   private val mockImportsLogger= mock[DeclarationsLogger]
+  private val errorResponseUnauthorisedGeneral = ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
 
   trait SetUp extends AuthConnectorNrsDisabledStubbing { // NRS not required yet
     override val mockAuthConnector: AuthConnector = mockAuthenticationConnector
@@ -73,6 +75,14 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
         private val actual = await(authAction.refine(validatedHeadersRequest))
         actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(CustomHeaderNames.XConversationIdHeaderName -> TestData.conversationIdValue))
         verifyCspAuthorisationCalled(1)
+      }
+
+      "return Unauthorised error response with conversationId when not authorised" in new SetUp {
+        unauthoriseCsp()
+
+        private val actual = await(authAction.refine(validatedHeadersRequest))
+
+        actual shouldBe Left(errorResponseUnauthorisedGeneral.XmlResult.withHeaders(CustomHeaderNames.XConversationIdHeaderName -> TestData.conversationIdValue))
       }
     }
   }

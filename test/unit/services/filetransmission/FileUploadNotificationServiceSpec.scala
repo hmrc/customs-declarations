@@ -102,7 +102,6 @@ class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSuga
     private[FileUploadNotificationServiceSpec] implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val successCallbackPayload: FileTransmissionNotification =
     FileTransmissionSuccessNotification(FileReferenceOne, BatchIdOne, FileTransmissionSuccessOutcome)
   private val failureCallbackPayload: FileTransmissionNotification =
@@ -114,7 +113,7 @@ class FileUploadNotificationServiceSpec extends AnyWordSpecLike with MockitoSuga
       when(mockNotificationConnector.send(any[FileUploadCustomsNotification])(any[HeaderCarrier])).thenReturn(Future.successful(()))
       when(mockFileUploadMetadataRepo.fetch(fileRefEq(FileReferenceOne))(any[HasConversationId])).thenReturn(Future.successful(Some(FileMetadataWithFileOne)))
 
-      (service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)(toXml, hc)).futureValue
+      (service.sendMessage(successCallbackPayload, successCallbackPayload.fileReference, subscriptionFieldsId)(toXml, this.hc)).futureValue
 
       verifyNotificationConnectorCalledWithXml(expectedSuccessXml)
     }

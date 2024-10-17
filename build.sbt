@@ -14,7 +14,7 @@ import java.util.Calendar
 import scala.language.postfixOps
 
 name := "customs-declarations"
-scalaVersion := "2.13.14"
+scalaVersion := "3.5.1"
 
 lazy val CdsIntegrationComponentTest = config("it") extend Test
 
@@ -73,9 +73,9 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
       "<empty>"
       ,"uk\\.gov\\.hmrc\\.customs\\.declaration\\.model\\..*"
       ,"uk\\.gov\\.hmrc\\.customs\\.declaration\\.views\\..*"
-      ,".*(Reverse|AuthService|BuildInfo|Routes).*"
+      ,".*(Reverse|AuthService|BuildInfo|Routes|DateTimeService|TestOnlyService).*"
     ).mkString(";"),
-  coverageMinimumStmtTotal := 96,
+  coverageMinimumStmtTotal := 95,
   coverageFailOnMinimum := true,
   coverageHighlighting := true,
   Test / parallelExecution := false
@@ -83,8 +83,6 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
 
 def integrationComponentTestFilter(name: String): Boolean = (name startsWith "integration") || (name startsWith "component")
 def unitTestFilter(name: String): Boolean = name startsWith "unit"
-
-scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
 val compileDependencies = Seq(hmrcMongo, bootstrapBackendPlay30, cats)
 

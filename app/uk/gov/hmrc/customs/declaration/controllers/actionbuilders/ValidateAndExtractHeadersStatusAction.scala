@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.customs.declaration.controllers.actionbuilders
 
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ValidatedHeadersStatusRequest}
 
 import javax.inject.{Inject, Singleton}
+import scala.annotation.unused
 import scala.concurrent.{ExecutionContext, Future}
 
 /** Action builder that validates headers.
@@ -31,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 @Singleton
 class ValidateAndExtractHeadersStatusAction @Inject()(validator: HeaderStatusValidator,
-                                                      logger: DeclarationsLogger)
+                                                      @unused logger: DeclarationsLogger)
                                                      (implicit ec: ExecutionContext)
   extends ActionRefiner[ApiVersionRequest, ValidatedHeadersStatusRequest] {
   actionName =>

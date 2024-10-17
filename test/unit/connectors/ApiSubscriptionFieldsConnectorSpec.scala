@@ -16,8 +16,8 @@
 
 package unit.connectors
 
-import org.mockito.ArgumentMatchers.{any, anyString, eq => ameq}
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.{any, eq as ameq}
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
@@ -28,14 +28,15 @@ import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
-import util.ExternalServicesConfig._
+import util.ExternalServicesConfig.*
 import util.{ApiSubscriptionFieldsTestData, TestData}
 
+import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
 
 class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
@@ -56,7 +57,7 @@ class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
   private val connector = new ApiSubscriptionFieldsConnector(mockWSGetImpl, mockLogger, mockDeclarationsConfigService)
 
   private val expectedUrl = s"http://$Host:$Port$ApiSubscriptionFieldsContext/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0"
-
+  private val url = new URL(expectedUrl)
   override protected def beforeEach(): Unit = {
     reset(mockLogger, mockWSGetImpl, mockDeclarationsConfigService)
 
@@ -69,7 +70,7 @@ class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
       "use the correct URL for valid path parameters and config" in {
         val futureResponse = Future.successful(apiSubscriptionFieldsResponse)
         when(mockWSGetImpl.GET[ApiSubscriptionFieldsResponse](
-          ameq(expectedUrl), any(), any())
+            ameq(url))
           (any[HttpReads[ApiSubscriptionFieldsResponse]](), any[HeaderCarrier](), any[ExecutionContext])).thenReturn(futureResponse)
 
         awaitRequest shouldBe apiSubscriptionFieldsResponse
@@ -94,7 +95,7 @@ class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
   }
 
   private def returnResponseForRequest(eventualResponse: Future[ApiSubscriptionFieldsResponse]) = {
-    when(mockWSGetImpl.GET[ApiSubscriptionFieldsResponse](anyString(), any(), any())
+    when(mockWSGetImpl.GET[ApiSubscriptionFieldsResponse](ameq(url))
       (any[HttpReads[ApiSubscriptionFieldsResponse]](), any[HeaderCarrier](), any[ExecutionContext])).thenReturn(eventualResponse)
   }
 }

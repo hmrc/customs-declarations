@@ -62,26 +62,26 @@ class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
         .toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), Some(nrsRetrievalValues)))
         .toValidatedPayloadRequest(xmlBody = TestXmlPayload)
       
-      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(cspResponsePayload))
+      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.successful(cspResponsePayload))
 
       val result = send(testCspValidatedPayloadRequestWithMinimalHeaders)
 
       result shouldBe cspResponsePayload
 
-      verify(mockNrsConnector).send(meq(cspNrsPayload), any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
+      verify(mockNrsConnector).send(meq(cspNrsPayload), any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])
     }
 
     "serialise multiple headers correctly" in new SetUp() {
-      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(cspResponsePayload))
+      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.successful(cspResponsePayload))
 
       val result = send(TestCspValidatedPayloadRequestMultipleHeaderValues)
 
       result shouldBe cspResponsePayload
-      verify(mockNrsConnector).send(meq(cspNrsPayloadMultipleHeaderValues), any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])
+      verify(mockNrsConnector).send(meq(cspNrsPayloadMultipleHeaderValues), any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])
     }
 
     "return failed future when nrs service call fails" in new SetUp() {
-      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(new Exception()))
+      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.failed(new Exception()))
 
       val result = intercept[Exception](send())
 
@@ -89,7 +89,7 @@ class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
     }
 
     "audit when nrs returns 5xx error response" in new SetUp() {
-      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(new InternalServerException("internal server")))
+      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.failed(new InternalServerException("internal server")))
 
       val result = intercept[Exception](send())
 
@@ -99,7 +99,7 @@ class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
     }
 
     "DO NOT audit when nrs returns 4xx error response" in new SetUp() {
-      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(new BadRequestException("bad request")))
+      when(mockNrsConnector.send(any[NrsPayload], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.failed(new BadRequestException("bad request")))
 
       val result = intercept[Exception](send())
 

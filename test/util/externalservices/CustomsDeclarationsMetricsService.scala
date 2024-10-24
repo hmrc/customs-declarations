@@ -37,7 +37,7 @@ trait CustomsDeclarationsMetricsService extends WireMockRunner {
     stubFor(post(urlMatchingRequestPath)
       .withHeader(ACCEPT, equalTo(MimeTypes.JSON))
       .withHeader(CONTENT_TYPE, equalTo(MimeTypes.JSON))
-      willReturn aResponse()
+      `willReturn` aResponse()
       .withStatus(status))
 
   def verifyCustomsDeclarationsMetricsServiceWasCalled(): Unit = {

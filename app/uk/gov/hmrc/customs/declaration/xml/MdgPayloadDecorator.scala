@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customs.declaration.xml
 
 import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 
 import java.time.Instant
 import scala.xml.{NodeSeq, Text}

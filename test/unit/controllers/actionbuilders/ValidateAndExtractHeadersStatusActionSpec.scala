@@ -46,9 +46,9 @@ class ValidateAndExtractHeadersStatusActionSpec extends AnyWordSpecLike with Moc
   "HeaderValidationStatusAction when validation succeeds" should {
     "extract headers from incoming request and copy relevant values on to the ValidatedHeaderStatusRequest" in new SetUp {
       val apiVersionRequestV1: ApiVersionRequest[AnyContentAsXml] = TestApiVersionRequestV1
-      when(mockHeaderStatusValidator.validateHeaders(any[ApiVersionRequest[_]])).thenReturn(Right(TestExtractedStatusHeaders))
+      when(mockHeaderStatusValidator.validateHeaders(any[ApiVersionRequest[Any]])).thenReturn(Right(TestExtractedStatusHeaders))
 
-      val actualResult: Either[Result, ValidatedHeadersStatusRequest[_]] = validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue
+      val actualResult: Either[Result, ValidatedHeadersStatusRequest[?]] = validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue
 
       actualResult shouldBe Right(TestValidatedHeadersStatusRequest)
     }
@@ -57,9 +57,9 @@ class ValidateAndExtractHeadersStatusActionSpec extends AnyWordSpecLike with Moc
   "HeaderValidationStatusAction when validation fails" should {
     "return error with conversation Id in the headers" in new SetUp {
       val apiVersionRequestV1: ApiVersionRequest[AnyContentAsXml] = TestApiVersionRequestV1
-      when(mockHeaderStatusValidator.validateHeaders(any[ApiVersionRequest[_]])).thenReturn(Left(ErrorContentTypeHeaderInvalid))
+      when(mockHeaderStatusValidator.validateHeaders(any[ApiVersionRequest[Any]])).thenReturn(Left(ErrorContentTypeHeaderInvalid))
 
-      val actualResult: Either[Result, ValidatedHeadersStatusRequest[_]] = validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue
+      val actualResult: Either[Result, ValidatedHeadersStatusRequest[?]] = validateAndExtractHeadersAction.refine(apiVersionRequestV1).futureValue
 
       actualResult shouldBe Left(ErrorContentTypeHeaderInvalid.XmlResult.withHeaders(RequestHeaders.X_CONVERSATION_ID_NAME -> conversationIdValue))
     }

@@ -79,7 +79,7 @@ class ConfigValidatedNelAdaptor @Inject()(servicesConfig: ServicesConfig, config
 
   def root: RootValidatedNelAdaptor = RootConfigReader
 
-  def service(serviceName: String): ValidatedNelAdaptor with UrlNelAdaptor = ServiceConfigReader(serviceName)
+  def service(serviceName: String): ValidatedNelAdaptor & UrlNelAdaptor = ServiceConfigReader(serviceName)
 
   private object RootConfigReader extends RootValidatedNelAdaptor {
 

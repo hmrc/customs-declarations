@@ -43,7 +43,7 @@ trait FileTransmissionService extends WireMockRunner {
     verify(1, postRequestedFor(urlMatchingRequestPath))
     val req = findAll(postRequestedFor(urlMatchingRequestPath)).get(0)
     val keys: List[String] = List.concat(req.getHeaders.keys().asScala)
-    (Map(keys map { s => (s, req.getHeader(s)) }: _*), req.getBodyAsString)
+    (Map(keys map { s => (s, req.getHeader(s)) }*), req.getBodyAsString)
   }
 
   def verifyFileTransmissionServiceWasCalledWith(request: FileTransmission): Unit = {

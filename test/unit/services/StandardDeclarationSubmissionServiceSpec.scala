@@ -76,12 +76,12 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
       (service.send(vpr, hc)).futureValue
     }
 
-    when(mockPayloadDecorator.wrap(meq(TestXmlPayload), meq[ApiSubscriptionFieldsResponse](apiSubscriptionFieldsResponse), any[Instant])(any[ValidatedPayloadRequest[_]])).thenReturn(wrappedValidXML)
+    when(mockPayloadDecorator.wrap(meq(TestXmlPayload), meq[ApiSubscriptionFieldsResponse](apiSubscriptionFieldsResponse), any[Instant])(any[ValidatedPayloadRequest[Any]])).thenReturn(wrappedValidXML)
     when(mockDateTimeProvider.nowUtc()).thenReturn(dateTime)
     when(mockDateTimeProvider.zonedDateTimeUtc).thenReturn(CustomsDeclarationsMetricsTestData.EventStart, CustomsDeclarationsMetricsTestData.EventEnd)
-    when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(mockHttpResponse))
-    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-    when(mockNrsService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(nrSubmissionId))
+    when(mockMdgDeclarationConnector.send(any[NodeSeq], meq(dateTime), any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.successful(mockHttpResponse))
+    when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[?]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+    when(mockNrsService.send(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.successful(nrSubmissionId))
   }
   "StandardDeclarationSubmissionService" should {
 
@@ -106,8 +106,8 @@ class StandardDeclarationSubmissionServiceSpec extends AnyWordSpecLike with Mock
 
     "should still contain nrs submission id even if call to downstream fails" in new SetUp() {
       when(mockDeclarationsConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
-      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
-      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
+      when(mockApiSubscriptionFieldsConnector.getSubscriptionFields(any[ApiSubscriptionKey])(any[ValidatedPayloadRequest[?]], any[HeaderCarrier])).thenReturn(Future.successful(apiSubscriptionFieldsResponse))
+      when(mockMdgDeclarationConnector.send(any[NodeSeq], any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.failed(emulatedServiceFailure))
       val result: Either[Result, Option[NrSubmissionId]] = send()
 
       result shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))

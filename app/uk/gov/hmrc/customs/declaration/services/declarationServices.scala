@@ -170,9 +170,9 @@ trait ApiSubscriptionFieldsService {
   private val apiContextEncoded = URLEncoder.encode("customs/declarations", "UTF-8")
 
   def futureApiSubFieldsId[A](c: ClientId)
-                             (implicit vpr: HasConversationId with HasApiVersion with HasAuthorisedAs with ExtractedHeaders, hc: HeaderCarrier): Future[Either[Result, ApiSubscriptionFieldsResponse]] = {
+                             (implicit vpr: HasConversationId & HasApiVersion & HasAuthorisedAs & ExtractedHeaders, hc: HeaderCarrier): Future[Either[Result, ApiSubscriptionFieldsResponse]] = {
     (apiSubFieldsConnector.getSubscriptionFields(ApiSubscriptionKey(c, apiContextEncoded, vpr.requestedApiVersion)) map {
-      response: ApiSubscriptionFieldsResponse =>
+      (response: ApiSubscriptionFieldsResponse) =>
         vpr.authorisedAs match {
           case Csp(_, _, _) =>
             if (response.fields.authenticatedEori.exists(_.trim.nonEmpty)) {

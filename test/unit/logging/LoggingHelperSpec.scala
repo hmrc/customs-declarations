@@ -35,7 +35,7 @@ class LoggingHelperSpec extends AnyWordSpecLike with MockitoSugar with Matchers 
   private def expectedMessage(message: String, maybeAuthorised: String = "") = s"[conversationId=${conversationId.toString}]" +
     "[clientId=some-client-id]" +
     s"[requestedApiVersion=1.0]$maybeAuthorised $message"
-  private val requestMock = mock[Request[_]]
+  private val requestMock = mock[Request[?]]
   private val conversationIdRequest =
     ConversationIdRequest(
       conversationId,

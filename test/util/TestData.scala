@@ -258,7 +258,7 @@ object TestData {
 
   object TestModule extends AbstractModule {
     override def configure(): Unit = {
-      bind(classOf[UuidService]) toInstance mockUuidService
+      bind(classOf[UuidService]) `toInstance` mockUuidService
     }
 
     def asGuiceableModule: GuiceableModule = GuiceableModule.guiceable(this)
@@ -277,9 +277,9 @@ object TestData {
   val TestFakeRequestWithBadgeIdAndNoEori: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(("Authorization", "bearer-token"), ("X-Badge-Identifier", badgeIdentifier.value))
   val TestFakeRequestWithEoriAndNoBadgeId: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(("Authorization", "bearer-token"), ("X-EORI-Identifier", declarantEori.value))
   val TestFakeRequestMultipleHeaderValues: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(("Authorization", "bearer-token"), ("Accept", "ABC"), ("Accept", "DEF"))
-  val TestFakeRequestWithV1Headers: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV1.toSeq: _*)
-  val TestFakeRequestWithV2Headers: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV2.toSeq: _*)
-  val TestFakeRequestWithV3Headers: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV3.toSeq: _*)
+  val TestFakeRequestWithV1Headers: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV1.toSeq*)
+  val TestFakeRequestWithV2Headers: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV2.toSeq*)
+  val TestFakeRequestWithV3Headers: FakeRequest[AnyContentAsXml] = FakeRequest().withXmlBody(TestXmlPayload).withHeaders(ValidHeadersV3.toSeq*)
 
   def testFakeRequestWithBadgeId(badgeIdString: String = badgeIdentifier.value): FakeRequest[AnyContentAsXml] =
     FakeRequest().withXmlBody(TestXmlPayload).withHeaders(RequestHeaders.X_BADGE_IDENTIFIER_NAME -> badgeIdString)

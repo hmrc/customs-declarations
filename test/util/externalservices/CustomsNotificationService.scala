@@ -55,7 +55,7 @@ trait CustomsNotificationService extends WireMockRunner {
 
     val req = findAll(postRequestedFor(notifyPath)).get(0)
     val keys: List[String] = List.concat(req.getHeaders.keys().asScala)
-    (Map(keys map { s => (s, req.getHeader(s)) }: _*), req.getBodyAsString)
+    (Map(keys map { s => (s, req.getHeader(s)) }*), req.getBodyAsString)
   }
 
   def verifyWasCalledWith(requestBody: String): Unit = {

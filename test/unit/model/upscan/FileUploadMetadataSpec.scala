@@ -51,18 +51,18 @@ class FileUploadMetadataSpec extends AnyWordSpecLike with Matchers {
                              |}
                              |""".stripMargin
 
-  private val json = Json.parse(jsonString)
+  private val expectedJson = Json.parse(jsonString)
 
   "FileUploadMetaData model" should {
     "serialise to Json" in {
       val actualJson = Json.toJson(FileMetadataWithFileOne)
 
-      actualJson shouldBe json
+      actualJson shouldBe expectedJson
     }
 
     "de-serialise from Json" in {
 
-      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[FileUploadMetadata]
+      val JsSuccess(actualMetaData, _) = Json.parse(jsonString).validate[FileUploadMetadata]: @unchecked
 
       actualMetaData shouldBe FileMetadataWithFileOne
     }

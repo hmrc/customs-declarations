@@ -48,7 +48,7 @@ class UpscanInitiateConnector @Inject()(http: HttpClient,
 
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
     http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload, getCustomsApiStubExtraHeaders(hc))(implicitly, implicitly, headerCarrier, implicitly)
-      .map { res: UpscanInitiateResponsePayload =>
+      .map { (res: UpscanInitiateResponsePayload) =>
         logger.info(s"reference from call to upscan initiate ${res.reference}")
         logger.debug(s"Response received from upscan initiate service $res")
         res

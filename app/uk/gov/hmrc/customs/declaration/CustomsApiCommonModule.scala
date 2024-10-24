@@ -23,7 +23,7 @@ import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class CustomsApiCommonModule extends Module {
 
-  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[?]] = Seq(
     bind[HttpClient].to[DefaultHttpClient]
   )
 

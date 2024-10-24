@@ -17,7 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers.dynamicservice
 
 import com.google.inject.Inject
-import play.api.libs.json._
+import play.api.libs.json.*
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.customs.declaration.config.{InvalidEnvironmentException, ServiceConfigProvider}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
@@ -31,7 +31,7 @@ class DynamicServiceConfigurationController @Inject()(serviceConfigProvider: Ser
 
   def setConfigurationForService(service: String): Action[AnyContent] = Action { request =>
     request.body.asJson.get.validate[ServiceConfigDto] match {
-      case success: JsSuccess[ServiceConfigDto] =>
+      case success: JsSuccess[_] =>
         val dto = success.value
         setEnvironmentForService(service, dto.environment)
       case _: JsError => BadRequest("no environment was provided")

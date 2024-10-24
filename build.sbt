@@ -30,8 +30,7 @@ lazy val testAll = TaskKey[Unit]("test-all")
 lazy val allTest = Seq(testAll := (CdsIntegrationComponentTest / test).dependsOn(Test / test).value)
 
 lazy val microservice = (project in file("."))
-  .enablePlugins(PlayScala)
-  .enablePlugins(SbtDistributablesPlugin)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin, BuildInfoPlugin)
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
   .configs(testConfig: _*)
   .settings(
@@ -43,6 +42,10 @@ lazy val microservice = (project in file("."))
   )
   .settings(majorVersion := 0)
   .settings(playDefaultPort := 9820)
+  .settings(
+    buildInfoKeys := Seq[BuildInfoKey](scalaVersion),
+    buildInfoPackage := "buildinfo"
+  )
 
 def onPackageName(rootPackage: String): String => Boolean = {
   testName => testName startsWith rootPackage
@@ -123,7 +126,3 @@ zipWcoXsds := { mappings: Seq[PathMapping] =>
 }
 
 pipelineStages := Seq(zipWcoXsds)
-
-// To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
-// Try to remove when sbt 1.8.0+ and scoverage is 2.0.7+
-ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always

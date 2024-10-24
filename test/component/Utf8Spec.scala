@@ -26,7 +26,7 @@ import util.AuditService
 import util.FakeRequests.*
 import util.RequestHeaders.ValidHeadersV2WithCharset
 import util.externalservices.*
-
+import buildinfo.BuildInfo
 import java.nio.file.{Files, Paths}
 import scala.concurrent.Future
 
@@ -60,9 +60,8 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
     stopMockServer()
   }
 
-  // TODO: get Scala version number, avoid string literal
-  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-3.5.1/test-classes/raw/valid_xml.raw")))
-  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-3.5.1/test-classes/raw/invalid_xml.raw")))
+  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-${BuildInfo.scalaVersion}/test-classes/raw/valid_xml.raw")))
+  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-${BuildInfo.scalaVersion}/test-classes/raw/invalid_xml.raw")))
   
   Feature("Declaration API rejects declaration payloads containing invalid utf-8 bytes") {
     Scenario(

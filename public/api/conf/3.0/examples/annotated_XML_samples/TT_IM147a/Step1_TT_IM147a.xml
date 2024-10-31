@@ -1,19 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.7</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			Please note this sample now has credibility checks after the tariff refresh. This will be resolved for a future release.
             SCENARIO
@@ -33,7 +24,7 @@
 		<!--DE 2/5: LRN.
             Mandatory.
             Trader's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>7847323SC4TZ</FunctionalReferenceID>
+		<FunctionalReferenceID>U.78473238HHMD</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
             Mandatory.
             IM to represent an import declaration. -->
@@ -287,9 +278,9 @@
 					</GoodsMeasure>
 					<!--DE 4/14: Item Price/ Amount.
                         Mandatory.
-                        The invoice was issued with a value of 5000 and the currency was in GBP. -->
+                        The invoice was issued with a value of 10000 and the currency was in GBP. -->
 					<InvoiceLine>
-						<ItemChargeAmount currencyID="GBP">5000</ItemChargeAmount>
+						<ItemChargeAmount currencyID="GBP">10000</ItemChargeAmount>
 					</InvoiceLine>
 				</Commodity>
 				<!--DE 4/16: Valuation method.
@@ -353,7 +344,7 @@
             In CDS, the MUCR (MCR) is not required on a sup dec. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>4GB896458895015-20240207</ID>
+				<ID>4GB896458895015-2810-02</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

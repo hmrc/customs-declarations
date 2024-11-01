@@ -16,7 +16,7 @@
 
 package unit.services.upscan
 
-import org.mockito.ArgumentMatchers.{eq => meq, _}
+import org.mockito.ArgumentMatchers.{eq as meq, *}
 import org.mockito.Mockito.{atLeastOnce, times, verify, when}
 import org.scalatest.EitherValues
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -31,15 +31,16 @@ import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ValidatedFileUploadPayloadRequest, ValidatedPayloadRequest}
+import uk.gov.hmrc.customs.declaration.model.*
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedFileUploadPayloadRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.upscan.FileUploadMetadata
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
-import util.TestData._
+import util.MockitoPassByNameHelper.PassByNameVerifier
+import util.TestData.*
 
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
@@ -253,6 +254,12 @@ class FileUploadBusinessServiceSpec extends AnyWordSpec with MockitoSugar with G
       val result: Future[Result] = Future.successful(send().left.value)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+
+      PassByNameVerifier(mockLogger, "error")
+        .withByNameParam[String]("Subscriptions fields lookup call failed: Emulated service failure.")
+        .withByNameParam(emulatedServiceFailure)
+        .withParamMatcher(any[HasConversationId])
+        .verify()
     }
 
     "return 500 error response when upscan initiate call fails" in new SetUp() {
@@ -262,6 +269,11 @@ class FileUploadBusinessServiceSpec extends AnyWordSpec with MockitoSugar with G
       val result: Future[Result] = Future.successful(send().left.value)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      PassByNameVerifier(mockLogger, "error")
+        .withByNameParam[String]("Upscan initiate call failed: Emulated service failure.")
+        .withByNameParam(emulatedServiceFailure)
+        .withParamMatcher(any[HasConversationId])
+        .verify()
     }
   }
 

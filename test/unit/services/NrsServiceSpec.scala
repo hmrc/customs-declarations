@@ -16,22 +16,23 @@
 
 package unit.services
 
-import org.mockito.ArgumentMatchers.{eq => meq, _}
+import org.mockito.ArgumentMatchers.{eq as meq, *}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc._
+import play.api.mvc.*
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.NrsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.{ApiVersionRequestOps, AuthorisedRequestOps, ConversationIdRequestOps, ValidatedHeadersRequestOps}
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.declaration.services.{AuditingService, DateTimeService, NrsService}
-import uk.gov.hmrc.http._
-import util.TestData._
+import uk.gov.hmrc.http.*
+import util.MockitoPassByNameHelper.PassByNameVerifier
+import util.TestData.*
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -96,6 +97,10 @@ class NrsServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
       result shouldBe a[Exception]
       verify(mockAuditingService).auditFailedNrs(any[NrsPayload], any[HttpException])(any[ValidatedPayloadRequest[AnyContent]])
       verify(mockAuditingService, times(0)).auditFailedNrs(any[NrsPayload], any[UpstreamErrorResponse])(any[ValidatedPayloadRequest[AnyContent]])
+      PassByNameVerifier(mockLogger, "info")
+        .withByNameParam[String]("Error occurred while submitting NRS payload got HttpException status: 500 error message: internal server")
+        .withParamMatcher[HasConversationId](any[HasConversationId])
+        .verify()
     }
 
     "DO NOT audit when nrs returns 4xx error response" in new SetUp() {

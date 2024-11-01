@@ -16,6 +16,7 @@
 
 package unit.controllers.actionbuilders
 
+import org.mockito.ArgumentMatchers.any
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -26,9 +27,10 @@ import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.*
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderStatusValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.{VersionOne}
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders, ExtractedStatusHeadersImpl}
+import uk.gov.hmrc.customs.declaration.model.VersionOne
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders, ExtractedStatusHeadersImpl, HasConversationId}
 import util.CustomsDeclarationsMetricsTestData.EventStart
+import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders.*
 import util.{ApiSubscriptionFieldsTestData, TestData}
 import util.TestData.badgeIdentifier
@@ -48,6 +50,13 @@ class HeaderStatusValidatorSpec extends AnyWordSpecLike with TableDrivenProperty
     }
   }
 
+  private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {
+    PassByNameVerifier(mockLogger, logLevel)
+      .withByNameParam(logText)
+      .withParamMatcher(any[HasConversationId])
+      .verify()
+  }
+
   "HeaderValidator" can {
     "in unhappy path, validation" should {
       "fail when request has invalid X-Badge-Identifier header" in new SetUp {
@@ -61,6 +70,7 @@ class HeaderStatusValidatorSpec extends AnyWordSpecLike with TableDrivenProperty
     "in happy path, validation" should {
       "be successful for a valid request with accept header for V2" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+        logVerifier(loggerMock, "debug", "\nX-Client-ID header passed validation: SOME_X_CLIENT_ID X-Badge-Identifier header passed validation: BADGEID123")
       }
       "be successful for a valid request with accept header for V3" in new SetUp {
         validate(apiVersionRequest(ValidHeadersV3)) shouldBe Right(extractedHeadersWithBadgeIdentifierV3)

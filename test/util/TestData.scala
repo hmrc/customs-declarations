@@ -252,6 +252,9 @@ object TestData {
   type EmulatedServiceFailure = UnsupportedOperationException
   val emulatedServiceFailure = new EmulatedServiceFailure("Emulated service failure.")
 
+  type EmulatedInsufficientEnrolments = InsufficientEnrolments
+  val emulatedInsufficientEnrolments = new EmulatedInsufficientEnrolments("Insufficient Enrolments")
+  
   lazy val mockUuidService: UuidService = mock[UuidService]
 
   lazy val stubDeclarationsLogger = new StubDeclarationsLogger(mock[CdsLogger])

@@ -16,6 +16,7 @@
 
 package unit.controllers.actionbuilders
 
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
@@ -33,7 +34,8 @@ import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthStatusActi
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.Csp
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.*
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersStatusRequest
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedHeadersStatusRequest}
+import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData.*
 import util.{AuthConnectorNrsDisabledStubbing, TestData}
 
@@ -55,6 +57,13 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
     reset(mockAuthenticationConnector)
   }
 
+  private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {
+    PassByNameVerifier(mockLogger, logLevel)
+      .withByNameParam(logText)
+      .withParamMatcher(any[HasConversationId])
+      .verify()
+  }
+
   "AuthStatusAction" can {
     "for Declaration Status request" should {
 
@@ -67,6 +76,7 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
 
         actual shouldBe Right(validatedHeadersRequest.toAuthorisedRequest(Csp(None, Some(badgeIdentifier), None)))
         verifyCspAuthorisationCalled(1)
+        logVerifier(mockImportsLogger, "debug", "Successfully authorised status CSP PrivilegedApplication with write:customs-declaration enrolment")
       }
 
       "return ErrorResponse with ConversationId when not authorised by auth API" in new SetUp {
@@ -75,6 +85,11 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
         private val actual = await(authAction.refine(validatedHeadersRequest))
         actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(CustomHeaderNames.XConversationIdHeaderName -> TestData.conversationIdValue))
         verifyCspAuthorisationCalled(1)
+        PassByNameVerifier(mockImportsLogger, "error")
+          .withByNameParam[String]("Error when authorising for status CSP PrivilegedApplication with write:customs-declaration enrolment")
+          .withByNameParam(emulatedServiceFailure)
+          .withParamMatcher(any[HasConversationId])
+          .verify()
       }
 
       "return Unauthorised error response with conversationId when not authorised" in new SetUp {
@@ -83,6 +98,11 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
         private val actual = await(authAction.refine(validatedHeadersRequest))
 
         actual shouldBe Left(errorResponseUnauthorisedGeneral.XmlResult.withHeaders(CustomHeaderNames.XConversationIdHeaderName -> TestData.conversationIdValue))
+        PassByNameVerifier(mockImportsLogger, "debug")
+          .withByNameParam[String]("No authorisation for status CSP PrivilegedApplication with write:customs-declaration enrolment")
+          .withByNameParam(emulatedInsufficientEnrolments)
+          .withParamMatcher(any[HasConversationId])
+          .verify()
       }
     }
   }

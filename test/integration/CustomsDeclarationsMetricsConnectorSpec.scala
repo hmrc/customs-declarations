@@ -16,6 +16,7 @@
 
 package integration
 
+import org.mockito.ArgumentMatchers.any
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.should.Matchers
@@ -27,9 +28,10 @@ import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import uk.gov.hmrc.customs.declaration.connectors.CustomsDeclarationsMetricsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import util.CustomsDeclarationsMetricsTestData._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedPayloadRequest}
+import util.CustomsDeclarationsMetricsTestData.*
 import util.ExternalServicesConfig.{Host, Port}
+import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.VerifyLogging.verifyDeclarationsLoggerError
 import util.externalservices.{AuditService, CustomsDeclarationsMetricsService}
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
@@ -54,7 +56,14 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
   override protected def afterAll(): Unit = {
     stopMockServer()
   }
-
+  
+  private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {
+    PassByNameVerifier(mockLogger, logLevel)
+      .withByNameParam(logText)
+      .withParamMatcher(any[HasConversationId])
+      .verify()
+  }
+  
   override implicit lazy val app: Application =
     GuiceApplicationBuilder(overrides = Seq(IntegrationTestModule(mockDeclarationsLogger).asGuiceableModule)).configure(Map(
       "auditing.consumer.baseUri.host" -> Host,
@@ -75,6 +84,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
       response shouldBe (() : Unit)
       verifyCustomsDeclarationsMetricsServiceWasCalledWith(ValidCustomsDeclarationsMetricsRequest)
       verifyAuditServiceWasNotCalled()
+      logVerifier(mockDeclarationsLogger, "debug", "[conversationId=38400000-8cf0-11bd-b23e-10b96e4ef00d]: customs declarations metrics sent successfully")
     }
 
     "return a failed future when external service returns 404" in {

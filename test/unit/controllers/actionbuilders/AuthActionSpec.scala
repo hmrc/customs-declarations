@@ -233,6 +233,10 @@ class AuthActionSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
 
         actual shouldBe Left(errorResponseMissingIdentifiers.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationId.toString))
         verifyNonCspAuthorisationNotCalled
+        PassByNameVerifier(mockLogger, "error")
+          .withByNameParam[String]("Both X-Submitter-Identifier and X-Badge-Identifier headers are missing")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
       }
 
       "Return 400 response when authorised by auth API but badge identifier exists but is too long" in new NrsEnabled {

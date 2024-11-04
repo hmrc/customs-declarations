@@ -18,16 +18,17 @@ package uk.gov.hmrc.customs.declaration.services.upscan
 
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.model.filetransmission._
-import uk.gov.hmrc.customs.declaration.model.upscan._
+import uk.gov.hmrc.customs.declaration.model.filetransmission.*
+import uk.gov.hmrc.customs.declaration.model.upscan.*
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import java.net.URL
 import javax.inject.{Inject, Singleton}
+import scala.annotation.unused
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -75,7 +76,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
     )
   }
 
-  private def extractFileProperties(ready: UploadedReadyCallbackBody, md: FileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {
+  private def extractFileProperties(@unused ready: UploadedReadyCallbackBody, md: FileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {
     val fileProperties = Seq("DeclarationId" -> md.declarationId.toString, "Eori" -> md.eori.toString)
       .map(t => FileTransmissionProperty(name = t._1, value = t._2))
     if (bf.documentType.isDefined) fileProperties :+ FileTransmissionProperty("DocumentType", bf.documentType.get.toString) else fileProperties

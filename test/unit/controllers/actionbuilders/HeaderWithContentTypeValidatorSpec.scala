@@ -41,7 +41,7 @@ class HeaderWithContentTypeValidatorSpec extends AnyWordSpecLike with TableDrive
     val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
     val validator = new HeaderWithContentTypeValidator(loggerMock)
 
-    def validate(avr: ApiVersionRequest[_]): Either[ErrorResponse, ExtractedHeaders] = {
+    def validate(avr: ApiVersionRequest[?]): Either[ErrorResponse, ExtractedHeaders] = {
       validator.validateHeaders(avr)
     }
   }
@@ -162,6 +162,6 @@ class HeaderWithContentTypeValidatorSpec extends AnyWordSpecLike with TableDrive
     }
   }
 
-  private def apiVersionRequest(requestMap: Map[String, String]): ApiVersionRequest[_] =
-    ApiVersionRequest(TestData.conversationId, EventStart, VersionOne, FakeRequest().withHeaders(requestMap.toSeq: _*))
+  private def apiVersionRequest(requestMap: Map[String, String]): ApiVersionRequest[?] =
+    ApiVersionRequest(TestData.conversationId, EventStart, VersionOne, FakeRequest().withHeaders(requestMap.toSeq*))
 }

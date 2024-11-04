@@ -51,8 +51,8 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
                           (implicit ec: ExecutionContext)
   extends ActionRefiner[ValidatedHeadersRequest, AuthorisedRequest] {
 
-  protected[this] def requestRetrievalsForEndpoint: Boolean = true
-  protected[this] def executionContext: ExecutionContext = ec
+  protected def requestRetrievalsForEndpoint: Boolean = true
+  protected def executionContext: ExecutionContext = ec
 
   override def refine[A](vhr: ValidatedHeadersRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val implicitVhr: ValidatedHeadersRequest[A] = vhr
@@ -79,7 +79,7 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
   }
 
   private def authAsCspWithMandatoryAuthHeaders[A](requestRetrievals: Boolean)
-                                                  (implicit vhr: HasRequest[A] with HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {
+                                                  (implicit vhr: HasRequest[A] & HasConversationId, hc: HeaderCarrier): Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] = {
 
     val eventualAuthWithIdentifierHeaders: Future[Either[ErrorResponse, Option[AuthorisedAsCsp]]] =
       customsAuthService.authAsCsp(requestRetrievals).map {
@@ -95,7 +95,7 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
     eventualAuthWithIdentifierHeaders
   }
 
-  protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
+  protected def eitherCspAuthData[A](maybeNrsRetrievalData: Option[NrsRetrievalData])(implicit vhr: HasRequest[A] & HasConversationId): Either[ErrorResponse, AuthorisedAsCsp] = {
     eitherBadgeIdentifier(allowNone = false) map {
       badgeId =>
         logger.info(headerValidator.logBadgeIdHeaderText(badgeId))
@@ -103,7 +103,7 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
     }
   }
 
-  protected def eitherBadgeIdentifier[A](allowNone: Boolean)(implicit vhr: HasRequest[A] with HasConversationId): Either[ErrorResponse, Option[BadgeIdentifier]] = {
+  protected def eitherBadgeIdentifier[A](allowNone: Boolean)(implicit vhr: HasRequest[A] & HasConversationId): Either[ErrorResponse, Option[BadgeIdentifier]] = {
     headerValidator.eitherBadgeIdentifier(allowNone = allowNone)
   }
 

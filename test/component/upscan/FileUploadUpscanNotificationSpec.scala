@@ -18,6 +18,7 @@ package component.upscan
 
 import component.{ComponentTestSpec, ExpectedTestResponses}
 import org.mongodb.scala.model.Filters
+import org.mongodb.scala.SingleObservableFuture
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
@@ -49,7 +50,7 @@ class FileUploadUpscanNotificationSpec extends ComponentTestSpec with ExpectedTe
 
   private val endpoint = s"/uploaded-file-upscan-notifications/clientSubscriptionId/$subscriptionFieldsIdString"
 
-  val repo = app.injector.instanceOf[FileUploadMetadataMongoRepo]
+  val repo: FileUploadMetadataMongoRepo = app.injector.instanceOf[FileUploadMetadataMongoRepo]
 
   override protected def beforeAll(): Unit = {
     startMockServer()

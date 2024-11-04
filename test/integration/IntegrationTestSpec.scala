@@ -26,7 +26,7 @@ import util.UnitSpec
 
 case class IntegrationTestModule(mockLogger: DeclarationsLogger) extends AbstractModule {
   override def configure(): Unit = {
-    bind(classOf[DeclarationsLogger]) toInstance mockLogger
+    bind(classOf[DeclarationsLogger]) `toInstance` mockLogger
   }
 
   def asGuiceableModule: GuiceableModule = GuiceableModule.guiceable(this)
@@ -40,6 +40,6 @@ trait IntegrationTestSpec extends AnyWordSpecLike with UnitSpec
    * @return
    */
   def localhostString: String = {
-    if (System.getenv("HOME") == "/home/jenkins") "127.0.0.1" else "0:0:0:0:0:0:0:1"
+    if (System.getenv("HOME") == "/home/jenkins") "127.0.0.1" else "[0:0:0:0:0:0:0:1]"
   }
 }

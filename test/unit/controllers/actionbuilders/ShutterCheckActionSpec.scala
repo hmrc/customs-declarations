@@ -73,14 +73,14 @@ class ShutterCheckActionSpec extends AnyWordSpecLike with MockitoSugar with Matc
 
   "in unhappy path, validation" should {
     "fail for a valid request with missing accept header" in new SetUp {
-      val requestWithoutAcceptHeader = FakeRequest().withXmlBody(TestXmlPayload).withHeaders((ValidHeadersV1 - ACCEPT).toSeq: _*)
+      val requestWithoutAcceptHeader = FakeRequest().withXmlBody(TestXmlPayload).withHeaders((ValidHeadersV1 - ACCEPT).toSeq*)
       
       val result = await(action.refine(ConversationIdRequest(conversationId, EventStart, requestWithoutAcceptHeader)))
       result shouldBe Left(ErrorAcceptHeaderInvalid.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationIdValue))
     }
 
     "fail for a valid request with invalid accept header" in new SetUp {
-      val requestWithInvalidAcceptHeader = FakeRequest().withXmlBody(TestXmlPayload).withHeaders((ValidHeadersV1 + ACCEPT_HEADER_INVALID).toSeq: _*)
+      val requestWithInvalidAcceptHeader = FakeRequest().withXmlBody(TestXmlPayload).withHeaders((ValidHeadersV1 + ACCEPT_HEADER_INVALID).toSeq*)
 
       val result = await(action.refine(ConversationIdRequest(conversationId, EventStart, requestWithInvalidAcceptHeader)))
       result shouldBe Left(ErrorAcceptHeaderInvalid.XmlResult.withHeaders(X_CONVERSATION_ID_NAME -> conversationIdValue))

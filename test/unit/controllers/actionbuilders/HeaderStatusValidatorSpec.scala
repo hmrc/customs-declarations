@@ -16,6 +16,7 @@
 
 package unit.controllers.actionbuilders
 
+import org.mockito.ArgumentMatchers.any
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -23,26 +24,37 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.mvc.Http.Status.BAD_REQUEST
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
-import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse._
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.*
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.HeaderStatusValidator
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.VersionOne
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders}
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{ApiVersionRequest, ExtractedHeaders, ExtractedStatusHeadersImpl, HasConversationId}
 import util.CustomsDeclarationsMetricsTestData.EventStart
-import util.RequestHeaders._
-import util.TestData
+import util.MockitoPassByNameHelper.PassByNameVerifier
+import util.RequestHeaders.*
+import util.{ApiSubscriptionFieldsTestData, TestData}
+import util.TestData.badgeIdentifier
 
 class HeaderStatusValidatorSpec extends AnyWordSpecLike with TableDrivenPropertyChecks with MockitoSugar with Matchers{
 
+  private val extractedHeadersWithBadgeIdentifierV2 = ExtractedStatusHeadersImpl(badgeIdentifier, ApiSubscriptionFieldsTestData.clientId)
+  private val extractedHeadersWithBadgeIdentifierV3 = extractedHeadersWithBadgeIdentifierV2.copy()
   private val ErrorInvalidBadgeIdentifierHeader: ErrorResponse = ErrorResponse(BAD_REQUEST, BadRequestCode, s"X-Badge-Identifier header is missing or invalid")
 
   trait SetUp {
     val loggerMock: DeclarationsLogger = mock[DeclarationsLogger]
     val validator = new HeaderStatusValidator(loggerMock)
 
-    def validate(avr: ApiVersionRequest[_]): Either[ErrorResponse, ExtractedHeaders] = {
+    def validate(avr: ApiVersionRequest[?]): Either[ErrorResponse, ExtractedHeaders] = {
       validator.validateHeaders(avr)
     }
+  }
+
+  private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {
+    PassByNameVerifier(mockLogger, logLevel)
+      .withByNameParam(logText)
+      .withParamMatcher(any[HasConversationId])
+      .verify()
   }
 
   "HeaderValidator" can {
@@ -54,8 +66,18 @@ class HeaderStatusValidatorSpec extends AnyWordSpecLike with TableDrivenProperty
         validate(apiVersionRequest(ValidHeadersV2 - X_BADGE_IDENTIFIER_NAME)) shouldBe Left(ErrorInvalidBadgeIdentifierHeader)
       }
     }
+
+    "in happy path, validation" should {
+      "be successful for a valid request with accept header for V2" in new SetUp {
+        validate(apiVersionRequest(ValidHeadersV2)) shouldBe Right(extractedHeadersWithBadgeIdentifierV2)
+        logVerifier(loggerMock, "debug", "\nX-Client-ID header passed validation: SOME_X_CLIENT_ID X-Badge-Identifier header passed validation: BADGEID123")
+      }
+      "be successful for a valid request with accept header for V3" in new SetUp {
+        validate(apiVersionRequest(ValidHeadersV3)) shouldBe Right(extractedHeadersWithBadgeIdentifierV3)
+      }
+    }
   }
 
-  private def apiVersionRequest(requestMap: Map[String, String]): ApiVersionRequest[_] =
-    ApiVersionRequest(TestData.conversationId, EventStart, VersionOne, FakeRequest().withHeaders(requestMap.toSeq: _*))
+  private def apiVersionRequest(requestMap: Map[String, String]): ApiVersionRequest[?] =
+    ApiVersionRequest(TestData.conversationId, EventStart, VersionOne, FakeRequest().withHeaders(requestMap.toSeq*))
 }

@@ -98,7 +98,7 @@ class CustomsDeclarationControllerSpec extends AnyWordSpecLike
     }
 
     when(mockXmlValidationService.validate(any[NodeSeq])(any[ExecutionContext])).thenReturn(Future.successful(()))
-    when(mockBusinessService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier])).thenReturn(Future.successful(Right(Some(nrSubmissionId))))
+    when(mockBusinessService.send(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])).thenReturn(Future.successful(Right(Some(nrSubmissionId))))
     when(mockDeclarationConfigService.nrsConfig).thenReturn(nrsConfigEnabled)
     when(mockDeclarationConfigService.declarationsShutterConfig).thenReturn(allVersionsUnshuttered)
   }
@@ -199,7 +199,7 @@ class CustomsDeclarationControllerSpec extends AnyWordSpecLike
     "respond with status 400 for a request with an invalid X-Badge-Identifier" in new SetUp() {
       authoriseCsp()
 
-      val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders((ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS).toSeq: _*))
+      val result: Result = awaitSubmit(ValidSubmissionV2Request.withHeaders((ValidHeadersV2 + X_BADGE_IDENTIFIER_HEADER_INVALID_CHARS).toSeq*))
 
       result shouldBe errorResultBadgeIdentifier
       verifyNoMoreInteractions(mockBusinessService)
@@ -252,7 +252,7 @@ class CustomsDeclarationControllerSpec extends AnyWordSpecLike
     }
 
     "return the error response returned from the Communication service" in new SetUp() {
-      when(mockBusinessService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+      when(mockBusinessService.send(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier]))
         .thenReturn(Future.successful(Left(mockResult)))
       authoriseCsp()
 
@@ -262,7 +262,7 @@ class CustomsDeclarationControllerSpec extends AnyWordSpecLike
     }
 
     "return the Internal Server error when business service returns a 500 " in new SetUp() {
-      when(mockBusinessService.send(any[ValidatedPayloadRequest[_]], any[HeaderCarrier]))
+      when(mockBusinessService.send(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier]))
         .thenReturn(Future.successful(Left(ErrorResponse.ErrorInternalServerError.XmlResult)))
       authoriseCsp()
 

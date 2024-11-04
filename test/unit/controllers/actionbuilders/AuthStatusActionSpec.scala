@@ -16,24 +16,27 @@
 
 package unit.controllers.actionbuilders
 
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.http.Status.UNAUTHORIZED
 import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames
-import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.ErrorInternalServerError
+import uk.gov.hmrc.customs.declaration.controllers.{CustomHeaderNames, ErrorResponse}
+import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.{ErrorInternalServerError, UnauthorizedCode}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.AuthStatusAction
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.Csp
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedHeadersStatusRequest
-import util.TestData._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.*
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, ValidatedHeadersStatusRequest}
+import util.MockitoPassByNameHelper.PassByNameVerifier
+import util.TestData.*
 import util.{AuthConnectorNrsDisabledStubbing, TestData}
 
 import scala.concurrent.ExecutionContext
@@ -42,8 +45,9 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
 
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private lazy val validatedHeadersRequest: ValidatedHeadersStatusRequest[AnyContentAsXml] = TestValidatedHeadersStatusRequest
-  private val mockAuthenticationConnector: AuthConnector = mock[AuthConnector]
+  private val mockAuthenticationConnector: AuthConnector   = mock[AuthConnector]
   private val mockImportsLogger= mock[DeclarationsLogger]
+  private val errorResponseUnauthorisedGeneral = ErrorResponse(UNAUTHORIZED, UnauthorizedCode, "Unauthorised request")
 
   trait SetUp extends AuthConnectorNrsDisabledStubbing { // NRS not required yet
     override val mockAuthConnector: AuthConnector = mockAuthenticationConnector
@@ -51,6 +55,13 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
 
   override protected def beforeEach(): Unit = {
     reset(mockAuthenticationConnector)
+  }
+
+  private def logVerifier(mockLogger: DeclarationsLogger, logLevel: String, logText: String): Unit = {
+    PassByNameVerifier(mockLogger, logLevel)
+      .withByNameParam(logText)
+      .withParamMatcher(any[HasConversationId])
+      .verify()
   }
 
   "AuthStatusAction" can {
@@ -65,6 +76,7 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
 
         actual shouldBe Right(validatedHeadersRequest.toAuthorisedRequest(Csp(None, Some(badgeIdentifier), None)))
         verifyCspAuthorisationCalled(1)
+        logVerifier(mockImportsLogger, "debug", "Successfully authorised status CSP PrivilegedApplication with write:customs-declaration enrolment")
       }
 
       "return ErrorResponse with ConversationId when not authorised by auth API" in new SetUp {
@@ -73,6 +85,24 @@ class AuthStatusActionSpec extends AnyWordSpecLike with MockitoSugar with TableD
         private val actual = await(authAction.refine(validatedHeadersRequest))
         actual shouldBe Left(ErrorInternalServerError.XmlResult.withHeaders(CustomHeaderNames.XConversationIdHeaderName -> TestData.conversationIdValue))
         verifyCspAuthorisationCalled(1)
+        PassByNameVerifier(mockImportsLogger, "error")
+          .withByNameParam[String]("Error when authorising for status CSP PrivilegedApplication with write:customs-declaration enrolment")
+          .withByNameParam(emulatedServiceFailure)
+          .withParamMatcher(any[HasConversationId])
+          .verify()
+      }
+
+      "return Unauthorised error response with conversationId when not authorised" in new SetUp {
+        unauthoriseCsp()
+
+        private val actual = await(authAction.refine(validatedHeadersRequest))
+
+        actual shouldBe Left(errorResponseUnauthorisedGeneral.XmlResult.withHeaders(CustomHeaderNames.XConversationIdHeaderName -> TestData.conversationIdValue))
+        PassByNameVerifier(mockImportsLogger, "debug")
+          .withByNameParam[String]("No authorisation for status CSP PrivilegedApplication with write:customs-declaration enrolment")
+          .withByNameParam(emulatedInsufficientEnrolments)
+          .withParamMatcher(any[HasConversationId])
+          .verify()
       }
     }
   }

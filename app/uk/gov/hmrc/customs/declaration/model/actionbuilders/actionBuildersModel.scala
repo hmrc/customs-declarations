@@ -17,11 +17,12 @@
 package uk.gov.hmrc.customs.declaration.model.actionbuilders
 
 import play.api.mvc.{Request, Result, WrappedRequest}
-import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames._
-import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.*
+import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.upscan.DocumentType
 
 import java.time.ZonedDateTime
+import scala.annotation.unused
 import scala.xml.NodeSeq
 
 object ActionBuilderModelHelper {
@@ -229,12 +230,12 @@ case class AuthorisedRequest[A](conversationId: ConversationId,
 ) extends WrappedRequest[A](request) with HasConversationId with HasApiVersion with ExtractedHeaders with HasAuthorisedAs
 
 // Available after ValidatedPayloadAction builder
-abstract class GenericValidatedPayloadRequest[A](conversationId: ConversationId,
-                                                 start: ZonedDateTime,
-                                                 requestedApiVersion: ApiVersion,
-                                                 clientId: ClientId,
-                                                 authorisedAs: AuthorisedAs,
-                                                 xmlBody: NodeSeq,
+abstract class GenericValidatedPayloadRequest[A](@unused conversationId: ConversationId,
+                                                 @unused start: ZonedDateTime,
+                                                 @unused requestedApiVersion: ApiVersion,
+                                                 @unused clientId: ClientId,
+                                                 @unused authorisedAs: AuthorisedAs,
+                                                 @unused xmlBody: NodeSeq,
                                                  request: Request[A]
 ) extends WrappedRequest[A](request) with HasConversationId with HasApiVersion with ExtractedHeaders with HasAuthorisedAs with HasXmlBody
 

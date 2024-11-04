@@ -19,14 +19,14 @@ package component
 import org.apache.pekko.util.ByteString
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
-import play.api.mvc._
-import play.api.test.Helpers.{status, _}
+import play.api.mvc.*
+import play.api.test.Helpers.{status, *}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.AuditService
-import util.FakeRequests._
+import util.FakeRequests.*
 import util.RequestHeaders.ValidHeadersV2WithCharset
-import util.externalservices._
-
+import util.externalservices.*
+import buildinfo.BuildInfo
 import java.nio.file.{Files, Paths}
 import scala.concurrent.Future
 
@@ -60,9 +60,9 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
     stopMockServer()
   }
 
-  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.13/test-classes/raw/valid_xml.raw")))
-  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get("target/scala-2.13/test-classes/raw/invalid_xml.raw")))
-
+  val ValidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-${BuildInfo.scalaVersion}/test-classes/raw/valid_xml.raw")))
+  val InvalidRawXmlByte = ByteString.fromArray(Files.readAllBytes(Paths.get(s"target/scala-${BuildInfo.scalaVersion}/test-classes/raw/invalid_xml.raw")))
+  
   Feature("Declaration API rejects declaration payloads containing invalid utf-8 bytes") {
     Scenario(
       "Response status 200 when user submits a valid utf-8 encoded payload with Header 'Content Type: application/xml'"
@@ -120,7 +120,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
 
       val request = ValidSubmissionRawRequest.fromCsp
         .withMethod(POST)
-        .withHeaders(ValidHeadersV2WithCharset.toSeq: _*)
+        .withHeaders(ValidHeadersV2WithCharset.toSeq*)
         .withTarget(ValidSubmissionRawRequest.target.withPath(endpoint))
         .withRawBody(ValidRawXmlByte)
 
@@ -144,7 +144,7 @@ class Utf8Spec extends ComponentTestSpec with AuditService with ExpectedTestResp
 
       val request = ValidSubmissionRawRequest.fromCsp
         .withMethod(POST)
-        .withHeaders(ValidHeadersV2WithCharset.toSeq: _*)
+        .withHeaders(ValidHeadersV2WithCharset.toSeq*)
         .withTarget(ValidSubmissionRawRequest.target.withPath(endpoint))
         .withRawBody(InvalidRawXmlByte)
 

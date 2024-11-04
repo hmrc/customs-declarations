@@ -42,7 +42,7 @@ trait AuthService {
 
   private def bearerTokenMatcher(bearerToken: String)= equalTo("Bearer " + bearerToken)
 
-  private def authRequestJson(predicate: Predicate, retrievals: Retrieval[_]*): String = {
+  private def authRequestJson(predicate: Predicate, retrievals: Retrieval[?]*): String = {
     val predicateJsArray = predicateToJson(predicate)
     val js =
       s"""

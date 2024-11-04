@@ -202,7 +202,7 @@ class CustomErrorHandlerSpec extends UnitSpec with MockitoSugar {
     }
 
     def assertJsonResult(acceptJsonRequest: RequestHeader)(implicit fixture: CustomErrorHandlerFixture): Unit = {
-      when(fixture.mockEnvironment.mode) thenReturn Mode.Dev
+      when(fixture.mockEnvironment.mode) `thenReturn` Mode.Dev
 
       val result = onServerError(acceptJsonRequest, ServerException)
       status(result) shouldBe INTERNAL_SERVER_ERROR
@@ -210,7 +210,7 @@ class CustomErrorHandlerSpec extends UnitSpec with MockitoSugar {
     }
 
     def assertXmlResult(acceptXmlRequest: RequestHeader)(implicit fixture: CustomErrorHandlerFixture): Unit = {
-      when(fixture.mockEnvironment.mode) thenReturn Mode.Dev
+      when(fixture.mockEnvironment.mode) `thenReturn` Mode.Dev
 
       val result = onServerError(acceptXmlRequest, ServerException)
       status(result) shouldBe INTERNAL_SERVER_ERROR
@@ -241,7 +241,7 @@ class CustomErrorHandlerSpec extends UnitSpec with MockitoSugar {
     }
 
     def assertJsonResult(acceptJsonRequest: RequestHeader)(implicit fixture: CustomErrorHandlerFixture): Unit = {
-      when(fixture.mockEnvironment.mode) thenReturn Mode.Prod
+      when(fixture.mockEnvironment.mode) `thenReturn` Mode.Prod
 
       val result = onServerError(acceptJsonRequest, ServerException)
       status(result) shouldBe INTERNAL_SERVER_ERROR
@@ -249,7 +249,7 @@ class CustomErrorHandlerSpec extends UnitSpec with MockitoSugar {
     }
 
     def assertXmlResult(acceptXmlRequest: RequestHeader)(implicit fixture: CustomErrorHandlerFixture): Unit = {
-      when(fixture.mockEnvironment.mode) thenReturn Mode.Prod
+      when(fixture.mockEnvironment.mode) `thenReturn` Mode.Prod
 
       val result = onServerError(acceptXmlRequest, ServerException)
       status(result) shouldBe INTERNAL_SERVER_ERROR

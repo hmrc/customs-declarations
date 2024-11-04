@@ -27,13 +27,13 @@ class FileTransmissionNotificationModelSpec extends AnyWordSpecLike with Matcher
   "FileTransmissionNotification model" can {
     "In happy path" should {
       "conditionally deserialize callback body as FileTransmissionSuccessNotification if outcome is SUCCESS" in {
-        val JsSuccess(actual, _) = FileTransmissionCallbackDecider.parse(Json.parse(FileTransmissionSuccessNotificationPayload))
+        val JsSuccess(actual, _) = FileTransmissionCallbackDecider.parse(Json.parse(FileTransmissionSuccessNotificationPayload)): @unchecked
 
         actual shouldBe SuccessNotification
       }
 
       "conditionally deserialize callback body as FileTransmissionFailureNotification if outcome is FAILURE" in {
-        val JsSuccess(actual, _) = FileTransmissionCallbackDecider.parse(Json.parse(FileTransmissionFailureNotificationPayload))
+        val JsSuccess(actual, _) = FileTransmissionCallbackDecider.parse(Json.parse(FileTransmissionFailureNotificationPayload)): @unchecked
 
         actual shouldBe FailureNotification
       }
@@ -41,14 +41,14 @@ class FileTransmissionNotificationModelSpec extends AnyWordSpecLike with Matcher
 
     "In unhappy path" should {
       "return JsError when fileStatus is not SUCCESS or FAILURE" in {
-        val JsError(list) = FileTransmissionCallbackDecider.parse(Json.parse(InvalidFileTransmissionNotificationPayload))
+        val JsError(list) = FileTransmissionCallbackDecider.parse(Json.parse(InvalidFileTransmissionNotificationPayload)): @unchecked
 
         val (path, _) = list.head
         path.toString shouldBe "/outcome"
       }
 
       "return JsError when payload is invalid" in {
-        val JsError(list) = FileTransmissionCallbackDecider.parse(Json.parse("""{"foo": "bar"}"""))
+        val JsError(list) = FileTransmissionCallbackDecider.parse(Json.parse("""{"foo": "bar"}""")): @unchecked
 
         val (path, _) = list.head
         path.toString shouldBe "/outcome"

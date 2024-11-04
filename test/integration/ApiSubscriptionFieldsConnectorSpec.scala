@@ -123,7 +123,7 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
 
   }
 
-  private def getApiSubscriptionFields(implicit vpr: ValidatedPayloadRequest[_]): Future[ApiSubscriptionFieldsResponse] = {
+  private def getApiSubscriptionFields(implicit vpr: ValidatedPayloadRequest[?]): Future[ApiSubscriptionFieldsResponse] = {
     connector.getSubscriptionFields(apiSubscriptionKey)
   }
 }

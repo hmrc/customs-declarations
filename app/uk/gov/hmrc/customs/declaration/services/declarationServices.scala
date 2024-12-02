@@ -99,10 +99,9 @@ trait DeclarationService extends ApiSubscriptionFieldsService {
       logger.debug("NRS enabled. Calling NRS.")
 
       val startTime = dateTimeProvider.zonedDateTimeUtc
-
+      logger.debug(s"NRS returned submission id: $nrSubmissionId")
       nrsService.send(vpr, hc)
         .map(nrSubmissionId => {
-          logger.debug(s"NRS returned submission id: $nrSubmissionId")
           logCallDuration(startTime)
         })
         .recover {

@@ -1,5 +1,6 @@
 digital-service: CDS
 repoVisibility: public_0C3F0CE3E6E6448FAD341E7BFA50FCD333E06A20CFF05FCACE61154DDBBADF71
+description: This service offers a general interface for custom declarations, where those declarations are represented using the WCO declarations schema. In addition to submitting declarations, the Customs Declarations service allows you to amend and cancel them. It also provides the ability to upload supporting documents and make arrival notifications.
 test-repositories:
   - customs-declaration-performance-test
   - customs-automation-test

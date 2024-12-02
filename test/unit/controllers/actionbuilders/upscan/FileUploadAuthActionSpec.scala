@@ -16,6 +16,7 @@
 
 package unit.controllers.actionbuilders.upscan
 
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -27,12 +28,13 @@ import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.{XBadgeIden
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse.{ErrorInternalServerError, errorBadRequest}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, HeaderWithContentTypeValidator}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.*
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.*
 import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import uk.gov.hmrc.customs.declaration.services.{CustomsAuthService, DeclarationsConfigService}
 import util.CustomsDeclarationsMetricsTestData.EventStart
-import util.TestData._
+import util.MockitoPassByNameHelper.PassByNameVerifier
+import util.TestData.*
 import util.{AuthConnectorNrsDisabledStubbing, AuthConnectorStubbing, RequestHeaders}
 
 import scala.concurrent.ExecutionContext
@@ -93,6 +95,10 @@ class FileUploadAuthActionSpec extends AnyWordSpecLike with MockitoSugar with Ma
 
         actual shouldBe Right(validatedHeadersRequestWithValidBadgeIdEoriPair.toCspAuthorisedRequest(Csp(Some(declarantEori), Some(badgeIdentifier), None)))
         verifyNonCspAuthorisationNotCalled
+        PassByNameVerifier(mockLogger, "info")
+          .withByNameParam[String]("X-EORI-Identifier header passed validation: ZZ123456789000\nX-Badge-Identifier header passed validation: BADGEID123")
+          .withParamMatcher[HasConversationId](any[HasConversationId])
+          .verify()
       }
 
       "Return 401 response when authorised by auth API but both badge identifier and eori are invalid" in new NrsEnabled {

@@ -118,6 +118,10 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
 
       result shouldBe Right(Some(nrSubmissionId))
       verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])
+      PassByNameVerifier(mockLogger, "debug")
+        .withByNameParam[String]("NRS returned submission id: 38400000-8cf0-11bd-b23e-10b96e4ef00d")
+        .withParamMatcher(any[HasConversationId])
+        .verify()
     }
 
   }
@@ -174,6 +178,12 @@ class DeclarationServiceSpec extends AnyWordSpecLike with MockitoSugar with Matc
     val result: Either[Result, Option[NrSubmissionId]] = send()
 
     result shouldBe Left(ErrorInternalServerError.XmlResult.withConversationId.withNrSubmissionId(nrSubmissionId))
+    verify(mockMdgDeclarationConnector).send(meq(wrappedValidXML), any[Instant], any[UUID], any[ApiVersion])(any[ValidatedPayloadRequest[Any]], any[HeaderCarrier])
+    PassByNameVerifier(mockLogger, "warn")
+      .withByNameParam[String]("Returning status=[500]. Emulated service failure.")
+      .withByNameParam(emulatedServiceFailure)
+      .withParamMatcher(any[HasConversationId])
+      .verify()
   }
 
   "return 500 error response when MDG circuit breaker trips" in new SetUp() {

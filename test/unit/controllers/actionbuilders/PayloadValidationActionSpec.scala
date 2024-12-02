@@ -16,7 +16,8 @@
 
 package unit.controllers.actionbuilders
 
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
@@ -26,12 +27,13 @@ import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.PayloadValidationAction
 import uk.gov.hmrc.customs.declaration.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.*
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.*
 import uk.gov.hmrc.customs.declaration.model.{Csp, VersionOne}
 import uk.gov.hmrc.customs.declaration.services.XmlValidationService
 import util.CustomsDeclarationsMetricsTestData.EventStart
-import util.TestData._
+import util.MockitoPassByNameHelper.PassByNameVerifier
+import util.TestData.*
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.SAXException
@@ -86,6 +88,11 @@ class PayloadValidationActionSpec extends AnyWordSpecLike with MockitoSugar with
       private val actual: Either[Result, ValidatedPayloadRequest[AnyContentAsXml]] = await(payloadValidationAction.refine(TestCspAuthorisedRequest))
 
       actual shouldBe Left(ErrorResponse.ErrorInternalServerError.XmlResult.withConversationId)
+      PassByNameVerifier(mockExportsLogger, "debug")
+        .withByNameParam[String](s"Error validating payload.:\n<foo>bar</foo>")
+        .withByNameParam(emulatedServiceFailure)
+        .withParamMatcher(any[HasConversationId])
+        .verify()
     }
   }
 

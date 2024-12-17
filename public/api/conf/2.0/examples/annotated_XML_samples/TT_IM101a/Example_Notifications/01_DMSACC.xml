@@ -1,19 +1,23 @@
 <MetaData>
-    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-    <WCOTypeName>RES</WCOTypeName>
-    <ResponsibleCountryCode/>
-    <ResponsibleAgencyName/>
-    <AgencyAssignedCustomizationCode/>
-    <AgencyAssignedCustomizationVersionCode/>
-    <Response>
-        <FunctionCode>01</FunctionCode>
-        <FunctionalReferenceID>586ab6370b424826a9fd3d6d9d22b3b1</FunctionalReferenceID>
-        <IssueDateTime formatCode="304">20220607091726+01</IssueDateTime>
-        <Declaration>
-            <AcceptanceDateTime formatCode="304">20220607091723+01</AcceptanceDateTime>
-            <FunctionalReferenceID>NIP_267_TC01_0706_01</FunctionalReferenceID>
-            <ID>22GB68TWE44QY1IAR5</ID>
-            <VersionID>1</VersionID>
-        </Declaration>
-    </Response>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>01</FunctionCode>
+		<FunctionalReferenceID>a8e78a324db147b2a3c9adebe3eddf73</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20241202112227Z</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<AcceptanceDateTime>
+				<DateTimeString formatCode="304">20241202112225Z</DateTimeString>
+			</AcceptanceDateTime>
+			<FunctionalReferenceID>U.78477672K77G</FunctionalReferenceID>
+			<ID>24GBDCSBU6A6T7PAR7</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
 </MetaData>

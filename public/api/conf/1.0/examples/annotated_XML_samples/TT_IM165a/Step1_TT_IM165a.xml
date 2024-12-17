@@ -36,7 +36,7 @@
         <!--DE 2/5: LRN.
             Mandatory.
             Trader's own reference number - this must be unique to the transaction. -->
-        <FunctionalReferenceID>7849431WQBXX</FunctionalReferenceID>
+        <FunctionalReferenceID>7849431WQBXX01_35</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             Mandatory.
             IM to represent an import declaration. -->
@@ -307,6 +307,10 @@
                         <ID>X345</ID>
                         <IdentificationTypeCode>GN</IdentificationTypeCode>
                     </Classification>
+					<Classification>
+                        <ID>89ZZ</ID>
+                        <IdentificationTypeCode>TRA</IdentificationTypeCode>
+                    </Classification>
                     <DutyTaxFee>
                         <!--DE 4/17: Preference.
                             Mandatory.
@@ -315,7 +319,7 @@
                         <!--DE 4/4: Calculation of Taxes - Tax Base.
                             Code GBP used as a manual duty calculation is being made.
                             Note where 'OVR01' is declared in DE 2/2 (Additional Information) on a Type C or Type F declaration, DE 4/4 (Tax Base) must be declared. -->
-                        <SpecificTaxBaseQuantity unitCode="GBP">2500</SpecificTaxBaseQuantity>
+                        <SpecificTaxBaseQuantity unitCode="GBP">10000</SpecificTaxBaseQuantity>
                         <!--DE 4/3: Tax Type.
                             A00 represents UK customs duty. -->
                         <TypeCode>A00</TypeCode>
@@ -330,7 +334,7 @@
                         <!--DE 4/4: Tax Base.
                             Code GBP used as a manual duty calculation is being made.
                             Note where 'OVR01' is declared in DE 2/2 (Additional Information) on a Type C or Type F declaration, DE 4/4 (Tax Base) must be declared. -->
-                        <SpecificTaxBaseQuantity unitCode="GBP">2500</SpecificTaxBaseQuantity>
+                        <SpecificTaxBaseQuantity unitCode="GBP">10000</SpecificTaxBaseQuantity>
                         <!--DE 4/3: Tax Type.
                             345 indicates UK tax type 345, Spirits exceeding 22%. -->
                         <TypeCode>345</TypeCode>
@@ -395,7 +399,7 @@
                         Mandatory.
                         The invoice was issued with a value of 2500 and the currency was in GBP. -->
                     <InvoiceLine>
-                        <ItemChargeAmount currencyID="GBP">2500</ItemChargeAmount>
+                        <ItemChargeAmount currencyID="GBP">10000</ItemChargeAmount>
                     </InvoiceLine>
                 </Commodity>
                 <!--DE 4/16: Valuation method.

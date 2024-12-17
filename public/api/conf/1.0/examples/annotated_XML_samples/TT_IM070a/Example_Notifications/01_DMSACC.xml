@@ -1,23 +1,23 @@
 <MetaData>
-    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-    <WCOTypeName>RES</WCOTypeName>
-    <ResponsibleCountryCode/>
-    <ResponsibleAgencyName/>
-    <AgencyAssignedCustomizationCode/>
-    <AgencyAssignedCustomizationVersionCode/>
-    <Response>
-        <FunctionCode>01</FunctionCode>
-        <FunctionalReferenceID>9424bfa3496d478e846077034dfc3b07</FunctionalReferenceID>
-        <IssueDateTime>
-            <DateTimeString formatCode="304">20240618164831+01</DateTimeString>
-        </IssueDateTime>
-        <Declaration>
-            <AcceptanceDateTime>
-                <DateTimeString formatCode="304">20240618164828+01</DateTimeString>
-            </AcceptanceDateTime>
-            <FunctionalReferenceID>7849431Z359T</FunctionalReferenceID>
-            <ID>24GB6QFAQBSB7WVAR9</ID>
-            <VersionID>1</VersionID>
-        </Declaration>
-    </Response>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>01</FunctionCode>
+		<FunctionalReferenceID>636967f68243451eb7db0c6559409827</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20241205144654Z</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<AcceptanceDateTime>
+				<DateTimeString formatCode="304">20241205144652Z</DateTimeString>
+			</AcceptanceDateTime>
+			<FunctionalReferenceID>U.78675232JA7L</FunctionalReferenceID>
+			<ID>24GBDH9YBE170GSAR1</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
 </MetaData>

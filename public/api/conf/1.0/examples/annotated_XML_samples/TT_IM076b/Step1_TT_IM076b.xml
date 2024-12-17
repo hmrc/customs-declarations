@@ -6,6 +6,7 @@
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!-- SCENARIO
+        Please note this scenario currently has an expected failure. This is due to UKIMS changing the at risk treatment and thus calculations. This will be fixed for a future release.
             An agent submits a Type D (H1) declaration importing goods from GB to NI, via RoRo method of transport at a GVMS location.
             The agent enters the following information on the declaration:
             -  Additional procedure code 'F47' to indicate that the goods are being grouped under a single commodity code in DE 1/11.

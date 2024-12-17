@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-		
 		<!--SCENARIO
 			-	A Trader submits a pre-lodged Type K (GL C21i) declaration "Not At Risk" importing goods from GB to NI with UKIMS authorisation
 			-	The trader submits a GPN.
@@ -15,11 +15,10 @@
 			-	CDS must send a DMSTAX notification to the submitter(N.B. this notification must contain a "0" value to meet CDSNIP-747 US9, AC8 and so show that no customs duties,
 				VAT or excise have been charged)
 			-->
-			
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>78477672VUY2</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7849431QQ4OY</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: K to represent Pre-lodged GL C21i declaration-->
 		<TypeCode>IMK</TypeCode>
@@ -39,7 +38,7 @@
 		<BorderTransportMeans>
 			<ModeCode>4</ModeCode>
 		</BorderTransportMeans>
-		<!--DE 3/18: Declarant ID no. 
+		<!--DE 3/18: Declarant ID no.
 				The EORI number of the agent entering the declaration
 				The UK requires an EORI to be provided for the declarant.
 				-->
@@ -49,35 +48,44 @@
 		<GoodsShipment>
 			<Consignment>
 				<!--DE 7/2: Container.
-				Indicator to show if goods are packed in a container or not. 
+				Indicator to show if goods are packed in a container or not.
 				1 indicates that goods are transported in containers.-->
 				<ContainerCode>1</ContainerCode>
 				<!--DE 5/23: Location of Goods.
                     The location code for Belfast Airport, GBAUBELBFSBEL.
                     Goods moved via Belfast Airport. -->
-                <GoodsLocation>
-                    <!--DE 5/23: Location of Goods.
+				<GoodsLocation>
+					<!--DE 5/23: Location of Goods.
                         Name code BELBFSBEL for Belfast Airport.
                         Goods moved via Belfast Airport. -->
-                    <Name>BELBFSBEL</Name>
-                    <!--DE 5/23: Location of Goods.
+					<Name>BELBFSBEL</Name>
+					<!--DE 5/23: Location of Goods.
                         Type A in this scenario to represent that it is a designated location. -->
-                    <TypeCode>A</TypeCode>
-                    <Address>
-                        <!--DE 5/23: Location of Goods.
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Location of Goods.
                             Address Type U in this scenario for UN/LOCODE. -->
-                        <TypeCode>U</TypeCode>
-                        <!--DE 5/23: Location of Goods.
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Location of Goods.
                             Country code of the country where the goods may be examined, GB in this scenario. -->
-                        <CountryCode>GB</CountryCode>
-                    </Address>
-                </GoodsLocation>
-            </Consignment>
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+			</Consignment>
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Goods Item Number.
 					Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					This field is mandatory only where codes required.
+					N740 indicating Air Waybill (T1). -->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>0054039</ID>
+					<TypeCode>740</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory only where codes required.
 					C522 -->
 				<AdditionalDocument>
@@ -85,7 +93,7 @@
 					<ID>GBACE150454489082</ID>
 					<TypeCode>522</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory only where codes required.
 					1UKI indicates the A trader has declared that they are UKIMS Authorised. LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
 				<AdditionalDocument>
@@ -108,14 +116,14 @@
 					<StatementCode>NIREM</StatementCode>
 				</AdditionalInformation>
 				<Commodity>
-                    <!--DE 6/8: Description of Goods.
+					<!--DE 6/8: Description of Goods.
                         Description of the goods which is specific enough to allow the unambiguous identification, classification and examination of goods. -->
-                    <Description>Pastels and drawing charcoals</Description>
+					<Description>Pastels and drawing charcoals</Description>
 					<GoodsMeasure>
-                        <!--DE 6/5: Gross Mass.
+						<!--DE 6/5: Gross Mass.
                             Weight of the goods in kilograms including packaging. -->
-                        <GrossMassMeasure>100</GrossMassMeasure>
-                    </GoodsMeasure>
+						<GrossMassMeasure>100</GrossMassMeasure>
+					</GoodsMeasure>
 				</Commodity>
 				<!--DE 5/14: Country code of the dispatch country: GB. -->
 				<ExportCountry>
@@ -159,7 +167,7 @@
 					<TypeCode>821</TypeCode>
 				</PreviousDocument>
 			</GovernmentAgencyGoodsItem>
-		<!--DE 3/16: EORI number of the Importer. -->
+			<!--DE 3/16: EORI number of the Importer. -->
 			<Importer>
 				<ID>XI150454489082</ID>
 			</Importer>
@@ -167,14 +175,14 @@
 				For import inventory linked locations, the Inventory Reference Number (UCN) must be declared in DE 2/1 using the code 'MCR'. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>4GB553202734852-17EC11</ID>
+				<ID>4GB553202734852-1411EC12</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Previous Documents.
 				For import inventory linked locations, the Inventory Reference Number (UCN) must be declared in DE 2/1 using the code 'MCR'. -->
-            <PreviousDocument>
+			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>GB/1234-:17EC11</ID>
+				<ID>GB/1234-:1411EC12</ID>
 				<TypeCode>MCR</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>

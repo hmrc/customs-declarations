@@ -6,10 +6,10 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			
+
 			SCENARIO
-			A Trader submits a Type Z (H8) declaration "Not At Risk" importing goods from GB to NI for which a Postponed VAT Accounting is declared but prevented from being processed. 
-			The declaration of IOSS, OSR and OSD is also prevented and in addition, the traders are exiting a special procedure. 
+			A Trader submits a Type Z (H8) declaration "Not At Risk" importing goods from GB to NI for which a Postponed VAT Accounting is declared but prevented from being processed.
+			The declaration of IOSS, OSR and OSD is also prevented and in addition, the traders are exiting a special procedure.
 			Procedure code 4071 Additional Procedure code 1SG, 1VW and 1SP
 			Goods: Containing by weight not more than 0.1% of carbon and more than 30% but not more than 90% of chromium (super-refined ferrochromium).
 			Agent employed by the importer under direct rep.
@@ -19,13 +19,13 @@
         -->
 		<!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20240912121145+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20241113141259+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number: this must be unique to the transaction. -->
-		<FunctionalReferenceID>7849431IWHGE</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7849431VUY8T</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -65,12 +65,12 @@
 			<CategoryCode>UKIM</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 7/4: Mode of Transport at the Border.1 to represent Maritime/Sea transport as the mode of transport at the border. -->
-		<BorderTransportMeans>	
+		<BorderTransportMeans>
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
 		<Declarant>
 			<!--DE 3/18: Declarant Identification Number.
-				The EORI number of the agent entering the declaration. 
+				The EORI number of the agent entering the declaration.
 				The UK requires an EORI to be provided for the declarant. -->
 			<ID>XI603202734852</ID>
 		</Declarant>
@@ -114,48 +114,57 @@
 			</Destination>
 			<!--DE 3/40: Additional Fiscal References Identification Number.
                     Role Code FR1 - The VAT registered importer who is using PVA to account for the import VAT. -->
-            <DomesticDutyTaxParty>
-                <ID>GB553202734</ID>
-                <RoleCode>FR1</RoleCode>
-            </DomesticDutyTaxParty>
+			<DomesticDutyTaxParty>
+				<ID>GB553202734</ID>
+				<RoleCode>FR1</RoleCode>
+			</DomesticDutyTaxParty>
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Goods Item Number.
 					Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 						A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantâ€™s records. -->
-						<AdditionalDocument>
+				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>XIEIR553202734852I20231019133850</ID>
 					<TypeCode>514</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 						A document code of C517 indicates CWP - Authorisation for the operation of storage facilities for the customs warehousing of goods in a private customs warehouse. -->
-						<AdditionalDocument>
+				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>XICWP55320273485220231019133850</ID>
 					<TypeCode>517</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of 1UKI indicates the A trader has declared that they are UKIMS Authorised. 
+					A document code of 1UKI indicates the A trader has declared that they are UKIMS Authorised.
 					LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
-						<AdditionalDocument>
-							<CategoryCode>1</CategoryCode>
-							<ID>XIUKIM55320273485220240124160138</ID>
-							<TypeCode>UKI</TypeCode>
-							<LPCOExemptionCode>AC</LPCOExemptionCode>
-						</AdditionalDocument>
-				<!--DE 2/2: Additional Information. 
+				<AdditionalDocument>
+					<CategoryCode>1</CategoryCode>
+					<ID>XIUKIM55320273485220240124160138</ID>
+					<TypeCode>UKI</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+						A document code of N705 indicates Bill of lading
+					LPCOExemptionCode: AE indicates Document attached — exhausted by (or only applies to) this entry (document returned to the trader)-->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>0054047</ID>
+					<TypeCode>705</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional Information.
 					This field is mandatory, this represents goods are Imported from ROW into Northern Ireland. -->
 				<AdditionalInformation>
 					<StatementCode>NIDOM</StatementCode>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional Information. 
+				<!--DE 2/2: Additional Information.
 					This field is mandatory, this represents goods are de-risked from ROW into Northern Ireland. -->
 				<AdditionalInformation>
 					<StatementCode>NIREM</StatementCode>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional Information. 
+				<!--DE 2/2: Additional Information.
 					This field is mandatory, this represents Manual calculation of postponed VAT -->
 				<AdditionalInformation>
 					<StatementCode>PVA01</StatementCode>
@@ -176,7 +185,7 @@
 						<GrossMassMeasure>1100</GrossMassMeasure>
 					</GoodsMeasure>
 					<InvoiceLine>
-						<!--DE 4/14: Item Price/ Amount. 
+						<!--DE 4/14: Item Price/ Amount.
 							The invoice was issued with a value of 2,500 and the currency was in GBP. -->
 						<ItemChargeAmount currencyID="GBP">2500</ItemChargeAmount>
 					</InvoiceLine>
@@ -245,7 +254,7 @@
 				Note that this is item 1 from the EIDR record entry. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20240912</ID>
+				<ID>20241113</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -255,7 +264,7 @@
 				<TypeCode>U</TypeCode>
 			</Warehouse>
 		</GoodsShipment>
-		<!--DE 5/27: Supervising customs office. 
+		<!--DE 5/27: Supervising customs office.
 			The Supervising Office Code for the HMRC Office overseeing the Customs Warehouse procedure. In this scenario, this is Belfast, Dorchester House (NIRU). -->
 		<SupervisingOffice>
 			<ID>GBBEL004</ID>

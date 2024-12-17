@@ -1,43 +1,43 @@
 <MetaData>
-    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-    <WCOTypeName>RES</WCOTypeName>
-    <ResponsibleCountryCode/>
-    <ResponsibleAgencyName/>
-    <AgencyAssignedCustomizationCode/>
-    <AgencyAssignedCustomizationVersionCode/>
-    <Response>
-        <FunctionCode>13</FunctionCode>
-        <FunctionalReferenceID>73f77081957d44b3b6d110e17721b647</FunctionalReferenceID>
-        <IssueDateTime>
-            <DateTimeString formatCode="304">20240618163754+01</DateTimeString>
-        </IssueDateTime>
-        <Bank>
-            <ReferenceID>BARCGB22</ReferenceID>
-            <ID>GB16BARC20051723372545</ID>
-        </Bank>
-        <Status>
-            <NameCode>4</NameCode>
-        </Status>
-        <Declaration>
-            <FunctionalReferenceID>7849431QVR2M</FunctionalReferenceID>
-            <ID>24GB6QESJMP0GGSAR4</ID>
-            <VersionID>2</VersionID>
-            <GoodsShipment>
-                <GovernmentAgencyGoodsItem>
-                    <SequenceNumeric>1</SequenceNumeric>
-                    <Commodity>
-                        <DutyTaxFee>
-                            <DutyRegimeCode>100</DutyRegimeCode>
-                            <SpecificTaxBaseQuantity unitCode="GBP">200.000000</SpecificTaxBaseQuantity>
-                            <TypeCode>A00</TypeCode>
-                            <Payment>
-                                <TaxAssessedAmount currencyID="GBP">5.00</TaxAssessedAmount>
-                                <PaymentAmount currencyID="GBP">5.00</PaymentAmount>
-                            </Payment>
-                        </DutyTaxFee>
-                    </Commodity>
-                </GovernmentAgencyGoodsItem>
-            </GoodsShipment>
-        </Declaration>
-    </Response>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>13</FunctionCode>
+		<FunctionalReferenceID>8e15b11225354ab8be843baa571dc723</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20241112163124Z</DateTimeString>
+		</IssueDateTime>
+		<Bank>
+			<ReferenceID>BARCGB22</ReferenceID>
+			<ID>GB16BARC20051723372545</ID>
+		</Bank>
+		<Status>
+			<NameCode>4</NameCode>
+		</Status>
+		<Declaration>
+			<FunctionalReferenceID>U.7867523NY00D</FunctionalReferenceID>
+			<ID>24GBCKIFB5UARBYAR2</ID>
+			<VersionID>2</VersionID>
+			<GoodsShipment>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<Commodity>
+						<DutyTaxFee>
+							<DutyRegimeCode>100</DutyRegimeCode>
+							<SpecificTaxBaseQuantity unitCode="GBP">200.000000</SpecificTaxBaseQuantity>
+							<TypeCode>A00</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">5.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">5.00</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+					</Commodity>
+				</GovernmentAgencyGoodsItem>
+			</GoodsShipment>
+		</Declaration>
+	</Response>
 </MetaData>

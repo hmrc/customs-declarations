@@ -3,20 +3,13 @@
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
-	<md:AgencyAssignedCustomizationVersionCode>v2.1
-	</md:AgencyAssignedCustomizationVersionCode>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1 </md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-		<!--
-			SCENARIO: 
-			C21iEIDR NOP additional declaration type K
-			Procedure code 40 00, with 000 no other additional procedure codes apply
-			Goods: Fabrics for the manufacture of bandages, dressings and medical gauzes.
-			Expected notification: DMSRCV 
-		-->
+		<!-- SCENARIO: C21iEIDR NOP additional declaration type K Procedure code 40 00, with 000 no other additional procedure codes apply Goods: Fabrics for the manufacture of bandages, dressings and medical gauzes. Expected notification: DMSRCV -->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>7849431TW38W</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523HK37Q</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: K to represent To represent a pre-lodged C21iEIDR NOP-->
 		<TypeCode>IMK</TypeCode>
@@ -24,9 +17,7 @@
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<!--DE 6/18: Total packages - 20. Note that this matches DE 6/10 because this is a single item declaration.-->
 		<TotalPackageQuantity>20</TotalPackageQuantity>
-		<!--DE 3/39: An Authorisation type of EIR indicates Authorisation for the use of customs declaration 
-			through an entry of data in the declarants records. 
-			The ID is the EORI number of the EIDR authorisation holder -->
+		<!--DE 3/39: An Authorisation type of EIR indicates Authorisation for the use of customs declaration through an entry of data in the declarants records. The ID is the EORI number of the EIDR authorisation holder -->
 		<AuthorisationHolder>
 			<ID>XI427168118378</ID>
 			<CategoryCode>EIR</CategoryCode>
@@ -35,32 +26,23 @@
 		<BorderTransportMeans>
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
-		<!--DE 3/18: Declarant Identification Number 
-			Person presenting the goods to customs in case of entry in the declarants records or pre-lodged customs declarations identification no. 
-			This is mandatory in this case -->
+		<!--DE 3/18: Declarant Identification Number Person presenting the goods to customs in case of entry in the declarants records or pre-lodged customs declarations identification no. This is mandatory in this case -->
 		<Declarant>
 			<ID>XI427168118378</ID>
 		</Declarant>
 		<GoodsShipment>
-			<!--DE 7/2: Indicator to show if goods are packed in a container or not. 
-				1 indicates that goods are transported in containers. 
-				Note: Unlike CHIEF this must now be completed.-->
+			<!--DE 7/2: Indicator to show if goods are packed in a container or not. 1 indicates that goods are transported in containers. Note: Unlike CHIEF this must now be completed.-->
 			<Consignment>
 				<ContainerCode>1</ContainerCode>
-				<!--DE 7/9: Identity of the means of transport on arrival. 
-					Example number representing IMO ship identification number: '10', and 5 digits 
-					for the identification number: '12345'. 
-					Mandatory unless postal or fixed energy installation-->
+				<!--DE 7/9: Identity of the means of transport on arrival. Example number representing IMO ship identification number: '10', and 5 digits for the identification number: '12345'. Mandatory unless postal or fixed energy installation-->
 				<ArrivalTransportMeans>
 					<ID>12345</ID>
 					<IdentificationTypeCode>10</IdentificationTypeCode>
 				</ArrivalTransportMeans>
-				<!--DE 5/23: Location of goods. 
-					Mandatory.
-					The location code for Wallasea Island, a non-inventory linked location. -->
+				<!--DE 5/23: Location of goods. Mandatory. The location code for Wallasea Island, a non-inventory linked location. -->
 				<GoodsLocation>
 					<!--DE 5/23: ID to give a unique position of the location.-->
-					<Name>WLALONBTW</Name>
+					<Name>BELBELBEL</Name>
 					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
 					<TypeCode>A</TypeCode>
 					<Address>
@@ -71,9 +53,7 @@
 					</Address>
 				</GoodsLocation>
 				<TransportEquipment>
-					<!--DE 7/10: Container identification number. 
-						This is alpha-numeric with up to 17 characters. 
-						Mandatory only if containerised -->
+					<!--DE 7/10: Container identification number. This is alpha-numeric with up to 17 characters. Mandatory only if containerised -->
 					<SequenceNumeric>1</SequenceNumeric>
 					<ID>DM1234567</ID>
 				</TransportEquipment>
@@ -81,8 +61,7 @@
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Sequential number of the goods item.-->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					C514 indicating Authorisation for making a customs declaration through an entry in the declarant's records -->
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. C514 indicating Authorisation for making a customs declaration through an entry in the declarant's records -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>XIEIR427168118378I20231019133850</ID>
@@ -93,13 +72,11 @@
 					<StatementCode>00500</StatementCode>
 					<StatementDescription>IMPORTER</StatementDescription>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional Information. 
-					This field is mandatory, this represents goods are imported from ROW into Northern Ireland. -->
+				<!--DE 2/2: Additional Information. This field is mandatory, this represents goods are imported from ROW into Northern Ireland. -->
 				<AdditionalInformation>
 					<StatementCode>NIIMP</StatementCode>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional Information. 
-					This field is mandatory, this represents that goods have been de-risked by the trader. -->
+				<!--DE 2/2: Additional Information. This field is mandatory, this represents that goods have been de-risked by the trader. -->
 				<AdditionalInformation>
 					<StatementCode>NIREM</StatementCode>
 				</AdditionalInformation>
@@ -112,9 +89,7 @@
 						<NetNetWeightMeasure>59</NetNetWeightMeasure>
 					</GoodsMeasure>
 				</Commodity>
-				<!--DE 1/10: Procedure.
-					Requested Procedure of 40 indicating entry for free circulation and home use of goods.
-					Previous Procedure of 00 indicating there is no previous procedure.-->
+				<!--DE 1/10: Procedure. Requested Procedure of 40 indicating entry for free circulation and home use of goods. Previous Procedure of 00 indicating there is no previous procedure.-->
 				<GovernmentProcedure>
 					<CurrentCode>40</CurrentCode>
 					<PreviousCode>00</PreviousCode>
@@ -133,29 +108,26 @@
 					<TypeCode>CT</TypeCode>
 				</Packaging>
 			</GovernmentAgencyGoodsItem>
-			<!--DE 3/16: Importer Identification Number.
-				EORI number of the Importer.-->
+			<!--DE 3/16: Importer Identification Number. EORI number of the Importer.-->
 			<Importer>
 				<ID>XI427168118378</ID>
 			</Importer>
-			<!--DE 2/1: Previous Documents of Z355 to show the MRN for the entry summary declaration (ENS). 
-				This is a mandatory field.-->
+			<!--DE 2/1: Previous Documents of Z355 to show the MRN for the entry summary declaration (ENS). This is a mandatory field.-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>23GB34F7Y1O2CX8PT4</ID>
+				<ID>24GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
-			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment. 
-				This is a mandatory field-->
+			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment. This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB427168118378-12345</ID>
+				<ID>4GB427168118378-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/4: Reference number which is optional for the declarant to complete.-->
 			<UCR>
-				<TraderAssignedReferenceID>1GB427168118378-12345</TraderAssignedReferenceID>
+				<TraderAssignedReferenceID>4GB427168118378-12345</TraderAssignedReferenceID>
 			</UCR>
 		</GoodsShipment>
 	</Declaration>

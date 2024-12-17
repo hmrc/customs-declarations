@@ -1,214 +1,224 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
-    <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
-    <md:WCOTypeName>DEC</md:WCOTypeName>
-    <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
-    <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
-    <md:AgencyAssignedCustomizationVersionCode>v2.1
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1
     </md:AgencyAssignedCustomizationVersionCode>
-    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-        <!--
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--
             SCENARIO:
             C21iEIDR NOP additional declaration type K
             Procedure code 40 00, with 000 no other additional procedure codes apply
-            Goods: Fabrics for the manufacture of bandages, dressings and medical gauzes.
-            Expected notification: DMSRCV
+            Goods: Tar distilled from coal, from lignite or from peat, and other mineral tars, whether or not dehydrated or partially distilled, including reconstituted tars
+
         -->
-        <!--Function Code of 9 to represent an original declaration.-->
-        <FunctionCode>9</FunctionCode>
-        <!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-        <FunctionalReferenceID>7847323U7DYG</FunctionalReferenceID>
-        <!--DE 1/1: IM to represent an import declaration.-->
-        <!--DE 1/2: K to represent To represent a pre-lodged C21iEIDR NOP-->
-        <TypeCode>IMK</TypeCode>
-        <!--DE 1/9: Sequential number of the goods item.-->
-        <GoodsItemQuantity>1</GoodsItemQuantity>
-        <!--DE 6/18: Total packages - 20. Note that this matches DE 6/10 because this is a single item declaration.-->
-        <TotalPackageQuantity>20</TotalPackageQuantity>
-        <!--DE 3/39: An Authorisation type of EIR indicates Authorisation for the use of customs declaration
+		<!--Function Code of 9 to represent an original declaration.-->
+		<FunctionCode>9</FunctionCode>
+		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
+		<FunctionalReferenceID>U.7849431OX2NQ</FunctionalReferenceID>
+		<!--DE 1/1: IM to represent an import declaration.-->
+		<!--DE 1/2: K to represent To represent a pre-lodged C21iEIDR NOP-->
+		<TypeCode>IMK</TypeCode>
+		<!--DE 1/9: Sequential number of the goods item.-->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 6/18: Total packages - 20. Note that this matches DE 6/10 because this is a single item declaration.-->
+		<TotalPackageQuantity>20</TotalPackageQuantity>
+		<!--DE 3/39: An Authorisation type of EIR indicates Authorisation for the use of customs declaration
             through an entry of data in the declarants records.
             The ID is the EORI number of the EIDR authorisation holder -->
-        <AuthorisationHolder>
-            <ID>XI553202734852</ID>
-            <CategoryCode>EIR</CategoryCode>
-        </AuthorisationHolder>
-        <!-- DE 3/39: Holder of the Authoriation Identification Number.
+		<AuthorisationHolder>
+			<ID>XI553202734852</ID>
+			<CategoryCode>EIR</CategoryCode>
+		</AuthorisationHolder>
+		<!-- DE 3/39: Holder of the Authoriation Identification Number.
             An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
             The ID here is the EORI of the DPO authorised party.  -->
-        <AuthorisationHolder>
-            <ID>XI553202734852</ID>
-            <CategoryCode>UKIM</CategoryCode>
-        </AuthorisationHolder>
-        <!--DE 7/4: ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border.-->
-        <BorderTransportMeans>
-            <ModeCode>1</ModeCode>
-        </BorderTransportMeans>
-        <!--DE 3/18: Declarant Identification Number
+		<AuthorisationHolder>
+			<ID>XI553202734852</ID>
+			<CategoryCode>UKIM</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 7/4: ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border.-->
+		<BorderTransportMeans>
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<!--DE 3/18: Declarant Identification Number
             Person presenting the goods to customs in case of entry in the declarants records or pre-lodged customs declarations identification no.
             This is mandatory in this case -->
-        <Declarant>
-            <ID>XI553202734852</ID>
-        </Declarant>
-        <GoodsShipment>
-            <!--DE 7/2: Indicator to show if goods are packed in a container or not.
+		<Declarant>
+			<ID>XI553202734852</ID>
+		</Declarant>
+		<GoodsShipment>
+			<!--DE 7/2: Indicator to show if goods are packed in a container or not.
                 1 indicates that goods are transported in containers.
                 Note: Unlike CHIEF this must now be completed.-->
-            <Consignment>
-                <ContainerCode>1</ContainerCode>
-                <!--DE 7/9: Identity of the means of transport on arrival.
+			<Consignment>
+				<ContainerCode>1</ContainerCode>
+				<!--DE 7/9: Identity of the means of transport on arrival.
                     Example number representing IMO ship identification number: '10', and 5 digits
                     for the identification number: '12345'.
                     Mandatory unless postal or fixed energy installation-->
-                <ArrivalTransportMeans>
-                    <ID>12345</ID>
-                    <IdentificationTypeCode>10</IdentificationTypeCode>
-                </ArrivalTransportMeans>
-                <!--DE 5/23: Location of goods.
+				<ArrivalTransportMeans>
+					<ID>12345</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+				</ArrivalTransportMeans>
+				<!--DE 5/23: Location of goods.
                     Mandatory.
-                    The location code for Wallasea Island, a non-inventory linked location. -->
-                <GoodsLocation>
-                    <!--DE 5/23: ID to give a unique position of the location.-->
-                    <Name>WLALONBTW</Name>
-                    <!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
-                    <TypeCode>A</TypeCode>
-                    <Address>
-                        <!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE.-->
-                        <TypeCode>U</TypeCode>
-                        <!--DE 5/23: Country code of the country where the goods may be examined, GB in this scenario.-->
-                        <CountryCode>GB</CountryCode>
-                    </Address>
-                </GoodsLocation>
-                <TransportEquipment>
-                    <!--DE 7/10: Container identification number.
+                    The location code for Belfast Port. -->
+				<GoodsLocation>
+					<!--DE 5/23: ID to give a unique position of the location.-->
+					<Name>BELBELBEL</Name>
+					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE.-->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Country code of the country where the goods may be examined, GB in this scenario.-->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<TransportEquipment>
+					<!--DE 7/10: Container identification number.
                         This is alpha-numeric with up to 17 characters.
                         Mandatory only if containerised -->
-                    <SequenceNumeric>1</SequenceNumeric>
-                    <ID>DM1234567</ID>
-                </TransportEquipment>
-            </Consignment>
-            <GovernmentAgencyGoodsItem>
-                <!--DE 1/6: Sequential number of the goods item.-->
-                <SequenceNumeric>1</SequenceNumeric>
-                <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>DM1234567</ID>
+				</TransportEquipment>
+			</Consignment>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Sequential number of the goods item.-->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					This field is mandatory only where codes required.
+					N710 Maritime manifest (T1) -->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>0054037</ID>
+					<TypeCode>710</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     C514 indicating Authorisation for making a customs declaration through an entry in the declarant's records -->
-                <AdditionalDocument>
-                    <CategoryCode>C</CategoryCode>
-                    <ID>XIEIR553202734852I20231019133850</ID>
-                    <TypeCode>514</TypeCode>
-                </AdditionalDocument>
-                <!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>XIEIR553202734852I20231019133850</ID>
+					<TypeCode>514</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
                    A document code of 1UKI indicates the A trader has declared that they are UKIMS Authorised.
                    LPCOExemptionCode: AC indicates Document attached for certification by customs.  -->
-                <AdditionalDocument>
-                    <CategoryCode>1</CategoryCode>
-                    <ID>XIUKIM55320273485220240124160138</ID>
-                    <TypeCode>UKI</TypeCode>
-                    <LPCOExemptionCode>AC</LPCOExemptionCode>
-                </AdditionalDocument>
-                <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+				<AdditionalDocument>
+					<CategoryCode>1</CategoryCode>
+					<ID>XIUKIM55320273485220240124160138</ID>
+					<TypeCode>UKI</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     A document code of C672 is an information document for the import of non-hazardous waste.
                     LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
-                <AdditionalDocument>
-                    <CategoryCode>C</CategoryCode>
-                    <ID>XI553202734852</ID>
-                    <TypeCode>672</TypeCode>
-                    <LPCOExemptionCode>AC</LPCOExemptionCode>
-                </AdditionalDocument>
-                <!--DE 2/2: Additional information. 00500 Indicating Self representation by the importer -->
-                <AdditionalInformation>
-                    <StatementCode>00500</StatementCode>
-                    <StatementDescription>IMPORTER</StatementDescription>
-                </AdditionalInformation>
-                <!--DE 2/2: Additional Information.
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>XI553202734852</ID>
+					<TypeCode>672</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional information. 00500 Indicating Self representation by the importer -->
+				<AdditionalInformation>
+					<StatementCode>00500</StatementCode>
+					<StatementDescription>IMPORTER</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional Information.
                     This field is mandatory.
                     'NIDOM' indicates GB movements into NI (where goods have UK Domestic goods status) - Excluding movements to NI from UK Special Fiscal Territories. -->
-                <AdditionalInformation>
-                    <StatementCode>NIDOM</StatementCode>
-                </AdditionalInformation>
-                <!--DE 2/2: Additional Information.
+				<AdditionalInformation>
+					<StatementCode>NIDOM</StatementCode>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional Information.
                     This field is mandatory, this represents goods are de-risked from ROW into Northern Ireland. -->
-                <AdditionalInformation>
-                    <StatementCode>NIREM</StatementCode>
-                </AdditionalInformation>
-                <!--DE 2/2: Additional Information.
+				<AdditionalInformation>
+					<StatementCode>NIREM</StatementCode>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional Information.
                     This field is mandatory, GLOIL represents Movement of Hydrocarbon Oil covered by the ‘Tied Oil’ Scheme.. -->
-                <AdditionalInformation>
-                    <StatementCode>GLOIL</StatementCode>
-                    <StatementDescription>Green Lane Tied Oil</StatementDescription>
-                </AdditionalInformation>
-                <!--DE 2/2: Additional Information.
+				<AdditionalInformation>
+					<StatementCode>GLOIL</StatementCode>
+					<StatementDescription>Green Lane Tied Oil</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional Information.
                     This field is mandatory, GLCCL represents Movements of Taxable Commodities and Solid Fuels Liable to Climate Change Levy. -->
-                <AdditionalInformation>
-                    <StatementCode>GLCCL</StatementCode>
-                    <StatementDescription>Green Lane Climate Change Levy</StatementDescription>
-                </AdditionalInformation>
-                <Commodity>
-                    <!--DE 6/8: Description of Goods.
+				<AdditionalInformation>
+					<StatementCode>GLCCL</StatementCode>
+					<StatementDescription>Green Lane Climate Change Levy</StatementDescription>
+				</AdditionalInformation>
+				<Commodity>
+					<!--DE 6/8: Description of Goods.
                         Description of the goods which is specific enough to allow the unambiguous identification, classification and examination of goods. -->
-                    <Description>Tar distilled from coal, from lignite or from peat, and other mineral tars, whether or not dehydrated or partially distilled, including reconstituted tars</Description>
-                    <Classification>
-                        <!--DE 6/14: Commodity Code — Combined Nomenclature Code. -->
-                        <ID>27060000</ID>
-                        <IdentificationTypeCode>TSP</IdentificationTypeCode>
-                    </Classification>
-                    <GoodsMeasure>
-                        <!--DE 6/5: Gross Mass.
+					<Description>Tar distilled from coal, from lignite or from peat, and other mineral tars, whether or not dehydrated or partially distilled, including reconstituted tars</Description>
+					<Classification>
+						<!--DE 6/14: Commodity Code — Combined Nomenclature Code. -->
+						<ID>27060000</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass.
                             Weight of the goods in kilograms including packaging. -->
-                        <GrossMassMeasure>1100</GrossMassMeasure>
-                    </GoodsMeasure>
-                </Commodity>
-                <!--DE 5/14: Country of Dispatch/Export Code.
+						<GrossMassMeasure>1100</GrossMassMeasure>
+					</GoodsMeasure>
+				</Commodity>
+				<!--DE 5/14: Country of Dispatch/Export Code.
                     For declarations with a single goods item, this DE can be declared at header or item level.
                     In this case,GB. -->
-                <ExportCountry>
-                    <ID>GB</ID>
-                </ExportCountry>
-                <!--DE 1/10: Procedure.
+				<ExportCountry>
+					<ID>GB</ID>
+				</ExportCountry>
+				<!--DE 1/10: Procedure.
                     Mandatory field.
                     CurrentCode 40 indicating entry for free circulation and home use of non-union goods.
                     PreviousCode 00 indicating where the goods have not been subject to any previous procedure. -->
-                <GovernmentProcedure>
-                    <CurrentCode>40</CurrentCode>
-                    <PreviousCode>00</PreviousCode>
-                </GovernmentProcedure>
-                <!--DE 1/11: Additional Procedure Code.
+				<GovernmentProcedure>
+					<CurrentCode>40</CurrentCode>
+					<PreviousCode>00</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code.
                     '1SG' at item level to derive the SRDS dataset. -->
-                <GovernmentProcedure>
-                    <CurrentCode>1EN</CurrentCode>
-                </GovernmentProcedure>
-                <Packaging>
-                    <SequenceNumeric>1</SequenceNumeric>
-                    <!--DE 6/10: Number of Packages.
+				<GovernmentProcedure>
+					<CurrentCode>1EN</CurrentCode>
+				</GovernmentProcedure>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/10: Number of Packages.
                         In this case 10. -->
-                    <QuantityQuantity>10</QuantityQuantity>
-                </Packaging>
-            </GovernmentAgencyGoodsItem>
-            <!--DE 3/16: Importer Identification Number.
+					<QuantityQuantity>10</QuantityQuantity>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 3/16: Importer Identification Number.
                 EORI number of the Importer.-->
-            <Importer>
-                <ID>XI553202734852</ID>
-            </Importer>
-            <!--DE 2/1: Previous Documents of Z355 to show the MRN for the entry summary declaration (ENS).
+			<Importer>
+				<ID>XI553202734852</ID>
+			</Importer>
+			<!--DE 2/1: Previous Documents of Z355 to show the MRN for the entry summary declaration (ENS).
                 This is a mandatory field.-->
-            <PreviousDocument>
-                <CategoryCode>Z</CategoryCode>
-                <ID>24GB34F7Y1O2CX8PT4</ID>
-                <TypeCode>355</TypeCode>
-                <LineNumeric>1</LineNumeric>
-            </PreviousDocument>
-            <!--DE 2/1: Previous document to show the DUCR assigned to the consignment.
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>24GB34F7Y1O2CX8PT4</ID>
+				<TypeCode>355</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment.
                 This is a mandatory field-->
-            <PreviousDocument>
-                <CategoryCode>Z</CategoryCode>
-                <ID>4GB427168118378-12345</ID>
-                <TypeCode>DCR</TypeCode>
-            </PreviousDocument>
-            <!--DE 2/1: Simplified Declarations/Previous documents.
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>4GB427168118378-141100</ID>
+				<TypeCode>DCR</TypeCode>
+			</PreviousDocument>
+			<!--DE 2/1: Simplified Declarations/Previous documents.
                 For import inventory linked locations, the Inventory Reference Number (UCN) must be declared in DE 2/1 using the previous document type code 'MCR'. -->
-            <PreviousDocument>
-                <CategoryCode>Z</CategoryCode>
-                <ID>CSPUCN123</ID>
-                <TypeCode>MCR</TypeCode>
-            </PreviousDocument>
-        </GoodsShipment>
-    </Declaration>
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>CSPUCN121</ID>
+				<TypeCode>MCR</TypeCode>
+			</PreviousDocument>
+		</GoodsShipment>
+	</Declaration>
 </md:MetaData>

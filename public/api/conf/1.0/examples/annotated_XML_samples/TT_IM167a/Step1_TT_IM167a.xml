@@ -5,7 +5,7 @@
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-		<!-- 			
+		<!--
 			SCENARIO
 			Passing H8 declaration data to GVMS
 			A trader submits a Type D (H8) declaration "Not At Risk", importing goods from GB to NI to be processed via GVMS.
@@ -37,7 +37,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number: this must be unique to the transaction. -->
-		<FunctionalReferenceID>784732383ZKJ</FunctionalReferenceID>
+		<FunctionalReferenceID>U.78494311WFRH</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -154,6 +154,15 @@
 					<Name>See attached worksheet</Name>
 					<TypeCode>WKS</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+						A document code of N705 indicates Bill of lading
+					LPCOExemptionCode: AE indicates Document attached — exhausted by (or only applies to) this entry (document returned to the trader)-->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>0054047</ID>
+					<TypeCode>705</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/2: Additional information.
 					Statement code 00100 indicating Authorisation by Customs Declaration used. -->

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:InventoryLinkingImportsValidateMovementResponse xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
-<inv:entryNumber>24GB2U3F297011RAR7</inv:entryNumber>
+<inv:entryNumber>24GBCLZ6UED3CH2AR9</inv:entryNumber>
 <inv:entryVersionNumber>1</inv:entryVersionNumber>
 <inv:inventoryConsignmentReference>CSPUCN123</inv:inventoryConsignmentReference>
 <inv:irc>000</inv:irc>

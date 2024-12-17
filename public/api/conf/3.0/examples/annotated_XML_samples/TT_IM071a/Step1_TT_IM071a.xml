@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
@@ -24,7 +25,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number this must be unique to the transaction. -->
-		<FunctionalReferenceID>7847323WK3WM</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847323WVJQ5</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -155,7 +156,7 @@
 					- followed by the authorisation reference number. No document status code is required. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBDPO1108654</ID>
+					<ID>XIDPO1108656</ID>
 					<TypeCode>506</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
@@ -174,7 +175,7 @@
 					This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16.-->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/19.07.2021</ID>
+					<ID>12345/19.09.2024</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -199,22 +200,22 @@
 				<Commodity>
 					<!--DE 6/8: Description of Goods.
 						Description of the goods specific enough to enable classification without repeating the CN code description in the Tariff. -->
-					<Description>Mixtures of urea and ammonium nitrate in aqueous or ammoniacal solution</Description>
+					<Description>For household use, of a thickness of not less than 0,008 mm and not more than 0,018 mm, in rolls of a width not exceeding 650 mm</Description>
 					<Classification>
 						<!--DE 6/14: Commodity Code - Combined Nomenclature Code.
 							IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
-						<ID>31028000</ID>
+						<ID>76071119</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<Classification>
 						<!--DE 6/15: Commodity code: TARIC code.-->
-						<ID>00</ID>
+						<ID>10</ID>
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<Classification>
 						<!--DE 6/16: Commodity code: TARIC Additional code.
-							C502 indicating definitive anti-dumping duty for this commodity manufactured by Methanol Holdings (Trinidad) Limited. -->
-						<ID>C502</ID>
+							C601 indicating definitive anti-dumping duty for this commodity signifying Products consigned from Thailand - All exporting producers -->
+						<ID>C601</ID>
 						<IdentificationTypeCode>TRA</IdentificationTypeCode>
 					</Classification>
 					<DutyTaxFee>

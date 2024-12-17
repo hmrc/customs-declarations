@@ -23,7 +23,7 @@
         <!--Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN. Mandatory. Trader's own reference number - this must be unique to the transaction. -->
-        <FunctionalReferenceID>7849431P0DLV</FunctionalReferenceID>
+        <FunctionalReferenceID>7849431P0DLV17_025</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type. Mandatory. IM to represent an import declaration. -->
         <!--DE 1/2: Additional Declaration Type. Mandatory. A to represent a standard frontier declaration. -->
         <TypeCode>IMA</TypeCode>
@@ -198,11 +198,15 @@
                         <ID>X345</ID>
                         <IdentificationTypeCode>GN</IdentificationTypeCode>
                     </Classification>
+					<Classification>
+                        <ID>89ZZ</ID>
+                        <IdentificationTypeCode>TRA</IdentificationTypeCode>
+                    </Classification>
                     <DutyTaxFee>
                         <!--DE 4/17: Preference. Mandatory. 100 represents no preference being claimed. -->
                         <DutyRegimeCode>100</DutyRegimeCode>
                         <!--DE 4/4: Calculation of Taxes - Tax Base. Code GBP used as a manual duty calculation is being made. Note where 'OVR01' is declared in DE 2/2 (Additional Information) on a Type C or Type F declaration, DE 4/4 (Tax Base) must be declared. -->
-                        <SpecificTaxBaseQuantity unitCode="GBP">2500</SpecificTaxBaseQuantity>
+                        <SpecificTaxBaseQuantity unitCode="GBP">10000</SpecificTaxBaseQuantity>
                         <!--DE 4/3: Tax Type. A00 represents UK customs duty. -->
                         <TypeCode>A00</TypeCode>
                         <Payment>
@@ -212,7 +216,7 @@
                     </DutyTaxFee>
                     <DutyTaxFee>
                         <!--DE 4/4: Tax Base. Code GBP used as a manual duty calculation is being made. Note where 'OVR01' is declared in DE 2/2 (Additional Information) on a Type C or Type F declaration, DE 4/4 (Tax Base) must be declared. -->
-                        <SpecificTaxBaseQuantity unitCode="GBP">2500</SpecificTaxBaseQuantity>
+                        <SpecificTaxBaseQuantity unitCode="GBP">10000</SpecificTaxBaseQuantity>
                         <!--DE 4/3: Tax Type. 345 indicates UK tax type 345, Spirits exceeding 22%. -->
                         <TypeCode>345</TypeCode>
                         <Payment>
@@ -250,15 +254,15 @@
                     </DutyTaxFee>
                     <GoodsMeasure>
                         <!--DE 6/5: Gross Mass (KG). Mandatory. Weight of the goods in kilograms including packaging. -->
-                        <GrossMassMeasure>1225</GrossMassMeasure>
+                        <GrossMassMeasure>1200</GrossMassMeasure>
                         <!--DE 6/1: Net Mass (KG). Mandatory. Weight of the goods in kilograms without any packaging. -->
                         <NetNetWeightMeasure>1000</NetNetWeightMeasure>
                         <!--DE 6/2: Supplementary Units. Litre Pure (100%) Alcohol (LPA). -->
                         <TariffQuantity>500</TariffQuantity>
                     </GoodsMeasure>
-                    <!--DE 4/14: Item price amount. Mandatory. The invoice was issued with a value of 2500 and the currency was in GBP. -->
+                    <!--DE 4/14: Item price amount. Mandatory. The invoice was issued with a value of 10000 and the currency was in GBP. -->
                     <InvoiceLine>
-                        <ItemChargeAmount currencyID="GBP">2500</ItemChargeAmount>
+                        <ItemChargeAmount currencyID="GBP">10000</ItemChargeAmount>
                     </InvoiceLine>
                 </Commodity>
                 <!--DE 4/16: Valuation method. Mandatory. 1 to indicate the method is transaction value of the imported goods. -->

@@ -1,11 +1,11 @@
 <n1:InventoryLinkingImportsDeclarationStatusNotification xmlns:n1="http://gov.uk/customs/inventoryLinkingImport/v1">
 	<n1:declarationMethod>2</n1:declarationMethod>
-	<n1:dateOfEntry>2024-09-17T09:09:28.123Z</n1:dateOfEntry>
-	<n1:entryNumber>24GBAC23PXY1504A00</n1:entryNumber>
+	<n1:dateOfEntry>2024-11-14T15:24:58.347Z</n1:dateOfEntry>
+	<n1:entryNumber>24GBCNB1RVU8V5VA03</n1:entryNumber>
 	<n1:entryVersionNumber>2</n1:entryVersionNumber>
 	<n1:goodsArrivalDeclaration>Y</n1:goodsArrivalDeclaration>
 	<n1:ics>14</n1:ics>
-	<n1:inventoryConsignmentReference>GB/1234-:17EC11</n1:inventoryConsignmentReference>
+	<n1:inventoryConsignmentReference>GB/1234-:1411EC12</n1:inventoryConsignmentReference>
 	<n1:roe>6</n1:roe>
 	<n1:totalPackages>0</n1:totalPackages>
 </n1:InventoryLinkingImportsDeclarationStatusNotification>

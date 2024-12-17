@@ -23,7 +23,7 @@
 				<FunctionCode>9</FunctionCode>
 				<!--DE 2/5: LRN. Mandatory.
 			Trader's own reference number - this must be unique to the transaction -->
-				<FunctionalReferenceID>7849431LE06U</FunctionalReferenceID>
+				<FunctionalReferenceID>U.78477672OFLR</FunctionalReferenceID>
 				<!--DE 1/1: Declaration Type. Mandatory.
 			IM to represent an import declaration.-->
 				<!--DE 1/2: Additional Declaration Type. Mandatory.
@@ -213,7 +213,6 @@
 					<ID>GBTEA553202734852</ID>
 					<Name>Authorisation by declaration</Name>
 					<TypeCode>516</TypeCode>
-					<LPCOExemptionCode>XW</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. 
@@ -224,15 +223,6 @@
 					<ID>12345/01.11.2021</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
-				</AdditionalDocument>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of 955D with an Exemption Status Code of 'AE' is required, when MoP code 'R' is declared. -->
-				<AdditionalDocument>
-					<CategoryCode>9</CategoryCode>
-					<ID>Form C&amp;E955D completed</ID>
-					<Name>Reason for Waiver</Name>
-					<TypeCode>55D</TypeCode>
-					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/2: Additional information.
 					Statement code 00100 indicating Authorisation by Customs Declaration used. -->
@@ -426,7 +416,6 @@
 					<ID>GBTEA553202734852</ID>
 					<Name>Authorisation by declaration</Name>
 					<TypeCode>516</TypeCode>
-					<LPCOExemptionCode>XW</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. 
@@ -437,15 +426,6 @@
 					<ID>12345/01.11.2021</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
-				</AdditionalDocument>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of 955D with an Exemption Status Code of 'AE' is required, when MoP code 'R' is declared. -->
-				<AdditionalDocument>
-					<CategoryCode>9</CategoryCode>
-					<ID>Form C&amp;E955D completed</ID>
-					 <Name>Reason for Waiver</Name>
-					<TypeCode>55D</TypeCode>
-					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
 					This field is mandatory if the codes are required.
@@ -628,7 +608,6 @@
 					<ID>GBTEA553202734852</ID>
 					<Name>Authorisation by declaration</Name>
 					<TypeCode>516</TypeCode>
-					<LPCOExemptionCode>XW</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					N935 indicates the invoice on the basis of which the customs value of the goods is declared. 
@@ -639,15 +618,6 @@
 					<ID>12345/01.08.2023</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
-				</AdditionalDocument>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of 955D with an Exemption Status Code of 'AE' is required, when MoP code 'R' is declared. -->
-				<AdditionalDocument>
-					<CategoryCode>9</CategoryCode>
-					<ID>Form C&amp;E955D completed</ID>
-					<Name>Reason for Waiver</Name>
-					<TypeCode>55D</TypeCode>
-					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/2: Additional information. 
 					00100 Indicating Authorisation by Customs Declaration used. -->

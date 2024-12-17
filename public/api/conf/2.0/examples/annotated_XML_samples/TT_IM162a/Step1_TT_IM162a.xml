@@ -6,6 +6,8 @@
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--
+            Please note this sample now fails due to quota exhaustion. This is an expected failure for now. 
+            We expect to see this working again in January when quota values are updated.
             SCENARIO
             CDSNIP-714 -Declaring and Claiming Quota under Windsor Framework
             A Trader submits a Type A (H1) declaration importing goods from RoW to NI. Goods are deemed "Not At Risk". Trader wants to claim UK quota on these goods.

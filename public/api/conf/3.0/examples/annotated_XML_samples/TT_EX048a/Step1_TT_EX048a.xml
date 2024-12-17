@@ -1,47 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			***
-			Note KEL 208: DE 7/7 Identity of means of transport at the border is currently being incorrectly mandated on B4 and C1 declarations when DE 7/4 Mode of transport at the border is coded 1(Maritime), 3(Road), 4(Air), 8(Inland Waterway) or 9(Mode Unknown). Until this is resolved, it will be necessary to complete both components of DE 7/7 in these circumstances. 
+			Note KEL 208: DE 7/7 Identity of means of transport at the border is currently being incorrectly mandated on B4 and C1 declarations when DE 7/4 Mode of transport at the border is coded 1(Maritime), 3(Road), 4(Air), 8(Inland Waterway) or 9(Mode Unknown). Until this is resolved, it will be necessary to complete both components of DE 7/7 in these circumstances.
 			***
 			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID), even when the Representative is the same Party as the Declarant.
 			***
-			
-			SCENARIO
-			Type C Exports standalone simplified Declaration. 
-			Re-export of goods previously entered to Inward Processing (IP). 
 
-			Type â€“ C simplified export Declaration moves to Type C - Re-Arrived simplified Export declaration. 
+			SCENARIO
+			Type C Exports standalone simplified Declaration.
+			Re-export of goods previously entered to Inward Processing (IP).
+			Type C simplified export Declaration moves to Type C - Re-Arrived simplified Export declaration.
 			Procedure code 3151, additional procedure code 1CS.
-			Data set category C1. 
+			Data set category C1.
 			This scenario covers the presentation of a simplified declaration from a Customs Supervised Exports (CSE) based trader.
 			The declaration will therefore quote or need to quote an approved CSE based location.
 			For the generation of movement messages the declared C declaration will equate to a Re-Arrival at the UK Frontier Port.
-			
+
 			Steps for execution:
 			 - Step 1 - Declaration with 1 DUCR only.
 			 - Step 2 - EAL Message with 1 DUCR only.
-			 - Step 3 - EDL Message with 1 DUCR only.
-			
+
 			Expected notifications:
 			 - Where declaration is accepted and validation successful - DMSACC - ( Function Code 01).
 			 - Where declaration is cleared of the goods - DMSCLE - ( Function Code 09).
-			 - Where declaration is finalised and the goods have exited - DMSEOG - ( Function Code 16).
-			
+
 			Note that declarations for CSE controlled goods require:
 			 - DE 1/2 Additional Declaration Type to reflect the new approach of the declaration being declared as "Arrived" i.e. Types A, B or C.
 			 - DE 1/11 Additional Procedure Code 1CS - this is a CDS workaround pending confirmation or a new solution to provide CSE functionality (as the Tariff currently does not include this code).
@@ -52,21 +41,21 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			The unique trader assigned reference to the declaration. -->
-		<FunctionalReferenceID>784776764OQ7</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7849431F5VZU</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			EX to represent an Export declaration. -->
-		<!--DE 1/2: Additional Declaration Type. 
+		<!--DE 1/2: Additional Declaration Type.
 			C to represent a simplified frontier declaration with regular use (pre-authorised). -->
 		<TypeCode>EXC</TypeCode>
 		<!--DE 1/9: Total Number of Items. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<Agent>
-			<!--DE 3/20: Representative Identification Number. 
+			<!--DE 3/20: Representative Identification Number.
 				When declared, the UK requires an EORI to be provided for the representative.
 				Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
 			<ID>XI427168118378</ID>
 			<!--DE 3/21: Representative Status Code.
-				Declares the way in which the declarant is representing the Exporter. 
+				Declares the way in which the declarant is representing the Exporter.
 				In this case, 2 indicates a direct representation (holding written instruction to do so). -->
 			<FunctionCode>2</FunctionCode>
 		</Agent>
@@ -84,8 +73,14 @@
 			<CategoryCode>CSE</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 7/4: Mode of Transport at the Border.
-			ModeCode of 4 to represent Air transport transport as the mode of transport at the border. -->
+			ModeCode of 4 to represent Air transport as the mode of transport at the border. -->
 		<BorderTransportMeans>
+			<!--DE 7/14: Identity of active means of transport crossing the border. 40 Indicating IATA flight number-->
+			<ID>CSCL123</ID>
+			<IdentificationTypeCode>40</IdentificationTypeCode>
+			<!--DE 7/15: Country code of the nationality of the active means of transport
+                    crossing the border, in this case GB.-->
+			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
 			<ModeCode>4</ModeCode>
 		</BorderTransportMeans>
 		<Consignment>
@@ -93,12 +88,12 @@
 			<Carrier>
 				<ID>XI150454489082</ID>
 			</Carrier>
-			<!--DE 4/2: Transport charges method of payment. 
+			<!--DE 4/2: Transport charges method of payment.
 				C indicating Payment by cheque. -->
 			<Freight>
 				<PaymentMethodCode>C</PaymentMethodCode>
 			</Freight>
-			<!--DE 5/18: Country of Routing Codes. 
+			<!--DE 5/18: Country of Routing Codes.
 				GBUS indicating routing from elsewhere to US through UK for IP. -->
 			<Itinerary>
 				<SequenceNumeric>1</SequenceNumeric>
@@ -110,16 +105,16 @@
 			</Itinerary>
 		</Consignment>
 		<Declarant>
-			<!--DE 3/18: Declarant Identification Number. 
+			<!--DE 3/18: Declarant Identification Number.
 				EORI number of the Declarant. -->
 			<ID>XI427168118378</ID>
 		</Declarant>
-		<!--DE 5/12 Customs Office of Exit. 
+		<!--DE 5/12 Customs Office of Exit.
 			In this case indicating DUBLIN PORT. -->
 		<ExitOffice>
 			<ID>IEDUB100</ID>
 		</ExitOffice>
-		<!--DE 3/2: Exporter Identification Number. 
+		<!--DE 3/2: Exporter Identification Number.
 			EORI number of the Exporter. -->
 		<Exporter>
 			<ID>XI150454489082</ID>
@@ -136,7 +131,7 @@
 				</Address>
 			</Consignee>
 			<Consignment>
-				<!--DE 7/2: Container. 
+				<!--DE 7/2: Container.
 					1 to indicate that the goods are transported in containers. -->
 				<ContainerCode>1</ContainerCode>
 				<!--DE 7/7: Identity of the means of transport at departure.
@@ -150,7 +145,7 @@
 				</DepartureTransportMeans>
 				<GoodsLocation>
 					<!--DE 5/23: Location of Goods - Identification of location.
-						ID to give a unique position of the location. 
+						ID to give a unique position of the location.
 						BELBFSBEL Indicating Belfast Airport. -->
 					<Name>BELBFSBEL</Name>
 					<!--DE 5/23: Location of Goods - Type of location.
@@ -185,40 +180,40 @@
 			<!--DE 1/6: Goods Item Number. -->
 			<GovernmentAgencyGoodsItem>
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					A document code of C512 indicates SDE - authorisation to use simplified declaration. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>XISDE150454489082E20231019133850</ID>
 					<TypeCode>512</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
-					A document code of C676 indicates Export authorisation issued by the competent authorities of the member states. 
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of C676 indicates Export authorisation issued by the competent authorities of the member states.
 					CSE is used to indicate Customs Supervised Export. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>XICSE150454489082E20231019133850</ID>
 					<TypeCode>676</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/2: Additional Information. 
+				<!--DE 2/2: Additional Information.
 					In this case, GEN45 to indicate unique reference number allocated to the consignment. -->
 				<AdditionalInformation>
 					<StatementCode>00400</StatementCode>
 					<StatementDescription>EXPORTER</StatementDescription>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional Information. 
+				<!--DE 2/2: Additional Information.
 					NIEXP to be used when a movement is made from NI to GB or an NI to RoW export declaration is made.
-					00100 Authorisation by Customs Declaration only: Special Procedure Authorisation granted on the declaration at the time of entry to the procedure. 
-                    Note: Users of an Authorisation by Customs Declaration should refer to Appendix 4: DE 2/2 Additional Information Statement Codes for other codes which may be required for the specific operation.. 
+					00100 Authorisation by Customs Declaration only: Special Procedure Authorisation granted on the declaration at the time of entry to the procedure.
+                    Note: Users of an Authorisation by Customs Declaration should refer to Appendix 4: DE 2/2 Additional Information Statement Codes for other codes which may be required for the specific operation..
 					Enter 'EXPORTER' to indicate self-representation by the exporter.-->
 				<AdditionalInformation>
 					<StatementCode>NIEXP</StatementCode>
 				</AdditionalInformation>
 				<Commodity>
-					<!--DE 6/8: Description of Goods. 
+					<!--DE 6/8: Description of Goods.
 						Specific enough to enable classification. -->
 					<Description>Microchips for sound recording equipment, made using semiconductors</Description>
-					<!--DE 6/14: Description of Goods. 
+					<!--DE 6/14: Description of Goods.
 						Specific enough to enable classification. -->
 					<Classification>
 						<ID>63011000</ID>
@@ -232,12 +227,12 @@
 					</GoodsMeasure>
 				</Commodity>
 				<GovernmentProcedure>
-					<!--DE 1/10: Procedure. 
+					<!--DE 1/10: Procedure.
 						Requested procedure of 31 51 indicating Re-export of goods previously entered to inward processing. -->
 					<CurrentCode>10</CurrentCode>
 					<PreviousCode>40</PreviousCode>
 				</GovernmentProcedure>
-				<!--DE 1/11: Additional Procedure. 
+				<!--DE 1/11: Additional Procedure.
 					The code 1CS is a CDS workaround pending confirmation or a new solution to provide CSE functionality (as the Tariff currently does not include this code). -->
 				<GovernmentProcedure>
 					<CurrentCode>1CS</CurrentCode>
@@ -254,13 +249,13 @@
 					<TypeCode>PK</TypeCode>
 				</Packaging>
 			</GovernmentAgencyGoodsItem>
-			<!--DE 2/1: Simplified Declaration/ Previous Documents. 
+			<!--DE 2/1: Simplified Declaration/ Previous Documents.
 				Previous document to show the DUCR assigned to the consignment.
-				This is a mandatory field. 
+				This is a mandatory field.
 				EORI matches the authorisor's EORI in 3/39. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>4GB801347272465-50YYKGM</ID>
+				<ID>4GB953375141394-UJZPUJ</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

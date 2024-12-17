@@ -7,8 +7,8 @@
 	</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>78477672VUY2</FunctionalReferenceID>
-		<ID>24GBAC23PXY1504A00</ID>
+		<FunctionalReferenceID>U.7849431QQ4OY</FunctionalReferenceID>
+		<ID>24GBCNB1RVU8V5VA03</ID>
 		<TypeCode>GPR</TypeCode>
 		<Submitter>
 			<ID>XI150454489082</ID>

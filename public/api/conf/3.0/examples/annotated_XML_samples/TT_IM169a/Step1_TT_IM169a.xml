@@ -5,73 +5,49 @@
     <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-        <!--
-            SCENARIO
-            H8 Supplementary Declarations
-            A Trader submits a Type Z (H8) supplementary declaration "Not At Risk" importing goods from GB to NI. The trader has declared APC 1EN in addition with the APC 1RD.
-            This declaration's data will be queried by the full declaration retrieval.
-        -->
+        <!-- SCENARIO H8 Supplementary Declarations A Trader submits a Type Z (H8) supplementary declaration "Not At Risk" importing goods from GB to NI. The trader has declared APC 1EN in addition with the APC 1RD. This declaration's data will be queried by the full declaration retrieval. -->
         <!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
         <AcceptanceDateTime>
-            <p1:DateTimeString formatCode="304">20240912131454+01</p1:DateTimeString>
+            <p1:DateTimeString formatCode="304">20241113160845+01</p1:DateTimeString>
         </AcceptanceDateTime>
         <!--Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
-        <!--DE 2/5: LRN.
-            Traders own reference number Ã¢â‚¬â€œ this must be unique to the transaction. -->
-        <FunctionalReferenceID>78494311P8SM</FunctionalReferenceID>
-        <!--DE 1/1: Declaration Type.
-            IM to represent an import declaration.-->
-        <!--DE 1/2: Additional Declaration Type.
-            Z to represent an EIDR supplementary declaration. -->
+        <!--DE 2/5: LRN. Traders own reference number Ã¢â‚¬â€œ this must be unique to the transaction. -->
+        <FunctionalReferenceID>U.7867523MH40X</FunctionalReferenceID>
+        <!--DE 1/1: Declaration Type. IM to represent an import declaration.-->
+        <!--DE 1/2: Additional Declaration Type. Z to represent an EIDR supplementary declaration. -->
         <TypeCode>IMZ</TypeCode>
-        <!--DE 1/9: Total Number of Items.
-            Single item declaration.-->
+        <!--DE 1/9: Total Number of Items. Single item declaration.-->
         <GoodsItemQuantity>1</GoodsItemQuantity>
         <Agent>
             <FunctionCode>2</FunctionCode>
         </Agent>
-        <!--DE 3/39: Holder of the Authorisation Identification Number.
-            An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarantâ„¢s records.
-            The ID is the EORI of the EIDR authorised party. -->
+        <!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarantâ„¢s records. The ID is the EORI of the EIDR authorised party. -->
         <AuthorisationHolder>
             <ID>XI553202734852</ID>
             <CategoryCode>EIR</CategoryCode>
         </AuthorisationHolder>
-        <!--DE 3/39: Holder of the Authorisation Identification Number.
-            An authorisation type code of CWP indicates operation of storage facilities for the customs warehousing of goods in a private customs warehouse
-               The ID is the EORI number of the Private Customs Warehousekeeper. As per the
-               import declaration completion guide, when goods are being removed from a private
-               customs warehouse, the EORI number entered here must be the same as the
-               Importer's EORI number declared in DE 3/16.-->
+        <!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of CWP indicates operation of storage facilities for the customs warehousing of goods in a private customs warehouse The ID is the EORI number of the Private Customs Warehousekeeper. As per the import declaration completion guide, when goods are being removed from a private customs warehouse, the EORI number entered here must be the same as the Importer's EORI number declared in DE 3/16.-->
         <AuthorisationHolder>
             <ID>XI553202734852</ID>
             <CategoryCode>CWP</CategoryCode>
         </AuthorisationHolder>
-        <!-- DE 3/39: Holder of the Authoriation Identification Number.
-            An authorisation type code of UKIM indicates that a good that otherwise would be considered â€œat riskâ€ of moving into the EU, must instead be considered â€œnot at riskâ€.
-            The ID here is the EORI of the DPO authorised party.  -->
+        <!-- DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered â€œat riskâ€ of moving into the EU, must instead be considered â€œnot at riskâ€. The ID here is the EORI of the DPO authorised party. -->
         <AuthorisationHolder>
             <ID>XI553202734852</ID>
             <CategoryCode>UKIM</CategoryCode>
         </AuthorisationHolder>
         <BorderTransportMeans>
-            <!--DE 7/15: Country code of the nationality of the active means of transport crossing the border.
-                In this case GB. -->
+            <!--DE 7/15: Country code of the nationality of the active means of transport crossing the border. In this case GB. -->
             <RegistrationNationalityCode>GB</RegistrationNationalityCode>
-            <!--DE 7/4: Mode of Transport at the Border.
-                ModeCode of 9 to represent Mode unknown (for instance, own propulsion). -->
+            <!--DE 7/4: Mode of Transport at the Border. ModeCode of 9 to represent Mode unknown (for instance, own propulsion). -->
             <ModeCode>9</ModeCode>
         </BorderTransportMeans>
-        <!--DE 3/18: Declarant Identification Number.
-            The EORI number of the agent entering the declaration
-            The UK requires an EORI to be provided for the declarant
-            In this scenario, this is the same as the EORI of the Agent. -->
+        <!--DE 3/18: Declarant Identification Number. The EORI number of the agent entering the declaration The UK requires an EORI to be provided for the declarant In this scenario, this is the same as the EORI of the Agent. -->
         <Declarant>
             <ID>XI603202734852</ID>
         </Declarant>
-        <!--DE 3/1: Exporter.
-            Exporter name and address. -->
+        <!--DE 3/1: Exporter. Exporter name and address. -->
         <Exporter>
             <Name>Pure Protein Cocoa Butter Co.</Name>
             <Address>
@@ -82,198 +58,166 @@
             </Address>
         </Exporter>
         <GoodsShipment>
-            <!--DE 8/5: Nature of transaction.
-                1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation. -->
+            <!--DE 8/5: Nature of transaction. 1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation. -->
             <TransactionNatureCode>1</TransactionNatureCode>
             <Consignment>
                 <!--DE 5/23: ID to give a unique position of the location -->
-				<GoodsLocation>
-					<!--DE 5/23: Location of Goods - Identification of location.
-						Mandatory.
-						The location code for Port of Belfast.
-						Goods moved via shipping container from GB to NI via Port of Belfast. -->
-					<Name>CW5212234GB</Name>
-					<!--DE 5/23: Location of Goods - Type of location.
-						B is used to identify inland locations such as customs warehouses. -->
-					<TypeCode>B</TypeCode>
-					<Address>
-						<!--DE 5/23: Location of Goods - Qualifier of the identification.
-							Y is used where the goods location is identified by an authorisation number.. -->
-						<TypeCode>Y</TypeCode>
-						<!--DE 5/23: Location of Goods - Country.
-							Country code of the country where the goods may be examined.
-							GB in this scenario. -->
-						<CountryCode>GB</CountryCode>
-					</Address>
-				</GoodsLocation>
+                <GoodsLocation>
+                    <!--DE 5/23: Location of Goods - Identification of location. Mandatory. The location code for Port of Belfast. Goods moved via shipping container from GB to NI via Port of Belfast. -->
+                    <Name>CW5212234GB</Name>
+                    <!--DE 5/23: Location of Goods - Type of location. B is used to identify inland locations such as customs warehouses. -->
+                    <TypeCode>B</TypeCode>
+                    <Address>
+                        <!--DE 5/23: Location of Goods - Qualifier of the identification. Y is used where the goods location is identified by an authorisation number.. -->
+                        <TypeCode>Y</TypeCode>
+                        <!--DE 5/23: Location of Goods - Country. Country code of the country where the goods may be examined. GB in this scenario. -->
+                        <CountryCode>GB</CountryCode>
+                    </Address>
+                </GoodsLocation>
             </Consignment>
-            <!--DE 5/8: Country code of the destination country.
-                In this case GB. -->
+            <!--DE 5/8: Country code of the destination country. In this case GB. -->
             <Destination>
                 <CountryCode>GB</CountryCode>
             </Destination>
-            <!--DE 5/14: Country of Dispatch/Export Code.
-                Country code for the country from which the goods were originally dispatched, in this case GB.-->
-            <!--  <ExportCountry>
-                  <ID>GB</ID>
-              </ExportCountry> -->
+            <!--DE 5/14: Country of Dispatch/Export Code. Country code for the country from which the goods were originally dispatched, in this case GB.-->
+            <!-- <ExportCountry> <ID>GB</ID> </ExportCountry> -->
             <GovernmentAgencyGoodsItem>
-                <!--DE 1/6: Goods Item Number.
-                    Sequential number of the goods item. -->
+                <!--DE 1/6: Goods Item Number. Sequential number of the goods item. -->
                 <SequenceNumeric>1</SequenceNumeric>
                 <AdditionalDocument>
-                    <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                        A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantÃ¢â‚¬â„¢s records. -->
+                    <!--DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantÃ¢â‚¬â„¢s records. -->
                     <CategoryCode>C</CategoryCode>
                     <ID>XIEIR553202734852I20231019133850</ID>
                     <TypeCode>514</TypeCode>
                 </AdditionalDocument>
-                <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                    A document code of C517 indicates CWP - Authorisation for the operation of storage facilities for the customs warehousing of goods in a private customs warehouse. -->
+                <!--DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of C517 indicates CWP - Authorisation for the operation of storage facilities for the customs warehousing of goods in a private customs warehouse. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
                     <ID>XICWP55320273485220231019133850</ID>
                     <TypeCode>517</TypeCode>
                 </AdditionalDocument>
-                <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                    A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
+                <!--DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
                 <AdditionalDocument>
                     <CategoryCode>N</CategoryCode>
                     <ID>12345/05.03.2024</ID>
                     <TypeCode>935</TypeCode>
                     <LPCOExemptionCode>AC</LPCOExemptionCode>
                 </AdditionalDocument>
-                <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                    A document code of C644 indicates Certificate of inspection for organic products. -->
+                <!--DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of C644 indicates Certificate of inspection for organic products. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
                     <ID>0054037-00554047</ID>
                     <TypeCode>644</TypeCode>
                     <LPCOExemptionCode>GE</LPCOExemptionCode>
                 </AdditionalDocument>
-                <!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
-                    A document code of 1UKI indicates the A trader has declared that they are UKIMS Authorised.
-                    LPCOExemptionCode: AC indicates Document attached for certification by customs.  -->
+                <!-- DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of 1UKI indicates the A trader has declared that they are UKIMS Authorised. LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
                 <AdditionalDocument>
                     <CategoryCode>1</CategoryCode>
                     <ID>XIUKIM55320273485220240124160138</ID>
                     <TypeCode>UKI</TypeCode>
                     <LPCOExemptionCode>AC</LPCOExemptionCode>
                 </AdditionalDocument>
-                <!--DE 2/2: Additional Information.
-                    This field is mandatory, this represents goods are Imported from ROW into Northern Ireland. -->
+                <!--DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of N705 indicates Bill of lading LPCOExemptionCode: AE indicates Document attached — exhausted by (or only applies to) this entry (document returned to the trader)-->
+                <AdditionalDocument>
+                    <CategoryCode>N</CategoryCode>
+                    <ID>0054047</ID>
+                    <TypeCode>705</TypeCode>
+                    <LPCOExemptionCode>AE</LPCOExemptionCode>
+                </AdditionalDocument>
+                <!--DE 2/2: Additional Information. This field is mandatory, this represents goods are Imported from ROW into Northern Ireland. -->
                 <AdditionalInformation>
                     <StatementCode>NIDOM</StatementCode>
                 </AdditionalInformation>
-                <!--DE 2/2: Additional Information.
-                    This field is mandatory, this represents goods are de-risked from ROW into Northern Ireland. -->
+                <!--DE 2/2: Additional Information. This field is mandatory, this represents goods are de-risked from ROW into Northern Ireland. -->
                 <AdditionalInformation>
                     <StatementCode>NIREM</StatementCode>
                 </AdditionalInformation>
-                <!-- DE 2/2: Additional information.
-                     RSDSD: This field is mandatory, this represents a total for the number of individual goods movements being included on the recapitulative declaration  -->
+                <!-- DE 2/2: Additional information. RSDSD: This field is mandatory, this represents a total for the number of individual goods movements being included on the recapitulative declaration -->
                 <AdditionalInformation>
                     <StatementCode>RSDSD</StatementCode>
                     <StatementDescription>RSDSD 1</StatementDescription>
                 </AdditionalInformation>
                 <Commodity>
-                    <!--DE 6/8: Goods Description.
-                        Description of the goods specific enough to enable classification Ã¢â‚¬â€œ without repeating the CN code description in the Tariff. -->
+                    <!--DE 6/8: Goods Description. Description of the goods specific enough to enable classification Ã¢â‚¬â€œ without repeating the CN code description in the Tariff. -->
                     <Description>Cocoa Butter-fat and oil</Description>
                     <Classification>
-                        <!--DE 6/14: Commodity code - combined nomenclature code.
-                           IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
+                        <!--DE 6/14: Commodity code - combined nomenclature code. IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
                         <ID>18040000</ID>
                         <IdentificationTypeCode>TSP</IdentificationTypeCode>
                     </Classification>
                     <GoodsMeasure>
-                        <!--DE 6/5: Gross Mass
-                            Mass of the goods in kilograms including packaging. -->
+                        <!--DE 6/5: Gross Mass Mass of the goods in kilograms including packaging. -->
                         <GrossMassMeasure>150</GrossMassMeasure>
                     </GoodsMeasure>
-                    <!--DE 4/14:  Item price amount.
-                        The invoice was issued with of a value of Â£1000 and the currency was in GBP. -->
+                    <!--DE 4/14: Item price amount. The invoice was issued with of a value of Â£1000 and the currency was in GBP. -->
                     <InvoiceLine>
                         <ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
                     </InvoiceLine>
                 </Commodity>
                 <GovernmentProcedure>
-                    <!--DE 1/10: Procedure.
-                        Requested Procedure of 40 indicating entry for free circulation and home use of goods.
-                        Previous Procedure of 71 indicating goods are being removed from
-                        a customs warehouse. -->
+                    <!--DE 1/10: Procedure. Requested Procedure of 40 indicating entry for free circulation and home use of goods. Previous Procedure of 71 indicating goods are being removed from a customs warehouse. -->
                     <CurrentCode>40</CurrentCode>
                     <PreviousCode>71</PreviousCode>
                 </GovernmentProcedure>
-                <!--DE 1/11: Additional Procedure Code.
-                    1EN to indicate Category 2 Excise Goods not subject to Documentary Controls. -->
+                <!--DE 1/11: Additional Procedure Code. 1EN to indicate Category 2 Excise Goods not subject to Documentary Controls. -->
                 <GovernmentProcedure>
                     <CurrentCode>1EN</CurrentCode>
                 </GovernmentProcedure>
-                <!--DE 1/11: Additional Procedure Code.
-                    1RD to indicate Recapitulative H8 Supplementary Declaration. -->
+                <!--DE 1/11: Additional Procedure Code. 1RD to indicate Recapitulative H8 Supplementary Declaration. -->
                 <GovernmentProcedure>
                     <CurrentCode>1RD</CurrentCode>
                 </GovernmentProcedure>
-                <!--DE 5/15: Country of Origin.
-                    TypeCode of 1 to represent non-preferential origin.
-                    CountryCode contains the code for the country from which the goods originated,
-                    in this case GB.
-                    It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/15
-                    (from DE 5/16). It is not a part of the UCC or Tariff completion requirements.-->
+                <!--DE 1/11: Additional Procedure Code 1SP to indicate GL Release to Free Circulation on Diversion from a Special Procedure in NI -->
+                <GovernmentProcedure>
+                    <CurrentCode>1SP</CurrentCode>
+                </GovernmentProcedure>
+                <!--DE 1/11: Additional Procedure Code 1NR to indicate GL Release to Free Circulation on Diversion from a Special Procedure in NI -->
+                <GovernmentProcedure>
+                    <CurrentCode>1NR</CurrentCode>
+                </GovernmentProcedure>
+                <!--DE 5/15: Country of Origin. TypeCode of 1 to represent non-preferential origin. CountryCode contains the code for the country from which the goods originated, in this case GB. It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/15 (from DE 5/16). It is not a part of the UCC or Tariff completion requirements.-->
                 <Origin>
                     <CountryCode>GB</CountryCode>
                     <TypeCode>1</TypeCode>
                 </Origin>
                 <Packaging>
                     <SequenceNumeric>1</SequenceNumeric>
-                    <!--DE 6/10: Number of Packages.
-                        In this case 55. -->
+                    <!--DE 6/10: Number of Packages. In this case 55. -->
                     <QuantityQuantity>55</QuantityQuantity>
                 </Packaging>
             </GovernmentAgencyGoodsItem>
-            <!--DE 3/16: Importer Identification Number.
-                EORI number of the Importer.-->
+            <!--DE 3/16: Importer Identification Number. EORI number of the Importer.-->
             <Importer>
                 <ID>XI553202734852</ID>
             </Importer>
-            <!--DE 2/1 : Previous Documents.
-                The DUCR assigned to the consignment
-                Note: document class Y used for DUCR as sup dec.
-                As this is for a single item declaration, this should all be declared at header level.
-                In CDS, the MUCR (MCR) is not required on a sup dec.-->
+            <!--DE 2/1 : Previous Documents. The DUCR assigned to the consignment Note: document class Y used for DUCR as sup dec. As this is for a single item declaration, this should all be declared at header level. In CDS, the MUCR (MCR) is not required on a sup dec.-->
             <PreviousDocument>
                 <CategoryCode>Y</CategoryCode>
                 <ID>4GB553202734852-20221114</ID>
                 <TypeCode>DCR</TypeCode>
                 <LineNumeric>1</LineNumeric>
             </PreviousDocument>
-            <!--DE 2/1: Previous Documents.
-                YCLE To show the date of the EIDR record.
-                Note that this is item 6 from the EIDR record entry. -->
+            <!--DE 2/1: Previous Documents. YCLE To show the date of the EIDR record. Note that this is item 6 from the EIDR record entry. -->
             <PreviousDocument>
                 <CategoryCode>Y</CategoryCode>
-                <ID>20240912</ID>
+                <ID>20241113</ID>
                 <TypeCode>CLE</TypeCode>
                 <LineNumeric>6</LineNumeric>
             </PreviousDocument>
-            <!--DE 2/1: Previous Documents.
-                ZZZZ To represent the warehouse stock reference number. -->
+            <!--DE 2/1: Previous Documents. ZZZZ To represent the warehouse stock reference number. -->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
                 <ID>STK12345</ID>
                 <TypeCode>ZZZ</TypeCode>
                 <LineNumeric>1</LineNumeric>
             </PreviousDocument>
-            <!--DE 2/7: Warehouse type of U to represent private warehouse.
-                ID contains the private warehouse ID. -->
+            <!--DE 2/7: Warehouse type of U to represent private warehouse. ID contains the private warehouse ID. -->
             <Warehouse>
                 <ID>5212234GB</ID>
                 <TypeCode>U</TypeCode>
             </Warehouse>
         </GoodsShipment>
-        <!--DE 5/27: Supervising customs office.
-            The Supervising Office Code for the HMRC Office overseeing the Customs Warehouse procedure. In this scenario, this is Belfast, Dorchester House (NIRU). -->
+        <!--DE 5/27: Supervising customs office. The Supervising Office Code for the HMRC Office overseeing the Customs Warehouse procedure. In this scenario, this is Belfast, Dorchester House (NIRU). -->
         <SupervisingOffice>
             <ID>GBBEL004</ID>
         </SupervisingOffice>

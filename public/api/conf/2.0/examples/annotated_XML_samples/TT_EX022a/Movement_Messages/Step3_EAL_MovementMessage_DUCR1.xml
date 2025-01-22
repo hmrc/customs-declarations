@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- EAL – Movement message notification format for Entry arriving at location (Arrivals) -->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-                   <inv:messageCode>EAL</inv:messageCode>
-				   <inv:ucrBlock>
-				   <!--Air time MUCR assigned to the consignment. Arriving at MUCR level. This value has come from Declaration -->
-                    <inv:ucr>3GB427168118378-RMDID01</inv:ucr>
-                        <inv:ucrType>D</inv:ucrType>
-                   </inv:ucrBlock>
-				   <!-- ID to give a unique position of the location. DVRDOVDVR Indicating Dover. This value has come from Declaration -->
-                   <inv:goodsLocation>GBAUEUTEUTEUT</inv:goodsLocation>
-				   <!-- This should be today's Date -->
-                   <inv:goodsArrivalDateTime>2023-03-03T09:01:00Z</inv:goodsArrivalDateTime>
-                    <inv:movementReference>Movement8</inv:movementReference>
+	<inv:messageCode>EAL</inv:messageCode>
+	<inv:ucrBlock>
+		<inv:ucr>4GB610693642685-L7F7QAUXU</inv:ucr>
+		<inv:ucrType>D</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAUEUTEUTEUTGVM</inv:goodsLocation>
+	<inv:goodsArrivalDateTime>2024-12-06T15:46:57.057Z</inv:goodsArrivalDateTime>
+	<inv:movementReference>LDUEXD819SMWZ93D167NIGAML</inv:movementReference>
 </inv:inventoryLinkingMovementRequest>

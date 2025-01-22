@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>03</FunctionCode>
-		<FunctionalReferenceID>5043613b76f04049ba0a02980c7a3e0f</FunctionalReferenceID>
+		<FunctionalReferenceID>9660142522f34708af3f650ec64f32e7</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20210712154719Z</DateTimeString>
+			<DateTimeString formatCode="304">20241206154628Z</DateTimeString>
 		</IssueDateTime>
 		<Error>
 			<ValidationCode>CDS10001</ValidationCode>
@@ -46,10 +46,10 @@
 			</Pointer>
 		</Error>
 		<Declaration>
-			<FunctionalReferenceID>R323_E2E_TC10_II01</FunctionalReferenceID>
-			<ID>21GB7NADQMFD5BWNA4</ID>
+			<FunctionalReferenceID>U.7867523GH2XS</FunctionalReferenceID>
+			<ID>24GBDIRISPEQNS6AA6</ID>
 			<RejectionDateTime>
-				<DateTimeString formatCode="304">20210712154719Z</DateTimeString>
+				<DateTimeString formatCode="304">20241206154628Z</DateTimeString>
 			</RejectionDateTime>
 			<VersionID>1</VersionID>
 		</Declaration>

@@ -1,22 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><v1:submitDeclarationRequest xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<v1:requestCommon>
-    <v1:regime>CDS</v1:regime>
-    <v1:receiptDate>2024-07-15T17:06:12.012+01:00</v1:receiptDate>
-    <v1:clientID>50773247-31df-4c4c-a898-e33c0dc6192d</v1:clientID>
-    <v1:conversationID>73132fa2-af8b-4e02-aa99-84abb9849dca</v1:conversationID>    
-    <!--Example WSO2 Header-->
-    <v1:originatingPartyID>GB225456994000</v1:originatingPartyID>
-	<v1:authenticatedPartyID>GB225456994000</v1:authenticatedPartyID>
-  </v1:requestCommon>
-  <v1:requestDetail> 
- 
-  <md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			ROW to NI - De-risked - UK Licence Quota Validation
@@ -34,7 +22,7 @@
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: Traders own reference number: this must be unique to the transaction-->
-		<FunctionalReferenceID>U.7849431Z6ION</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523T9816</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration-->
 		<!--DE 1/2: A to represent a To represent an arrived frontier standard declaration-->
 		<TypeCode>IMA</TypeCode>
@@ -199,7 +187,6 @@
 					<ID>XIDPO1108656</ID>
 					<TypeCode>506</TypeCode>
 				</AdditionalDocument>
-
 				<!--DE 2/3: A document code of N935 indicates: the invoice on the basis of which
 					the customs value of the goods is declared.
 					This is required as a Valuation Method of 1 to indicate transaction value has
@@ -217,6 +204,16 @@
 					<CategoryCode>9</CategoryCode>
 					<ID>GBAHC987654</ID>
 					<TypeCode>120</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+					A document code of Y100 indicates: Special entries on the import licence AGRIM.
+					Document code of AC in this scenario indicates Document attached for certification by customs. -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>GBAHC987654</ID>
+					<Name>QUOTA</Name>
+					<TypeCode>100</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/2: Additional Information.
@@ -381,5 +378,4 @@
 			<SecurityDetailsCode>1</SecurityDetailsCode>
 		</ObligationGuarantee>
 	</Declaration>
-</md:MetaData></v1:requestDetail>
-</v1:submitDeclarationRequest>
+</md:MetaData>

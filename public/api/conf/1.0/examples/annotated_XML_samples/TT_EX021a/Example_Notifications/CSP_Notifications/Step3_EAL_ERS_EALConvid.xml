@@ -1,16 +1,17 @@
-<ns2:inventoryLinkingMovementTotalsResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
-    <ns2:messageCode>ERS</ns2:messageCode>
-    <ns2:goodsLocation>GBAUSUNSUNSUN</ns2:goodsLocation>
-    <ns2:goodsArrivalDateTime>2021-07-12T09:00:00.000Z</ns2:goodsArrivalDateTime>
-    <ns2:movementReference>Movement14</ns2:movementReference>
-    <ns2:entry>
-        <ns2:ucrBlock>
-            <ns2:ucr>1GB427168118378-12AD01</ns2:ucr>
-            <ns2:ucrType>D</ns2:ucrType>
-        </ns2:ucrBlock>
-        <ns2:entryStatus>
-            <ns2:roe>6</ns2:roe>
-            <ns2:soe>3</ns2:soe>
-        </ns2:entryStatus>
-    </ns2:entry>
+<ns2:inventoryLinkingMovementTotalsResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1"
+                                            xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
+	<ns2:messageCode>ERS</ns2:messageCode>
+	<ns2:goodsLocation>GBAUSUNSUNSUN</ns2:goodsLocation>
+	<ns2:goodsArrivalDateTime>2024-12-06T15:46:47.047Z</ns2:goodsArrivalDateTime>
+	<ns2:movementReference>RYFJSC0GUBALT2G3VC220SM1P</ns2:movementReference>
+	<ns2:entry>
+		<ns2:ucrBlock>
+			<ns2:ucr>4GB995533237489-F8LLLLF</ns2:ucr>
+			<ns2:ucrType>D</ns2:ucrType>
+		</ns2:ucrBlock>
+		<ns2:entryStatus>
+			<ns2:roe>6</ns2:roe>
+			<ns2:soe>3</ns2:soe>
+		</ns2:entryStatus>
+	</ns2:entry>
 </ns2:inventoryLinkingMovementTotalsResponse>

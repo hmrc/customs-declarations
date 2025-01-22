@@ -1,27 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- EAL – Movement message notification format for Entry arriving at location (Arrivals) -->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
 	<inv:messageCode>EAL</inv:messageCode>
-	<inv:agentDetails>
-		<!-- EORI number of the Community Systems Providers (CSPs). -->
-		<inv:EORI>GB025115166433</inv:EORI>
-		<inv:agentLocation>a</inv:agentLocation>
-		<inv:agentRole>a</inv:agentRole>
-	</inv:agentDetails>
 	<inv:ucrBlock>
-		<!--Air time MUCR assigned to the consignment. Arriving at MUCR level. This value has come from Declaration -->
-		<inv:ucr>GB/123456789012-2301M1</inv:ucr>
+		<inv:ucr>GB/PL38-PWE6JBRK0U2GO0SOQYJ6XHCAL</inv:ucr>
 		<inv:ucrType>M</inv:ucrType>
 	</inv:ucrBlock>
-	<!-- ID to give a unique position of the location. LHRLHRLHR Indicating London heathrow -->
 	<inv:goodsLocation>GBAUSOUSTNSOU</inv:goodsLocation>
-	<!-- This should be today's Date -->
-	<inv:goodsArrivalDateTime>2020-01-23T09:11:00</inv:goodsArrivalDateTime>
-	<inv:goodsDepartureDateTime>2020-01-23T09:11:00</inv:goodsDepartureDateTime>
-	<inv:movementReference>Movement14</inv:movementReference>
-	<inv:transportDetails>
-		<inv:transportID>11CSCLGLOBE</inv:transportID>
-		<inv:transportMode>1</inv:transportMode>
-		<inv:transportNationality>GB</inv:transportNationality>
-	</inv:transportDetails>
+	<inv:goodsArrivalDateTime>2024-12-06T15:52:30.030Z</inv:goodsArrivalDateTime>
+	<inv:movementReference>SI55HNQ2X873D37B1TWM0H8CF</inv:movementReference>
 </inv:inventoryLinkingMovementRequest>

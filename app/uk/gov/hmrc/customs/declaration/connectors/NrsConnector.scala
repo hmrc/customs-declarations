@@ -16,19 +16,20 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import com.google.inject._
+import com.google.inject.*
 import play.api.libs.json.Json
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NrsConnector @Inject()(http: HttpClient,
+class NrsConnector @Inject()(http: HttpClientV2,
                              logger: DeclarationsLogger,
                              declarationConfigService: DeclarationsConfigService)
                             (implicit ec: ExecutionContext) extends HeaderUtil {
@@ -42,7 +43,11 @@ class NrsConnector @Inject()(http: HttpClient,
     val nrsHeaders = Seq[(String, String)](("Content-Type", "application/json"), ("X-API-Key", declarationConfigService.nrsConfig.nrsApiKey))
       .++ (getCustomsApiStubExtraHeaders)
     logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
-    http.POST[NrsPayload, NrSubmissionId](url, payload, nrsHeaders)
+    http
+      .post(url"$url")
+      .setHeader(nrsHeaders: _*)
+      .withBody(payload.toString)
+      .execute[HttpResponse]
       .map { res =>
         logger.debug(s"Response received from nrs service is submission id: ${res}")
         res

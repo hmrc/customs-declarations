@@ -16,20 +16,21 @@
 
 package uk.gov.hmrc.customs.declaration.connectors.upscan
 
-import com.google.inject._
+import com.google.inject.*
 import play.api.libs.json.Json
 import uk.gov.hmrc.customs.declaration.connectors.HeaderUtil
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UpscanInitiateConnector @Inject()(http: HttpClient,
+class UpscanInitiateConnector @Inject()(http: HttpClientV2,
                                         logger: DeclarationsLogger,
                                         config: DeclarationsConfigService)
                                        (implicit ec: ExecutionContext) extends HeaderUtil{

@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.connectors.filetransmission
 
-import com.google.inject._
+import com.google.inject.*
 import play.api.libs.json.Json
-import play.mvc.Http.HeaderNames._
+import play.mvc.Http.HeaderNames.*
 import play.mvc.Http.MimeTypes.JSON
 import uk.gov.hmrc.customs.declaration.connectors.HeaderUtil
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
@@ -26,13 +26,14 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmission
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpErrorFunctions, HttpException, HttpResponse}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class FileTransmissionConnector @Inject()(http: HttpClient,
+class FileTransmissionConnector @Inject()(http: HttpClientV2,
                                           logger: DeclarationsLogger,
                                           config: DeclarationsConfigService)
                                          (implicit ec: ExecutionContext) extends HttpErrorFunctions with HeaderUtil {

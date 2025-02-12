@@ -1,26 +1,11 @@
-		<md:MetaData
-	xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-	xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-	xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
->
-	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
-	<md:WCOTypeName>DEC</md:WCOTypeName>
-	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
-	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
-	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration
-		xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-		xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-		xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-		xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-		xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
-	>
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+      <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+      <md:WCOTypeName>DEC</md:WCOTypeName>
+      <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+      <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+      <md:AgencyAssignedCustomizationVersionCode>v2.1
+      </md:AgencyAssignedCustomizationVersionCode>
+      <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
 			Declaration #2
@@ -28,7 +13,6 @@
 			No control,Inventory linked Type D Airtime declaration with one DUCR, Consolidated to a MUCR, shut, Arrived and departed at MUCR level.
 			Goods: Straw envelopes for bottles
 			Data set category: B1
-			National Additional Code: VATZ to claim VAT zero-rating.
 			Scenario steps:
 			Loader submits EAL message to CDS for the declared MUCR.
 			Consolidator closes the MUCR by sending a CST message to CDS containing the MUCR
@@ -41,12 +25,8 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: The trader assigned reference to the declaration -->
-		<FunctionalReferenceID>R322_E2E_TC01_CDS2</FunctionalReferenceID>
-		<!-- The IssueDateTime element is not required for any declarations. This was included for internal testing.-->
-		<IssueDateTime>
-			<p1:DateTimeString formatCode="304">20210716100000+01</p1:DateTimeString>
-		</IssueDateTime>
-		<!--DE 1/1: EX to represent an Export declaration.-->
+		<FunctionalReferenceID>U.7867523TKAHK</FunctionalReferenceID>
+		  <!--DE 1/1: EX to represent an Export declaration.-->
 		<!--DE 1/2: D to represent a Pre lodged declaration.-->
 		<TypeCode>EXD</TypeCode>
 		<!--DE 1/9: Total number of goods items on the declaration.-->
@@ -177,9 +157,7 @@
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!--DE 6/17: Commodity code – National additional code.
-							VATZ to represent VAT 0% duty rate.
-							Note that when code VATZ is used the requirements for VAT zero-rating in the Export Declaration Completion Guide Appendix 20 and VAT Notice 703 will apply. -->
+						<!--DE 6/17: Commodity code – National additional code. -->
 						<ID>VATZ</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
 					</Classification>
@@ -215,16 +193,16 @@
 				This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB427168118378-16M11D2</ID>
+				<ID>4GB637486824687-Y6OKKV</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
 			<!--DE 2/1: Previous document to show the MUCR assigned to the consignment -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>GB/FCP1-CDSDM1T16M2</ID>
+				<ID>GB/GYMM-LOUI3EDLNJQHXERRTN5DK9CAL</ID>
 				<TypeCode>MCR</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>
 	</Declaration>
-</md:MetaData>
+             </md:MetaData>

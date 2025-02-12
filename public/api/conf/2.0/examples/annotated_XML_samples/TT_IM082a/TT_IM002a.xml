@@ -1,27 +1,11 @@
-<md:MetaData
-      xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-      xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-      xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-      xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "    >
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration
-        xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-        xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-        xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-        xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-        xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-
-		Please note that this scenario isnt performing as expected and will be updated in a future release.
-		
 			SCENARIO
             Removal of goods from a private customs warehouse using EIDR.
             EIDR Supplementary Declaration Type Z which derives a H1 Declaration Category data set.
@@ -29,18 +13,18 @@
             Deferred payment is being used with standing authority - Declarant is authorized to use the Importer's DAN.
             Agent has a Function Code of 2 indicating a direct representative of the importer.
             Agent and Declarant ID have the same EORI values of Declarant/ Agent EORI: GB603202734852.
-            Also results in a FEC challenge, which is detailed in the DMSACC Trader Notification: “Incredible value found : Value per kilo appears too high for this commodity”.
+            Also results in a FEC challenge, which is detailed in the DMSACC Trader Notification: â€œIncredible value found : Value per kilo appears too high for this commodity.
             Acceptance Date is present on all supplementary declarations, and will match the CLE date listed in 2/1.
 		-->
 		<!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20210708143931+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20241209095336+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			Traders own reference number – this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IM02a_EIDR_0807_001</FunctionalReferenceID>
+			Traders own reference number â€“ this must be unique to the transaction. -->
+		<FunctionalReferenceID>U.7867523ANB35</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type.
@@ -67,7 +51,7 @@
 			<FunctionCode>2</FunctionCode>
 		</Agent>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarant’s records.
+			An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarant's records.
             The ID is the EORI of the EIDR authorised party. -->
 		<AuthorisationHolder>
 			<ID>GB553202734852</ID>
@@ -81,7 +65,7 @@
 			<CategoryCode>AEOC</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of DPO indicates Deferment of payment authorisation. See DE 2/3 where a document code of C506 has been entered. 
+			An authorisation type code of DPO indicates Deferment of payment authorisation. See DE 2/3 where a document code of C506 has been entered.
 			The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>
 			<ID>GB553202734852</ID>
@@ -98,8 +82,8 @@
 			<CategoryCode>CWP</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of CGU is required where CCG authorisation is being declared or a waiver is being claimed. 
-			In this scenario, a waiver is being claimed. 
+			An authorisation type code of CGU is required where CCG authorisation is being declared or a waiver is being claimed.
+			In this scenario, a waiver is being claimed.
 			See DE 2/3 where a document code of C505 has been entered.
             The ID here is the EORI of the CCG authorised party. -->
 		<AuthorisationHolder>
@@ -121,7 +105,7 @@
 		<Declarant>
 			<ID>GB603202734852</ID>
 		</Declarant>
-		<!--DE 3/1: Exporter. 
+		<!--DE 3/1: Exporter.
 			Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
 		<Exporter>
 			<Name>Chicago Cocoa Company</Name>
@@ -138,12 +122,12 @@
 			<TransactionNatureCode>1</TransactionNatureCode>
 			<Consignment>
 				<!--DE 7/2: Container.
-					Indicator to show if goods are packed in a container or not. 
+					Indicator to show if goods are packed in a container or not.
 					1 indicates that goods are transported in containers.
                     Note: Unlike CHIEF this must now be completed. -->
 				<ContainerCode>1</ContainerCode>
 				<!--DE 7/9:  Identity of means of transport on arrival.
-					Example number representing IMO ship identification number: ‘10’, and 5 digits for the identification number: ‘12345’. -->
+					Example number representing IMO ship identification number: ˜10, and 5 digits for the identification number: ˜12345. -->
 				<ArrivalTransportMeans>
 					<ID>12345</ID>
 					<IdentificationTypeCode>10</IdentificationTypeCode>
@@ -153,7 +137,7 @@
 				</ArrivalTransportMeans>
 				<!--DE 5/23: ID to give a unique position of the location -->
 				<GoodsLocation>
-					<!--DE 5/23:The location code for the Customs Warehouse. -->				
+					<!--DE 5/23:The location code for the Customs Warehouse. -->
 					<Name>CW1117770GB</Name>
 					<!--DE 5/23: Type of Location.
 						B is used to identify inland locations such as customs warehouses. -->
@@ -167,7 +151,7 @@
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
-				<!--DE 7/10: Container identification number. 
+				<!--DE 7/10: Container identification number.
 					This is alpha-numeric up to a total of 17 characters.
 					This is required where the container code in DE 7/2 is '1', indicating containerised traffic.
 					For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number.
@@ -193,7 +177,7 @@
 				<SequenceNumeric>1</SequenceNumeric>
 				<AdditionalDocument>
 					<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-						A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant’s records. -->
+						A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant's records. -->
 					<CategoryCode>C</CategoryCode>
 					<ID>GBEIR553202734852I20190613093448</ID>
 					<TypeCode>514</TypeCode>
@@ -223,7 +207,7 @@
 					<TypeCode>517</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of C505 indicates ‘CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
+					A document code of C505 indicates â€˜CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
                     In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of "CC"), and therefore the ID also indicates that a waiver is being used. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
@@ -235,7 +219,7 @@
 					A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/18.05.2021</ID>
+					<ID>12345/05.03.2024</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -248,7 +232,7 @@
 					<TypeCode>023</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of Y024 for the Declarant AEO certificate number. 
+					A document code of Y024 for the Declarant AEO certificate number.
 					ID contains the reference number of the certificate. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
@@ -256,7 +240,7 @@
 					<TypeCode>024</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of Y027 for the Warehousekeeper AEO certificate number. 
+					A document code of Y027 for the Warehousekeeper AEO certificate number.
 					ID contains the reference number of the certificate. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
@@ -273,7 +257,7 @@
 				</AdditionalDocument>
 				<Commodity>
 					<!--DE 6/8: Goods Description.
-						Description of the goods specific enough to enable classification – without repeating the CN code description in the Tariff. -->
+						Description of the goods specific enough to enable classification without repeating the CN code description in the Tariff. -->
 					<Description>Cocoa Butter-fat and oil</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - combined nomenclature code.
@@ -287,7 +271,7 @@
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!-- DE 6/17: Commodity Code – National Additional Codes.
+						<!-- DE 6/17: Commodity Code National Additional Codes.
                            VATZ to represent VAT 0% duty rate. -->
 						<ID>VATZ</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
@@ -296,7 +280,7 @@
 						<!--DE 4/17: Preference.
 							Type of 100 represents no preference being claimed. -->
 						<DutyRegimeCode>100</DutyRegimeCode>
-						<!--DE 4/3: Calculation of Taxes - Tax Type. 
+						<!--DE 4/3: Calculation of Taxes - Tax Type.
 							In this scenario, A00 indicating Customs duties. -->
 						<TypeCode>A00</TypeCode>
 						<Payment>
@@ -309,12 +293,12 @@
 						<!--DE 6/5: Gross Mass
 							Mass of the goods in kilograms including packaging. -->
 						<GrossMassMeasure>15</GrossMassMeasure>
-						<!--DE 6/1: Net Mass 
+						<!--DE 6/1: Net Mass
 							Mass of the goods in kilograms without any packaging. -->
 						<NetNetWeightMeasure>10</NetNetWeightMeasure>
-						</GoodsMeasure>
-					<!--DE 4/14:  Item price amount. 
-						The invoice was issued with of a value of £1000 and the currency was in GBP. -->
+					</GoodsMeasure>
+					<!--DE 4/14:  Item price amount.
+						The invoice was issued with of a value of Â£1000 and the currency was in GBP. -->
 					<InvoiceLine>
 						<ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
 					</InvoiceLine>
@@ -339,7 +323,7 @@
 				</GovernmentProcedure>
 				<!--DE 5/15: Country of Origin.
 					TypeCode of 1 to represent non-preferential origin.
-					Where preference in D.E. 4/17 begins with ‘1’, this must be completed .
+					Where preference in D.E. 4/17 begins with ˜1, this must be completed .
 					CountryCode contains the code for the country from which the goods originated,
 					in this case Brazil.
 					It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/15
@@ -361,7 +345,7 @@
 				</Packaging>
 				<!--DE 4/13: Valuation indicator.
 					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-					The code comprises four digits, each of which being either a ‘0’ or a ‘1’:
+					The code comprises four digits, each of which being either a ˜0 or a ˜1:
 					 - First digit: 0 = there is no price influence as a result of a
 					Party Relationship between the buyer and seller.
 					 - Second digit: 0 = there are no restrictions as to the disposal
@@ -387,7 +371,7 @@
 				In CDS, the MUCR (MCR) is not required on a sup dec.-->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>1GB553202734852-20210107</ID>
+				<ID>4GB553202734852-20221114</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -396,7 +380,7 @@
 				Note that this is item 6 from the EIDR record entry. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20210610</ID>
+				<ID>20241209</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>6</LineNumeric>
 			</PreviousDocument>
@@ -419,7 +403,7 @@
 			<!--DE 2/4: Reference Number/UCR.
 				Reference number which is optional for the declarant to complete. -->
 			<UCR>
-				<TraderAssignedReferenceID>1GB553202734852-20210607</TraderAssignedReferenceID>
+				<TraderAssignedReferenceID>4GB553202734852-20210607</TraderAssignedReferenceID>
 			</UCR>
 			<!--DE 2/7: Warehouse type of U to represent private warehouse.
                 ID contains the private warehouse ID. -->
@@ -432,12 +416,12 @@
 			<!--DE 8/3: Guarantee reference number.
 				Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then this data element is mandatory ID indicates that the guarantee is not required, as stated in DE 8/2. -->
 			<ID>Guaranteenotrequired</ID>
-			<!--DE 8/2: Guarantee type. 
+			<!--DE 8/2: Guarantee type.
 				0 to represent that a customs comprehensive guarantee is being waived for the deferment of customs duty.
-                Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code ‘0’ or ‘1’ must be declared in this data element. -->
+                Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code â€˜0â€™ or â€˜1â€™ must be declared in this data element. -->
 			<SecurityDetailsCode>0</SecurityDetailsCode>
 		</ObligationGuarantee>
-		<!--DE 5/27: Supervising customs office. 
+		<!--DE 5/27: Supervising customs office.
 			The Supervising Office Code for the HMRC Office overseeing the Customs Warehouse procedure. In this scenario, this is Belfast, Dorchester House (NIRU). -->
 		<SupervisingOffice>
 			<ID>GBBEL004</ID>

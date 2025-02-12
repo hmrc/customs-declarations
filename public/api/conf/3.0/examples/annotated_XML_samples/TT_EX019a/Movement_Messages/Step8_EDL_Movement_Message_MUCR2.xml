@@ -1,20 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- EDL – Movement message used for creating Goods Departure messages. This also covers the removal of goods back inland where an export is abandoned (Departures) -->
-<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-                   <inv:messageCode>EDL</inv:messageCode>
-                   <inv:ucrBlock>				  
-                    <inv:ucr>GB/FCP1-CDSDM1T16M2</inv:ucr>
-                        <inv:ucrType>M</inv:ucrType>
-                   </inv:ucrBlock>
-				     <!--DE 5/23: ID to give a unique position of the location. SUNSUNSUN Indicating Sunderland. This value has come from Declaration -->
-                   <inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
-				   <!-- This should be today's Date -->
-                   <inv:goodsDepartureDateTime>2021-07-16T15:30:00</inv:goodsDepartureDateTime>
-                    <inv:movementReference>Movement15</inv:movementReference>
-								<inv:transportDetails>
-                      <inv:transportID>11CSCLGLOBE</inv:transportID>
-                      <inv:transportMode>1</inv:transportMode>
-                      <inv:transportNationality>GB</inv:transportNationality>
-                   </inv:transportDetails>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EDL</inv:messageCode>
+	
+	<inv:ucrBlock>
+		<inv:ucr>GB/GYMM-LOUI3EDLNJQHXERRTN5DK9CAL</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
+	
+	<inv:goodsDepartureDateTime>2024-12-06T15:47:17.017Z</inv:goodsDepartureDateTime>
+	<inv:movementReference>ET94W7Q7BOXJ2UWF71VRNZ35U</inv:movementReference>
+	<inv:transportDetails>
+		<inv:transportID>11CSCLGLOBE</inv:transportID>
+		<inv:transportMode>1</inv:transportMode>
+		<inv:transportNationality>GB</inv:transportNationality>
+	</inv:transportDetails>
 </inv:inventoryLinkingMovementRequest>
-

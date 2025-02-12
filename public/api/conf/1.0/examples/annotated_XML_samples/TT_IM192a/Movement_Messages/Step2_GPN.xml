@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
-	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
-	<md:WCOTypeName>DEC</md:WCOTypeName>
-	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
-	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
-	<md:AgencyAssignedCustomizationVersionCode>v2.1
-	</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>U.7847767PCRH3</FunctionalReferenceID>
-		<ID>24GBCLMAQYD18QZA06</ID>
-		<TypeCode>GPR</TypeCode>
-		<Submitter>
-			<ID>XI553202734852</ID>
-		</Submitter>
-	</Declaration>
-</md:MetaData>
+<v1:submitDeclarationRequest xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<v1:requestCommon>
+		<v1:regime>CDS</v1:regime>
+		<v1:receiptDate>2025-02-10T16:54:05.005Z</v1:receiptDate>
+		<v1:clientID>65379a23-7c7e-46fe-8a9a-776562e4a581</v1:clientID>
+		<v1:conversationID>858bd36c-07af-4598-899b-afe99f925bea</v1:conversationID>
+		<v1:originatingPartyID>GB225456994000</v1:originatingPartyID>
+		<v1:authenticatedPartyID>GB225456994000</v1:authenticatedPartyID>
+	</v1:requestCommon>
+	<v1:requestDetail>
+		<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+			<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+			<md:WCOTypeName>DEC</md:WCOTypeName>
+			<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+			<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+			<md:AgencyAssignedCustomizationVersionCode>v2.1
+      </md:AgencyAssignedCustomizationVersionCode>
+			<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+				<FunctionCode>13</FunctionCode>
+				<FunctionalReferenceID>U.78477677DUWR</FunctionalReferenceID>
+				<ID>25GB1M5TW6HTQRPA09</ID>
+				<TypeCode>GPR</TypeCode>
+				<Submitter>
+					<ID>XI553202734852</ID>
+				</Submitter>
+			</Declaration>
+		</md:MetaData>
+	</v1:requestDetail>
+</v1:submitDeclarationRequest>

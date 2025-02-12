@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>07</FunctionCode>
-		<FunctionalReferenceID>94a6a2519bb74a5883bd0930077e3bdb</FunctionalReferenceID>
+		<FunctionalReferenceID>49ff5d39640d406da9276f68f81ce199</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20220314123005Z</DateTimeString>
+			<DateTimeString formatCode="304">20250131113636Z</DateTimeString>
 		</IssueDateTime>
 		<AdditionalInformation>
 			<StatementDescription>Increase Freight Charge Amount to GBP 19.34 - DE 4/19, TagID 117</StatementDescription>
@@ -63,8 +63,8 @@
 			</Pointer>
 		</Amendment>
 		<Declaration>
-			<FunctionalReferenceID>TT_IM68a_1403_001</FunctionalReferenceID>
-			<ID>22GB2VL0IA6VLYBA03</ID>
+			<FunctionalReferenceID>U.7849431R66ZB</FunctionalReferenceID>
+			<ID>25GB17K2U6WMM38A05</ID>
 			<VersionID>3</VersionID>
 		</Declaration>
 		<Declaration>

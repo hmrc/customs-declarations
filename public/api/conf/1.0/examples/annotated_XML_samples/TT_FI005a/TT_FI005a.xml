@@ -1,19 +1,22 @@
-<md:MetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-                     xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-                     xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-                     xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><v1:submitDeclarationRequest xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<v1:requestCommon>
+    <v1:regime>CDS</v1:regime>
+    <v1:receiptDate>2025-02-10T11:46:16.016Z</v1:receiptDate>
+    <v1:clientID>da775662-deb0-46dd-9baa-f5686bc6a0cb</v1:clientID>
+    <v1:conversationID>5150cdc6-0099-4dba-8aa9-db9b1e4a8a55</v1:conversationID>    
+    <!--Example WSO2 Header-->
+    <v1:originatingPartyID>GB225456994000</v1:originatingPartyID>
+	<v1:authenticatedPartyID>GB225456994000</v1:authenticatedPartyID>
+  </v1:requestCommon>
+  <v1:requestDetail> 
+ 
+  <md:MetaData xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd">
         <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
             <md:WCOTypeName>DEC</md:WCOTypeName>
             <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
             <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
             <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-            <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                         xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-                         xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-                         xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-                         xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd">
+            <Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd">
 		<!--
 			SCENARIO
 			Goods imported and declared to End-Use
@@ -27,7 +30,7 @@
 		<!--Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Traders own reference number : this must be unique to the transaction -->
-		<FunctionalReferenceID>TT_FI005a_2111.01</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847767UNR1N</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: A to represent a frontier/arrived standard declaration-->
 		<TypeCode>IMA</TypeCode>
@@ -168,7 +171,7 @@
 					Document code of AC in this scenario indicates 	Document attached for certification by customs-->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/01.03.2021</ID>
+					<ID>12345/01.02.2025</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -180,6 +183,15 @@
 					<Name>Simplified Authorisation</Name>
 					<TypeCode>990</TypeCode>
 				</AdditionalDocument>
+				<!--DE 2/3: A document code of C119 indicates Authorised Release Certificate — 
+				EASA Form 1 (Appendix I to Annex I to Regulation (EU) No 748/2012), 
+				or equivalent certificate Formerly referred to as: Airworthiness certificate. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>0054047</ID>
+					<TypeCode>119</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
+				</AdditionalDocument>
 				<!--DE 2/2: Additional Information. 
 					00500 for identity between declarant and importer. 
 					Enter 'IMPORTER' to indicate self-representation by the importer. -->
@@ -189,7 +201,7 @@
 				</AdditionalInformation>
 				<!--DE 6/8: Description of the goods.-->
 				<Commodity>
-					<Description>Pin boot</Description>
+					<Description>Air intake hose for air supply to the combustion part of the engine </Description>
 					<!--DE 6/14: Commodity code - combined nomenclature code.-->
 					<Classification>
 						<ID>40169957</ID>
@@ -197,7 +209,7 @@
 					</Classification>
 					<Classification>
 						<!--DE 6/15: Commodity code - TARIC code.-->
-						<ID>30</ID>
+						<ID>10</ID>
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<DutyTaxFee>
@@ -216,6 +228,9 @@
 						<GrossMassMeasure>2200</GrossMassMeasure>
 						<!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
 						<NetNetWeightMeasure>2000</NetNetWeightMeasure>
+						<!--DE 6/2: Supplementary Units. 
+							This data element is only required where the commodity code requires a supplementary unit. -->
+						<TariffQuantity>200</TariffQuantity>
 					</GoodsMeasure>
 					<!--DE 4/14:  Item price amount. The invoice was issued with of a value of 2500 and 
 						the currency was in GBP.-->
@@ -282,7 +297,7 @@
 			<PreviousDocument>
 				<!--DE 2/1: Z355 To indicate the Entry Summary Declaration. -->
 				<CategoryCode>Z</CategoryCode>
-				<ID>21GB34F7Y1O2CX8PT4</ID>
+				<ID>25GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -303,4 +318,5 @@
 			<ID>GBBEL004</ID>
 		</SupervisingOffice>
 	</Declaration>
-</md:MetaData>
+</md:MetaData></v1:requestDetail>
+</v1:submitDeclarationRequest>

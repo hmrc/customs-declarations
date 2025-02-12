@@ -1,22 +1,12 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1
 			</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 			SCENARIO
 			RoW to NI: SRDS
@@ -38,7 +28,7 @@
 		<!--DE 2/5: LRN. 
 			Mandatory field. 
 			Declarant's own reference number this must be unique to the transaction. -->
-		<FunctionalReferenceID>TT_IM77a_v1.1_0303_02</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847767797YA</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. 
 			Mandatory field. 
 			IM to represent an import declaration. -->
@@ -65,7 +55,7 @@
 			The EORI number of the declarant. 
 			UK requires an EORI to be provided for the declarant. -->
 		<Declarant>
-			<ID>GB603202734852</ID>
+			<ID>XI603202734852</ID>
 		</Declarant>
 		<!--DE 3/1: Exporter. 
 			This data element can be declared at a header or item level, depending on the scenario.
@@ -119,7 +109,7 @@
 					9WKS indicates Worksheet to support calculation of the customs value and/or revenue calculations. -->
 				<AdditionalDocument>
 					<CategoryCode>9</CategoryCode>
-					<ID>See attached Worksheet1154-01122021</ID>
+					<ID>See attached Worksheet1154-27012025</ID>
 					<Name>See attached worksheet</Name>
 					<TypeCode>WKS</TypeCode>
 					<LPCOExemptionCode>AE</LPCOExemptionCode>
@@ -180,14 +170,14 @@
 			<!--DE 3/16: Importer Identification Number.
 				EORI number of the Importer. -->
 			<Importer>
-				<ID>GB553202734852</ID>
+				<ID>XI553202734852</ID>
 			</Importer>
 			<!--DE 2/1: Previous Documents. 
 				Mandatory field. 
 				Z271 represents a "Packing List". -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>PL20210630-281-284</ID>
+				<ID>PL20250127-281-284</ID>
 				<TypeCode>271</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>

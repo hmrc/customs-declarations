@@ -1,9 +1,9 @@
 <ns2:inventoryLinkingControlResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
-    <ns2:messageCode>EDL</ns2:messageCode>
-    <ns2:actionCode>1</ns2:actionCode>
-    <ns2:ucr>
-        <ns2:ucr>GB/FCP1-CDSDM1T16M2</ns2:ucr>
-        <ns2:ucrType>M</ns2:ucrType>
-    </ns2:ucr>
-    <ns2:movementReference>Movement15</ns2:movementReference>
+	<ns2:messageCode>EDL</ns2:messageCode>
+	<ns2:actionCode>1</ns2:actionCode>
+	<ns2:ucr>
+		<ns2:ucr>GB/GYMM-LOUI3EDLNJQHXERRTN5DK9CAL</ns2:ucr>
+		<ns2:ucrType>M</ns2:ucrType>
+	</ns2:ucr>
+	<ns2:movementReference>ET94W7Q7BOXJ2UWF71VRNZ35U</ns2:movementReference>
 </ns2:inventoryLinkingControlResponse>

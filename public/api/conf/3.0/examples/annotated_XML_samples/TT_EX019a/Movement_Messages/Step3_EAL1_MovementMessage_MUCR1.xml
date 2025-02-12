@@ -1,23 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- EAL – Movement message notification format for Entry arriving at location (Arrivals) -->
-<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-                   <inv:messageCode>EAL</inv:messageCode>
-				   <inv:ucrBlock>				   
-                    <inv:ucr>GB/FCP1-CDSDM1T15M1</inv:ucr>
-                        <inv:ucrType>M</inv:ucrType>
-                   </inv:ucrBlock>				  
-                   <inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
-				   <!-- This should be today's Date -->
-                   <inv:goodsArrivalDateTime>2021-07-15T10:30:00</inv:goodsArrivalDateTime>
-                    <inv:movementReference>Movement14</inv:movementReference>
-								<inv:transportDetails>
-                      <inv:transportID>11CSCLGLOBE</inv:transportID>
-                      <inv:transportMode>1</inv:transportMode>
-                      <inv:transportNationality>GB</inv:transportNationality>
-                   </inv:transportDetails>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EAL</inv:messageCode>
+	
+	<inv:ucrBlock>
+		<inv:ucr>GB/L18T-DT52KCHS2UMEGZ6X4VB8YDCAL</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
+	<inv:goodsArrivalDateTime>2024-12-06T15:45:58.058Z</inv:goodsArrivalDateTime>
+	
+	<inv:movementReference>JNATXYV44BU98D1O5PGVRGT6X</inv:movementReference>
+	
 </inv:inventoryLinkingMovementRequest>
-
-
-
-
-

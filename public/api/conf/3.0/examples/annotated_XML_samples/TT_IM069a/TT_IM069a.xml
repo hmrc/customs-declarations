@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
@@ -26,13 +27,13 @@
 			Expected Notifications: DMSTAX(1), DMSACC, DMSTAX(2), DMSCLE
 		-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20240926103222+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20250130093455+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number: this must be unique to the transaction-->
-		<FunctionalReferenceID>U.7849431W9YG9</FunctionalReferenceID>
+		<FunctionalReferenceID>U.78494316JETT</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			Mandatory field.
 			First two characters IM to represent an import declaration.	-->
@@ -52,21 +53,21 @@
 			An authorisation type code of EIR indicates Authorisation for the use of customs declaration through an entry of data in the declarant’s records(see DE 2/3 where a document code of C514 has been entered).
 			The ID here is the EORI of the EIR authorised party.-->
 		<AuthorisationHolder>
-			<ID>GB025115100010</ID>
+			<ID>XI025115100010</ID>
 			<CategoryCode>EIR</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
 			An authorisation type code of CGU is required as CCG authorisation is being declared (see DE 2/3 where a document code of C505 has been entered).
 			The ID here is the EORI of the CCG authorised party.-->
 		<AuthorisationHolder>
-			<ID>GB025115100010</ID>
+			<ID>XI025115100010</ID>
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
 			An authorisation type code of IPO indicates Inward processing procedure authorisation (see DE 2/3 where a document code of C601 has been entered).
 			The ID here is the EORI of the IPO authorised party.-->
 		<AuthorisationHolder>
-			<ID>GB025115100010</ID>
+			<ID>XI025115100010</ID>
 			<CategoryCode>IPO</CategoryCode>
 		</AuthorisationHolder>
 		<BorderTransportMeans>
@@ -81,7 +82,7 @@
 			The EORI number of the agent entering the declaration.
 			The UK requires an EORI to be provided for the declarant. -->
 		<Declarant>
-			<ID>GB025115100010</ID>
+			<ID>XI025115100010</ID>
 		</Declarant>
 		<!--DE 3/1: Exporter.
 			Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
@@ -160,25 +161,23 @@
 					A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant’s records. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBEIR025115100010I</ID>
+					<ID>XIEIR025115100010I20231019133850</ID>
 					<TypeCode>514</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional reference.
 					A document code of C601 indicates IPO - Authorisation for the use of inward processing procedure (Column 8a, Annex A of Delegated regulation (EU) 2015/2446). -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBIPO0251/151/00</ID>
+					<ID>XIIPO02511510001020231019133850</ID>
 					<TypeCode>601</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional reference.
 					A document code of C505 indicates CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
-					In this scenario, a waiver to the CCG authorisation is being used and therefore the ID also indicates that a waiver is being used.
-					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code – CCG not required. -->
+					In this scenario, a waiver to the CCG authorisation is being used and therefore the ID also indicates that a waiver is being used.-->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBCGU3821</ID>
+					<ID>XICGU02511510001020231019133850</ID>
 					<TypeCode>505</TypeCode>
-					<LPCOExemptionCode>CC</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional reference.
 					A document code of N935 indicates: the invoice on the basis of which the customs value of the goods is declared.
@@ -186,7 +185,7 @@
 					Document status code of AC in this scenario indicates Document attached for certification by customs. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/29/09/2023</ID>
+					<ID>12345/29/12/2024</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -319,14 +318,14 @@
 			<!--DE 3/16: Importer Identification Number.
 				EORI number of the Importer. -->
 			<Importer>
-				<ID>GB025115100010</ID>
+				<ID>XI025115100010</ID>
 			</Importer>
 			<!--DE 2/1: Previous Documents.
 				YCLE To show the date of the EIDR record
 				(Note that this is item 1 from the EIDR record entry). -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20240926</ID>
+				<ID>20250130</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -335,7 +334,7 @@
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>3GB025115100010-12345</ID>
+				<ID>5XI025115100010-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Previous Documents.
@@ -358,7 +357,7 @@
 		<ObligationGuarantee>
 			<!--DE 8/3: Guarantee Reference.
                 Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then this data element is mandatory. -->
-			<ID>GBCGU3821</ID>
+			<ID>XICGU02511510001020231019133850</ID>
 			<!--DE 8/2: Guarantee Type and Cash Accounts.
 				0 to represent that a custom comprehensive guarantee is being waived for the deferment of customs duty.
                 Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code ‘0’ or ‘1’ must be declared in this data element. -->

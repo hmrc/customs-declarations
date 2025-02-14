@@ -38,15 +38,15 @@ class FileTransmissionConnector @Inject()(http: HttpClientV2,
                                           config: DeclarationsConfigService)
                                          (implicit ec: ExecutionContext) extends HttpErrorFunctions with HeaderUtil {
   def send[A](request: FileTransmission)(implicit hasConversationId: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
-    post(request)
+    post(request, config.fileUploadConfig.fileTransmissionBaseUrl)
   }
 
-  private def post[A](request: FileTransmission)(implicit hasConversationId: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
+  private def post[A](request: FileTransmission, url: String)(implicit hasConversationId: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
     implicit val headerCarrier: HeaderCarrier = HeaderCarrier(
       extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON) // http-verbs will implicitly add user agent header
     )
-    logger.debug(s"Sending request to file transmission service. Url: Payload:\n${Json.prettyPrint(Json.toJson(request))}")
-    http.post(url"http://localhost:8080/").withBody(Json.toJson(request)).execute[HttpResponse].map{ response =>
+    logger.debug(s"Sending request to file transmission service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(request))}")
+    http.post(url"$url").withBody(Json.toJson(request)).execute[HttpResponse].map{ response =>
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")

@@ -27,6 +27,8 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse, StringContextOps}
 
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+
 import java.net.URL
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,8 +53,7 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
     val url = new URL(urlString)
     //http.POST[CustomsDeclarationsMetricsRequest, HttpResponse](url, request).map{ response =>
     http
-      .post(url"$url")(hc)
-      //.setHeader(hc: _*)
+      .post(url"$url")
       .withBody(Json.toJson(request))
       .execute[HttpResponse]
       .map { response =>

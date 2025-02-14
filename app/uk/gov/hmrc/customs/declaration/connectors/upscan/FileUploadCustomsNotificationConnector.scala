@@ -26,7 +26,10 @@ import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadCustomsNotification
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse, StringContextOps}
+
+import scala.util.control.NonFatal
+import play.api.libs.ws.writeableOf_String
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -50,7 +53,7 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClientV2,
 
     val url = config.declarationsConfig.customsNotificationBaseBaseUrl
 
-    http.POSTString[HttpResponse](url, XMLHeader + notification.payload.toString(), headers)(implicitly, HeaderCarrier(), implicitly).map { response =>
+    http.post(url"$url").withBody(notification.payload.toString).execute[HttpResponse].map { response =>
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: notification sent successfully. url=${config.declarationsConfig.customsNotificationBaseBaseUrl}")
@@ -65,7 +68,7 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClientV2,
         logger.error(s"Call to customs notification service failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
         Future.failed(new RuntimeException(httpError))
 
-      case e: Throwable =>
+      case NonFatal(e) =>
         logger.error(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: Call to customs notification failed. url=${config.declarationsConfig.customsNotificationBaseBaseUrl}")
         Future.failed(e)
     }

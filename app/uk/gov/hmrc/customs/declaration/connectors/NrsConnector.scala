@@ -26,6 +26,9 @@ import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+
+import scala.util.control.NonFatal
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -42,18 +45,20 @@ class NrsConnector @Inject()(http: HttpClientV2,
 
     val nrsHeaders = Seq[(String, String)](("Content-Type", "application/json"), ("X-API-Key", declarationConfigService.nrsConfig.nrsApiKey))
       .++ (getCustomsApiStubExtraHeaders)
-    logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
+    val jsonPayload = Json.toJson(payload)
+    
+    logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(jsonPayload)}")
     http
       .post(url"$url")
       .setHeader(nrsHeaders: _*)
-      .withBody(payload.toString)
-      .execute[HttpResponse]
+      .withBody(jsonPayload)
+      .execute[NrSubmissionId]
       .map { res =>
         logger.debug(s"Response received from nrs service is submission id: ${res}")
         res
       }
       .recoverWith {
-        case e: Throwable =>
+        case NonFatal(e) =>
           logger.error(s"Call to nrs service failed url=$url, exception=$e")
           Future.failed(e)
       }

@@ -25,7 +25,8 @@ import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload,
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException, StringContextOps}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,9 +47,11 @@ class UpscanInitiateConnector @Inject()(http: HttpClientV2,
   private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
 
     implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
-
-    logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
-    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload, getCustomsApiStubExtraHeaders(hc))(implicitly, implicitly, headerCarrier, implicitly)
+    val jsonPayload = Json.toJson(payload)
+    
+    
+    logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(jsonPayload)}")
+    http.post(url"$url").withBody(jsonPayload).execute[UpscanInitiateResponsePayload]
       .map { (res: UpscanInitiateResponsePayload) =>
         logger.info(s"reference from call to upscan initiate ${res.reference}")
         logger.debug(s"Response received from upscan initiate service $res")

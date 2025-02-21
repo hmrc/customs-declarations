@@ -32,6 +32,7 @@ object VerifyLogging {
   }
 
   private def verifyDeclarationsLogger(method: String, message: String)(implicit logger: DeclarationsLogger): Unit = {
+    println("got here")
     PassByNameVerifier(logger, method)
       .withByNameParam(message)
       .withParamMatcher(any[HasConversationId])

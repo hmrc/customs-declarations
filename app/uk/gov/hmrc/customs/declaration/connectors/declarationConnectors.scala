@@ -29,7 +29,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames, HttpErrorFunctions, HttpException, HttpResponse, StringContextOps}
 import play.api.libs.ws.writeableOf_String
 
 import java.time.{Instant, LocalDateTime}
@@ -106,7 +106,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
     implicit val hc: HeaderCarrier = HeaderCarrier()
     logger.debug(s"Sending request to $url.\n Headers:\n $decHeaders\n Payload:\n$xml")
 
-    http.post(url"$url").withBody(xml.toString).execute[HttpResponse].setHeader(decHeaders: _*).map { response =>
+    http.post(url"$url").setHeader(decHeaders*).withBody(xml.toString).execute[HttpResponse].map { response =>
       response.status match {
         case status if is2xx(status) =>
           response

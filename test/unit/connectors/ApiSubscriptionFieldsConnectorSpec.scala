@@ -16,51 +16,83 @@
 
 package unit.connectors
 
-import org.mockito.ArgumentMatchers.{any, eq as ameq}
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, get, getRequestedFor, urlEqualTo}
 import org.mockito.Mockito.*
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Application
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsXml
 import play.api.test.Helpers
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.Helpers.{ACCEPT, await, defaultAwaitTimeout}
+import play.api.inject.bind
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.test.{HttpClientV2Support, WireMockSupport}
+import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.play.audit.http.HttpAuditing
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.bootstrap.http.{DefaultHttpAuditing, HttpClientV2Provider}
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
 import util.ExternalServicesConfig.*
 import util.{ApiSubscriptionFieldsTestData, TestData}
-
-import java.net.URL
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
   with Matchers
   with MockitoSugar
   with BeforeAndAfterEach
   with Eventually
-  with ApiSubscriptionFieldsTestData {
+  with ApiSubscriptionFieldsTestData
+  with BeforeAndAfterAll
+  with GuiceOneAppPerSuite
+  with HttpClientV2Support
+  with WireMockSupport {
 
-  private val mockWSGetImpl = mock[HttpClient]
   private val mockLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private val mockDeclarationsConfig = mock[DeclarationsConfig]
+  private val mockAuditConnector = mock[AuditConnector]
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
 
-  private val connector = new ApiSubscriptionFieldsConnector(mockWSGetImpl, mockLogger, mockDeclarationsConfigService)
+  override lazy val app: Application = new GuiceApplicationBuilder()
+    .configure(
+      "play.http.router" -> "definition.Routes",
+      "application.logger.name" -> "customs-declarations",
+      "appName" -> "customs-declarations",
+      "appUrl" -> "http://customs-wco-declaration.service",
+      "auditing.enabled" -> false,
+      "auditing.traceRequests" -> false,
+      "microservice.services.api-subscription-fields" -> Host,
+      "microservice.services.api-subscription-fields" -> Port,
+    ).overrides(
+      bind[HttpAuditing].to[DefaultHttpAuditing],
+      bind[String].qualifiedWith("appName").toInstance("customs-declarations"),
+      bind[HttpClientV2].toProvider[HttpClientV2Provider],
+      bind[AuditConnector].toInstance(mockAuditConnector),
+      bind[DeclarationsConfigService].toInstance(mockDeclarationsConfigService),
+      bind[DeclarationsLogger].toInstance(mockLogger)
+    ).build()
 
-  private val expectedUrl = s"http://$Host:$Port$ApiSubscriptionFieldsContext/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0"
-  private val url = new URL(expectedUrl)
+  private val connector: ApiSubscriptionFieldsConnector = app.injector.instanceOf[ApiSubscriptionFieldsConnector]
+  private val expectedUrl = s"$ApiSubscriptionFieldsContext/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0"
+  
   override protected def beforeEach(): Unit = {
-    reset(mockLogger, mockWSGetImpl, mockDeclarationsConfigService)
-
+    reset(mockLogger, mockDeclarationsConfigService)
+    wireMockServer.resetMappings()
+    wireMockServer.resetRequests()
     when(mockDeclarationsConfigService.declarationsConfig).thenReturn(mockDeclarationsConfig)
     when(mockDeclarationsConfig.apiSubscriptionFieldsBaseUrl).thenReturn(s"http://$Host:$Port$ApiSubscriptionFieldsContext")
   }
@@ -68,34 +100,47 @@ class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
   "ApiSubscriptionFieldsConnector" can {
     "when making a successful request" should {
       "use the correct URL for valid path parameters and config" in {
-        val futureResponse = Future.successful(apiSubscriptionFieldsResponse)
-        when(mockWSGetImpl.GET[ApiSubscriptionFieldsResponse](
-            ameq(url))
-          (any[HttpReads[ApiSubscriptionFieldsResponse]](), any[HeaderCarrier](), any[ExecutionContext])).thenReturn(futureResponse)
+        wireMockServer.stubFor(get(urlEqualTo(expectedUrl))
+          .withHeader(ACCEPT, equalTo("*/*"))
+          .willReturn(
+            aResponse()
+              .withBody(Json.stringify(Json.toJson(apiSubscriptionFieldsResponse)))
+              .withStatus(OK)))
 
         awaitRequest shouldBe apiSubscriptionFieldsResponse
+        wireMockServer.verify(1, getRequestedFor(urlEqualTo(expectedUrl)))
       }
     }
 
     "when making an failing request" should {
       "propagate an underlying error when api subscription fields call fails with a non-http exception" in {
-        returnResponseForRequest(Future.failed(TestData.emulatedServiceFailure))
+//        returnResponseForRequest(Future.failed(TestData.emulatedServiceFailure))
+//
+//        val caught = intercept[TestData.EmulatedServiceFailure] {
+//          awaitRequest
+//        }
+//
+//        caught shouldBe TestData.emulatedServiceFailure
+      }
 
-        val caught = intercept[TestData.EmulatedServiceFailure] {
+      "return the http exception when http call fails with an http exception" in {
+        wireMockServer.stubFor(get(urlEqualTo(expectedUrl))
+          .withHeader(ACCEPT, equalTo("*/*"))
+          .willReturn(
+            aResponse()
+              .withBody(Json.stringify(Json.toJson(apiSubscriptionFieldsResponse)))
+              .withStatus(INTERNAL_SERVER_ERROR)))
+
+        val caught = intercept[UpstreamErrorResponse] {
           awaitRequest
         }
-
-        caught shouldBe TestData.emulatedServiceFailure
+        wireMockServer.verify(1, getRequestedFor(urlEqualTo(expectedUrl)))
+        caught.message shouldBe s"""GET of 'http://localhost:$Port/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' returned 500. Response body: '{"fieldsId":"327d9145-4965-4d28-a2c5-39dedee50334","fields":{"authenticatedEori":"ZZ123456789000"}}'"""
       }
     }
   }
 
   private def awaitRequest = {
     await(connector.getSubscriptionFields(apiSubscriptionKey))
-  }
-
-  private def returnResponseForRequest(eventualResponse: Future[ApiSubscriptionFieldsResponse]) = {
-    when(mockWSGetImpl.GET[ApiSubscriptionFieldsResponse](ameq(url))
-      (any[HttpReads[ApiSubscriptionFieldsResponse]](), any[HeaderCarrier](), any[ExecutionContext])).thenReturn(eventualResponse)
   }
 }

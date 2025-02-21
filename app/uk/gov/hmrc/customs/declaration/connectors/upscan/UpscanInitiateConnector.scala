@@ -16,19 +16,19 @@
 
 package uk.gov.hmrc.customs.declaration.connectors.upscan
 
-import com.google.inject.*
 import play.api.libs.json.Json
 import uk.gov.hmrc.customs.declaration.connectors.HeaderUtil
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, StringContextOps}
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 @Singleton
 class UpscanInitiateConnector @Inject()(http: HttpClientV2,
@@ -48,10 +48,8 @@ class UpscanInitiateConnector @Inject()(http: HttpClientV2,
 
     implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
     val jsonPayload = Json.toJson(payload)
-    
-    
     logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(jsonPayload)}")
-    http.post(url"$url").withBody(jsonPayload).execute[UpscanInitiateResponsePayload]
+    http.post(url"$url").setHeader(getCustomsApiStubExtraHeaders(hc)*).withBody(jsonPayload).execute[UpscanInitiateResponsePayload]
       .map { (res: UpscanInitiateResponsePayload) =>
         logger.info(s"reference from call to upscan initiate ${res.reference}")
         logger.debug(s"Response received from upscan initiate service $res")
@@ -60,7 +58,7 @@ class UpscanInitiateConnector @Inject()(http: HttpClientV2,
       .recoverWith {
         case httpError: HttpException =>
           Future.failed(httpError)
-        case e: Throwable =>
+        case NonFatal(e) =>
           logger.error(s"Call to upscan initiate failed.")
           Future.failed(e)
       }

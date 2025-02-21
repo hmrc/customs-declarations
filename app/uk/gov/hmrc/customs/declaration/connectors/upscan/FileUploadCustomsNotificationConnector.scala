@@ -53,7 +53,7 @@ class FileUploadCustomsNotificationConnector @Inject()(http: HttpClientV2,
 
     val url = config.declarationsConfig.customsNotificationBaseBaseUrl
 
-    http.post(url"$url").withBody(notification.payload.toString).execute[HttpResponse].map { response =>
+    http.post(url"$url").setHeader(headers*).withBody(XMLHeader + notification.payload.toString).execute[HttpResponse].map { response =>
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: notification sent successfully. url=${config.declarationsConfig.customsNotificationBaseBaseUrl}")

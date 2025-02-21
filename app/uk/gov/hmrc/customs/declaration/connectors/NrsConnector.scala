@@ -24,7 +24,7 @@ import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPay
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
@@ -50,7 +50,7 @@ class NrsConnector @Inject()(http: HttpClientV2,
     logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(jsonPayload)}")
     http
       .post(url"$url")
-      .setHeader(nrsHeaders: _*)
+      .setHeader(nrsHeaders*)
       .withBody(jsonPayload)
       .execute[NrSubmissionId]
       .map { res =>

@@ -18,7 +18,7 @@ package util
 
 import com.google.inject.AbstractModule
 import org.scalatestplus.mockito.MockitoSugar.mock
-import play.api.http.HeaderNames._
+import play.api.http.HeaderNames.*
 import play.api.http.MimeTypes
 import play.api.inject.guice.GuiceableModule
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
@@ -27,18 +27,20 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.CONTENT_TYPE
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core.ConfidenceLevel.L500
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve._
+import uk.gov.hmrc.auth.core.*
+import uk.gov.hmrc.auth.core.retrieve.*
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.customs.declaration.logging.CdsLogger
-import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders._
-import uk.gov.hmrc.customs.declaration.model.upscan._
+import uk.gov.hmrc.customs.declaration.model.*
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.*
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.*
+import uk.gov.hmrc.customs.declaration.model.upscan.*
 import uk.gov.hmrc.customs.declaration.services.{UniqueIdsService, UuidService}
 import unit.logging.StubDeclarationsLogger
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
+import util.CustomsDeclarationsExternalServicesConfig.NrsServiceContext
 import util.CustomsDeclarationsMetricsTestData.EventStart
+import util.ExternalServicesConfig.{Host, Port}
 import util.RequestHeaders.{ValidHeadersV1, ValidHeadersV2, ValidHeadersV3, X_EORI_IDENTIFIER_NAME}
 import util.TestData.declarantEori
 
@@ -70,13 +72,13 @@ object TestData {
   val clientSubscriptionIdString: String = "327d9145-4965-4d28-a2c5-39dedee50334"
 
   val nrSubmissionId: NrSubmissionId = NrSubmissionId(conversationId.uuid)
-  val nrsConfigEnabled: NrsConfig = NrsConfig(nrsEnabled = true, "nrs-api-key", "nrs.url")
-  val nrsConfigDisabled: NrsConfig = NrsConfig(nrsEnabled = false, "nrs-api-key",  "nrs.url")
+  val nrsConfigEnabled: NrsConfig = NrsConfig(nrsEnabled = true, "nrs-api-key", s"http://$Host:$Port$NrsServiceContext")
+  val nrsConfigDisabled: NrsConfig = NrsConfig(nrsEnabled = false, "nrs-api-key",  s"http://$Host:$Port$NrsServiceContext")
 
   val allVersionsUnshuttered: DeclarationsShutterConfig = DeclarationsShutterConfig(Some(false), Some(false), Some(false))
 
   val TenMb = 10485760
-  val fileUploadConfig: FileUploadConfig = FileUploadConfig("upscan-initiate-v1.url", "upscan-initiate-v2.url", 10485760, "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl", 600)
+  val fileUploadConfig: FileUploadConfig = FileUploadConfig(s"http://$Host:$Port/upscan/initiate", s"http://$Host:$Port/upscan/v2/initiate", 10485760, "callback.url", 3, "fileTransmissionCallbackUrl", "fileTransmissionUrl", 600)
 
   val validBadgeIdentifierValue = "BADGEID123"
   val invalidBadgeIdentifierValue = "INVALIDBADGEID123456789"

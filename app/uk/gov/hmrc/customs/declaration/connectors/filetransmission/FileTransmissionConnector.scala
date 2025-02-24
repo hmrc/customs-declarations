@@ -51,7 +51,7 @@ class FileTransmissionConnector @Inject()(http: HttpClientV2,
     val jsonPayload = Json.toJson(request)
 
     logger.debug(s"Sending request to file transmission service. Url: $url Payload:\n${Json.prettyPrint(jsonPayload)}")
-    http.post(url"$url").withBody(jsonPayload).execute[HttpResponse].map{ response =>
+    http.post(url"$url").setHeader(getCustomsApiStubExtraHeaders(hc)*).withBody(jsonPayload).execute[HttpResponse].map{ response =>
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")

@@ -9051,7 +9051,7 @@
 												<xs:element name="ID" type="ds:PreviousDocumentIdentificationIDType" minOccurs="0">
 													<xs:annotation>
 														<xs:documentation xml:lang="EN">
-															<WCOFormat>an..70</WCOFormat>
+															<WCOFormat>an..35</WCOFormat>
 														</xs:documentation>
 														<xs:documentation>
 															<TDEDUID>1004</TDEDUID>
@@ -10341,7 +10341,7 @@
 									<xs:element name="ID" type="ds:PreviousDocumentIdentificationIDType" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation xml:lang="EN">
-												<WCOFormat>an..70</WCOFormat>
+												<WCOFormat>an..35</WCOFormat>
 											</xs:documentation>
 											<xs:documentation>
 												<TDEDUID>1004</TDEDUID>

@@ -2118,12 +2118,12 @@
     <xs:annotation>
       <xs:documentation>
         <WCOID>D018</WCOID>
-        <WCOFormat>an..70</WCOFormat>
+        <WCOFormat>an..35</WCOFormat>
       </xs:documentation>
     </xs:annotation>
     <xs:simpleContent>
       <xs:restriction base="udt:IDType">
-        <xs:maxLength value="70"/>
+        <xs:maxLength value="35"/>
         <xs:pattern value=".*[^\s].*"/>
       </xs:restriction>
     </xs:simpleContent>

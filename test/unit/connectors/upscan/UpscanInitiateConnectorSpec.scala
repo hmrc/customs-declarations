@@ -25,7 +25,6 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.http.MimeTypes
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -36,21 +35,20 @@ import play.api.test.Helpers.await
 import play.api.test.Helpers.defaultAwaitTimeout
 import play.mvc.Http.HeaderNames.*
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
-import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.test.{HttpClientV2Support, WireMockSupport}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.http.{DefaultHttpAuditing, HttpClientV2Provider}
 import util.ExternalServicesConfig.{Host, Port}
-import util.TestData.{EmulatedServiceFailure, ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles, correlationId, emulatedServiceFailure, fileUploadConfig}
+import util.TestData
+import util.TestData.{ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles, fileUploadConfig}
 import util.VerifyLogging.verifyDeclarationsLoggerError
-import scala.concurrent.{ExecutionContext, Future}
 
 class UpscanInitiateConnectorSpec extends AnyWordSpecLike
   with MockitoSugar
@@ -172,21 +170,22 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike
     }
 
     "when making an failing request" should {
-//      "propagate an underlying error when MDG call fails with a non-http exception" in {
-//        wireMockServer.stubFor(post(urlEqualTo("/upscan/v2/initiate"))
-//          .withHeader(CONTENT_TYPE, equalTo("application/json"))
-//          .withHeader(ACCEPT, equalTo("*/*"))
-//          .withRequestBody(equalToJson(Json.stringify(Json.toJson(upscanInitiatePayloadV2))))
-//          .willReturn(
-//            aResponse()
-//              .withStatus(INTERNAL_SERVER_ERROR)))
-//
-//        val caught = intercept[EmulatedServiceFailure] {
-//          awaitRequest()
-//        }
-//        caught shouldBe emulatedServiceFailure
-//        verifyDeclarationsLoggerError("Call to upscan initiate failed.")
-//      }
+      "propagate an underlying error when MDG call fails with a non-http exception" in {
+        wireMockServer.stubFor(post(urlEqualTo("/upscan/v2/initiate"))
+          .withHeader(CONTENT_TYPE, equalTo("application/json"))
+          .withHeader(ACCEPT, equalTo("*/*"))
+          .withRequestBody(equalToJson(Json.stringify(Json.toJson(upscanInitiatePayloadV2))))
+          .willReturn(
+            aResponse()
+              .withFixedDelay(60000)))
+
+        val caught = intercept[TestData.TimeoutExceptionFailure] {
+          awaitRequest()
+        }
+
+        caught.getCause shouldBe TestData.timeoutExceptionFailure.getCause
+        verifyDeclarationsLoggerError("Call to upscan initiate failed.")
+      }
 
       "return the http exception when MDG call fails with an http exception" in {
         wireMockServer.stubFor(post(urlEqualTo("/upscan/v2/initiate"))

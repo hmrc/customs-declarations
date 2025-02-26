@@ -44,10 +44,11 @@ import util.ExternalServicesConfig.{Host, Port}
 import util.RequestHeaders.{ValidHeadersV1, ValidHeadersV2, ValidHeadersV3, X_EORI_IDENTIFIER_NAME}
 import util.TestData.declarantEori
 
-import java.net.URL
+import java.net.{SocketException, URL}
 import java.time.{Instant, LocalDate, ZoneId, ZonedDateTime}
 import java.util.UUID
 import java.util.UUID.fromString
+import java.util.concurrent.TimeoutException
 import scala.xml.{Elem, NodeSeq}
 
 object TestData {
@@ -253,6 +254,12 @@ object TestData {
 
   type EmulatedServiceFailure = UnsupportedOperationException
   val emulatedServiceFailure = new EmulatedServiceFailure("Emulated service failure.")
+  
+  type ConnectionResetFailure = SocketException
+  val connectionResetFailure = new ConnectionResetFailure("Connection reset")
+
+  type TimeoutExceptionFailure = TimeoutException
+  val timeoutExceptionFailure = new TimeoutExceptionFailure("Connection timout")
 
   type EmulatedInsufficientEnrolments = InsufficientEnrolments
   val emulatedInsufficientEnrolments = new EmulatedInsufficientEnrolments("Insufficient Enrolments")

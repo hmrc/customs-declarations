@@ -17,6 +17,7 @@
 package unit.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, get, getRequestedFor, urlEqualTo}
+import com.github.tomakehurst.wiremock.http.Fault
 import org.mockito.Mockito.*
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatest.concurrent.Eventually
@@ -46,6 +47,7 @@ import uk.gov.hmrc.play.bootstrap.http.{DefaultHttpAuditing, HttpClientV2Provide
 import util.CustomsDeclarationsExternalServicesConfig.ApiSubscriptionFieldsContext
 import util.ExternalServicesConfig.*
 import util.{ApiSubscriptionFieldsTestData, TestData}
+
 import scala.concurrent.ExecutionContext
 
 class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
@@ -114,13 +116,31 @@ class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
 
     "when making an failing request" should {
       "propagate an underlying error when api subscription fields call fails with a non-http exception" in {
-//        returnResponseForRequest(Future.failed(TestData.emulatedServiceFailure))
-//
-//        val caught = intercept[TestData.EmulatedServiceFailure] {
-//          awaitRequest
-//        }
-//
-//        caught shouldBe TestData.emulatedServiceFailure
+        wireMockServer.stubFor(get(urlEqualTo(expectedUrl))
+          .withHeader(ACCEPT, equalTo("*/*"))
+          .willReturn(
+            aResponse()
+              .withFault(Fault.CONNECTION_RESET_BY_PEER)))
+
+        val caught = intercept[TestData.ConnectionResetFailure] {
+          awaitRequest
+        }
+
+        caught.getCause shouldBe TestData.connectionResetFailure.getCause
+      }
+
+      "propagate an underlying error when api subscription fields call fails with a non-http exceptions" in {
+        wireMockServer.stubFor(get(urlEqualTo(expectedUrl))
+          .withHeader(ACCEPT, equalTo("*/*"))
+          .willReturn(
+            aResponse()
+              .withFixedDelay(60000)))
+
+        val caught = intercept[TestData.TimeoutExceptionFailure] {
+          awaitRequest
+        }
+
+        caught.getCause shouldBe TestData.timeoutExceptionFailure.getCause
       }
 
       "return the http exception when http call fails with an http exception" in {

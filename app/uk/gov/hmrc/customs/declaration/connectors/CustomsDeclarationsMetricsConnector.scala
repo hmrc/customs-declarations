@@ -29,7 +29,6 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpR
 
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
-import java.net.URL
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -50,10 +49,8 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
   private def post[A](request: CustomsDeclarationsMetricsRequest, urlString: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
 
     logger.debug(s"Sending request to customs declarations metrics service. Url: $urlString Payload:\n${request.toString}")
-    val url = new URL(urlString)
-    //http.POST[CustomsDeclarationsMetricsRequest, HttpResponse](url, request).map{ response =>
     http
-      .post(url"$url")
+      .post(url"$urlString")
       .withBody(Json.toJson(request))
       .execute[HttpResponse]
       .map { response =>
@@ -62,15 +59,15 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
             logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
 
           case status => //1xx, 3xx, 4xx, 5xx
-            logger.error(s"Call to customs declarations metrics service failed. url=$url, HttpStatus=$status, Error=Received a non 2XX response, response body=${response.body}")
+            logger.error(s"Call to customs declarations metrics service failed. url=$urlString, HttpStatus=$status, Error=Received a non 2XX response, response body=${response.body}")
         }
         ()
       }.recoverWith {
         case httpError: HttpException =>
-          logger.error(s"Call to customs declarations metrics service failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
+          logger.error(s"Call to customs declarations metrics service failed. url=$urlString, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
           Future.failed(new RuntimeException(httpError))
         case e: Throwable =>
-          logger.warn(s"Call to customs declarations metrics service failed. url=$url")
+          logger.warn(s"Call to customs declarations metrics service failed. url=$urlString")
           Future.failed(e)
       }
   }

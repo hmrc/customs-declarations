@@ -17,6 +17,7 @@
 package unit.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, post, postRequestedFor, urlEqualTo}
+import com.github.tomakehurst.wiremock.http.Fault
 import org.mockito.Mockito.*
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
@@ -26,7 +27,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.HeaderNames
-import play.api.http.Status.OK
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsXml
@@ -35,13 +36,14 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.declaration.config.{ServiceConfig, ServiceConfigProvider}
 import uk.gov.hmrc.customs.declaration.connectors.{DeclarationCancellationConnector, DeclarationConnector, DeclarationSubmissionConnector}
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
 import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.test.{HttpClientV2Support, WireMockSupport}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, UpstreamErrorResponse}
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.http.{DefaultHttpAuditing, HttpClientV2Provider}
@@ -192,16 +194,45 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
       }
     }
 
-//    "when making an failing request" should {
-//      "propagate an underlying error when MDG call fails with a non-http exception" in {
-//        returnResponseForRequest(Future.failed(TestData.emulatedServiceFailure))
-//
-//        val caught = intercept[TestData.EmulatedServiceFailure] {
-//          awaitRequest()
-//        }
-//        caught shouldBe TestData.emulatedServiceFailure
-//      }
-//    }
+    "propagate an underlying error when api subscription fields call fails with a non-http exception" in {
+      wireMockServer.stubFor(post(urlEqualTo("/declarations/submitdeclaration"))
+        .withHeader(HeaderNames.AUTHORIZATION, equalTo(s"Bearer ${v2Config.bearerToken.get}"))
+        .withHeader(HeaderNames.CONTENT_TYPE, equalTo("application/xml; charset=utf-8"))
+        .withHeader(HeaderNames.ACCEPT, equalTo(MimeTypes.XML))
+        .withHeader(HeaderNames.DATE, equalTo(httpFormattedDate))
+        .withHeader(HeaderNames.X_FORWARDED_HOST, equalTo("MDTP"))
+        .withHeader("X-Correlation-ID", equalTo(correlationId.toString))
+        .withRequestBody(equalTo(xml.toString()))
+        .willReturn(
+          aResponse()
+            .withFault(Fault.CONNECTION_RESET_BY_PEER)))
+
+      val caught = intercept[TestData.ConnectionResetFailure] {
+        await(submissionConnector.send(xml, date, correlationId, VersionTwo))
+      }
+
+      caught.getCause shouldBe TestData.connectionResetFailure.getCause
+    }
+
+    "return the http exception when http call fails with an http exception" in {
+      wireMockServer.stubFor(post(urlEqualTo("/declarations/submitdeclaration"))
+        .withHeader(HeaderNames.AUTHORIZATION, equalTo(s"Bearer ${v2Config.bearerToken.get}"))
+        .withHeader(HeaderNames.CONTENT_TYPE, equalTo("application/xml; charset=utf-8"))
+        .withHeader(HeaderNames.ACCEPT, equalTo(MimeTypes.XML))
+        .withHeader(HeaderNames.DATE, equalTo(httpFormattedDate))
+        .withHeader(HeaderNames.X_FORWARDED_HOST, equalTo("MDTP"))
+        .withHeader("X-Correlation-ID", equalTo(correlationId.toString))
+        .withRequestBody(equalTo(xml.toString()))
+        .willReturn(
+          aResponse()
+            .withStatus(INTERNAL_SERVER_ERROR)))
+
+      val caught = intercept[Non2xxResponseException] {
+        await(submissionConnector.send(xml, date, correlationId, VersionTwo))
+      }
+      wireMockServer.verify(1, postRequestedFor(urlEqualTo("/declarations/submitdeclaration")))
+      caught.message shouldBe s"""Call to Declarations backend failed. Status=[500] url=[http://localhost:$Port/declarations/submitdeclaration] response body=[<empty>]"""
+    }
 
     "when configuration is absent" should {
       "throw an exception when no config is found for given api and version combination" in {
@@ -213,10 +244,6 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
         caught.getMessage shouldBe "config not found"
       }
     }
-  }
-
-  private def awaitRequest() = {
-//    await(connector.send(xml, date, correlationId, VersionTwo))
   }
 
   private def setupSuccessfulDeclarationRequest(bearerToken: Option[String]): Unit = {

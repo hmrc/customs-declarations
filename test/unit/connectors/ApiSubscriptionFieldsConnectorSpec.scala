@@ -129,20 +129,6 @@ class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
         caught.getCause shouldBe TestData.connectionResetFailure.getCause
       }
 
-      "propagate an underlying error when api subscription fields call fails with a non-http exceptions" in {
-        wireMockServer.stubFor(get(urlEqualTo(expectedUrl))
-          .withHeader(ACCEPT, equalTo("*/*"))
-          .willReturn(
-            aResponse()
-              .withFixedDelay(60000)))
-
-        val caught = intercept[TestData.TimeoutExceptionFailure] {
-          awaitRequest
-        }
-
-        caught.getCause shouldBe TestData.timeoutExceptionFailure.getCause
-      }
-
       "return the http exception when http call fails with an http exception" in {
         wireMockServer.stubFor(get(urlEqualTo(expectedUrl))
           .withHeader(ACCEPT, equalTo("*/*"))

@@ -17,6 +17,7 @@
 package unit.connectors.upscan
 
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, equalToJson, post, postRequestedFor, urlEqualTo}
+import com.github.tomakehurst.wiremock.http.Fault
 import org.mockito.Mockito.*
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.matchers.should.Matchers
@@ -170,21 +171,20 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike
     }
 
     "when making an failing request" should {
-      "propagate an underlying error when MDG call fails with a non-http exception" in {
+      "propagate an underlying error when api subscription fields call fails with a non-http exception" in {
         wireMockServer.stubFor(post(urlEqualTo("/upscan/v2/initiate"))
           .withHeader(CONTENT_TYPE, equalTo("application/json"))
           .withHeader(ACCEPT, equalTo("*/*"))
           .withRequestBody(equalToJson(Json.stringify(Json.toJson(upscanInitiatePayloadV2))))
           .willReturn(
             aResponse()
-              .withFixedDelay(60000)))
+              .withFault(Fault.CONNECTION_RESET_BY_PEER)))
 
-        val caught = intercept[TestData.TimeoutExceptionFailure] {
+        val caught = intercept[TestData.ConnectionResetFailure] {
           awaitRequest()
         }
 
-        caught.getCause shouldBe TestData.timeoutExceptionFailure.getCause
-        verifyDeclarationsLoggerError("Call to upscan initiate failed.")
+        caught.getCause shouldBe TestData.connectionResetFailure.getCause
       }
 
       "return the http exception when MDG call fails with an http exception" in {

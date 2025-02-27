@@ -16,8 +16,8 @@
 
 package unit.connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, equalToJson, get, post, postRequestedFor, urlEqualTo}
-import org.mockito.ArgumentMatchers.{eq as ameq, *}
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, post, postRequestedFor, urlEqualTo}
+import com.github.tomakehurst.wiremock.http.Fault
 import org.mockito.Mockito.*
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatest.concurrent.Eventually
@@ -45,14 +45,13 @@ import uk.gov.hmrc.http.test.{HttpClientV2Support, WireMockSupport}
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.http.{DefaultHttpAuditing, HttpClientV2Provider}
-import util.CustomsDeclarationsExternalServicesConfig.NrsServiceContext
 import util.CustomsDeclarationsMetricsTestData.EventStart
 import util.TestData
 import util.TestData.{fileUploadConfig, nrSubmissionId, nrsConfigEnabled}
 import util.ExternalServicesConfig.*
 
 import java.util.UUID
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 import scala.xml.NodeSeq
 
 class NrsConnectorSpec extends AnyWordSpecLike
@@ -65,7 +64,6 @@ class NrsConnectorSpec extends AnyWordSpecLike
   with WireMockSupport
   with HttpClientV2Support {
 
-  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val mockWsPost = mock[HttpClientV2]
   private val mockLogger = mock[DeclarationsLogger]
@@ -103,8 +101,6 @@ class NrsConnectorSpec extends AnyWordSpecLike
     FakeRequest().withJsonBody(Json.obj("fake" -> "request"))
   )
 
-  private val httpException =  UpstreamErrorResponse("Emulated 404 response from a web call", 404)
-
   override protected def beforeEach(): Unit = {
     reset(mockWsPost, mockLogger)
     wireMockServer.resetMappings()
@@ -138,13 +134,21 @@ class NrsConnectorSpec extends AnyWordSpecLike
     }
 
     "when making an failing request" should {
-      "propagate an underlying error when nrs service call fails with a non-http exception" in {
-//        returnResponseForRequest(Future.failed(TestData.emulatedServiceFailure))
-//
-//        val caught = intercept[TestData.EmulatedServiceFailure] {
-//          awaitRequest
-//        }
-//        caught shouldBe TestData.emulatedServiceFailure
+      "propagate an underlying error when api subscription fields call fails with a non-http exception" in {
+        wireMockServer.stubFor(post(urlEqualTo("/submission"))
+          .withHeader(CONTENT_TYPE, equalTo(MimeTypes.JSON))
+          .withHeader(ACCEPT, equalTo("*/*"))
+          .withHeader("X-API-Key", equalTo("nrs-api-key"))
+          .withRequestBody(equalTo(Json.stringify(Json.toJson(TestData.nrsPayload))))
+          .willReturn(
+            aResponse()
+              .withFault(Fault.CONNECTION_RESET_BY_PEER)))
+
+        val caught = intercept[TestData.ConnectionResetFailure] {
+          awaitRequest
+        }
+
+        caught.getCause shouldBe TestData.connectionResetFailure.getCause
       }
 
       "wrap an underlying error when nrs service call fails with an http exception" in {
@@ -168,10 +172,4 @@ class NrsConnectorSpec extends AnyWordSpecLike
   private def awaitRequest = {
     await(connector.send(TestData.nrsPayload, VersionTwo))
   }
-
-//  private def returnResponseForRequest(eventualResponse: Future[NrSubmissionId]) = {
-//    when(mockWsPost.POST(anyString, any[NrsPayload], any[SeqOfHeader])(
-//      any[Writes[NrsPayload]], any[HttpReads[NrSubmissionId]](), any[HeaderCarrier](), any[ExecutionContext]))
-//      .thenReturn(eventualResponse)
-//  }
 }

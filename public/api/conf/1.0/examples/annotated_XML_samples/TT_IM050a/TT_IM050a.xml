@@ -1,32 +1,24 @@
-<md:MetaData xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
-             xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--SCENARIO
 			Imports simplified frontier (Type C) declaration.
 			A Trader chooses to utilise the Duty Calculation Manual Override functionality for this type of Declaration (Type C Simplified) where the Tax Base and Tax Payable Amount values are entered.
 			Procedure Code 44 21 has been used to claim duty (and where applicable VAT) relief under end use with simultaneous release for free circulation and home use, where the goods are being re-imported following temporary export under outward processing.
 			Expected notifications (2): DMSACC and DMSCLE
-			
+
 			Notes:
 			• This declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'.
 			• Since the introduction of this sample, duties are no longer calculated on Type C/F declarations so the duty override claimed in the scenario is no longer required.
 		-->
-		
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
-		<FunctionalReferenceID>IM50a_v1.3_0203_SA6</FunctionalReferenceID>
+		<FunctionalReferenceID>U.78675239HLAR</FunctionalReferenceID>
 		<TypeCode>IMC</TypeCode>
 		<!--DE 1/9: Total number of goods items on the declaration.
 			Single item declaration. -->
@@ -35,7 +27,7 @@
 			55 packages.
 			Note that this matches DE 6/10 because this is a single item declaration. -->
 		<TotalPackageQuantity>55</TotalPackageQuantity>
-		<!--DE 2/6: Deferred Payment. 
+		<!--DE 2/6: Deferred Payment.
 			The DAN account used for deferred payment.
 			This declared DAN belongs to the importer declared on the declaration. -->
 		<AdditionalDocument>
@@ -72,7 +64,7 @@
 			<ID>GB201909013000</ID>
 			<CategoryCode>OPO</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 3/39: Holder of the authorisation identification No. 
+		<!--DE 3/39: Holder of the authorisation identification No.
 			Type code of EUS indicates End Use authorisation, the EORI number entered here must be the same as the Importer's EORI number declared in DE 3/16. -->
 		<AuthorisationHolder>
 			<ID>GB201909013000</ID>
@@ -83,7 +75,7 @@
 			ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border. -->
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
-		<!--DE 3/18: Declarant Identification Number. 
+		<!--DE 3/18: Declarant Identification Number.
 			The EORI number of the agent entering the declaration. The UK requires an EORI to be provided for the declarant. -->
 		<Declarant>
 			<ID>GB201909013000</ID>
@@ -105,25 +97,25 @@
 					1 indicates that goods are transported in containers. Note: Unlike CHIEF this must now be completed-->
 				<ContainerCode>1</ContainerCode>
 				<GoodsLocation>
-					<!--DE 5/23: Location of Goods - Identification of location. 
-						To give a unique position of the location. 
+					<!--DE 5/23: Location of Goods - Identification of location.
+						To give a unique position of the location.
 						The location code for Wallasea Island, Baltic Wharf, a non-inventory linked location.
-						Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: 
+						Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only:
 						for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'. -->
 					<Name>WLALONBTW</Name>
-					<!--DE 5/23: Location of Goods - Type of Location. 
+					<!--DE 5/23: Location of Goods - Type of Location.
 						A in this scenario to represent that it is a designated location. -->
 					<TypeCode>A</TypeCode>
 					<Address>
-						<!--DE 5/23: Location of Goods - Qualifier of the identification. 
+						<!--DE 5/23: Location of Goods - Qualifier of the identification.
 							U in this scenario for UN/LOCODE. -->
 						<TypeCode>U</TypeCode>
-						<!--DE 5/23: Location of Goods - Country. 
+						<!--DE 5/23: Location of Goods - Country.
 							Country code of the country where the goods may be examined, GB in this scenario. -->
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
-				<!--DE 7/10: Container identification number. 
+				<!--DE 7/10: Container identification number.
 					This is required where the container code in DE 7/2 is 1, indicating containerised traffic.
 					Example container identification number: alpha numeric to a total of 17 characters. -->
 				<TransportEquipment>
@@ -134,7 +126,7 @@
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Good item number. Mandatory field. Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 2/3: Documents produced.                     
+				<!--DE 2/3: Documents produced.
 					A document code of C505 indicates CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
 					In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of "CC" and the statement "Guaranteenotrequired") for deferment purposes, and therefore the ID also indicates that a waiver is being used. -->
 				<AdditionalDocument>
@@ -197,38 +189,45 @@
 					<ID>GBEUS9531/421/24</ID>
 					<TypeCode>990</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of Y926 indicates goods are not concerned by import prohibition on fluorinated greenhouse gases 
+				<!--DE 2/3: A document code of Y926 indicates goods are not concerned by import prohibition on fluorinated greenhouse gases
 					(as retained in UK law and as applicable in Great Britain) -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<Name>Excluded from prohibition</Name>
 					<TypeCode>926</TypeCode>
 				</AdditionalDocument>
+				<!--DE 2/3: A document code of Y902 indicates goods are not concerned by import prohibition on fluorinated greenhouse gases
+					(as retained in UK law and as applicable in Great Britain) -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<Name>Not in footnote list</Name>
+					<TypeCode>902</TypeCode>
+				</AdditionalDocument>
 				<!--DE 2/2 Additional Information.
-					This is required when DE 4/7 is completed for a manual tax calculation. 
-					Statement code OVR01 indicates duty calculation override claimed. 
-					In the description enter ‘Duty override claimed’ followed by a plain text description of the reason for the override. 
+					This is required when DE 4/7 is completed for a manual tax calculation.
+					Statement code OVR01 indicates duty calculation override claimed.
+					In the description enter ‘Duty override claimed’ followed by a plain text description of the reason for the override.
 					Note that since the introduction of this sample, duties are no longer calculated on Type C/F declarations so the duty override claimed in the scenario is no longer required. -->
 				<AdditionalInformation>
 					<StatementCode>OVR01</StatementCode>
 					<StatementDescription>Duty override claimed - to test CDSP-8181</StatementDescription>
 				</AdditionalInformation>
-				<!--DE 2/2 Additional Information. 
-					Statement code GEN45 for Enter the unique reference number, allocated to the consignment/work by the authorisation holder. 
+				<!--DE 2/2 Additional Information.
+					Statement code GEN45 for Enter the unique reference number, allocated to the consignment/work by the authorisation holder.
 					Enter ‘Simplified authorisation’ in the description. -->
 				<AdditionalInformation>
 					<StatementCode>GEN45</StatementCode>
 					<StatementDescription>Ref Number: 123456</StatementDescription>
 				</AdditionalInformation>
 				<AdditionalInformation>
-					<!--DE 2/2 Additional information. 
+					<!--DE 2/2 Additional information.
 						Statement code of 00500 is the identity between declarant and importer.
 						Enter 'Importer' in the statement description. -->
 					<StatementCode>00500</StatementCode>
 					<StatementDescription>Importer</StatementDescription>
 				</AdditionalInformation>
 				<Commodity>
-					<!--DE 6/8: Description of goods.        
+					<!--DE 6/8: Description of goods.
 						Description specific enough to enable classification – without repeating the CN code description in the Tariff. -->
 					<Description>Road wheels and parts and accessories thereof for the industrial assembly of pedestrian-controlled tractors</Description>
 					<!--DE 6/14: Commodity code - Combined Nomenclature Code. -->
@@ -242,21 +241,21 @@
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<!--DE 6/16: Commodity Code - TARIC Additional code(s).
-						Additional Code 4999 to represent Restriction on entry into free circulation. -->
+						Additional Code 4601 to represent Restriction on entry into free circulation. -->
 					<Classification>
-						<ID>4999</ID>
+						<ID>4601</ID>
 						<IdentificationTypeCode>TRA</IdentificationTypeCode>
 					</Classification>
 					<DutyTaxFee>
-						<!--DE 4/17: Preference. 
+						<!--DE 4/17: Preference.
 							Mandatory field.
 							Preference Type of 140 indicates Exemption for end-use resulting from the Community Customs Tariff (CCT). -->
 						<DutyRegimeCode>140</DutyRegimeCode>
-						<!--DE 4/4: Calculation of Taxes - Tax Base. 
+						<!--DE 4/4: Calculation of Taxes - Tax Base.
 							Code GBP used as a manual duty calculation is being made.
 							Note where 'OVR01' is declared in D.E. 2/2 (Additional Information) on a Type C or Type F declaration, DE 4/4 (Tax Base) must be declared. -->
 						<SpecificTaxBaseQuantity unitCode="GBP">20000</SpecificTaxBaseQuantity>
-						<!--DE 4/3: Calculation of taxes - Tax type. 
+						<!--DE 4/3: Calculation of taxes - Tax type.
 							In this scenario, A00 indicating Customs duties. -->
 						<TypeCode>A00</TypeCode>
 						<Payment>
@@ -264,45 +263,45 @@
 							<MethodCode>E</MethodCode>
 							<!--DE 4/7: Total Taxes. -->
 							<TaxAssessedAmount currencyID="GBP">400</TaxAssessedAmount>
-							<!--DE 4/6: Payable Tax Amount. 
+							<!--DE 4/6: Payable Tax Amount.
 								Note where 'OVR01' is declared in D.E. 2/2 (Additional Information) on a Type C or Type F declaration, DE 4/6 (Payable Tax Amount) must be declared. -->
 							<PaymentAmount currencyID="GBP">400</PaymentAmount>
 						</Payment>
 					</DutyTaxFee>
 					<DutyTaxFee>
-						<!--DE 4/3: Calculation of taxes - Tax type. 
+						<!--DE 4/3: Calculation of taxes - Tax type.
 							In this scenario, B00 indicating VAT. -->
 						<SpecificTaxBaseQuantity unitCode="GBP">20000</SpecificTaxBaseQuantity>
 						<TypeCode>B00</TypeCode>
 						<Payment>
-							<!--DE 4/4: Calculation of Taxes - Tax Base. 
-								Code GBP used as a manual duty calculation is being made. 
+							<!--DE 4/4: Calculation of Taxes - Tax Base.
+								Code GBP used as a manual duty calculation is being made.
 								Note where 'OVR01' is declared in D.E. 2/2 (Additional Information) on a Type C or Type F declaration, DE 4/4 (Tax Base) must be declared. -->
 							<!--DE 4/8: MethodCode of E to indicate Deferment used for customs duty. -->
 							<MethodCode>E</MethodCode>
 							<!--DE 4/7: Total Taxes. -->
 							<!-- <TaxAssessedAmount currencyID="GBP">4080</TaxAssessedAmount> -->
-							<!--DE 4/6: Payable Tax Amount. 
+							<!--DE 4/6: Payable Tax Amount.
 								Note where 'OVR01' is declared in D.E. 2/2 (Additional Information) on a Type C or Type F declaration, DE 4/6 (Payable Tax Amount) must be declared. -->
 							<PaymentAmount currencyID="GBP">4080</PaymentAmount>
 						</Payment>
 					</DutyTaxFee>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
-						<GrossMassMeasure>250</GrossMassMeasure>
+						<GrossMassMeasure>2500</GrossMassMeasure>
 						<!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
-						<NetNetWeightMeasure>200</NetNetWeightMeasure>
+						<NetNetWeightMeasure>2000</NetNetWeightMeasure>
 					</GoodsMeasure>
-					<!--DE 4/14: Item price amount. 
+					<!--DE 4/14: Item price amount.
 						The invoice was issued with of a value of 2500 and the currency was in GBP. -->
 					<InvoiceLine>
 						<ItemChargeAmount currencyID="GBP">20000</ItemChargeAmount>
 					</InvoiceLine>
 				</Commodity>
 				<ExportCountry>
-					<!--DE 5/14: Country of Dispatch/Export Code. 
-						This data element can be declared at a header or item level, depending on the scenario. 
-						Mandatory field. 
+					<!--DE 5/14: Country of Dispatch/Export Code.
+						This data element can be declared at a header or item level, depending on the scenario.
+						Mandatory field.
 						Dispatching country is United States. -->
 					<ID>US</ID>
 				</ExportCountry>
@@ -317,7 +316,7 @@
 					<PreviousCode>21</PreviousCode>
 				</GovernmentProcedure>
 				<GovernmentProcedure>
-					<!--DE 1/11: Additional Procedure. 
+					<!--DE 1/11: Additional Procedure.
 						Mandatory field.
 						000 to indicate no additional procedure.-->
 					<CurrentCode>000</CurrentCode>
@@ -349,7 +348,7 @@
 				The Trader's DUCR assigned to the consignment. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>2GB201909013000-12345</ID>
+				<ID>5GB201909013000-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1 : Previous Documents.
@@ -357,7 +356,7 @@
 				ZMRN to represent the MRN of the export declaration used to enter the goods to OP. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>22GB34F7Y1O2CX8PT4</ID>
+				<ID>25GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>MRN</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>
@@ -366,12 +365,12 @@
 				Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then this data element is mandatory.
 				ID indicates that the guarantee is not required, as stated in DE 8/2-->
 			<ID>Guaranteenotrequired</ID>
-			<!--DE 8/2: Guarantee type. 
+			<!--DE 8/2: Guarantee type.
 				0 to represent that a customs comprehensive guarantee is being waived for the deferment of customs duty.
 				Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code ‘0’ or ‘1’ must be declared in this data element. -->
 			<SecurityDetailsCode>0</SecurityDetailsCode>
 		</ObligationGuarantee>
-		<!--DE 5/27: Supervising Customs Office. 
+		<!--DE 5/27: Supervising Customs Office.
 			This is a mandatory field dependant on the Procedure code.
 			The ID GBSAA001 represents Southend on Sea, Alexander House. -->
 		<SupervisingOffice>

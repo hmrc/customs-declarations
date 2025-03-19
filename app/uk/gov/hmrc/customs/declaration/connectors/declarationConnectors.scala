@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import com.google.inject._
+import com.google.inject.*
 import org.apache.pekko.actor.ActorSystem
-import play.api.http.HeaderNames._
+import play.api.http.HeaderNames.*
 import play.api.http.{ContentTypes, MimeTypes}
 import play.api.mvc.Codec.utf_8
 import uk.gov.hmrc.customs.declaration.config.{DeclarationCircuitBreaker, ServiceConfigProvider}
@@ -27,8 +27,10 @@ import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
 import uk.gov.hmrc.customs.declaration.model.ApiVersion
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HttpClient, _}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames, HttpErrorFunctions, HttpException, HttpResponse, StringContextOps}
+import play.api.libs.ws.writeableOf_String
 
 import java.time.{Instant, LocalDateTime}
 import java.util.UUID
@@ -37,7 +39,7 @@ import scala.util.control.NonFatal
 import scala.xml.NodeSeq
 
 @Singleton
-class DeclarationSubmissionConnector @Inject()(override val http: HttpClient,
+class DeclarationSubmissionConnector @Inject()(override val http: HttpClientV2,
                                                override val logger: DeclarationsLogger,
                                                override val serviceConfigProvider: ServiceConfigProvider,
                                                override val config: DeclarationsConfigService,
@@ -50,7 +52,7 @@ class DeclarationSubmissionConnector @Inject()(override val http: HttpClient,
 }
 
 @Singleton
-class DeclarationCancellationConnector @Inject()(override val http: HttpClient,
+class DeclarationCancellationConnector @Inject()(override val http: HttpClientV2,
                                                  override val logger: DeclarationsLogger,
                                                  override val serviceConfigProvider: ServiceConfigProvider,
                                                  override val config: DeclarationsConfigService,
@@ -64,7 +66,7 @@ class DeclarationCancellationConnector @Inject()(override val http: HttpClient,
 
 trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunctions with HeaderUtil {
 
-  def http: HttpClient
+  def http: HttpClientV2
 
   def logger: DeclarationsLogger
 
@@ -104,7 +106,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
     implicit val hc: HeaderCarrier = HeaderCarrier()
     logger.debug(s"Sending request to $url.\n Headers:\n $decHeaders\n Payload:\n$xml")
 
-    http.POSTString[HttpResponse](url, xml.toString(), headers = decHeaders).map { response =>
+    http.post(url"$url").setHeader(decHeaders*).withBody(xml.toString).execute[HttpResponse].map { response =>
       response.status match {
         case status if is2xx(status) =>
           response

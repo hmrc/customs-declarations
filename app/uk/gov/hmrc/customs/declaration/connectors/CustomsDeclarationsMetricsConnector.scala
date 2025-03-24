@@ -26,6 +26,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse, StringContextOps}
+import scala.util.control.NonFatal
 
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
@@ -66,7 +67,7 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
         case httpError: HttpException =>
           logger.error(s"Call to customs declarations metrics service failed. url=$urlString, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
           Future.failed(new RuntimeException(httpError))
-        case e: Throwable =>
+        case NonFatal(e) =>
           logger.warn(s"Call to customs declarations metrics service failed. url=$urlString")
           Future.failed(e)
       }

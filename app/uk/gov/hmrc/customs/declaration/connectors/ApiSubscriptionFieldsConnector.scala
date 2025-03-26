@@ -20,17 +20,16 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HttpReads.Implicits.*
-import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, StringContextOps, UpstreamErrorResponse}
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException, UpstreamErrorResponse}
 
+import java.net.URL
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
 
 
 @Singleton
-class ApiSubscriptionFieldsConnector @Inject()(http: HttpClientV2,
+class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
                                                logger: DeclarationsLogger,
                                                config: DeclarationsConfigService)
                                               (implicit ec: ExecutionContext) {
@@ -42,18 +41,19 @@ class ApiSubscriptionFieldsConnector @Inject()(http: HttpClientV2,
 
   private def get[A](urlString: String)(implicit hci: HasConversationId, hc: HeaderCarrier): Future[ApiSubscriptionFieldsResponse] = {
     logger.debug(s"Getting fields id from api subscription fields service. url=$urlString")
-    http.get(url"$urlString").execute[ApiSubscriptionFieldsResponse]
+    val url = new URL(urlString)
+    http.GET[ApiSubscriptionFieldsResponse](url)
       .recoverWith {
         case upstreamError: UpstreamErrorResponse =>
-          logger.error(s"Subscriptions fields lookup call failed. url=$urlString HttpStatus=${upstreamError.statusCode} error=${upstreamError.getMessage}")
+          logger.error(s"Subscriptions fields lookup call failed. url=$url HttpStatus=${upstreamError.statusCode} error=${upstreamError.getMessage}")
           Future.failed(upstreamError)
 
         case httpError: HttpException =>
-          logger.error(s"Subscriptions fields lookup call failed. url=$urlString HttpStatus=${httpError.responseCode} error=${httpError.getMessage}")
+          logger.error(s"Subscriptions fields lookup call failed. url=$url HttpStatus=${httpError.responseCode} error=${httpError.getMessage}")
           Future.failed(new RuntimeException(httpError))
 
-        case NonFatal(e) =>
-          logger.error(s"Call to subscription information service failed. url=$urlString")
+        case e: Throwable =>
+          logger.error(s"Call to subscription information service failed. url=$url")
           Future.failed(e)
       }
   }

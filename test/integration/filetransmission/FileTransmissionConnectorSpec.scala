@@ -88,7 +88,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
-      verifyDeclarationsLoggerError(s"Call to file transmission failed. url=http://localhost:$Port/file/transmission, HttpStatus=300, Error=Received a non 2XX response")
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=300, Error=Received a non 2XX response")
     }
 
     "return a failed future when external service returns 404" in {
@@ -96,7 +96,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
-      verifyDeclarationsLoggerError(s"Call to file transmission failed. url=http://localhost:$Port/file/transmission, HttpStatus=404, Error=Received a non 2XX response")
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=404, Error=Received a non 2XX response")
     }
 
     "return a failed future when external service returns 400" in {
@@ -104,7 +104,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
-      verifyDeclarationsLoggerError(s"Call to file transmission failed. url=http://localhost:$Port/file/transmission, HttpStatus=400, Error=Received a non 2XX response")
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=400, Error=Received a non 2XX response")
     }
 
     "return a failed future when external service returns 500" in {
@@ -112,7 +112,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
-      verifyDeclarationsLoggerError(s"Call to file transmission failed. url=http://localhost:$Port/file/transmission, HttpStatus=500, Error=Received a non 2XX response")
+      verifyDeclarationsLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=500, Error=Received a non 2XX response")
     }
 
     "return a failed future when fail to connect the external service" in {
@@ -120,7 +120,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadGatewayException]
 
-      verifyDeclarationsLoggerError(s"Call to file transmission failed. url=http://localhost:$Port/file/transmission, HttpStatus=502, Error=POST of 'http://localhost:$Port/file/transmission' failed. Caused by: 'Connection refused: localhost/$localhostString:$Port'")
+      verifyDeclarationsLoggerError(s"Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=502, Error=POST of 'http://localhost:11111/file/transmission' failed. Caused by: 'Connection refused: localhost/$localhostString:11111'")
 
       startMockServer()
     }

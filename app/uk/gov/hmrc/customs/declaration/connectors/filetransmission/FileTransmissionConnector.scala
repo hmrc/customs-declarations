@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.customs.declaration.connectors.filetransmission
 
-import com.google.inject.*
+import com.google.inject._
 import play.api.libs.json.Json
-import play.mvc.Http.HeaderNames.*
+import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes.JSON
 import uk.gov.hmrc.customs.declaration.connectors.HeaderUtil
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
@@ -26,20 +26,16 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.filetransmission.FileTransmission
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HttpReads.Implicits.*
-import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse, StringContextOps}
-import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpErrorFunctions, HttpException, HttpResponse}
 
-import scala.util.control.NonFatal
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class FileTransmissionConnector @Inject()(http: HttpClientV2,
+class FileTransmissionConnector @Inject()(http: HttpClient,
                                           logger: DeclarationsLogger,
                                           config: DeclarationsConfigService)
                                          (implicit ec: ExecutionContext) extends HttpErrorFunctions with HeaderUtil {
-
   def send[A](request: FileTransmission)(implicit hasConversationId: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
     post(request, config.fileUploadConfig.fileTransmissionBaseUrl)
   }
@@ -48,10 +44,8 @@ class FileTransmissionConnector @Inject()(http: HttpClientV2,
     implicit val headerCarrier: HeaderCarrier = HeaderCarrier(
       extraHeaders = Seq(ACCEPT -> JSON, CONTENT_TYPE -> JSON) // http-verbs will implicitly add user agent header
     )
-    val jsonPayload = Json.toJson(request)
-
-    logger.debug(s"Sending request to file transmission service. Url: $url Payload:\n${Json.prettyPrint(jsonPayload)}")
-    http.post(url"$url").setHeader(getCustomsApiStubExtraHeaders(hc)*).withBody(jsonPayload).execute[HttpResponse].map{ response =>
+    logger.debug(s"Sending request to file transmission service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(request))}")
+    http.POST[FileTransmission, HttpResponse](url, request, getCustomsApiStubExtraHeaders(hc))(implicitly, implicitly, headerCarrier, implicitly).map{ response =>
       response.status match {
         case status if is2xx(status) =>
           logger.info(s"[conversationId=${request.file.reference}]: file transmission request sent successfully")
@@ -64,7 +58,7 @@ class FileTransmissionConnector @Inject()(http: HttpClientV2,
         case httpError: HttpException =>
           logger.error(s"Call to file transmission failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
           Future.failed(new RuntimeException(httpError))
-        case NonFatal(e) =>
+        case e: Throwable =>
           logger.error(s"Call to file transmission failed. url=$url")
           Future.failed(e)
       }

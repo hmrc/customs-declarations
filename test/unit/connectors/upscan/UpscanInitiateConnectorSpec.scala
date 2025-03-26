@@ -16,57 +16,40 @@
 
 package unit.connectors.upscan
 
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, equalToJson, post, postRequestedFor, urlEqualTo}
-import com.github.tomakehurst.wiremock.http.Fault
-import org.mockito.Mockito.*
-import org.scalatest.concurrent.{Eventually, ScalaFutures}
+import org.mockito.ArgumentMatchers.{eq => ameq, _}
+import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
+import play.api.libs.json.Writes
 import play.api.mvc.AnyContentAsJson
 import play.api.test.Helpers
-import play.api.test.Helpers.await
-import play.api.test.Helpers.defaultAwaitTimeout
-import play.mvc.Http.HeaderNames.*
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
+import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model.*
+import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.test.{HttpClientV2Support, WireMockSupport}
-import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
-import uk.gov.hmrc.play.audit.http.HttpAuditing
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.bootstrap.http.{DefaultHttpAuditing, HttpClientV2Provider}
-import util.ExternalServicesConfig.{Host, Port}
-import util.TestData
-import util.TestData.{ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles, fileUploadConfig}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException, HttpReads, HttpResponse}
+import util.TestData.{EmulatedServiceFailure, ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles, emulatedServiceFailure, fileUploadConfig}
 import util.VerifyLogging.verifyDeclarationsLoggerError
 
-class UpscanInitiateConnectorSpec extends AnyWordSpecLike
-  with MockitoSugar
-  with BeforeAndAfterEach
-  with Eventually
-  with Matchers
-  with WireMockSupport
-  with ScalaFutures
-  with BeforeAndAfterAll
-  with GuiceOneAppPerSuite
-  with HttpClientV2Support {
+import scala.concurrent.{ExecutionContext, Future}
 
+class UpscanInitiateConnectorSpec extends AnyWordSpecLike with MockitoSugar with BeforeAndAfterEach with Eventually with Matchers {
+
+  private val mockWsPost = mock[HttpClient]
   private implicit val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
-  private val mockAuditConnector = mock[AuditConnector]
+  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
+  private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockDeclarationsConfigService)
+
+  private val httpException: Non2xxResponseException = Non2xxResponseException(404)
   private val tenThousand: Int = 10000
   private val upscanInitiatePayloadV1WithNoRedirects: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, None, None)
   private val upscanInitiatePayloadV1WithSuccessRedirects: UpscanInitiatePayload = UpscanInitiatePayload("https://callbackurl.com", tenThousand, Some("https://success-redirect.com"), None)
@@ -75,33 +58,8 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike
 
   implicit val jsonRequest: ValidatedFileUploadPayloadRequest[AnyContentAsJson] = ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles
 
-  override lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(
-      "play.http.router" -> "definition.Routes",
-      "application.logger.name" -> "customs-declarations",
-      "appName" -> "customs-declarations",
-      "appUrl" -> "http://customs-wco-declaration.service",
-      "auditing.enabled" -> false,
-      "auditing.traceRequests" -> false,
-      "microservice.services.upscan-initiate-v1.host" -> Host,
-      "microservice.services.upscan-initiate-v1.port" -> Port,
-      "microservice.services.upscan-initiate-v2.host" -> Host,
-      "microservice.services.upscan-initiate-v2.port" -> Port,
-    ).overrides(
-      bind[HttpAuditing].to[DefaultHttpAuditing],
-      bind[String].qualifiedWith("appName").toInstance("customs-declarations"),
-      bind[HttpClientV2].toProvider[HttpClientV2Provider],
-      bind[AuditConnector].toInstance(mockAuditConnector),
-      bind[DeclarationsConfigService].toInstance(mockDeclarationsConfigService),
-      bind[DeclarationsLogger].toInstance(mockLogger)
-    ).build()
-
-  lazy val connector: UpscanInitiateConnector = app.injector.instanceOf[UpscanInitiateConnector]
-
   override protected def beforeEach(): Unit = {
-    wireMockServer.resetMappings()
-    wireMockServer.resetRequests()
-    reset(mockLogger)
+    reset(mockWsPost, mockLogger)
     when(mockDeclarationsConfigService.fileUploadConfig).thenReturn(fileUploadConfig)
   }
 
@@ -110,102 +68,80 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike
     "when making a successful request" should {
 
       "select V1 URL from config when no redirect values are present" in {
-        wireMockServer.stubFor(post(urlEqualTo("/upscan/initiate"))
-          .withHeader(CONTENT_TYPE, equalTo("application/json"))
-          .withHeader(ACCEPT, equalTo("*/*"))
-          .withRequestBody(equalToJson(Json.stringify(Json.toJson(upscanInitiatePayloadV1WithNoRedirects))))
-          .willReturn(
-            aResponse()
-              .withBody("""{"reference":"string", "uploadRequest":{"href":"", "fields": {"test":"test"}}}""")
-              .withStatus(OK)))
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
 
         awaitRequest(upscanInitiatePayloadV1WithNoRedirects)
 
-        wireMockServer.verify(1, postRequestedFor(urlEqualTo("/upscan/initiate")))
+        verify(mockWsPost).POST(ameq("upscan-initiate-v1.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
+          any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
       "select V1 URL from config when success redirect and no error redirect values are present" in {
-        wireMockServer.stubFor(post(urlEqualTo("/upscan/initiate"))
-          .withHeader(CONTENT_TYPE, equalTo("application/json"))
-          .withHeader(ACCEPT, equalTo("*/*"))
-          .withRequestBody(equalToJson(Json.stringify(Json.toJson(upscanInitiatePayloadV1WithSuccessRedirects))))
-          .willReturn(
-            aResponse()
-              .withBody("""{"reference":"string", "uploadRequest":{"href":"", "fields": {"test":"test"}}}""")
-              .withStatus(OK)))
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
 
         awaitRequest(upscanInitiatePayloadV1WithSuccessRedirects)
 
-        wireMockServer.verify(1, postRequestedFor(urlEqualTo("/upscan/initiate")))
+        verify(mockWsPost).POST(ameq("upscan-initiate-v1.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
+          any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
       "select V1 URL from config when error redirect and no success redirect values are present" in {
-        wireMockServer.stubFor(post(urlEqualTo("/upscan/initiate"))
-          .withHeader(CONTENT_TYPE, equalTo("application/json"))
-          .withHeader(ACCEPT, equalTo("*/*"))
-          .withRequestBody(equalToJson(Json.stringify(Json.toJson(upscanInitiatePayloadV1WithErrorRedirects))))
-          .willReturn(
-            aResponse()
-              .withBody("""{"reference":"string", "uploadRequest":{"href":"", "fields": {"test":"test"}}}""")
-              .withStatus(OK)))
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
 
         awaitRequest(upscanInitiatePayloadV1WithErrorRedirects)
-        wireMockServer.verify(1, postRequestedFor(urlEqualTo("/upscan/initiate")))
+
+        verify(mockWsPost).POST(ameq("upscan-initiate-v1.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
+          any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
 
       "select V2 URL from config when both redirect values are present" in {
-        wireMockServer.stubFor(post(urlEqualTo("/upscan/v2/initiate"))
-          .withHeader(CONTENT_TYPE, equalTo("application/json"))
-          .withHeader(ACCEPT, equalTo("*/*"))
-          .withRequestBody(
-            equalToJson(Json.stringify(Json.toJson(upscanInitiatePayloadV2))))
-          .willReturn(
-            aResponse()
-              .withBody("""{"reference":"string", "uploadRequest":{"href":"", "fields": {"test":"test"}}}""")
-              .withStatus(OK)))
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
 
         awaitRequest()
 
-        wireMockServer.verify(1, postRequestedFor(urlEqualTo("/upscan/v2/initiate")))
+        verify(mockWsPost).POST(ameq("upscan-initiate-v2.url"), any[UpscanInitiatePayload], any[SeqOfHeader])(
+          any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
+      }
+
+      "pass in the body" in {
+        returnResponseForRequest(Future.successful(mock[UpscanInitiateResponsePayload]))
+
+        awaitRequest()
+
+        verify(mockWsPost).POST(anyString, ameq(upscanInitiatePayloadV2), any[SeqOfHeader])(
+          any[Writes[UpscanInitiatePayload]], any[HttpReads[HttpResponse]](), any[HeaderCarrier](), any[ExecutionContext])
       }
     }
 
     "when making an failing request" should {
-      "propagate an underlying error when api subscription fields call fails with a non-http exception" in {
-        wireMockServer.stubFor(post(urlEqualTo("/upscan/v2/initiate"))
-          .withHeader(CONTENT_TYPE, equalTo("application/json"))
-          .withHeader(ACCEPT, equalTo("*/*"))
-          .withRequestBody(equalToJson(Json.stringify(Json.toJson(upscanInitiatePayloadV2))))
-          .willReturn(
-            aResponse()
-              .withFault(Fault.CONNECTION_RESET_BY_PEER)))
+      "propagate an underlying error when MDG call fails with a non-http exception" in {
+        returnResponseForRequest(Future.failed(emulatedServiceFailure))
 
-        val caught = intercept[TestData.ConnectionResetFailure] {
+        val caught = intercept[EmulatedServiceFailure] {
           awaitRequest()
         }
-
-        caught.getCause shouldBe TestData.connectionResetFailure.getCause
+        caught shouldBe emulatedServiceFailure
+        verifyDeclarationsLoggerError("Call to upscan initiate failed.")
       }
 
       "return the http exception when MDG call fails with an http exception" in {
-        wireMockServer.stubFor(post(urlEqualTo("/upscan/v2/initiate"))
-          .withHeader(CONTENT_TYPE, equalTo("application/json"))
-          .withHeader(ACCEPT, equalTo("*/*"))
-          .withRequestBody(equalToJson(Json.stringify(Json.toJson(upscanInitiatePayloadV2))))
-          .willReturn(
-            aResponse()
-              .withStatus(INTERNAL_SERVER_ERROR)))
+        returnResponseForRequest(Future.failed(httpException))
 
-        val caught = intercept[UpstreamErrorResponse] {
+        val caught = intercept[HttpException] {
           awaitRequest()
         }
-        wireMockServer.verify(1, postRequestedFor(urlEqualTo("/upscan/v2/initiate")))
-        caught.message shouldBe "POST of 'http://localhost:6001/upscan/v2/initiate' returned 500. Response body: ''"
+        caught shouldBe httpException
       }
     }
   }
 
   private def awaitRequest(payload: UpscanInitiatePayload = upscanInitiatePayloadV2): UpscanInitiateResponsePayload = {
     await(connector.send(payload, VersionOne))
+  }
+
+  private def returnResponseForRequest(eventualResponse: Future[UpscanInitiateResponsePayload]) = {
+    when(mockWsPost.POST(anyString, any[UpscanInitiatePayload], any[SeqOfHeader])(
+      any[Writes[UpscanInitiatePayload]], any[HttpReads[UpscanInitiateResponsePayload]](), any[HeaderCarrier](), any[ExecutionContext]))
+      .thenReturn(eventualResponse)
   }
 }

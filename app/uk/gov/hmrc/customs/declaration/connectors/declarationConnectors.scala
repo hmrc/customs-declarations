@@ -112,7 +112,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
           response
 
         case status => //1xx, 3xx, 4xx, 5xx
-          throw Non2xxResponseException(s"Call to Declarations backend failed. Status=[$status] url=[$url] response body=[${formatResponseBody(response.body)}]", status)
+          throw Non2xxResponseException(s"Call to Declarations backend failed. Status=[$status] url=[$url] response body=[${formatResponseBody(response.body)}] response headers[${response.headers}]", status)
       }
     }
       .recoverWith {

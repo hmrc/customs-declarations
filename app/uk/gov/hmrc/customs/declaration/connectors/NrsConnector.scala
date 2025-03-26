@@ -16,23 +16,19 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
-import com.google.inject.*
+import com.google.inject._
 import play.api.libs.json.Json
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, NrSubmissionId, NrsPayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.HttpReads.Implicits.*
-import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
-import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
-
-import scala.util.control.NonFatal
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NrsConnector @Inject()(http: HttpClientV2,
+class NrsConnector @Inject()(http: HttpClient,
                              logger: DeclarationsLogger,
                              declarationConfigService: DeclarationsConfigService)
                             (implicit ec: ExecutionContext) extends HeaderUtil {
@@ -45,20 +41,14 @@ class NrsConnector @Inject()(http: HttpClientV2,
 
     val nrsHeaders = Seq[(String, String)](("Content-Type", "application/json"), ("X-API-Key", declarationConfigService.nrsConfig.nrsApiKey))
       .++ (getCustomsApiStubExtraHeaders)
-    val jsonPayload = Json.toJson(payload)
-    
-    logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(jsonPayload)}")
-    http
-      .post(url"$url")
-      .setHeader(nrsHeaders*)
-      .withBody(jsonPayload)
-      .execute[NrSubmissionId]
+    logger.debug(s"Sending request to nrs service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
+    http.POST[NrsPayload, NrSubmissionId](url, payload, nrsHeaders)
       .map { res =>
         logger.debug(s"Response received from nrs service is submission id: ${res}")
         res
       }
       .recoverWith {
-        case NonFatal(e) =>
+        case e: Throwable =>
           logger.error(s"Call to nrs service failed url=$url, exception=$e")
           Future.failed(e)
       }

@@ -16,20 +16,20 @@
 
 package uk.gov.hmrc.customs.declaration.http
 
+import com.typesafe.config.Config
 import org.apache.pekko.actor.ActorSystem
 import play.api.Configuration
 import play.api.libs.ws.WSClient
-import uk.gov.hmrc.http.client.HttpClientV2Impl
+import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.hooks.HttpHook
+import uk.gov.hmrc.play.http.ws._
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class NoAuditHttpClient @Inject()( config: Configuration,
-                                   wsClient: WSClient,
-                                   actorSystem: ActorSystem)
-  extends HttpClientV2Impl(
-    wsClient,
-    actorSystem,
-    config = config,
-    hooks = Seq()
-  )
+                                   override val wsClient: WSClient,
+                                   override val actorSystem: ActorSystem) extends HttpClient with WSHttp {
+  override lazy val configuration: Config = config.underlying
+  override val hooks: Seq[HttpHook] = Seq.empty
+}

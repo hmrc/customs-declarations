@@ -16,23 +16,20 @@
 
 package uk.gov.hmrc.customs.declaration.connectors.upscan
 
+import com.google.inject._
 import play.api.libs.json.Json
 import uk.gov.hmrc.customs.declaration.connectors.HeaderUtil
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
-import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, StringContextOps}
-import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
-
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException}
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UpscanInitiateConnector @Inject()(http: HttpClientV2,
+class UpscanInitiateConnector @Inject()(http: HttpClient,
                                         logger: DeclarationsLogger,
                                         config: DeclarationsConfigService)
                                        (implicit ec: ExecutionContext) extends HeaderUtil{
@@ -48,12 +45,9 @@ class UpscanInitiateConnector @Inject()(http: HttpClientV2,
   private def post[A](payload: UpscanInitiatePayload, url: String)(implicit vfupr: ValidatedFileUploadPayloadRequest[A], hc: HeaderCarrier) = {
 
     implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
-    val jsonPayload = Json.toJson(payload)
-    logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(jsonPayload)}")
-    http.post(url"$url")
-      .setHeader(getCustomsApiStubExtraHeaders(hc)*)
-      .withBody(Json.toJson(payload))
-      .execute[UpscanInitiateResponsePayload]
+
+    logger.debug(s"Sending request to upscan initiate service. Url: $url Payload:\n${Json.prettyPrint(Json.toJson(payload))}")
+    http.POST[UpscanInitiatePayload, UpscanInitiateResponsePayload](url, payload, getCustomsApiStubExtraHeaders(hc))(implicitly, implicitly, headerCarrier, implicitly)
       .map { (res: UpscanInitiateResponsePayload) =>
         logger.info(s"reference from call to upscan initiate ${res.reference}")
         logger.debug(s"Response received from upscan initiate service $res")
@@ -62,7 +56,7 @@ class UpscanInitiateConnector @Inject()(http: HttpClientV2,
       .recoverWith {
         case httpError: HttpException =>
           Future.failed(httpError)
-        case NonFatal(e) =>
+        case e: Throwable =>
           logger.error(s"Call to upscan initiate failed.")
           Future.failed(e)
       }

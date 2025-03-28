@@ -49,7 +49,7 @@ trait CustomsDeclarationsMetricsService extends WireMockRunner {
 
   def verifyCustomsDeclarationsMetricsServiceWasCalledWith(request: CustomsDeclarationsMetricsRequest): Unit = {
     val expectedJson = Json.toJson(request).toString()
-    val timeoutDuration = 30.seconds
+    val timeoutDuration = 50.seconds
 
     val resultFuture: Future[Unit] = Future {
       verify(

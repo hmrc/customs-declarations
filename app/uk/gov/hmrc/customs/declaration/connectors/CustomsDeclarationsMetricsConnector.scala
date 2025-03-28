@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.customs.declaration.connectors
 
+import play.api.libs.json.Json
 import play.mvc.Http.HeaderNames.{ACCEPT, CONTENT_TYPE}
 import play.mvc.Http.MimeTypes.JSON
 import uk.gov.hmrc.customs.declaration.http.NoAuditHttpClient
@@ -24,9 +25,11 @@ import uk.gov.hmrc.customs.declaration.model.CustomsDeclarationsMetricsRequest
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
-import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpErrorFunctions, HttpException, HttpResponse, StringContextOps}
+import scala.util.control.NonFatal
 
-import java.net.URL
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,23 +50,26 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
   private def post[A](request: CustomsDeclarationsMetricsRequest, urlString: String)(implicit hasConversationId: HasConversationId): Future[Unit] = {
 
     logger.debug(s"Sending request to customs declarations metrics service. Url: $urlString Payload:\n${request.toString}")
-    val url = new URL(urlString)
-    http.POST[CustomsDeclarationsMetricsRequest, HttpResponse](url, request).map{ response =>
-      response.status match {
-        case status if is2xx(status) =>
-          logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
+    http
+      .post(url"$urlString")
+      .withBody(Json.toJson(request))
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+          case status if is2xx(status) =>
+            logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
 
-        case status => //1xx, 3xx, 4xx, 5xx
-          logger.error(s"Call to customs declarations metrics service failed. url=$url, HttpStatus=$status, Error=Received a non 2XX response, response body=${response.body}")
+          case status => //1xx, 3xx, 4xx, 5xx
+            logger.error(s"Call to customs declarations metrics service failed. url=$urlString, HttpStatus=$status, Error=Received a non 2XX response, response body=${response.body}")
+        }
+        ()
+      }.recoverWith {
+        case httpError: HttpException =>
+          logger.error(s"Call to customs declarations metrics service failed. url=$urlString, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
+          Future.failed(new RuntimeException(httpError))
+        case NonFatal(e) =>
+          logger.warn(s"Call to customs declarations metrics service failed. url=$urlString")
+          Future.failed(e)
       }
-      ()
-    }.recoverWith {
-      case httpError: HttpException =>
-        logger.error(s"Call to customs declarations metrics service failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
-        Future.failed(new RuntimeException(httpError))
-      case e: Throwable =>
-        logger.warn(s"Call to customs declarations metrics service failed. url=$url")
-        Future.failed(e)
-    }
   }
 }

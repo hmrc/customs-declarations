@@ -92,7 +92,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
 
       (sendValidRequest()).futureValue shouldBe (())
       verifyAuditServiceWasNotCalled()
-      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=404, Error=Received a non 2XX response, response body=")
+      verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=http://localhost:$Port/log-times, HttpStatus=404, Error=Received a non 2XX response, response body=")
     }
 
     "return a failed future when external service returns 400" in {
@@ -100,7 +100,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
 
       (sendValidRequest()).futureValue shouldBe (())
       verifyAuditServiceWasNotCalled()
-      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=400, Error=Received a non 2XX response, response body=")
+      verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=http://localhost:$Port/log-times, HttpStatus=400, Error=Received a non 2XX response, response body=")
     }
 
     "return a failed future when external service returns 500" in {
@@ -108,7 +108,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
 
       (sendValidRequest()).futureValue shouldBe (())
       verifyAuditServiceWasNotCalled()
-      verifyDeclarationsLoggerError("Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=500, Error=Received a non 2XX response, response body=")
+      verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=http://localhost:$Port/log-times, HttpStatus=500, Error=Received a non 2XX response, response body=")
     }
 
     "return a failed future when fail to connect the external service" in {
@@ -116,7 +116,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
 
       intercept[RuntimeException]((sendValidRequest()).futureValue).getCause.getClass shouldBe classOf[RuntimeException]
 
-      verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=http://localhost:11111/log-times, HttpStatus=502, Error=POST of 'http://localhost:11111/log-times' failed. Caused by: 'Connection refused: localhost/$localhostString:11111'")
+      verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=http://localhost:$Port/log-times, HttpStatus=502, Error=POST of 'http://localhost:$Port/log-times' failed. Caused by: 'Connection refused: localhost/$localhostString:$Port'")
 
       startMockServer()
     }

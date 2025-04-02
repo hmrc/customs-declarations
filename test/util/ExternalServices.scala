@@ -93,7 +93,7 @@ trait AuthServiceStub extends WireMockRunner {
 
 
 object ExternalServicesConfig {
-  val Port = sys.env.getOrElse("WIREMOCK_SERVICE_LOCATOR_PORT", "11111").toInt
+  val Port = sys.env.getOrElse("WIREMOCK_SERVICE_LOCATOR_PORT", "6001").toInt
   val Host = "localhost"
   val MdgSuppDecServiceContext = "/mdgSuppDecService/submitdeclaration"
   val AuthToken: String = "auth-token"

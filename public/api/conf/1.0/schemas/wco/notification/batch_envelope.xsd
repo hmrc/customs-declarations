@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.1" targetNamespace="http://core.dms.ecf/batchEnvelope/2014/02/">
+
+  <xsd:element name="BatchEnvelope">
+    <xsd:annotation>
+      <xsd:documentation>This schema provides a construct which wraps an arbitrary number of items as a batch and supporting any namespace</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:any processContents="lax" maxOccurs="unbounded" namespace="##other"/>
+      </xsd:sequence>
+      <xsd:attribute name="batchId" type="xsd:token" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
+
+
+
+

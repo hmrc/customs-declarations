@@ -1,22 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><v1:submitDeclarationRequest xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<v1:requestCommon>
-    <v1:regime>CDS</v1:regime>
-    <v1:receiptDate>2025-03-19T09:08:56.056Z</v1:receiptDate>
-    <v1:clientID>124d4ec8-8ed7-4b59-aab9-0d91ab408983</v1:clientID>
-    <v1:conversationID>8fca2dd6-2cdd-4963-9aa9-ce3a835ebdb6</v1:conversationID>    
-    <!--Example WSO2 Header-->
-    <v1:originatingPartyID>GB225456994000</v1:originatingPartyID>
-	<v1:authenticatedPartyID>GB225456994000</v1:authenticatedPartyID>
-  </v1:requestCommon>
-  <v1:requestDetail> 
- 
-  <md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
     <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
     <md:WCOTypeName>DEC</md:WCOTypeName>
     <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
     <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-    <Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--
             SCENARIO RoW to NI: "At Risk"
             Import of goods liable to Customs Duty & VAT, with no previous procedure
@@ -25,12 +13,12 @@
             Goods presented at Belfast Container Terminal on arrival.
             AI code 'NIIMP' entered at Item Level.
 
-            Please note that this scenario isnt performing as expected and will be updated in a future release.
+            Please note that this scenario isnt performing as expected and will be updated in a future release. 
         -->
         <!-- Function Code of 9 to represent an original declaration -->
         <FunctionCode>9</FunctionCode>
         <!-- DE 2/5: Traders own reference number this must be unique to the transaction -->
-        <FunctionalReferenceID>U.7867523J8Q2D</FunctionalReferenceID>
+        <FunctionalReferenceID>78494318EQSS</FunctionalReferenceID>
         <!--DE 1/1: IM to represent an import declaration.-->
         <!--DE 1/2: A to represent a supplementary declaration.-->
         <TypeCode>IMA</TypeCode>
@@ -194,7 +182,7 @@
                     This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
                 <AdditionalDocument>
                     <CategoryCode>N</CategoryCode>
-                    <ID>12345/01.03.2025</ID>
+                    <ID>12345/01.02.2022</ID>
                     <TypeCode>935</TypeCode>
                     <LPCOExemptionCode>AC</LPCOExemptionCode>
                 </AdditionalDocument>
@@ -267,7 +255,7 @@
                         <!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
                         <GrossMassMeasure>2100</GrossMassMeasure>
                         <!--DE 6/1: Net mass of the goods in kilograms without any packaging.-->
-                        <NetNetWeightMeasure>200</NetNetWeightMeasure>
+                        <NetNetWeightMeasure>2000</NetNetWeightMeasure>
                     </GoodsMeasure>
                     <!--DE 4/14:  Item price amount.
                         The invoice was issued with of a value of 2000 and the currency was in GBP.-->
@@ -333,7 +321,7 @@
                 As this is for a single item declaration, this should all be declared at header level..-->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
-                <ID>3XI553202734852-202503</ID>
+                <ID>3XI553202734852-202212</ID>
                 <TypeCode>DCR</TypeCode>
                 <LineNumeric>1</LineNumeric>
             </PreviousDocument>
@@ -356,5 +344,4 @@
             <SecurityDetailsCode>0</SecurityDetailsCode>
         </ObligationGuarantee>
     </Declaration>
-</md:MetaData></v1:requestDetail>
-</v1:submitDeclarationRequest>
+</md:MetaData>

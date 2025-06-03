@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.controllers
+package uk.gov.hmrc.customs.declaration.controllers.documentationController
 
 import controllers.Assets
 import play.api.Configuration
 import play.api.http.MimeTypes
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.customs.declaration.controllers.definitionController.DocumentationController
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 
 import javax.inject.{Inject, Singleton}

@@ -40,6 +40,6 @@ trait IntegrationTestSpec extends AnyWordSpecLike with UnitSpec
    * @return
    */
   def localhostString: String = {
-    if (System.getenv("HOME") == "/home/jenkins") "127.0.0.1" else "[0:0:0:0:0:0:0:1]"
+    if (System.getenv("HOME") == "/home/jenkins") "127.0.0.1" else "0:0:0:0:0:0:0:1"
   }
 }

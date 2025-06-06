@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EAL</inv:messageCode>
+	<inv:ucrBlock>
+		<inv:ucr>GB/QCP2-5XGRY8EYNYAGXS53RCCBHZCAL</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAUDVRDOVDVR</inv:goodsLocation>
+	<inv:goodsArrivalDateTime>2025-05-13T12:47:34.034+01:00</inv:goodsArrivalDateTime>
+	<inv:movementReference>98L9MW557GALLG0FQJJORQXOS</inv:movementReference>
+</inv:inventoryLinkingMovementRequest>

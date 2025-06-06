@@ -1,0 +1,25 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>51</FunctionCode>
+		<FunctionalReferenceID>87e83347f4f24a52933f05c02b9130ce</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20250603114739Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>Q01</StatementCode>
+			<StatementDescription>Urgent: Your Declaration or Goods are being queried. Customs authorities have raised a query, or they have a further query for you. You must sign in to view and act on the query message each time in order for your declaration to progress. Step 1. Search online for ‘Upload documents and get messages for the Customs Declaration Service’ on the GOV.UK website. Step 2. Sign in using the Government Gateway account that is linked to your EORI number. Step 3. Select the View messages option.</StatementDescription>
+			<StatementTypeCode>QRY</StatementTypeCode>
+		</AdditionalInformation>
+		<Declaration>
+			<FunctionalReferenceID>U.7849431GTAOS</FunctionalReferenceID>
+			<ID>25GB63BM2TSVKL2AA5</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

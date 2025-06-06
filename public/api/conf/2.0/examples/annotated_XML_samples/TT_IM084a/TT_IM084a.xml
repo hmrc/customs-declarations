@@ -1,10 +1,11 @@
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 				Type D Full Import Declaration for a single Goods item for entry to an approved Customs Warehouse, being re-imported following temporary export under outward processing procedures.
 				The Declaration contains all the data elements required for an H2 Dataset, thus there is no Tariff validation of the Declaration, and CDS will not trigger any duty calculation.
@@ -21,7 +22,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. This is a mandatory field. Trader's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>784943155AZ4GDKP2</FunctionalReferenceID>
+		<FunctionalReferenceID>U.78475761WVJ7</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. This is a mandatory field. IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type. This is a mandatory field. D to represent a pre-lodged, standard declaration.-->
 		<TypeCode>IMD</TypeCode>
@@ -140,6 +141,12 @@
 						<ID>02041000</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
+					<!--DE 6/15: Commodity code - The TARIC code.
+             Two characters for the application of specific Union measures in respect of formalities to be completed at destination. -->
+					<Classification>
+						<ID>10</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass (KG). This is a mandatory field. Entry of 150 indicates 150kg including packaging. -->
 						<GrossMassMeasure>150</GrossMassMeasure>
@@ -188,7 +195,7 @@
 					Note: As this is for a single item declaration, this should be declared at header level. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>22GB34F7Y1O2CX8PT4</ID>
+				<ID>25GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -207,7 +214,7 @@
 						In CDS, the MUCR (MCR) is not required on a sup dec. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>2GB201909014000-20210307</ID>
+				<ID>5GB201909014000-20250307</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

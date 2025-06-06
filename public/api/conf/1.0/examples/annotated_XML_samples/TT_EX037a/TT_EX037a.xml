@@ -1,21 +1,11 @@
-<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
-             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
-	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 			SCENARIO A trader submits an Exports Type D pre-lodged declaration with DUCR & MUCR from GB to ROW using a continental shelf country code.
 			Type D pre-lodged declaration with procedure code 10 40.
@@ -28,13 +18,13 @@
 			Consolidator closes the MUCR by sending a CST message to CDS containing the MUCR
 			to be closed.
 			Loader sends EDL message for MUCR to CDS to notify departure of the consolidation
-			Expected notifications: DMSRCV, DMSRCV2, DMSRES, DMSACC, DMSCLE, DMSEOG. 
+			Expected notifications: DMSRCV, DMSRCV2, DMSRES, DMSACC, DMSCLE, DMSEOG.
 		-->
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			The trader assigned reference to the declaration. -->
-		<FunctionalReferenceID>R4.0.0_CDSP-6436_TC01</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847576HCQBB</FunctionalReferenceID>
 		<!-- <IssueDateTime>
 			<p1:DateTimeString formatCode="304">20230427080000+01</p1:DateTimeString>
 		</IssueDateTime> -->
@@ -46,14 +36,14 @@
 		<!--DE 1/9: Total Number of Items.
 			1 goods item on the declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
-		<!--DE 6/18: Total Packages. 
+		<!--DE 6/18: Total Packages.
 			10 packages on teh declaration. -->
 		<TotalPackageQuantity>10</TotalPackageQuantity>
 		<!--DE 3/20: Representative Identification Number. -->
-        <Agent>
+		<Agent>
 			<ID>GB427168118378</ID>
 			<!--DE 3/21: Representative Status Code.
-				Declares the way in which the declarant is representing the Exporter. 
+				Declares the way in which the declarant is representing the Exporter.
 				In this case, 2 indicates a direct representation (holding written instruction to do so). -->
 			<FunctionCode>2</FunctionCode>
 		</Agent>
@@ -70,19 +60,19 @@
 			<ModeCode>4</ModeCode>
 		</BorderTransportMeans>
 		<Consignment>
-			<!--DE 3/32: Carrier identification no. 
+			<!--DE 3/32: Carrier identification no.
 				This is Security and Safety Data.
 				In this scenario, GB025115100010. -->
 			<Carrier>
 				<ID>GB025115100010</ID>
 			</Carrier>
 			<!--DE 4/2: Transport charges method of payment.
-				S&S Data - D indicating other e.g. direct debit to cash account. 
+				S&S Data - D indicating other e.g. direct debit to cash account.
 				This is Security and Safety Data. -->
 			<Freight>
 				<PaymentMethodCode>D</PaymentMethodCode>
 			</Freight>
-			<!--DE 5/18: Countries of routing codes. 
+			<!--DE 5/18: Countries of routing codes.
 				Routing from GB to IT. -->
 			<Itinerary>
 				<SequenceNumeric>1</SequenceNumeric>
@@ -98,7 +88,7 @@
 		<Declarant>
 			<ID>GB427168118378</ID>
 		</Declarant>
-		<!--DE 5/12 Customs Office of Exit. 
+		<!--DE 5/12 Customs Office of Exit.
 			Indicating London Heathrow Cargo. -->
 		<ExitOffice>
 			<ID>GB000040</ID>
@@ -110,7 +100,7 @@
 		</Exporter>
 		<GoodsShipment>
 			<!--DE 3/9: Consignee Name and Address.
-				Mandatory when DE 3/10 is not completed. 
+				Mandatory when DE 3/10 is not completed.
 				This is Security and Safety Data.  'IT' indicates Italy -->
 			<Consignee>
 				<Name>Packings Import Incorporated</Name>
@@ -133,7 +123,7 @@
 				</DepartureTransportMeans>
 				<!--DE 5/23: Location of Goods. -->
 				<GoodsLocation>
-					<!--DE 5/23: ID to give a unique position of the location. 
+					<!--DE 5/23: ID to give a unique position of the location.
 						LHRLHRANS indicating Heathrow. -->
 					<Name>LHRLHRANS</Name>
 					<!--DE 5/23: Type of Location.
@@ -153,7 +143,7 @@
 						In this scenario, 1. -->
 					<SequenceNumeric>1</SequenceNumeric>
 					<ID>CONU1234567</ID>
-					<!--DE 7/18: Seal number. 
+					<!--DE 7/18: Seal number.
 						This is Security and Safety Data.
 						In this scenario, 333. -->
 					<Seal>
@@ -179,7 +169,7 @@
 				<!--DE 8/6: Statistical Value.
 					Enter the statistical value for the goods item in GBP (£ sterling), irrespective of the currency used in invoice currency. -->
 				<StatisticalValueAmount currencyID="GBP">200</StatisticalValueAmount>
-				<!--DE 8/5 Nature of Transaction. 
+				<!--DE 8/5 Nature of Transaction.
 					Enter, a 2-digit code (second digit is optional).
 					The single digit codes listed in column A of the table provided for under Article 10(2) of Commission Regulation (EC) No 113/2010 shall be used.
 					Member States may also provide for a second digit from the list in column B of that table to be collected.
@@ -187,7 +177,7 @@
 					- First digit (1) represents 'Transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation'.
 					- Second digit (1) represents 'Outright purchase/sale'. -->
 				<TransactionNatureCode>11</TransactionNatureCode>
-                    <Commodity>
+				<Commodity>
 					<!--DE 6/8: Description of the Goods. -->
 					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
 					<Classification>
@@ -195,13 +185,6 @@
 							46021910 to indicate Straw envelopes for bottles. -->
 						<ID>46021910</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
-					</Classification>
-					<Classification>
-						<!--DE 6/17: National Additional Code.
-							VATZ to represent VAT 0% duty rate.
-							Note that when code VATZ is used the requirements for VAT zero-rating in the Export Declaration Completion Guide Appendix 20 and VAT Notice 703 will apply. -->
-						<ID>VATZ</ID>
-						<IdentificationTypeCode>GN</IdentificationTypeCode>
 					</Classification>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass.
@@ -213,13 +196,13 @@
 					</GoodsMeasure>
 				</Commodity>
 				<GovernmentProcedure>
-					<!--DE 1/10: Procedure. 
+					<!--DE 1/10: Procedure.
 						Requested Procedure of 10 40 indicating permanent export of goods in free circulation and home use. -->
 					<CurrentCode>10</CurrentCode>
 					<PreviousCode>40</PreviousCode>
 				</GovernmentProcedure>
 				<GovernmentProcedure>
-					<!--DE 1/11: Additional Procedure Code. 
+					<!--DE 1/11: Additional Procedure Code.
 						000 to indicate no additional procedure. -->
 					<CurrentCode>000</CurrentCode>
 				</GovernmentProcedure>
@@ -247,7 +230,7 @@
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>3GB427168118378-1905S2</ID>
+				<ID>5GB732279299762-ZR1267O</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -256,7 +239,7 @@
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>A:14682019052</ID>
+				<ID>A:81618997625</ID>
 				<TypeCode>MCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

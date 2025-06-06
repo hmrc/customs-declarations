@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
 	<inv:messageCode>EDL</inv:messageCode>
 	<inv:ucrBlock>
-		<inv:ucr>A:14682019052</inv:ucr>
+		<inv:ucr>A:81618997625</inv:ucr>
 		<inv:ucrType>M</inv:ucrType>
 	</inv:ucrBlock>
 	<inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
-	<inv:goodsDepartureDateTime>2023-05-19T11:05:00Z</inv:goodsDepartureDateTime>
-	<inv:movementReference>M11</inv:movementReference>
+	<inv:goodsDepartureDateTime>2025-05-09T10:56:15.015+01:00</inv:goodsDepartureDateTime>
+	<inv:movementReference>JSSMXNTRN5EJ007DAUGJBJN6C</inv:movementReference>
 	<inv:transportDetails>
 		<inv:transportID>11CSCLGLOBE</inv:transportID>
 		<inv:transportMode>1</inv:transportMode>

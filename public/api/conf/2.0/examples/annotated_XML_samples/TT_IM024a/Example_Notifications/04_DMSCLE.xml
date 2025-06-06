@@ -5,19 +5,19 @@
 	<ResponsibleAgencyName/>
 	<AgencyAssignedCustomizationCode/>
 	<AgencyAssignedCustomizationVersionCode/>
-	<Response>
+	<Response xmlns:_1="urn:wco:datamodel:WCO:RES-DMS:2">
 		<FunctionCode>09</FunctionCode>
-		<FunctionalReferenceID>2d2081a21b434bf19a455cee5527e31f</FunctionalReferenceID>
+		<FunctionalReferenceID>2767d34f201f49d699622f68864170ab</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20231201122423Z</DateTimeString>
+			<DateTimeString formatCode="304">20250414081410Z</DateTimeString>
 		</IssueDateTime>
 		<AdditionalInformation>
 			<StatementCode>A2</StatementCode>
 			<StatementTypeCode>AFB</StatementTypeCode>
 		</AdditionalInformation>
 		<Declaration>
-			<FunctionalReferenceID>7849431XMDPI</FunctionalReferenceID>
-			<ID>23GBD9ZNS33AMK3AR3</ID>
+			<FunctionalReferenceID>U.7847893SJSC8</FunctionalReferenceID>
+			<ID>25GB43NYKJVPLU9AR8</ID>
 			<VersionID>1</VersionID>
 		</Declaration>
 	</Response>

@@ -15,22 +15,22 @@
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--Type D pre-lodged declaration with procedure code 1040
-			No control,Inventory linked Type D Maritime declaration with one MUCR and
-			one DUCR, arrived, shut and departed at MUCR level.
-			Goods: Straw envelopes for bottles
-			Data set category: B1
-			Scenario steps:
-			Loader submits EAL message to CDS for the declared MUCR.
-			Consolidator closes the MUCR by sending a CST message to CDS containing the MUCR
-			to be closed.
-			Loader sends EDL message for MUCR to CDS to notify departure of the consolidation
-			Expected notifications: DMSACC, DMSCLE, DMSEOG, DMSRCV, DMSRCV2, DMSRES
-			EMR Message also expected response from ILE, as MUCR and DUCR consolidated in the declaration 
-		-->
+            No control,Inventory linked Type D Maritime declaration with one MUCR and
+            one DUCR, arrived, shut and departed at MUCR level.
+            Goods: Straw envelopes for bottles
+            Data set category: B1
+            Scenario steps:
+            Loader submits EAL message to CDS for the declared MUCR.
+            Consolidator closes the MUCR by sending a CST message to CDS containing the MUCR
+            to be closed.
+            Loader sends EDL message for MUCR to CDS to notify departure of the consolidation
+            Expected notifications: DMSACC, DMSCLE, DMSEOG, DMSRCV, DMSRCV2, DMSRES
+            EMR Message also expected response from ILE, as MUCR and DUCR consolidated in the declaration
+        -->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: The trader assigned reference to the declaration -->
-		<FunctionalReferenceID>7867523JJA4R111</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847576CMQAK</FunctionalReferenceID>
 		<!--DE 1/1: EX to represent an Export declaration.-->
 		<!--DE 1/2: D to represent a Pre lodged declaration.-->
 		<TypeCode>EXD</TypeCode>
@@ -43,10 +43,10 @@
 			<ID>CSCLGLOBE</ID>
 			<IdentificationTypeCode>11</IdentificationTypeCode>
 			<!--DE 7/15: Country code of the nationality of the active means of transport
-	               	crossing the border, in this case GB.-->
+                       crossing the border, in this case GB.-->
 			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
 			<!--	DE 7/4: ModeCode of 1 to represent Maritime/Sea transport as the mode of transport
-					 at the border.-->
+                     at the border.-->
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
 		<Consignment>
@@ -99,8 +99,8 @@
 				<!--DE 7/2: 1 to indicate that the goods are transported in containers-->
 				<ContainerCode>1</ContainerCode>
 				<!--DE 7/7: ID of the means of transport and
-                     	identification type of the means of transport (in this scenario, 11
-                     	indicating name of the seagoing vessel ).-->
+                         identification type of the means of transport (in this scenario, 11
+                         indicating name of the seagoing vessel ).-->
 				<DepartureTransportMeans>
 					<ID>CSCLGLOBE</ID>
 					<IdentificationTypeCode>11</IdentificationTypeCode>
@@ -109,14 +109,14 @@
 					<!--DE 5/23: ID to give a unique position of the location. DVRDVRDVR Indicating Dover. -->
 					<Name>DVRDOVDVR</Name>
 					<!--DE 5/23: Type of Location - A in this scenario to represent
-                        		that it is a designated location.-->
+                                that it is a designated location.-->
 					<TypeCode>A</TypeCode>
 					<Address>
 						<!--DE 5/23: Type of ID of the Location - U in this scenario for
-                        		UN/LOCODE.-->
+                                UN/LOCODE.-->
 						<TypeCode>U</TypeCode>
 						<!--DE 5/23: Country code of the country where the goods may be examined,
-                           	GB in this scenario.-->
+                               GB in this scenario.-->
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
@@ -136,28 +136,28 @@
 				<CountryCode>US</CountryCode>
 			</Destination>
 			<!--DE 5/14: Country code for the country from which the goods were
-                  	originally dispatched, in this case GB.-->
+                      originally dispatched, in this case GB.-->
 			<ExportCountry>
 				<ID>GB</ID>
 			</ExportCountry>
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Sequential number of the goods item.-->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 8/6: Enter the statistical value for the goods item in GBP (£ sterling), 
-					irrespective of the currency used in Invoice Currency. -->
+				<!--DE 8/6: Enter the statistical value for the goods item in GBP (£ sterling),
+                    irrespective of the currency used in Invoice Currency. -->
 				<StatisticalValueAmount currencyID="GBP">200</StatisticalValueAmount>
 				<!--DE 8/5 Nature of Transaction. Enter, a 2-digit code (second digit is optional)
-					The single digit codes listed in column A of the table provided for under Article 10(2) 
-					of Commission Regulation (EC) No 113/2010 shall be used.
-					Member States may also provide for a second digit from the list in column B of that table 
-					to be collected.
-					In this case: 
-					- First digit (1) represents 'Transactions involving actual or intended transfer of ownership 
-					from residents to non-residents against financial or other compensation'
-					- Second digit (1) represents 'Outright purchase/sale' -->
+                    The single digit codes listed in column A of the table provided for under Article 10(2)
+                    of Commission Regulation (EC) No 113/2010 shall be used.
+                    Member States may also provide for a second digit from the list in column B of that table
+                    to be collected.
+                    In this case:
+                    - First digit (1) represents 'Transactions involving actual or intended transfer of ownership
+                    from residents to non-residents against financial or other compensation'
+                    - Second digit (1) represents 'Outright purchase/sale' -->
 				<TransactionNatureCode>11</TransactionNatureCode>
-				<!--DE 2/2: Additional information. 00400 Indicating Self representation i.e. the declarant and 
-					the exporter are the same party. -->
+				<!--DE 2/2: Additional information. 00400 Indicating Self representation i.e. the declarant and
+                    the exporter are the same party. -->
 				<AdditionalInformation>
 					<StatementCode>00400</StatementCode>
 					<StatementDescription>EXPORTER</StatementDescription>
@@ -170,11 +170,6 @@
 						<ID>46021910</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
-					<Classification>
-						<!--DE 6/17: Commodity code – National additional code.-->
-						<ID>VATZ</ID>
-						<IdentificationTypeCode>GN</IdentificationTypeCode>
-					</Classification>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross mass of the goods in kilograms including packaging.-->
 						<GrossMassMeasure>10</GrossMassMeasure>
@@ -184,7 +179,7 @@
 				</Commodity>
 				<GovernmentProcedure>
 					<!--DE 1/10: Requested Procedure of 10 40 indicating
-						Permanent export of goods in free circulation and home use.-->
+                        Permanent export of goods in free circulation and home use.-->
 					<CurrentCode>10</CurrentCode>
 					<PreviousCode>40</PreviousCode>
 				</GovernmentProcedure>
@@ -203,17 +198,17 @@
 				</Packaging>
 			</GovernmentAgencyGoodsItem>
 			<!--DE 2/1: Previous document to show the DUCR assigned to the consignment.
-				This is a mandatory field-->
+                This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>4GB299745147438-TA0SBUJ1</ID>
+				<ID>5GB136894557797-QBKNLRC</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
 			<!--DE 2/1: Previous document to show the MUCR assigned to the consignment -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>GB/2OL3-TMKVK4CDEI3F9PM1</ID>
+				<ID>GB/JOL7-YNP7888UO403UMMD1BHDBRCAL</ID>
 				<TypeCode>MCR</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>

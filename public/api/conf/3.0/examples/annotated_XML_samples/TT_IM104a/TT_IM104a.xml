@@ -1,18 +1,11 @@
-<md:MetaData xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd "
-			 xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
-			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			 xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
-			 xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
-			 xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd "
-				 xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
-				 xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
-				 xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
             SCENARIO
             Import of goods liable to Customs Duty & VAT, with no previous procedure
@@ -22,14 +15,16 @@
             Importer's DAN is being used.
             Goods presented at Wallasea Island on arrival.
 
-            Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'.
+            Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test 
+			purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed 
+			as an 'Other listed location'.
         -->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
             Mandatory.
             Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>R380_NIP493_2107_01</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847767SZ4FE</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
             Mandatory.
             IM to represent an import declaration.-->
@@ -53,7 +48,7 @@
             The agent has standing authority to use this DAN on behalf of the importer in this declaration. -->
 		<AdditionalDocument>
 			<CategoryCode>1</CategoryCode>
-			<ID>1108654</ID>
+			<ID>1108656</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
 		<!--DE 3/21: Representative Status Code.
@@ -68,7 +63,7 @@
             (see DE 2/3 where a document code of C505 has been entered).
             The ID here is the EORI of the CCG authorised party.-->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
@@ -76,7 +71,7 @@
             An authorisation type code of DPO indicates Deferment of Payment authorisation.
             The ID here is the EORI of the DPO authorised party.-->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 7/15: Nationality of active means of transport crossing the border.
@@ -93,7 +88,7 @@
             The UK requires an EORI to be provided for the declarant.
             In this scenario, the same as the EORI of the Agent.-->
 		<Declarant>
-			<ID>GB603202734852</ID>
+			<ID>XI603202734852</ID>
 		</Declarant>
 		<!--DE 3/1: Exporter.
             Mandatory when no recognised ID no. is in DE 3/2
@@ -189,7 +184,7 @@
                     required. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBDPO1108654</ID>
+					<ID>XIDPO1108656</ID>
 					<TypeCode>506</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
@@ -207,7 +202,7 @@
                     (EEC) No 2092/91.-->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
-					<ID>Excluded from Reg 834/2007</ID>
+					<ID>Excluded from Reg 834/2024</ID>
 					<Name>Reason for Waiver</Name>
 					<TypeCode>929</TypeCode>
 				</AdditionalDocument>
@@ -327,7 +322,7 @@
                 Mandatory only when a recognised ID no. is available
                 EORI number of the Importer.-->
 			<Importer>
-				<ID>GB553202734852</ID>
+				<ID>XI553202734852</ID>
 			</Importer>
 			<!--DE 2/1: Simplified Declarations/Previous documents.
                 Previous document to show the DUCR assigned to the consignment.
@@ -335,7 +330,7 @@
                 process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>2GB553202734852-12345</ID>
+				<ID>4GB553202734852-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Simplified Declarations/Previous documents.
@@ -344,7 +339,7 @@
                 header level. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>22GB34F7Y1O2CX8PT4</ID>
+				<ID>24GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

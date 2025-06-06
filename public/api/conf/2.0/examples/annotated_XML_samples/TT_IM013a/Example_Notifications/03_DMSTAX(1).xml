@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>b80538e4517a4f4d991a8e6391aaf3d5</FunctionalReferenceID>
+		<FunctionalReferenceID>25615b262cf6404893c66a95bf651c16</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20240912105835Z</DateTimeString>
+			<DateTimeString formatCode="304">20250513134639Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,8 +19,8 @@
 			<NameCode>4</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>7849431SMLYN</FunctionalReferenceID>
-			<ID>24GBA50T4Y6Y9KYAR4</ID>
+			<FunctionalReferenceID>U.78477674YKGC</FunctionalReferenceID>
+			<ID>25GB59FN8Z0DASEAR0</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
@@ -35,17 +35,6 @@
 							<Payment>
 								<TaxAssessedAmount currencyID="GBP">780.00</TaxAssessedAmount>
 								<PaymentAmount currencyID="GBP">780.00</PaymentAmount>
-							</Payment>
-						</DutyTaxFee>
-						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP">7280.00</AdValoremTaxBaseAmount>
-							<DeductAmount currencyID="GBP">0.00</DeductAmount>
-							<DutyRegimeCode>100</DutyRegimeCode>
-							<TaxRateNumeric>0.00</TaxRateNumeric>
-							<TypeCode>B00</TypeCode>
-							<Payment>
-								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>

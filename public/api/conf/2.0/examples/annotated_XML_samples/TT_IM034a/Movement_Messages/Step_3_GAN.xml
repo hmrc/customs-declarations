@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:inventoryLinkingImportsGoodsArrival xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
-   <inv:entryNumber>24GBA4ZLMDXTKOTAR3</inv:entryNumber>
-   <inv:entryVersionNumber>3</inv:entryVersionNumber>
-   <inv:inventoryConsignmentReference>GB/1234-:3333HB</inv:inventoryConsignmentReference>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<inv:inventoryLinkingImportsGoodsArrival xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
+	<inv:entryNumber>25GB5DRW4L4YAPSAR5</inv:entryNumber>
+	<inv:entryVersionNumber>3</inv:entryVersionNumber>
+	<inv:inventoryConsignmentReference>GB/1234-:3333HB</inv:inventoryConsignmentReference>
 </inv:inventoryLinkingImportsGoodsArrival>

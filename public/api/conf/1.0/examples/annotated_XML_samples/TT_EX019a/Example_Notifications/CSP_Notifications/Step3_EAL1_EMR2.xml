@@ -2,15 +2,15 @@
 	<ns2:messageCode>EMR</ns2:messageCode>
 	<ns2:crc>000</ns2:crc>
 	<ns2:goodsLocation>GBAULHRLHRANS</ns2:goodsLocation>
-	<ns2:masterUCR>GB/L18T-DT52KCHS2UMEGZ6X4VB8YDCAL</ns2:masterUCR>
+	<ns2:masterUCR>GB/4045-O8RLBVT72J2MM9AOIZLRQQCAL</ns2:masterUCR>
 	<ns2:declarationCount>1</ns2:declarationCount>
-	<ns2:goodsArrivalDateTime>2024-12-06T15:45:58.058Z</ns2:goodsArrivalDateTime>
-	<ns2:movementReference>JNATXYV44BU98D1O5PGVRGT6X</ns2:movementReference>
+	<ns2:goodsArrivalDateTime>2025-05-02T10:06:32.032Z</ns2:goodsArrivalDateTime>
+	<ns2:movementReference>VI5SO7IJUTKRY24BNOM88NYIX</ns2:movementReference>
 	<ns2:masterROE>6</ns2:masterROE>
 	<ns2:masterSOE>3</ns2:masterSOE>
 	<ns2:entry>
 		<ns2:ucrBlock>
-			<ns2:ucr>4GB629775681658-LLTYET</ns2:ucr>
+			<ns2:ucr>5GB778233511008-V6W4ZS</ns2:ucr>
 			<ns2:ucrType>D</ns2:ucrType>
 		</ns2:ucrBlock>
 		<ns2:entryStatus>

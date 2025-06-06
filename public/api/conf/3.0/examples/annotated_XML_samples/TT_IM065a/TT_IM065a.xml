@@ -1,4 +1,4 @@
-﻿<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
              xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
@@ -39,7 +39,7 @@
 		<!--Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Traders own reference number – this must be unique to the transaction -->
-		<FunctionalReferenceID>R310_NIP_TC15_2505_04</FunctionalReferenceID>
+		<FunctionalReferenceID>R310_NIP_TC15_1305</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: A to represent a standard frontier declaration-->
 		<TypeCode>IMA</TypeCode>
@@ -173,7 +173,7 @@
 					LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/24.05.2021</ID>
+					<ID>12345/24.04.2025</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -194,6 +194,16 @@
 					<TypeCode>001</TypeCode>
 					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+                    This field is mandatory only where codes required. 
+                    Additional document code of 9WKS indicates Worksheet to support calculation of the customs value and/or revenue calculations. -->
+                <AdditionalDocument>
+                    <CategoryCode>9</CategoryCode>
+                    <ID>GB553202734852</ID>
+                    <Name>See attached Worksheet1247-11032025</Name>
+                    <TypeCode>WKS</TypeCode>
+                    <LPCOExemptionCode>AE</LPCOExemptionCode>
+                </AdditionalDocument>           
 				<!--DE 2/2: Additional information. 
 					A code of 00500 Indicating Self representation by the importer. -->
 				<AdditionalInformation>

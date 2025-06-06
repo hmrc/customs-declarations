@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
@@ -19,7 +20,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>78494313QXW4</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7849431TFOXQ</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: A to represent a standard frontier declaration.-->
 		<TypeCode>IMD</TypeCode>
@@ -333,5 +334,5 @@
 				'0' or '1' must be declared in this data element.-->
 			<SecurityDetailsCode>0</SecurityDetailsCode>
 		</ObligationGuarantee>
-	</Declaration> 
+	</Declaration>
 </md:MetaData>

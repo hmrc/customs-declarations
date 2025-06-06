@@ -1,23 +1,50 @@
 <MetaData>
-    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
-    <WCOTypeName>RES</WCOTypeName>
-    <ResponsibleCountryCode/>
-    <ResponsibleAgencyName/>
-    <AgencyAssignedCustomizationCode/>
-    <AgencyAssignedCustomizationVersionCode/>
-    <Response>
-        <FunctionCode>01</FunctionCode>
-        <FunctionalReferenceID>f743386e7aa8433c9d7f8d47cb141715</FunctionalReferenceID>
-        <IssueDateTime>
-            <DateTimeString formatCode="304">20221109120207Z</DateTimeString>
-        </IssueDateTime>
-        <Declaration>
-            <AcceptanceDateTime>
-                <DateTimeString formatCode="304">20221109120206Z</DateTimeString>
-            </AcceptanceDateTime>
-            <FunctionalReferenceID>CDSP_9928_0911_01</FunctionalReferenceID>
-            <ID>22GBCEJ6F3CNKB4AR0</ID>
-            <VersionID>1</VersionID>
-        </Declaration>
-    </Response>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>01</FunctionCode>
+		<FunctionalReferenceID>91952038951b443c94ec1b55452f60de</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20241206123950Z</DateTimeString>
+		</IssueDateTime>
+		<AdditionalInformation>
+			<StatementCode>smartErrorMsg</StatementCode>
+			<StatementDescription>Value per kilo appears too low for this commodity</StatementDescription>
+			<StatementTypeCode>1</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>07B</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>53A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+		<Error>
+			<Description>Value per kilo appears too low for this commodity</Description>
+			<ValidationCode>CDS13000</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+		</Error>
+		<Declaration>
+			<AcceptanceDateTime>
+				<DateTimeString formatCode="304">20241206123948Z</DateTimeString>
+			</AcceptanceDateTime>
+			<FunctionalReferenceID>U.7847767LKP5O</FunctionalReferenceID>
+			<ID>24GBDIKURAT1FITAR0</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
 </MetaData>

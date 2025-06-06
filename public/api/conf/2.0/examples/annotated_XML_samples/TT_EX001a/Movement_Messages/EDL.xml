@@ -2,12 +2,12 @@
 <inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
 	<inv:messageCode>EDL</inv:messageCode>
 	<inv:ucrBlock>
-		<inv:ucr>GB/2OL3-TMKVK4CDEI3F9PMTYSLDOMCAL</inv:ucr>
+		<inv:ucr>GB/AIGI-SULE72WT1Q4CE5O20WJ7LTCAL</inv:ucr>
 		<inv:ucrType>M</inv:ucrType>
 	</inv:ucrBlock>
 	<inv:goodsLocation>GBAUDVRDOVDVR</inv:goodsLocation>
-	<inv:goodsDepartureDateTime>2024-01-18T15:27:04.004Z</inv:goodsDepartureDateTime>
-	<inv:movementReference>UFLKU6UFZ9T1MRXCDBAQA906F</inv:movementReference>
+	<inv:goodsDepartureDateTime>2025-05-02T13:53:02.002+01:00</inv:goodsDepartureDateTime>
+	<inv:movementReference>NZC0L43JCCE1MJR18TFUHWXMY</inv:movementReference>
 	<inv:transportDetails>
 		<inv:transportID>11CSCLGLOBE</inv:transportID>
 		<inv:transportMode>1</inv:transportMode>

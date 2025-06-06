@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>07</FunctionCode>
-		<FunctionalReferenceID>b190c9419e3545338c38615b985c4ce1</FunctionalReferenceID>
+		<FunctionalReferenceID>9e38a752c4ed45b2b9e6b33815c1a75b</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304" >20241206154652Z</DateTimeString>
+			<DateTimeString formatCode="304">20250502100829Z</DateTimeString>
 		</IssueDateTime>
 		<Amendment>
 			<ChangeReasonCode>16</ChangeReasonCode>
@@ -82,11 +82,11 @@
 			</Pointer>
 		</Amendment>
 		<Declaration>
-			<FunctionalReferenceID>U.7867523TKAHK</FunctionalReferenceID>
-			<ID>24GBDIRIML7QMK8AA0</ID>
+			<FunctionalReferenceID>U.7847323WRBZ3</FunctionalReferenceID>
+			<ID>25GB4THYU0WPGRRAA9</ID>
 			<VersionID>2</VersionID>
 		</Declaration>
-		<Declaration>
+		<Declaration xmlns:_3="urn:wco:datamodel:WCO:DEC-DMS:2">
 			<FunctionCode>9</FunctionCode>
 			<GoodsShipment>
 				<Consignment>

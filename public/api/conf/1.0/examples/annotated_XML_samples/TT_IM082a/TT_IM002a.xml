@@ -13,18 +13,18 @@
             Deferred payment is being used with standing authority - Declarant is authorized to use the Importer's DAN.
             Agent has a Function Code of 2 indicating a direct representative of the importer.
             Agent and Declarant ID have the same EORI values of Declarant/ Agent EORI: GB603202734852.
-            Also results in a FEC challenge, which is detailed in the DMSACC Trader Notification: â€œIncredible value found : Value per kilo appears too high for this commodity.
+            Also results in a FEC challenge, which is detailed in the DMSACC Trader Notification: â€œIncredible value found : Value per kilo appears too high for this commodityâ€.
             Acceptance Date is present on all supplementary declarations, and will match the CLE date listed in 2/1.
 		-->
 		<!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20241209095336+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20250404141856+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number â€“ this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7867523ANB35</FunctionalReferenceID>
+		<FunctionalReferenceID>U.78475764QX0M</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type.
@@ -51,7 +51,7 @@
 			<FunctionCode>2</FunctionCode>
 		</Agent>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarant's records.
+			An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarantâ€™s records.
             The ID is the EORI of the EIDR authorised party. -->
 		<AuthorisationHolder>
 			<ID>GB553202734852</ID>
@@ -127,7 +127,7 @@
                     Note: Unlike CHIEF this must now be completed. -->
 				<ContainerCode>1</ContainerCode>
 				<!--DE 7/9:  Identity of means of transport on arrival.
-					Example number representing IMO ship identification number: ˜10, and 5 digits for the identification number: ˜12345. -->
+					Example number representing IMO ship identification number: â€˜10â€™, and 5 digits for the identification number: â€˜12345â€™. -->
 				<ArrivalTransportMeans>
 					<ID>12345</ID>
 					<IdentificationTypeCode>10</IdentificationTypeCode>
@@ -177,7 +177,7 @@
 				<SequenceNumeric>1</SequenceNumeric>
 				<AdditionalDocument>
 					<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-						A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant's records. -->
+						A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantâ€™s records. -->
 					<CategoryCode>C</CategoryCode>
 					<ID>GBEIR553202734852I20190613093448</ID>
 					<TypeCode>514</TypeCode>
@@ -257,7 +257,7 @@
 				</AdditionalDocument>
 				<Commodity>
 					<!--DE 6/8: Goods Description.
-						Description of the goods specific enough to enable classification without repeating the CN code description in the Tariff. -->
+						Description of the goods specific enough to enable classification â€“ without repeating the CN code description in the Tariff. -->
 					<Description>Cocoa Butter-fat and oil</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - combined nomenclature code.
@@ -271,7 +271,7 @@
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!-- DE 6/17: Commodity Code National Additional Codes.
+						<!-- DE 6/17: Commodity Code â€“ National Additional Codes.
                            VATZ to represent VAT 0% duty rate. -->
 						<ID>VATZ</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
@@ -323,7 +323,7 @@
 				</GovernmentProcedure>
 				<!--DE 5/15: Country of Origin.
 					TypeCode of 1 to represent non-preferential origin.
-					Where preference in D.E. 4/17 begins with ˜1, this must be completed .
+					Where preference in D.E. 4/17 begins with â€˜1â€™, this must be completed .
 					CountryCode contains the code for the country from which the goods originated,
 					in this case Brazil.
 					It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/15
@@ -345,7 +345,7 @@
 				</Packaging>
 				<!--DE 4/13: Valuation indicator.
 					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-					The code comprises four digits, each of which being either a ˜0 or a ˜1:
+					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
 					 - First digit: 0 = there is no price influence as a result of a
 					Party Relationship between the buyer and seller.
 					 - Second digit: 0 = there are no restrictions as to the disposal
@@ -380,7 +380,7 @@
 				Note that this is item 6 from the EIDR record entry. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20241209</ID>
+				<ID>20250404</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>6</LineNumeric>
 			</PreviousDocument>

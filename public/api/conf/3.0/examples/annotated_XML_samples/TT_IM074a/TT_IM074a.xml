@@ -7,19 +7,16 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--SCENARIO
-
             SDP Authorised Trader submitting a Type C simplified declaration importing goods from ROW to NI.
             Tariff P&R measures are enforced on a goods item (Live horses) that requires a licence (C400).
             Importer EORI: GB575456994000.
             Declarant EORI: GB603202734852.
-
             The Trader declares:
              - 'NIIMP' in D.E. 2/2 at Item level, as the goods are being imported from ROW to NI and are deemed to be 'At Risk'.
              - Procedure Code 40 00 entered in D.E. 1/10
              - A Document Code of C400 in D.E. 2/3 to satify an Import Control CITES measure, as mandated by EU Tariff.
              - Supplementary Units (p/st) entered in D.E. 6/2
              - A valid commodity code for importing Live Horses is entered within D.E. 6/14 and D.E. 6/15
-
             The declaration will be successfully accepted and cleared.
             As per BAU processing for Type C declarations there will be no tax calculated.
             CDS will generate trader notifications.
@@ -27,7 +24,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
             Traders own reference number - this must be unique to the transaction-->
-		<FunctionalReferenceID>U.78675235J5FR</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523S0UB3</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
             IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -134,7 +131,7 @@
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					C635 indicates CITES Label for Scientific Material. Commission Reg 160/2017 on the protection of species of wild fauna and flora by regulating 						trade therein. Please note that this code is not currently mandated for CITES measures.
+                    C635 indicates CITES Label for Scientific Material. Commission Reg 160/2017 on the protection of species of wild fauna and flora by regulating 						trade therein. Please note that this code is not currently mandated for CITES measures.
                     C400 must always be declared in addition to C635. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
@@ -211,10 +208,10 @@
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass
                             Mass of the goods in kilograms including packaging. -->
-						<GrossMassMeasure>2300</GrossMassMeasure>
+						<GrossMassMeasure>2400</GrossMassMeasure>
 						<!--DE 6/1: Net Mass.
                             Mass of the goods in kilograms without any packaging. -->
-						<NetNetWeightMeasure>1800</NetNetWeightMeasure>
+						<NetNetWeightMeasure>2000</NetNetWeightMeasure>
 						<!--DE 6/2: Supplementary Units.
                         Quantity of the goods in the unit as required by Customs for tariff, statistical or fiscal purposes)-->
 						<TariffQuantity>4</TariffQuantity>

@@ -1,12 +1,12 @@
 <p:DeclarationVersionResponse xsi:schemaLocation="http://gov.uk/customs/retrieveDeclarationVersion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p4="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:p3="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:p2="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:p="http://gov.uk/customs/retrieveDeclarationVersion">
   <p:DeclarationVersionDetails>
     <p:Declaration>
-      <p:ID>24GBDMP8SXTZPGSAR4</p:ID>
+      <p:ID>25GB3POHWIVZSF9AR0</p:ID>
       <p:VersionID>3</p:VersionID>
       <p:CreatedDateTime>
-        <p:DateTimeString formatCode="304">20241209095410Z</p:DateTimeString>
+        <p:DateTimeString formatCode="304">20250404131925Z</p:DateTimeString>
       </p:CreatedDateTime>
-      <p:LRN>U.7867523ANB35</p:LRN>
+      <p:LRN>U.78475764QX0M</p:LRN>
     </p:Declaration>
     <p2:Declaration>
       <p2:FunctionCode>9</p2:FunctionCode>
@@ -31,12 +31,12 @@
   </p:DeclarationVersionDetails>
   <p:DeclarationVersionDetails>
     <p:Declaration>
-      <p:ID>24GBDMP8SXTZPGSAR4</p:ID>
+      <p:ID>25GB3POHWIVZSF9AR0</p:ID>
       <p:VersionID>2</p:VersionID>
       <p:CreatedDateTime>
-        <p:DateTimeString formatCode="304">20241209095403Z</p:DateTimeString>
+        <p:DateTimeString formatCode="304">20250404131920Z</p:DateTimeString>
       </p:CreatedDateTime>
-      <p:LRN>U.7867523ANB35</p:LRN>
+      <p:LRN>U.78475764QX0M</p:LRN>
     </p:Declaration>
     <p2:Declaration>
       <p2:FunctionCode>9</p2:FunctionCode>
@@ -61,12 +61,12 @@
   </p:DeclarationVersionDetails>
   <p:DeclarationVersionDetails>
     <p:Declaration>
-      <p:ID>24GBDMP8SXTZPGSAR4</p:ID>
+      <p:ID>25GB3POHWIVZSF9AR0</p:ID>
       <p:VersionID>1</p:VersionID>
       <p:CreatedDateTime>
-        <p:DateTimeString formatCode="304">20241209095347Z</p:DateTimeString>
+        <p:DateTimeString formatCode="304">20250404131907Z</p:DateTimeString>
       </p:CreatedDateTime>
-      <p:LRN>U.7867523ANB35</p:LRN>
+      <p:LRN>U.78475764QX0M</p:LRN>
     </p:Declaration>
     <p2:Declaration>
       <p2:FunctionCode>9</p2:FunctionCode>

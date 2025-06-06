@@ -7,43 +7,16 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>01</FunctionCode>
-		<FunctionalReferenceID>e25f27b8549040398d6dd6805e061a53</FunctionalReferenceID>
+		<FunctionalReferenceID>213cfd5d7689425aaf5f2ce43b164bfc</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20230303132855Z</DateTimeString>
+			<DateTimeString formatCode="304">20250318125742Z</DateTimeString>
 		</IssueDateTime>
-		<AdditionalInformation>
-			<StatementCode>smartErrorMsg</StatementCode>
-			<StatementDescription>Value per kilo appears too high for this commodity</StatementDescription>
-			<StatementTypeCode>1</StatementTypeCode>
-			<Pointer>
-				<SequenceNumeric>1</SequenceNumeric>
-				<DocumentSectionCode>07B</DocumentSectionCode>
-			</Pointer>
-			<Pointer>
-				<SequenceNumeric>1</SequenceNumeric>
-				<DocumentSectionCode>53A</DocumentSectionCode>
-			</Pointer>
-		</AdditionalInformation>
-		<Error>
-			<Description>Value per kilo appears too high for this commodity</Description>
-			<ValidationCode>CDS13000</ValidationCode>
-			<Pointer>
-				<DocumentSectionCode>42A</DocumentSectionCode>
-			</Pointer>
-			<Pointer>
-				<DocumentSectionCode>67A</DocumentSectionCode>
-			</Pointer>
-			<Pointer>
-				<SequenceNumeric>1</SequenceNumeric>
-				<DocumentSectionCode>68A</DocumentSectionCode>
-			</Pointer>
-		</Error>
 		<Declaration>
 			<AcceptanceDateTime>
-				<DateTimeString formatCode="304">20230303132854Z</DateTimeString>
+				<DateTimeString formatCode="304" >20250318125740Z</DateTimeString>
 			</AcceptanceDateTime>
-			<FunctionalReferenceID>IM50a_v1.3_0203_SA6</FunctionalReferenceID>
-			<ID>23GB2FYR8CV8GSJAR6</ID>
+			<FunctionalReferenceID>U.78675239HLAR</FunctionalReferenceID>
+			<ID>25GB31D8UKSRXWYAR2</ID>
 			<VersionID>1</VersionID>
 		</Declaration>
 	</Response>

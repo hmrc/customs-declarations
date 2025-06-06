@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 
             RoW to NI - NIIMP "NOT AT RISK" CPTPP Measures APPLIED - CPTPP Measures Processed
 
-            A Trader submits a Type A (H1) standard declaration "Not At Risk" importing goods 
-			from ROW to NI declaring Document Code 9081 and Proof of Origin Doc Code 9U01 with 
+            A Trader submits a Type A (H1) standard declaration "Not At Risk" importing goods
+			from ROW to NI declaring Document Code 9081 and Proof of Origin Doc Code 9U01 with
 			a 300 Series Preference Code in the declaration to apply CPTPP preferences.
 
 			The trader enters the following information on the declaration:
@@ -28,7 +28,7 @@
 		<!-- Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: LRN. Mandatory field. Traders own reference number this must be unique to the transaction -->
-		<FunctionalReferenceID>U.7849431R10H4</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847323SIYWE</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. Mandatory field. IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type. Mandatory field. A to represent a supplementary pre-lodged declaration.-->
 		<TypeCode>IMA</TypeCode>
@@ -199,6 +199,7 @@
 					<CategoryCode>9</CategoryCode>
 					<ID>123456</ID>
 					<TypeCode>081</TypeCode>
+					<LPCOExemptionCode>JP</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     9U01 indicates Statement on Origin.

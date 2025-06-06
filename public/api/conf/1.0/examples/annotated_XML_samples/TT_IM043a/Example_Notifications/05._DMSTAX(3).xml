@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>fba456acf72f45baa3b91a55e3aefbd4</FunctionalReferenceID>
+		<FunctionalReferenceID>5fca5a0b3f804289818828c8576ea506</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20240624150930+01</DateTimeString>
+			<DateTimeString formatCode="304">20250513112425Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,24 +19,13 @@
 			<NameCode>4</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>DDR_149945166776</FunctionalReferenceID>
-			<ID>24GB6YW093JZZWKAR3</ID>
+			<FunctionalReferenceID>U.7867523DKIEK</FunctionalReferenceID>
+			<ID>25GB59AE4HKIDKIAR3</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
 					<SequenceNumeric>1</SequenceNumeric>
 					<Commodity>
-						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP">5950.00</AdValoremTaxBaseAmount>
-							<DeductAmount currencyID="GBP">0.00</DeductAmount>
-							<DutyRegimeCode>120</DutyRegimeCode>
-							<TaxRateNumeric>6.00</TaxRateNumeric>
-							<TypeCode>A00</TypeCode>
-							<Payment>
-								<TaxAssessedAmount currencyID="GBP">357.00</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP">357.00</PaymentAmount>
-							</Payment>
-						</DutyTaxFee>
 						<DutyTaxFee>
 							<AdValoremTaxBaseAmount currencyID="GBP">6307.00</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
@@ -46,6 +35,17 @@
 							<Payment>
 								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
 								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<AdValoremTaxBaseAmount currencyID="GBP">5950.00</AdValoremTaxBaseAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
+							<DutyRegimeCode>120</DutyRegimeCode>
+							<TaxRateNumeric>6.00</TaxRateNumeric>
+							<TypeCode>A00</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">357.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">357.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 					</Commodity>

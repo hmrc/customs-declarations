@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <inv:inventoryLinkingConsolidationRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
 	<inv:messageCode>CST</inv:messageCode>
-	<inv:masterUCR>GB/2OL3-TMKVK4CDEI3F9PMTYSLDOMCAL</inv:masterUCR>
+	<inv:masterUCR>GB/AIGI-SULE72WT1Q4CE5O20WJ7LTCAL</inv:masterUCR>
 </inv:inventoryLinkingConsolidationRequest>

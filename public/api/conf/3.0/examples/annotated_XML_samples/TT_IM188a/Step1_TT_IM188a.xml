@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
-			A Trader submits a Type A (H1) standard declaration importing goods from ROW to GB
-			declaring Document Code 9081 in DE 2/3  and Proof of Origin Doc Codes 9U03 in the 
-			declaration to apply CPTPP preferences.
-			
-			A 3XX series Pref Code and a Country of Preferential Origin are not declared.
+            A Trader submits a Type A (H1) standard declaration importing goods from ROW to GB
+            declaring Document Code 9081 in DE 2/3  and Proof of Origin Doc Codes 9U03 in the
+            declaration to apply CPTPP preferences.
 
-			The trader enters the following information on the declaration:
+            A 3XX series Pref Code and a Country of Preferential Origin are not declared.
 
-			- DE 1/1: IM
-			- DE 1/2: A
-			- DE 2/3: 9081, 9U03 declared at item level
-			- DE 4/17: 100 Preference Code
-			- DE 6/14: 0201100021  Commodity Code 
+            The trader enters the following information on the declaration:
+
+            - DE 1/1: IM
+            - DE 1/2: A
+            - DE 2/3: 9081, 9U03 declared at item level
+            - DE 4/17: 100 Preference Code
+            - DE 6/14: 0201100021  Commodity Code
 
 
         -->
 		<!-- Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: LRN. Mandatory field. Traders own reference number this must be unique to the transaction -->
-		<FunctionalReferenceID>U.7849431WMDB2</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523TJ4LM</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. Mandatory field. IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type. Mandatory field. A to represent a supplementary pre-lodged declaration.-->
 		<TypeCode>IMA</TypeCode>
@@ -105,9 +105,9 @@
 				</ArrivalTransportMeans>
 				<GoodsLocation>
 					<!--DE 5/23: Location of Goods - Identification of location.
-						Mandatory.
-						The location code for Wallasea Island, a non-inventory linked location.
-						Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'. -->
+                        Mandatory.
+                        The location code for Wallasea Island, a non-inventory linked location.
+                        Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'. -->
 					<Name>WLALONBTW</Name>
 					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
 					<TypeCode>A</TypeCode>
@@ -183,6 +183,7 @@
 					<CategoryCode>9</CategoryCode>
 					<ID>123456</ID>
 					<TypeCode>081</TypeCode>
+					<LPCOExemptionCode>JP</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     9U01 indicates Statement on Origin.
@@ -231,16 +232,16 @@
 					</Classification>
 					<DutyTaxFee>
 						<!--DE 4/17: Preference.
-							Mandatory.
-							100 represents no preference being claimed.-->
+                            Mandatory.
+                            100 represents no preference being claimed.-->
 						<DutyRegimeCode>100</DutyRegimeCode>
 						<!--DE 4/3: Tax Type.
-							A00 represents UK Customs Duty -->
+                            A00 represents UK Customs Duty -->
 						<TypeCode>A00</TypeCode>
 						<Payment>
 							<!--DE 4/8: Method of Payment.
-								Mandatory.
-								MethodCode of E to indicate deferment used for import. -->
+                                Mandatory.
+                                MethodCode of E to indicate deferment used for import. -->
 							<MethodCode>E</MethodCode>
 						</Payment>
 					</DutyTaxFee>

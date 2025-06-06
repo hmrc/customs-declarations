@@ -2,9 +2,9 @@
 <inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
 	<inv:messageCode>EAA</inv:messageCode>
 	<inv:ucrBlock>
-		<inv:ucr>GB/ZD72-831204DTVZ43QTC7AWSQ2OCAL</inv:ucr>
+		<inv:ucr>GB/2589-3TJA90LOTYMI19Q0M5J8DCCAL</inv:ucr>
 		<inv:ucrType>M</inv:ucrType>
 	</inv:ucrBlock>
 	<inv:goodsLocation>GBAUBELBELBEL</inv:goodsLocation>
-	<inv:movementReference>A05B9BVUFBISGHCXPI1Y25N56</inv:movementReference>
+	<inv:movementReference>Z0A05SBRLTKWIC2A7UVJ82KTY</inv:movementReference>
 </inv:inventoryLinkingMovementRequest>

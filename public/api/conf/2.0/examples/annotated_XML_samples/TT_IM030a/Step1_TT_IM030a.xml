@@ -1,13 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 			***
-			Note that this scenario is currently not working and will be fixed for a future release. 
+			Note that this declaration is currently rejected due to a preference code mismatch following the implementation of new dual Tariff validation.
+			Work to restore the sample to full use is ongoing.
 			***
 
 			SCENARIO
@@ -31,12 +33,12 @@
 		-->
 		<!-- Acceptance Date is present on all supplementary declarations, and will match the CLE date listed in 2/1.-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20231130134333+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20250416112427+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!-- Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. Mandatory field. Traders own reference number this must be unique to the transaction -->
-		<FunctionalReferenceID>78494319U54L</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847893UKH0D</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. Mandatory field. IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type. Mandatory field. A to represent an arrived frontier standard declaration.-->
 		<TypeCode>IMY</TypeCode>
@@ -54,7 +56,7 @@
 		</AdditionalDocument>
 		<!--DE 3/39: Holder of the authorisation ID number.
 			Mandatory if authorisation is required to declare goods to procedure.
-			Type code of AEOC indicates this is the EORI number of the Authorised Economic Operator â€”
+			Type code of AEOC indicates this is the EORI number of the Authorised Economic Operator
 			Customs simplifications. -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
@@ -82,7 +84,7 @@
 		<BorderTransportMeans>
 			<!--DE 7/15: Nationality of active means of transport crossing the border. Mandatory field unless postal, rail or fixed energy installation.
 						RegistrationNationalityCode: UA represents Ukraine. -->
-			<RegistrationNationalityCode>UA</RegistrationNationalityCode>
+			<RegistrationNationalityCode>CL</RegistrationNationalityCode>
 			<!--DE 7/4: Mode of transport at the border. Mandatory field. ModeCode of 1 to represent Maritime Sea transport. -->
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
@@ -92,10 +94,10 @@
 		</Declarant>
 		<!--DE 3/1: Exporter. This data element can be declared at a header or item level, depending on the scenario. Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2.  -->
 		<Exporter>
-			<Name>Ukraine Vegetable Company</Name>
+			<Name>Chile Vegetable Company</Name>
 			<Address>
 				<CityName>Odesa</CityName>
-				<CountryCode>UA</CountryCode>
+				<CountryCode>CL</CountryCode>
 				<Line>10 Port Road</Line>
 				<PostcodeID>U41 2RO</PostcodeID>
 			</Address>
@@ -189,7 +191,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory if the codes are required.
 					A document code of C505 indicates CGU - Authorisation for the provision of a customs comprehensive guarantee, including possible reduction or waiver. In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of CC), and therefore the ID also indicates that a waiver is being used.
-					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code â€“ CCG not required. -->
+					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code Ã¢â‚¬â€œ CCG not required. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>XICGU55320273485220231019133850</ID>
@@ -210,7 +212,7 @@
 					This field is mandatory if the codes are required.
 					A document code of C644 indicates Certificate of inspection for organic products.
 					Name: A free text description of the Reason where required by the Document Status Code.
-					LPCOExemptionCode: GE indicates document with the goods â€“ exhausted by (or only applies to) this entry. -->
+					LPCOExemptionCode: GE indicates document with the goods Ã¢â‚¬â€œ exhausted by (or only applies to) this entry. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>0054039</ID>
@@ -242,13 +244,13 @@
 					<TypeCode>512</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					This field is mandatory if the codes are required.
-					9017 indicates goods exported from an area of Ukraine under the control of the Ukrainian government. -->
+					A document code of N851 indicates Phytosanitary certificate.
+					Document status code of AP indicates document attached - part use (applies to this and other entries) (document returned to the trader). -->
 				<AdditionalDocument>
-					<CategoryCode>9</CategoryCode>
-					<ID>From Government Controlled Area</ID>
-					<Name>From Government Controlled Area</Name>
-					<TypeCode>017</TypeCode>
+					<CategoryCode>N</CategoryCode>
+					<ID>GBPHC012345</ID>
+					<TypeCode>851</TypeCode>
+					<LPCOExemptionCode>AP</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory if the codes are required.
@@ -279,7 +281,7 @@
 					<!--DE 6/8: Description of goods.
 						Mandatory item.
 						Description of the goods specific enough to enable classification - without repeating the CN code description in the Tariff. -->
-					<Description>Fresh courgettes from Ukraine</Description>
+					<Description>Fresh courgettes from Chile</Description>
 					<!--DE 6/14: Commodity code - combined nomenclature code. Mandatory field. -->
 					<Classification>
 						<ID>07099310</ID>
@@ -311,9 +313,9 @@
 					</DutyTaxFee>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass (KG). This data element can be declared at a header or item level, depending on the scenario. Mandatory field. Entry of 15010 indicates 15010kg including packaging. -->
-						<GrossMassMeasure>15010</GrossMassMeasure>
-						<!--DE 6/1: Net Mass (KG). Mandatory field. Entry of 15000 indicates 15000kg excluding packaging. -->
-						<NetNetWeightMeasure>15000</NetNetWeightMeasure>
+						<GrossMassMeasure>11800</GrossMassMeasure>
+						<!--DE 6/1: Net Mass (KG). Mandatory field. Entry of 11600 indicates 11600kg excluding packaging. -->
+						<NetNetWeightMeasure>11600</NetNetWeightMeasure>
 					</GoodsMeasure>
 					<!--DE 4/14:  Item price amount. Mandatory field. The invoice was issued with of a value of 6500 and the currency was in GBP. -->
 					<InvoiceLine>
@@ -326,7 +328,7 @@
 				</CustomsValuation>
 				<ExportCountry>
 					<!--DE 5/14: Country of Dispatch/export code. This data element can be declared at a header or item level, depending on the scenario. Mandatory field. Dispatching Third country is Ukraine. -->
-					<ID>UA</ID>
+					<ID>CL</ID>
 				</ExportCountry>
 				<!--DE 1/10: Procedure. Mandatory field.
 							CurrentCode: 40 indicating entry for free circulation and home use of non-union goods.
@@ -343,7 +345,7 @@
 							TypeCode: 2 indicates the Country of Preferential Origin.
 							CountryCode: UA represents Ukraine, the country from which the goods originated -->
 				<Origin>
-					<CountryCode>UA</CountryCode>
+					<CountryCode>CL</CountryCode>
 					<TypeCode>2</TypeCode>
 				</Origin>
 				<!--DE 6/11: Shipping marks on the packages.-->
@@ -376,7 +378,7 @@
 			<Importer>
 				<ID>XI553202734852</ID>
 			</Importer>
-			<!--DE 2/1: Simplified Declarations/Previous documents. This data element can be declared at a header or item level - as this is for a single item declaration, this should be declared at header level. Mandatory field. This identifies the class or kind of document being declared. The previous document, represented by â€˜Zâ€™
+			<!--DE 2/1: Simplified Declarations/Previous documents. This data element can be declared at a header or item level - as this is for a single item declaration, this should be declared at header level. Mandatory field. This identifies the class or kind of document being declared. The previous document, represented by Ã¢â‚¬ËœZÃ¢â‚¬â„¢
 						ID: Mandatory field. This represents the data needed to recognise and identify the document.
 						TypeCode: Mandatory field. This serves to identify the type of document: 355 indicates ENS - Entry Summary Declaration.
 						LineNumeric: Optional field. This is the goods item number. It is used to identify which item of the previous document is being referred to. Where the previous document referred to or contained only a single goods item, this component may be left blank. -->
@@ -392,7 +394,7 @@
 							In CDS, the MUCR (MCR) is not required on a sup dec.-->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>3XI553202734852-24082022</ID>
+				<ID>5XI553202734852-24082022</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 4/1: Mandatory as method 1 is being used in DE 4/16.

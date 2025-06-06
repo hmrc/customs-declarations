@@ -1,3 +1,172 @@
 <p:DeclarationFullResponse xsi:schemaLocation="http://gov.uk/customs/FullDeclarationDataRetrievalService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p4="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:p3="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:p2="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Response_DS:DMS:2" xmlns:p="http://gov.uk/customs/FullDeclarationDataRetrievalService">
-      <p:FullDeclarationDataDetails><p:HighLevelSummaryDetails><p:MRN>23GBDECWHDH8HM8AA1</p:MRN><p:LRN>DDR_391716953834</p:LRN><p:DUCRandPartID>3XI427168118378-DDR566397</p:DUCRandPartID><p:VersionID>2</p:VersionID><p:GoodsLocationCode>GBAUBELBELBEL</p:GoodsLocationCode><p:CreatedDateTime><p:DateTimeString formatCode="304">20231204135000Z</p:DateTimeString></p:CreatedDateTime><p:AcceptanceDateTime><p:DateTimeString formatCode="304">20231204134959Z</p:DateTimeString></p:AcceptanceDateTime><p:P2PDateTime><p:DateTimeString formatCode="304">20231204135001Z</p:DateTimeString></p:P2PDateTime><p:FinalisedDateTime><p:DateTimeString formatCode="304">20231204135214Z</p:DateTimeString></p:FinalisedDateTime></p:HighLevelSummaryDetails><p:GeneratedConsignmentDetails><p:ROE>6</p:ROE><p:StatusOfEntry-ICS>22</p:StatusOfEntry-ICS><p:GoodsArrivalDateTime><p:DateTimeString formatCode="304">20231204135000Z</p:DateTimeString></p:GoodsArrivalDateTime><p:DeclaredCustomsExitOffice>GB000142</p:DeclaredCustomsExitOffice><p:ActualCustomsExitOffice>GBAUBELB</p:ActualCustomsExitOffice><p:SubmitterID>GB150454489082</p:SubmitterID><p:StatisticalValue currencyID="GBP">60000.0</p:StatisticalValue><p:ExitResult>A1</p:ExitResult><p:DateOfExit><p:DateTimeString formatCode="304">20231204135214Z</p:DateTimeString></p:DateOfExit></p:GeneratedConsignmentDetails><p:FullDeclarationObject><p:Declaration><p:AcceptanceDateTime><p:DateTimeString formatCode="304">20231204134959Z</p:DateTimeString></p:AcceptanceDateTime><p:FunctionCode>9</p:FunctionCode><p:FunctionalReferenceID>DDR_391716953834</p:FunctionalReferenceID><p:TypeCode>EXA</p:TypeCode><p:ProcedureCategory>B1</p:ProcedureCategory><p:GoodsItemQuantity>1</p:GoodsItemQuantity><p:TotalPackageQuantity>10</p:TotalPackageQuantity><p:BorderTransportMeans><p:ID>4029072022</p:ID><p:IdentificationTypeCode>11</p:IdentificationTypeCode><p:RegistrationNationalityCode>GB</p:RegistrationNationalityCode><p:ModeCode>1</p:ModeCode></p:BorderTransportMeans><p:Consignment><p:Carrier><p:ID>XI427168118378</p:ID></p:Carrier><p:ConsignmentItem><p:SequenceNumeric>1</p:SequenceNumeric></p:ConsignmentItem><p:Freight><p:PaymentMethodCode>D</p:PaymentMethodCode></p:Freight><p:Itinerary><p:SequenceNumeric>1</p:SequenceNumeric><p:RoutingCountryCode>GB</p:RoutingCountryCode></p:Itinerary><p:Itinerary><p:SequenceNumeric>2</p:SequenceNumeric><p:RoutingCountryCode>JP</p:RoutingCountryCode></p:Itinerary></p:Consignment><p:Declarant><p:ID>XI427168118378</p:ID><p:Address/></p:Declarant><p:ExitOffice><p:ID>GB000142</p:ID></p:ExitOffice><p:Exporter><p:ID>XI427168118378</p:ID><p:Address/></p:Exporter><p:GoodsShipment><p:Consignee><p:Name>Packings Import Incorporated</p:Name><p:Address><p:CityName>Tokyo</p:CityName><p:CountryCode>JP</p:CountryCode><p:Line>1 Bags Avenue</p:Line><p:PostcodeID>JP1 234</p:PostcodeID></p:Address></p:Consignee><p:Consignment><p:ContainerCode>1</p:ContainerCode><p:DepartureTransportMeans><p:ID>CSCLGL123</p:ID><p:IdentificationTypeCode>10</p:IdentificationTypeCode></p:DepartureTransportMeans><p:GoodsLocation><p:Name>BELBELBEL</p:Name><p:TypeCode>A</p:TypeCode><p:Address><p:TypeCode>U</p:TypeCode><p:CountryCode>GB</p:CountryCode></p:Address></p:GoodsLocation><p:TransportEquipment><p:SequenceNumeric>0</p:SequenceNumeric><p:ID>Container123</p:ID><p:Seal><p:SequenceNumeric>1</p:SequenceNumeric><p:ID>12345</p:ID></p:Seal></p:TransportEquipment></p:Consignment><p:Destination><p:CountryCode>JP</p:CountryCode></p:Destination><p:ExportCountry><p:ID>GB</p:ID></p:ExportCountry><p:GovernmentAgencyGoodsItem><p:SequenceNumeric>1</p:SequenceNumeric><p:StatisticalValueAmount currencyID="GBP">60000.0</p:StatisticalValueAmount><p:TransactionNatureCode>99</p:TransactionNatureCode><p:AdditionalInformation><p:SequenceNumeric>1</p:SequenceNumeric><p:StatementCode>NIEXP</p:StatementCode></p:AdditionalInformation><p:AdditionalInformation><p:SequenceNumeric>2</p:SequenceNumeric><p:StatementCode>00400</p:StatementCode><p:StatementDescription>EXPORTER</p:StatementDescription></p:AdditionalInformation><p:Commodity><p:Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</p:Description><p:Classification><p:ID>46021910</p:ID><p:IdentificationTypeCode>TSP</p:IdentificationTypeCode></p:Classification><p:GoodsMeasure><p:GrossMassMeasure>1000.0</p:GrossMassMeasure><p:NetNetWeightMeasure>500.0</p:NetNetWeightMeasure></p:GoodsMeasure></p:Commodity><p:GovernmentProcedure><p:CurrentCode>23</p:CurrentCode><p:PreviousCode>00</p:PreviousCode></p:GovernmentProcedure><p:GovernmentProcedure><p:CurrentCode>000</p:CurrentCode></p:GovernmentProcedure><p:Packaging><p:SequenceNumeric>1</p:SequenceNumeric><p:MarksNumbersID>2379261ETT</p:MarksNumbersID><p:QuantityQuantity>1000</p:QuantityQuantity><p:TypeCode>PK</p:TypeCode></p:Packaging></p:GovernmentAgencyGoodsItem><p:PreviousDocument><p:SequenceNumeric>1</p:SequenceNumeric><p:CategoryCode>Z</p:CategoryCode><p:ID>3XI427168118378-DDR566397</p:ID><p:TypeCode>DCR</p:TypeCode><p:LineNumeric>1</p:LineNumeric></p:PreviousDocument></p:GoodsShipment></p:Declaration></p:FullDeclarationObject></p:FullDeclarationDataDetails>
-    </p:DeclarationFullResponse>
+	<p:FullDeclarationDataDetails>
+		<p:HighLevelSummaryDetails>
+			<p:MRN>25GB597JUPYPWJBAA7</p:MRN>
+			<p:LRN>U.7847767AOPKN</p:LRN>
+			<p:DUCRandPartID>5XI427168118378-LNWYEYHC9</p:DUCRandPartID>
+			<p:VersionID>2</p:VersionID>
+			<p:GoodsLocationCode>GBAUBELBELBEL</p:GoodsLocationCode>
+			<p:CreatedDateTime>
+				<p:DateTimeString formatCode="304">20250513100152Z</p:DateTimeString>
+			</p:CreatedDateTime>
+			<p:AcceptanceDateTime>
+				<p:DateTimeString formatCode="304">20250513100151Z</p:DateTimeString>
+			</p:AcceptanceDateTime>
+			<p:P2PDateTime>
+				<p:DateTimeString formatCode="304">20250513100154Z</p:DateTimeString>
+			</p:P2PDateTime>
+			<p:FinalisedDateTime>
+				<p:DateTimeString formatCode="304">20250513100323Z</p:DateTimeString>
+			</p:FinalisedDateTime>
+		</p:HighLevelSummaryDetails>
+		<p:GeneratedConsignmentDetails>
+			<p:ROE>6</p:ROE>
+			<p:StatusOfEntry-ICS>22</p:StatusOfEntry-ICS>
+			<p:GoodsArrivalDateTime>
+				<p:DateTimeString formatCode="304">20250513100152Z</p:DateTimeString>
+			</p:GoodsArrivalDateTime>
+			<p:DeclaredCustomsExitOffice>GB000142</p:DeclaredCustomsExitOffice>
+			<p:ActualCustomsExitOffice>GBAUBELB</p:ActualCustomsExitOffice>
+			<p:SubmitterID>GB575456994000</p:SubmitterID>
+			<p:StatisticalValue currencyID="GBP">60000.0</p:StatisticalValue>
+			<p:ExitResult>A1</p:ExitResult>
+			<p:DateOfExit>
+				<p:DateTimeString formatCode="304">20250513100323Z</p:DateTimeString>
+			</p:DateOfExit>
+		</p:GeneratedConsignmentDetails>
+		<p:FullDeclarationObject>
+			<p:Declaration>
+				<p:AcceptanceDateTime>
+					<p:DateTimeString formatCode="304">20250513100151Z</p:DateTimeString>
+				</p:AcceptanceDateTime>
+				<p:FunctionCode>9</p:FunctionCode>
+				<p:FunctionalReferenceID>U.7847767AOPKN</p:FunctionalReferenceID>
+				<p:TypeCode>EXA</p:TypeCode>
+				<p:ProcedureCategory>B1</p:ProcedureCategory>
+				<p:GoodsItemQuantity>1</p:GoodsItemQuantity>
+				<p:TotalPackageQuantity>10</p:TotalPackageQuantity>
+				<p:BorderTransportMeans>
+					<p:ID>4029072022</p:ID>
+					<p:IdentificationTypeCode>11</p:IdentificationTypeCode>
+					<p:RegistrationNationalityCode>GB</p:RegistrationNationalityCode>
+					<p:ModeCode>1</p:ModeCode>
+				</p:BorderTransportMeans>
+				<p:Consignment>
+					<p:Carrier>
+						<p:ID>XI427168118378</p:ID>
+					</p:Carrier>
+					<p:ConsignmentItem>
+						<p:SequenceNumeric>1</p:SequenceNumeric>
+					</p:ConsignmentItem>
+					<p:Freight>
+						<p:PaymentMethodCode>D</p:PaymentMethodCode>
+					</p:Freight>
+					<p:Itinerary>
+						<p:SequenceNumeric>1</p:SequenceNumeric>
+						<p:RoutingCountryCode>GB</p:RoutingCountryCode>
+					</p:Itinerary>
+					<p:Itinerary>
+						<p:SequenceNumeric>2</p:SequenceNumeric>
+						<p:RoutingCountryCode>JP</p:RoutingCountryCode>
+					</p:Itinerary>
+				</p:Consignment>
+				<p:Declarant>
+					<p:ID>XI427168118378</p:ID>
+					<p:Address/>
+				</p:Declarant>
+				<p:ExitOffice>
+					<p:ID>GB000142</p:ID>
+				</p:ExitOffice>
+				<p:Exporter>
+					<p:ID>XI427168118378</p:ID>
+					<p:Address/>
+				</p:Exporter>
+				<p:GoodsShipment>
+					<p:Consignee>
+						<p:Name>Packings Import Incorporated</p:Name>
+						<p:Address>
+							<p:CityName>Tokyo</p:CityName>
+							<p:CountryCode>JP</p:CountryCode>
+							<p:Line>1 Bags Avenue</p:Line>
+							<p:PostcodeID>JP1 234</p:PostcodeID>
+						</p:Address>
+					</p:Consignee>
+					<p:Consignment>
+						<p:ContainerCode>1</p:ContainerCode>
+						<p:DepartureTransportMeans>
+							<p:ID>CSCLGL123</p:ID>
+							<p:IdentificationTypeCode>10</p:IdentificationTypeCode>
+						</p:DepartureTransportMeans>
+						<p:GoodsLocation>
+							<p:Name>BELBELBEL</p:Name>
+							<p:TypeCode>A</p:TypeCode>
+							<p:Address>
+								<p:TypeCode>U</p:TypeCode>
+								<p:CountryCode>GB</p:CountryCode>
+							</p:Address>
+						</p:GoodsLocation>
+						<p:TransportEquipment>
+							<p:SequenceNumeric>0</p:SequenceNumeric>
+							<p:ID>Container123</p:ID>
+							<p:Seal>
+								<p:SequenceNumeric>1</p:SequenceNumeric>
+								<p:ID>12345</p:ID>
+							</p:Seal>
+						</p:TransportEquipment>
+					</p:Consignment>
+					<p:Destination>
+						<p:CountryCode>JP</p:CountryCode>
+					</p:Destination>
+					<p:ExportCountry>
+						<p:ID>GB</p:ID>
+					</p:ExportCountry>
+					<p:GovernmentAgencyGoodsItem>
+						<p:SequenceNumeric>1</p:SequenceNumeric>
+						<p:StatisticalValueAmount currencyID="GBP">60000.0</p:StatisticalValueAmount>
+						<p:TransactionNatureCode>99</p:TransactionNatureCode>
+						<p:AdditionalInformation>
+							<p:SequenceNumeric>1</p:SequenceNumeric>
+							<p:StatementCode>NIEXP</p:StatementCode>
+						</p:AdditionalInformation>
+						<p:AdditionalInformation>
+							<p:SequenceNumeric>2</p:SequenceNumeric>
+							<p:StatementCode>00400</p:StatementCode>
+							<p:StatementDescription>EXPORTER</p:StatementDescription>
+						</p:AdditionalInformation>
+						<p:Commodity>
+							<p:Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</p:Description>
+							<p:Classification>
+								<p:ID>46021910</p:ID>
+								<p:IdentificationTypeCode>TSP</p:IdentificationTypeCode>
+							</p:Classification>
+							<p:GoodsMeasure>
+								<p:GrossMassMeasure>1000.0</p:GrossMassMeasure>
+								<p:NetNetWeightMeasure>500.0</p:NetNetWeightMeasure>
+							</p:GoodsMeasure>
+						</p:Commodity>
+						<p:GovernmentProcedure>
+							<p:CurrentCode>23</p:CurrentCode>
+							<p:PreviousCode>00</p:PreviousCode>
+						</p:GovernmentProcedure>
+						<p:GovernmentProcedure>
+							<p:CurrentCode>000</p:CurrentCode>
+						</p:GovernmentProcedure>
+						<p:Packaging>
+							<p:SequenceNumeric>1</p:SequenceNumeric>
+							<p:MarksNumbersID>2379261ETT</p:MarksNumbersID>
+							<p:QuantityQuantity>1000</p:QuantityQuantity>
+							<p:TypeCode>PK</p:TypeCode>
+						</p:Packaging>
+					</p:GovernmentAgencyGoodsItem>
+					<p:PreviousDocument>
+						<p:SequenceNumeric>1</p:SequenceNumeric>
+						<p:CategoryCode>Z</p:CategoryCode>
+						<p:ID>5XI427168118378-LNWYEYHC9</p:ID>
+						<p:TypeCode>DCR</p:TypeCode>
+						<p:LineNumeric>1</p:LineNumeric>
+					</p:PreviousDocument>
+				</p:GoodsShipment>
+			</p:Declaration>
+		</p:FullDeclarationObject>
+	</p:FullDeclarationDataDetails>
+</p:DeclarationFullResponse>

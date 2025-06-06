@@ -6,6 +6,8 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
+			This scenario is not working as expected, and it will be fixed in the future.
+
 			SCENARIO
 			Trader submits a Type Y declaration to import steel from the ROW into NI.
 			Goods imported and declared to free-circulation and home use of non-union goods, with no previous procedure. 

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1
       </md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--Type D pre-lodged declaration with procedure code 1040
 	No control,Inventory linked Type D Maritime declaration with one DUCR 
 	arrived and departed at DUCR level.
@@ -19,12 +19,12 @@
 	ERS Message also expected response from ILE, as DUCR consolidated in the declaration -->
 		<!--This should be updated to today's date.-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20241206155227+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20250514164156+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: The trader assigned reference to the declaration -->
-		<FunctionalReferenceID>U.7867523JN8S0</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523NVJOA</FunctionalReferenceID>
 		<!--DE 1/1: EX to represent an Export declaration.-->
 		<!--DE 1/2: D to represent a Pre lodged declaration.-->
 		<TypeCode>EXD</TypeCode>
@@ -134,7 +134,7 @@
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Sequential number of the goods item.-->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 8/6: Enter the statistical value for the goods item in GBP (£ sterling), irrespective of the currency used in Invoice Currency. -->
+				<!--DE 8/6: Enter the statistical value for the goods item in GBP (Â£ sterling), irrespective of the currency used in Invoice Currency. -->
 				<StatisticalValueAmount currencyID="GBP">200</StatisticalValueAmount>
 				<!--  DE 8/5 Nature of Transaction. Enter, a 2-digit code (second digit is optional)
           The single digit codes listed in column A of the table provided for under Article 10(2) of Commission Regulation (EC) No 113/2010 shall be used.
@@ -143,7 +143,7 @@
            from residents to non-residents against financial or other compensation'
            second digit (1) represents 'Outright purchase/sale' -->
 				<TransactionNatureCode>11</TransactionNatureCode>
-				<!--DE 2/2: Additional information. 00400 Indicating Self representation i.e. the declarant and the exporter are the same party-->
+				<!--DE 2/2: Additional information. 00400 Indicating Self representation i.e. the declarant and tthe exporter are the same party-->
 				<AdditionalInformation>
 					<StatementCode>00400</StatementCode>
 					<StatementDescription>EXPORTER</StatementDescription>
@@ -160,7 +160,7 @@
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!--DE 6/17: Commodity code National additional code.-->
+						<!--DE 6/17: Commodity code â€“ National additional code.-->
 						<ID>VATZ</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
 					</Classification>
@@ -196,7 +196,7 @@
                    This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>4GB270630267300-GDWUTX</ID>
+				<ID>5GB817614922302-NJWEPESTRA</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

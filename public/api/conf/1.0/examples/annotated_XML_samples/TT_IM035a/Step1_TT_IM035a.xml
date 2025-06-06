@@ -1,27 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 			SCENARIO
 			Trader submits an Inventory-linked Type A Frontier ALVS declaration triggering a control by using commodity description D.E 6/8 = ttalvsdecisionHold1.
-			
+
 			Import of goods liable to Customs Duty & VAT, with no previous procedure
 			Goods: Shavers, hair clippers and hair-removing appliances, with self-contained electric motor
 			Standard frontier Declaration Type A which derives a H1 Declaration Category data set
 			Deferred Payment is used with specific authority. Importer's DAN is being used.
 			Goods presented at Wallasea Island on arrival.
-			
+
 			Note that some of the trigger words relating to ALVS are case sensitive - (e.g. "ttalvsdecisionHold1") and if not followed a DMSALV will not be returned.
 		-->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: LRN.
 			Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>7849431U9KG4</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847576373SS</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -30,12 +31,12 @@
 		<!--DE 1/9: Total Number of Items.
 			Number of goods items on the declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
-		<!--DE 6/18: Total Packages. 
+		<!--DE 6/18: Total Packages.
 			This matches the sum of the DE 6/10 values for each of the Goods Items in the Declaration. -->
 		<TotalPackageQuantity>50</TotalPackageQuantity>
-		<!--DE 2/6: Deferred Payment. 
+		<!--DE 2/6: Deferred Payment.
 			This is mandatory when deferred payment is used.
-			ID is the DAN account used for deferred payment (for excise duty in this scenario). 
+			ID is the DAN account used for deferred payment (for excise duty in this scenario).
 			This declared DAN belongs to the importer declared on the declaration.-->
 		<AdditionalDocument>
 			<CategoryCode>1</CategoryCode>
@@ -50,7 +51,7 @@
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
-			An authorisation type code of DPO indicates Deferment of Payment authorisation. 
+			An authorisation type code of DPO indicates Deferment of Payment authorisation.
 			The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>
 			<ID>GB553202734852</ID>
@@ -65,8 +66,8 @@
 			<ModeCode>1</ModeCode>
 		</BorderTransportMeans>
 		<!--DE 3/18: Declarant Identification Number.
-			The EORI number of the agent entering the declaration. 
-			The UK requires an EORI to be provided for the declarant. 
+			The EORI number of the agent entering the declaration.
+			The UK requires an EORI to be provided for the declarant.
 			In this scenario, the same as the EORI of the importer. -->
 		<Declarant>
 			<ID>GB553202734852</ID>
@@ -84,16 +85,16 @@
 		</Exporter>
 		<GoodsShipment>
 			<!--DE 8/5: Nature of Transaction.
-				1 to indicate transactions involving actual or intended 
+				1 to indicate transactions involving actual or intended
 				transfer of ownership from residents to non-residents against financial or other compensation. -->
 			<TransactionNatureCode>1</TransactionNatureCode>
 			<Consignment>
 				<!--DE 7/2: Container.
-					Indicator to show if goods are packed in a container or not. 
+					Indicator to show if goods are packed in a container or not.
 					1 indicates that goods are transported in containers.
 					Note: Unlike CHIEF this must now be completed. -->
 				<ContainerCode>1</ContainerCode>
-				<!--DE 7/9: Identity of Means of Transport on Arrival. 
+				<!--DE 7/9: Identity of Means of Transport on Arrival.
 					Example number representing IMO ship identification number: '10', and 5 digits for the identification number: '12345'.-->
 				<ArrivalTransportMeans>
 					<ID>12345</ID>
@@ -101,7 +102,7 @@
 				</ArrivalTransportMeans>
 				<GoodsLocation>
 					<!--DE 5/23: DE 5/23: Location of Goods - Identification of location.
-						ID to give a unique position of the location. 
+						ID to give a unique position of the location.
 						The location code for Tilbury docks. -->
 					<Name>TILLONTIL</Name>
 					<!--DE 5/23: Location of Goods - Type of location.
@@ -117,7 +118,7 @@
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
-				<!--DE 7/10: Container identification number. 
+				<!--DE 7/10: Container identification number.
 					This is alpha-numeric with up to 17 characters.
 					For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number.
 					For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used. -->
@@ -131,7 +132,7 @@
 			<Destination>
 				<CountryCode>GB</CountryCode>
 			</Destination>
-			<!--DE 5/14: Country of Dispatch/Export Code. 
+			<!--DE 5/14: Country of Dispatch/Export Code.
 				In this case, US. -->
 			<ExportCountry>
 				<ID>US</ID>
@@ -161,7 +162,7 @@
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of C505 indicates CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver. 
+					A document code of C505 indicates CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
 					In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of "CC"),and therefore the ID also indicates that a waiver is being used. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
@@ -196,12 +197,18 @@
 					<TypeCode>851</TypeCode>
 					<LPCOExemptionCode>AP</LPCOExemptionCode>
 				</AdditionalDocument>
-				<!--DE 2/2: Additional information. 
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>0054039</ID>
+					<TypeCode>046</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional information.
 					00500 - IMPORTER Indicating Self representation by the importer. -->
 				<AdditionalInformation>
 					<StatementCode>00500</StatementCode>
 					<StatementDescription>IMPORTER</StatementDescription>
-				</AdditionalInformation>		
+				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of Goods.
 						Description of the goods which is specific enough to allow the unambiguous identification, classification and examination of goods.
@@ -221,12 +228,12 @@
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-					<!-- DE 6/17: National Additional Code. 
-						VATZ to represent VAT zero percent rate. -->
+						<!-- DE 6/17: National Additional Code.
+                            VATZ to represent VAT zero percent rate. -->
 						<ID>VATZ</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
 					</Classification>
-						<DutyTaxFee>
+					<DutyTaxFee>
 						<!--DE 4/17: Preference.
 							100 represents no preference being claimed. -->
 						<DutyRegimeCode>100</DutyRegimeCode>
@@ -288,8 +295,8 @@
 					<TypeCode>BX</TypeCode>
 				</Packaging>
 				<!--DE 2/1: Simplified Declaration/Previous Documents.
-					Previous document of Z355 to show the MRN for the entry summary declaration. 
-					This is a mandatory field. 
+					Previous document of Z355 to show the MRN for the entry summary declaration.
+					This is a mandatory field.
 					To denote the inventory reference number. -->
 				<PreviousDocument>
 					<CategoryCode>Z</CategoryCode>
@@ -317,7 +324,7 @@
 				For import inventory linked locations, the Inventory Reference Number (UCN) must be declared in DE 2/1 using the Previous Document Type Code 'MCR'. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>GB/1234-:3333HB</ID>
+				<ID>GB/1234-:333TC2</ID>
 				<TypeCode>MCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Simplified Declaration/Previous Documents.
@@ -325,12 +332,12 @@
 				This is a mandatory field. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>1GB553202734852-12345</ID>
+				<ID>5GB553202734852-12341</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 4/1: Delivery Terms.
-				Mandatory as method 1 is being used in DE 4/16.  
-				CIF to indicate Cost, Insurance and Freight.  
+				Mandatory as method 1 is being used in DE 4/16.
+				CIF to indicate Cost, Insurance and Freight.
 				GBTIL to represent the named port of destination: Tilbury, UK. -->
 			<TradeTerms>
 				<ConditionCode>CIF</ConditionCode>
@@ -344,7 +351,7 @@
 				element is mandatory.
 				ID indicates that the guarantee is not required, as stated in DE 8/2.-->
 			<ID>Guaranteenotrequired</ID>
-			<!--DE 8/2: Guarantee Type and Cash Accounts. 
+			<!--DE 8/2: Guarantee Type and Cash Accounts.
 				0 to represent that a customs comprehensive Guarantee is being waived for the deferment of customs duty.
 				Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code '0' or '1' must be declared in this data element. -->
 			<SecurityDetailsCode>0</SecurityDetailsCode>

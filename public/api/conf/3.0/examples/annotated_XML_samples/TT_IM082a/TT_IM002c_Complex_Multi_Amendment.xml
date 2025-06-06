@@ -9,9 +9,9 @@
 				<FunctionCode>13</FunctionCode>
 				<!--The trader assigned reference to the additional message. 
 					Note that this reference is independent of the declaration. -->
-				<FunctionalReferenceID>U.7867523ANB35</FunctionalReferenceID>
+				<FunctionalReferenceID>U.78475764QX0M</FunctionalReferenceID>
 				<!--Declaration ID of the corresponding Declaration to be amended. -->
-				<ID>24GBDMP8SXTZPGSAR4</ID>
+				<ID>25GB3POHWIVZSF9AR0</ID>
 				<!--Defines the type of additional message.
 					In this scenario, COR to indicate that this additional message is an amendment. -->
 				<TypeCode>COR</TypeCode>

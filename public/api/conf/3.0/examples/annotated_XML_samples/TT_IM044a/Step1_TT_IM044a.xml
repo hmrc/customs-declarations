@@ -1,22 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><v1:submitDeclarationRequest xmlns:v1="http://uk/gov/hmrc/mdg/declarationmanagement/submitdeclaration/request/schema/v1" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns:n1="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<v1:requestCommon>
-    <v1:regime>CDS</v1:regime>
-    <v1:receiptDate>2025-01-20T14:45:06.006Z</v1:receiptDate>
-    <v1:clientID>7d99ba8f-7f6e-4cd6-8989-b0ea10b85b1f</v1:clientID>
-    <v1:conversationID>0607a2fe-6257-48b3-a988-f54b7294442b</v1:conversationID>    
-    <!--Example WSO2 Header-->
-    <v1:originatingPartyID>GB225456994000</v1:originatingPartyID>
-	<v1:authenticatedPartyID>GB225456994000</v1:authenticatedPartyID>
-  </v1:requestCommon>
-  <v1:requestDetail> 
- 
-  <md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 			SCENARIO
 			ROW to NI - De-risked - UK Licence Quota Validation.
@@ -35,7 +24,7 @@
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number: this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.78494310H00W</FunctionalReferenceID>
+		<FunctionalReferenceID>U.78473237F705</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -238,6 +227,7 @@
 					This field is mandatory, this represents goods are de-risked from ROW into Northern Ireland. -->
 				<AdditionalInformation>
 					<StatementCode>NIQUO</StatementCode>
+					<StatementDescription>Declared when trader claims UK Quota on RoW-NI movements deemed "Not At Risk"</StatementDescription>
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of Goods.
@@ -343,7 +333,7 @@
 						This is a mandatory field. To denote the inventory reference number.
 						Note: As this is for a single item declaration, this should all be declared at header level-->
 					<CategoryCode>Z</CategoryCode>
-					<ID>24GB34F7Y1O2CX8PT4 </ID>
+					<ID>25GB34F7Y1O2CX8PT4 </ID>
 					<TypeCode>355</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
@@ -369,7 +359,7 @@
 				In CDS, the MUCR (MCR) is not required on a supplementary declaration. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>4GB553202734852-20240901</ID>
+				<ID>5GB553202734852-20240901</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -392,5 +382,4 @@
 			<SecurityDetailsCode>1</SecurityDetailsCode>
 		</ObligationGuarantee>
 	</Declaration>
-</md:MetaData></v1:requestDetail>
-</v1:submitDeclarationRequest>
+</md:MetaData>

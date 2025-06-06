@@ -25,7 +25,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: The trader assigned reference to the declaration -->
-		<FunctionalReferenceID>U.7867523TKAHK</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847323WRBZ3</FunctionalReferenceID>
 		  <!--DE 1/1: EX to represent an Export declaration.-->
 		<!--DE 1/2: D to represent a Pre lodged declaration.-->
 		<TypeCode>EXD</TypeCode>
@@ -156,11 +156,11 @@
 						<ID>46021910</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
-					<Classification>
-						<!--DE 6/17: Commodity code – National additional code. -->
-						<ID>VATZ</ID>
-						<IdentificationTypeCode>GN</IdentificationTypeCode>
-					</Classification>
+<!--					<Classification>-->
+<!--						&lt;!&ndash;DE 6/17: Commodity code – National additional code. &ndash;&gt;-->
+<!--						<ID>VATZ</ID>-->
+<!--						<IdentificationTypeCode>GN</IdentificationTypeCode>-->
+<!--					</Classification>-->
 					<GoodsMeasure>
 						<!--DE 6/5: Gross mass of the goods in kilograms including packaging. -->
 						<GrossMassMeasure>10</GrossMassMeasure>
@@ -193,14 +193,14 @@
 				This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>4GB637486824687-Y6OKKV</ID>
+				<ID>5GB978637785572-W6RDJM</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
 			<!--DE 2/1: Previous document to show the MUCR assigned to the consignment -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>GB/GYMM-LOUI3EDLNJQHXERRTN5DK9CAL</ID>
+				<ID>GB/TI8P-DT2WQ1EZIAGHEHNEGYCIISCAL</ID>
 				<TypeCode>MCR</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>

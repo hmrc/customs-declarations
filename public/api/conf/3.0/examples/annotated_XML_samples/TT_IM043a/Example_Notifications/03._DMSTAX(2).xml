@@ -5,11 +5,11 @@
 	<ResponsibleAgencyName/>
 	<AgencyAssignedCustomizationCode/>
 	<AgencyAssignedCustomizationVersionCode/>
-	<Response>
+	<Response xmlns:_1="urn:wco:datamodel:WCO:RES-DMS:2">
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>a7656c556e8e4daa970951602e869e7c</FunctionalReferenceID>
+		<FunctionalReferenceID>2c5a39c00273481495fdb22421cb3672</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20240624150830+01</DateTimeString>
+			<DateTimeString formatCode="304">20250513112234Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,8 +19,8 @@
 			<NameCode>115</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>DDR_149945166776</FunctionalReferenceID>
-			<ID>24GB6YW093JZZWKAR3</ID>
+			<FunctionalReferenceID>U.7867523DKIEK</FunctionalReferenceID>
+			<ID>25GB59AE4HKIDKIAR3</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>

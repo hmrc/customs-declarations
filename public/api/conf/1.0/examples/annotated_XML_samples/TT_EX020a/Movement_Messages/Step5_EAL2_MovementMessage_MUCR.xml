@@ -1,25 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- EAL – Movement message notification format for Entry arriving at location (Arrivals) -->
-<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-                   <inv:messageCode>EAL</inv:messageCode>
-				   <inv:ucrBlock>
-				   
-                    <inv:ucr>GB/FCP1-CDSDD1407M3</inv:ucr>
-                        <inv:ucrType>M</inv:ucrType>
-                   </inv:ucrBlock>
-				   <!-- ID to give a unique position of the location. SUNSUNSUN Indicating Sunderland. This value has come from Declaration -->
-                   <inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
-				   <!-- This should be today's Date -->
-                   <inv:goodsArrivalDateTime>2021-07-14T10:30:00</inv:goodsArrivalDateTime>
-                    <inv:movementReference>Movement14</inv:movementReference>
-								<inv:transportDetails>
-                      <inv:transportID>11CSCLGLOBE</inv:transportID>
-                      <inv:transportMode>1</inv:transportMode>
-                      <inv:transportNationality>GB</inv:transportNationality>
-                   </inv:transportDetails>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EAL</inv:messageCode>
+	
+	<inv:ucrBlock>
+		<inv:ucr>GB/B3BK-0KE3SNNZBZTN8051EA8Q60CAL</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
+	<inv:goodsArrivalDateTime>2025-05-02T11:14:19.019+01:00</inv:goodsArrivalDateTime>
+	
+	<inv:movementReference>KP1R0S44V1531QP3JQ6AYRA4S</inv:movementReference>
+	
 </inv:inventoryLinkingMovementRequest>
-
-
-
-
-

@@ -7,43 +7,16 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>01</FunctionCode>
-		<FunctionalReferenceID>ec206a641bb04047bcbc74b385c63451</FunctionalReferenceID>
+		<FunctionalReferenceID>71ebcd1bbaa74d3189c27f17384ef30b</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20231130134339Z</DateTimeString>
+			<DateTimeString formatCode="304">20250416102431Z</DateTimeString>
 		</IssueDateTime>
-		<AdditionalInformation>
-			<StatementCode>smartErrorMsg</StatementCode>
-			<StatementDescription>Value per kilo appears too low for this commodity</StatementDescription>
-			<StatementTypeCode>1</StatementTypeCode>
-			<Pointer>
-				<SequenceNumeric>1</SequenceNumeric>
-				<DocumentSectionCode>07B</DocumentSectionCode>
-			</Pointer>
-			<Pointer>
-				<SequenceNumeric>1</SequenceNumeric>
-				<DocumentSectionCode>53A</DocumentSectionCode>
-			</Pointer>
-		</AdditionalInformation>
-		<Error>
-			<Description>Value per kilo appears too low for this commodity</Description>
-			<ValidationCode>CDS13000</ValidationCode>
-			<Pointer>
-				<DocumentSectionCode>42A</DocumentSectionCode>
-			</Pointer>
-			<Pointer>
-				<DocumentSectionCode>67A</DocumentSectionCode>
-			</Pointer>
-			<Pointer>
-				<SequenceNumeric>1</SequenceNumeric>
-				<DocumentSectionCode>68A</DocumentSectionCode>
-			</Pointer>
-		</Error>
 		<Declaration>
 			<AcceptanceDateTime>
-				<DateTimeString formatCode="304">20231130124333Z</DateTimeString>
+				<DateTimeString formatCode="304">20250416102427Z</DateTimeString>
 			</AcceptanceDateTime>
-			<FunctionalReferenceID>78494319U54L</FunctionalReferenceID>
-			<ID>23GBD8N1VATRWNSAR6</ID>
+			<FunctionalReferenceID>U.7847893UKH0D</FunctionalReferenceID>
+			<ID>25GB46NJJC9AGLEAR2</ID>
 			<VersionID>1</VersionID>
 		</Declaration>
 	</Response>

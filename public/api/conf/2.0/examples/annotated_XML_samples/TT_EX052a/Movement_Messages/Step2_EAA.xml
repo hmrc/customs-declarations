@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
 	<inv:messageCode>EAA</inv:messageCode>
 	<inv:ucrBlock>
-		<inv:ucr>GB/9UQI-G3I4F0OGSXTOD72FRNV1ZTCAL</inv:ucr>
+		<inv:ucr>GB/JOL7-YNP7888UO403UMMD1BHDBRCAL</inv:ucr>
 		<inv:ucrType>M</inv:ucrType>
 	</inv:ucrBlock>
 	<inv:goodsLocation>GBAUDVRDOVDVR</inv:goodsLocation>
-	<inv:movementReference>0IAPQNEE4QL5A6C9G8RNH4RCN</inv:movementReference>
+	<inv:movementReference>JORM74CI00VGLDPNG9PX6DPX5</inv:movementReference>
 </inv:inventoryLinkingMovementRequest>

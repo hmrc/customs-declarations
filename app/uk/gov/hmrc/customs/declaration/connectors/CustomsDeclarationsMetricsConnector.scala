@@ -57,21 +57,17 @@ class CustomsDeclarationsMetricsConnector @Inject() (http: NoAuditHttpClient,
       .map { response =>
         response.status match {
           case status if is2xx(status) =>
-            println(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
             logger.debug(s"[conversationId=${request.conversationId}]: customs declarations metrics sent successfully")
 
           case status => //1xx, 3xx, 4xx, 5xx
-            println(s"Call to customs declarations metrics service failed. url=[$urlString], HttpStatus=[$status], Error=Received a non 2XX response, response body=[${response.body}]")
             logger.error(s"Call to customs declarations metrics service failed. url=[$urlString], HttpStatus=[$status], Error=Received a non 2XX response, response body=[${response.body}]")
         }
         ()
       }.recoverWith {
         case httpError: HttpException =>
-          println(s"Call to customs declarations metrics service failed. url=[$urlString], HttpStatus=[${httpError.responseCode}], Error=[${httpError.message}]")
           logger.error(s"Call to customs declarations metrics service failed. url=[$urlString], HttpStatus=[${httpError.responseCode}], Error=[${httpError.message}]")
           Future.failed(new RuntimeException(httpError))
         case NonFatal(e) =>
-          println(s"Call to customs declarations metrics service failed. url=[$urlString]")
           logger.warn(s"Call to customs declarations metrics service failed. url=[$urlString]")
           Future.failed(e)
       }

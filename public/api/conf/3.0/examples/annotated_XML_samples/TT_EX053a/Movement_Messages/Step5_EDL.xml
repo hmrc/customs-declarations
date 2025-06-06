@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EDL</inv:messageCode>
+	<inv:ucrBlock>
+		<inv:ucr>GB/QCP2-5XGRY8EYNYAGXS53RCCBHZCAL</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAUDVRDOVDVR</inv:goodsLocation>
+	<inv:goodsDepartureDateTime>2025-05-13T12:48:13.013+01:00</inv:goodsDepartureDateTime>
+	<inv:movementReference>0MKD0LQPO6UP6KBCKR6JMKFUT</inv:movementReference>
+	<inv:transportDetails>
+		<inv:transportID>11CSCLGLOBE</inv:transportID>
+		<inv:transportMode>1</inv:transportMode>
+		<inv:transportNationality>GB</inv:transportNationality>
+	</inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<inv:inventoryLinkingQueryRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:queryUCR>
+		<inv:ucr>GB/EJ6Z-14TPGLBKJYT9P5S01P4FETCAL</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:queryUCR>
+</inv:inventoryLinkingQueryRequest>

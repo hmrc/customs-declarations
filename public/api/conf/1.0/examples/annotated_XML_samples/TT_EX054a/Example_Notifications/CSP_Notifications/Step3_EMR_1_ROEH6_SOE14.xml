@@ -1,0 +1,20 @@
+<ns2:inventoryLinkingMovementTotalsResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
+	<ns2:messageCode>EMR</ns2:messageCode>
+	<ns2:crc>000</ns2:crc>
+	<ns2:goodsLocation>GBAUDVRDOVDVR</ns2:goodsLocation>
+	<ns2:masterUCR>GB/EJ6Z-14TPGLBKJYT9P5S01P4FETCAL</ns2:masterUCR>
+	<ns2:declarationCount>1</ns2:declarationCount>
+	<ns2:movementReference>HAYL79N6R552OX21KHOBAZGKT</ns2:movementReference>
+	<ns2:masterROE>H6</ns2:masterROE>
+	<ns2:masterSOE>C</ns2:masterSOE>
+	<ns2:entry>
+		<ns2:ucrBlock>
+			<ns2:ucr>5GB056140462617-CRSRAN</ns2:ucr>
+			<ns2:ucrType>D</ns2:ucrType>
+		</ns2:ucrBlock>
+		<ns2:entryStatus>
+			<ns2:roe>H6</ns2:roe>
+			<ns2:soe>14</ns2:soe>
+		</ns2:entryStatus>
+	</ns2:entry>
+</ns2:inventoryLinkingMovementTotalsResponse>

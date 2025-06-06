@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1
+	</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
+		<!--
+			SCENARIO
+			A Trader submits a pre-lodged (B1) Type D export declaration from NI to ROW for an ODS (Ozone Depleting Substance) and declares a combination of Document Code in DE 2/3 and previous Procedure Code in DE 1/10 for CDS to identify the declaration and initiate a CERTEX validation.
+			The description of goods in DE 'ttcertexCheck' will trigger the control and generate a DMSQRY trader notification.
+            The declaration is queried by the Full Declaration.
+			An EAL and EDL are submitted to arrive and then depart the goods at DUCR level using XI EORI as as submitter.
+			Expected Notification: DMSRCV, DMSQRY, DMSRCV, DMSACC, DMSRES, DMSCLE, DMSEOG.
+		-->
+		<!--Function Code of 9 to represent an original declaration. -->
+		<FunctionCode>9</FunctionCode>
+		<!-- DE 2/5: LRN.
+			The declarant's assigned reference to the declaration. -->
+		<FunctionalReferenceID>U.7849431GTAOS</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type.
+			EX to represent an Export declaration. -->
+		<!--DE 1/2: Additional Declaration Type.
+			D to represent a Pre lodged declaration. -->
+		<TypeCode>EXD</TypeCode>
+		<!--DE 1/9: Total Number of Items. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<!--DE 6/18: Total Packages. -->
+		<TotalPackageQuantity>10</TotalPackageQuantity>
+		<!--DE 3/20: Representative Identification Number.
+			EORI number of the Representative.
+            Note KEL 277 when testing: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant.
+			DE 3/21: Representative Status Code.
+			2 indicating direct representation. -->
+		<Agent>
+			<ID>XI150454489082</ID>
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
+			An authorisation type code of OPO indicates Authorisation for the use of Outward Processing. -->
+		<!-- <AuthorisationHolder>
+			<ID>XI150454489082</ID>
+			<CategoryCode>OPO</CategoryCode>
+		</AuthorisationHolder> -->
+		<!--DE 7/14: Identity of active means of transport crossing the border. IdentificationTypeCode 40 Indicating 'IATA flight number'. -->
+		<BorderTransportMeans>
+			<ID>4029072022</ID>
+			<IdentificationTypeCode>40</IdentificationTypeCode>
+			<!--DE 7/15: Nationality of active means of transport crossing the border.
+				In this case GB. -->
+			<RegistrationNationalityCode>GB</RegistrationNationalityCode>
+			<!--DE 7/4: Mode of Transport at the Border.
+				ModeCode of 4 to represent Air transport transport as the mode of transport
+			 at the border. -->
+			<ModeCode>4</ModeCode>
+		</BorderTransportMeans>
+		<Consignment>
+			<!--DE 3/32: Carrier identification number.
+				This is Security and Safety Data. -->
+			<Carrier>
+				<ID>XI025115100010</ID>
+			</Carrier>
+			<!--DE 4/2: Transport charges method of payment.
+				S&S Data - D indicating other e.g. direct debit to cash account.
+				This is Security and Safety Data.  -->
+			<Freight>
+				<PaymentMethodCode>D</PaymentMethodCode>
+			</Freight>
+			<!--DE 5/18: Country of Routing Codes.
+				Routing from GB to JP. -->
+			<Itinerary>
+				<SequenceNumeric>1</SequenceNumeric>
+				<RoutingCountryCode>GB</RoutingCountryCode>
+			</Itinerary>
+			<Itinerary>
+				<SequenceNumeric>2</SequenceNumeric>
+				<RoutingCountryCode>JP</RoutingCountryCode>
+			</Itinerary>
+		</Consignment>
+		<!--DE 3/18: Declarant Identification Number.
+			EORI number of the Declarant. -->
+		<Declarant>
+			<ID>XI427168118378</ID>
+		</Declarant>
+		<!--DE 5/12 Customs Office of Exit.
+			Indicating Belfast International Airport. -->
+		<ExitOffice>
+			<ID>GB000014</ID>
+		</ExitOffice>
+		<!--DE 3/2: Exporter Identification Number.
+			EORI number of the Exporter, the same as 3/18. -->
+		<Exporter>
+			<ID>XI427168118378</ID>
+		</Exporter>
+		<GoodsShipment>
+			<!--DE 3/9: Consignee Name and Address.
+				(Mandatory when DE 3/10 is not completed).
+				This is Security and Safety Data. -->
+			<Consignee>
+				<Name>Packings Import Incorporated</Name>
+				<Address>
+					<CityName>Tokyo</CityName>
+					<CountryCode>JP</CountryCode>
+					<Line>1 Bags Avenue</Line>
+					<PostcodeID>JP1 234</PostcodeID>
+				</Address>
+			</Consignee>
+			<Consignment>
+				<!--DE 7/2: Container.
+					1 to indicate that the goods are transported in containers. -->
+				<ContainerCode>1</ContainerCode>
+				<!--DE 7/7: Identity of the means of transport at departure.
+					Identification type of the means of transport.
+					In this scenario,  41 indicating Registration Number of the Aircraft. -->
+				<DepartureTransportMeans>
+					<ID>CSCLGLOBE</ID>
+					<IdentificationTypeCode>41</IdentificationTypeCode>
+				</DepartureTransportMeans>
+				<GoodsLocation>
+					<!--DE 5/23: Location of Goods - Identification of location.
+						ID to give a unique position of the location.
+						BELBFSBEL Indicating Belfast Airport. -->
+					<Name>BELBFSBEL</Name>
+					<!--DE 5/23: Location of Goods - Type of location.
+						A in this scenario to represent that it is a Frontier or Frontier linked location. -->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Location of Goods - Qualifier of the identification.
+							U in this scenario for UN/LOCODE. -->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Location of Goods - Country.
+							Country code of the country where the goods may be examined.
+							GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<TransportEquipment>
+					<!--DE 7/10: Container Identification Number.
+						Sequence number '0' indicates goods are not transported in containers . -->
+					<SequenceNumeric>0</SequenceNumeric>
+					<ID>Container123</ID>
+					<!--DE 7/18: Seal number. -->
+					<Seal>
+						<SequenceNumeric>1</SequenceNumeric>
+						<ID>12345</ID>
+					</Seal>
+				</TransportEquipment>
+			</Consignment>
+			<Destination>
+				<!--DE 5/8: Country of Destination Code.
+					In this case JP. -->
+				<CountryCode>JP</CountryCode>
+			</Destination>
+			<!--DE 5/14: Country of Dispatch/Export Code.
+				Country code for the country from which the goods were originally dispatched.
+				In this case GB. -->
+			<ExportCountry>
+				<ID>GB</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Goods Item Number.
+					Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 8/6: Statistical Value.
+					Enter the statistical value for the goods item in GBP (£ sterling), irrespective of the currency used in Invoice Currency. -->
+				<StatisticalValueAmount currencyID="GBP">60000</StatisticalValueAmount>
+				<!--DE 8/5 Nature of Transaction.
+					Enter, a 2-digit code (second digit is optional)
+					The single digit codes listed in column A of the table provided for under Article 10(2) of Commission Regulation (EC) No 113/2010 shall be used.
+					Member States may also provide for a second digit from the list in column B of that table to be collected.
+					In this case first digit (1) represents 'Transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation' second digit (1) represents 'Outright purchase/sale'. -->
+				<TransactionNatureCode>99</TransactionNatureCode>
+				<!--DE 2/2: Additional Information.
+					NIEXP to be used when a movement is made from NI to GB or an NI to RoW export declaration is made.
+					00100 Authorisation by Customs Declaration only: Special Procedure Authorisation granted on the declaration at the time of entry to the procedure.
+                    Note: Users of an Authorisation by Customs Declaration should refer to Appendix 4: DE 2/2 Additional Information Statement Codes for other codes which may be required for the specific operation..
+					Enter 'EXPORTER' to indicate self-representation by the exporter.-->
+				<AdditionalDocument>
+					<CategoryCode>E</CategoryCode>
+					<ID>116/2009</ID>
+					<Name>Cultural goods</Name>
+					<TypeCode>013</TypeCode>
+					<LPCOExemptionCode>ES</LPCOExemptionCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>005345680</ID>
+					<Name>Feedstock</Name>
+					<TypeCode>786</TypeCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>005345680</ID>
+					<Name>Refillable</Name>
+					<TypeCode>785</TypeCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>005345680</ID>
+					<TypeCode>797</TypeCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>30000000</ID>
+					<TypeCode>799</TypeCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>9</CategoryCode>
+					<Name>Licence Exempt</Name>
+					<TypeCode>Y10</TypeCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>L</CategoryCode>
+					<ID>IOD20250529</ID>
+					<TypeCode>100</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<Name>Excluded product</Name>
+					<TypeCode>923</TypeCode>
+				</AdditionalDocument>
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<Name>Export licence not required</Name>
+					<TypeCode>901</TypeCode>
+				</AdditionalDocument>
+				<AdditionalInformation>
+					<StatementCode>NIEXP</StatementCode>
+				</AdditionalInformation>
+				<Commodity>
+					<!--DE 6/8: Description of Goods. -->
+					<Description>ttcertexCheck</Description>
+					<Classification>
+						<!--DE 6/14: Commodity Code (Dibromo tetrafluoroethanes) - Combined Nomenclature Code. -->
+						<ID>29037690</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<!--DE 6/16: Commodity Code - TARIC Additional code(s).
+						Additional Code 4604 to represent Ozone Depleting Substance exported not for destruction.. -->
+					<Classification>
+						<ID>4604</ID>
+						<IdentificationTypeCode>TRA</IdentificationTypeCode>
+					</Classification>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass.
+							Weight of the goods in kilograms including packaging. -->
+						<GrossMassMeasure>1000</GrossMassMeasure>
+						<!--DE 6/1: Net Mass.
+							Weight of the goods in kilograms without any packaging. -->
+						<NetNetWeightMeasure>500</NetNetWeightMeasure>
+					</GoodsMeasure>
+				</Commodity>
+				<GovernmentProcedure>
+					<!--DE 1/10: Procedure.
+						Requested procedure of 21 00 indicate temporary exportation of Union goods or goods in free circulation and home use goods under the Outward Processing (OP) procedure where the goods have not been subject to any previous procedure (Council Regulation (EU) No., Article 259 - 262). -->
+					<CurrentCode>10</CurrentCode>
+					<PreviousCode>40</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure.
+					The code A04 Goods which are being placed under or discharged from an Inward Processing procedure (VAT only) -->
+				<GovernmentProcedure>
+					<CurrentCode>000</CurrentCode>
+				</GovernmentProcedure>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/11: Shipping Marks.
+						In this case '2379261ETT'. -->
+					<MarksNumbersID>2379261ETT</MarksNumbersID>
+					<!--DE 6/10: Number of Packages.
+						In this case 10. -->
+					<QuantityQuantity>1000</QuantityQuantity>
+					<!--DE 6/9: Type of Packages.
+						CN for Container. -->
+					<TypeCode>CN</TypeCode>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<!--DE 2/1: Simplified Declaration/ Previous Documents.
+				Previous document to show the DUCR assigned to the consignment.
+				This is a mandatory field. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>5GB395784431192-STBYCM8</ID>
+				<TypeCode>DCR</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+		</GoodsShipment>
+		<!--DE 5/27: Supervising Customs Office.
+			In this scenario, this is Belfast, Custom House. -->
+		<SupervisingOffice>
+			<ID>GBBEL003</ID>
+		</SupervisingOffice>
+	</Declaration>
+</md:MetaData>

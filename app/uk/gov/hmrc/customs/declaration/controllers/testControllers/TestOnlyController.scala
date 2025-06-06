@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.controllers
+package uk.gov.hmrc.customs.declaration.controllers.testControllers
 
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.customs.declaration.services.TestOnlyService

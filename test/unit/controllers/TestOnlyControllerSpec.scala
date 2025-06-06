@@ -22,7 +22,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.customs.declaration.controllers.TestOnlyController
+import uk.gov.hmrc.customs.declaration.controllers.testControllers.TestOnlyController
 import uk.gov.hmrc.customs.declaration.services.TestOnlyService
 
 class TestOnlyControllerSpec extends AnyWordSpecLike

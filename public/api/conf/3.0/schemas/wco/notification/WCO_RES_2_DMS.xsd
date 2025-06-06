@@ -2,7 +2,7 @@
 <xs:schema xmlns="urn:wco:datamodel:WCO:RES-DMS:2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:od="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:ds="urn:wco:datamodel:WCO:Response_DS:DMS:2"
   targetNamespace="urn:wco:datamodel:WCO:RES-DMS:2" elementFormDefault="qualified" version="2.2">
   <xs:import namespace="urn:wco:datamodel:WCO:Response_DS:DMS:2" schemaLocation="WCO_DS/WCO_RES_DS_2_DMS.xsd" />
-  <xs:import namespace="urn:wco:datamodel:WCO:DEC-DMS:2" schemaLocation="WCO_DEC_2_DMS.xsd" />
+  <xs:import namespace="urn:wco:datamodel:WCO:DEC-DMS:2" schemaLocation="../declaration/WCO_DEC_2_DMS.xsd" />
   <xs:element name="Response">
     <xs:annotation>
       <xs:documentation xml:lang="EN">

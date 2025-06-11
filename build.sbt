@@ -1,12 +1,13 @@
-import AppDependencies._
+import AppDependencies.*
 import com.typesafe.sbt.web.PathMapping
 import com.typesafe.sbt.web.pipeline.Pipeline
 import play.sbt.PlayImport.PlayKeys.playDefaultPort
-import sbt.Keys._
+import sbt.Keys.*
 import sbt.Tests.{Group, SubProcess}
-import sbt._
+import sbt.*
+import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm}
-import uk.gov.hmrc.gitstamp.GitStampPlugin._
+import uk.gov.hmrc.gitstamp.GitStampPlugin.*
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 
 import java.text.SimpleDateFormat
@@ -15,6 +16,7 @@ import scala.language.postfixOps
 
 name := "customs-declarations"
 scalaVersion := "3.5.1"
+val currentScalaVersion= "3.5.1"
 
 lazy val CdsIntegrationComponentTest = config("it") extend Test
 
@@ -68,6 +70,22 @@ lazy val integrationComponentTestSettings =
       addTestReportOption(CdsIntegrationComponentTest, "int-comp-test-reports"),
       CdsIntegrationComponentTest / testGrouping := forkedJvmPerTestConfig((Test / definedTests).value, "integration", "component")
     )
+
+lazy val it = project
+  .dependsOn(microservice % "test->test")
+  .settings(DefaultBuildSettings.itSettings())
+  .enablePlugins(play.sbt.PlayScala)
+  .settings(
+    publish / skip := true
+  )
+  .settings(scalaVersion := currentScalaVersion)
+  .settings(majorVersion := 0)
+  .settings(
+    testForkedParallel := true
+  )
+
+
+
 
 lazy val commonSettings: Seq[Setting[_]] = gitStampSettings
 

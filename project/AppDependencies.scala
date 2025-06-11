@@ -2,7 +2,7 @@ import sbt._
 
 object AppDependencies {
 
-  private val testScope = "test,it"
+  private val testScope = Test
 
   val playSuffix = "-play-30"
 

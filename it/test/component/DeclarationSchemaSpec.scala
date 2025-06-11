@@ -18,11 +18,11 @@ package component
 
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
-import play.api.mvc._
-import play.api.test.Helpers._
+import play.api.mvc.*
+import play.api.test.Helpers.*
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionOne, VersionTwo}
 import util.AuditService
-import util.FakeRequests._
+import util.FakeRequests.*
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.TestData.conversationIdValue
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, MdgWcoDecService}

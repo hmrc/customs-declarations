@@ -17,7 +17,7 @@
 package integration.filetransmission
 
 import integration.{IntegrationTestModule, IntegrationTestSpec}
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
@@ -30,10 +30,10 @@ import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmiss
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ConversationIdRequest
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.*
 import util.ExternalServicesConfig.{Host, Port}
-import util.FileTransmissionTestData._
-import util.VerifyLogging._
+import util.FileTransmissionTestData.*
+import util.VerifyLogging.*
 import util.externalservices.FileTransmissionService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 

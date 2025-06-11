@@ -16,7 +16,7 @@
 
 package integration
 
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
@@ -24,14 +24,14 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsXml
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.customs.declaration.connectors.DeclarationSubmissionConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
-import uk.gov.hmrc.customs.declaration.model._
+import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.*
 import util.ExternalServicesConfig.{AuthToken, Host, Port}
-import util.TestData._
+import util.TestData.*
 import util.TestXMLData.ValidSubmissionXML
 import util.externalservices.MdgWcoDecService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}

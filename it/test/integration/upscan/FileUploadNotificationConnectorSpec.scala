@@ -27,10 +27,10 @@ import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, MULTIPLE_CHOIC
 import uk.gov.hmrc.customs.declaration.connectors.upscan.FileUploadCustomsNotificationConnector
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadCustomsNotification
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.*
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.ExternalServicesConfig.{Host, Port}
-import util.TestData._
+import util.TestData.*
 import util.externalservices.CustomsNotificationService
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 

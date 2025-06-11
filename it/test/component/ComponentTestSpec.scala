@@ -17,7 +17,7 @@
 package component
 
 import org.mockito.Mockito.when
-import org.scalatest._
+import org.scalatest.*
 import org.scalatest.concurrent.Eventually
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatestplus.mockito.MockitoSugar

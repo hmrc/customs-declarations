@@ -19,12 +19,12 @@ package component
 import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
-import play.api.mvc._
+import play.api.mvc.*
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{status, _}
+import play.api.test.Helpers.{status, *}
 import uk.gov.hmrc.customs.declaration.model.{ApiSubscriptionKey, VersionThree, VersionTwo}
 import uk.gov.hmrc.customs.declaration.xml.ValidateXmlAgainstSchema
-import util.FakeRequests._
+import util.FakeRequests.*
 import util.RequestHeaders.X_CONVERSATION_ID_NAME
 import util.TestData.conversationIdValue
 import util.XmlOps.stringToXml

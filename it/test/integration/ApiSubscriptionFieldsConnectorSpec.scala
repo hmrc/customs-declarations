@@ -30,9 +30,9 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.ApiSubscriptionFieldsResponse
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.http.*
+import util.*
 import util.ExternalServicesConfig.{Host, Port}
 import util.VerifyLogging.verifyDeclarationsLoggerError
-import util.*
 import util.externalservices.ApiSubscriptionFieldsService
 
 import scala.concurrent.Future

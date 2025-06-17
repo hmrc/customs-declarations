@@ -15,6 +15,7 @@
  */
 
 package component
+
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterEach, GivenWhenThen}
@@ -22,7 +23,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import util.DynamicServiceTestData
 
 class DynamicServiceConfigurationSpec extends AnyFeatureSpec with GivenWhenThen with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach with DynamicServiceTestData {

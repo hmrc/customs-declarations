@@ -16,6 +16,7 @@
 
 package component
 
+import buildinfo.BuildInfo
 import org.apache.pekko.util.ByteString
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
@@ -26,7 +27,7 @@ import util.AuditService
 import util.FakeRequests.*
 import util.RequestHeaders.ValidHeadersV2WithCharset
 import util.externalservices.*
-import buildinfo.BuildInfo
+
 import java.nio.file.{Files, Paths}
 import scala.concurrent.Future
 

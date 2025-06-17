@@ -17,21 +17,21 @@
 package component.upscan
 
 import component.{ComponentTestSpec, ExpectedTestResponses}
-import org.mongodb.scala.model.Filters
 import org.mongodb.scala.SingleObservableFuture
+import org.mongodb.scala.model.Filters
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ACCEPT, CONTENT_TYPE, contentAsString, route, status, _}
+import play.api.test.Helpers.{ACCEPT, CONTENT_TYPE, contentAsString, route, status, *}
 import uk.gov.hmrc.customs.declaration.model.ConversationId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataMongoRepo
 import util.ApiSubscriptionFieldsTestData
 import util.CustomsDeclarationsExternalServicesConfig.CustomsNotificationAuthHeaderValue
-import util.TestData._
-import util.UpscanNotifyTestData._
+import util.TestData.*
+import util.UpscanNotifyTestData.*
 import util.XmlOps.stringToXml
 import util.externalservices.{CustomsNotificationService, FileTransmissionService}
 

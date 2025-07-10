@@ -1,0 +1,5 @@
+Step 1: Submit a declaration with a DUCR. 
+Step 2: EAC to associate DUCR with recycled MUCR.
+Step 3: CST to shut the recycled MUCR 
+Step 4: EAL with recycled MUCR is submitted. 
+Step 5: EDL with recycled MUCR is submitted.

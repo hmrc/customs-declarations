@@ -12,8 +12,8 @@
 			A Trader submits a pre-lodged (B1) Type D export declaration from NI to ROW for an ODS (Ozone Depleting Substance) and declares a combination of Document Code in DE 2/3 and previous Procedure Code in DE 1/10 for CDS to identify the declaration and initiate a CERTEX validation.
 			The description of goods in DE 'ttcertexCheck' will trigger the control and generate a DMSQRY trader notification.
             The declaration is queried by the Full Declaration.
-			An EAL and EDL are submitted to arrive and then depart the goods at DUCR level using XI EORI as as submitter.
-			Expected Notification: DMSRCV, DMSQRY, DMSRCV, DMSACC, DMSRES, DMSCLE, DMSEOG.
+			An EAL is submitted to arrive the goods at DUCR level using XI EORI as the submitter.
+			Expected Notification: DMSRCV, DMSACC, DMSQRY, DMSQRY.
 		-->
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>

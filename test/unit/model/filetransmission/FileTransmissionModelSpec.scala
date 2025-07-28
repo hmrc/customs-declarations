@@ -25,9 +25,9 @@ class FileTransmissionModelSpec extends AnyWordSpecLike with Matchers {
 
   "file transmission model" should {
     "serialise to Json" in {
-      val actual = Json.prettyPrint(Json.toJson(FileTransmissionRequest))
+      val actual = Json.toJson(FileTransmissionRequest)
 
-      actual shouldBe FileTransmissionRequestJsonString
+      actual shouldBe Json.parse(FileTransmissionRequestJsonString)
     }
   }
 }

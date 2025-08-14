@@ -20,12 +20,13 @@
 			Importer is not an AEO authorization holder
 			Self-representation used by the importer
 			Commodity Code: 0714100010
+            DE 2/3 C085 (Lic Exempt) added to existing
 			Expected Notifications: DMSTAX, DMSACC, DMSTAX, DMSROG, DMSTAX, DMSCLE 	-->
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 				Traders own reference number – this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7867523DKIEK</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523DKITK2</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 				IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -156,6 +157,16 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 						A document code of C517 indicates CWP - Authorisation for the operation of storage facilities for the customs warehousing of goods in a private customs warehouse.
 						ID contains the warehouse ID listed in 2/7. -->
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.-->
+				<!--DE 2/3: A document code of C085 for Plant or Plant related Commodity Code.
+				Document status code XW is a waiver code to indicate that no licence is required -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCHD2024.NIRMS</ID>
+					<Name>NIRMS</Name>
+					<TypeCode>085</TypeCode>
+					<LPCOExemptionCode>XW</LPCOExemptionCode>
+				</AdditionalDocument>
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>XICWP55320273485220231019133850</ID>
@@ -253,7 +264,7 @@
 						In these cases the serial number of the quota is mentioned beside the preferential duty rate in the printed version of the TARIC. -->
 						<DutyRegimeCode>120</DutyRegimeCode>
 						<!--DE 4/3: Tax type.
-								In this scenario, B00 indicating UK VAT. -->
+								In this scenario, A00 indicating customs duties. -->
 						<TypeCode>A00</TypeCode>
 						<!--DE 4/8: Method of Payment.
 								MethodCode of E to indicate Deferment used for customs duty. -->
@@ -345,7 +356,7 @@
 				<!--DE 4/13: Validation indicators.
 						This DE is mandatory when Method 1 is used.
 						The code comprises four digits, each of which being either a ‘0’ or a ‘1’:
-						• First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer  					and seller. 					• Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in  					accordance with Article 70(3)(a) of the Code. 					• Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance  					with Article 70(3)(b) of the Code. 					• Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
+						• First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller. 					• Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code. 					• Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code. 					• Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
 				<ValuationAdjustment>
 					<AdditionCode>0000</AdditionCode>
 				</ValuationAdjustment>

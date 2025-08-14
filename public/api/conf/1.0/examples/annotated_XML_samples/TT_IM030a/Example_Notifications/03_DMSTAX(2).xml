@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>8a7c42f43d3144228c84be52c06ff32a</FunctionalReferenceID>
+		<FunctionalReferenceID>96098bb18ab84184bfd77ae57e2a5886</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20250416102537Z</DateTimeString>
+			<DateTimeString formatCode="304">20250811145738Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,28 +19,19 @@
 			<NameCode>4</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>U.7847893UKH0D</FunctionalReferenceID>
-			<ID>25GB46NJJC9AGLEAR2</ID>
+			<FunctionalReferenceID>U.7867523TFS0V</FunctionalReferenceID>
+			<ID>25GB8U3N9D85D93AR7</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
 					<SequenceNumeric>1</SequenceNumeric>
 					<Commodity>
 						<DutyTaxFee>
-							<DeductAmount currencyID="GBP">0.00</DeductAmount>
-							<DutyRegimeCode>300</DutyRegimeCode>
-							<TypeCode>A50</TypeCode>
-							<Payment>
-								<TaxAssessedAmount currencyID="GBP">269.16</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP">269.16</PaymentAmount>
-							</Payment>
-						</DutyTaxFee>
-						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP">269.16</AdValoremTaxBaseAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">6500.00</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>300</DutyRegimeCode>
 							<TaxRateNumeric>0.00</TaxRateNumeric>
-							<TypeCode>B05</TypeCode>
+							<TypeCode>A00</TypeCode>
 							<Payment>
 								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
 								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
@@ -60,7 +51,7 @@
 						<DutyTaxFee>
 							<TypeCode>MDP</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP">832.00</TaxAssessedAmount>
+								<TaxAssessedAmount currencyID="GBP">780.00</TaxAssessedAmount>
 							</Payment>
 						</DutyTaxFee>
 					</Commodity>

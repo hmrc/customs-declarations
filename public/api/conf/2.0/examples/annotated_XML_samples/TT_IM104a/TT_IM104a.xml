@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
             SCENARIO
             Import of goods liable to Customs Duty & VAT, with no previous procedure
@@ -15,8 +15,8 @@
             Importer's DAN is being used.
             Goods presented at Wallasea Island on arrival.
 
-            Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test 
-			purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed 
+            Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test
+			purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed
 			as an 'Other listed location'.
         -->
 		<!--Function Code of 9 to represent an original declaration.-->
@@ -24,7 +24,7 @@
 		<!--DE 2/5: LRN.
             Mandatory.
             Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>U.7847767SZ4FE</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523TXTQK</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
             Mandatory.
             IM to represent an import declaration.-->
@@ -215,6 +215,15 @@
 					<TypeCode>851</TypeCode>
 					<LPCOExemptionCode>AP</LPCOExemptionCode>
 				</AdditionalDocument>
+				<!--DE 2/3: A document code of C085 for Plant or Plant related Commodity Code.
+				Document status code XX is a waiver code to indicate that no licence is required -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCHD-2025-EC01</ID>
+					<Name>Exempt</Name>
+					<TypeCode>085</TypeCode>
+					<LPCOExemptionCode>XX</LPCOExemptionCode>
+				</AdditionalDocument>
 				<!--DE 2/2: Additional Information. This field is mandatory, this represents goods
                 are imported from ROW into Northern Ireland. -->
 				<AdditionalInformation>
@@ -252,7 +261,7 @@
                             100 represents no preference being claimed.-->
 						<DutyRegimeCode>100</DutyRegimeCode>
 						<!--DE 4/3: Tax Type.
-                            A00 represents UK Customs Duty -->
+                            A50 represents Customs Duty EU code for use in Northern Ireland only -->
 						<TypeCode>A50</TypeCode>
 						<Payment>
 							<!--DE 4/8: Method of Payment.
@@ -274,7 +283,7 @@
 				</Commodity>
 				<!--DE 4/16: Valuation method.
                     Mandatory unless D.E. 1/11 used E01 or E02.
-                    1 to indicate the method is transaction value of the imported goods.-->
+                    4 to indicate the deductive method of the imported goods.-->
 				<CustomsValuation>
 					<MethodCode>4</MethodCode>
 				</CustomsValuation>
@@ -289,7 +298,7 @@
 				</GovernmentProcedure>
 				<!--DE 1/11: Additional Procedure.
                     Mandatory
-                    000 to indicate no additional procedure.-->
+                    E02 to indicate Standard Import Values (SIV) as published in the EU Official Journal (OJ).-->
 				<GovernmentProcedure>
 					<CurrentCode>E02</CurrentCode>
 				</GovernmentProcedure>

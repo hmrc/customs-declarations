@@ -14,7 +14,7 @@
 
 			SCENARIO
 			A self-representing frontier declaration: H1 additional declaration Type Y (Supplementary) declaration
-			Goods being imported from RoW(UA) to NI
+			Goods being imported from RoW(CL) to NI
 			Goods are deemed to be 'At Risk'
 			EU Preference has been claimed, however, the Trader has indicated that preference documentation is not available.
 			Customs Duty is calculated at the EU Tariff preferential rate, according to the preference code entered
@@ -24,21 +24,22 @@
 			CDS calculates Customs Duties using the EU Tariff rate
 			CDS notifies the Trader via DMSTAX of the duties payable
 			Procedure code 4000 Additional Procedure code 000
-			Goods: Fresh courgettes from Ukraine, 15,000kg
+			Goods: Fresh courgettes from Chile, 11,800kg
 			Importer is an AEO authorisation holder, DAN holder, and SDE authorised party
 			Deferment used for payment of duty & security
 			Goods presented at Warren Point, Belfast, Northern Ireland, UK
+			DE 2/3 C085 (Lic Exempt) added to existing
 
 			Expected Notifications: DMSTAX(1), DMSACC, DMSTAX(2), DMSCLE
 		-->
 		<!-- Acceptance Date is present on all supplementary declarations, and will match the CLE date listed in 2/1.-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20250416112427+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20250811155246+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!-- Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. Mandatory field. Traders own reference number this must be unique to the transaction -->
-		<FunctionalReferenceID>U.7847893UKH0D</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523TFS0V</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. Mandatory field. IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type. Mandatory field. A to represent an arrived frontier standard declaration.-->
 		<TypeCode>IMY</TypeCode>
@@ -83,7 +84,7 @@
 		</AuthorisationHolder>
 		<BorderTransportMeans>
 			<!--DE 7/15: Nationality of active means of transport crossing the border. Mandatory field unless postal, rail or fixed energy installation.
-						RegistrationNationalityCode: UA represents Ukraine. -->
+						RegistrationNationalityCode: CL represents Chile. -->
 			<RegistrationNationalityCode>CL</RegistrationNationalityCode>
 			<!--DE 7/4: Mode of transport at the border. Mandatory field. ModeCode of 1 to represent Maritime Sea transport. -->
 			<ModeCode>1</ModeCode>
@@ -145,6 +146,16 @@
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Good item number. Mandatory field. Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.-->
+				<!--DE 2/3: A document code of C085 for Plant or Plant related Commodity Code.
+				Document status code XW is a waiver code to indicate that no licence is required -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCHD2024.NIRMS</ID>
+					<Name>NIRMS</Name>
+					<TypeCode>085</TypeCode>
+					<LPCOExemptionCode>XW</LPCOExemptionCode>
+				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory if the codes are required.
 					A document code of U096 indicates Certificate EUR.1 bearing the endorsement "Derogation - [Commission Implementing Decision (EU) 2015/164]"
@@ -280,7 +291,7 @@
 				<Commodity>
 					<!--DE 6/8: Description of goods.
 						Mandatory item.
-						Description of the goods specific enough to enable classification - without repeating the CN code description in the Tariff. -->
+						Description of the goods specific enough to enable classification - without repeating the CL code description in the Tariff. -->
 					<Description>Fresh courgettes from Chile</Description>
 					<!--DE 6/14: Commodity code - combined nomenclature code. Mandatory field. -->
 					<Classification>
@@ -312,7 +323,7 @@
 						<DutyRegimeCode>300</DutyRegimeCode>
 					</DutyTaxFee>
 					<GoodsMeasure>
-						<!--DE 6/5: Gross Mass (KG). This data element can be declared at a header or item level, depending on the scenario. Mandatory field. Entry of 15010 indicates 15010kg including packaging. -->
+						<!--DE 6/5: Gross Mass (KG). This data element can be declared at a header or item level, depending on the scenario. Mandatory field. Entry of 11800 indicates 11800kg including packaging. -->
 						<GrossMassMeasure>11800</GrossMassMeasure>
 						<!--DE 6/1: Net Mass (KG). Mandatory field. Entry of 11600 indicates 11600kg excluding packaging. -->
 						<NetNetWeightMeasure>11600</NetNetWeightMeasure>
@@ -327,7 +338,7 @@
 					<MethodCode>1</MethodCode>
 				</CustomsValuation>
 				<ExportCountry>
-					<!--DE 5/14: Country of Dispatch/export code. This data element can be declared at a header or item level, depending on the scenario. Mandatory field. Dispatching Third country is Ukraine. -->
+					<!--DE 5/14: Country of Dispatch/export code. This data element can be declared at a header or item level, depending on the scenario. Mandatory field. Dispatching Third country is Chile. -->
 					<ID>CL</ID>
 				</ExportCountry>
 				<!--DE 1/10: Procedure. Mandatory field.
@@ -343,7 +354,7 @@
 				</GovernmentProcedure>
 				<!--DE 5/16: Country of preferential origin code. Mandatory if DE 4/17 does not begin with '1'. Where preference in DE 4/17 begins with a number other than '1', this must be completed.
 							TypeCode: 2 indicates the Country of Preferential Origin.
-							CountryCode: UA represents Ukraine, the country from which the goods originated -->
+							CountryCode: CL represents Chile, the country from which the goods originated -->
 				<Origin>
 					<CountryCode>CL</CountryCode>
 					<TypeCode>2</TypeCode>

@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 			SCENARIO
 			Standard declaration: H1 additional declaration Type Y – Release for Free Circulation.
@@ -15,18 +16,16 @@
 			Valuation Method 1 with Item Price declared.
 			AI code 'NIIMP' entered at Item Level.
 			000 is declared in D.E. 1/11 (Additional Procedure Code) and "KGM" is declared in D.E. 4/4 (Tax Base, under "Measurement Unit"), therefore, CDS will Accept, Calculate Tax, and Clear the declaration.
-
-			Please note that this scenario isnt performing as expected and will be updated in a future release.
 		-->
 		<!--Acceptance Date is present on all supplementary declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20241129170122+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20250812112657+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number – this must be unique to the transaction -->
-		<FunctionalReferenceID>U.78675238THJQ</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523IVST2</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type.
@@ -161,6 +160,16 @@
 				<!--DE 1/6: Goods Item Number.
 					Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.-->
+				<!--DE 2/3: A document code of C085 for Plant or Plant related Commodity Code.
+				Document status code XW is a waiver code to indicate that no licence is required -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCHD2024.NIRMS</ID>
+					<Name>NIRMS</Name>
+					<TypeCode>085</TypeCode>
+					<LPCOExemptionCode>XW</LPCOExemptionCode>
+				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory if the codes are required.
 					A document code of C501 indicates AEOC - Authorisation for the status of Authorised Economic Operator - Customs Simplifications. -->
@@ -316,7 +325,7 @@
 						<NetNetWeightMeasure unitCode="KGM">1000</NetNetWeightMeasure>
 					</GoodsMeasure>
 					<!--DE 4/14: Item price amount.
-						The invoice was issued with a value of 1200 and the currency is GBP. -->
+						The invoice was issued with a value of 2000 and the currency is GBP. -->
 					<InvoiceLine>
 						<ItemChargeAmount currencyID="GBP">2000</ItemChargeAmount>
 					</InvoiceLine>

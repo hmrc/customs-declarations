@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 
 			SCENARIO
@@ -19,13 +20,13 @@
         -->
 		<!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20241113141259+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20250901110330+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Declarant's own reference number: this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7849431VUY8T</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7927468WCQ00</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
@@ -58,7 +59,7 @@
 			<CategoryCode>CWP</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authoriation Identification Number.
-			An authorisation type code of UKIM indicates that a good that otherwise would be considered â€œat riskâ€ of moving into the EU, must instead be considered â€œnot at riskâ€.
+			An authorisation type code of UKIM indicates that a good that otherwise would be considered 'at risk' of moving into the EU, must instead be considered 'not at risk'.
 			The ID here is the EORI of the UKIM authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
@@ -87,6 +88,14 @@
 		</Exporter>
 		<GoodsShipment>
 			<Consignment>
+				<!--DE 7/9: Identity of the means of transport on arrival.
+					Mandatory unless postal or fixed energy installation.
+					Example number representing IMO ship identification number: '10', and 5 digits for the
+					identification number: '12345'. -->
+				<ArrivalTransportMeans>
+					<ID>12345</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+				</ArrivalTransportMeans>
 				<GoodsLocation>
 					<!--DE 5/23: Location of Goods - Identification of location.
 						Mandatory.
@@ -229,7 +238,7 @@
 						This is a mandatory field. To denote the inventory reference number.
 						Note: As this is for a single item declaration, this should all be declared at header level-->
 					<CategoryCode>Z</CategoryCode>
-					<ID>24GB34F7Y1O2CX8PT4 </ID>
+					<ID>25GB34F7Y1O2CX8PT4 </ID>
 					<TypeCode>355</TypeCode>
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
@@ -245,7 +254,7 @@
 				In CDS, the MUCR (MCR) is not required on a supplementary declaration. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>4GB553202734852-20240408</ID>
+				<ID>5GB553202734852-20250829</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -254,7 +263,7 @@
 				Note that this is item 1 from the EIDR record entry. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20241113</ID>
+				<ID>20250901</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

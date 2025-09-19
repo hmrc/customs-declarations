@@ -10,7 +10,7 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7867523Y85HA</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7845574WRU1F</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type. B to represent an occasional simplified frontier declaration. -->
 		<TypeCode>IMB</TypeCode>
@@ -154,15 +154,15 @@
 					</DutyTaxFee>
 					<GoodsMeasure>
 						<!--DE 6/5: Gross Mass. Weight of the goods in kilograms including packaging. -->
-						<GrossMassMeasure>5</GrossMassMeasure>
+						<GrossMassMeasure>2</GrossMassMeasure>
 						<!--DE 6/1: Net Mass. Weight of the goods in kilograms without any packaging. -->
-						<NetNetWeightMeasure>3</NetNetWeightMeasure>
+						<NetNetWeightMeasure>1</NetNetWeightMeasure>
 						<!--DE 6/2: Supplementary Units. Quantity of the goods in the unit as required by Customs for tariff, statistical or fiscal purposes. -->
-						<TariffQuantity>5</TariffQuantity>
+						<TariffQuantity>1</TariffQuantity>
 					</GoodsMeasure>
-					<!--DE 4/14: Item Price/ Amount. The invoice was issued with a value of 1200 and the currency was in GBP. -->
+					<!--DE 4/14: Item Price/ Amount. The invoice was issued with a value of 130 and the currency was in GBP. -->
 					<InvoiceLine>
-						<ItemChargeAmount currencyID="GBP">1200</ItemChargeAmount>
+						<ItemChargeAmount currencyID="GBP">130</ItemChargeAmount>
 					</InvoiceLine>
 				</Commodity>
 				<!--DE 4/16: Valuation Method. 1 to indicate the method is transaction value of the goods. -->

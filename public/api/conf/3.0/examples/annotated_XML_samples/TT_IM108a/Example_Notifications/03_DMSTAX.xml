@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>6583f4f06d0a4b5c94c0031983e314f0</FunctionalReferenceID>
+		<FunctionalReferenceID>621184f727c74c4daa9b5fd71a7d858e</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20230609082628+01</DateTimeString>
+			<DateTimeString formatCode="304">20250905085959Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,17 +19,17 @@
 			<NameCode>4</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>784830983BP8J16J8</FunctionalReferenceID>
-			<ID>23GB6BMYKQPD989AR5</ID>
+			<FunctionalReferenceID>U.7867523V5GOE</FunctionalReferenceID>
+			<ID>25GB9TGXXSOCZRZAR0</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
 					<SequenceNumeric>1</SequenceNumeric>
 					<Commodity>
 						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP">200000.00</AdValoremTaxBaseAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">187000.00</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
-							<DutyRegimeCode>300</DutyRegimeCode>
+							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>0.00</TaxRateNumeric>
 							<TypeCode>A00</TypeCode>
 							<Payment>
@@ -38,8 +38,8 @@
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
-							<DeductAmount currencyID="GBP">67890.00</DeductAmount>
-							<DutyRegimeCode>300</DutyRegimeCode>
+							<DeductAmount currencyID="GBP">15500.00</DeductAmount>
+							<DutyRegimeCode>100</DutyRegimeCode>
 							<TypeCode>99D</TypeCode>
 							<Payment>
 								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
@@ -47,9 +47,9 @@
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP">200000.00</AdValoremTaxBaseAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">187000.00</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
-							<DutyRegimeCode>300</DutyRegimeCode>
+							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>0.00</TaxRateNumeric>
 							<TypeCode>B00</TypeCode>
 							<Payment>

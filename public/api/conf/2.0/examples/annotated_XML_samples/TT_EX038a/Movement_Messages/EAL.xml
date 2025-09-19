@@ -1,11 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-<inv:messageCode>EAL</inv:messageCode>                       
-<inv:ucrBlock>
-<inv:ucr>3GB238566566459-606DCNA</inv:ucr>
-<inv:ucrType>D</inv:ucrType>
-</inv:ucrBlock>
-<inv:goodsLocation>GBAUBELBFSBEL</inv:goodsLocation>           
-<inv:goodsArrivalDateTime>2023-08-09T10:56:00Z</inv:goodsArrivalDateTime>                               
-<inv:movementReference>M35</inv:movementReference>                    
-</inv:inventoryLinkingMovementRequest>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<n1:InventoryLinkingExportsInboundRequest xmlns:n1="http://www.hmrc.gov.uk/cds/inventorylinking/exportmovement" xmlns:gw="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:inv="http://gov.uk/customs/inventoryLinking/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hmrc.gov.uk/cds/inventorylinking/exportmovement DEC39_Root.xsd">
+	<n1:requestCommon>
+		<!-- <gw:badgeIdentifier>FCP127</gw:badgeIdentifier> -->
+		<gw:submitter>GB239355053000</gw:submitter>
+		<gw:clientID>f189ece6-0386-406d-99b9-b7a59c367d27</gw:clientID>
+		<gw:conversationID>a774a2c3-5c93-471e-8b9b-923e34bfd6ad</gw:conversationID>
+		<gw:correlationID>02364e54-0f1e-401d-aa8b-1e55e596c29b</gw:correlationID>
+		<gw:dateTimeStamp>2025-09-15T14:53:29.029+01:00</gw:dateTimeStamp>
+	</n1:requestCommon>
+	<n1:requestDetail>
+		<inv:inventoryLinkingMovementRequest>
+			<inv:messageCode>EAL</inv:messageCode>
+			<inv:ucrBlock>
+				<inv:ucr>5GB575801025632-8QS1JAV</inv:ucr>
+				<inv:ucrType>D</inv:ucrType>
+			</inv:ucrBlock>
+			<inv:goodsLocation>GBAUBELBFSBEL</inv:goodsLocation>
+			<inv:goodsArrivalDateTime>2025-09-15T14:53:29.029+01:00</inv:goodsArrivalDateTime>
+			<inv:movementReference>YLDAIJGUPJGC5GHZTB6AH94UP</inv:movementReference>
+		</inv:inventoryLinkingMovementRequest>
+	</n1:requestDetail>
+</n1:InventoryLinkingExportsInboundRequest>

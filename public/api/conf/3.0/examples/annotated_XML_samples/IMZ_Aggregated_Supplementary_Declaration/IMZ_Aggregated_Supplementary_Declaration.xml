@@ -1,0 +1,693 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!-- 
+            SCENARIO
+			Single aggregated supplementary declaration (IMZ)for multiple removals of goods made in the same day, (Daily Aggregation)to reduce the number of supplementary declarations of Type Z submissions.
+            
+			A trader submits a EIDR Type Z supplementary Declaration, H1 dataset, importing goods from RoW-GB, declaring:
+			• Procedure code 4071, no additional procedure 000.
+			• Commodity code 1803100000 and 18040000 importing from Brazil
+            • Deferred payment is being used with standing authority - Declarant is authorized to use the Importer's DAN.
+            • Agent has a Function Code of 2 indicating a direct representative of the importer.
+            • Agent and Declarant ID have the same EORI values of Declarant/ Agent EORI: GB603202734852 -->
+		<!-- Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations.  -->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20250731143931+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<!-- Function Code of 9 to represent an original declaration.  -->
+		<FunctionCode>9</FunctionCode>
+		<!-- DE 2/5: LRN.
+            Traders own reference number – this must be unique to the transaction.  -->
+		<FunctionalReferenceID>Agg_Supp_Dec_Z</FunctionalReferenceID>
+		<!-- DE 1/1: Declaration Type.
+            IM to represent an import declaration. -->
+		<!-- DE 1/2: Additional Declaration Type Z.
+            Z to represent an EIDR supplementary declaration.
+        Aggregation rule on DE1/1- Cannot mix IM and CO on an aggregated declaration and on DE1/2 Cannot aggregate across Sup Dec Types.   -->
+		<TypeCode>IMZ</TypeCode>
+		<!-- DE 1/9: Total Number of Items.
+         2 to represent a multiple items declaration. -->
+		<GoodsItemQuantity>2</GoodsItemQuantity>
+		<!-- 6/18: Total Packages.
+            In this case 55 -->
+		<TotalPackageQuantity>55</TotalPackageQuantity>
+		<!-- DE 2/6: Deferred Payment.
+            The DAN account used for deferred payment (of third country duty in this scenario).
+            The agent has standing authority to use this DAN on behalf of the importer in this declaration.  -->
+		<AdditionalDocument>
+			<CategoryCode>1</CategoryCode>
+			<ID>1108654</ID>
+			<TypeCode>DAN</TypeCode>
+		</AdditionalDocument>
+		<!-- DE 3/21: Representative Status Code.
+            FunctionCode of 2 indicating agent acting in direct representation for the importer (holding written instruction to do so).
+			Aggregation Rule on DE 3/21 - No aggregation across representation types.  -->
+		<Agent>
+			<FunctionCode>2</FunctionCode>
+		</Agent>
+		<!-- DE 3/39: Holder of the Authorisation Identification Number.
+            An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarant’s records.
+            The ID is the EORI of the EIDR authorised party. Holder of the Authorisation Number (D.E. 3/39) must have an Authorisation Type CodeHolder of the 
+			Authorisation Number (D.E. 3/39) must have an Authorisation Type Code 'EIR' declaration through an entry in the declarant’s records -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>EIR</CategoryCode>
+		</AuthorisationHolder>
+		<!-- DE 3/39: Holder of the Authorisation Identification Number.
+            An authorisation type code of AEOC indicates an authorisation for the status of Authorised Economic Operator - Customs Simplifications.
+            The ID is the EORI of the AEOC authorised party.  -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>AEOC</CategoryCode>
+		</AuthorisationHolder>
+		<!-- DE 3/39: Holder of the Authorisation Identification Number.
+            An authorisation type code of DPO indicates Deferment of payment authorisation. See DE 2/3 where a document code of C506 has been entered.
+            The ID here is the EORI of the DPO authorised party.  -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>DPO</CategoryCode>
+		</AuthorisationHolder>
+		<!-- DE 3/39: Holder of the Authorisation Identification Number.
+            An authorisation type code of CWP indicates operation of storage facilities for the customs warehousing of goods in a private customs warehouse
+               The ID is the EORI number of the Private Customs Warehousekeeper. As per the
+               import declaration completion guide, when goods are being removed from a private
+               customs warehouse, the EORI number entered here must be the same as the
+               Importer's EORI number declared in DE 3/16. -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>CWP</CategoryCode>
+		</AuthorisationHolder>
+		<!-- DE 3/39: Holder of the Authorisation Identification Number.
+            An authorisation type code of CGU is required where CCG authorisation is being declared or a waiver is being claimed.
+            In this scenario, a waiver is being claimed.
+            See DE 2/3 where a document code of C505 has been entered.
+            The ID here is the EORI of the CCG authorised party.  -->
+		<AuthorisationHolder>
+			<ID>GB553202734852</ID>
+			<CategoryCode>CGU</CategoryCode>
+		</AuthorisationHolder>
+		<BorderTransportMeans>
+			<!-- DE 7/15: Country code of the nationality of the active means of transport crossing the border.
+                In this case US.  -->
+			<RegistrationNationalityCode>US</RegistrationNationalityCode>
+			<!-- DE 7/4: Mode of Transport at the Border.
+                ModeCode of 1 to represent Maritime/Sea transport
+                Aggregation Rule on DE7/4- Must be the same mode of transport. 				 -->
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<!-- DE 3/18: Declarant Identification Number.
+            The EORI number of the agent entering the declaration
+            The UK requires an EORI to be provided for the declarant
+            In this scenario, this is the same as the EORI of the Agent.  -->
+		<Declarant>
+			<ID>GB603202734852</ID>
+		</Declarant>
+		<!-- DE 3/1: Exporter.
+            Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2.  -->
+		<Exporter>
+			<Name>Chicago Cocoa Company</Name>
+			<Address>
+				<CityName>Chicago</CityName>
+				<CountryCode>US</CountryCode>
+				<Line>10 Irwin Street</Line>
+				<PostcodeID>H81 4RG</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<!-- DE 8/5: Nature of transaction.
+                1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation
+                If aggregating across transaction types use code ‘9’				 -->
+			<TransactionNatureCode>1</TransactionNatureCode>
+			<Consignment>
+				<!-- DE 7/2: Container.
+                    Indicator to show if goods are packed in a container or not.
+                    1 indicates that goods are transported in containers.
+                    Note: Unlike CHIEF this must now be completed
+					If aggregating across containerised and non-containerised goods use code ‘0’.  -->
+				<ContainerCode>1</ContainerCode>
+				<!-- DE 7/9:  Identity of means of transport on arrival.
+                    Example number representing IMO ship identification number: ‘10’, and 5 digits for the identification number: ‘12345’.  -->
+				<ArrivalTransportMeans>
+					<ID>12345</ID>
+					<IdentificationTypeCode>10</IdentificationTypeCode>
+					<!-- DE 7/5: Inland Mode of Transport - 3 to represent Road Transport.
+                        This is required as customs procedures are completed away from the border.  -->
+					<ModeCode>3</ModeCode>
+				</ArrivalTransportMeans>
+				<!-- DE 5/23: ID to give a unique position of the location 
+				    Aggregation Rule on DE5/23-Single goods located at header level.
+                    For warehousing must declare — GBBYCW + Warehouse Identification number.
+                    For Free Zones declare — GBBYFZ + Free Zone Identification number
+                    For other location types where more than one Location applies, declare GBBYAGG + reference number to link to breakdown in the commercial records -->
+				<GoodsLocation>
+					<!-- DE 5/23:The location code for the Customs Warehouse.  -->
+					<Name>CW1117770GB</Name>
+					<!-- DE 5/23: Type of Location.
+                        B is used to identify inland locations such as customs warehouses.  -->
+					<TypeCode>B</TypeCode>
+					<Address>
+						<!-- DE 5/23: Type of ID of the Location.
+                            Y is used where the goods location is identified by an authorisation number.  -->
+						<TypeCode>Y</TypeCode>
+						<!-- DE 5/23: Goods Location.
+                            Country code of the country where the goods may be examined, GB in this scenario.  -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+				<!-- DE 7/10: Container identification number.
+                    This is alpha-numeric up to a total of 17 characters.
+                    This is required where the container code in DE 7/2 is '1', indicating containerised traffic.
+                    For containers covered by the standard ISO 6346, the identifier (prefix) allocated by the International Bureau of Containers and Intermodal Transport (BIC) shall also be provided in addition to the container identification number.
+                    For swap bodies and semi-trailers the ILU (Intermodal Loading Units) code as introduced by the European EN 13044 shall be used.  -->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>DM1234</ID>
+				</TransportEquipment>
+			</Consignment>
+			<!-- DE 5/8: Country code of the destination country.
+                In this case GB. 
+				Aggregation rule on DE5/8 - If Onward Supply Relief (OSR) cannot aggregate across destination Member States.  -->
+			<Destination>
+				<CountryCode>GB</CountryCode>
+			</Destination>
+			<!-- DE 5/14: Country of Dispatch/Export Code.
+                Country code for the country from which the goods were originally dispatched, in this case US. 
+				 Aggregation Rule on DE5/14 -If declared at header level, all goods must be from same country. 
+			     If different countries apply, this must be declared at item level and aggregation can only be used where all the goods declared on a single item are from the same country -->
+			<ExportCountry>
+				<ID>US</ID>
+			</ExportCountry>
+			<GovernmentAgencyGoodsItem>
+				<!-- DE 1/6: Goods Item Number.
+                    Sequential number of the goods item.  -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<AdditionalDocument>
+					<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                        A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant’s records.  -->
+					<CategoryCode>C</CategoryCode>
+					<ID>GBEIR553202734852I20190613093448</ID>
+					<TypeCode>514</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    A document code of C501 indicates AEOC - Authorisation for the status of Authorised Economic Operator - Customs Simplifications.  -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GB AEOC 14274/19</ID>
+					<TypeCode>501</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    C506 indicates DPO - Authorisation for the deferment of payment.  Provide the authorisation decision number for the deferment of payment authorisation in the format:
+                     - 2 digit code identifying the member state of authorisation, for example, GB
+                     - 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
+                     - followed by the authorisation reference number. No document status code is required. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBDPO1108654</ID>
+					<TypeCode>506</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    A document code of C517 indicates CWP - Authorisation for the operation of storage facilities for the customs warehousing of goods in a private customs warehouse.  -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCWP55320273485220190607191400</ID>
+					<TypeCode>517</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    A document code of C505 indicates ‘CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
+                    In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of "CC"), and therefore the ID also indicates that a waiver is being used.  -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCGUGuaranteenotrequired</ID>
+					<TypeCode>505</TypeCode>
+					<LPCOExemptionCode>CC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                 A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16.
+                 Aggregation Rule on DE 2/3 Invoice details: Where N935 is required — insert a reference that allows a cross reference back to the individual invoices in the commercial records (i.e. ID provides a link to a series of invoices)-->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>12345/14.11.2022</ID>
+					<TypeCode>935</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    A document code of C644 indicates Certificate of inspection for organic products.  -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>0054037-00554047</ID>
+					<TypeCode>644</TypeCode>
+					<LPCOExemptionCode>GE</LPCOExemptionCode>
+				</AdditionalDocument>
+				<Commodity>
+					<!-- DE 6/8: Goods Description.
+                        Description of the goods specific enough to enable classification – without repeating the CN code description in the Tariff.
+                        Aggregation Rule on DE6/8-Description of goods must be specific and the same for all aggregated goods. 							 -->
+					<Description>Cocoa Butter-fat and oil</Description>
+					<Classification>
+						<!-- DE 6/14: Commodity code - combined nomenclature code.
+                           IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used
+                           Aggregation rule on DE6/14, 6/15, 6/16, 6/17- Cannot aggregate across TARIC or NAC commodity codes. 						    -->
+						<ID>18031000</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!-- DE 6/15: Commodity code - TARIC code.  -->
+						<ID>00</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--  DE 6/17: Commodity Code – National Additional Codes.
+                           VATZ to represent VAT 0% duty rate.  -->
+						<ID>VATZ</ID>
+						<IdentificationTypeCode>GN</IdentificationTypeCode>
+					</Classification>
+					<DutyTaxFee>
+						<!-- DE 4/17: Preference.
+                            Type of 100 represents no preference being claimed.  -->
+						<DutyRegimeCode>100</DutyRegimeCode>
+						<!-- DE 4/3: Calculation of Taxes - Tax Type.
+                            In this scenario, A00 indicating Customs duties.  -->
+						<TypeCode>A00</TypeCode>
+						<Payment>
+							<!-- DE 4/8: Payment Method.
+                                MethodCode of E to indicate Deferment used for import.  -->
+							<MethodCode>E</MethodCode>
+						</Payment>
+					</DutyTaxFee>
+					<GoodsMeasure>
+						<!-- DE 6/5: Gross Mass
+                            Mass of the goods in kilograms including packaging.
+							Aggregated Rule on DE6/5 -An aggregated weight may be provided at header level. 
+                            Completion at item level is determined by the additions and deductions claimed in D.E 4/9 and any commodity code specific requirements.  -->
+						<GrossMassMeasure>15</GrossMassMeasure>
+						<!-- DE 6/1: Net Mass
+                            Mass of the goods in kilograms without any packaging.  -->
+						<NetNetWeightMeasure>10</NetNetWeightMeasure>
+					</GoodsMeasure>
+					<!-- DE 4/14:  Item price amount.
+                        The invoice was issued with of a value of £1000 and the currency was in GBP. 
+                     Aggregation rule on DE4/14- Declare the aggregated value for the item. Where goods are being removed from a customs warehouse, the customs value may be converted to CIF for the purposes of aggregation.
+                     Declare the converted customs value ensuring all necessary additions and deductions have been made to the aggregated value entered in DE 4/14)-->
+					<InvoiceLine>
+						<ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+				<!-- DE 4/16: Valuation method.
+                    	Valuation Method 3 — Transaction value of similar goods.  -->
+				<CustomsValuation>
+					<MethodCode>3</MethodCode>
+				</CustomsValuation>
+				<GovernmentProcedure>
+					<!-- DE 1/10: Procedure.
+                        Requested Procedure of 40 indicating entry for free circulation and home use of goods.
+                        Previous Procedure of 71 indicating goods are being removed from
+                        a customs warehouse.  -->
+					<CurrentCode>40</CurrentCode>
+					<PreviousCode>71</PreviousCode>
+				</GovernmentProcedure>
+				<!-- DE 1/11: Additional Procedure Code.
+                    000 to indicate no additional procedure.  -->
+				<GovernmentProcedure>
+					<CurrentCode>000</CurrentCode>
+				</GovernmentProcedure>
+				<!-- DE 5/15: Country of Origin.
+                    TypeCode of 1 to represent non-preferential origin.
+                    Where preference in D.E. 4/17 begins with ‘1’, this must be completed .
+					DE 5/16: Country of Preferential Origin.
+                    TypeCode: 2 indicates the Country of Preferential Origin.
+                    CountryCode contains the code for the country from which the goods originated,in this case ERITREA.                  
+					Aggregation Rule on DE5/15 and 5/16-Cannot combine preference and non-preference on same item. Cannot aggregate across preference codes.   -->
+				<Origin>
+					<CountryCode>ER</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!-- DE 6/11: Shipping marks on the packages
+                     Aggregation Rule on 6/11-If aggregated across shipping marks use DCRAGG ref as per D.E 2/1	 -->
+					<MarksNumbersID>PK12345</MarksNumbersID>
+					<!-- DE 6/10: Number of Packages.
+                        In this case 55.  -->
+					<QuantityQuantity>55</QuantityQuantity>
+					<!-- DE 6/9: Type of Packages.
+                        IG to represent 'Package, paper wrapped'. 
+						Aggregation Rule on DE6/9-If a single package type applies to all the aggregated goods-enter the specific type code. 
+						If multiple package types apply, enter NA. Provide an audit trail in the commercial records where NA is used.  -->
+					<TypeCode>IG</TypeCode>
+				</Packaging>
+				<!-- DE 2/1: Previous document of Z355 to show the MRN for the entry summary declaration. 
+					This is a mandatory field. 
+					To denote the inventory reference number. 
+					Note: As this is for a multiple item declaration, these should all be declared at Item level.  -->
+				<PreviousDocument>
+					<CategoryCode>Z</CategoryCode>
+					<ID>25GB6W23HIITPATAR8</ID>
+					<TypeCode>355</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<!-- DE 2/1: Previous Documents.
+                ZZZZ To represent the warehouse stock reference number.  -->
+				<PreviousDocument>
+					<CategoryCode>Z</CategoryCode>
+					<ID>STK11111</ID>
+					<TypeCode>ZZZ</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<!-- CLE represents the date of Entry Into Declarant’s Records (EIDR) procedure
+			   Note: If aggregating across 40 or more DUCRs use the following 
+              • YCLE + the last date of the aggregation period    
+			  Additionally, If the trader is doing an aggregated supplementary declaration covering a number of days entries in traders records then they declare CLE, 
+			  repeated for each applicable date, at item level with the relevant dates, and don't declare CLE at header level.
+			  AND if a trader does a separate aggregated supplementary declaration for each day's entries in trader's record, 
+			  then they declare CLE at header level only with that one date and do not declare CLE at item level.-->
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>20250715</ID>
+					<TypeCode>CLE</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>20250716</ID>
+					<TypeCode>CLE</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<!-- The DUCR quoted on the type Z declaration must be the DUCR associated with the removal of the goods from the customs warehouse
+			   Note: If aggregating across 40 or more DUCRs use the following 
+              • YDCRAGGDUCRGB + the EORI number + a unique reference number + 1 — to provide a reference that tracks back to records of all DUCRs aggregated across the supplementary declaration.  -->
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>DUCRGB553202734852-22522</ID>
+					<TypeCode>DCR</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>DUCRGB553202734852-22523</ID>
+					<TypeCode>DCR</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<!-- DE 4/13: Valuation indicator.
+                    Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
+                    The code comprises four digits, each of which being either a ‘0’ or a ‘1’:
+                     - First digit: 0 = there is no price influence as a result of a
+                    Party Relationship between the buyer and seller.
+                     - Second digit: 0 = there are no restrictions as to the disposal
+                    or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+                     - Third digit: 0 = the sale or price is not subject to some condition
+                    or consideration in accordance with Article 70(3)(b) of the Code.
+                     - Fourth digit: 0 = the sale is not subject to an arrangement under
+                    which part of the proceeds of any subsequent resale, disposal or use
+                    accrues directly or indirectly to the seller.  -->
+				<ValuationAdjustment>
+					<AdditionCode>0000</AdditionCode>
+				</ValuationAdjustment>
+			</GovernmentAgencyGoodsItem>
+			<GovernmentAgencyGoodsItem>
+				<!-- DE 1/6: Goods Item Number.
+                    Sequential number of the goods item.  -->
+				<SequenceNumeric>2</SequenceNumeric>
+				<AdditionalDocument>
+					<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                        A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant’s records.  -->
+					<CategoryCode>C</CategoryCode>
+					<ID>GBEIR553202734852I20190613093448</ID>
+					<TypeCode>514</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    A document code of C501 indicates AEOC - Authorisation for the status of Authorised Economic Operator - Customs Simplifications.  -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GB AEOC 14274/19</ID>
+					<TypeCode>501</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    C506 indicates DPO - Authorisation for the deferment of payment.  Provide the authorisation decision number for the deferment of payment authorisation in the format:
+                     - 2 digit code identifying the member state of authorisation, for example, GB
+                     - 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
+                     - followed by the authorisation reference number. No document status code is required. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBDPO1108654</ID>
+					<TypeCode>506</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    A document code of C517 indicates CWP - Authorisation for the operation of storage facilities for the customs warehousing of goods in a private customs warehouse.  -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCWP55320273485220190607191400</ID>
+					<TypeCode>517</TypeCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    A document code of C505 indicates ‘CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
+                    In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of "CC"), and therefore the ID also indicates that a waiver is being used.  -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>GBCGUGuaranteenotrequired</ID>
+					<TypeCode>505</TypeCode>
+					<LPCOExemptionCode>CC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. 
+                This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16.
+                Aggregation Rule on DE 2/3 Invoice details: Where N935 is required — insert a reference that allows a cross reference back to the individual invoices in the commercial records (i.e. ID provides a link to a series of invoices)-->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>12345/14.11.2022</ID>
+					<TypeCode>935</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    This field is mandatory if the codes are required.
+                    A document code of C644 indicates Certificate of inspection for organic products.
+                    Name: A free text description of the Reason where required by the Document Status Code.
+                    LPCOExemptionCode: GE indicates document with the goods – exhausted by (or only applies to) this entry,   -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>0054037-00554047</ID>
+					<TypeCode>644</TypeCode>
+					<LPCOExemptionCode>GE</LPCOExemptionCode>
+				</AdditionalDocument>
+				<Commodity>
+					<!-- DE 6/8: Goods Description.
+                        Description of the goods specific enough to enable classification – without repeating the code description in the Tariff. 
+						Aggregation Rule on DE6/8-Description of goods must be specific and the same for all aggregated goods. 	 -->
+					<Description>Cocoa Butter-fat and oil</Description>
+					<Classification>
+						<!-- DE 6/14: Commodity code - combined nomenclature code.
+                           IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. 
+						   Aggregation rule on DE6/14, 6/15, 6/16, 6/17- Cannot aggregate across TARIC or NAC commodity codes.  -->
+						<ID>18040000</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!-- DE 6/15: Commodity code - TARIC code.  -->
+						<ID>00</ID>
+						<IdentificationTypeCode>TRC</IdentificationTypeCode>
+					</Classification>
+					<Classification>
+						<!--  DE 6/17: Commodity Code – National Additional Codes.
+                           VATZ to represent VAT 0% duty rate.  -->
+						<ID>VATZ</ID>
+						<IdentificationTypeCode>GN</IdentificationTypeCode>
+					</Classification>
+					<DutyTaxFee>
+						<!-- DE 4/17: Preference.
+                            Type of 100 represents no preference being claimed. 
+							Aggregation Rule on DE4/17 - Cannot aggregate across preference codes  -->
+						<DutyRegimeCode>100</DutyRegimeCode>
+						<!-- DE 4/3: Calculation of Taxes - Tax Type.
+                            In this scenario, A00 indicating Customs duties.  -->
+						<TypeCode>A00</TypeCode>
+						<Payment>
+							<!-- DE 4/8: Payment Method.
+                                MethodCode of E to indicate Deferment used for import.  -->
+							<MethodCode>E</MethodCode>
+						</Payment>
+					</DutyTaxFee>
+					<GoodsMeasure>
+						<!-- DE 6/5: Gross Mass
+                            Mass of the goods in kilograms including packaging.
+                            Aggregated Rule on DE6/5 -An aggregated weight may be provided at header level. 
+                            Completion at item level is determined by the additions and deductions claimed in D.E 4/9 and any commodity code specific requirements.  -->
+						<GrossMassMeasure>15</GrossMassMeasure>
+						<!-- DE 6/1: Net Mass
+                            Mass of the goods in kilograms without any packaging.  -->
+						<NetNetWeightMeasure>10</NetNetWeightMeasure>
+					</GoodsMeasure>
+					<!-- DE 4/14:  Item price amount.
+                   The invoice was issued with of a value of £1000 and the currency was in GBP. 
+                   Aggregation rule on DE4/14- Declare the aggregated value for the item. Where goods are being removed from a customs warehouse, the customs value may be converted to CIF for the purposes of aggregation.
+                   Declare the converted customs value ensuring all necessary additions and deductions have been made to the aggregated value entered in DE 4/14)-->
+					<InvoiceLine>
+						<ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+				<!--DE 4/16: Valuation method.Valuation Method 3 — Transaction value of similar goods.  Aggregation rule on DE4/16 - Same valuation method must apply to all the aggregated goods at item level. -->
+				<CustomsValuation>
+					<MethodCode>3</MethodCode>
+				</CustomsValuation>
+				<GovernmentProcedure>
+					<!-- DE 1/10: Procedure.
+                  Requested Procedure of 40 indicating entry for free circulation and home use of goods.
+                  Previous Procedure of 71 indicating goods are being removed froma customs warehouse.  -->
+					<CurrentCode>40</CurrentCode>
+					<PreviousCode>71</PreviousCode>
+				</GovernmentProcedure>
+				<!-- DE 1/11: Additional Procedure Code.
+                    000 to indicate no additional procedure.  -->
+				<GovernmentProcedure>
+					<CurrentCode>000</CurrentCode>
+				</GovernmentProcedure>
+				<!-- DE 5/15: Country of Origin.
+                    TypeCode of 1 to represent non-preferential origin.
+                    Where preference in D.E. 4/17 begins with ‘1’, this must be completed .
+                    CountryCode contains the code for the country from which the goods originated,
+                    in this case Brazil.
+                    It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/15
+                    (from DE 5/16). It is not a part of the UCC or Tariff completion requirements. -->
+				<Origin>
+					<CountryCode>BR</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!-- DE 6/11: Shipping marks on the packages
+                     Aggregation Rule on 6/11-If aggregated across shipping marks use DCRAGG ref as per D.E 2/1					 -->
+					<MarksNumbersID>PK12345</MarksNumbersID>
+					<!-- DE 6/10: Number of Packages.
+                        In this case 55.  -->
+					<QuantityQuantity>55</QuantityQuantity>
+					<!-- DE 6/9: Type of Packages.
+                        IG to represent 'Package, paper wrapped'. 
+						Aggregation Rule on DE6/9-If a single package type applies to all the aggregated goods-enter the specific type code. 
+						If multiple package types apply, enter NA. Provide an audit trail in the commercial records where NA is used.  -->
+					<TypeCode>IG</TypeCode>
+				</Packaging>
+				<!-- DE 2/1: Simplified Declaration/ Previous Documents
+                    Mandatory field.
+                    EIDR to show the MRN for the previous declaration Entry Into Declarant’s Records (EIDR) procedure -->
+				<PreviousDocument>
+					<CategoryCode>Z</CategoryCode>
+					<ID>25GB6W23HIITPATAR7</ID>
+					<TypeCode>355</TypeCode>
+				</PreviousDocument>
+				<!-- DE 2/1: Previous Documents.
+                ZZZZ To represent the warehouse stock reference number.  -->
+				<PreviousDocument>
+					<CategoryCode>Z</CategoryCode>
+					<ID>STK22222</ID>
+					<TypeCode>ZZZ</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<!--  CLE represents the date of Entry Into Declarant’s Records (EIDR) procedure
+			    Note: If aggregating across 40 or more DUCRs use the following 
+              • YCLE + the last date of the aggregation period 
+			   Additionally, If the trader is doing an aggregated supplementary declaration covering a number of days entries in traders records then they declare CLE, 
+			  repeated for each applicable date, at item level with the relevant dates, and don't declare CLE at header level.
+			  AND if a trader does a separate aggregated supplementary declaration for each day's entries in trader's record, 
+			  then they declare CLE at header level only with that one date and do not declare CLE at item level.-->
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>20250715</ID>
+					<TypeCode>CLE</TypeCode>
+					<LineNumeric>2</LineNumeric>
+				</PreviousDocument>
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>20250716</ID>
+					<TypeCode>CLE</TypeCode>
+					<LineNumeric>2</LineNumeric>
+				</PreviousDocument>
+				<!-- The DUCR quoted on the type Z declaration must be the DUCR associated with the removal of the goods from the customs warehouse
+			   Note: If aggregating across 40 or more DUCRs use the following 
+              • YDCRAGGDUCRGB + the EORI number + a unique reference number + 1 — to provide a reference that tracks back to records of all DUCRs aggregated across the supplementary declaration.  -->
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>DUCRGB553202734852-22533</ID>
+					<TypeCode>DCR</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<PreviousDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>DUCRGB553202734852-22534</ID>
+					<TypeCode>DCR</TypeCode>
+					<LineNumeric>1</LineNumeric>
+				</PreviousDocument>
+				<!-- DE 4/13: Valuation indicator.
+                    Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
+                    The code comprises four digits, each of which being either a ‘0’ or a ‘1’:
+                     - First digit: 0 = there is no price influence as a result of a
+                    Party Relationship between the buyer and seller.
+                     - Second digit: 0 = there are no restrictions as to the disposal
+                    or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+                     - Third digit: 0 = the sale or price is not subject to some condition
+                    or consideration in accordance with Article 70(3)(b) of the Code.
+                     - Fourth digit: 0 = the sale is not subject to an arrangement under
+                    which part of the proceeds of any subsequent resale, disposal or use
+                    accrues directly or indirectly to the seller.  -->
+				<ValuationAdjustment>
+					<AdditionCode>0000</AdditionCode>
+				</ValuationAdjustment>
+			</GovernmentAgencyGoodsItem>
+			<!-- DE 3/16: Importer Identification Number.
+                EORI number of the Importer.  -->
+			<Importer>
+				<ID>GB553202734852</ID>
+			</Importer>
+			<!-- The DUCR quoted on the type Z declaration must be the DUCR associated with the removal of the goods from the customs warehouse
+			   Note: If aggregating across 40 or more DUCRs use the following 
+              • YDCRAGGDUCRGB + the EORI number + a unique reference number + 1 — to provide a reference that tracks back to records of all DUCRs aggregated across the supplementary declaration.  -->
+			<PreviousDocument>
+				<CategoryCode>Y</CategoryCode>
+				<ID>DUCRGB553202734852-22522</ID>
+				<TypeCode>DCR</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<PreviousDocument>
+				<CategoryCode>Y</CategoryCode>
+				<ID>DUCRGB553202734852-22533</ID>
+				<TypeCode>DCR</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!-- DE 4/1: Delivery Terms.
+                Mandatory as method 1 is being used in DE 4/16.
+                CIF to indicate Cost, Insurance and Freight.
+                GBWLA to represent the named port of destination: Wallasea, UK. -->
+			<TradeTerms>
+				<ConditionCode>CIF</ConditionCode>
+				<LocationID>GBWLA</LocationID>
+			</TradeTerms>
+			<!-- DE 2/4: Reference Number/UCR.
+                Reference number which is optional for the declarant to complete.  -->
+			<UCR>
+				<TraderAssignedReferenceID>DUCRGB553202734852-12345</TraderAssignedReferenceID>
+			</UCR>
+			<!-- DE 2/7: Warehouse type of U to represent private warehouse.
+                ID contains the private warehouse ID.  -->
+			<Warehouse>
+				<ID>1117770GB</ID>
+				<TypeCode>U</TypeCode>
+			</Warehouse>
+		</GoodsShipment>
+		<ObligationGuarantee>
+			<!-- DE 8/3: Guarantee reference number.
+                Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then this data element is mandatory ID indicates that the guarantee is not required, as stated in DE 8/2.  -->
+			<ID>Guaranteenotrequired</ID>
+			<!-- DE 8/2: Guarantee type.
+                0 to represent that a customs comprehensive guarantee is being waived for the deferment of customs duty.
+                Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code ‘0’ or ‘1’ must be declared in this data element.  -->
+			<SecurityDetailsCode>0</SecurityDetailsCode>
+		</ObligationGuarantee>
+		<!-- DE 5/27: Supervising customs office.
+            The Supervising Office Code for the HMRC Office overseeing the Customs Warehouse procedure. In this scenario, this is Belfast, Dorchester House (NIRU).  -->
+		<SupervisingOffice>
+			<ID>GBBEL004</ID>
+		</SupervisingOffice>
+	</Declaration>
+</md:MetaData>

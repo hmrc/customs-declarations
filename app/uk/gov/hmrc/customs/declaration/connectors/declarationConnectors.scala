@@ -82,7 +82,7 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
 
-    val decHeaders = getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders(hc)
+    val decHeaders = getHeaders(date, correlationId, vpr.conversationId.uuid) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders(hc)
     val startTime = LocalDateTime.now
     withCircuitBreaker(post(xml, config.url, decHeaders)).map {
       response => {
@@ -93,13 +93,15 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
     }
   }
 
-  private def getHeaders(date: Instant, correlationId: UUID) = {
+  private def getHeaders(date: Instant, correlationId: UUID, conversationId: UUID) = {
     Seq(
       (ACCEPT, MimeTypes.XML),
       (CONTENT_TYPE, ContentTypes.XML(utf_8)),
       (DATE, getDateHeader(date)),
       (X_FORWARDED_HOST, "MDTP"),
-      ("X-Correlation-ID", correlationId.toString))
+      ("X-Correlation-ID", correlationId.toString),
+      ("X-Conversation-ID", conversationId.toString)
+    )
   }
 
   private def post[A](xml: NodeSeq, url: String, decHeaders: Seq[(String, String)])(implicit vpr: ValidatedPayloadRequest[A]) = {

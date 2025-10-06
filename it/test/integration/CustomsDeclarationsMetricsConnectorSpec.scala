@@ -115,7 +115,6 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
       stopMockServer()
 
       intercept[RuntimeException]((sendValidRequest()).futureValue).getCause.getClass shouldBe classOf[RuntimeException]
-      println("//////////////////// " + localhostString)
       verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=[http://localhost:$Port/log-times], HttpStatus=[502], Error=[POST of 'http://localhost:$Port/log-times' failed. Caused by: 'Connection refused: localhost/$localhostString:$Port']")
 
       startMockServer()

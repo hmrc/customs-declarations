@@ -24,8 +24,6 @@ import play.api.inject.guice.GuiceableModule
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import util.UnitSpec
 
-import java.net.{Inet4Address, Inet6Address, InetAddress}
-
 case class IntegrationTestModule(mockLogger: DeclarationsLogger) extends AbstractModule {
   override def configure(): Unit = {
     bind(classOf[DeclarationsLogger]) `toInstance` mockLogger
@@ -42,10 +40,6 @@ trait IntegrationTestSpec extends AnyWordSpecLike with UnitSpec
    * @return
    */
   def localhostString: String = {
-    val localhostString = InetAddress.getLoopbackAddress
-      localhostString match {
-        case ipv4: Inet4Address => ipv4.getHostAddress
-        case ipv6: Inet6Address => ipv6.getHostAddress
-      }
+    if (System.getenv("HOME") == "/home/jenkins") "127.0.0.1" else "[0:0:0:0:0:0:0:1]"
   }
 }

@@ -35,15 +35,15 @@ import play.api.test.Helpers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.declaration.config.{ServiceConfig, ServiceConfigProvider}
-import uk.gov.hmrc.customs.declaration.connectors.{DeclarationCancellationConnector, DeclarationConnector, DeclarationSubmissionConnector}
+import uk.gov.hmrc.customs.declaration.connectors.{DeclarationCancellationConnector, DeclarationSubmissionConnector}
 import uk.gov.hmrc.customs.declaration.http.Non2xxResponseException
-import uk.gov.hmrc.customs.declaration.logging.{CdsLogger, DeclarationsLogger}
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.test.{HttpClientV2Support, WireMockSupport}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, UpstreamErrorResponse}
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.http.{DefaultHttpAuditing, HttpClientV2Provider}
@@ -52,7 +52,6 @@ import util.TestData
 
 import java.time.{LocalDateTime, ZoneOffset}
 import java.util.UUID
-import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationConnectorSpec extends AnyWordSpecLike
   with MockitoSugar
@@ -69,6 +68,7 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private val mockDeclarationsCircuitBreakerConfig = mock[DeclarationsCircuitBreakerConfig]
+  private val mockExtraHeadersFeatureConfig = mock[ExtraHeaderConfig]
   private val numberOfCallsToTriggerStateChange = 5
   private val unavailablePeriodDurationInMillis = 1000
   private val unstablePeriodDurationInMillis = 10000
@@ -82,6 +82,8 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
       "appUrl" -> "http://customs-wco-declaration.service",
       "auditing.enabled" -> false,
       "auditing.traceRequests" -> false,
+      "extraHeadersFeature.enabled" -> true,
+      "isRunningInQA.enabled" -> false,
       "microservice.services.declaration-cancellation.host" -> Host,
       "microservice.services.declaration-cancellation.port" -> Port,
       "microservice.services.declaration-cancellation.bearer-token" -> "v1-bearer-token",
@@ -133,9 +135,12 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
     when(mockServiceConfigProvider.getConfig("v2.declaration-cancellation")).thenReturn(v2Config)
     when(mockServiceConfigProvider.getConfig("v3.declaration-cancellation")).thenReturn(v3Config)
     when(mockDeclarationsConfigService.declarationsCircuitBreakerConfig).thenReturn(mockDeclarationsCircuitBreakerConfig)
+    when(mockDeclarationsConfigService.extraHeaderConfig).thenReturn(mockExtraHeadersFeatureConfig)
     when(mockDeclarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange).thenReturn(numberOfCallsToTriggerStateChange)
     when(mockDeclarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis).thenReturn(unavailablePeriodDurationInMillis)
     when(mockDeclarationsCircuitBreakerConfig.unstablePeriodDurationInMillis).thenReturn(unstablePeriodDurationInMillis)
+    when(mockExtraHeadersFeatureConfig.extraHeaderFeature).thenReturn(true)
+    when(mockExtraHeadersFeatureConfig.isRunningInQA).thenReturn(false)
   }
 
   private val year = 2017
@@ -157,7 +162,7 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
       "ensure URL is retrieved from config" in {
         setupSuccessfulDeclarationRequest(v2Config.bearerToken)
 
-        submissionConnector.send(xml, date, correlationId, VersionTwo).futureValue
+        await(submissionConnector.send(xml, date, correlationId, VersionTwo))
 
         wireMockServer.verify(1, postRequestedFor(urlEqualTo("/declarations/submitdeclaration"))
           .withHeader(HeaderNames.AUTHORIZATION, equalTo("Bearer v2-bearer-token"))
@@ -202,6 +207,7 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
         .withHeader(HeaderNames.DATE, equalTo(httpFormattedDate))
         .withHeader(HeaderNames.X_FORWARDED_HOST, equalTo("MDTP"))
         .withHeader("X-Correlation-ID", equalTo(correlationId.toString))
+        .withHeader("X-Conversation-ID", equalTo("38400000-8cf0-11bd-b23e-10b96e4ef00d"))
         .withRequestBody(equalTo(xml.toString()))
         .willReturn(
           aResponse()

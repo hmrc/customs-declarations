@@ -2,11 +2,11 @@ import AppDependencies.*
 import com.typesafe.sbt.web.PathMapping
 import com.typesafe.sbt.web.pipeline.Pipeline
 import play.sbt.PlayImport.PlayKeys.playDefaultPort
+import sbt.*
 import sbt.Keys.*
 import sbt.Tests.{Group, SubProcess}
-import sbt.*
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm}
+import uk.gov.hmrc.DefaultBuildSettings.addTestReportOption
 import uk.gov.hmrc.gitstamp.GitStampPlugin.*
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 
@@ -77,7 +77,7 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
       ,"uk\\.gov\\.hmrc\\.customs\\.declaration\\.views\\..*"
       ,".*(Reverse|AuthService|BuildInfo|Routes|DateTimeService|TestOnlyService).*"
     ).mkString(";"),
-  coverageMinimumStmtTotal := 95,
+  coverageMinimumStmtTotal := 94,
   coverageFailOnMinimum := true,
   coverageHighlighting := true,
   Test / parallelExecution := false

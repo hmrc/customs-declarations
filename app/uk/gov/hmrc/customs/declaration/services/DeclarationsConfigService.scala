@@ -38,6 +38,9 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val v1ShutteredNel = root.maybeBoolean("shutter.v1")
   private val v2ShutteredNel = root.maybeBoolean("shutter.v2")
   private val v3ShutteredNel = root.maybeBoolean("shutter.v3")
+  
+  private val extraHeadersFeature = root.boolean("extraHeadersFeature.enabled")
+  private val isRunningInQA = root.boolean("isRunningInQA.enabled")
 
   private val numberOfCallsToTriggerStateChangeNel = root.int("circuitBreaker.numberOfCallsToTriggerStateChange")
   private val unavailablePeriodDurationInMillisNel = root.int("circuitBreaker.unavailablePeriodDurationInMillis")
@@ -77,6 +80,10 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
     nrsEnabled, nrsApiKey, nrsUrl
     ) mapN NrsConfig.apply
 
+  private val validatedExtraHeaderConfig: CustomsValidatedNel[ExtraHeaderConfig] = (
+    extraHeadersFeature, isRunningInQA
+  ) mapN ExtraHeaderConfig.apply
+
   private val validatedFileUploadConfig: CustomsValidatedNel[FileUploadConfig] = (
     upscanInitiateUrlV1, upscanInitiateUrlV2, upscanInitiateMaximumFileSize,
     fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl, ttlInSeconds
@@ -87,7 +94,8 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
       validatedDeclarationsShutterConfig,
       validatedDeclarationsCircuitBreakerConfig,
       validatedNrsConfig,
-      validatedFileUploadConfig
+      validatedFileUploadConfig,
+      validatedExtraHeaderConfig
       ) mapN CustomsConfigHolder.apply
 
   private val customsConfigHolderConf =
@@ -110,10 +118,13 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   val nrsConfig: NrsConfig = customsConfigHolderConf.validatedNrsConfig
 
   val fileUploadConfig: FileUploadConfig = customsConfigHolderConf.validatedFileUploadConfig
+  
+  val extraHeaderConfig: ExtraHeaderConfig = customsConfigHolderConf.validatedExtraHeaderConfig
 
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
                                          declarationsShutterConfig: DeclarationsShutterConfig,
                                          declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,
                                          validatedNrsConfig: NrsConfig,
-                                         validatedFileUploadConfig: FileUploadConfig)
+                                         validatedFileUploadConfig: FileUploadConfig,
+                                         validatedExtraHeaderConfig: ExtraHeaderConfig)
 }

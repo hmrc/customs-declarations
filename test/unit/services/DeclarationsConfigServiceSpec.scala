@@ -65,6 +65,8 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
       |microservice.services.file-transmission.host=some-host3
       |microservice.services.file-transmission.port=1113
       |microservice.services.file-transmission.context=/file-transmission
+      |extraHeadersFeature.enabled=true
+      |isRunningInQA.enabled=false
     """.stripMargin)
 
   private val emptyAppConfig: Config = ConfigFactory.parseString("")
@@ -85,6 +87,8 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
       configService.declarationsConfig.customsNotificationBaseBaseUrl shouldBe "http://some-host2:1112/some-context2"
       configService.declarationsConfig.customsDeclarationsMetricsBaseBaseUrl shouldBe "http://some-host3:1113/some-context3"
       configService.declarationsConfig.customsNotificationBearerToken shouldBe "some-token"
+      configService.extraHeaderConfig.extraHeaderFeature shouldBe true
+      configService.extraHeaderConfig.isRunningInQA shouldBe false
       configService.declarationsShutterConfig.v1Shuttered shouldBe Some(true)
       configService.declarationsShutterConfig.v2Shuttered shouldBe Some(false)
       configService.declarationsShutterConfig.v3Shuttered shouldBe None
@@ -127,7 +131,11 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
           |Could not find config key 'file-transmission-callback.url'
           |Could not find config key 'file-transmission.host'
           |Service configuration not found for key: file-transmission.context
-          |Could not find config key 'ttlInSeconds'""".stripMargin
+          |Could not find config key 'ttlInSeconds'
+          |Could not find config key 'extraHeadersFeature.enabled'
+          |Could not find config key 'isRunningInQA.enabled'""".stripMargin
+
+
 
       val caught = intercept[IllegalStateException](customsConfigService(emptyServicesConfiguration))
       caught.getMessage shouldBe expectedErrorMessage

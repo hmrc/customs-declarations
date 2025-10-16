@@ -78,6 +78,7 @@ trait MdgWcoDecService extends WireMockRunner {
       .withHeader(AUTHORIZATION, equalTo(s"Bearer $expectedAuthToken"))
       .withHeader(DATE, notMatching(""))
       .withHeader("X-Correlation-ID", notMatching(""))
+      .withHeader("X-Conversation-ID", notMatching(""))
       .withHeader(X_FORWARDED_HOST, equalTo("MDTP"))
       .withRequestBody(equalToXml(requestBody))
     )

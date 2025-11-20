@@ -18,14 +18,14 @@
             Expected Notifications: DMSACC, DMSCLE.
         -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20250901095856+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20251111150522+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
             Declarant's own reference number.
             This must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7847323EDA5A</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523N424K</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
             Mandatory field.
             First two characters IM to represent an import declaration.	-->
@@ -62,7 +62,7 @@
 			<ID>XI553202734852</ID>
 			<CategoryCode>UKIM</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 7/4: Mode of Transport at the Border. 1 to represent Maritime/Sea transport as the mode of transport at the border. -->
+		<!--DE 7/4: Mode of Transport at the Border. 9 to represent Mode unknown. -->
 		<BorderTransportMeans>
 			<ModeCode>9</ModeCode>
 		</BorderTransportMeans>
@@ -94,14 +94,14 @@
                         ID to give a unique position of the location.
                         BELBELBEL indicates the Belfast Port.
                         Goods moved via shipping container from GB to NI via port of Belfast. -->
-					<Name>BELBELBEL</Name>
+					<Name>UKIM55320273485220240124160138</Name>
 					<!--DE 5/23: Location of Goods - Type of location.
                         Location type A in this scenario to represent that it is a designated location. -->
-					<TypeCode>A</TypeCode>
+					<TypeCode>B</TypeCode>
 					<Address>
 						<!--DE 5/23: Location of Goods - Qualifier of the identification.
                             Location ID type is U in this scenario for UN/LOCODE. -->
-						<TypeCode>U</TypeCode>
+						<TypeCode>Y</TypeCode>
 						<!--DE 5/23: Location of Goods - Country.
                             Country code of the country where the goods may be examined, GB in this scenario. -->
 						<CountryCode>GB</CountryCode>

@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>d42a53fd8f9249e881b0b1662f6e7c22</FunctionalReferenceID>
+		<FunctionalReferenceID>eb466ac9fa1442fa861b81650020abb6</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20240904083943Z</DateTimeString>
+			<DateTimeString formatCode="304">20251111110157Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,8 +19,8 @@
 			<NameCode>4</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>7847323GOY7Q</FunctionalReferenceID>
-			<ID>24GB9TGBQWWQSNBAR0</ID>
+			<FunctionalReferenceID>U.7847767WIYE1</FunctionalReferenceID>
+			<ID>25GBCHBWMKMVRHNAR6</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
@@ -30,10 +30,10 @@
 							<AdValoremTaxBaseAmount currencyID="GBP">2500.00</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
-							<TaxRateNumeric>20.00</TaxRateNumeric>
-							<TypeCode>B00</TypeCode>
+							<TaxRateNumeric>0.00</TaxRateNumeric>
+							<TypeCode>A00</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP">500.00</TaxAssessedAmount>
+								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
 								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
@@ -41,10 +41,10 @@
 							<AdValoremTaxBaseAmount currencyID="GBP">2500.00</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
-							<TaxRateNumeric>0.00</TaxRateNumeric>
-							<TypeCode>A00</TypeCode>
+							<TaxRateNumeric>20.00</TaxRateNumeric>
+							<TypeCode>B00</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+								<TaxAssessedAmount currencyID="GBP">500.00</TaxAssessedAmount>
 								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>

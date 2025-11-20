@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <inv:InventoryLinkingImportsValidateMovementResponse xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
 	<!--ID of the declaration assigned by Customs, being a specific customs ID or a Movement Reference Number (MRN)-->
-	<inv:entryNumber>24GBDMQXU436F46A07</inv:entryNumber>
+	<inv:entryNumber>25GBCK5RK8DCT2IA08</inv:entryNumber>
 	<!-- Version number of the declaration before processing the amendment -->
 	<inv:entryVersionNumber>1</inv:entryVersionNumber>
 	<!-- Inventory Consignment Reference number which matches that within the declaration payload MUCR -->

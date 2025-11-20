@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
@@ -6,7 +5,7 @@
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1
       </md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--Type D pre-lodged declaration with procedure code 1040
 	No control,Inventory linked Type D Maritime declaration with one DUCR 
 	arrived and departed at DUCR level.
@@ -17,14 +16,10 @@
 	Loader sends EDL message for DUCR to CDS to notify departure of the consolidation
 	Expected notifications: DMSACC, DMSCLE, DMSEOG, DMSRCV, DMSRES
 	ERS Message also expected response from ILE, as DUCR consolidated in the declaration -->
-		<!--This should be updated to today's date.-->
-		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20250514164156+01</p1:DateTimeString>
-		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: The trader assigned reference to the declaration -->
-		<FunctionalReferenceID>U.7867523NVJOA</FunctionalReferenceID>
+		<FunctionalReferenceID>R31_EXD_TC05_DEC1</FunctionalReferenceID>
 		<!--DE 1/1: EX to represent an Export declaration.-->
 		<!--DE 1/2: D to represent a Pre lodged declaration.-->
 		<TypeCode>EXD</TypeCode>
@@ -46,7 +41,7 @@
 		<Consignment>
 			<!--DE 3/32: Carrier identification no. This is Security and Safety Data  -->
 			<Carrier>
-				<ID>GB025115100010</ID>
+				<ID>XI025115100010</ID>
 			</Carrier>
 			<!-- DE 4/2: S&S Data - D indicating other e.g. direct debit to cash account. This is Security and Safety Data -->
 			<Freight>
@@ -64,7 +59,7 @@
 		</Consignment>
 		<!--DE 3/18: EORI number of the Declarant. -->
 		<Declarant>
-			<ID>GB427168118378</ID>
+			<ID>XI427168118378</ID>
 		</Declarant>
 		<!--DE 5/12 Customs office of exit. Indicating Dover -->
 		<ExitOffice>
@@ -72,12 +67,12 @@
 		</ExitOffice>
 		<!--DE 3/2: EORI number of the Exporter, the same as 3/18 -->
 		<Exporter>
-			<ID>GB427168118378</ID>
+			<ID>XI427168118378</ID>
 		</Exporter>
 		<GoodsShipment>
 			<!--DE 3/9: Consignee Name and Address (Mandatory when DE 3/10 is not completed). This is Security and Safety Data  -->
 			<Consignee>
-				<ID>GB427168118378</ID>
+				<ID>XI427168118378</ID>
 				<!-- 	<Name>Packings Import Incorporated</Name>
 						<Address>
 							<CityName>New York</CityName>
@@ -123,7 +118,7 @@
 				</TransportEquipment>
 			</Consignment>
 			<Destination>
-				<!--DE 5/8: Country code of the destination country, in this case US.-->
+				<!--DE 5/8: Country code of the destination country, in this case GB.-->
 				<CountryCode>GB</CountryCode>
 			</Destination>
 			<!--DE 5/14: Country code for the country from which the goods were
@@ -134,7 +129,7 @@
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Sequential number of the goods item.-->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 8/6: Enter the statistical value for the goods item in GBP (Â£ sterling), irrespective of the currency used in Invoice Currency. -->
+				<!--DE 8/6: Enter the statistical value for the goods item in GBP (sterling), irrespective of the currency used in Invoice Currency. -->
 				<StatisticalValueAmount currencyID="GBP">200</StatisticalValueAmount>
 				<!--  DE 8/5 Nature of Transaction. Enter, a 2-digit code (second digit is optional)
           The single digit codes listed in column A of the table provided for under Article 10(2) of Commission Regulation (EC) No 113/2010 shall be used.
@@ -160,7 +155,7 @@
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!--DE 6/17: Commodity code â€“ National additional code.-->
+						<!--DE 6/17: Commodity code National additional code.-->
 						<ID>VATZ</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
 					</Classification>
@@ -196,7 +191,7 @@
                    This is a mandatory field-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>5GB817614922302-NJWEPESTRA</ID>
+				<ID>5XI427168118378-DECH01</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

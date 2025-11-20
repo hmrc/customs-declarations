@@ -6,15 +6,15 @@
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
-		<!-- SCENARIO H8 Supplementary Declarations A Trader submits a Type Z (H8) supplementary declaration "Not At Risk" importing goods from GB to NI. The trader has declared APC 1EN in addition with the APC 1RD. This declaration's data will be queried by the full declaration retrieval. -->
-		<!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
+		<!-- SCENARIOA Trader submits a Type Z (H8) supplementary declaration, GB-NI, importing goods 'not at risk' with APC 1RD and a valid UKIMS EIDR authorisation.
+        Previous document type DCR in DE 2/1 declared with RSD as the first three characters -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20250904112712+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20251111142004+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. Traders own reference number‚ this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7867523RBQST</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7927468WEJMH</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type. Z to represent an EIDR supplementary declaration. -->
 		<TypeCode>IMZ</TypeCode>
@@ -69,7 +69,7 @@
 				<!--DE 5/23: ID to give a unique position of the location -->
 				<GoodsLocation>
 					<!--DE 5/23: Location of Goods - Identification of location. Mandatory. The location code for Port of Belfast. Goods moved via shipping container from GB to NI via Port of Belfast. -->
-					<Name>CW5212234GB</Name>
+					<Name>UKIM55320273485220240124160138</Name>
 					<!--DE 5/23: Location of Goods - Type of location. B is used to identify inland locations such as customs warehouses. -->
 					<TypeCode>B</TypeCode>
 					<Address>
@@ -104,7 +104,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/05.03.2024</ID>
+					<ID>12345/03.11.2025</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -143,7 +143,7 @@
 					<StatementDescription>RSDSD 1</StatementDescription>
 				</AdditionalInformation>
 				<Commodity>
-					<!--DE 6/8: Goods Description. Description of the goods specific enough to enable classification Ã¢â‚¬â€œ without repeating the CN code description in the Tariff. -->
+					<!--DE 6/8: Goods Description. Description of the goods specific enough to enable classification‚without repeating the CN code description in the Tariff. -->
 					<Description>Cocoa Butter-fat and oil</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - combined nomenclature code. IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
@@ -154,7 +154,7 @@
 						<!--DE 6/5: Gross Mass Mass of the goods in kilograms including packaging. -->
 						<GrossMassMeasure>150</GrossMassMeasure>
 					</GoodsMeasure>
-					<!--DE 4/14: Item price amount. The invoice was issued with of a value of Â£1000 and the currency was in GBP. -->
+					<!--DE 4/14: Item price amount. The invoice was issued with of a value of £1000 and the currency was in GBP. -->
 					<InvoiceLine>
 						<ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
 					</InvoiceLine>
@@ -198,14 +198,14 @@
 			<!--DE 2/1 : Previous Documents. The DUCR assigned to the consignment Note: document class Y used for DUCR as sup dec. As this is for a single item declaration, this should all be declared at header level. In CDS, the MUCR (MCR) is not required on a sup dec.-->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>4GB553202734852-20221114</ID>
+				<ID>RSD5GB553202734852-20221114</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
 			<!--DE 2/1: Previous Documents. YCLE To show the date of the EIDR record. Note that this is item 6 from the EIDR record entry. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20250904</ID>
+				<ID>20251111</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>6</LineNumeric>
 			</PreviousDocument>

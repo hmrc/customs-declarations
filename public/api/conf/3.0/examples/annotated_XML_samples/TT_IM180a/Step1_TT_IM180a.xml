@@ -7,26 +7,26 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--SCENARIO
-		A Trader submits arrived Type J (GL C21i) declaration "Not At Risk" importing goods from GB to NI with NIAPP override code.
+        A Trader submits arrived Type J (GL C21i) declaration "Not At Risk" importing goods from GB to NI with NIAPP override code.
 
-		The trader then submits a UKCIRM (Use the correlation ID of step-1 response to send validatemovement Response).
+        The trader then submits a UKCIRM (Use the correlation ID of step-1 response to send validatemovement Response).
 
-		The trader enters the following information on the declaration:
-		- DE 1/1: IM
-		- DE 1/2: J
-		- DE 1/10: 0007 declared at item level
-		- DE 1/11: 71G declared at item level
-		- DE 2/2: Additional Information Codes NIAPP, NIDOM, MOVE1, TSGEE, TSPER at item level
-		- DE 2/3:  Document Code C509 and Doc ID declared at item level
-		- DE 3/16: Importer EORI declared at header level
-		- DE 3/18: Declarant EORI  declared at header level
-		- DE 3/39: TST authorisation declared at header level
-		- DE 5/27: GBBEL004
+        The trader enters the following information on the declaration:
+        - DE 1/1: IM
+        - DE 1/2: J
+        - DE 1/10: 0007 declared at item level
+        - DE 1/11: 71G declared at item level
+        - DE 2/2: Additional Information Codes NIAPP, NIDOM, MOVE1, TSGEE, TSPER at item level
+        - DE 2/3:  Document Code C509 and Doc ID declared at item level
+        - DE 3/16: Importer EORI declared at header level
+        - DE 3/18: Declarant EORI  declared at header level
+        - DE 3/39: TST authorisation declared at header level
+        - DE 5/27: GBBEL004
         -->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>U.7847767IJR4V</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7867523R0R51</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: J to represent Arrived GL C21i declaration-->
 		<TypeCode>IMJ</TypeCode>
@@ -74,14 +74,19 @@
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
+				<!-- DE 7/10 -->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>DM1234</ID>
+				</TransportEquipment>
 			</Consignment>
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Goods Item Number.
                     Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
-					This field is mandatory only where codes required.
-					N750 indicating Movement by post including parcel post. -->
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    This field is mandatory only where codes required.
+                    N740 indicating Air Waybill(T1). -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
 					<ID>0054037</ID>
@@ -105,7 +110,7 @@
 				<AdditionalInformation>
 					<StatementCode>NIDOM</StatementCode>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional information. NIREM, indicates goods not at risk -->
+				<!--DE 2/2: Additional information. NIAPP, indicates goods not at risk -->
 				<AdditionalInformation>
 					<StatementCode>NIAPP</StatementCode>
 				</AdditionalInformation>

@@ -1,7 +1,7 @@
 <n1:InventoryLinkingImportsDeclarationStatusNotification xmlns:n1="http://gov.uk/customs/inventoryLinkingImport/v1">
 	<n1:declarationMethod>2</n1:declarationMethod>
-	<n1:dateOfEntry>2024-12-06T16:38:25.320Z</n1:dateOfEntry>
-	<n1:entryNumber>24GBDITDM706QOLA09</n1:entryNumber>
+	<n1:dateOfEntry>2025-11-13T11:06:34.318Z</n1:dateOfEntry>
+	<n1:entryNumber>25GBCK6YEQTF0M4A00</n1:entryNumber>
 	<n1:entryVersionNumber>1</n1:entryVersionNumber>
 	<n1:goodsArrivalDeclaration>Y</n1:goodsArrivalDeclaration>
 	<n1:ics>3</n1:ics>

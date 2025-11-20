@@ -18,13 +18,13 @@
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>U.7849431QQ4OY</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7927468L57MM</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: K to represent Pre-lodged GL C21i declaration-->
 		<TypeCode>IMK</TypeCode>
 		<!--DE 1/9: Total number of goods items on the declaration.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
-		<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered Ã¢â‚¬Å“at riskÃ¢â‚¬Â of moving into the EU, must instead be considered Ã¢â‚¬Å“not at riskÃ¢â‚¬Â. The ID here is the EORI of the UKIM authorised party. -->
+		<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk" of moving into the EU, must instead be considered “not at risk". The ID here is the EORI of the UKIM authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI150454489082</ID>
 			<CategoryCode>UKIM</CategoryCode>
@@ -71,6 +71,11 @@
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
+				<!-- DE 7/10 -->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>DM1234</ID>
+				</TransportEquipment>
 			</Consignment>
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Goods Item Number.
@@ -134,7 +139,7 @@
 					<CurrentCode>00</CurrentCode>
 					<PreviousCode>06</PreviousCode>
 				</GovernmentProcedure>
-				<!--DE 1/11: 61G indicating GB â€“ NI Transports Internationaux Routiers (TIR) Carnets.
+				<!--DE 1/11: 61G indicating GB NI Transports Internationaux Routiers (TIR) Carnets.
 							When 61G is declared, either 62G or 63G must also be declared. In this case, 62G is declared.	-->
 				<GovernmentProcedure>
 					<CurrentCode>61G</CurrentCode>
@@ -153,14 +158,14 @@
 					<TypeCode>BX</TypeCode>
 				</Packaging>
 				<!--DE 2/1: Previous Documents.
-				For import inventory linked locations, the Inventory Reference Number (UCN) must be declared in DE 2/1 using the code 'MCR'. -->
+				 The TIR Carnet Reference Number must be declared in DE 2/1 using the code '952'. -->
 				<PreviousDocument>
 					<CategoryCode>Z</CategoryCode>
 					<ID>4GB553202734852-1408EC02</ID>
 					<TypeCode>952</TypeCode>
 				</PreviousDocument>
 				<!--DE 2/1: Previous Documents.
-				For import inventory linked locations, the Inventory Reference Number (UCN) must be declared in DE 2/1 using the code 'MCR'. -->
+				 The External Union/Common Transit Declaration (T1) Reference Number must be declared in DE 2/1 using the code '821'. -->
 				<PreviousDocument>
 					<CategoryCode>Z</CategoryCode>
 					<ID>1</ID>
@@ -172,7 +177,7 @@
 				<ID>XI150454489082</ID>
 			</Importer>
 			<!--DE 2/1: Previous Documents.
-				For import inventory linked locations, the Inventory Reference Number (UCN) must be declared in DE 2/1 using the code 'MCR'. -->
+				For import inventory linked locations, the Inventory Reference Number (UCN) must be declared in DE 2/1 using the code 'DCR'. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
 				<ID>4GB553202734852-1411EC12</ID>

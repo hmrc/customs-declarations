@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:InventoryLinkingImportsValidateMovementResponse xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
-<!--ID of the declaration assigned by Customs, being a specific customs ID or a Movement Reference Number (MRN)-->
-<inv:entryNumber>24GBCNB1RVU8V5VA03</inv:entryNumber>
-<!-- Version number of the declaration before processing the amendment -->
-<inv:entryVersionNumber>2</inv:entryVersionNumber>
-<!-- Inventory Consignment Reference number which matches that within the declaration payload MUCR -->
-<inv:inventoryConsignmentReference>4GB553202734852-1408EC02</inv:inventoryConsignmentReference>
-<!-- 000 indicates that the consignment has been matched to the declaration which should allow CDS to continue processing the declaration further. -->
-<inv:irc>000</inv:irc>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<inv:InventoryLinkingImportsValidateMovementResponse xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
+	<!--ID of the declaration assigned by Customs, being a specific customs ID or a Movement Reference Number (MRN)-->
+	<inv:entryNumber>25GBCK4V7KWBT69A05</inv:entryNumber>
+	<!-- Version number of the declaration before processing the amendment -->
+	<inv:entryVersionNumber>2</inv:entryVersionNumber>
+	<!-- Inventory Consignment Reference number which matches that within the declaration payload MUCR -->
+	<inv:inventoryConsignmentReference>4GB553202734852-1408EC02</inv:inventoryConsignmentReference>
+	<!-- 000 indicates that the consignment has been matched to the declaration which should allow CDS to continue processing the declaration further. -->
+	<inv:irc>000</inv:irc>
 </inv:InventoryLinkingImportsValidateMovementResponse>

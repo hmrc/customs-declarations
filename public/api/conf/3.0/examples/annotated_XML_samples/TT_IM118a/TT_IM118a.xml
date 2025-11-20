@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
@@ -35,7 +34,7 @@
 		<!--DE 2/5: LRN.
 			Mandatory.
 			Declarants's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7867523HRNO5</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847323ZY6O3</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			Mandatory.
 			IM to represent an import declaration. -->
@@ -85,7 +84,7 @@
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 7/15: Nationality of active means of transport crossing the border.
-			In this case US.
+			In this case MX.
 			DE 7/4: Mode of transport at the border.
 			ModeCode of 1 to represent Maritime/Sea transport. -->
 		<BorderTransportMeans>
@@ -231,13 +230,14 @@
 					<LPCOExemptionCode>AP</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: A document code of C085 for Plant or Plant related Commodity Code.
-				Document status code XX is a waiver code to indicate that no licence is required -->
+				Document code of AE in this scenario indicates 	Document attached exhausted by (or only applies to)
+					this entry (document returned to the trader) -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBCHD-2025-EC01</ID>
 					<Name>Exempt</Name>
 					<TypeCode>085</TypeCode>
-					<LPCOExemptionCode>XX</LPCOExemptionCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/2: Additional Information.
 						This field is mandatory, this represents goods are imported from ROW into Northern Ireland. -->

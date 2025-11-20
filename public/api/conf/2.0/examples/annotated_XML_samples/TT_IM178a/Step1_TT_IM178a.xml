@@ -5,19 +5,19 @@
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
-		
+
 		<!--SCENARIO
 			A Trader submits a Type J IVL (GL C21i) declaration "Not At Risk" importing goods from GB to NI through an Inventory Linking Port by declaring UKC authorisation.
 			The state of the declaration after the initial declaration submission will be Received.
 			The trader then submits a UKCIRM to Register the declaration in DMS.
-			The trader then submits a GPN to arrive the declaration. 
+			The trader then submits a GPN to arrive the declaration.
 			The trader then submits a UKCIRM-2, and The declaration will be Accepted and Cleared.
 			-->
-			
+
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>78477678FG9E</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847767W587L</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: J to represent Goods arrived GL C21i declaration-->
 		<TypeCode>IMJ</TypeCode>
@@ -32,7 +32,7 @@
 		<BorderTransportMeans>
 			<ModeCode>4</ModeCode>
 		</BorderTransportMeans>
-		<!--DE 3/18: Declarant ID no. 
+		<!--DE 3/18: Declarant ID no.
 				The EORI number of the agent entering the declaration
 				The UK requires an EORI to be provided for the declarant. -->
 		<Declarant>
@@ -59,6 +59,10 @@
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>DM1234</ID>
+				</TransportEquipment>
 			</Consignment>
 			<!--DE 5/14: Country code of the dispatch country: GB. -->
 			<ExportCountry>
@@ -68,7 +72,7 @@
 				<!--DE 1/6: Goods Item Number.
 					Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory only where codes required.
 					1PPS indicating UKC authorisation. -->
 				<AdditionalDocument>
@@ -76,12 +80,12 @@
 					<ID>XIUKC15045448908220240808092246</ID>
 					<TypeCode>PPS</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory only where codes required.
 					N750 indicating Movement by post including parcel post. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>012345/101 13.08.2024</ID>
+					<ID>012345/101 13.10.2025</ID>
 					<TypeCode>750</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -108,7 +112,7 @@
 					<StatementCode>NIREM</StatementCode>
 				</AdditionalInformation>
 				<Commodity>
-                    <Classification>
+					<Classification>
 						<!--DE 6/14: Commodity Code — Combined Nomenclature Code. -->
 						<ID>4818209900</ID>
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
@@ -157,7 +161,7 @@
 				<TypeCode>MCR</TypeCode>
 			</PreviousDocument>
 		</GoodsShipment>
-		<!--DE 5/27: Supervising Customs Office. 
+		<!--DE 5/27: Supervising Customs Office.
 			This is a mandatory field dependant on the Procedure code.
 			The ID GBBEL004 represents Belfast, Erskine House. -->
 		<SupervisingOffice>

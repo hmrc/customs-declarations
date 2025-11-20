@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>b0d8fe2acab340b79c878f54f9a0986a</FunctionalReferenceID>
+		<FunctionalReferenceID>c3645c0804ca460e874f0c6758a95b40</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20241209104435Z</DateTimeString>
+			<DateTimeString formatCode="304">20251113103640Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,8 +19,8 @@
 			<NameCode>4</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>U.7847767IJR4V</FunctionalReferenceID>
-			<ID>24GBDMQXU436F46A07</ID>
+			<FunctionalReferenceID>U.7867523R0R51</FunctionalReferenceID>
+			<ID>25GBCK5RK8DCT2IA08</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>

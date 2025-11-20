@@ -7,28 +7,28 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--SCENARIO
-		A Trader submits a Type J (GL C21i) inventory linking goods arrived declaration "Not At Risk" (GB to NI) 
-		for the Customs Clearance Request (CCR) for Movements in Temporary Storage (MiTS) between Temporary Storage (TS) 
-		premises located in Northern Ireland using the Northern Ireland Green Lane.
+        A Trader submits a Type J (GL C21i) inventory linking goods arrived declaration "Not At Risk" (GB to NI)
+        for the Customs Clearance Request (CCR) for Movements in Temporary Storage (MiTS) between Temporary Storage (TS)
+        premises located in Northern Ireland using the Northern Ireland Green Lane.
 
-		The state of the declaration after the initial declaration submission will be Received.
-		The trader then submits a UKCIRM and the declaration will be Accepted and Cleared.
+        The state of the declaration after the initial declaration submission will be Received.
+        The trader then submits a UKCIRM and the declaration will be Accepted and Cleared.
 
-		The trader enters the following information on the declaration:
-		- DE 1/1: IM
-		- DE 1/2: J
-		- DE 1/10: 0007 declared at item level
-		- DE 1/11: 71G declared at item level
-		- DE 2/2: Additional Information Codes NIDOM, NIREM, MOVE1, TSGEE and TSPER at item level
-		- DE 2/3: Document Code 1UKI, C509 and N740 declared at item level
-		- DE 3/39: UKIM and TST declared at header level
-		- DE 5/23: NI location code (GB prefix) declared at header level
-		- DE 5/27: Supervising Customs Office GBBEL004 declared at header level
+        The trader enters the following information on the declaration:
+        - DE 1/1: IM
+        - DE 1/2: J
+        - DE 1/10: 0007 declared at item level
+        - DE 1/11: 71G declared at item level
+        - DE 2/2: Additional Information Codes NIDOM, NIREM, MOVE1, TSGEE and TSPER at item level
+        - DE 2/3: Document Code 1UKI, C509 and N740 declared at item level
+        - DE 3/39: UKIM and TST declared at header level
+        - DE 5/23: NI location code (GB prefix) declared at header level
+        - DE 5/27: Supervising Customs Office GBBEL004 declared at header level
             -->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
-		<FunctionalReferenceID>U.7847767LIQ9F</FunctionalReferenceID>
+		<FunctionalReferenceID>U.78696180BNWL</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: J to represent Arrived GL C21i declaration-->
 		<TypeCode>IMJ</TypeCode>
@@ -36,8 +36,8 @@
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<AuthorisationHolder>
 			<!--DE 3/39: Holder of the Authoriation Identification Number.
-			An authorisation type code of UKIM indicates that a good that otherwise would be considered "at risk" of moving into the EU, must instead be considered "not at risk".
-			The ID here is the EORI of the DPO authorised party. -->
+            An authorisation type code of UKIM indicates that a good that otherwise would be considered "at risk" of moving into the EU, must instead be considered "not at risk".
+            The ID here is the EORI of the DPO authorised party. -->
 			<ID>XI553202734852</ID>
 			<CategoryCode>UKIM</CategoryCode>
 		</AuthorisationHolder>
@@ -83,14 +83,19 @@
 						<CountryCode>GB</CountryCode>
 					</Address>
 				</GoodsLocation>
+				<!-- DE 7/10 -->
+				<TransportEquipment>
+					<SequenceNumeric>1</SequenceNumeric>
+					<ID>DM1234</ID>
+				</TransportEquipment>
 			</Consignment>
 			<GovernmentAgencyGoodsItem>
 				<!--DE 1/6: Goods Item Number.
                     Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
-					This field is mandatory only where codes required.
-					N740 indicating Movement by post including parcel post. -->
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                    This field is mandatory only where codes required.
+                    N740 indicating Movement by post including parcel post. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
 					<ID>0054037</ID>
@@ -98,8 +103,8 @@
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of 1UKI indicates the A trader has declared that they are UKIMS Authorised. 
-					LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
+                    A document code of 1UKI indicates the A trader has declared that they are UKIMS Authorised.
+                    LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
 				<AdditionalDocument>
 					<CategoryCode>1</CategoryCode>
 					<ID>XIUKIM55320273485220240124160138</ID>
@@ -199,7 +204,7 @@
 			</PreviousDocument>
 		</GoodsShipment>
 		<!--DE 5/27: Supervising Customs Office.
-            This is a mandatory field dependant on the Procedure code.
+            This is a mandatory field dependent on the Procedure code.
             The ID GBBEL004 represents Belfast, Erskine House. -->
 		<SupervisingOffice>
 			<ID>GBBEL004</ID>

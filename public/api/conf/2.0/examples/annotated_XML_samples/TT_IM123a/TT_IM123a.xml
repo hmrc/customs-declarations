@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!-- SCENARIO GB to NI At Risk Import of goods liable to Customs Duty & VAT, with no previous procedure Goods: Men's brown trousers, made of cotton, in various sizes and lengths Standard frontier Declaration Type B which derives an H1 Declaration Category data set Goods presented at Warrenpoint on arrival. AI code 'NIDOM' entered at Item Level. -->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7845574WRU1F</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7927468XH0JQ</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type. B to represent an occasional simplified frontier declaration. -->
 		<TypeCode>IMB</TypeCode>
@@ -21,17 +21,17 @@
 		<!--DE 2/6: Deferred Payment. This is mandatory when deferred payment is used. ID is the DAN account used for deferred payment (for excise duty in this scenario). This declared DAN belongs to the importer declared on the declaration. -->
 		<AdditionalDocument>
 			<CategoryCode>1</CategoryCode>
-			<ID>1108654</ID>
+			<ID>1108656</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
 		<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of DPO indicates Deferment of Payment authorisation. The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of CGU is required as CCG authorisation is being declared (see DE 2/3 where a document code of C505 has been entered). The ID here is the EORI of the CCG authorised party. -->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 7/15: Nationality of active means of transport crossing the border. In this case GB. DE 7/4: Mode of transport at the border. ModeCode of 1 to represent Maritime/Sea transport. -->
@@ -41,11 +41,11 @@
 		</BorderTransportMeans>
 		<!--DE 3/18: Declarant Number. The EORI number of the party entering the declaration. The UK requires an EORI to be provided for the declarant. In this scenario, the same as the EORI of the importer. -->
 		<Declarant>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 		</Declarant>
 		<!--DE 3/1: Exporter Identification Number. Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
 		<Exporter>
-			<ID>GB553202734852</ID>
+			<ID>XI553202734852</ID>
 		</Exporter>
 		<GoodsShipment>
 			<Consignment>
@@ -81,7 +81,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. C506 indicates DPO - Authorisation for the deferment of payment. Provide the authorisation decision number for the deferment of payment authorisation in format: • 2 digit code identifying the member state of authorisation, for example, GB • 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO • Followed by the authorisation reference number. No document status code is required.-->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBDPO1108654</ID>
+					<ID>XIDPO1108656</ID>
 					<Name>DPO authorisation</Name>
 					<TypeCode>506</TypeCode>
 				</AdditionalDocument>
@@ -109,14 +109,14 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. N935 indicates the invoice on the basis of which the customs value of the goods is declared. This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/30.08.2023</ID>
+					<ID>12345/30.08.2025</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. C679 indicates Attesting Document (seal product), issued by a recognised body in accordance with either - Regulation (EU) No 737/2010 (on condition that the attesting document was issued prior to 18 October 2015) or, COMMISSION IMPLEMENTING REGULATION (EU) 2015/1850, laying down detailed rules for the implementation of Regulation (EC) No 1007/2009 of the European Parliament and of the Council on trade in seal products. Document status code of XB in this scenario indicates Document not required – quantity below ‘de minimus’. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>0054037-0054047</ID>
+					<ID>0054037</ID>
 					<TypeCode>679</TypeCode>
 					<LPCOExemptionCode>XB</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -203,12 +203,12 @@
 			</GovernmentAgencyGoodsItem>
 			<!--DE 3/16: Importer Identification Number. EORI number of the Importer. -->
 			<Importer>
-				<ID>GB553202734852</ID>
+				<ID>XI553202734852</ID>
 			</Importer>
 			<!--DE 2/1: Previous Documents. Z355 to show the MRN for the entry summary declaration. This is a mandatory field. To denote the inventory reference number. Note that as this is for a single item declaration, this should all be declared at header level. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>23GB34F7Y1O2CX8PT4</ID>
+				<ID>25GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

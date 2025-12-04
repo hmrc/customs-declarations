@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>03</FunctionCode>
-		<FunctionalReferenceID>ad77b8595d0d441d954103ff02d8d78f</FunctionalReferenceID>
+		<FunctionalReferenceID>4b16df140c964c5084ca3ff802f1e630</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20230705155950Z</DateTimeString>
+			<DateTimeString formatCode="304">20251110160753Z</DateTimeString>
 		</IssueDateTime>
 		<Error>
 			<ValidationCode>CDS12056</ValidationCode>
@@ -53,11 +53,136 @@
 				<TagID>145</TagID>
 			</Pointer>
 		</Error>
+		<Error>
+			<ValidationCode>CDS12070</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>02A</DocumentSectionCode>
+				<TagID>D006</TagID>
+			</Pointer>
+		</Error>
+		<Error>
+			<ValidationCode>CDS12070</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>02A</DocumentSectionCode>
+				<TagID>D031</TagID>
+			</Pointer>
+		</Error>
+		<Error>
+			<ValidationCode>CDS12070</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>02A</DocumentSectionCode>
+				<TagID>D006</TagID>
+			</Pointer>
+		</Error>
+		<Error>
+			<ValidationCode>CDS12070</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>02A</DocumentSectionCode>
+				<TagID>D031</TagID>
+			</Pointer>
+		</Error>
+		<Error>
+			<ValidationCode>CDS12171</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>23A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>50A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>94A</DocumentSectionCode>
+				<TagID>107</TagID>
+			</Pointer>
+		</Error>
+		<Error>
+			<ValidationCode>CDS12171</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>67A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>68A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>23A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>50A</DocumentSectionCode>
+				<TagID>113</TagID>
+			</Pointer>
+		</Error>
+		<Error>
+			<ValidationCode>CDS12171</ValidationCode>
+			<Pointer>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<DocumentSectionCode>17C</DocumentSectionCode>
+				<TagID>R145</TagID>
+			</Pointer>
+		</Error>
 		<Declaration>
-			<FunctionalReferenceID>78484492NUGS6Y2AG</FunctionalReferenceID>
-			<ID>23GB7DAQYLRQU6UAR3</ID>
+			<FunctionalReferenceID>U.792746806S8Z</FunctionalReferenceID>
+			<ID>25GBCG7EBQV7HD6AR9</ID>
 			<RejectionDateTime>
-				<DateTimeString formatCode="304">20230705155950Z</DateTimeString>
+				<DateTimeString formatCode="304">20251110160753Z</DateTimeString>
 			</RejectionDateTime>
 			<VersionID>1</VersionID>
 		</Declaration>

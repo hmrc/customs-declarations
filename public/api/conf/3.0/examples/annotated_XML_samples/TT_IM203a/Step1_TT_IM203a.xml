@@ -30,13 +30,13 @@
 		-->
 		<!--Acceptance Date is present on all supplementary declarations, and should match the CLE date listed in 2/1 for EIDR declarations. -->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20250826102930+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20251111144817+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.78477676NUPQ</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7849431PEMPC</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type.
@@ -143,7 +143,7 @@
                     Note: Unlike CHIEF this must now be completed. -->
 				<ContainerCode>1</ContainerCode>
 				<!--DE 7/9:  Identity of means of transport on arrival.
-					Example number representing IMO ship identification number: â€˜10â€™, and 5 digits for the identification number: 12345. -->
+					Example number representing IMO ship identification number: 10, and 5 digits for the identification number: 12345. -->
 				<ArrivalTransportMeans>
 					<ID>12345</ID>
 					<IdentificationTypeCode>10</IdentificationTypeCode>
@@ -202,7 +202,7 @@
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					C506 indicates DPO - Authorisation for the deferment of payment.  Provide the authorisation decision number for the deferment of payment authorisation in the format:
-                     - 2 digit code identifying the member state of authorisation, for example, GB
+                     - 2 digit code identifying the member state of authorisation, for example, XI
                      - 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
                      - followed by the authorisation reference number. No document status code is required.-->
 				<AdditionalDocument>
@@ -262,7 +262,7 @@
 					A document code of C644 indicates Certificate of inspection for organic products. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>0054037-00554047</ID>
+					<ID>0054037</ID>
 					<TypeCode>644</TypeCode>
 					<LPCOExemptionCode>GE</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -316,7 +316,7 @@
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!-- DE 6/17: Commodity Code â€“ National Additional Codes.
+						<!-- DE 6/17: Commodity Code, National Additional Codes.
                            VATZ to represent VAT 0% duty rate. -->
 						<ID>VATZ</ID>
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
@@ -343,7 +343,7 @@
 						<NetNetWeightMeasure>250</NetNetWeightMeasure>
 					</GoodsMeasure>
 					<!--DE 4/14:  Item price amount.
-						The invoice was issued with of a value of £1000 and the currency was in GBP. -->
+						The invoice was issued with of a value of 1000 and the currency was in GBP. -->
 					<InvoiceLine>
 						<ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
 					</InvoiceLine>
@@ -420,7 +420,7 @@
 				In CDS, the MUCR (MCR) is not required on a sup dec.-->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>5GB553202734852-20250804</ID>
+				<ID>RSD5GB553202734852-20250804</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -429,7 +429,7 @@
 				Note that this is item 6 from the EIDR record entry. -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20250826</ID>
+				<ID>20251111</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>6</LineNumeric>
 			</PreviousDocument>
@@ -467,7 +467,7 @@
 			<ID>Guaranteenotrequired</ID>
 			<!--DE 8/2: Guarantee type.
 				0 to represent that a customs comprehensive guarantee is being waived for the deferment of customs duty.
-                Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code â€˜0â€™ or â€˜1â€™ must be declared in this data element. -->
+                Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code "0" or "1" must be declared in this data element. -->
 			<SecurityDetailsCode>0</SecurityDetailsCode>
 		</ObligationGuarantee>
 		<!--DE 5/27: Supervising customs office.

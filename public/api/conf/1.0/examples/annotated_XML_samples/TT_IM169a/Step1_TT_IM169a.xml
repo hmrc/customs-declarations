@@ -6,7 +6,7 @@
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
-		<!-- SCENARIOA Trader submits a Type Z (H8) supplementary declaration, GB-NI, importing goods 'not at risk' with APC 1RD and a valid UKIMS EIDR authorisation.
+		<!-- SCENARIO A Trader submits a Type Z (H8) supplementary declaration, GB-NI, importing goods 'not at risk' with APC 1RD and a valid UKIMS EIDR authorisation.
         Previous document type DCR in DE 2/1 declared with RSD as the first three characters -->
 		<AcceptanceDateTime>
 			<p1:DateTimeString formatCode="304">20251111142004+01</p1:DateTimeString>
@@ -23,7 +23,7 @@
 		<Agent>
 			<FunctionCode>2</FunctionCode>
 		</Agent>
-		<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarantâ„¢s records. The ID is the EORI of the EIDR authorised party. -->
+		<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of EIR is required for authorisation for making a customs declaration through an entry in the declarants records. The ID is the EORI of the EIDR authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
 			<CategoryCode>EIR</CategoryCode>
@@ -143,7 +143,7 @@
 					<StatementDescription>RSDSD 1</StatementDescription>
 				</AdditionalInformation>
 				<Commodity>
-					<!--DE 6/8: Goods Description. Description of the goods specific enough to enable classification‚without repeating the CN code description in the Tariff. -->
+					<!--DE 6/8: Goods Description. Description of the goods specific enough to enable classification without repeating the CN code description in the Tariff. -->
 					<Description>Cocoa Butter-fat and oil</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - combined nomenclature code. IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->
@@ -154,7 +154,7 @@
 						<!--DE 6/5: Gross Mass Mass of the goods in kilograms including packaging. -->
 						<GrossMassMeasure>150</GrossMassMeasure>
 					</GoodsMeasure>
-					<!--DE 4/14: Item price amount. The invoice was issued with of a value of £1000 and the currency was in GBP. -->
+					<!--DE 4/14: Item price amount. The invoice was issued with of a value of 1000 and the currency was in GBP. -->
 					<InvoiceLine>
 						<ItemChargeAmount currencyID="GBP">1000</ItemChargeAmount>
 					</InvoiceLine>

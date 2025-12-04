@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
+		<!--
+
+            SCENARIO
+            A trader submits a Type A (H8) standard declaration importing goods "Not At Risk" from GB to NI
+            for Entry for free-circulation and home use of non-Union goods where the goods have been previously
+            entered to inward processing on arrival in NI. The trader submits a declaration using procedure
+            code 4051, APC's 1EN, 1SP, 1NR and additional document N760.
+
+            The Trader enters the following information on the declaration:
+            - DE 1/1: IM
+            - DE 1/2: A
+            - DE 1/10: Procedure Code 0778 at the item level.
+            - DE 1/11: Additional Procedure Code 'F06' and '1EN, 1NR, 1SP'  at item level.
+            - DE 2/1: Simplified Declaration/Previous Documents: Z (MRN), Z (ZZZ)
+            - DE 2/2 Additional Information Code 'NIDOM' & 'NIREM' & 'ECONR' at item level.
+            - DE 2/3: 1UKI, C600, C676 and N760 declared at item level
+            - DE 2/7: Warehouse type of Y declared at Header level
+            - DE 3/39 UKIM EXW and FP authorisations declared at header level
+            - DE 5/23 Goods location GBAU at Header Level
+
+            Expected notifications: DMSACC, DMSCLE
+
+        -->
+		<!--Function Code of 9 to represent an original declaration-->
+		<FunctionCode>9</FunctionCode>
+		<!--DE 2/5: LRN. Declarant's own reference number: this must be unique to the transaction. -->
+		<FunctionalReferenceID>U.7847767NX5VQ</FunctionalReferenceID>
+		<!--DE 1/1: Declaration Type. IM to represent an import declaration. -->
+		<!--DE 1/2: Additional Declaration Type. A to represent a standard customs declaration. -->
+		<TypeCode>IMA</TypeCode>
+		<!--DE 1/9: Total Number of Items, Number of goods items on the declaration. This is a single item declaration. -->
+		<GoodsItemQuantity>1</GoodsItemQuantity>
+		<AuthorisationHolder>
+			<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered "at risk" of moving into the EU, must instead be considered "not at risk" The ID here is the EORI of the DPO authorised party. -->
+			<ID>XI150454489082</ID>
+			<CategoryCode>UKIM</CategoryCode>
+		</AuthorisationHolder>
+		<!--DE 3/39: Holder of the authorisation ID no.
+            Mandatory if authorisation is required to declare goods to procedure
+            An authorisation type code of EXW indicates EORI number or other reference of the excise warehouse authorisation holder.
+            The ID here is the EORI of the EXW authorised party.-->
+		<AuthorisationHolder>
+			<ID>XI150454489082</ID>
+			<CategoryCode>EXW</CategoryCode>
+		</AuthorisationHolder>
+		<AuthorisationHolder>
+			<!--DE 3/39: Holder of the Authorisation Identification Number.
+            An authorisation type code of SDE indicates Simplified Declaration authorisation (see DE 2/3 where a document code of C512 has been entered).
+            The ID here is the EORI of the SDE authorised party. -->
+			<!-- Enter: the GB or XI EORI number of the Freeport Business authorisation holder  -->
+			<ID>XI150454489082</ID>
+			<CategoryCode>FP</CategoryCode>
+		</AuthorisationHolder>
+		<BorderTransportMeans>
+			<!--DE 7/4: Mode of Transport at the Border. 1 to represent Maritime/Sea transport as the mode of transport at the border. -->
+			<ModeCode>1</ModeCode>
+		</BorderTransportMeans>
+		<Declarant>
+			<!--DE 3/18: Declarant Identification Number. The EORI number of the agent entering the declaration. The UK requires an EORI to be provided for the declarant. -->
+			<ID>XI150454489082</ID>
+		</Declarant>
+		<Exporter>
+			<!--DE 3/1: Exporter. Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
+			<Name>Light It Up</Name>
+			<Address>
+				<CityName>Liverpool</CityName>
+				<CountryCode>GB</CountryCode>
+				<Line>5 Tar Terrace</Line>
+				<PostcodeID>L1 1TA</PostcodeID>
+			</Address>
+		</Exporter>
+		<GoodsShipment>
+			<Consignment>
+				<GoodsLocation>
+					<!--DE 5/23: Location of Goods - Identification of location. Mandatory. -->
+					<Name>BELBELBEL</Name>
+					<!--DE 5/23: Type of Location - A in this scenario to represent that it is a designated location.-->
+					<TypeCode>A</TypeCode>
+					<Address>
+						<!--DE 5/23: Location of Goods - Qualifier of the identification. Location ID type is U in this scenario for UN/LOCODE..-->
+						<TypeCode>U</TypeCode>
+						<!--DE 5/23: Location of Goods - Country. Country code of the country where the goods may be examined. GB in this scenario. -->
+						<CountryCode>GB</CountryCode>
+					</Address>
+				</GoodsLocation>
+			</Consignment>
+			<!--DE 5/8: Country of Destination Code. In this case, GB. -->
+			<Destination>
+				<CountryCode>GB</CountryCode>
+			</Destination>
+			<GovernmentAgencyGoodsItem>
+				<!--DE 1/6: Goods Item Number. Sequential number of the goods item. -->
+				<SequenceNumeric>1</SequenceNumeric>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. This field is mandatory only where codes required. N760, multimodal/combined transport document. -->
+				<AdditionalDocument>
+					<CategoryCode>N</CategoryCode>
+					<ID>0054039</ID>
+					<TypeCode>760</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of 1UKI indicates the A trader has declared that they are UKIMS Authorised. LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
+				<AdditionalDocument>
+					<CategoryCode>1</CategoryCode>
+					<ID>XIUKIM15045448908220240124160138</ID>
+					<TypeCode>UKI</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of C600 indicates authorisation or the use of an inward processing procedure. -->
+				<AdditionalDocument>
+					<!-- Enter: the Freeport
+                 Business Authorisation number -->
+					<CategoryCode>C</CategoryCode>
+					<ID>XIFP15045448908220241108094615</ID>
+					<TypeCode>600</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Import/ Export authorisation issued by the competent authorities of the Member States. Decision 1764/15. This code is to be used for all national facilitations and authorisations listed in Appendix 6, i.e EXW. -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>XIEXW15045448908220231019133850</ID>
+					<TypeCode>676</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Self-certificate for wine imported from the United Kingdom into the European Union -->
+				<AdditionalDocument>
+					<CategoryCode>C</CategoryCode>
+					<ID>0054047</ID>
+					<TypeCode>083</TypeCode>
+					<LPCOExemptionCode>AC</LPCOExemptionCode>
+				</AdditionalDocument>
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                   Y929 indicates Excluded from Reg 834/2007 - Authorisation for Denoting the goods are not organic/do not meet terms to be classed as organic. -->
+				<AdditionalDocument>
+					<CategoryCode>Y</CategoryCode>
+					<ID>Excluded from Reg 834/2007</ID>
+					<Name>Reason for Waiver</Name>
+					<TypeCode>929</TypeCode>
+				</AdditionalDocument>
+				<!--DE 2/2: Additional Information.
+                    This field represents the Excise Registered Consignor -->
+				<AdditionalInformation>
+					<StatementCode>ECONR</StatementCode>
+					<StatementDescription>Reg No. 1234567890</StatementDescription>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional Information.
+                    This field is mandatory.
+                    This represents a domestic movement as the goods are imported from GB into Northern Ireland. -->
+				<AdditionalInformation>
+					<StatementCode>NIDOM</StatementCode>
+				</AdditionalInformation>
+				<!--DE 2/2: Additional Information.
+                    This field is mandatory, this represents goods are de-risked into Northern Ireland. -->
+				<AdditionalInformation>
+					<StatementCode>NIREM</StatementCode>
+				</AdditionalInformation>
+				<AdditionalInformation>
+					<!--DE 2/2: Additional Information. 00500 Indicating Self representation by the importer. -->
+					<StatementCode>00500</StatementCode>
+					<StatementDescription>IMPOTER</StatementDescription>
+				</AdditionalInformation>
+				<Commodity>
+					<!--DE 6/8: Description of Goods. Description of the goods which is specific enough to allow the unambiguous identification, classification and examination of goods. -->
+					<Description>Arrested fermentation grape must in barrels - FP1234</Description>
+					<Classification>
+						<!--DE 6/14: Commodity Code Combined Nomenclature Code. -->
+						<ID>22043098</ID>
+						<IdentificationTypeCode>TSP</IdentificationTypeCode>
+					</Classification>
+					<GoodsMeasure>
+						<!--DE 6/5: Gross Mass. Weight of the goods in kilograms including packaging. -->
+						<GrossMassMeasure>25</GrossMassMeasure>
+					</GoodsMeasure>
+					<InvoiceLine>
+						<!--DE 4/14: Item Price/ Amount. The invoice was issued with a value of 120 and the currency was in GBP. -->
+						<ItemChargeAmount currencyID="GBP">120</ItemChargeAmount>
+					</InvoiceLine>
+				</Commodity>
+				<GovernmentProcedure>
+					<!--DE 1/10: Procedure. Requested Procedure of 07 indicating entry for free circulation with simultaneus entry into an excise warehouse. Previous Procedure of 78 indicating release for free circulation -->
+					<CurrentCode>07</CurrentCode>
+					<PreviousCode>78</PreviousCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code 1EN to indicate Category 2 Excise Goods not subject to Documentary Controls.. -->
+				<GovernmentProcedure>
+					<CurrentCode>1EN</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code 1SP to indicate GL Special Procedure Diversion, mandatory when declaring 1EN -->
+				<GovernmentProcedure>
+					<CurrentCode>1SP</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code 1NR to indicate GL Special Procedure Diversion in NI following confirmation that the Goods are "not at risk". Mandatory when declaring 1SP. -->
+				<GovernmentProcedure>
+					<CurrentCode>1NR</CurrentCode>
+				</GovernmentProcedure>
+				<!--DE 1/11: Additional Procedure Code.
+                    Mandatory field. F06 to indicate A Movement of Excise Goods from GB – NI under an Excise Duty Suspension Arrangement
+                    from the Place of Importation in accordance with Article 17(1)(b) of Directive 2008/118/EC -->
+				<GovernmentProcedure>
+					<CurrentCode>F06</CurrentCode>
+				</GovernmentProcedure>
+				<Origin>
+					<!--DE 5/15: Country of Origin. Where preference in DE 4/17 begins with '1', this must be completed. TypeCode of 1 to represent non-preferential origin. CountryCode contains the code for the country from which the goods originated, in this case GB. -->
+					<CountryCode>GB</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
+				<Packaging>
+					<SequenceNumeric>1</SequenceNumeric>
+					<!--DE 6/10: Number of Packages. In this case 10. -->
+					<QuantityQuantity>10</QuantityQuantity>
+				</Packaging>
+			</GovernmentAgencyGoodsItem>
+			<Importer>
+				<!--DE 3/16: Importer Identification Number. EORI number of the Importer. -->
+				<ID>XI150454489082</ID>
+			</Importer>
+			<!--DE 2/1: Simplified Declaration/Previous Documents. The DUCR assigned to the consignment As this is for a single item declaration, this should all be declared at header level. In CDS, the MUCR (MCR) is not required on a supplementary declaration. -->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>5GBXI150454489082-0611EC04</ID>
+				<TypeCode>DCR</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!--DE 2/1: Simplified Declaration/Previous Documents. Previous document of ZZZ to show stock reference number at header level-->
+			<PreviousDocument>
+				<CategoryCode>Z</CategoryCode>
+				<ID>F7Y1O2CX8PT7</ID>
+				<TypeCode>ZZZ</TypeCode>
+				<LineNumeric>1</LineNumeric>
+			</PreviousDocument>
+			<!--DE 2/7: Warehouse type of Y to represent non-customs warehouse.
+                ID contains the non-customs warehouse ID. -->
+			<Warehouse>
+				<ID>4170294</ID>
+				<TypeCode>Y</TypeCode>
+			</Warehouse>
+		</GoodsShipment>
+		<!--DE 5/27: Supervising customs office. The Supervising Office Code for the HMRC Office overseeing the Customs Warehouse procedure. In this scenario, this is Belfast, Dorchester House (NIRU). -->
+		<SupervisingOffice>
+			<ID>GBBEL004</ID>
+		</SupervisingOffice>
+	</Declaration>
+</md:MetaData>

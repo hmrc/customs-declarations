@@ -16,14 +16,12 @@
 				Self-Representation used by the Importer
 				Deferment used for security
 				Goods presented at port of Belfast.
-				Expected Notifications (4): DMSACC, DMSTAX(1), DMSTAX(2) and DMSCLE	
-				
-				Please note that this scenario isnt performing as expected and will be updated in a future 						release.-->
-				
+				Expected Notifications (4): DMSACC, DMSTAX(1), DMSTAX(2) and DMSCLE -->
+
 		<!-- Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Declarant's own reference number : this must be unique to the transaction. -->
-		<FunctionalReferenceID>7849431W04ON</FunctionalReferenceID>
+		<FunctionalReferenceID>U.79274681C5UJ</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration. -->
 		<!--DE 1/2: A to represent a frontier/arrived standard declaration. -->
 		<TypeCode>IMA</TypeCode>
@@ -37,13 +35,13 @@
 			This declared DAN belongs to the importer declared on the declaration.-->
 		<AdditionalDocument>
 			<CategoryCode>1</CategoryCode>
-			<ID>1229026</ID>
+			<ID>1229027</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
-		<!--DE 3/39: Holder of teh Authorisation Identification Number.
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
 					An authorisation type code of EUS indicates End Use authorisation, the EORI number entered here must be the same as the Importer's EORI number declared in DE 3/16. -->
 		<AuthorisationHolder>
-			<ID>GB896458895015</ID>
+			<ID>XI896458895015</ID>
 			<CategoryCode>EUS</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
@@ -51,14 +49,14 @@
 					See DE 2/3 where a document code of C505 has been entered.
 					The ID here is the EORI of the CCG authorised party. -->
 		<AuthorisationHolder>
-			<ID>GB896458895015</ID>
+			<ID>XI896458895015</ID>
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
 			An authorisation type code of DPO indicates Deferment of Payment authorisation.
 			The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>
-			<ID>GB553202734852</ID>
+			<ID>XI896458895015</ID>
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
 		<BorderTransportMeans>
@@ -73,7 +71,7 @@
 					The EORI number of the Importer entering the declaration.
 					The UK requires an EORI to be provided for the declarant. -->
 		<Declarant>
-			<ID>GB896458895015</ID>
+			<ID>XI896458895015</ID>
 		</Declarant>
 		<!--DE 3/1: Exporter.
 		Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
@@ -105,7 +103,7 @@
 					<!--DE 5/23: Type of Location - A is used to identify Frontier or Frontier linker locations such as Airports, ITSFs etc. -->
 					<TypeCode>A</TypeCode>
 					<Address>
-						<!--DE 5/23: Type of ID of the Location - Y is used where the goods location is identified by an authorisation number. -->
+						<!--DE 5/23: Type of ID of the Location - U in this scenario for UN/LOCODE. -->
 						<TypeCode>U</TypeCode>
 						<!--DE 5/23: Country code of the country where the goods may be examined,
 							GB in this scenario. -->
@@ -129,26 +127,26 @@
                     authorisation other than for ships and platforms). -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>GBEUS89645889501520191113093111</ID>
+					<ID>XIEUS89645889502320231120224100</ID>
 					<Name>Simplified Authorisation</Name>
 					<TypeCode>990</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: A document code of C505 indicates a CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.-->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBCGU3827</ID>
+					<ID>XICGU89645889501520231019133850</ID>
 					<TypeCode>505</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					C506 indicates DPO - Authorisation for the deferment of payment.
 					Provide the authorisation decision number for the deferment of payment authorisation in format:
-					- 2 digit code identifying the member state of authorisation, for example, GB.
+					- 2 digit code identifying the member state of authorisation, for example, XI.
 					- 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO.
 					- Followed by the authorisation reference number.
 					No document status code is required. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
-					<ID>GBDPO1108654</ID>
+					<ID>XIDPO1108654</ID>
 					<TypeCode>506</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: A document code of N935 indicates Invoice/order reference (valuation Method 1 used).
@@ -242,8 +240,8 @@
 							<MethodCode>E</MethodCode>
 						</Payment>
 					</DutyTaxFee>
-					<!--DE 4/3: Tax Type. 
-						Mandatory field if revenue to pay/secure. 
+					<!--DE 4/3: Tax Type.
+						Mandatory field if revenue to pay/secure.
 						Tax Type of B00 represents VAT. -->
 					<DutyTaxFee>
 						<TypeCode>B00</TypeCode>
@@ -277,7 +275,7 @@
 				<CustomsValuation>
 					<MethodCode>1</MethodCode>
 				</CustomsValuation>
-				<!--DE 5/14: Country of Dispatch/Export Code. 
+				<!--DE 5/14: Country of Dispatch/Export Code.
 							For declarations with a single goods item, this DE can be declared at header or item level.
 							In this case, GB. -->
 				<ExportCountry>
@@ -293,8 +291,8 @@
 				<GovernmentProcedure>
 					<CurrentCode>1RL</CurrentCode>
 				</GovernmentProcedure>
-				<!--DE 5/16: Country of Preferential Origin Code. 
-					Mandatory.TypeCode of 1 to represent non-preferential origin. 
+				<!--DE 5/16: Country of Preferential Origin Code.
+					Mandatory.TypeCode of 1 to represent non-preferential origin.
 					Where preference in DE 4/17 begins with '2', this must be completed.
 					Origin country is GB.-->
 				<Origin>
@@ -305,13 +303,13 @@
 					<SequenceNumeric>1</SequenceNumeric>
 					<!--DE 6/11: Shipping marks on the packages-->
 					<MarksNumbersID>ADRN123456123</MarksNumbersID>
-					<!--DE 6/10: Number of packages, in this case 100. 
+					<!--DE 6/10: Number of packages, in this case 100.
 						Note that this matches DE 6/18 because this is a single item declaration.-->
 					<QuantityQuantity>100</QuantityQuantity>
 					<!-- DE 6/9: Type of packages - FT to represent Foodtainer-->
 					<TypeCode>FT</TypeCode>
 				</Packaging>
-				<!--DE 4/13. 
+				<!--DE 4/13.
 					First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
 					Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
 					Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
@@ -322,20 +320,20 @@
 			</GovernmentAgencyGoodsItem>
 			<!--DE 3/16: EORI number of the Importer. -->
 			<Importer>
-				<ID>GB896458895015</ID>
+				<ID>XI896458895015</ID>
 			</Importer>
 			<!--DE 2/1: Simplified Declarations/Previous documents.
 				Previous document to show the DUCR assigned to the consignment.
-				Note: The DUCR is not mandatory for â€˜normalâ€™ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
+				Note: The DUCR is not mandatory for normal declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>3GB896458895015-A12345</ID>
+				<ID>3XI896458895015-A12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Z355 To show the MRN for the Entry Summary Declaration. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>23GB34F7Y1O2CX8PT4</ID>
+				<ID>25GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
@@ -347,21 +345,21 @@
 		</GoodsShipment>
 		<!--DE 8/3:  Guarantee Reference. -->
 		<ObligationGuarantee>
-			<ID>GB896458895015</ID>
-			<!--DE 8/2:  Guarantee Type and Cash Accounts.  
-				3 to represent individual guarantee in cash or other means of payment recognised by the customs authorities as being equivalent to a cash deposit, 
+			<ID>XI896458895015</ID>
+			<!--DE 8/2:  Guarantee Type and Cash Accounts.
+				3 to represent individual guarantee in cash or other means of payment recognised by the customs authorities as being equivalent to a cash deposit,
 				made in euro or in the currency of the Member State in which the guarantee is required (Article 92(1)(a) of the Code). -->
 			<SecurityDetailsCode>3</SecurityDetailsCode>
 		</ObligationGuarantee>
 		<!--DE 8/3:  Guarantee Reference. -->
 		<ObligationGuarantee>
 			<ID>1229026</ID>
-			<!--DE 8/2:  Guarantee Type and Cash Accounts. 
+			<!--DE 8/2:  Guarantee Type and Cash Accounts.
 				1 to indicate that a CCG authorisation is held. -->
 			<SecurityDetailsCode>1</SecurityDetailsCode>
 		</ObligationGuarantee>
 		<SupervisingOffice>
-			<!--DE 5/27: Supervising customs office. 
+			<!--DE 5/27: Supervising customs office.
 						In this scenario, this is Belfast, Dorchester House (NIRU).-->
 			<ID>GBBEL004</ID>
 		</SupervisingOffice>

@@ -78,29 +78,11 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
   override val unstablePeriodDurationInMillis: Int = config.declarationsCircuitBreakerConfig.unstablePeriodDurationInMillis
   override val unavailablePeriodDurationInMillis: Int = config.declarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis
 
-  val extraHeadersFeature: Boolean = config.extraHeaderConfig.extraHeaderFeature
-  val isRunningInQA: Boolean = config.extraHeaderConfig.isRunningInQA
-
   def send[A](xml: NodeSeq, date: Instant, correlationId: UUID, apiVersion: ApiVersion)(implicit vpr: ValidatedPayloadRequest[A], hc: HeaderCarrier): Future[HttpResponse] = {
     val config = Option(serviceConfigProvider.getConfig(s"${apiVersion.configPrefix}$configKey")).getOrElse(throw new IllegalArgumentException("config not found"))
     val bearerToken = "Bearer " + config.bearerToken.getOrElse(throw new IllegalStateException("no bearer token was found in config"))
 
-    logger.debug(s"Environment for request is set to: ${vpr.requestedApiVersion.value}")
-    logger.debug(s"Accept Header : ${vpr.request.headers.get("Accept")}")
-    val decHeaders = if (extraHeadersFeature) {
-      if (isRunningInQA) {
-        vpr.request.headers.get("Accept") match {
-          case Some("application/vnd.hmrc.2.0+xml") =>
-            getHeaders(date, correlationId, vpr.conversationId.uuid) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders(hc)
-          case _ =>
-            getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders(hc)
-        }
-      } else {
-        getHeaders(date, correlationId, vpr.conversationId.uuid) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders(hc)
-      }
-    } else {
-      getHeaders(date, correlationId) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders(hc)
-    }
+    val decHeaders = getHeaders(date, correlationId, vpr.conversationId.uuid) ++ Seq(HeaderNames.authorisation -> bearerToken) ++ getCustomsApiStubExtraHeaders(hc)
 
     val startTime = LocalDateTime.now
     withCircuitBreaker(post(xml, config.url, decHeaders)).map {
@@ -110,16 +92,6 @@ trait DeclarationConnector extends DeclarationCircuitBreaker with HttpErrorFunct
       }
         response
     }
-  }
-
-  private def getHeaders(date: Instant, correlationId: UUID) = {
-    Seq(
-      (ACCEPT, MimeTypes.XML),
-      (CONTENT_TYPE, ContentTypes.XML(utf_8)),
-      (DATE, getDateHeader(date)),
-      (X_FORWARDED_HOST, "MDTP"),
-      ("X-Correlation-ID", correlationId.toString)
-    )
   }
 
   private def getHeaders(date: Instant, correlationId: UUID, conversationId: UUID) = {

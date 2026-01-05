@@ -23,8 +23,6 @@ case class DeclarationsConfig(apiSubscriptionFieldsBaseUrl: String,
 
 case class NrsConfig(nrsEnabled: Boolean, nrsApiKey: String,  nrsUrl: String)
 
-case class ExtraHeaderConfig(extraHeaderFeature: Boolean, isRunningInQA: Boolean)
-
 case class DeclarationsShutterConfig(v1Shuttered: Option[Boolean],
                                      v2Shuttered: Option[Boolean],
                                      v3Shuttered: Option[Boolean])

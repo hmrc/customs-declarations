@@ -68,7 +68,6 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
   private val mockServiceConfigProvider = mock[ServiceConfigProvider]
   private val mockDeclarationsConfigService = mock[DeclarationsConfigService]
   private val mockDeclarationsCircuitBreakerConfig = mock[DeclarationsCircuitBreakerConfig]
-  private val mockExtraHeadersFeatureConfig = mock[ExtraHeaderConfig]
   private val numberOfCallsToTriggerStateChange = 5
   private val unavailablePeriodDurationInMillis = 1000
   private val unstablePeriodDurationInMillis = 10000
@@ -82,8 +81,6 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
       "appUrl" -> "http://customs-wco-declaration.service",
       "auditing.enabled" -> false,
       "auditing.traceRequests" -> false,
-      "extraHeadersFeature.enabled" -> true,
-      "isRunningInQA.enabled" -> false,
       "microservice.services.declaration-cancellation.host" -> Host,
       "microservice.services.declaration-cancellation.port" -> Port,
       "microservice.services.declaration-cancellation.bearer-token" -> "v1-bearer-token",
@@ -135,12 +132,9 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
     when(mockServiceConfigProvider.getConfig("v2.declaration-cancellation")).thenReturn(v2Config)
     when(mockServiceConfigProvider.getConfig("v3.declaration-cancellation")).thenReturn(v3Config)
     when(mockDeclarationsConfigService.declarationsCircuitBreakerConfig).thenReturn(mockDeclarationsCircuitBreakerConfig)
-    when(mockDeclarationsConfigService.extraHeaderConfig).thenReturn(mockExtraHeadersFeatureConfig)
     when(mockDeclarationsCircuitBreakerConfig.numberOfCallsToTriggerStateChange).thenReturn(numberOfCallsToTriggerStateChange)
     when(mockDeclarationsCircuitBreakerConfig.unavailablePeriodDurationInMillis).thenReturn(unavailablePeriodDurationInMillis)
     when(mockDeclarationsCircuitBreakerConfig.unstablePeriodDurationInMillis).thenReturn(unstablePeriodDurationInMillis)
-    when(mockExtraHeadersFeatureConfig.extraHeaderFeature).thenReturn(true)
-    when(mockExtraHeadersFeatureConfig.isRunningInQA).thenReturn(false)
   }
 
   private val year = 2017
@@ -171,6 +165,7 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
           .withHeader(HeaderNames.DATE, equalTo(httpFormattedDate))
           .withHeader(HeaderNames.X_FORWARDED_HOST, equalTo("MDTP"))
           .withHeader("X-Correlation-ID", equalTo(correlationId.toString))
+          .withHeader("X-Conversation-ID", equalTo("38400000-8cf0-11bd-b23e-10b96e4ef00d"))
           .withRequestBody(equalTo(xml.toString())))
       }
 
@@ -228,6 +223,7 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
         .withHeader(HeaderNames.DATE, equalTo(httpFormattedDate))
         .withHeader(HeaderNames.X_FORWARDED_HOST, equalTo("MDTP"))
         .withHeader("X-Correlation-ID", equalTo(correlationId.toString))
+        .withHeader("X-Conversation-ID", equalTo("38400000-8cf0-11bd-b23e-10b96e4ef00d"))
         .withRequestBody(equalTo(xml.toString()))
         .willReturn(
           aResponse()
@@ -260,6 +256,7 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
       .withHeader(HeaderNames.DATE, equalTo(httpFormattedDate))
       .withHeader(HeaderNames.X_FORWARDED_HOST, equalTo("MDTP"))
       .withHeader("X-Correlation-ID", equalTo(correlationId.toString))
+      .withHeader("X-Conversation-ID", equalTo("38400000-8cf0-11bd-b23e-10b96e4ef00d"))
       .withRequestBody(equalTo(xml.toString()))
       .willReturn(
         aResponse()

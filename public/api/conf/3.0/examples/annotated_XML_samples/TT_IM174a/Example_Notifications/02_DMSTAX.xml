@@ -7,9 +7,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>76d4d743f93a416fad37c437afafdd3c</FunctionalReferenceID>
+		<FunctionalReferenceID>b2e1057236824b4ba9201cff394cf7a1</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20240930135124Z</DateTimeString>
+			<DateTimeString formatCode="304">20260113124715Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,8 +19,8 @@
 			<NameCode>67</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>7847767EC0S1</FunctionalReferenceID>
-			<ID>24GBAUWWQ8KKWZNAR7</ID>
+			<FunctionalReferenceID>U.7847767DQ6YZ</FunctionalReferenceID>
+			<ID>26GB0HWOVS9FP1EAR3</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
@@ -31,12 +31,23 @@
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TypeCode>A50</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP">27.66</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP">27.66</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">28.35</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">28.35</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP">27.66</AdValoremTaxBaseAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">600.00</AdValoremTaxBaseAmount>
+							<DeductAmount currencyID="GBP">0.00</DeductAmount>
+							<DutyRegimeCode>100</DutyRegimeCode>
+							<TaxRateNumeric>0.00</TaxRateNumeric>
+							<TypeCode>A70</TypeCode>
+							<Payment>
+								<TaxAssessedAmount currencyID="GBP">0.00</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">0.00</PaymentAmount>
+							</Payment>
+						</DutyTaxFee>
+						<DutyTaxFee>
+							<AdValoremTaxBaseAmount currencyID="GBP">28.35</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>0.00</TaxRateNumeric>

@@ -17,8 +17,8 @@
 		<!--
 			***
 
-			SCENARIO GB-NI, NIDOM, Goods 'Not At Risk'
-			A Trader submits a Type A (H1) standard declaration "Not At Risk" importing Agri-food products directly transported from GB to NI where goods are released for free circulation and by traders authorised under the Northern Ireland Retail Movement Scheme (NIRMS) where a licence waiver is being declared to home use in NI. The trader has declared APC 1RM.
+			SCENARIO GB-NI, NIDOM, Goods 'Not at Risk'
+			A Trader submits a Type A (H1) standard declaration "Not at Risk" importing Agri-food products directly transported from GB to NI where goods are released for free circulation and by traders authorised under the Northern Ireland Retail Movement Scheme (NIRMS) where a licence waiver is being declared to home use in NI. The trader has declared APC 1RM.
 
 			The trader enters the following information on the declaration:
 			- DE 1/1: IM
@@ -347,7 +347,7 @@
 			</Importer>
 			<!--DE 2/1: Simplified Declarations/Previous documents.
                 ZDCR to show the DUCR assigned to the consignment.
-                Note: The DUCR is not mandatory for â€˜normalâ€™ declarations, only if CFSP or where the business
+                Note: The DUCR is not mandatory for normal declarations, only if CFSP or where the business
                 process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>

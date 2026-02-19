@@ -7,7 +7,7 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--SCENARIO
-        A Trader submits a Type J (GL C21i) inventory linking goods arrived declaration "Not At Risk" (GB to NI)
+        A Trader submits a Type J (GL C21i) inventory linking goods arrived declaration "Not at Risk" (GB to NI)
         for the Customs Clearance Request (CCR) for Movements in Temporary Storage (MiTS) between Temporary Storage (TS)
         premises located in Northern Ireland using the Northern Ireland Green Lane.
 
@@ -35,13 +35,13 @@
 		<!--DE 1/9: Total number of goods items on the declaration.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<AuthorisationHolder>
-			<!--DE 3/39: Holder of the Authoriation Identification Number.
+			<!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of UKIM indicates that a good that otherwise would be considered "at risk" of moving into the EU, must instead be considered "not at risk".
             The ID here is the EORI of the DPO authorised party. -->
 			<ID>XI553202734852</ID>
 			<CategoryCode>UKIM</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of TST indicates Authorisation to operate storage facilities for the temporary storage of goods.  -->
+		<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of TST indicates Authorisation to operate storage facilities for the temporary storage of goods.  -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
 			<CategoryCode>TST</CategoryCode>
@@ -182,7 +182,7 @@
 				</Packaging>
 				<PreviousDocument>
 					<!--DE 2/1: Simplified Declaration/Previous Documents.
-                        Previous document of X337 for Temporary Storage DeclarationÂ .
+                        Previous document of X337 for Temporary Storage Declaration .
                         This is a mandatory field. To denote the inventory reference number.
                         Note: As this is for a single item declaration, this should all be declared at header level-->
 					<CategoryCode>X</CategoryCode>

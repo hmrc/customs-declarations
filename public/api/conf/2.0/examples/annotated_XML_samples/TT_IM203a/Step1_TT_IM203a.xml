@@ -93,7 +93,7 @@
 		</AuthorisationHolder>
 		<!--DE 3/39: Holder of the Authorisation Identification Number.
 			An authorisation type code of CWP indicates operation of storage facilities for the customs warehousing of goods in a private customs warehouse
-            The ID is the EORI number of the Private Customs Warehousekeeper. As per the import declaration completion guide, when goods are being
+            The ID is the EORI number of the Private Customs Warehouse keeper. As per the import declaration completion guide, when goods are being
 			removed from a private customs warehouse, the EORI number entered here must be the same as the Importer's EORI number declared in DE 3/16.-->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
@@ -153,7 +153,7 @@
 				</ArrivalTransportMeans>
 				<!--DE 5/23: ID to give a unique position of the location -->
 				<GoodsLocation>
-					<!--DE 5/23:The location code for the Customs Warehouse. -->
+					<!--DE 5/23: The location code for the Customs Warehouse. -->
 					<Name>CW155320273485220190613093448GB</Name>
 					<!--DE 5/23: Type of Location.
 						B is used to identify inland locations such as customs warehouses. -->
@@ -251,7 +251,7 @@
 					<TypeCode>024</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of Y027 for the Warehousekeeper AEO certificate number.
+					A document code of Y027 for the Warehouse keeper AEO certificate number.
 					ID contains the reference number of the certificate. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>

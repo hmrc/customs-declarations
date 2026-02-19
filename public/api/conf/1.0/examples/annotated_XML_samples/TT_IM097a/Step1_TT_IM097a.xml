@@ -79,7 +79,7 @@
 
                     A to represent a standard frontier declaration.  -->
 				<TypeCode>IMA</TypeCode>
-				<!-- DE 1/9: Total Numnber of Items.
+				<!-- DE 1/9: Total Number of Items.
 
                     Number of goods items on the declaration.  -->
 				<GoodsItemQuantity>1</GoodsItemQuantity>
@@ -121,7 +121,7 @@
 					<ID>XI553202734852</ID>
 					<CategoryCode>CGU</CategoryCode>
 				</AuthorisationHolder>
-				<!-- DE 3/39: Holder of the Authoriation Identification Number.
+				<!-- DE 3/39: Holder of the Authorisation Identification Number.
                     An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
                     The ID here is the EORI of the DPO authorised party.  -->
 				<AuthorisationHolder>
@@ -367,7 +367,7 @@
 								<Payment>
 									<!-- DE 4/8: Method of Payment.
 
-                                                            MethodCode of E to indicate Deferment used for impor.  -->
+                                                            MethodCode of E to indicate Deferment used for import.  -->
 									<MethodCode>E</MethodCode>
 								</Payment>
 							</DutyTaxFee>
@@ -398,7 +398,7 @@
 
                                     For declarations with a single goods item, this DE can be declared at header or item level.
 
-                                    In this case, Contental Shelf United Kingdom Sector ZU.  -->
+                                    In this case, Continental Shelf United Kingdom Sector ZU.  -->
 						<ExportCountry>
 							<ID>ZU</ID>
 						</ExportCountry>

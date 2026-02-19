@@ -208,7 +208,7 @@
 					<LPCOExemptionCode>XB</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					Y922 indicates Other than cats and dogs fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
+					Y922 indicates Other than cats and dog fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>No cat or dog fur</ID>

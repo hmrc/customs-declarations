@@ -6,11 +6,7 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			***
-			Note KEL 208: DE 7/7 Identity of means of transport at the border is currently being incorrectly mandated on B4 and C1 declarations when DE 7/4 Mode of transport at the border is coded 1 (Maritime), 3 (Road), 4 (Air), 8 (Inland Waterway) or 9 (Mode Unknown). Until this is resolved, it will be necessary to complete both components of DE 7/7 in these circumstances.
-
-			Note KEL 427: DE 8/5 Nature of Transaction is currently being mandated on all B4 declarations, when it should be dependent. Until this is resolved, it will be necessary to declared DE 8/5 on all B4 declarations. 
-			***
+			
 			
 			SCENARIO
 			Special Fiscal Territories Declaration Category Data Set (B4).
@@ -74,9 +70,7 @@
 				<ContainerCode>1</ContainerCode>
 				<!--DE 7/7: Identity of the means of transport at departure.
 					ID of the means of transport and identification type of the means of transport - in this case 11 indicating name of the seagoing vessel.
-					***
-					Note KEL 208: DE 7/7 Identity of means of transport at the border is currently being incorrectly mandated on B4 and C1 declarations when DE 7/4 Mode of transport at the border is coded 1 (Maritime), 3 (Road), 4 (Air), 8 (Inland Waterway) or 9 (Mode Unknown). Until this is resolved, it will be necessary to complete both components of DE 7/7 in these circumstances.
-					***
+					
 					 -->
 				<DepartureTransportMeans>
 					<ID>CSCLGLOBE</ID>
@@ -143,7 +137,7 @@
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of the goods. -->
-					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+					<Description>Straw envelopes for bottles, made of certified straw in wraps of 1000</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - combined nomenclature code. -->
 						<ID>46021910</ID>

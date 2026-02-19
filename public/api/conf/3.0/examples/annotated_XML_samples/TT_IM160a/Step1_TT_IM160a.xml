@@ -10,7 +10,7 @@
     SCENARIO
     ROW-NI At Risk + Valuation Method 4 + APC 'E02'. Duties calculated using SPV (with no Item Price).
 
-    An agent submits a Type A (H1) declaration importing goods from ROW to NI 'At Risk'.
+    An agent submits a Type Y (H1) declaration importing goods from ROW to NI 'At Risk'.
 
     The agent enters the following information on the declaration:
     - Goods: Onions.

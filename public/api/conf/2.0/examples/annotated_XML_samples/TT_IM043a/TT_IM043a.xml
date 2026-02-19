@@ -230,7 +230,7 @@
 						This field is mandatory, this represents goods are de-risked while Imported from RoW into Northern Ireland. -->
 				<AdditionalInformation>
 					<StatementCode>NIQUO</StatementCode>
-					<StatementDescription>Declared when trader claims UK Quota on RoW-NI movements deemed "Not At Risk"</StatementDescription>
+					<StatementDescription>Declared when trader claims UK Quota on RoW-NI movements deemed "Not at Risk"</StatementDescription>
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of the Goods.
@@ -307,7 +307,7 @@
 				<CustomsValuation>
 					<MethodCode>1</MethodCode>
 					<!--DE 4/9: Additions and Deductions.
-							BT representing Other deductions not elsewhere declared...100 GBP to be deducted.
+							BT representing other deductions not elsewhere declared...100 GBP to be deducted.
 							Note: This DE is Mandatory if there are amounts to be added or deducted but which have not already been accounted for in the declared value. -->
 					<ChargeDeduction>
 						<ChargesTypeCode>BT</ChargesTypeCode>

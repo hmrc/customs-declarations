@@ -17,8 +17,8 @@
 		<!--
             ***
             SCENARIO
-            CDSNIP-709 - Subsidy processing with UKIMS
-            RoW to NI NIIMP "AT RISK" NIAID APPLIED - USER STORY 3 - Subsidy Claim NOT Allowed
+            Subsidy processing with UKIMS
+            RoW to NI NIIMP "AT RISK" NIAID APPLIED -  Subsidy Claim NOT Allowed
             A Trader submits a Type A (H1) declaration importing goods from RoW to NI for which subsidy claim is NOT allowed and is NOT processed.
             The sum of duty for a goods item on a declaration has resulted in EU Tariff higher than the UK Tariff
             but is 3% or less higher (based on the difference in the duty for the 2 tariffs, expressed as a percentage of the customs value).
@@ -53,14 +53,14 @@
 			<ID>1108656</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
-		<!--DE 3/39: Holder of the Authoriation Identification Number.
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of DPO indicates Deferment of Payment authorisation.
             The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 3/39: Holder of the Authoriation Identification Number.
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of CGU is required where CCG authorisation is being declared or a waiver is being claimed.
             In this scenario, a waiver is being claimed - see DE 2/3 where a document code of C505 has been entered.
             The ID here is the EORI of the CCG authorised party. -->
@@ -68,7 +68,7 @@
 			<ID>XI553202734852</ID>
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 3/39: Holder of the Authoriation Identification Number.
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
             The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>
@@ -212,7 +212,7 @@
 					<LPCOExemptionCode>XB</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                    Y922 indicates Other than cats and dogs fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
+                    Y922 indicates Other than cats and dog fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>No cat or dog fur</ID>
@@ -322,7 +322,7 @@
 				</CustomsValuation>
 				<GovernmentProcedure>
 					<!--DE 1/10: Procedure.
-                        RRequested Procedure of 40 indicating entry for free circulation and home use of goods.
+                        Requested Procedure of 40 indicating entry for free circulation and home use of goods.
                         Previous Procedure of 00 indicating where the goods have not been subject to any previous procedure. -->
 					<CurrentCode>40</CurrentCode>
 					<!--DE 1/10-->

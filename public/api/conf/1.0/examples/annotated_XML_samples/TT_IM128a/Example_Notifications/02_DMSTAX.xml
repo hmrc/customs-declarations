@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <MetaData>
 	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
 	<WCOTypeName>RES</WCOTypeName>
@@ -7,9 +8,9 @@
 	<AgencyAssignedCustomizationVersionCode/>
 	<Response>
 		<FunctionCode>13</FunctionCode>
-		<FunctionalReferenceID>88b37376fefa483d9bc18dcda7bc631d</FunctionalReferenceID>
+		<FunctionalReferenceID>e9adfba7fa2e408bab2047be4fb28c00</FunctionalReferenceID>
 		<IssueDateTime>
-			<DateTimeString formatCode="304">20241129171244Z</DateTimeString>
+			<DateTimeString formatCode="304">20260210145300Z</DateTimeString>
 		</IssueDateTime>
 		<Bank>
 			<ReferenceID>BARCGB22</ReferenceID>
@@ -19,8 +20,8 @@
 			<NameCode>67</NameCode>
 		</Status>
 		<Declaration>
-			<FunctionalReferenceID>U.7867523ELLOB</FunctionalReferenceID>
-			<ID>24GBD8UIQ2SG1DVAR1</ID>
+			<FunctionalReferenceID>U.7849454ZZSMB</FunctionalReferenceID>
+			<ID>26GB1M1IG64EB5MAR1</ID>
 			<VersionID>1</VersionID>
 			<GoodsShipment>
 				<GovernmentAgencyGoodsItem>
@@ -42,19 +43,19 @@
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TypeCode>311</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP">370.80</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP">370.80</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">398.40</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">398.40</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 						<DutyTaxFee>
-							<AdValoremTaxBaseAmount currencyID="GBP">2370.80</AdValoremTaxBaseAmount>
+							<AdValoremTaxBaseAmount currencyID="GBP">2398.40</AdValoremTaxBaseAmount>
 							<DeductAmount currencyID="GBP">0.00</DeductAmount>
 							<DutyRegimeCode>100</DutyRegimeCode>
 							<TaxRateNumeric>20.00</TaxRateNumeric>
 							<TypeCode>B00</TypeCode>
 							<Payment>
-								<TaxAssessedAmount currencyID="GBP">474.16</TaxAssessedAmount>
-								<PaymentAmount currencyID="GBP">474.16</PaymentAmount>
+								<TaxAssessedAmount currencyID="GBP">479.68</TaxAssessedAmount>
+								<PaymentAmount currencyID="GBP">479.68</PaymentAmount>
 							</Payment>
 						</DutyTaxFee>
 					</Commodity>

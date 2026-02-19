@@ -15,9 +15,9 @@
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-            CDSNIP-709 - Subsidy processing with UKIMS TC007
+            
 
-            RoW to NI - NIIMP "NOT AT RISK" NIAID APPLIED - USER STORY 4 - Subsidy Claim Not Processed
+            RoW to NI - NIIMP "NOT AT RISK" NIAID APPLIED -  Subsidy Claim Not Processed
 
             A Trader submits a Type A (H1) declaration importing goods from RoW to NI  for which duties are charged according to UK tariff rates but subsidy claim is NOT processed.
 
@@ -220,7 +220,7 @@
 					<StatementCode>NIREM</StatementCode>
 				</AdditionalInformation>
 				<!--DE 2/2: Additional Information.
-					This field is mandatory, this represents there there is NI aid applies to this declaration -->
+					This field is mandatory, this represents there is NI aid applies to this declaration -->
 				<AdditionalInformation>
 					<StatementCode>NIAID</StatementCode>
 				</AdditionalInformation>

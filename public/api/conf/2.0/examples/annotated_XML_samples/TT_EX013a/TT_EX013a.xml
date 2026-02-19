@@ -138,7 +138,7 @@
            from residents to non-residents against financial or other compensation'
            second digit (1) represents 'Outright purchase/sale' -->
 				<TransactionNatureCode>11</TransactionNatureCode>
-				<!--DE 2/2: Additional information. 00400 Indicating Self representation i.e. the declarant and tthe exporter are the same party-->
+				<!--DE 2/2: Additional information. 00400 Indicating Self representation i.e. the declarant and the exporter are the same party-->
 				<AdditionalInformation>
 					<StatementCode>00400</StatementCode>
 					<StatementDescription>EXPORTER</StatementDescription>
@@ -148,7 +148,7 @@
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of the goods.-->
-					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+					<Description>Straw envelopes for bottles, made of certified straw in wraps of 1000</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - combined nomenclature code.-->
 						<ID>46021910</ID>

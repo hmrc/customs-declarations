@@ -115,7 +115,7 @@
 		<!--DE 3/1: Exporter. 
 			Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
 		<Exporter>
-			<Name>The Fruit And Nut Corporation Ltd</Name>
+			<Name>The Fruit and Nut Corporation Ltd</Name>
 			<Address>
 				<CityName>Tel Aviv</CityName>
 				<CountryCode>IL</CountryCode>

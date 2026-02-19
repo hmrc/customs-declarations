@@ -43,7 +43,7 @@
 				<!--DE 2/5: Traders own reference number: this must be unique to the transaction. -->
 				<FunctionalReferenceID>U.7845574WGGIB</FunctionalReferenceID>
 				<!--DE 1/1: IM to represent an import declaration-->
-				<!--DE 1/2: D to represent a pre-lodged standard declaration-->
+				<!--DE 1/2: A to represent a standard declaration-->
 				<TypeCode>IMA</TypeCode>
 				<!--DE 1/9: Total number of goods items on the declaration - single item declaration.-->
 				<GoodsItemQuantity>1</GoodsItemQuantity>
@@ -76,7 +76,7 @@
 					<ID>XI553202734852</ID>
 					<CategoryCode>CGU</CategoryCode>
 				</AuthorisationHolder>
-				<!--DE 3/39: Holder of the Authoriation Identification Number.
+				<!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
             The ID here is the EORI of the DPO authorised party. -->
 				<AuthorisationHolder>

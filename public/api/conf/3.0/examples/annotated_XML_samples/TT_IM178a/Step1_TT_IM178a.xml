@@ -7,11 +7,11 @@
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 
 		<!--SCENARIO
-			A Trader submits a Type J IVL (GL C21i) declaration "Not At Risk" importing goods from GB to NI through an Inventory Linking Port by declaring UKC authorisation.
+			A Trader submits a Type J IVL (GL C21i) declaration "Not at Risk" importing goods from GB to NI through an Inventory Linking Port by declaring UKC authorisation.
 			The state of the declaration after the initial declaration submission will be Received.
 			The trader then submits a UKCIRM to Register the declaration in DMS.
 			The trader then submits a GPN to arrive the declaration.
-			The trader then submits a UKCIRM-2, and The declaration will be Accepted and Cleared.
+			The trader then submits a UKCIRM-2, and the declaration will be Accepted and Cleared.
 			-->
 
 		<!--Function Code of 9 to represent an original declaration.-->
@@ -23,7 +23,7 @@
 		<TypeCode>IMJ</TypeCode>
 		<!--DE 1/9: Total number of goods items on the declaration.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
-		<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of PUKC -->
+		<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of PUKC -->
 		<AuthorisationHolder>
 			<ID>XI150454489082</ID>
 			<CategoryCode>PUKC</CategoryCode>
@@ -94,7 +94,7 @@
 					<StatementCode>00500</StatementCode>
 					<StatementDescription>IMPORTER</StatementDescription>
 				</AdditionalInformation>
-				<!--DE 2/2: Additional information. NIPAP, indicates journey of UKC authorised post and parcel movements. This code is has replaced GLPAP. ... -->
+				<!--DE 2/2: Additional information. NIPAP, indicates journey of UKC authorised post and parcel movements. This code has replaced GLPAP. ... -->
 				<AdditionalInformation>
 					<StatementCode>NIPAP</StatementCode>
 					<StatementDescription>B2C Parcels</StatementDescription>

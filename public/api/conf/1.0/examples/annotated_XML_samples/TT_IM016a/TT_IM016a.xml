@@ -161,9 +161,9 @@
 						</Payment>
 					</DutyTaxFee>
 					<GoodsMeasure>
-						<!--DE 6/5: Gross Mass Mass of the goods in kilograms including packaging. -->
+						<!--DE 6/5: Gross Mass of the goods in kilograms including packaging. -->
 						<GrossMassMeasure>150</GrossMassMeasure>
-						<!--DE 6/1: Net Mass Mass of the goods in kilograms without any packaging. -->
+						<!--DE 6/1: Net Mass of the goods in kilograms without any packaging. -->
 						<NetNetWeightMeasure>100</NetNetWeightMeasure>
 					</GoodsMeasure>
 					<!--DE 4/14: Item price amount. The invoice was issued with a value of 1000 and the currency GBP.-->

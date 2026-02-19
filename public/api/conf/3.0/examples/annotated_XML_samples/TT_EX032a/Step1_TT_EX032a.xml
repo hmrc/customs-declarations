@@ -141,7 +141,7 @@
 				<GoodsLocation>
 					<!--DE 5/23: Location of Goods - Identification of location.
 						ID to give a unique position of the location.
-						DVRDOVDVR Indicating indicating Dover Eastern Docks. -->
+						DVRDOVDVR Indicating Dover Eastern Docks. -->
 					<Name>DVRDOVDVR</Name>
 					<!--DE 5/23: Location of Goods - Type of location.
 						A in this scenario to represent that it is a Frontier or Frontier linked location. -->
@@ -169,7 +169,7 @@
 				</TransportEquipment>
 			</Consignment>
 			<!--DE 5/8: Country of Destination Code.
-				JP Indicating Indicating Japan. -->
+				JP Indicating Japan. -->
 			<Destination>
 				<CountryCode>JP</CountryCode>
 			</Destination>
@@ -231,7 +231,7 @@
 					<PreviousCode>40</PreviousCode>
 				</GovernmentProcedure>
 				<!--DE 1/11: Additional Procedure Code.
-					APC code 1MB to ensure that only DE 2/2 (Additional Information) code â€˜MIB02â€™, DE 3/39 (Holder of the Authorisation) code â€˜MIBâ€™, and DE 2/3 (Additional Document) code â€˜1MIBâ€™ can be entered on Type A arrived declarations. -->
+					APC code 1MB to ensure that only DE 2/2 (Additional Information) code MIB02, DE 3/39 (Holder of the Authorisation) code MIB, and DE 2/3 (Additional Document) code 1MIB can be entered on Type A arrived declarations. -->
 				<GovernmentProcedure>
 					<CurrentCode>1MB</CurrentCode>
 				</GovernmentProcedure>

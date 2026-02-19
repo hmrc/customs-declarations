@@ -348,7 +348,7 @@
 				<!--DE 5/15: Country of Origin Code. Mandatory.
 					TypeCode of 1 to represent non-preferential origin. 
 					Where preference in DE 4/17 begins with '1', this must be completed.
-					Origin country is the Italy. -->
+					Origin country is Italy. -->
 				<Origin>
 					<CountryCode>IT</CountryCode>
 					<TypeCode>1</TypeCode>

@@ -225,7 +225,7 @@
 				</AdditionalInformation>
 				<!--DE 2/2: Additional Information.
 					This field is mandatory, this represents goods are imported from GB into Northern Ireland.
-					Statment description of 300 is the identity between declarant and consignor.-->
+					Statement description of 300 is the identity between declarant and consignor.-->
 				<AdditionalInformation>
 					<StatementCode>EUPRF</StatementCode>
 					<StatementDescription>400</StatementDescription>

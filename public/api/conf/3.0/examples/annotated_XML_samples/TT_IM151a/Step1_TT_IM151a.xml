@@ -49,7 +49,7 @@
 			<ID>1108656</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
-		<!-- DE 3/39: Holder of the Authoriation Identification Number.
+		<!-- DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of DPO indicates Deferment of Payment authorisation.
             The ID here is the EORI of the DPO authorised party.  -->
 		<AuthorisationHolder>
@@ -311,7 +311,7 @@
 				</CustomsValuation>
 				<GovernmentProcedure>
 					<!-- DE 1/10: Procedure.
-                        RRequested Procedure of 40 indicating entry for free circulation and home use of goods.
+                        Requested Procedure of 40 indicating entry for free circulation and home use of goods.
                         Previous Procedure of 00 indicating where the goods have not been subject to any previous procedure.  -->
 					<CurrentCode>40</CurrentCode>
 					<!-- DE 1/10 -->

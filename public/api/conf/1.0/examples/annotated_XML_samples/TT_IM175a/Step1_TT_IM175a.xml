@@ -10,7 +10,7 @@
             SCENARIO
             This Special Fiscal Territories scenario will ensure that the correct amount of duties is applied for imports into Mainland UK from Guernsey and Jersey.
             Type A Imports from Special Fiscal Territories.
-            Export country: Guersey.
+            Export country: Guernsey.
             Declaration made by Agent using Direct Representation.
             Commodity: plucked chickens.
             Goods location: Belfast
@@ -232,7 +232,7 @@
                 This is required when DE 4/7 is completed for a manual tax calculation.
                 Statement code OVR01 indicates duty calculation override claimed.
                 In the description enter ˜Duty override claimed followed by a plain text description of the reason for the override.
-                Note that since the introduction of this sample, duties are no longer calculated on Type C/F declarations so the duty override claimed in the scenario is no longerrequired-->
+                Note that since the introduction of this sample, duties are no longer calculated on Type C/F declarations so the duty override claimed in the scenario is no longer required-->
 				<AdditionalInformation>
 					<StatementCode>OVR01</StatementCode>
 					<StatementDescription>Duty override claimed</StatementDescription>
@@ -327,7 +327,7 @@
 					<ID>GG</ID>
 				</ExportCountry>
 				<!--DE 1/10: Procedure.
-                    Requested Procedure of 53 indicating temporary admition.
+                    Requested Procedure of 53 indicating temporary admission.
                     Previous Procedure of 00 indicating no procedure. -->
 				<GovernmentProcedure>
 					<CurrentCode>53</CurrentCode>
@@ -341,7 +341,7 @@
 				<!--DE 5/15: Country of Origin.
                     1 to represent non-preferential origin.
                     Where preference in DE 4/17 begins with '1', this must be completed.
-                    CountryCode cotains the code for the country from which the goods originated, in this case India. -->
+                    CountryCode contains the code for the country from which the goods originated, in this case India. -->
 				<Origin>
 					<CountryCode>FR</CountryCode>
 					<TypeCode>1</TypeCode>

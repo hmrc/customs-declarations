@@ -7,12 +7,12 @@
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
-			"GB to NI, NIDOM, Goods At Risk, Relief Procedures Applied:
+			"GB to NI, NIDOM, Goods at Risk, Relief Procedures Applied:
 			Type A declaration for goods imported to NI from GB. Goods are deemed to be 'At-Risk'. 
 			The declaration will be validated against EU Tariff regulatory measures and Relief procedures will be allowed to be applied. 
 			Customs duties are calculated at the EU Tariff Third Country duty rate with NO VAT on EU liabilities."
 			Attributes:
-			Full Declaration: Category H1, Declaration Type A â€“ Special procedure, storage, customs warehousing.
+			Full Declaration: Category H1, Declaration Type A Special procedure, storage, customs warehousing.
 			Procedure code 61 22. Additional procedure code B02 (Re-importation of goods after outward processing for repair under guarantee).
 			The Importer is a Customs Warehousing (CW) authorisation holder for the premises declared.
 			The Importer is a Customs Comprehensive Guarantee (CCG) authorisation holder.
@@ -123,7 +123,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. 
 				This field is mandatory only where codes required.
 				Additional document code of C604 indicates INF2 form. Exemption code AE indicates document 
-				attached â€“ exhausted by (or only applies to) this entry (document returned to the trader). -->
+				attached exhausted by (or only applies to) this entry (document returned to the trader). -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>INF2123456-190503</ID>
@@ -170,7 +170,7 @@
 				<!--DE 6/8: Description of the goods. This is a mandatory field.
 					This is specific enough to enable classification - without repeating the CN code description in the Tariff. -->
 				<Commodity>
-					<Description>Textile fabrics used as theatrical scenery, coated with adhesive in which are embedded spheres of a diameter not exceeding 150 Âµm</Description>
+					<Description>Textile fabrics used as theatrical scenery, coated with adhesive in which are embedded spheres of a diameter not exceeding 150 µm</Description>
 					<!--DE 6/14: Commodity code - combined nomenclature code. This is a mandatory field. -->
 					<Classification>
 						<ID>59070000</ID>
@@ -224,7 +224,7 @@
 				</GovernmentProcedure>
 				<!-- DE 5/15: Country of Origin.  
 					GB representing Great Britain. 
-					Where preference in D.E. 4/17 begins with a number â€˜1â€™, this must be completed. -->
+					Where preference in D.E. 4/17 begins with a number 1, this must be completed. -->
 				<Origin>
 					<CountryCode>GB</CountryCode>
 					<TypeCode>1</TypeCode>
@@ -246,7 +246,7 @@
 				</Packaging>
 				<!--DE 4/13: Valuation Indicator.
 					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16. 
-					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
+					The code comprises four digits, each of which being either a 0 or a 1:
 					- First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller. 
 					- Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code. 
 					- Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code. 
@@ -261,7 +261,7 @@
 				<ID>XI896458895015</ID>
 			</Importer>
 			<!--DE 2/1: Simplified Declaration/Previous Document.
-				CategoryCode: This is a mandatory field. This identifies the class or kind of document being declared. The previous document, represented by â€˜Zâ€™.
+				CategoryCode: This is a mandatory field. This identifies the class or kind of document being declared. The previous document, represented by Z.
 				ID: This is a mandatory field. This represents the data needed to recognise and identify the document. 21GB34F7Y1O2CX8PT4.
 				TypeCode: This is a mandatory field. This serves to identify the type of document: 355, Entry Summary Declaration.
 				LineNumeric: This is an optional field. This is the goods item number. It is used to identify which item of the previous document is being referred to. Where the previous document referred to contained only a single goods item, this component may be left blank.
@@ -299,7 +299,7 @@
 		</GoodsShipment>
 		<!--DE 5/27: Supervising Customs Office. This is a mandatory field dependant on the Procedure code.
 			The ID GBBEL004 represents the Supervising Office Code per:
-			Where an authorisation is granted under â€˜Authorisation by Customs Declarationâ€™, enter SPOFF code â€˜GBBEL004â€™ for the HMRC National Imports Relief Unit (NIRU). -->
+			Where an authorisation is granted under Authorisation by Customs Declaration, enter SPOFF code GBBEL004 for the HMRC National Imports Relief Unit (NIRU). -->
 		<SupervisingOffice>
 			<ID>GBBEL004</ID>
 		</SupervisingOffice>

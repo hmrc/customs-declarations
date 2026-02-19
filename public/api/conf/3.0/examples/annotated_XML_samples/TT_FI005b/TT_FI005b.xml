@@ -223,7 +223,7 @@
 					<CurrentCode>000</CurrentCode>
 				</GovernmentProcedure>
 				<!--DE 5/15: Country of Origin.
-					US repesenting Unites States of America.
+					US representing United States of America.
 					Where preference in D.E. 4/17 begins with a '1', this must be completed. -->
 				<Origin>
 					<CountryCode>US</CountryCode>

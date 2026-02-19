@@ -7,7 +7,7 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-            SCENARIO
+            Scenario
             GB to NI At Risk
             Import of goods liable to Customs Duty & VAT, with no previous procedure
 
@@ -44,8 +44,7 @@
 		<Agent>
 			<!-- DE 3/20: Representative Identification Number.
                 EORI number of the Representative. This needs to refer to the same user as the DUCR.
-                Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"),
-                Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant.  -->
+                 -->
 			<ID>XI021111239000</ID>
 			<!--DE 3/21: Identification Status Code.
                 '2' Indicating direct representation. -->
@@ -273,7 +272,7 @@
 				</GovernmentProcedure>
 				<!--DE 1/11: Additional Procedure Code.
                     Mandatory
-                    D23 to to indicate the Temporary Admission for exhibitions.-->
+                    D23 to indicate the Temporary Admission for exhibitions.-->
 				<GovernmentProcedure>
 					<CurrentCode>D23</CurrentCode>
 				</GovernmentProcedure>

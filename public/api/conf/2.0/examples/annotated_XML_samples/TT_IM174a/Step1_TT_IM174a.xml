@@ -10,7 +10,7 @@
             SCENARIO
             This Special Fiscal Territories scenario will ensure that the correct amount of duties is applied for imports into Mainland UK from Guernsey and Jersey.
             Type A Imports from Special Fiscal Territories.
-            Export country: Guersey.
+            Export country: Guernsey.
             Declaration made by Agent using Direct Representation.
             Commodity: plucked chickens.
             Goods location: Belfast
@@ -281,7 +281,7 @@
 				<!--DE 5/15: Country of Origin.
                     1 to represent non-preferential origin.
                     Where preference in DE 4/17 begins with '1', this must be completed.
-                    CountryCode cotains the code for the country from which the goods originated, in this case France. -->
+                    CountryCode contains the code for the country from which the goods originated, in this case France. -->
 				<Origin>
 					<CountryCode>FR</CountryCode>
 					<TypeCode>1</TypeCode>

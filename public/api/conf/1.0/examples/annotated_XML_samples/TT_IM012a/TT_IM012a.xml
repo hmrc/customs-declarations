@@ -246,7 +246,7 @@
 					Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code is declared in DE 3/39 (Holder of the Authorisation), then this data element is mandatory. -->
 					<ID>GBCGU20190901400020181016120129</ID>
 					<!--DE 8/2: Guarantee type. This is a mandatory field.
-					1 to represent represent that a Customs Comprehensive Guarantee (CCG) is held for the customs warehouse.
+					1 to represent that a Customs Comprehensive Guarantee (CCG) is held for the customs warehouse.
 					Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code '0' or '1' must be declared in this data element.-->
 					<SecurityDetailsCode>1</SecurityDetailsCode>
 				</ObligationGuarantee>

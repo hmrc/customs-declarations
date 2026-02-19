@@ -7,11 +7,7 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			***
-			Note KEL 208: DE 7/7 Identity of means of transport at the border is currently being incorrectly mandated on B4 and C1 declarations when DE 7/4 Mode of transport at the border is coded 1(Maritime), 3(Road), 4(Air), 8(Inland Waterway) or 9(Mode Unknown). Until this is resolved, it will be necessary to complete both components of DE 7/7 in these circumstances.
-			***
-			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID), even when the Representative is the same Party as the Declarant.
-			***
+			
 
 			SCENARIO
 			Type C Exports standalone simplified Declaration.
@@ -52,7 +48,7 @@
 		<Agent>
 			<!--DE 3/20: Representative Identification Number.
 				When declared, the UK requires an EORI to be provided for the representative.
-				Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
+				On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
 			<ID>XI427168118378</ID>
 			<!--DE 3/21: Representative Status Code.
 				Declares the way in which the declarant is representing the Exporter.
@@ -136,8 +132,7 @@
 				<ContainerCode>1</ContainerCode>
 				<!--DE 7/7: Identity of the means of transport at departure.
 					GB427052534 indicating registration number and identification type of the means of transport - in this scenario, 41 indicating aircraft registration number.
-					***
-					Note KEL 208: DE 7/7 Identity of means of transport at the border is currently being incorrectly mandated on B4 and C1 declarations when DE 7/4 Mode of transport at the border is coded 1(Maritime), 3(Road), 4(Air), 8(Inland Waterway) or 9(Mode Unknown). Until this is resolved, it will be necessary to complete both components of DE 7/7 in these circumstances. ***
+					
 					-->
 				<DepartureTransportMeans>
 					<ID>GB427052534</ID>

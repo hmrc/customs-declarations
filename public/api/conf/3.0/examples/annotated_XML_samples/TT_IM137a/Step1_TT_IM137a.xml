@@ -34,7 +34,7 @@
 		<InvoiceAmount currencyID="GBP">2500</InvoiceAmount>
 		<!-- 6/18: Total packages - 100. Note that this matches DE 6/10 because this is a single item declaration. -->
 		<TotalPackageQuantity>100</TotalPackageQuantity>
-		<!-- DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”. The ID here is the EORI of the DPO authorised party. -->
+		<!-- DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”. The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI021111238000</ID>
 			<CategoryCode>UKIM</CategoryCode>
@@ -101,7 +101,7 @@
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
-				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of Y922 - Import of fur other than cats and dogs fur. -->
+				<!-- DE 2/3: Documents produced, certificates and authorisations, additional references. A document code of Y922 - Import of fur other than cats and dog fur. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>Cat/Dog Fur-96060</ID>

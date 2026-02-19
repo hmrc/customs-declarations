@@ -18,7 +18,7 @@
   <!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
   <FunctionalReferenceID>7847767HIPDG</FunctionalReferenceID>
   <!--DE 1/1: IM to represent an import declaration.-->
-  <!--DE 1/2: K to represent To represent a pre-lodged C21iEIDR NOP-->
+  <!--DE 1/2: K to represent a pre-lodged C21iEIDR NOP-->
   <TypeCode>IMK</TypeCode>
   <!--DE 1/9: Sequential number of the goods item.-->
   <GoodsItemQuantity>1</GoodsItemQuantity>

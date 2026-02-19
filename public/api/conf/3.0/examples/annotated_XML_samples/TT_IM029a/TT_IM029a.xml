@@ -20,7 +20,7 @@
 			xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd " >
 
 		<!--
-				Scenario: GB-NI 'Not At Risk' - NI Non-Quota Trade Preference
+				Scenario: GB-NI 'Not at Risk' - NI Non-Quota Trade Preference
 				Trader submits a Type Y (Supplementary) Declaration
 				Goods being imported from GB to NI
 				Goods are deemed to be 'At Risk'

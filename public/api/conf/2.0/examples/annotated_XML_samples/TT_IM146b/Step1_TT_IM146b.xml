@@ -267,7 +267,7 @@
 				<GovernmentProcedure>
 					<CurrentCode>000</CurrentCode>
 				</GovernmentProcedure>
-				<!--DE 5/15: US repesenting Unites States of America.
+				<!--DE 5/15: US representing Unites States of America.
                 Where preference in D.E. 4/17 begins with a '1', this must be completed. -->
 				<Origin>
 					<CountryCode>US</CountryCode>

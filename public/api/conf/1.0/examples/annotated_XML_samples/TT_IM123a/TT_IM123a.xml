@@ -6,7 +6,7 @@
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
-		<!-- SCENARIO GB to NI At Risk Import of goods liable to Customs Duty & VAT, with no previous procedure Goods: Men's brown trousers, made of cotton, in various sizes and lengths Standard frontier Declaration Type B which derives an H1 Declaration Category data set Goods presented at Warrenpoint on arrival. AI code 'NIDOM' entered at Item Level. -->
+		<!-- SCENARIO GB to NI At Risk Import of goods liable to Customs Duty & VAT, with no previous procedure Goods: Men's brown trousers, made of cotton, in various sizes and lengths Simplified frontier Declaration Type B which derives an H1 Declaration Category data set Goods presented at Warrenpoint on arrival. AI code 'NIDOM' entered at Item Level. -->
 		<!--Function Code of 9 to represent an original declaration.-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. Declarant's own reference number - this must be unique to the transaction. -->
@@ -99,7 +99,7 @@
 					<Name>Reason for Waiver</Name>
 					<TypeCode>929</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. Y922 indicates Other than cats and dogs fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
+				<!--DE 2/3: Documents produced, certificates and authorisations, additional references. Y922 indicates Other than cat and dog fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>No cat or dog fur</ID>

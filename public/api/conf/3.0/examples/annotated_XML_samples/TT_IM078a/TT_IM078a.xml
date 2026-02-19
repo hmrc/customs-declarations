@@ -186,7 +186,7 @@
 				<Commodity>
 					<!--DE 6/8: Description of goods.
 						Description of the goods specific enough to enable classification - without repeating the CN code description in the Tariff. -->
-					<Description>Wine of fresh grapes Of an actual alcoholic strength by volume not exceeding 13% vol</Description>
+					<Description>Wine of fresh grapes of an actual alcoholic strength by volume not exceeding 13% vol</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - Combined Nomenclature Code.
 							Identification TypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->

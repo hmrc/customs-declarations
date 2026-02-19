@@ -45,7 +45,7 @@
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<!--DE 6/18: Total Packages. 
 			Mandatory.
-			There are 3 packages in the shipment. 
+			There are 30 packages in the shipment. 
 			Note this matches the sum of the DE 6/10 values for each of the goods items in the declaration. -->
 		<TotalPackageQuantity>30</TotalPackageQuantity>
 		<!--DE 2/6: Deferred Payment. 

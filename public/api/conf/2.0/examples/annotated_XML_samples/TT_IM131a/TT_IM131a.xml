@@ -6,7 +6,7 @@
     <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--
-			SCENARIO RoW to NI: "Not At Risk"
+			SCENARIO RoW to NI: "Not at Risk"
 			Import of goods liable to Meursing, with no previous procedure
 			Goods: Bread, not containing added honey, eggs, cheese or fruit, and containing by weight in the dry matter state not more than 5% of sugars and not more than 5% of fat
 			Standard frontier Declaration Type A which derives a H1 Declaration Category data set

@@ -19,7 +19,7 @@
 			<!--DE 3/21: Holder of the Authorisation. FunctionCode of 2 indicating agent acting in direct representation for the importer (holding written instruction to do so). -->
 			<FunctionCode>2</FunctionCode>
 		</Agent>
-		<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered â€œat riskâ€ of moving into the EU, must instead be considered â€œnot at riskâ€. The ID here is the EORI of the UKIM authorised party. -->
+		<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered at risk of moving into the EU, must instead be considered not at risk. The ID here is the EORI of the UKIM authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
 			<CategoryCode>UKIM</CategoryCode>
@@ -38,7 +38,7 @@
 		</Exporter>
 		<GoodsShipment>
 			<Consignment>
-				<!--DE 5/23: Location of goods. Mandatory field. ID to give a unique position of the location where the goods are located at the time they are declared. The location code is entered using the following code components: â€¢ Name: An alphanumeric identifier to give a unique position of the location - BELBFSBEL to indicate goods arriving at Belfast Airport, Northern Ireland, UK. â€¢ TypeCode: Type of Location - A indicates frontier or frontier linked location. â€¢ Address TypeCode: Type of ID of the Location - U in this scenario for UN/LOCODE. â€¢ Address CountryCode: Country code of the country where the goods may be examined - GB in this scenario. -->
+				<!--DE 5/23: Location of goods. Mandatory field. ID to give a unique position of the location where the goods are located at the time they are declared. The location code is entered using the following code components: Name: An alphanumeric identifier to give a unique position of the location - BELBFSBEL to indicate goods arriving at Belfast Airport, Northern Ireland, UK. TypeCode: Type of Location - A indicates frontier or frontier linked location. Address TypeCode: Type of ID of the Location - U in this scenario for UN/LOCODE.  Address CountryCode: Country code of the country where the goods may be examined - GB in this scenario. -->
 				<GoodsLocation>
 					<Name>BELBFSBEL</Name>
 					<TypeCode>A</TypeCode>

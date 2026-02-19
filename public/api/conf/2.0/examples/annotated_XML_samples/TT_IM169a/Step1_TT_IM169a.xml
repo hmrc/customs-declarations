@@ -33,7 +33,7 @@
 			<ID>XI553202734852</ID>
 			<CategoryCode>CWP</CategoryCode>
 		</AuthorisationHolder>
-		<!-- DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered 'at risk'of moving into the EU, must instead be considered 'not at risk'. The ID here is the EORI of the DPO authorised party. -->
+		<!-- DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered 'at risk'of moving into the EU, must instead be considered 'not at risk'. The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
 			<CategoryCode>UKIM</CategoryCode>
@@ -151,7 +151,7 @@
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<GoodsMeasure>
-						<!--DE 6/5: Gross Mass Mass of the goods in kilograms including packaging. -->
+						<!--DE 6/5: Gross Mass of the goods in kilograms including packaging. -->
 						<GrossMassMeasure>150</GrossMassMeasure>
 					</GoodsMeasure>
 					<!--DE 4/14: Item price amount. The invoice was issued with of a value of 1000 and the currency was in GBP. -->

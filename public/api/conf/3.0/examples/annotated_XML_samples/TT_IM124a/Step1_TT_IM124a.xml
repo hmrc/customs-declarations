@@ -11,7 +11,7 @@
             RoW to NI: SRDS
             Importing into Northern Ireland - SRDS Declarations - ROW to NI - Journey Type B2C with
 
-            An agent submits a Type A Imports Declaration importing non-excise goods from the ROW into Northern Ireland
+            An agent submits a Type D Pre Lodged Declaration importing non-excise goods from the ROW into Northern Ireland
             The only Procedure Code D.E.1/10 combination allowed is '4000'
             The SRDS journey type is signalled by the value combinations included within the Additional Procedure Code D.E. 1/11 - 1H7 and C07
 
@@ -68,10 +68,10 @@
                     Mandatory field.
                     ID to give a unique position of the location where the goods are located at the time they are declared.
                     The location code is entered using the following code components:
-                    â€¢ Name: An alphanumeric identifier to give a unique position of the location - BELBFSBEL to indicate goods arriving at Belfast Airport, Northern Ireland, UK.
-                    â€¢ TypeCode: Type of Location -  A indicates frontier or frontier linked location.
-                    â€¢ Address TypeCode: Type of ID of the Location - U in this scenario for UN/LOCODE.
-                    â€¢ Address CountryCode: Country code of the country where the goods may be examined - GB in this scenario. -->
+                    Name: An alphanumeric identifier to give a unique position of the location - BELBFSBEL to indicate goods arriving at Belfast Airport, Northern Ireland, UK.
+                    TypeCode: Type of Location -  A indicates frontier or frontier linked location.
+                    Address TypeCode: Type of ID of the Location - U in this scenario for UN/LOCODE.
+                    Address CountryCode: Country code of the country where the goods may be examined - GB in this scenario. -->
                 <GoodsLocation>
                     <Name>BELBFSBEL</Name>
                     <TypeCode>A</TypeCode>
@@ -147,7 +147,7 @@
                     <CurrentCode>1H7</CurrentCode>
                 </GovernmentProcedure>
                 <!--DE 1/11: Additional Procedure Code.
-                    C07 to indicate that its an consignments of negligible value. -->
+                    C07 to indicate that its a consignments of negligible value. -->
                 <GovernmentProcedure>
                     <CurrentCode>C07</CurrentCode>
                 </GovernmentProcedure>

@@ -9,7 +9,7 @@
 		<!--
 
        SCENARIO
-         A UKIMS authorised trader submits an GB-NI GL Type IMY declaration with an H8 dateset, Not at risk from GB-NI.
+         A UKIMS authorised trader submits an GB-NI GL Type IMY declaration with an H8 dataset, not at risk from GB-NI.
         CDS must mandate the declaration of ‘DCR’ in Previous Document Type in DE 2/1 at header level and must ensure that the first 4 digits of coded identification of location sub field is ‘UKIM’ in DE 5/23
 
        Procedure code 0700 Additional Procedure code 1AG, F06
@@ -78,7 +78,7 @@
 			<ID>XI553202734852</ID>
 			<CategoryCode>UKIM</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 7/4: Mode of Transport at the Border. 9 Mode Unknown (For Instance ,own propulsion). -->
+		<!--DE 7/4: Mode of Transport at the Border. 9 Mode Unknown (For Instance, own propulsion). -->
 		<BorderTransportMeans>
 			<ModeCode>9</ModeCode>
 		</BorderTransportMeans>
@@ -290,7 +290,7 @@
 					<StatementCode>NIREM</StatementCode>
 				</AdditionalInformation>
 				<!--DE 2/2: Additional Information.
-                    This field is mandatory, this represents  The total number of
+                    This field is mandatory, this represents the total number of
                     individual goods movements being included in the aggregated declaration. -->
 				<!-- <AdditionalInformation>
                             <StatementCode>AGGSD</StatementCode>

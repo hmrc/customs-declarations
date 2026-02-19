@@ -30,7 +30,7 @@
             IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
             Mandatory field.
-            D to represent an Pre Lodged declaration. -->
+            D to represent a Pre Lodged declaration. -->
 		<TypeCode>IMD</TypeCode>
 		<!--DE 1/9: Total number of items.
             Mandatory field.
@@ -50,7 +50,7 @@
 			<ID>1108656</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
-		<!--DE 3/39: Holder of teh Authorisation Identification Number.
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of EUS indicates End Use authorisation, the EORI number entered here must be the same as the Importer's EORI number declared in DE 3/16. -->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
@@ -332,7 +332,7 @@
 					<ID>GB</ID>
 				</ExportCountry>
 				<!--DE 1/10: Procedure.
-                    Current procedude of 40 indicating entry for free circulation and home use of goods.
+                    Current procedure of 40 indicating entry for free circulation and home use of goods.
                     Previous procedure of 00 indicating there is no previous procedure. -->
 				<GovernmentProcedure>
 					<CurrentCode>44</CurrentCode>

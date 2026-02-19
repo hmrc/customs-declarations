@@ -19,7 +19,7 @@
 			<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 				<!--
                     SCENARIO RoW to NI
-                    ROW-NI Not At Risk + Valuation Method 4 + APC '1FV'.
+                    ROW-NI Not at Risk + Valuation Method 4 + APC '1FV'.
                     Duties calculated using Item Price.
 
                     An agent submits a Type A (H1) declaration importing goods from ROW to GB 'Not At Risk'
@@ -59,7 +59,7 @@
                     IM to represent an import declaration.  -->
 				<!-- DE 1/2: Additional Declaration Type.
                     Mandatory field.
-                    A to represent an Pre Lodged declaration.  -->
+                    A to represent a Pre Lodged declaration.  -->
 				<TypeCode>IMA</TypeCode>
 				<!-- DE 1/9: Total Number of Items.
                     Mandatory field.
@@ -236,7 +236,7 @@
                                     A document code of C505 indicates CGU - Authorisation for the provision of a customs comprehensive guarantee,
                                     including possible reduction or waiver.
                                     In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of CC), and therefore the ID also indicates that a waiver is being used.
-                                    LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code Ã¢â‚¬â€œ CCG not required.  -->
+                                    LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code CCG not required.  -->
 						<AdditionalDocument>
 							<CategoryCode>C</CategoryCode>
 							<ID>GBCGUGuaranteenotrequired</ID>
@@ -256,7 +256,7 @@
                                     This field is mandatory if the codes are required.
                                     A document code of C644 indicates Certificate of inspection for organic products.
                                     Name: A free text description of the Reason where required by the Document Status Code.
-                                    LPCOExemptionCode: GE indicates document with the goods Ã¢â‚¬â€œ exhausted by (or only applies to) this entry.  -->
+                                    LPCOExemptionCode: GE indicates document with the goods exhausted by (or only applies to) this entry.  -->
 						<AdditionalDocument>
 							<CategoryCode>C</CategoryCode>
 							<ID>0054039</ID>
@@ -278,7 +278,7 @@
 						<!-- DE 2/3: Documents produced, certificates and authorisations, additional references.
                                     This field is mandatory if the codes are required.
                                     A document code of 9120 indicates: Importation of animal pathogens Licence under the Importation of Animal pathogens Order 1980 (IAPO).
-                                    LPCOExemptionCode: AE indicates Document attached Ã¢â‚¬â€œ exhausted by (or only applies to) this entry (document
+                                    LPCOExemptionCode: AE indicates Document attached exhausted by (or only applies to) this entry (document
                                     returned to the trader).  -->
 						<AdditionalDocument>
 							<CategoryCode>9</CategoryCode>
@@ -424,7 +424,7 @@
                                     or item level - as this is for a single item declaration, this should be declared at header level.
                                     Mandatory field.
                                     This identifies the class or kind of document being declared.
-                                    The previous document, represented by Ã¢â‚¬ËœZÃ¢â‚¬â„¢ ID: Mandatory field.
+                                    The previous document, represented by ID: Mandatory field.
                                     This represents the data needed to recognise and identify the document.
                                     TypeCode: Mandatory field. This serves to identify the type of document: 355 indicates ENS - Entry Summary Declaration.
                                     LineNumeric: Optional field. This is the goods item number. It is used to identify which item of the previous document is being referred to. Where the previous document referred to or contained only a single goods item, this component may be left blank.  -->

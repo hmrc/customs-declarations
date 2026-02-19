@@ -267,7 +267,7 @@
 				<Commodity>
 					<!--DE 6/8: Goods Description.
 						Description specific enough to enable classification – without repeating the CN code description in the Tariff. -->
-					<Description>Fresh avacados from New Zealand, 1000kg</Description>
+					<Description>Fresh Avocados from New Zealand, 1000kg</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - combined nomenclature (CN) code.
 							Identification Type Code TSP indicates that a Transitional Simplified Procedure has been used.

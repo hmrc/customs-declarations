@@ -18,7 +18,7 @@
 			-Additional Information Code 'NIEXP' in DE 2/2.
 			-Additional Information Code '00100' in D.E. 2/2
 
-			An EAL and EDL are submitted to arrive and then depart the goods at DUCR level using XI EORI as as submitter.
+			An EAL and EDL are submitted to arrive and then depart the goods at DUCR level using XI EORI as submitter.
 			Expected Notification: DMSRCV, DMSACC, DMSRES, DMSCLE, DMSEOG.
 		-->
 		<!--Function Code of 9 to represent an original declaration. -->
@@ -37,7 +37,7 @@
 		<TotalPackageQuantity>10</TotalPackageQuantity>
 		<!--DE 3/20: Representative Identification Number.
 			EORI number of the Representative.
-            Note KEL 277 when testing: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant.
+         On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant.
 			DE 3/21: Representative Status Code.
 			2 indicating direct representation. -->
 		<Agent>
@@ -206,7 +206,7 @@
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of Goods. -->
-					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+					<Description>Straw envelopes for bottles, made of certified straw in wraps of 1000</Description>
 					<Classification>
 						<!--DE 6/14: Commodity Code - Combined Nomenclature Code. -->
 						<ID>46021910</ID>

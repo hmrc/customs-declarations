@@ -28,7 +28,7 @@
 		<!--DE 2/5: LRN. This is a mandatory field. Trader's own reference number - this must be unique to the transaction. -->
 		<FunctionalReferenceID>U.7845574PY7Q9</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. This is a mandatory field. IM to represent an import declaration.-->
-		<!--DE 1/2: Additional Declaration Type. This is a mandatory field. D to represent a pre-lodged, standard declaration.-->
+		<!--DE 1/2: Additional Declaration Type. This is a mandatory field. A to represent a standard frontier declaration.-->
 		<TypeCode>IMA</TypeCode>
 		<!--DE 1/9: Total number of items. This is a mandatory field. Total number of goods items on the declaration.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
@@ -72,7 +72,7 @@
 		</Exporter>
 		<GoodsShipment>
 			<!--DE 8/5: Nature of transaction. Mandatory.
-		1 to indicate transactions involving actual or intended transfer of ownership from residents to non-residents against financial or other compensation.
+		2 to indicate return and replacement of goods free of charge after registration of the original transaction.
 		Note: The second digit is not mandatory.	-->
 			<TransactionNatureCode>29</TransactionNatureCode>
 			<Consignment>

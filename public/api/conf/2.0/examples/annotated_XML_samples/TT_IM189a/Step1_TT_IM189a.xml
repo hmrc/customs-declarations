@@ -19,7 +19,7 @@
 			-DE 4/3: Tax type 633
 			-DE 4/4: additional measurement unit ‘KTC’
 			-DE 6/17: National Additional Code ‘X633’ declared at item level.
-			-DE 5/15 Country Of Origin: US
+			-DE 5/15 Country of Origin: US
 			-DE 1/10 Procedure Code: 40 00
 			-DE 1/11 Additional Procedure Code: 000
             Expected Notifications (4): DMSACC, DMSTAX, DMSTAX(1) and DMSCLE

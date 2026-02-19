@@ -63,7 +63,7 @@
 			<ID>1108656</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
-		<!--DE 3/39: Holder of the Authoriation Identification Number.
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
 			An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
 			The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>

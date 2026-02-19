@@ -9,7 +9,7 @@
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
             SCENARIO:
-			A Trader submits a Type K (EIDR NOP) supplementary declaration "Not At Risk" importing goods from GB to NI and also submits a GPN. The trader has declared AI Code NIAPP, APC '1SG' in the declaration.
+			A Trader submits a Type K (EIDR NOP) supplementary declaration "Not at Risk" importing goods from GB to NI and also submits a GPN. The trader has declared AI Code NIAPP, APC '1SG' in the declaration.
             C21iEIDR NOP additional declaration type K
             Procedure code 40 00, with 000 no other additional procedure codes apply
             Goods: Fabrics for the manufacture of bandages, dressings and medical gauzes.
@@ -20,7 +20,7 @@
 		<!-- DE 2/5: Trader's own reference number - this must be unique to the transaction -->
 		<FunctionalReferenceID>U.78494315HBY1</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
-		<!--DE 1/2: K to represent To represent a pre-lodged C21iEIDR NOP-->
+		<!--DE 1/2: K to represent a pre-lodged C21iEIDR NOP-->
 		<TypeCode>IMK</TypeCode>
 		<!--DE 1/9: Sequential number of the goods item.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>

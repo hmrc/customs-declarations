@@ -179,7 +179,7 @@ Expected Notifications (4): DMSACC, DMSTAX(1), DMSTAX(2), and DMSCLE.
                 </AdditionalDocument>
                 <!--DE 2/3 Documents produced, certificates and authorisations, additional references.
                     A document code of 9113 indicates a Home Office Individual Import Licence for Controlled Drugs is declared.
-                    LPCOExemptionCode: AE indicates Document attached and is exhaused by this entry. Document to be returned to the Trader.-->
+                    LPCOExemptionCode: AE indicates Document attached and is exhausted by this entry. Document to be returned to the Trader.-->
                 <AdditionalDocument>
                     <CategoryCode>9</CategoryCode>
                     <ID>GBCHA12345678</ID>

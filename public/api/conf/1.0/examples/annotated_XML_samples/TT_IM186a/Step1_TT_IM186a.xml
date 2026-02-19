@@ -9,13 +9,13 @@
 			SCENARIO
 			GB-NI Not at Risk - Suspension Procedure.
 
-			Goods are deemed ‘Not At Risk’.
+			Goods are deemed ‘Not at Risk’.
 
 			UK Tariff is to be used to calculate the duties.
 
 			A Trader submits a Type Z (H4 data set) Supplementary Declaration for goods imported from ROW into NI, declaring:
 			• Procedure code: 5100.
-			• Additional Procedure Code (APC) 1AR is to indicate Release to Free Circulation on Diversion from a Special Procedure in NI following confirmation that the Goods are ‘Not At Risk’
+			• Additional Procedure Code (APC) 1AR is to indicate Release to Free Circulation on Diversion from a Special Procedure in NI following confirmation that the Goods are ‘Not at Risk’
 			• Goods: 7009910000 (Unframed glass mirrors - STK12345)
 			• Importer is not an AEO authorisation holder
 			• Self representation declaration
@@ -190,7 +190,7 @@
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                    Mandatory if codes required.
-                   Document code Y900 to show the goods are not subject to CITES control â€“ complete statement/reason with: â€˜CITES Permits not requiredâ€™. -->
+                   Document code Y900 to show the goods are not subject to CITES control complete statement/reason with:CITES Permits not required. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<Name>CITES Permits not required</Name>

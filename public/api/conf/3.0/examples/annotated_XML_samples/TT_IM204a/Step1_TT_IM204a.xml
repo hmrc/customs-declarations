@@ -7,8 +7,6 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
-            Please note FEC checks appearing for this scenario after the Tariff Refresh TTM24.1. This will be fixed in a future release.
-            SCENARIO
             A Type Y declaration for goods imported from the Rest of the World to Northern Ireland, where the goods are 'At Risk' of onward transport to the EU.
 
             EU Specific requested procedure code declared is '40' and Additional Information code 'NIIMP' has been declared.
@@ -16,7 +14,7 @@
             Onward Supply Relief is claimed on VAT, for the goods being forwarded to the EU via Northern Ireland; all other duties are calculated and charged.
 
             The Agent declares:
-            • Procedure code: 4000 Additional Procedure code: 000.
+            • Procedure code: 4000 Additional Procedure codes F48 and C07
             • Goods: 6203423500 (10 pairs of Men's brown trousers, made of cotton, in various sizes and lengths).
             • Supplementary declaration: H1 additional declaration type Y.
             • Agent is same as Declarant with EORI = XI553202734852 and Function code = 3.

@@ -64,7 +64,7 @@
 		</AuthorisationHolder>
 		<!--DE 7/4: ModeCode of 4 to represent Air transport transport as the mode of transport at the border
 		Please be advised that there is a known defect whereby there is a business rule error that requires DE 7/7 to be completed when ‘4’ is entered in DE 7/4.
-		  DE 7/7 is not required (it is optional) on a C1, however.  This will be resolved in due course. Please refer to KEL 208 -->
+		  DE 7/7 is not required (it is optional) on a C1.>
 		<BorderTransportMeans>
 			<ModeCode>4</ModeCode>
 		</BorderTransportMeans>

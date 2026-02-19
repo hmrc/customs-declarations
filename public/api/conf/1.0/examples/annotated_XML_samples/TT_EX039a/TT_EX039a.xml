@@ -20,7 +20,7 @@
 			SCENARIO
 			Merchandise in Baggage Export Declaration from NI to RoW
 
-			A trader submits an Exports Type D pre-lodged declaration, exporting 2 goods item via Merchandise in Baggage from NI to ROW.
+			A trader submits an Exports Type D pre-lodged declaration, exporting 2 goods items via Merchandise in Baggage from NI to ROW.
 
 			The trader enters the following information on the declaration:
 			
@@ -216,7 +216,7 @@
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of Goods. -->
-					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+					<Description>Straw envelopes for bottles, made of certified straw in wraps of 1000</Description>
 					<Classification>
 						<!--DE 6/14: Commodity Code - Combined Nomenclature Code. -->
 						<ID>46021910</ID>

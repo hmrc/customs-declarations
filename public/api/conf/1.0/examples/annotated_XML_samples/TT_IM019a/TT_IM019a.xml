@@ -192,7 +192,7 @@
                 </GovernmentProcedure>
                 <!--DE 5/15: TypeCode of 1 to represent non-preferential origin.
                     Where preference in DE 4/17 begins with '1', this must be completed.
-                    CountryCode cotains the code for the country from which the originated, in this case GB -->
+                    CountryCode contains the code for the country from which the originated, in this case GB -->
                 <Origin>
                     <CountryCode>BR</CountryCode>
                     <TypeCode>1</TypeCode>

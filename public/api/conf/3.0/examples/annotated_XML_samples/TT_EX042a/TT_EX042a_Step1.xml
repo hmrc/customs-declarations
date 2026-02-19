@@ -14,9 +14,7 @@
 	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!-- 
-			***
-			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID), even when the Representative is the same Party as the Declarant.
-			***
+			
 			
 			SCENARIO
 			Type A Direct Export with Direct Representation and no control.
@@ -56,7 +54,7 @@
 		<Agent>
 			<!-- DE 3/20: Representative Identification Number. 
 			EORI number of the Representative. This needs to refer to the same user as the DUCR.
-			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant.  -->
+			On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant.  -->
 			<ID>GB427168118378</ID>
 			<!-- DE 3/21: Representative Status Code. 
 			'2' Indicating 'Direct representation'.  -->
@@ -107,7 +105,7 @@
 			<ID>GB427168118378</ID>
 		</Declarant>
 		<!--  5/12: Customs Office of Exit. 
-			'GB000290' Indicating Indicating Southampton.  -->
+			'GB000290' Indicating Southampton.  -->
 		<ExitOffice>
 			<ID>GB000290</ID>
 		</ExitOffice>
@@ -170,7 +168,7 @@
 				</TransportEquipment>
 			</Consignment>
 			<!-- DE 5/8: Country of Destination Code.
-				ZG Indicating Indicating German Continental Shelf.  -->
+				ZG Indicating German Continental Shelf.  -->
 			<Destination>
 				<CountryCode>ZG</CountryCode>
 			</Destination>

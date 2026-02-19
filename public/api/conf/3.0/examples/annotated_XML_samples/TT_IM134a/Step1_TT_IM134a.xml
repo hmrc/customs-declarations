@@ -24,7 +24,7 @@
 			<ID>1108656</ID>
 			<TypeCode>DAN</TypeCode>
 		</AdditionalDocument>
-		<!--DE 3/39: Holder of the Authorisation Identification Number. Mandatory if authorisation is required to declare goods to procedure An authorisation type code of DPO indicates Deferment of Payment authorisation. The ID here is the EORI of the DPO authorised party.-->
+		<!--DE 3/39: Holder of the Authorisation Identification Number. Mandatory if authorisation is required to declare goods to procedure an authorisation type code of DPO indicates Deferment of Payment authorisation. The ID here is the EORI of the DPO authorised party.-->
 		<AuthorisationHolder>
 			<ID>XI553202734852</ID>
 			<CategoryCode>DPO</CategoryCode>
@@ -50,7 +50,7 @@
 			<Consignment>
 				<!--DE 7/2: Container. Indicator to show if goods are packed in a container or not. 1 indicates that goods are transported in containers. Note that, unlike CHIEF, this must now be completed. -->
 				<ContainerCode>1</ContainerCode>
-				<!--DE 5/23: Location of Goods. Mandatory. ID to give a unique position of the location where the goods are located at the time they are declared. The location code is entered using the following components: â€¢ Name: ID to give a unique position of the location, in this scenario WPTWPTWPT indicating the port of Warrenpoint. â€¢ TypeCode: Type of Location, in this scenario A to represent that it is a designated location. â€¢ Address TypeCode: Type of ID of the Location, in this scenario U for UN/LOCODE. â€¢ Addess CountryCode: Code of the country where the goods may be examined, in this scenario GB. -->
+				<!--DE 5/23: Location of Goods. Mandatory. ID to give a unique position of the location where the goods are located at the time they are declared. The location code is entered using the following components:  Name: ID to give a unique position of the location, in this scenario WPTWPTWPT indicating the port of Warrenpoint.  TypeCode: Type of Location, in this scenario A to represent that it is a designated location. Address TypeCode: Type of ID of the Location, in this scenario U for UN/LOCODE. Addess CountryCode: Code of the country where the goods may be examined, in this scenario GB. -->
 				<GoodsLocation>
 					<Name>BELBELBEL</Name>
 					<TypeCode>A</TypeCode>
@@ -100,7 +100,7 @@
 					<TypeCode>505</TypeCode>
 					<LPCOExemptionCode>CC</LPCOExemptionCode>
 				</AdditionalDocument>
-				<!--DE 2/2 Additional Information. This is required when DE 4/7 is completed for a manual tax calculation. Statement code OVR01 indicates duty calculation override claimed. In the description enter â€˜Duty override claimedâ€™ followed by a plain text description of the reason for the override. -->
+				<!--DE 2/2 Additional Information. This is required when DE 4/7 is completed for a manual tax calculation. Statement code OVR01 indicates duty calculation override claimed. In the description enter ˜Duty override claimed followed by a plain text description of the reason for the override. -->
 				<AdditionalInformation>
 					<StatementCode>OVR01</StatementCode>
 					<StatementDescription>Duty override claimed - to test CDSP-10772</StatementDescription>
@@ -132,7 +132,7 @@
 						<IdentificationTypeCode>TSP</IdentificationTypeCode>
 					</Classification>
 					<Classification>
-						<!--DE 6/15: Commodity code: TARIC code. Two characters for the application of specific Union measures in respect of formalities to be completed at destination). Identification Type Code TRC indicates TARIC Code. -->
+						<!--DE 6/15: Commodity code: TARIC code. Two characters for the application of specific Union measures in respect of formalities to be completed at destination. Identification Type Code TRC indicates TARIC Code. -->
 						<ID>00</ID>
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
@@ -168,7 +168,7 @@
 				<ExportCountry>
 					<ID>US</ID>
 				</ExportCountry>
-				<!--DE 1/10: Procedure. Mandatory field. This data element is made up of two components: â€¢ CurrentCode: 40 indicating entry for free circulation and home use of non-union goods. â€¢ PreviousCode: 00 indicating where the goods have not been subject to any previous procedure. -->
+				<!--DE 1/10: Procedure. Mandatory field. This data element is made up of two components: CurrentCode: 40 indicating entry for free circulation and home use of non-union goods.  PreviousCode: 00 indicating where the goods have not been subject to any previous procedure. -->
 				<GovernmentProcedure>
 					<CurrentCode>40</CurrentCode>
 					<PreviousCode>00</PreviousCode>

@@ -176,7 +176,7 @@
             Sequential number of the goods item.-->
 				<SequenceNumeric>1</SequenceNumeric>
 							<!-- DE 2/3 Documents produced, certificates and authorisations, additional references.
-        A document code of N935 indicates The invoice on the basis of which the customs value of the goods is declared. -->
+        A document code of N935 indicates the invoice on the basis of which the customs value of the goods is declared. -->
 			<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
 					<ID>0054037</ID>

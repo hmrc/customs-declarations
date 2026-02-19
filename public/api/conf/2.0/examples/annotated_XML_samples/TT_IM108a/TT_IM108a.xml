@@ -41,7 +41,7 @@
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
-			Agents own reference number â€“ this must be unique to the transaction. -->
+			Agents own reference number  this must be unique to the transaction. -->
 		<FunctionalReferenceID>U.7867523V5GOE</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
@@ -154,7 +154,7 @@
 					Sequential number of the goods item. -->
 				<SequenceNumeric>1</SequenceNumeric>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarantâ€™s records. -->
+					A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant's records. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBEIR553202734852I20190613093448</ID>
@@ -302,7 +302,7 @@
 				</Packaging>
 				<!--DE 4/13: Valuation Indicator.
 					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
+					The code comprises four digits, each of which being either a 0 or a 1:
 					 - First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
 					 - Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
 					 - Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.

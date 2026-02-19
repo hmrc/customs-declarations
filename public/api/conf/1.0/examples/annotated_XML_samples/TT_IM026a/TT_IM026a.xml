@@ -29,7 +29,7 @@
             IM to represent an import declaration. -->
         <!--DE 1/2: Additional Declaration Type.
             Mandatory field.
-            D to represent an Pre Lodged declaration. -->
+            D to represent a Pre Lodged declaration. -->
         <TypeCode>IMD</TypeCode>
         <!--DE 1/9: Total number of items.
             Mandatory field.

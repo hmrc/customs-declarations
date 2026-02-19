@@ -90,7 +90,7 @@
 		</Exporter>
 		<GoodsShipment>
 			<!--DE 8/5: Nature of Transaction.
-				9 to indicate Other transactions which cannot be classified under other codes.  -->
+				9 to indicate other transactions which cannot be classified under other codes.  -->
 			<TransactionNatureCode>9</TransactionNatureCode>
 			<Consignment>
 				<!--DE 7/2: Container.
@@ -161,7 +161,7 @@
 					<LPCOExemptionCode>CC</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                    Y922 indicates Other than cats and dogs fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on
+                    Y922 indicates Other than cats and dog fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on
 					the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>

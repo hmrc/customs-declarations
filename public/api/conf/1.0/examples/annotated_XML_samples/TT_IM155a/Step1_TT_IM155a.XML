@@ -7,9 +7,9 @@
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--
 			SCENARIO
-            CDSNIP-709 - Subsidy processing with UKIMS TC002
+            
 
-            GB to NI NIDOM "AT RISK" NIAID APPLIED - USER STORY 1 - Subsidy Claim NOT Allowed
+            GB to NI NIDOM "AT RISK" NIAID APPLIED - Subsidy Claim NOT Allowed
 
             A Trader submits a Type A (H1) declaration importing goods from GB to NI for which subsidy claim is NOT allowed and is NOT processed.
 
@@ -219,7 +219,7 @@
                     <StatementCode>NIDOM</StatementCode>
                 </AdditionalInformation>
                 <!--DE 2/2: Additional Information.
-					This field is mandatory, this represents there there is NI aid applies to this declaration -->
+					This field is mandatory, this represents there is NI aid applies to this declaration -->
                 <AdditionalInformation>
                     <StatementCode>NIAID</StatementCode>
                 </AdditionalInformation>

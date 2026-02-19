@@ -27,7 +27,7 @@
 
     The trader declares:
 
-    Goods: Preparation of the mÃ¼sli type based on unroasted cereal flakes.
+    Goods: Preparation of the muesli type based on unroasted cereal flakes.
     AI code 'NIDOM' entered at Item Level.
 
     Goods presented at Warrenport on arrival.
@@ -86,7 +86,7 @@
 					<ID>XI553202734852</ID>
 					<CategoryCode>CGU</CategoryCode>
 				</AuthorisationHolder>
-				<!-- DE 3/39: Holder of the Authoriation Identification Number.
+				<!-- DE 3/39: Holder of the Authorisation Identification Number.
     An authorisation type code of UKIM indicates that a good that otherwise would be considered "at risk" of moving into the EU, must instead be considered "not at risk".
     The ID here is the EORI of the DPO authorised party.  -->
 				<AuthorisationHolder>

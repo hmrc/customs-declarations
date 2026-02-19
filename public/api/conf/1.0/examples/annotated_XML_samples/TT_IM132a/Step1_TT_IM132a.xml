@@ -25,7 +25,7 @@
             Standard frontier Declaration Type A which derives an H1 Declaration Category data set.
             Import of goods liable to Customs Duty & VAT, with no previous procedure.
             The trader declares:
-            • Goods: Preparation of the müsli type based on unroasted cereal flakes.
+            • Goods: Preparation of the müesli type based on unroasted cereal flakes.
             AI code 'NIDOM' entered at Item Level.
             AI code 'NIREM' entered at Item Level to signify that goods have been de-risked by the trader.
             Goods presented at Warrenport on arrival.
@@ -100,7 +100,7 @@
 		</Exporter>
 		<GoodsShipment>
 			<!--DE 8/5: Nature of Transaction.
-                9 to indicate Other transactions which cannot be classified under other codes.  -->
+                9 to indicate other transactions which cannot be classified under other codes.  -->
 			<TransactionNatureCode>9</TransactionNatureCode>
 			<Consignment>
 				<!--DE 7/2: Container.
@@ -235,7 +235,7 @@
 				<Commodity>
 					<!--DE 6/8: Description of Goods.
                         Description of the goods sufficiently precise enough to allow classification does not mean copying out the full description as set out in the tariff. -->
-					<Description>Preparation of the müsli type based on unroasted cereal flakes</Description>
+					<Description>Preparation of the müesli type based on unroasted cereal flakes</Description>
 					<Classification>
 						<!--DE 6/14: Commodity Code - Combined Nomenclature Code.
                             Mandatory.

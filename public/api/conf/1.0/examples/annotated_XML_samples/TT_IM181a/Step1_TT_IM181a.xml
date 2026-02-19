@@ -9,7 +9,7 @@
             SCENARIO
             To show that CDS does not reject an import declaration where the validation of certain status codes has been removed when document C400 has been entered with a status code of 'JA'.
             A trader submits a SDP Type Y supplementary Declaration H1 importing goods from RoW-GB, declaring:
-            • Document Code: C400 to satify the CITES measure with status code 'JA' to indicate licence/certificate attributed on SFD. D.E. 2/3.
+            • Document Code: C400 to satisfy the CITES measure with status code 'JA' to indicate licence/certificate attributed on SFD. D.E. 2/3.
             • Commodity Code 9601900000 importing goods from the country Kenya.
             CDS will accept and process the declaration:
             • No Customs Duty and Excise will be calculated using the UK Tariff.
@@ -191,7 +191,7 @@
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                    Mandatory if codes required.
-                   Document code Y900 to show the goods are not subject to CITES control â€“ complete statement/reason with: â€˜CITES Permits not requiredâ€™. -->
+                   Document code Y900 to show the goods are not subject to CITES control complete statement/reason with: CITES Permits not required. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<Name>CITES Permits not required</Name>

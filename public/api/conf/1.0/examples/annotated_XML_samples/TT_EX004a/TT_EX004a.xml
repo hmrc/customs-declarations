@@ -17,10 +17,7 @@
 	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
-			***
-			Please note FEC checks appearing for this scenario after the Tariff Refresh TTM24.1. This will be fixed in a future release.
-			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID), even when the Representative is the same Party as the Declarant.
-			***
+			
 
 			SCENARIO
 			Type Declaration with DIT licencing. Export to ensure Declaration is accepted and cleared when SDP authorisation is supplied with Licensing. 
@@ -52,7 +49,7 @@
 		<TotalPackageQuantity>2</TotalPackageQuantity>
 		<Agent>
 			<!--DE 3/20: Representative Identification Number.
-				Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
+				On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
 			<ID>GB150454489082</ID>
 			<!--DE 3/21: Representative Status Code.
 				3 indicating Indirect Export. -->

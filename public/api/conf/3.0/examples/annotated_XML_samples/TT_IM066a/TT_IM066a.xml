@@ -31,7 +31,7 @@
 		<!--DE 2/5: Traders own reference number: this must be unique to the transaction. -->
 		<FunctionalReferenceID>R330_419_TC1_1906_03</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration-->
-		<!--DE 1/2: D to represent a pre-lodged standard declaration-->
+		<!--DE 1/2: A to represent a pre-lodged standard declaration-->
 		<TypeCode>IMA</TypeCode>
 		<!--DE 1/9: Total number of goods items on the declaration - single item declaration.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>

@@ -142,7 +142,7 @@
 					</InvoiceLine>
 				</Commodity>
 				<!--DE 1/10: Procedure. 
-					00 20 indicating Home use and free circulation, with no previous procedure
+					00 20 indicating home use and free circulation, with no previous procedure
 					Customs Clearance Request (CCR) for release from customs control to free circulation on payment of customs duty and other charges, where required, for goods where a customs declaration is not required. -->
 				<GovernmentProcedure>
 					<CurrentCode>00</CurrentCode>

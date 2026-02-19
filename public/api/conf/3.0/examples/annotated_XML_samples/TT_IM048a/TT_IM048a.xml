@@ -26,7 +26,7 @@
 			Procedure code: 4000 Additional Procedure code: 000.
 			Goods: 9503004100 (Stuffed teddy bears,of mixed size,colour and design).
 			Standard declaration Type D.
-			Self representaion declaration.
+			Self representation declaration.
 			Expected Notifications: DMSRVC(1), DMSTAX(1), DMSRCV(2), DMSACC, DMSTAX(2), DMSTAX(3), DMSCLE.
         -->
 		<!--Function Code of 9 to represent an original declaration. -->
@@ -38,7 +38,7 @@
 			Mandatory field. IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type. 
 			Mandatory field. 
-			D to represent an Pre Lodged declaration. -->
+			D to represent a Pre Lodged declaration. -->
 		<TypeCode>IMD</TypeCode>
 		<!--DE 1/9: Total Number of Items. 
 			Mandatory field. 

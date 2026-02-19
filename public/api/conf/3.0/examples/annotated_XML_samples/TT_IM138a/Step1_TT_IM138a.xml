@@ -7,12 +7,9 @@
     </md:AgencyAssignedCustomizationVersionCode>
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--    
-            ***
-			Due to the introduction of UKIMS functionality, this scenario does not behave as originally intended. This will be addressed in a future release.
-            Please note calculations in DMSTAX notification will be incorrect at this time, looking to resolve this next release.
-            ***
+            
 
-            SCENARIO RoW-NI, NIIMP, NIREM Goods 'NOT At Risk'
+            Scenario RoW-NI, NIIMP, NIREM Goods 'NOT At Risk'
             EU Liability, Retaliatory Duties
         -->
         
@@ -213,7 +210,7 @@
                     </Classification>
                     <Classification>
                         <!--DE 6/15: Commodity Code - The TARIC code.
-                            Ttwo characters for the application of specific Union measures in respect of formalities to be completed at destination. -->
+                            Two characters for the application of specific Union measures in respect of formalities to be completed at destination. -->
                         <ID>90</ID>
                         <IdentificationTypeCode>TRC</IdentificationTypeCode>
                     </Classification>

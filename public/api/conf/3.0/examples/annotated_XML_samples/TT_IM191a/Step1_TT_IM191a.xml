@@ -167,7 +167,7 @@
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                 A document code of N705 indicates Bill of lading
-            LPCOExemptionCode: AE indicates Document attached â€” exhausted by (or only applies to) this entry (document returned to the trader)-->
+            LPCOExemptionCode: AE indicates Document attached exhausted by (or only applies to) this entry (document returned to the trader)-->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
 					<ID>0054047</ID>

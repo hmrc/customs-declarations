@@ -9,7 +9,7 @@
 		<!--
 
             SCENARIO
-            A Trader submits a Type Y (H8) supplementary declaration "Not At Risk" importing goods from GB to NI.
+            A Trader submits a Type Y (H8) supplementary declaration "Not at Risk" importing goods from GB to NI.
             Procedure code 0700 Additional Procedure code 1EL, F06
             Goods: 20 pairs of Men's brown trousers, made of cotton, in various sizes and lengths
             Agent employed by the importer under direct rep.
@@ -55,7 +55,7 @@
 			<ID>XI553202734852</ID>
 			<CategoryCode>EXW</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 3/39: Holder of the Authoriation Identification Number.
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
             The ID here is the EORI of the UKIM authorised party. -->
 		<AuthorisationHolder>
@@ -150,7 +150,7 @@
 					<LPCOExemptionCode>XB</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                    Y922 indicates Other than cats and dogs fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
+                    Y922 indicates Other than cats and dog fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>No cat or dog fur</ID>

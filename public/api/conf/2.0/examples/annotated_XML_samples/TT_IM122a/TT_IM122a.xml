@@ -215,7 +215,7 @@
 					<LPCOExemptionCode>XB</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-                    Y922 indicates Other than cats and dogs fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
+                    Y922 indicates Other than cats and dog fur as mentioned by Regulation (EC) No 1523/2007 (OJ L 343) banning the placing on the market and the import to, or export from, the Union of cat and dog fur, and products containing such fur (Text with EEA relevance). -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>No cat or dog fur</ID>
@@ -234,7 +234,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     This field is mandatory if the codes are required.
                     9120 indicates: Importation of animal pathogens Licence under the Importation of Animal pathogens Order 1980 (IAPO).
-                    LPCOExemptionCode: XX indicates To declare that goods are not subject to any licences other than those declared.. -->
+                    LPCOExemptionCode: XX indicates to declare that goods are not subject to any licences other than those declared.. -->
 				<AdditionalDocument>
 					<CategoryCode>9</CategoryCode>
 					<ID>GBAHC1234</ID>

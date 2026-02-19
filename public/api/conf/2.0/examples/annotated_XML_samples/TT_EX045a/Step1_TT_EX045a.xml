@@ -16,7 +16,7 @@
 			-Additional Procedure Code '000' at item level in DE 1/11
 			-Additional Information Code 'NIEXP' in DE 2/2.
 			
-			An EAL and EDL are submitted to arrive and then depart the goods at DUCR level using XI EORI as as submitter. 
+			An EAL and EDL are submitted to arrive and then depart the goods at DUCR level using XI EORI as submitter. 
 		-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. 
@@ -124,7 +124,7 @@
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of Goods. -->
-					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+					<Description>Straw envelopes for bottles, made of certified straw in wraps of 1000</Description>
 					<Classification>
 						<!--DE 6/14: Commodity Code - Combined Nomenclature Code. -->
 						<ID>46021910</ID>

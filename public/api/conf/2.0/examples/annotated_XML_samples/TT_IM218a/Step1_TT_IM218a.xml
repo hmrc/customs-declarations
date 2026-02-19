@@ -39,7 +39,7 @@
 		<!--DE 1/9: Total Number of Items, Number of goods items on the declaration. This is a single item declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<AuthorisationHolder>
-			<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered "at risk" of moving into the EU, must instead be considered "not at risk" The ID here is the EORI of the DPO authorised party. -->
+			<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered "at risk" of moving into the EU, must instead be considered "not at risk" The ID here is the EORI of the DPO authorised party. -->
 			<ID>XI150454489082</ID>
 			<CategoryCode>UKIM</CategoryCode>
 		</AuthorisationHolder>
@@ -181,7 +181,7 @@
 					</InvoiceLine>
 				</Commodity>
 				<GovernmentProcedure>
-					<!--DE 1/10: Procedure. Requested Procedure of 07 indicating entry for free circulation with simultaneus entry into an excise warehouse. Previous Procedure of 78 indicating release for free circulation -->
+					<!--DE 1/10: Procedure. Requested Procedure of 07 indicating entry for free circulation with simultaneous entry into an excise warehouse. Previous Procedure of 78 indicating release for free circulation -->
 					<CurrentCode>07</CurrentCode>
 					<PreviousCode>78</PreviousCode>
 				</GovernmentProcedure>
@@ -218,7 +218,7 @@
 				<!--DE 3/16: Importer Identification Number. EORI number of the Importer. -->
 				<ID>XI150454489082</ID>
 			</Importer>
-			<!--DE 2/1: Simplified Declaration/Previous Documents. The DUCR assigned to the consignment As this is for a single item declaration, this should all be declared at header level. In CDS, the MUCR (MCR) is not required on a supplementary declaration. -->
+			<!--DE 2/1: Simplified Declaration/Previous Documents. The DUCR assigned to the consignment. As this is for a single item declaration, this should all be declared at header level. In CDS, the MUCR (MCR) is not required on a supplementary declaration. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
 				<ID>5GBXI150454489082-0611EC04</ID>

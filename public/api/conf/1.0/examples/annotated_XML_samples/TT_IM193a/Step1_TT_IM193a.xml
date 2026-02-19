@@ -9,7 +9,7 @@
 		<!--
 			
 			SCENARIO
-			A trader submits a Type A (H8) standard declaration importing goods "Not At Risk" from GB to NI
+			A trader submits a Type A (H8) standard declaration importing goods "Not at Risk" from GB to NI
 			for Entry for free-circulation and home use of non-Union goods where the goods have been previously
 			entered to inward processing on arrival in NI. The trader submits a declaration using procedure 
 			code 4051, APC's 1EN, 1SP, 1NR and additional document N760.
@@ -38,12 +38,12 @@
 		<!--DE 1/9: Total Number of Items, Number of goods items on the declaration. This is a single item declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<AuthorisationHolder>
-			<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered "at risk" of moving into the EU, must instead be considered "not at risk" The ID here is the EORI of the DPO authorised party. -->
+			<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered "at risk" of moving into the EU, must instead be considered "not at risk" The ID here is the EORI of the DPO authorised party. -->
 			<ID>XI896458895015</ID>
 			<CategoryCode>UKIM</CategoryCode>
 		</AuthorisationHolder>
 		<AuthorisationHolder>
-			<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of IPO - authorisation of inward processing The ID here is the EORI of the IPO authorised party. -->
+			<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of IPO - authorisation of inward processing The ID here is the EORI of the IPO authorised party. -->
 			<ID>XI896458895015</ID>
 			<CategoryCode>IPO</CategoryCode>
 		</AuthorisationHolder>
@@ -200,7 +200,7 @@
 				<!--DE 3/16: Importer Identification Number. EORI number of the Importer. -->
 				<ID>XI896458895015</ID>
 			</Importer>
-			<!--DE 2/1: Simplified Declaration/Previous Documents. The DUCR assigned to the consignment As this is for a single item declaration, this should all be declared at header level. In CDS, the MUCR (MCR) is not required on a supplementary declaration. -->
+			<!--DE 2/1: Simplified Declaration/Previous Documents. The DUCR assigned to the consignment as this is for a single item declaration, this should all be declared at header level. In CDS, the MUCR (MCR) is not required on a supplementary declaration. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
 				<ID>4GBXI896458895015-0611EC04</ID>

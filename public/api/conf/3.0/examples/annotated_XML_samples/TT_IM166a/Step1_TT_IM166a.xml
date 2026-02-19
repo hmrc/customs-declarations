@@ -9,7 +9,7 @@
 		<!--
 
 			SCENARIO
-			A Trader submits a Type Z (H8) declaration "Not At Risk" importing goods from GB to NI for which a Postponed VAT Accounting is declared but prevented from being processed.
+			A Trader submits a Type Z (H8) declaration "Not at Risk" importing goods from GB to NI for which a Postponed VAT Accounting is declared but prevented from being processed.
 			The declaration of IOSS, OSR and OSD is also prevented and in addition, the traders are exiting a special procedure.
 			Procedure code 4071 Additional Procedure code 1SG, 1VW and 1SP
 			Goods: Containing by weight not more than 0.1% of carbon and more than 30% but not more than 90% of chromium (super-refined ferrochromium).
@@ -30,7 +30,7 @@
 		<!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
-			Z to represent a To represent an arrived frontier standard declaration. -->
+			Z to represent an arrived frontier standard declaration. -->
 		<TypeCode>IMZ</TypeCode>
 		<!--DE 1/9: Total Number of Items,
 			Number of goods items on the declaration
@@ -58,7 +58,7 @@
 			<ID>XI553202734852</ID>
 			<CategoryCode>CWP</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 3/39: Holder of the Authoriation Identification Number.
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
 			An authorisation type code of UKIM indicates that a good that otherwise would be considered 'at risk' of moving into the EU, must instead be considered 'not at risk'.
 			The ID here is the EORI of the UKIM authorised party. -->
 		<AuthorisationHolder>

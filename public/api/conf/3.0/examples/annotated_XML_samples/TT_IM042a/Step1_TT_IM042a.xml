@@ -7,7 +7,7 @@
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--
                 SCENARIO
-                GB to NI, NIDOM, Goods At Risk, Authorisation by Declaration, End-Use Relief Procedures Applied:
+                GB to NI, NIDOM, Goods at Risk, Authorisation by Declaration, End-Use Relief Procedures Applied:
                 Goods imported and declared to End-Use
                 Procedure code 4400 Additional Procedure code 000
                 Authorisation by Declaration (AbD) used
@@ -37,7 +37,7 @@
         <InvoiceAmount currencyID="GBP">25000</InvoiceAmount>
         <!--6/18: Total packages - 100. Note that this matches DE 6/10 because this is a single item declaration. -->
         <TotalPackageQuantity>100</TotalPackageQuantity>
-        <!--DE 3/39: Holder of teh Authorisation Identification Number.
+        <!--DE 3/39: Holder of the Authorisation Identification Number.
                     An authorisation type code of EUS indicates End Use authorisation, the EORI number entered here must be the same as the Importer's EORI number declared in DE 3/16. -->
         <AuthorisationHolder>
             <ID>XI896458895015</ID>
@@ -236,7 +236,7 @@
                 <GovernmentProcedure>
                     <CurrentCode>1RL</CurrentCode>
                 </GovernmentProcedure>
-                <!--DE 5/15: US repesenting Unites States of America. Where preference in D.E. 4/17 begins with a '1', this must be completed.-->
+                <!--DE 5/15: US representing Unites States of America. Where preference in D.E. 4/17 begins with a '1', this must be completed.-->
                 <Origin>
                     <CountryCode>GB</CountryCode>
                     <TypeCode>1</TypeCode>

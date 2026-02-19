@@ -7,7 +7,7 @@
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 				SCENARIO
-				GB to NI, NIDOM, Goods At Risk, Authorisation by Declaration, End-Use Relief Procedures Applied:
+				GB to NI, NIDOM, Goods at Risk, Authorisation by Declaration, End-Use Relief Procedures Applied:
 				Goods imported and declared to End-Use
 				Procedure code 4400 Additional Procedure code 1RL
 				Goods: Whale Meat
@@ -183,7 +183,7 @@
 					<Name>Simplified Authorisation</Name>
 					<TypeCode>929</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of 9001 indicates InDeclaration of preferential origin on an invoice or other commercial document bearing as appropriate an original signature or approval number of the exporter
+				<!--DE 2/3: A document code of 9001 indicates In Declaration of preferential origin on an invoice or other commercial document bearing as appropriate an original signature or approval number of the exporter
 					Document code of AE in this scenario indicates Document attached — exhausted by (or only applies to) this entry (document returned to the trader). -->
 				<AdditionalDocument>
 					<CategoryCode>9</CategoryCode>

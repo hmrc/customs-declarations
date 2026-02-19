@@ -9,12 +9,12 @@
             SCENARIO
             A trader submits a Type A (H1) Declaration importing goods from the CS Norway into CS UK.
             The trader enters the following information on the declaration:
-            Ã¢â‚¬Â¢ Country of Dispatch 'ZN' is declared in DE 5/14
-            Ã¢â‚¬Â¢ Country of Preferential Origin 'ZN' is declared in DE 5/16
-            Ã¢â‚¬Â¢ Border Transport Means Nationality Code 'ZN' is declared in DE 7/15
-            Ã¢â‚¬Â¢ Goods Location Country Code 'ZU' is declared in DE 5/23
-            Ã¢â‚¬Â¢ Trade Terms Country Code 'ZU' is declared in DE 4/1.
-            Ã¢â‚¬Â¢ No Excise Duty will be calculated using the UK Tariff.
+            Country of Dispatch 'ZN' is declared in DE 5/14
+            Country of Preferential Origin 'ZN' is declared in DE 5/16
+            Border Transport Means Nationality Code 'ZN' is declared in DE 7/15
+            Goods Location Country Code 'ZU' is declared in DE 5/23
+            Trade Terms Country Code 'ZU' is declared in DE 4/1.
+            No Excise Duty will be calculated using the UK Tariff.
             Custom Duty will be calculated using the UK Tariff at a rate of 3%.
             VAT will be calculated using the UK Tariff at the UK VAT standard rate of 20%.
             The trader gets notifications including DMSTAX from DMS confirming the successful acceptance and clearance of the declaration.
@@ -226,7 +226,7 @@
                     This field is mandatory if the codes are required.
                     A document code of 9120 indicates: Importation of animal pathogens Licence under the Importation of Animal
                     pathogens Order 1980 (IAPO).
-                    LPCOExemptionCode: AE indicates Document attached Ã¢â‚¬â€œ exhausted by (or only applies to) this entry (document
+                    LPCOExemptionCode: AE indicates Document attached exhausted by (or only applies to) this entry (document
                     returned to the trader). -->
                 <AdditionalDocument>
                     <CategoryCode>9</CategoryCode>
@@ -358,14 +358,14 @@
                 </Packaging>
                 <!--DE 4/13: Valuation Indicator.
                     Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-                    The code comprises four digits, each of which being either a Ã¢â‚¬Ëœ0Ã¢â‚¬â„¢ or a Ã¢â‚¬Ëœ1Ã¢â‚¬â„¢:
-                    Ã¢â‚¬Â¢ First digit: 0 = there is no price influence as a result of a Party Relationship
+                    The code comprises four digits, each of which being either a
+                    First digit: 0 = there is no price influence as a result of a Party Relationship
                     between the buyer and seller.
-                    Ã¢â‚¬Â¢ Second digit: 0 = there are no restrictions as to the disposal or use of the
+                    Second digit: 0 = there are no restrictions as to the disposal or use of the
                     goods by the buyer in accordance with Article 70(3)(a) of the Code.
-                    Ã¢â‚¬Â¢ Third digit: 0 = the sale or price is not subject to some condition or
+                    Third digit: 0 = the sale or price is not subject to some condition or
                     consideration in accordance with Article 70(3)(b) of the Code.
-                    Ã¢â‚¬Â¢ Fourth digit: 0 = the sale is not subject to an arrangement under which part of
+                    Fourth digit: 0 = the sale is not subject to an arrangement under which part of
                     the proceeds of any subsequent resale, disposal or use accrues directly or
                     indirectly to the seller. -->
                 <ValuationAdjustment>
@@ -380,7 +380,7 @@
             </Importer>
             <!--DE 2/1: Simplified Declarations/Previous documents.
                 Previous document to show the DUCR assigned to the consignment.
-                Note: The DUCR is not mandatory for Ã¢â‚¬ËœnormalÃ¢â‚¬â„¢ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
+                Note: The DUCR is not mandatory for normal declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
                 <ID>2GB553202734852-12345</ID>

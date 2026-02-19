@@ -19,8 +19,8 @@
 	<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
-			CDSNIP-709 - Subsidy processing with UKIMS
-			GB to NI NIDOM "AT RISK" NIAID APPLIED - USER STORY 1 - Subsidy Claim Allowed
+			Subsidy processing with UKIMS
+			GB to NI NIDOM "AT RISK" NIAID APPLIED - Subsidy Claim Allowed
 			A Trader submits a Type A (H1) declaration importing goods from GB to NI for which subsidy claim is allowed and processed.
 			The Trader declares:
 			• Goods: Fillets known as loins - For processing

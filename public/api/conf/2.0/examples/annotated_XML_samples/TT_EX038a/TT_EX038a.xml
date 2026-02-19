@@ -50,7 +50,7 @@
 				<Agent>
 					<!--DE 3/20: Representative Identification Number.
                 EORI number of the Representative.
-                Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
+                On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
 					<ID>GB150454489082</ID>
 					<!--DE 3/21: Identification Status Code.
                 '2' Indicating direct representation. -->

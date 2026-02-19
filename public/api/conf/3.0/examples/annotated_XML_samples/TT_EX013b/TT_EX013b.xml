@@ -18,9 +18,8 @@
 			<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 			<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 				<!--
-			***
-			Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID), even when the Representative is the same Party as the Declarant.
-			***
+			
+			
 			SCENARIO
 			Type Y Declaration with DIT licencing. Export to ensure Declaration is accepted and cleared
 			when SDP authorisation is supplied with Licensing
@@ -51,7 +50,7 @@
 				<TotalPackageQuantity>2</TotalPackageQuantity>
 				<Agent>
 					<!--DE 3/20: Representative Identification Number.
-				Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
+				On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID) even when the Representative is the same Party as the Declarant. -->
 					<ID>XI150454489082</ID>
 					<!--DE 3/21: Representative Status Code.
 				3 indicating Indirect Export. -->
@@ -65,7 +64,7 @@
 				</AuthorisationHolder>
 				<!--DE 7/14: Identity of active means of transport crossing the border.
 		11 indicating name of the seagoing vessel declared in ID -->
-				<!--DE 7/15: Country code of the nationality of the active means of transportcrossing the border,
+				<!--DE 7/15: Country code of the nationality of the active means of transport crossing the border,
 		in this case GB.-->
 				<!--DE 7/4: ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border. -->
 				<BorderTransportMeans>

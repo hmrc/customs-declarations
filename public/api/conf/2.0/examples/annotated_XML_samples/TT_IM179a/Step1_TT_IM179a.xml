@@ -7,12 +7,12 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--SCENARIO
-			-	A Trader submits a pre-lodged Type K (GL C21i) declaration "Not At Risk" importing goods from GB to NI with UKIMS authorisation
+			-	A Trader submits a pre-lodged Type K (GL C21i) declaration "Not at Risk" importing goods from GB to NI with UKIMS authorisation
 			-	The trader submits a GPN.
 			-	CDS must not calculate or charge any customs duties, VAT or excise to the submitter.
 			-	Expected Trader Notifications are generated: DMSTAX (Indicative) = Function Code 13, DMSRCV = Function Code 02, DMSTAX (Indicative) = Function Code 13,
 			-	DMSACC = Function Code 01, DMSTAX (Final) = Function Code 13, DMSCLE = Function Code 09
-			-	CDS must send a DMSTAX notification to the submitter(N.B. this notification must contain a "0" value to meet CDSNIP-747 US9, AC8 and so show that no customs duties,
+			-	CDS must send a DMSTAX notification to the submitter(N.B. this notification must contain a "0" value , AC8 and so show that no customs duties,
 				VAT or excise have been charged)
 			-->
 		<!--Function Code of 9 to represent an original declaration.-->
@@ -24,12 +24,12 @@
 		<TypeCode>IMK</TypeCode>
 		<!--DE 1/9: Total number of goods items on the declaration.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
-		<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk" of moving into the EU, must instead be considered “not at risk". The ID here is the EORI of the UKIM authorised party. -->
+		<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk" of moving into the EU, must instead be considered “not at risk". The ID here is the EORI of the UKIM authorised party. -->
 		<AuthorisationHolder>
 			<ID>XI150454489082</ID>
 			<CategoryCode>UKIM</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 3/39: Holder of the Authoriation Identification Number. An authorisation type code of ACE indicates Authorised consignee for Union transit. -->
+		<!--DE 3/39: Holder of the Authorisation Identification Number. An authorisation type code of ACE indicates Authorised consignee for Union transit. -->
 		<AuthorisationHolder>
 			<ID>XI150454489082</ID>
 			<CategoryCode>ACE</CategoryCode>
@@ -139,7 +139,7 @@
 					<CurrentCode>00</CurrentCode>
 					<PreviousCode>06</PreviousCode>
 				</GovernmentProcedure>
-				<!--DE 1/11: 61G indicating GB NI Transports Internationaux Routiers (TIR) Carnets.
+				<!--DE 1/11: 61G indicating GB NI Transports International Routiers (TIR) Carnets.
 							When 61G is declared, either 62G or 63G must also be declared. In this case, 62G is declared.	-->
 				<GovernmentProcedure>
 					<CurrentCode>61G</CurrentCode>

@@ -7,10 +7,7 @@
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
 	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
-			***
-			Note that this declaration is currently rejected due to a preference code mismatch following the implementation of new dual Tariff validation.
-			Work to restore the sample to full use is ongoing.
-			***
+			
 
 			SCENARIO
 			A self-representing frontier declaration: H1 additional declaration Type Y (Supplementary) declaration
@@ -34,12 +31,12 @@
 		-->
 		<!-- Acceptance Date is present on all supplementary declarations, and will match the CLE date listed in 2/1.-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20250811155246+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20260219132550+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!-- Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN. Mandatory field. Traders own reference number this must be unique to the transaction -->
-		<FunctionalReferenceID>U.7867523TFS0V</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7849454833T3</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. Mandatory field. IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type. Mandatory field. A to represent an arrived frontier standard declaration.-->
 		<TypeCode>IMY</TypeCode>
@@ -202,7 +199,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					This field is mandatory if the codes are required.
 					A document code of C505 indicates CGU - Authorisation for the provision of a customs comprehensive guarantee, including possible reduction or waiver. In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of CC), and therefore the ID also indicates that a waiver is being used.
-					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code CCG not required. -->
+					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code ‚ CCG not required. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>XICGU55320273485220231019133850</ID>
@@ -223,7 +220,7 @@
 					This field is mandatory if the codes are required.
 					A document code of C644 indicates Certificate of inspection for organic products.
 					Name: A free text description of the Reason where required by the Document Status Code.
-					LPCOExemptionCode: GE indicates document with the goods exhausted by (or only applies to) this entry. -->
+					LPCOExemptionCode: GE indicates document with the goods ‚exhausted by (or only applies to) this entry. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>0054039</ID>
@@ -352,6 +349,12 @@
 				<GovernmentProcedure>
 					<CurrentCode>000</CurrentCode>
 				</GovernmentProcedure>
+				<!--DE 5/15: Country of Origin. CL representing Chile.
+                    Where preference in D.E. 4/17 begins with a number other than ‘1’, this must be completed. Mandatory if DE 5/16 is present -->
+				<Origin>
+					<CountryCode>CL</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
 				<!--DE 5/16: Country of preferential origin code. Mandatory if DE 4/17 does not begin with '1'. Where preference in DE 4/17 begins with a number other than '1', this must be completed.
 							TypeCode: 2 indicates the Country of Preferential Origin.
 							CountryCode: CL represents Chile, the country from which the goods originated -->
@@ -390,7 +393,7 @@
 				<ID>XI553202734852</ID>
 			</Importer>
 			<!--DE 2/1: Simplified Declarations/Previous documents. This data element can be declared at a header or item level - as this is for a single item declaration, this should be declared at header level. Mandatory field. This identifies the class or kind of document being declared. 
-						ID: Mandatory field. This represents the data needed to recognise and identify the document.
+			ID: Mandatory field. This represents the data needed to recognise and identify the document.
 						TypeCode: Mandatory field. This serves to identify the type of document: 355 indicates ENS - Entry Summary Declaration.
 						LineNumeric: Optional field. This is the goods item number. It is used to identify which item of the previous document is being referred to. Where the previous document referred to or contained only a single goods item, this component may be left blank. -->
 			<PreviousDocument>

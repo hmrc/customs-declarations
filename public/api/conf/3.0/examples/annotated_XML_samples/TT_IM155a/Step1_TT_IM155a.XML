@@ -7,7 +7,7 @@
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--
 			SCENARIO
-            
+            Subsidy processing with UKIMS TC002
 
             GB to NI NIDOM "AT RISK" NIAID APPLIED - Subsidy Claim NOT Allowed
 
@@ -28,7 +28,7 @@
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN.
 			Trader's own reference number - this must be unique to the transaction. -->
-        <FunctionalReferenceID>78473232JLG9</FunctionalReferenceID>
+        <FunctionalReferenceID>U.7847767HVR0W</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
 			IM to represent an import declaration. -->
         <!--DE 1/2: Additional Declaration Type.
@@ -184,7 +184,7 @@
 					This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
                 <AdditionalDocument>
                     <CategoryCode>N</CategoryCode>
-                    <ID>12345/23.01.2024</ID>
+                    <ID>12345/23.02.2026</ID>
                     <TypeCode>935</TypeCode>
                     <LPCOExemptionCode>AC</LPCOExemptionCode>
                 </AdditionalDocument>
@@ -193,7 +193,7 @@
 					LPCOExemptionCode: AE indicates Document attached – exhausted by (or only applies to) this entry (document returned to the trader).-->
                 <AdditionalDocument>
                     <CategoryCode>9</CategoryCode>
-                    <ID>0062041-0062048</ID>
+                    <ID>0062041</ID>
                     <TypeCode>001</TypeCode>
                     <LPCOExemptionCode>AE</LPCOExemptionCode>
                 </AdditionalDocument>
@@ -244,13 +244,13 @@
                     </Classification>
                     <DutyTaxFee>
                         <!--DE 4/17: Preference.
-							Type of 100 represents no preference being claimed. -->
+							Type of 300 represents Preferential duty rate without conditions or limits (including ceilings). -->
                         <DutyRegimeCode>300</DutyRegimeCode>
                         <!--DE 4/3: Tax Type.
 							A50 represents EU Tariff customs duty. -->
                         <TypeCode>A50</TypeCode>
                         <!--DE 4/8: Method of Payment.
-							R to indicate Security deposit: deferred payment (deferment account deposit). change this comment too-->
+							MethodCode of E to indicate Deferment used for import. -->
                         <Payment>
                             <MethodCode>E</MethodCode>
                         </Payment>
@@ -322,10 +322,20 @@
                 <GovernmentProcedure>
                     <CurrentCode>000</CurrentCode>
                 </GovernmentProcedure>
-                <!--DE 5/15: Country of Origin.
+                <!--DE 5/15: Country of Origin
 					TypeCode of 1 to represent non-preferential origin.
-					Where preference in DE 4/17 begins with '1', this must be completed.
-					CountryCode contains the code for the country from which the originated, in this case GB.  -->
+					Where preference in D.E. 4/17 begins with 1, this must be completed.
+					CountryCode contains the code for the country from which the goods originated.
+					It is a feature of DMS/CDS that requires an additional qualifier to separate DE 5/15 (from DE 5/16).
+					It is not a part of the UCC or Tariff completion requirements.-->
+                <Origin>
+                    <CountryCode>MA</CountryCode>
+                    <TypeCode>1</TypeCode>
+                </Origin>
+                <!--DE 5/16: Country of Preferential Origin.
+                    TypeCode of 2 to represent preferential origin.
+                    Where preference in D.E. 4/17 begins with a value other than '1', this must be completed.
+                    CountryCode contains the code for the country from which the goods originated, in this case France. -->
                 <Origin>
                     <CountryCode>GB</CountryCode>
                     <TypeCode>2</TypeCode>
@@ -365,7 +375,7 @@
 				Note: As this is for a single item declaration, this should all be declared at header level-->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
-                <ID>24GB34F7Y1O2CX8PT4</ID>
+                <ID>26GB34F7Y1O2CX8PT4</ID>
                 <TypeCode>355</TypeCode>
                 <LineNumeric>1</LineNumeric>
             </PreviousDocument>

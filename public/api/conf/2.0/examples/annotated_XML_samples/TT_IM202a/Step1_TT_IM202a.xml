@@ -24,7 +24,7 @@
 		<!--Function Code of 9 to represent an original declaration.  -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: Declarant's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7849431PL93B</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847323MGG46</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
             Mandatory field.
             IM to represent an import declaration. -->
@@ -245,12 +245,12 @@
 					<TypeCode>162</TypeCode>
 					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
-				<AdditionalDocument>
-					<CategoryCode>U</CategoryCode>
-					<ID>1255512</ID>
-					<TypeCode>110</TypeCode>
-					<LPCOExemptionCode>AE</LPCOExemptionCode>
-				</AdditionalDocument>
+				<!-- 	<AdditionalDocument>
+                        <CategoryCode>U</CategoryCode>
+                        <ID>1255512</ID>
+                        <TypeCode>110</TypeCode>
+                        <LPCOExemptionCode>AE</LPCOExemptionCode>
+                    </AdditionalDocument> -->
 				<!--DE 2/2: Additional Information. This field is mandatory if the codes are required.
                     Denoting that the declarant and importer are the same party (self-rep). -->
 				<AdditionalInformation>
@@ -284,7 +284,7 @@
 					</Classification>
 					<DutyTaxFee>
 						<!--DE 4/17: Preference Type of 100 represents no preference being claimed. -->
-						<DutyRegimeCode>300</DutyRegimeCode>
+						<DutyRegimeCode>100</DutyRegimeCode>
 						<!--DE 4/3: Tax Type of A50 represents EU Customs Duty -->
 						<TypeCode>A50</TypeCode>
 						<Payment>
@@ -344,14 +344,11 @@
 				<GovernmentProcedure>
 					<CurrentCode>000</CurrentCode>
 				</GovernmentProcedure>
-				<!--DE 5/15: Country of Origin.
-                    TypeCode of 1 to represent non-preferential origin.
-                    Where preference in DE 4/17 begins with '1', this must be completed.
-                    CountryCode contains the code for the country from which the goods originated.
-                    In this case, BR to indicate Brazil. -->
+				<!--DE 5/15: Country of Origin. GB representing Great Britain.
+                    Where preference in D.E. 4/17 begins with a number other than ‘1’, this must be completed. Mandatory if DE 5/16 is present -->
 				<Origin>
 					<CountryCode>GB</CountryCode>
-					<TypeCode>2</TypeCode>
+					<TypeCode>1</TypeCode>
 				</Origin>
 				<Packaging>
 					<SequenceNumeric>1</SequenceNumeric>

@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 				SCENARIO
 				GB to NI, NIDOM, Goods at Risk, Authorisation by Declaration, End-Use Relief Procedures Applied:
@@ -17,11 +18,10 @@
 				Deferment used for security
 				Goods presented at port of Belfast.
 				Expected Notifications (4): DMSACC, DMSTAX(1), DMSTAX(2) and DMSCLE -->
-
 		<!-- Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: Declarant's own reference number : this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.79274681C5UJ</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847767MDAXE</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration. -->
 		<!--DE 1/2: A to represent a frontier/arrived standard declaration. -->
 		<TypeCode>IMA</TypeCode>
@@ -183,7 +183,7 @@
 					<Name>Simplified Authorisation</Name>
 					<TypeCode>929</TypeCode>
 				</AdditionalDocument>
-				<!--DE 2/3: A document code of 9001 indicates In Declaration of preferential origin on an invoice or other commercial document bearing as appropriate an original signature or approval number of the exporter
+				<!--DE 2/3: A document code of 9001 indicates InDeclaration of preferential origin on an invoice or other commercial document bearing as appropriate an original signature or approval number of the exporter
 					Document code of AE in this scenario indicates Document attached — exhausted by (or only applies to) this entry (document returned to the trader). -->
 				<AdditionalDocument>
 					<CategoryCode>9</CategoryCode>
@@ -199,7 +199,6 @@
 					<TypeCode>635</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
-
 				<!--DE 2/2: Additional information. 00500 - Identity between declarant and importer. -->
 				<AdditionalInformation>
 					<StatementCode>00500</StatementCode>
@@ -291,6 +290,14 @@
 				<GovernmentProcedure>
 					<CurrentCode>1RL</CurrentCode>
 				</GovernmentProcedure>
+				<Origin>
+					<!--DE 5/15: Country of Origin.
+                        Where preference in DE 4/17 begins with '1', this must be completed.
+                        TypeCode of 1 to represent non-preferential origin.
+                        CountryCode contains the code for the country from which the goods originated, in this case Argentina. -->
+					<CountryCode>GB</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
 				<!--DE 5/16: Country of Preferential Origin Code.
 					Mandatory.TypeCode of 1 to represent non-preferential origin.
 					Where preference in DE 4/17 begins with '2', this must be completed.
@@ -327,13 +334,13 @@
 				Note: The DUCR is not mandatory for normal declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>3XI896458895015-A12345</ID>
+				<ID>6XI896458895015-A12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Z355 To show the MRN for the Entry Summary Declaration. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>25GB34F7Y1O2CX8PT4</ID>
+				<ID>26GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

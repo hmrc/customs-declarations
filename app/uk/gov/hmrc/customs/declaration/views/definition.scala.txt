@@ -14,9 +14,6 @@
         "version": "1.0",
         "status": "BETA",
         "endpointsEnabled": true,
-        "access": {
-            "type": "PRIVATE"
-        },
         "fieldDefinitions": [
           {
             "name": "callbackUrl",
@@ -51,9 +48,6 @@
         "version": "2.0",
         "status": "BETA",
         "endpointsEnabled": @v2Enabled,
-        "access": {
-            "type": "PRIVATE"
-        },
         "fieldDefinitions": [
           {
             "name": "callbackUrl",

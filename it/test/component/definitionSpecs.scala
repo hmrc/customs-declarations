@@ -30,7 +30,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
 
   Feature("Ensure definition file") {
 
-    Scenario("is correct when all versions are private") {
+    Scenario("is correct when v1 and v2 are public and v3 is private") {
 
       Given("the API is available")
       val request = FakeRequest("GET", "/api/definition")
@@ -56,9 +56,6 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |        "version": "1.0",
           |        "status": "BETA",
           |        "endpointsEnabled": true,
-          |        "access": {
-          |          "type": "PRIVATE"
-          |        },
           |        "fieldDefinitions": [
           |          {
           |            "name": "callbackUrl",
@@ -93,9 +90,6 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |        "version": "2.0",
           |        "status": "BETA",
           |        "endpointsEnabled": true,
-          |        "access": {
-          |          "type": "PRIVATE"
-          |        },
           |        "fieldDefinitions": [
           |          {
           |            "name": "callbackUrl",
@@ -204,9 +198,6 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "version": "1.0",
           |        "status": "BETA",
           |        "endpointsEnabled": true,
-          |        "access": {
-          |          "type": "PRIVATE"
-          |        },
           |        "fieldDefinitions": [
           |          {
           |            "name": "callbackUrl",
@@ -241,9 +232,6 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "version": "2.0",
           |        "status": "BETA",
           |        "endpointsEnabled": false,
-          |        "access": {
-          |          "type": "PRIVATE"
-          |        },
           |        "fieldDefinitions": [
           |          {
           |            "name": "callbackUrl",

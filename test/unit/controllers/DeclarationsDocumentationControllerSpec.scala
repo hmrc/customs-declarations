@@ -37,7 +37,7 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
 
   "API Definition" should {
 
-    "be correct when V1, V2 are private" in {
+    "be correct when V1, V2 are public" in {
       val result = getApiDefinitionWith(Map())(FakeRequest())
 
       status(result) mustBe 200
@@ -58,9 +58,6 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
          |            "version":"1.0",
          |            "status":"BETA",
          |            "endpointsEnabled":true,
-         |            "access":{
-         |              "type": "PRIVATE"
-         |            },
          |            "fieldDefinitions":[
          |               {
          |                  "name":"callbackUrl",
@@ -95,9 +92,6 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
          |            "version":"2.0",
          |            "status":"BETA",
          |            "endpointsEnabled":true,
-         |            "access":{
-         |              "type": "PRIVATE"
-         |            },
          |            "fieldDefinitions":[
          |               {
          |                  "name":"callbackUrl",

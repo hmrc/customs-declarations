@@ -198,9 +198,6 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "version": "1.0",
           |        "status": "BETA",
           |        "endpointsEnabled": true,
-          |        "access": {
-          |          "type": "PRIVATE"
-          |        },
           |        "fieldDefinitions": [
           |          {
           |            "name": "callbackUrl",
@@ -235,9 +232,6 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "version": "2.0",
           |        "status": "BETA",
           |        "endpointsEnabled": false,
-          |        "access": {
-          |          "type": "PRIVATE"
-          |        },
           |        "fieldDefinitions": [
           |          {
           |            "name": "callbackUrl",

@@ -67,7 +67,6 @@ class ApiSubscriptionFieldsConnectorSpec extends AnyWordSpecLike
   private val mockAuditConnector = mock[AuditConnector]
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private implicit val vpr: ValidatedPayloadRequest[AnyContentAsXml] = TestData.TestCspValidatedPayloadRequest
-  private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(

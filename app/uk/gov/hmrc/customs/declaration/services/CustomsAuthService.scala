@@ -43,7 +43,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   private val customsDeclarationEnrolment = "write:customs-declaration"
 
   private type NrsRetrievalDataType = Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ Option[String] ~
-    Option[String] ~ Option[Name] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
+    Option[String] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~
     Option[CredentialRole] ~ Option[MdtpInformation] ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] ~
     Option[AffinityGroup] ~ Option[String] ~ LoginTimes
 
@@ -52,7 +52,7 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
   private val cspRetrievals: Retrieval[NrsRetrievalDataType]=
     Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and
       Retrievals.credentials and Retrievals.confidenceLevel and Retrievals.nino and
-      Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
+      Retrievals.saUtr and Retrievals.dateOfBirth and
       Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and
       Retrievals.credentialRole and Retrievals.mdtpInformation and Retrievals.itmpName and
       Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and
@@ -75,11 +75,11 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
     val eventualAuth: Future[Either[ErrorResponse, (IsCsp, Option[NrsRetrievalData])]] =
       if (requestRetrievals) {
         authorised(Enrolment(customsDeclarationEnrolment) and AuthProviders(PrivilegedApplication)).retrieve(cspRetrievals) {
-          case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
+          case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
             credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes =>
             Future.successful {
               val retrievalData = NrsRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
-                name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
+                dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
                 itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
 
               logger.debug(s"Successfully authorised CSP PrivilegedApplication with $customsDeclarationEnrolment enrolment with retrievals")
@@ -113,11 +113,11 @@ class CustomsAuthService @Inject()(override val authConnector: AuthConnector,
     val eventualAuth: Future[(Enrolments, Option[NrsRetrievalData])] =
       if (requestRetrievals) {
         authorised(Enrolment(hmrcCustomsEnrolment) and AuthProviders(GovernmentGateway)).retrieve(nonCspRetrievals) {
-          case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ name ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
+          case internalId ~ externalId ~ agentCode ~ credentials ~ confidenceLevel ~ nino ~ saUtr ~ dateOfBirth ~ email ~ agentInformation ~ groupIdentifier ~
             credentialRole ~ mdtpInformation ~ itmpName ~ itmpDateOfBirth ~ itmpAddress ~ affinityGroup ~ credentialStrength ~ loginTimes ~ authorisedEnrolments =>
 
             val retrievalData = NrsRetrievalData(internalId, externalId, agentCode, credentials, confidenceLevel, nino, saUtr,
-              name, dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
+              dateOfBirth, email, agentInformation, groupIdentifier, credentialRole, mdtpInformation, itmpName,
               itmpDateOfBirth, itmpAddress, affinityGroup, credentialStrength, loginTimes)
 
             logger.debug(s"Successfully authorised non-CSP with $hmrcCustomsEnrolment enrolment and GovernmentGateway non-CSP retrievals pending eori check")

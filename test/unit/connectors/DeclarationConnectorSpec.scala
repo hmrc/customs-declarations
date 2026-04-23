@@ -147,7 +147,6 @@ class DeclarationConnectorSpec extends AnyWordSpecLike
   private val httpFormattedDate = "Tue, 04 Jul 2017 13:45:00 UTC"
 
   private val correlationId = UUID.randomUUID()
-  private val successfulHttpResponse = HttpResponse(200, "")
 
   "MdgWcoDeclarationConnector" can {
 

@@ -56,7 +56,6 @@ case class NrsRetrievalData(internalId: Option[String],
   confidenceLevel: ConfidenceLevel,
   nino: Option[String],
   saUtr: Option[String],
-  name: Option[Name],
   dateOfBirth: Option[LocalDate],
   email: Option[String],
   agentInformation: AgentInformation,
@@ -72,7 +71,6 @@ case class NrsRetrievalData(internalId: Option[String],
 
 object NrsRetrievalData {
   implicit val credentialsFormat: OFormat[Credentials] = Json.format[Credentials]
-  implicit val nameFormat: OFormat[Name] = Json.format[Name]
   implicit val agentInformationFormat: OFormat[AgentInformation] = Json.format[AgentInformation]
   implicit val mdtpInformationFormat: OFormat[MdtpInformation] = Json.format[MdtpInformation]
   implicit val itmpNameFormat: OFormat[ItmpName] = Json.format[ItmpName]

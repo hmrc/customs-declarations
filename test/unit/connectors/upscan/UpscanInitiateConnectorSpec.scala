@@ -49,7 +49,6 @@ import uk.gov.hmrc.play.bootstrap.http.{DefaultHttpAuditing, HttpClientV2Provide
 import util.ExternalServicesConfig.{Host, Port}
 import util.TestData
 import util.TestData.{ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles, fileUploadConfig}
-import util.VerifyLogging.verifyDeclarationsLoggerError
 
 class UpscanInitiateConnectorSpec extends AnyWordSpecLike
   with MockitoSugar

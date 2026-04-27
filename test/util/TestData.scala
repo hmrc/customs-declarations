@@ -148,7 +148,6 @@ object TestData {
   val nrsConfidenceLevel: ConfidenceLevel.L500.type = L500
   val nrsNinoValue: String = "ninov"
   val nrsSaUtrValue: String = "saUtr"
-  val nrsNameValue: Option[Name] = Some(Name(Some("name"), Some("lastname")))
   val TWENTY_FIVE = 25
   val nrsDateOfBirth: Option[LocalDate] = Some(LocalDate.now().minusYears(TWENTY_FIVE))
   val nrsEmailValue: Option[String] = Some("nrsEmailValue")
@@ -191,7 +190,6 @@ object TestData {
     nrsConfidenceLevel,
     Some(nrsNinoValue),
     Some(nrsSaUtrValue),
-    nrsNameValue,
     nrsDateOfBirth,
     nrsEmailValue,
     nrsAgentInformationValue,
@@ -205,19 +203,18 @@ object TestData {
     nrsCredentialStrength,
     nrsLoginTimes)
 
-  val nrsRetrievalData: Retrieval[Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Option[Name] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes] = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
-    Retrievals.nino and Retrievals.saUtr and Retrievals.name and Retrievals.dateOfBirth and
+  val nrsRetrievalData: Retrieval[Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ Option[String] ~ Option[String] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[MdtpInformation] ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] ~ Option[AffinityGroup] ~ Option[String] ~ LoginTimes] = Retrievals.internalId and Retrievals.externalId and Retrievals.agentCode and Retrievals.credentials and Retrievals.confidenceLevel and
+    Retrievals.nino and Retrievals.saUtr and Retrievals.dateOfBirth and
     Retrievals.email and Retrievals.agentInformation and Retrievals.groupIdentifier and Retrievals.credentialRole and Retrievals.mdtpInformation and
     Retrievals.itmpName and Retrievals.itmpDateOfBirth and Retrievals.itmpAddress and Retrievals.affinityGroup and Retrievals.credentialStrength and Retrievals.loginTimes
 
-  val nrsReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(new ~(Some(nrsInternalIdValue)
+  val nrsReturnData = new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~( new ~(Some(nrsInternalIdValue)
     ,Some(nrsExternalIdValue)),
     Some(nrsAgentCodeValue)),
     nrsCredentials),
     nrsConfidenceLevel),
     Some(nrsNinoValue)),
     Some(nrsSaUtrValue)),
-    nrsNameValue),
     nrsDateOfBirth),
     nrsEmailValue),
     nrsAgentInformationValue),

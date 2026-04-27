@@ -51,7 +51,6 @@ import util.TestData.{fileUploadConfig, nrSubmissionId, nrsConfigEnabled}
 import util.ExternalServicesConfig.*
 
 import java.util.UUID
-import scala.concurrent.ExecutionContext
 import scala.xml.NodeSeq
 
 class NrsConnectorSpec extends AnyWordSpecLike

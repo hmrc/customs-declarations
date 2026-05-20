@@ -1,0 +1,54 @@
+<xsd:schema targetNamespace="http://ecf.dms.core/gatewayHeader/v1/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.1">
+	<xsd:element name="dmsGatewayHeader">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="communicationAddress" minOccurs="0" type="xsd:string">
+					<xsd:annotation>
+						<xsd:documentation>Metadata element providing the communication address of the party who submitted the message</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="receiveDate" minOccurs="0" type="xsd:dateTime">
+					<xsd:annotation>
+						<xsd:documentation>Metadata element providing the date/time at which the message was received by the gateway</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="messageType" minOccurs="0" type="xsd:string">
+					<xsd:annotation>
+						<xsd:documentation>Metadata element providing the type of the message</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="batchId" minOccurs="0" type="xsd:string">
+					<xsd:annotation>
+						<xsd:documentation>Metadata element providing a batch identification in case of a batch of messages</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="submitter" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Metadata element providing the identification of the (actual) submitter</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="id" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>The identification of the party</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="idType" type="xsd:token">
+								<xsd:annotation>
+									<xsd:documentation>The type of identification provided, as defined in codelist PartyIdentificationTypes:
+1. Eori Number: Economic Operator Registration and Identification number
+2. VAT number: Value Added tax number
+3. DUNS number: Dun &amp; Bradstreet Number, being a unique nine-digit sequence for identifying businesses.
+4. EAN number: European Article Number party ID number
+5. Fiscal number
+6. SSN: Social Security Number used to identify natural persons in a government context
+7. User defined: Number identifying a party defined by the user that uses the party identification</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

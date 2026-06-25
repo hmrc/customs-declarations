@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EAL</inv:messageCode>             
+	<!--***
+		Note that as per the CDS ILE Technical Completion Matrix for Trade Test, the AgentDetails fields are not used for inventory linking messages. These fields will be removed in the next version of this sample.
+		***-->
+	<inv:agentDetails>
+		<inv:EORI>GB239355053000</inv:EORI>                    
+	</inv:agentDetails>				  
+	<inv:ucrBlock>
+		<inv:ucr>GB/FCP1-CHIEF2001M30</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:ucrBlock>
+	<inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>            
+	<inv:goodsArrivalDateTime>2021-01-20T09:00:00</inv:goodsArrivalDateTime>                                
+	<inv:movementReference>Movement150</inv:movementReference>                     
+	<inv:transportDetails>
+		<inv:transportID>11CSCLGLOBE</inv:transportID>
+		<inv:transportMode>1</inv:transportMode>
+		<inv:transportNationality>GB</inv:transportNationality>
+	</inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>

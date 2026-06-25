@@ -158,7 +158,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 					A document code of C505 indicates CGU - Authorisation for the provision of a comprehensive guarantee, including possible reduction or waiver.
 					In this scenario, a waiver to the CCG authorisation is being used and therefore the ID also indicates that a waiver is being used.
-					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code CCG not required. -->
+					LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code â€“ CCG not required. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>GBCGUGuaranteenotrequired</ID>

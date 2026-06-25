@@ -10,7 +10,7 @@
             An agent submits a Type D (H1) declaration importing goods from GB to NI, via RoRo method of transport at a GVMS location.
             The agent enters the following information on the declaration:
             -  Additional procedure code 'F47' to indicate that the goods are being grouped under a single commodity code in DE 1/11.
-            -  Additional document 9WKS for the reference to records with the breakdown of the grouped consignment in DE 2/3.
+            -  Additional document 9WKS for the reference to records with the breakdown of the grouped consigment in DE 2/3.
             -  Location of goods 'GBAUBELBELGVM' for Port of Belfast GVMS in DE 5/23.
             -  Mode of transport at the border '6' for RoRo in DE 7/4. 
             Goods: Children's clothing, packaged as sets - various garments as a grouped consignment.
@@ -171,7 +171,7 @@
                 <Commodity>
                     <!--DE 6/8: Description of Goods.
                         Description of the goods specific enough to enable classification without repeating the CN code description in the Tariff. -->
-                    <Description>Childrens clothing, packaged as sets various garments as a grouped consignment</Description>
+                    <Description>Childrenâ€™s clothing, packaged as sets â€“ various garments as a grouped consignment</Description>
                     <Classification>
                         <!--DE 6/14: Commodity Code - Combined Nomenclature Code. 
                             IdentificationTypeCode of TSP indicates that a Transitional Simplified Procedure has been used. -->

@@ -1,0 +1,23 @@
+<ns2:inventoryLinkingMovementTotalsResponse xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1">
+    <ns2:messageCode>ERS</ns2:messageCode>
+    <ns2:goodsLocation>GBAULHRLHRANS</ns2:goodsLocation>
+    <ns2:goodsArrivalDateTime>2022-12-09T11:34:00.000Z</ns2:goodsArrivalDateTime>
+    <ns2:movementReference>MovementRM9</ns2:movementReference>
+    <ns2:entry>
+        <ns2:ucrBlock>
+            <ns2:ucr>2GB417869120000-AT01CHIEFD3</ns2:ucr>
+            <ns2:ucrPartNo>131A</ns2:ucrPartNo>
+            <ns2:ucrType>D</ns2:ucrType>
+        </ns2:ucrBlock>
+        <ns2:goodsItem>
+            <ns2:commodityCode>48111000</ns2:commodityCode>
+            <ns2:totalPackages>22</ns2:totalPackages>
+            <ns2:totalNetMass>2000.000</ns2:totalNetMass>
+        </ns2:goodsItem>
+        <ns2:entryStatus>
+            <ns2:ics>3</ns2:ics>
+            <ns2:roe>6</ns2:roe>
+            <ns2:soe>4</ns2:soe>
+        </ns2:entryStatus>
+    </ns2:entry>
+</ns2:inventoryLinkingMovementTotalsResponse>

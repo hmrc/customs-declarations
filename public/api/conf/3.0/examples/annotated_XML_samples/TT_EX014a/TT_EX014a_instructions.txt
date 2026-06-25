@@ -1,0 +1,19 @@
+TT_EX14a
+
+SCENARIO
+CSP receives correct ROE and SOE (value of 'E') in EMR messages from CDS in order to depart a MUCR consignment: Prelodged declaration on CHIEF with movement messages on CDS. The CSP must receive the correct ROE and SOE (value of 'E') in EMR messages from CDS. 1x Type D declarations in CHIEF moves to A with DUCR. The MUCR can then be departed via an EDL.
+
+Please note:
+Prior to testing, new MUCRs and DUCRs need to be generated, and injected into CHIEF.
+Dates and times will also need to be updated for each payload.
+
+Test steps for execution
+
+Step 0  - Negative test (EAL Dummy DUCR)
+Step 1	- Dec 1 in CHIEF with DUCR
+Step 2	- Submit 1x EAC1 with DUCR and MUCR
+Step 3	- Submit 1x EAA with CHIEF MUCR
+Step 4	- Submit 1x EAL with CHIEF MUCR
+Step 5	- Submit 1x CST with CHIEF MUCR
+Step 6	- Submit 1x EDL with CHIEF MUCR
+

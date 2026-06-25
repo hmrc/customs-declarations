@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1
 	</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
             SCENARIO
             A trader submits a Type A Frontier declaration (H1), importing packing goods from ROW to GB.
@@ -14,6 +15,9 @@
             - Procedure Code '4421' at item level in DE 1/10.
             - Additional Procedure Code '1SW' at item level in DE 1/11.
             - The UK tariff will be used to calculate any duties.
+			- Updated 4/17 to have Pref code of 300
+			- Added U110 in De 2/3
+			- Added DE 5/16 as Mandatory due to Pref code of 300
 
             The Declaration is Accepted, Tax Calculated and Cleared.
 
@@ -22,7 +26,7 @@
 		<!--Function Code of 9 to represent an original declaration. -->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: Traders own reference number : this must be unique to the transaction -->
-		<FunctionalReferenceID>78473239I2DX</FunctionalReferenceID>
+		<FunctionalReferenceID>U.78675239WVQL</FunctionalReferenceID>
 		<!--DE 1/1: IM to represent an import declaration.-->
 		<!--DE 1/2: A to represent a frontier/arrived standard declaration-->
 		<TypeCode>IMA</TypeCode>
@@ -117,13 +121,12 @@
 				<!--DE 8/5: Nature of transaction: 1 to indicate transactions involving actual or intended
 					transfer of ownership from residents to non-residents against financial or other compensation.-->
 				<TransactionNatureCode>1</TransactionNatureCode>
-				<!--DE 2/3: A document code of C990 End use authorisation ships and platforms (Column 8c,
-                Annex A of Delegated Regulation (EU) 2015/2446).
-                Must be used in conjunction with 1SW in D.E. 1/11.-->
+				<!--DE 2/3: U110 - Statement on Origin.  Required if Preference code is beginning with 3xx -->
 				<AdditionalDocument>
-					<CategoryCode>C</CategoryCode>
-					<ID>GBEUS55320273485220190613093448</ID>
-					<TypeCode>990</TypeCode>
+					<CategoryCode>U</CategoryCode>
+					<ID>0054038</ID>
+					<TypeCode>110</TypeCode>
+					<LPCOExemptionCode>AE</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: A document code of C505 indicates a CGU - Authorisation for the provision of a
 					comprehensive guarantee-->
@@ -148,7 +151,6 @@
 					<ID>GBEUS55320273485220190613093448</ID>
 					<TypeCode>990</TypeCode>
 				</AdditionalDocument>
-
 				<!--DE 2/3: A document code of C672 indicates Information document accompanying shipments of
 					waste as mentioned in Regulation (EC) No 1013/2006 (OJ L 190) Article 18 and Annex VII on
 					shipments of waste. -->
@@ -158,7 +160,6 @@
 					<TypeCode>672</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
-
 				<!--DE 2/3: A document code of 9AIV: Evidence required by Procedure or Additional Procedure Code
 					(D.E. 1/10 and D.E. 1/11) instructions or claiming relief from VAT.-->
 				<AdditionalDocument>
@@ -173,13 +174,11 @@
 					<StatementCode>00100</StatementCode>
 					<StatementDescription>Simplified Authorisation</StatementDescription>
 				</AdditionalInformation>
-
 				<!--DE 2/2: ABDOU Additional Information Code used to identify goods entering a special procedure using AbD-->
 				<AdditionalInformation>
 					<StatementCode>ABDOU</StatementCode>
 					<StatementDescription>Authorisation by declaration</StatementDescription>
 				</AdditionalInformation>
-
 				<!--DE 2/2: RVAT1: Relief/ Suspension of Import VAT claimed or Claim to a reduced rate/ value
 					for Import VAT -->
 				<AdditionalInformation>
@@ -205,8 +204,8 @@
 						<IdentificationTypeCode>TRC</IdentificationTypeCode>
 					</Classification>
 					<DutyTaxFee>
-						<!--DE 4/17: Preference Type of 140 represents Exemption for end-use resulting from the Community Customs Tariff (CCT). -->
-						<DutyRegimeCode>140</DutyRegimeCode>
+						<!--DE 4/17: Preference Type of 300 represents Tariff Preference without conditions or limits. -->
+						<DutyRegimeCode>300</DutyRegimeCode>
 						<!--DE 4/3: Calculation of taxes - Tax type.
 							In this scenario, A00 indicating Customs duties. -->
 						<TypeCode>A00</TypeCode>
@@ -253,18 +252,24 @@
 					<PreviousCode>21</PreviousCode>
 				</GovernmentProcedure>
 				<!--DE 1/11: Goods imported under the shipwork end-use procedure.-->
-				<GovernmentProcedure>
+				<!--<GovernmentProcedure>
 					<CurrentCode>1SW</CurrentCode>
-				</GovernmentProcedure>
+				</GovernmentProcedure> -->
 				<!--DE 1/11: Relief from VAT Reduced value for VAT or exemption is claimed.-->
 				<GovernmentProcedure>
 					<CurrentCode>1RV</CurrentCode>
 				</GovernmentProcedure>
 				<!--DE 5/15: SG representing country code Singapore.
-					Where preference in D.E. 4/17 begins with a '1', this must be completed.-->
+					Where preference in D.E. 4/17 begins with a number other than ‘1’, this must be completed. Mandatory if DE 5/16 is present -->
 				<Origin>
 					<CountryCode>SG</CountryCode>
 					<TypeCode>1</TypeCode>
+				</Origin>
+				<!--DE 5/16: SG representing country code Singapore.
+                    Where preference in D.E. 4/17 begins with a '3', this must be mandatory.-->
+				<Origin>
+					<CountryCode>SG</CountryCode>
+					<TypeCode>2</TypeCode>
 				</Origin>
 				<Packaging>
 					<SequenceNumeric>1</SequenceNumeric>

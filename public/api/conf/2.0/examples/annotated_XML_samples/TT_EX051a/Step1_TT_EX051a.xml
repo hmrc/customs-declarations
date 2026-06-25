@@ -176,7 +176,7 @@
 				</AdditionalDocument>
 				<!-- DE 2/2: Additional information. 
 				    TAEXP Indicating Temporary Admission (TA): Re-exportation of goods previously imported to TA.
-					00400 Indicating self representation i.e. the declarant and tthe exporter are the same party.  -->
+					00400 Indicating self representation i.e. the declarant and the exporter are the same party.  -->
 				<AdditionalInformation>
 					<StatementCode>TAEXP</StatementCode>
 					<StatementDescription>05012024-01032024</StatementDescription>
@@ -195,7 +195,7 @@
 				</AdditionalInformation>
 				<Commodity>
 					<!-- DE 6/8: Description of the Goods.  -->
-					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+					<Description>Straw envelopes for bottles, made of certified straw in wraps of 1000</Description>
 					<Classification>
 						<!-- DE 6/14: Commodity Code - Combined Nomenclature Code.
 							46021910 to indicate Straw envelopes for bottles.  -->

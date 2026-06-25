@@ -322,7 +322,7 @@
 					Mandatory.
 					TypeCode of 1 to represent non-preferential origin. 
 					Where preference in DE 4/17 begins with '1', this must be completed.
-					Origin country is the Jamaica. -->
+					Origin country is Jamaica. -->
 				<Origin>
 					<CountryCode>JM</CountryCode>
 					<TypeCode>1</TypeCode>

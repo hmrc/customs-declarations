@@ -156,7 +156,7 @@
 					</InvoiceLine>
 				</Commodity>
 				<!--DE 1/10: Procedure. 
-					00 20 indicating Home use and free circulation, with no previous procedure.
+					00 20 indicating home use and free circulation, with no previous procedure.
 					Customs Clearance Request (CCR) for release from customs control to free circulation on 
 					payment of customs duty and other charges, where required, for goods where a customs declaration is not required. -->
 				<GovernmentProcedure>
@@ -174,7 +174,7 @@
 						Description of any marks and numbers on transport units or packages. -->
 					<MarksNumbersID>ADR/PA/00002</MarksNumbersID>
 					<!--DE 6/10: Number of Packages.
-						In this case 50. 
+						In this case 150. 
 						Note that this matches DE 6/18 because this is a single item declaration. -->
 					<QuantityQuantity>150</QuantityQuantity>
 					<!--DE 6/9: Type of Packages.

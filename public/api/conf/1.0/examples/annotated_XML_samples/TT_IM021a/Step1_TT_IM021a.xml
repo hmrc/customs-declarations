@@ -24,7 +24,7 @@
         <!--DE 2/5: LRN. Mandatory field. Traders own reference number this must be unique to the transaction -->
         <FunctionalReferenceID>7849431RGXDI</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type. Mandatory field. IM to represent an import declaration.-->
-        <!--DE 1/2: Additional Declaration Type. Mandatory field. D to represent an Pre Lodged declaration.-->
+        <!--DE 1/2: Additional Declaration Type. Mandatory field. D to represent a Pre Lodged declaration.-->
         <TypeCode>IMD</TypeCode>
         <!--DE 1/9: Total number of items. Mandatory field. 1 to represent a single item declaration.-->
         <GoodsItemQuantity>1</GoodsItemQuantity>
@@ -295,7 +295,7 @@
                 <!--DE 5/15: Country of Origin.
                                     TypeCode of 1 to represent non-preferential origin.
                                     Where preference in DE 4/17 begins with '1', this must be completed.
-                                    CountryCode cotains the code for the country from which the goods originated, in this case US.-->
+                                    CountryCode contains the code for the country from which the goods originated, in this case US.-->
                 <Origin>
                     <CountryCode>US</CountryCode>
                     <TypeCode>1</TypeCode>

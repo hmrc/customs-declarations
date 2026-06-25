@@ -18,7 +18,7 @@
 	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 		<!--
 			SCENARIO
-			Type K direct reperesentation scenario with DUCR and MUCR declared and no control.
+			Type K direct representation scenario with DUCR and MUCR declared and no control.
 			Agent employed by the exporter under direct rep.
 			Goods exported permanently.
 			

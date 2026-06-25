@@ -7,8 +7,7 @@
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--
             ***
-            Note KEL 277: On Exports declarations, where Direct or Indirect Representation is indicated in Data Element 3/21 (values "2" or "3"), Representative details will be incorrectly required (in either DE 3/19 - Name and Address details or DE 3/20 - Representative ID), even when the Representative is the same Party as the Declarant.
-            ***
+            
 
             SCENARIO
             Type A declaration using Electronic Licensing to be followed by cancellation.
@@ -42,7 +41,7 @@
         <!--DE 6/18: Total packages -->
         <TotalPackageQuantity>1</TotalPackageQuantity>
         <Agent>
-            <!--DE 3/20: Represeentative Identification Number.
+            <!--DE 3/20: Representative Identification Number.
                          EORI number of the Representative. -->
             <ID>GB150454489082</ID>
             <!-- DE 3/21: Representative Status Code.
@@ -95,7 +94,7 @@
             <ID>GB150454489082</ID>
         </Declarant>
         <!-- 5/12: Customs Office of Exit.
-                        'GB000084' Indicating Indicating London Heathrow Cargo -->
+                        'GB000084' Indicating London Heathrow Cargo -->
         <ExitOffice>
             <ID>GB000084</ID>
         </ExitOffice>

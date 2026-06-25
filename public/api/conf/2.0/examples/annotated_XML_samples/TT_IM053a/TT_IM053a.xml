@@ -114,7 +114,7 @@
 					<!--DE 6/8: Description of the goods.-->
 					<Description>Documentation and printed materials</Description>
 				</Commodity>
-				<!--DE 1/10: 00 02 indicating Home use and free circulation, with no previous procedure
+				<!--DE 1/10: 00 02 indicating home use and free circulation, with no previous procedure
 								Customs Clearance Request (CCR) for release from customs control to free circulation on 
 								payment of customs duty and other charges, where required, for goods where a customs declaration is not required.-->
 				<GovernmentProcedure>

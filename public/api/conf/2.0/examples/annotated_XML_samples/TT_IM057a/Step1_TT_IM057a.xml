@@ -186,7 +186,7 @@
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of the goods. -->
-					<Description>Fresh or Chilled Potatoe Seed</Description>
+					<Description>Fresh or Chilled Potato Seed</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - combined nomenclature code. -->
 						<ID>07011000</ID>
@@ -204,7 +204,7 @@
 						<IdentificationTypeCode>GN</IdentificationTypeCode>
 					</Classification>
 					<DutyTaxFee>
-						<!--DE 4/17: Preference Type of 100 represents represents no preference being claimed.-->
+						<!--DE 4/17: Preference Type of 100 represents no preference being claimed.-->
 						<DutyRegimeCode>100</DutyRegimeCode>
 						<TypeCode>A50</TypeCode>
 						<Payment>
@@ -271,7 +271,7 @@
 					<LineNumeric>1</LineNumeric>
 				</PreviousDocument>
 				<!--DE 4/13: Valuation indicator - mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
+					The code comprises four digits, each of which being either a 0 or a 1:
 					- First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
 					- Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
 					- Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.

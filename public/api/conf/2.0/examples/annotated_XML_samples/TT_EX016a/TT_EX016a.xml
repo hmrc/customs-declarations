@@ -19,7 +19,7 @@
 			Type K Exports declaration direct representation scenario with DUCR and CPD Carnet Referencedeclared
 			Goods exported permanently
 			Procedure code 0015 Additional procedure code 13C
-			Goods: Cylinder capacity exceeding 1 500 cm3 but not exceeding 3000 cm3
+			Goods: Cylinder capacity exceeding 1500 cm3 but not exceeding 3000 cm3
 			Agent employed by the exporter under direct rep.
 			Movement messages: EAL, EDL 
 			Expected Notification: DMSACC,DMSRCV1, DMSRCV2, DMSRES, DMSROG,DMSCLE
@@ -133,7 +133,7 @@
 				</AdditionalDocument>
 				<Commodity>
 					<!--DE 6/8: Description of the goods.-->
-					<Description>cylinder capacity exceeding 1 500 cm3 but not exceeding 3000 cm3</Description>
+					<Description>cylinder capacity exceeding 1500 cm3 but not exceeding 3000 cm3</Description>
 					<Classification>
 						<!--DE 6/14: Commodity code - combined nomenclature code.-->
 						<ID>87032390</ID>

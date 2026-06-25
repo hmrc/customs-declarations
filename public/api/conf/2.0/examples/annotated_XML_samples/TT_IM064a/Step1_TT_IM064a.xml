@@ -411,7 +411,7 @@
 			<!--DE 8/3: Guarantee Reference.
 				Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code is declared in DE 3/39 (Holder of the Authorisation), then this data element is mandatory. -->
 			<ID>GBCGU55320273485220191113093459</ID>
-			<!--DE 8/2: Guarantee Type and Cash Accouts.
+			<!--DE 8/2: Guarantee Type and Cash Accounts.
 				1 to represent that a customs comprehensive Guarantee is NOT being waived for the deferment of customs duty.
 				Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code '0' or '1' must be declared in this data element. -->
 			<SecurityDetailsCode>1</SecurityDetailsCode>

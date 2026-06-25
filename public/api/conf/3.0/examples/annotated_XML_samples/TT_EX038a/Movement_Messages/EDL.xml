@@ -1,21 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
-	<inv:messageCode>EDL</inv:messageCode>
-	<inv:agentDetails>
-		<inv:EORI>GB025115188654</inv:EORI>
-		<inv:agentLocation>a</inv:agentLocation>
-		<inv:agentRole>a</inv:agentRole>
-	</inv:agentDetails>
-	<inv:ucrBlock>
-		<inv:ucr>3GB238566566459-6OCD4MDN</inv:ucr>
-		<inv:ucrType>D</inv:ucrType>
-	</inv:ucrBlock>
-	<inv:goodsLocation>GBAUBELBFSBEL</inv:goodsLocation>
-	
-	<inv:goodsDepartureDateTime>2023-06-09T11:07:05.005Z</inv:goodsDepartureDateTime>
-	<inv:movementReference>58TWZZGDCYFVNABQ0KD3DI5D6</inv:movementReference>
-	<inv:transportDetails>
-		<inv:transportID>11CSCLGLOBE</inv:transportID>
-		<inv:transportMode>1</inv:transportMode>
-		<inv:transportNationality>GB</inv:transportNationality>
-	</inv:transportDetails>
-</inv:inventoryLinkingMovementRequest>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<n1:InventoryLinkingExportsInboundRequest xmlns:n1="http://www.hmrc.gov.uk/cds/inventorylinking/exportmovement" xmlns:gw="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1" xmlns:inv="http://gov.uk/customs/inventoryLinking/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hmrc.gov.uk/cds/inventorylinking/exportmovement DEC39_Root.xsd">
+	<n1:requestCommon>
+		<!-- <gw:badgeIdentifier>FCP127</gw:badgeIdentifier> -->
+		<gw:submitter>GB239355053000</gw:submitter>
+		<gw:clientID>bc549758-7c96-4a35-aaa9-582ecbdb28ca</gw:clientID>
+		<gw:conversationID>df881113-2942-4f36-bbbb-22cafa7193a6</gw:conversationID>
+		<gw:correlationID>f8f679ba-bec4-4e15-ba9b-b487b17274c2</gw:correlationID>
+		<gw:dateTimeStamp>2025-09-15T14:53:53.053+01:00</gw:dateTimeStamp>
+	</n1:requestCommon>
+	<n1:requestDetail>
+		<inv:inventoryLinkingMovementRequest>
+			<inv:messageCode>EDL</inv:messageCode>
+			<inv:ucrBlock>
+				<inv:ucr>5GB575801025632-8QS1JAV</inv:ucr>
+				<inv:ucrType>D</inv:ucrType>
+			</inv:ucrBlock>
+			<inv:goodsLocation>GBAUBELBFSBEL</inv:goodsLocation>
+			<inv:goodsDepartureDateTime>2025-09-15T14:53:53.053+01:00</inv:goodsDepartureDateTime>
+			<inv:movementReference>WH06K31SN1KR0BLRWBN4BZDVV</inv:movementReference>
+			<inv:transportDetails>
+				<inv:transportID>11CSCLGLOBE</inv:transportID>
+				<inv:transportMode>1</inv:transportMode>
+				<inv:transportNationality>GB</inv:transportNationality>
+			</inv:transportDetails>
+		</inv:inventoryLinkingMovementRequest>
+	</n1:requestDetail>
+</n1:InventoryLinkingExportsInboundRequest>

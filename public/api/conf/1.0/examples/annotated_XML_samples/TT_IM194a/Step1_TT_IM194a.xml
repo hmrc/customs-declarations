@@ -22,7 +22,7 @@
 			- DE 2/3: 1UKI, C600 and N820 declared at item level
 			- DE 3/39: UKIM and FZ declared at header level
 			- DE 5/23: FZ location code declared at header level
-			- DE 6/8: Goods decription including Free Zone (FZ) stock reference number at header level 
+			- DE 6/8: Goods description including Free Zone (FZ) stock reference number at header level 
 			
 			Expected notifications: DMSACC, DMSCLE
             
@@ -70,7 +70,7 @@
 			<ID>XI553202734852</ID>
 			<CategoryCode>DPO</CategoryCode>
 		</AuthorisationHolder>
-		<!-- DE 3/39: Holder of the Authoriation Identification Number.
+		<!-- DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of UKIM indicates that a good that otherwise would be considered "At Risk" of moving into the EU, must instead be considered "not at risk".
             The ID here is the EORI of the DPO authorised party.  -->
 		<AuthorisationHolder>
@@ -143,7 +143,7 @@
 				<SequenceNumeric>1</SequenceNumeric>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     This field is mandatory only where codes required.
-                    Document type: A document code of C600 indicaticates authorisation to operate a Free Zone (Freeport).
+                    Document type: A document code of C600 indicates authorisation to operate a Free Zone (Freeport).
                     Document identifier: The authorisation decision number for the Free Zone in the following format:
                     • 2 digit code identifying the member state of authorisation, e.g., GB
                     • 2 digit code indicating that a Free Zone authorisation is held, i.e., FZ

@@ -22,7 +22,7 @@
 			-DE 2/2: Additional Information Codes: NIIMP, NIREM.
 			-DE 2/3 Additional Document Code: 1UKI declared at item level
 			-DE 3/39: UKIM authorisation declared at header level
-			-DE 5/15 Country Of Origin: US
+			-DE 5/15 Country of Origin: US
 			-DE 1/10 Procedure Code: 40 00
 			-DE 1/11 Additional Procedure Code: 000
 			
@@ -66,7 +66,7 @@
 			<ID>XI553202734852</ID>
 			<CategoryCode>CGU</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 3/39: Holder of the Authoriation Identification Number.
+		<!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
             The ID here is the EORI of the DPO authorised party. -->
 		<AuthorisationHolder>

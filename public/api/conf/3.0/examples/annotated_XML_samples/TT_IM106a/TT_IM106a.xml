@@ -210,7 +210,7 @@
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
 						Worksheet to support calculation of the customs value and/or revenue calculations (for example: C&E 1154 for Outward Processing Relief).
 						Manual calculations required if the goods have been invoiced in more than one currency or a fixed rate of exchange has been stipulated in the contract of sale.
-						If a fixed rate of exchange has been used this is also to be declared on the attached document and rate declared inÂ DEÂ 4/15. -->
+						If a fixed rate of exchange has been used this is also to be declared on the attached document and rate declared in 4/15. -->
 				<AdditionalDocument>
 					<CategoryCode>9</CategoryCode>
 					<ID>See attached worksheet</ID>
@@ -334,7 +334,7 @@
 			</Importer>
 			<!--DE 2/1: Simplified Declarations/ Previous documents.
 				Previous document of ZDCR to show the DUCR assigned to the consignment.
-				Note: The DUCR is not mandatory for â€˜normalâ€™ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
+				Note: The DUCR is not mandatory for normal declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
 				<ID>2GB553202734852-12345</ID>

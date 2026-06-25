@@ -77,7 +77,7 @@
 		<!--DE 3/1: Exporter.
 			Exporter name and address is mandatory where no recognised EORI number has been entered into DE 3/2. -->
 		<Exporter>
-			<Name>Ginger Fruit And Veg Company</Name>
+			<Name>Ginger Fruit and Veg Company</Name>
 			<Address>
 				<CityName>Telford</CityName>
 				<CountryCode>GB</CountryCode>

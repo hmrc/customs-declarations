@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
 	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
 	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
-	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+	<Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_DMS.xsd ">
 		<!--
 			SCENARIO
 			A Trader submits a Type Z (H3) supplementary declaration "AT Risk" importing goods from RoW to NI to claim a full or partial suspension from customs duty (and where applicable excise duty and VAT) for goods entered to TA, which are being released from a Customs Warehouse.
@@ -19,13 +20,13 @@
 			Expected Notifications: DMSTAX(1), DMSACC, DMSTAX(2), DMSCLE.
 		-->
 		<AcceptanceDateTime>
-			<p1:DateTimeString formatCode="304">20240904093936+01</p1:DateTimeString>
+			<p1:DateTimeString formatCode="304">20251111110149+01</p1:DateTimeString>
 		</AcceptanceDateTime>
 		<!--Function Code of 9 to represent an original declaration-->
 		<FunctionCode>9</FunctionCode>
 		<!--DE 2/5: LRN.
 			Traders own reference number: this must be unique to the transaction-->
-		<FunctionalReferenceID>7847323GOY7Q</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7847767WIYE1</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			Mandatory field.
 			First two characters IM to represent an import declaration.	-->
@@ -130,14 +131,14 @@
 					<!--DE 5/23: Location of Goods - Identification of location.
 						The location code for Port of Belfast.
 						Goods moved via shipping container from GB to NI via port of Belfast. -->
-					<Name>BELBELBEL</Name>
+					<Name>CWP02511510001020231019133850</Name>
 					<!--DE 5/23: Location of Goods - Type of location.
-						A in this scenario to represent that it is a designated location. -->
-					<TypeCode>A</TypeCode>
+						B in this scenario to represent that it is a designated location. -->
+					<TypeCode>B</TypeCode>
 					<Address>
 						<!--DE 5/23: Location of Goods - Qualifier of the identification.
-							Type of ID of the location; U in this scenario for UN/LOCODE. -->
-						<TypeCode>U</TypeCode>
+							Type of ID of the location; Y in this scenario for UN/LOCODE. -->
+						<TypeCode>Y</TypeCode>
 						<!--DE 5/23: Location of Goods - Country.
 							Country code of the country where the goods may be examined; GB in this scenario. -->
 						<CountryCode>GB</CountryCode>
@@ -212,7 +213,7 @@
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     Mandatory if codes required.
-                    Document code Y900 to show the goods are not subject to CITES control â€“ complete statement/reason with: â€˜CITES Permits not requiredâ€™. -->
+                    Document code Y900 to show the goods are not subject to CITES control complete statement/reason with: ˜CITES Permits not required. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<Name>CITES Permits not required</Name>
@@ -345,7 +346,7 @@
 				(Note that this is item 1 from the EIDR record entry). -->
 			<PreviousDocument>
 				<CategoryCode>Y</CategoryCode>
-				<ID>20240904</ID>
+				<ID>20251111</ID>
 				<TypeCode>CLE</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

@@ -24,7 +24,7 @@
 			Frontier declaration: H1 additional declaration type A.
 			Direct-Representation.
 			Relief is being applied to the outright Duty.
-			General Gurantee Account being used to collect security via Method of Payment - S.
+			General Guarantee Account being used to collect security via Method of Payment - S.
 			Goods presented at Baltic Wharf, Wallasea Island (NILP).
 			
 			Note that this declaration uses a frontier declaration at Wallasea Island, Baltic Wharf (NILP) for test purposes only: for business use a pre-lodged declaration must be submitted because Baltic Wharf is listed as an 'Other listed location'. 
@@ -248,8 +248,8 @@
 		<ObligationGuarantee>
 			<ReferenceID>GAN212081</ReferenceID>
 			<!--DE 8/2: Guarantee type. 
-				7 to indicate that a Generatl Guarantee Account. -->
+				7 to indicate that a General Guarantee Account. -->
 			<SecurityDetailsCode>7</SecurityDetailsCode>
-		</ObligationGuarantee>
+		</ObligationGuarantee> 
 	</Declaration>
 </md:MetaData>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_DMS.xsd ">
 	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
 	<md:WCOTypeName>DEC</md:WCOTypeName>
 	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
@@ -21,6 +20,7 @@
 			- DE 2/2: NIIMP and NIREM declared at item level
 			- DE 2/3: 9081, 9U01, 1UKI declared at item level
 			- DE 4/17: 300 Preference Code
+			- DE 5/15: JP Country of Origin declared as now mandatory if De 5/16 is present
 			- DE 5/16: JP Country of Preferential Origin
 			- DE 6/14: 0201100021 Commodity Code
 			- DE 3/39: UKIM authorisation at header level
@@ -28,7 +28,7 @@
 		<!-- Function Code of 9 to represent an original declaration -->
 		<FunctionCode>9</FunctionCode>
 		<!-- DE 2/5: LRN. Mandatory field. Traders own reference number this must be unique to the transaction -->
-		<FunctionalReferenceID>U.7847323SIYWE</FunctionalReferenceID>
+		<FunctionalReferenceID>U.7927468T8ULR</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type. Mandatory field. IM to represent an import declaration.-->
 		<!--DE 1/2: Additional Declaration Type. Mandatory field. A to represent a supplementary pre-lodged declaration.-->
 		<TypeCode>IMA</TypeCode>
@@ -180,7 +180,7 @@
                     This is required as a Valuation Method of 1 to indicate transaction value has been declared in DE 4/16. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
-					<ID>12345/13.01.2024</ID>
+					<ID>12345/13.02.2026</ID>
 					<TypeCode>935</TypeCode>
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
@@ -321,6 +321,12 @@
 				<GovernmentProcedure>
 					<CurrentCode>000</CurrentCode>
 				</GovernmentProcedure>
+				<!--DE 5/15: Country of Origin. JP representing Japan.
+                    Where preference in D.E. 4/17 begins with a number other than ‘1’, this must be completed. Mandatory if DE 5/16 is present -->
+				<Origin>
+					<CountryCode>JP</CountryCode>
+					<TypeCode>1</TypeCode>
+				</Origin>
 				<!--DE 5/16: Country of Origin.
                     TypeCode of 2 to represent preferential origin.
                     CountryCode contains the code for the country from which the goods originated, in this case Japan.
@@ -356,7 +362,7 @@
                 As this is for a single item declaration, this should all be declared at header level..-->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>4XI553202734852-20240102</ID>
+				<ID>6XI553202734852-20240102</ID>
 				<TypeCode>DCR</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>

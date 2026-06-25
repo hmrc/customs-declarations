@@ -157,7 +157,7 @@
 					<CurrentCode>1H7</CurrentCode>
 				</GovernmentProcedure>
 				<!--DE 1/11: Additional Procedure Code.
-					C07 to indicate that its an consignments of negligible value. -->
+					C07 to indicate that its a consignments of negligible value. -->
 				<GovernmentProcedure>
 					<CurrentCode>C07</CurrentCode>
 				</GovernmentProcedure>

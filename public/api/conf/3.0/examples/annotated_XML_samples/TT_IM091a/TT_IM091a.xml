@@ -135,7 +135,7 @@
                 </AdditionalDocument>
                 <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     This field is mandatory if the codes are required.
-                    A document code of C400 indicates Other certificates: Presentation of the required "CITES" certificate. -->
+                    A document code of C400 indicates other certificates: Presentation of the required "CITES" certificate. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
                     <ID>GBICP54321</ID>

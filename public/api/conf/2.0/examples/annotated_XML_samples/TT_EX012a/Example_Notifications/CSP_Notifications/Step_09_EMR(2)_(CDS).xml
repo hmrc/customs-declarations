@@ -1,0 +1,19 @@
+<inventoryLinkingMovementTotalsResponse>
+	<messageCode>EMR</messageCode>
+	<crc>000</crc>
+	<goodsLocation>GBAUTBCTBCTBC</goodsLocation>
+	<masterUCR>GB/FCP1-CHIEF0712M01</masterUCR>
+	<declarationCount>1</declarationCount>
+	<masterROE>6</masterROE>
+	<masterSOE>3</masterSOE>
+	<entry>
+		<ucrBlock>
+			<ucr>0GB427168118378-0712CDS1</ucr>
+			<ucrType>D</ucrType>
+		</ucrBlock>
+		<entryStatus>
+			<roe>6</roe>
+			<soe>3</soe>
+		</entryStatus>
+	</entry>
+</inventoryLinkingMovementTotalsResponse>

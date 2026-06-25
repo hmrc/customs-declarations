@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inv:inventoryLinkingConsolidationRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EAC</inv:messageCode>			
+	<inv:masterUCR>GB/FCP1-CHIEF2104M1</inv:masterUCR>
+	<inv:ucrBlock>
+		<inv:ucr>1GB417869120000-AT01CHIEFD8</inv:ucr>
+		<inv:ucrType>D</inv:ucrType>
+	</inv:ucrBlock>
+</inv:inventoryLinkingConsolidationRequest>

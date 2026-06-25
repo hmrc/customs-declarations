@@ -1,0 +1,18 @@
+
+TT_EX08a
+
+SCENARIO:
+Dual running Exports pre-lodged inventory declaration on CHIEF (C21 declaration) which is arrived via CDS and moves to Type A Export Declaration
+
+Please note:
+Prior to testing, new MUCRs and DUCRs need to be generated, and injected into CHIEF.
+Dates and times will also need to be updated for each payload.
+
+Test steps for execution
+
+Step 1 - 1x Declaration in CHIEF with 1 DUCR
+Step 2 - EAL1 message with DUCR
+Step 3 - EAC message with MUCR + DUCR
+Step 4 - CST message with MUCR
+Step 5 - EAL2 message with MUCR
+Step 6 - EDL message with MUCR

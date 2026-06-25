@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EDL – Movement message used for creating Goods Departure messages.-->
+<inv:inventoryLinkingMovementRequest xmlns:inv="http://gov.uk/customs/inventoryLinking/v1">
+	<inv:messageCode>EDL</inv:messageCode>
+	<!--***
+		Note that as per the CDS ILE Technical Completion Matrix for Trade Test, the AgentDetails fields are not used for inventory linking messages. These fields will be removed in the next version of this sample.
+		***-->
+	<inv:agentDetails>
+		<!-- EORI number of the Community Systems Providers (CSPs). -->
+		<inv:EORI>GB239355053000</inv:EORI>
+	</inv:agentDetails>
+	<inv:ucrBlock>
+		<!--MUCR assigned to the consignment. Depart at MUCR level -->
+		<inv:ucr>GB/FCP1-0403CHIEFM01</inv:ucr>
+		<inv:ucrType>M</inv:ucrType>
+	</inv:ucrBlock>
+	<!-- ID to give a unique position of the location. LHRLHR Indicating London Heathrow. ANS Indicating shed ID -->
+	<inv:goodsLocation>GBAULHRLHRANS</inv:goodsLocation>
+	<!-- This should be today's Date. Please note that this time is 30 minutes afer EAL 1, 20 minutes after EAL 2 and 10 minutes after EAL 3 -->
+	<inv:goodsDepartureDateTime>2020-03-04T10:30:00</inv:goodsDepartureDateTime>
+	<inv:movementReference>Movement13</inv:movementReference>
+	<inv:transportDetails>
+		<inv:transportID>11CSCLGLOBE</inv:transportID>
+		<inv:transportMode>1</inv:transportMode>
+		<inv:transportNationality>GB</inv:transportNationality>
+	</inv:transportDetails>
+</inv:inventoryLinkingMovementRequest>

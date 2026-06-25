@@ -1,0 +1,59 @@
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+             xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
+             xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2"
+             xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+	<md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+	<md:WCOTypeName>DEC</md:WCOTypeName>
+	<md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+	<md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+	<md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+	<Declaration xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+	             xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31"
+	             xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
+	             xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2"
+	             xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6"
+	             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	             xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+		<!--This is an example of a cancellation message that has been applied to a declaration. -->
+		<!--This should be updated to today's date.-->
+		<AcceptanceDateTime>
+			<p1:DateTimeString formatCode="304">20210421110000+01</p1:DateTimeString>
+		</AcceptanceDateTime>
+		<!--Function Code of 13 to represent Request (Additional Message)-->
+		<FunctionCode>13</FunctionCode>
+		<!--The trader assigned reference to the additional message.
+			Note that this reference is independent of the declaration. -->
+		<FunctionalReferenceID>TC01_Invalidate2</FunctionalReferenceID>
+		<!--Declaration ID of the corresponding Declaration to be cancelled. -->
+		<ID>21GB4DPFIJ80YO8LA0</ID>
+		<!--Defines the type of additional message.
+			In this scenario, INV to indicate that this additional message is a cancellation. -->
+		<TypeCode>INV</TypeCode>
+		<!--The EORI of the submitter who has initiated the cancellation. -->
+		<Submitter>
+			<ID>GB239355053000</ID>
+		</Submitter>
+		<AdditionalInformation>
+			<!--Textual description of the reason for cancellation. -->
+			<StatementDescription>This is a duplicate, please cancel</StatementDescription>
+			<!--The type of Additional Information. 
+				'AES' should always be used for Cancellations and Amendments to indicate a free text reason is being provided. -->
+			<StatementTypeCode>AES</StatementTypeCode>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>42A</DocumentSectionCode>
+			</Pointer>
+			<Pointer>
+				<SequenceNumeric>1</SequenceNumeric>
+				<DocumentSectionCode>06A</DocumentSectionCode>
+			</Pointer>
+		</AdditionalInformation>
+		<Amendment>
+			<!--Used to indicate the reason for the amendment.
+				In this scenario, a code of 1 to indicate that the declaration is to be cancelled. -->
+			<ChangeReasonCode>1</ChangeReasonCode>
+		</Amendment>
+	</Declaration>
+</md:MetaData>

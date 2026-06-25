@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:MetaData xmlns:md="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2" xmlns="urn:wco:datamodel:WCO:DEC-DMS:2" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B" xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:wco:datamodel:WCO:DocumentMetaData-DMS:2 ../DocumentMetaData_2_DMS.xsd ">
+    <md:WCODataModelVersionCode>3.6</md:WCODataModelVersionCode>
+    <md:WCOTypeName>DEC</md:WCOTypeName>
+    <md:ResponsibleCountryCode>GB</md:ResponsibleCountryCode>
+    <md:ResponsibleAgencyName>HMRC</md:ResponsibleAgencyName>
+    <md:AgencyAssignedCustomizationVersionCode>v2.1</md:AgencyAssignedCustomizationVersionCode>
+    <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
+        <!--
+           SCENARIO
+
+           A trader submits an Exports Type K declaration, exporting goods from NI to ROW.
+
+           The trader enters the following information on the declaration:
+           -XI EORI's at DE3/20 Representative, DE1/18 Declarant, DE 3/2 Exporter and 3/32 Carrier ID.
+           -EIR Authorisation declared in DE 3/39.
+           -Procedure Code '1040' at item level in DE 1/10
+           -Additional Procedure Code '000' at item level in DE 1/11
+           -Additional Information Code 'NIEXP' in DE 2/2.
+           -Additional Information Code '00400' in D.E. 2/2
+
+           An EAL and EDL are submitted to arrive and then depart the goods at DUCR level using XI EORI as as submitter.
+           Expected Notification: DMSRCV, DMSRCV, DMSACC, DMSRES, DMSCLE, DMSEOG.
+       -->
+        <!--Function Code of 9 to represent an original declaration.-->
+        <FunctionCode>9</FunctionCode>
+        <!--DE 2/5: LRN.
+            The trader assigned reference to the declaration. -->
+        <FunctionalReferenceID>78494312SJXU</FunctionalReferenceID>
+        <!--DE 1/1: Declaration Type.
+            EX to represent an Export declaration.-->
+        <!--DE 1/2: Additional Declaration Type.
+            K to represent a trusted pre-lodged declaration.-->
+        <TypeCode>EXK</TypeCode>
+        <!--DE 1/9: Total Number of Items.
+            In this case, 1. -->
+        <GoodsItemQuantity>1</GoodsItemQuantity>
+        <!--DE 3/21: Representative Status Code.
+            2 indicating direct representation. -->
+        <Agent>
+            <ID>XI150454489082</ID>
+            <FunctionCode>2</FunctionCode>
+        </Agent>
+        <!--DE 3/39: Holder of the Authorisation Identification Number.-->
+        <AuthorisationHolder>
+            <ID>XI150454489082</ID>
+            <CategoryCode>EIR</CategoryCode>
+        </AuthorisationHolder>
+        <!--DE 7/14: Identity of active means of transport crossing the border. IdentificationTypeCode 40 Indicating 'IATA flight number'. -->
+        <BorderTransportMeans>
+            <ID>4029072022</ID>
+            <IdentificationTypeCode>40</IdentificationTypeCode>
+            <!--DE 7/15: Nationality of active means of transport crossing the border.
+                In this case GB. -->
+            <RegistrationNationalityCode>GB</RegistrationNationalityCode>
+            <!--DE 7/4: Mode of Transport at the Border.
+                ModeCode of 4 to represent Air transport transport as the mode of transport
+             at the border. -->
+            <ModeCode>4</ModeCode>
+        </BorderTransportMeans>
+        <!--DE 3/18: Declarant Identification Number.
+            EORI number of the Declarant. -->
+        <Declarant>
+            <ID>XI150454489082</ID>
+        </Declarant>
+        <!--DE 5/12 Customs Office of Exit.
+            Indicating Belfast International Airport. -->
+        <ExitOffice>
+            <ID>GB000014</ID>
+        </ExitOffice>
+        <!--DE 3/2: Exporter Identification Number.
+            EORI number of the Exporter. -->
+        <Exporter>
+            <ID>XI427168118378</ID>
+        </Exporter>
+        <GoodsShipment>
+            <!--DE 3/9: Consignee.
+                    Consignee name and address. -->
+            <Consignee>
+                <Name>Mr Consignee</Name>
+                <Address>
+                    <CityName>Cairo</CityName>
+                    <CountryCode>EG</CountryCode>
+                    <Line>Greater Cairo</Line>
+                    <PostcodeID>11776</PostcodeID>
+                </Address>
+            </Consignee>
+            <Consignment>
+                <!--DE 7/2: Container.
+                    '0' Indicating goods not arriving in container. -->
+                <ContainerCode>0</ContainerCode>
+                <GoodsLocation>
+                    <!--DE 5/23: Location of Goods - Identification of location.
+                        ID to give a unique position of the location.
+                        BELBFSBEL Indicating Belfast Airport. -->
+                    <Name>BELBFSBEL</Name>
+                    <!--DE 5/23: Location of Goods - Type of location.
+                        A in this scenario to represent that it is a Frontier or Frontier linked location. -->
+                    <TypeCode>A</TypeCode>
+                    <Address>
+                        <!--DE 5/23: Location of Goods - Qualifier of the identification.
+                            U in this scenario for UN/LOCODE. -->
+                        <TypeCode>U</TypeCode>
+                        <!--DE 5/23: Location of Goods - Country.
+                            Country code of the country where the goods may be examined.
+                            GB in this scenario. -->
+                        <CountryCode>GB</CountryCode>
+                    </Address>
+                </GoodsLocation>
+            </Consignment>
+            <!--DE 5/8: Country of Destination Code.
+                In this case, country code EG for Egypt. -->
+            <Destination>
+                <CountryCode>EG</CountryCode>
+            </Destination>
+            <GovernmentAgencyGoodsItem>
+                <!--DE 1/6: Goods Item Number.
+                    Sequential number of the goods item. -->
+                <SequenceNumeric>1</SequenceNumeric>
+                <AdditionalDocument>
+                    <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
+                        A document code of C514 indicates EIR - Authorisation for making a customs declaration through an entry in the declarant’s records. -->
+                    <CategoryCode>C</CategoryCode>
+                    <ID>XIEIR150454489082E20231019133850</ID>
+                    <TypeCode>514</TypeCode>
+                </AdditionalDocument>
+                <!--DE 2/2: Additional Information.
+                    NIEXP to be used when a movement is made from NI to GB or an NI to RoW export declaration is made.
+                    00400 for identity between declarant and exporter. Enter 'EXPORTER' to indicate self-representation by the exporter.-->
+                <AdditionalInformation>
+                    <StatementCode>NIEXP</StatementCode>
+                </AdditionalInformation>
+                <Commodity>
+                    <!--DE 6/8: Description of Goods.
+                        Description of the goods specific enough to enable classification - without repeating the CN code description in the Tariff. Classification ID 27160000 -->
+                    <Description>Soya bean seeds</Description>
+                    <GoodsMeasure>
+                        <!--DE 6/5: Gross Mass.
+                            Weight of the goods in kilograms including packaging. -->
+                        <GrossMassMeasure>1000</GrossMassMeasure>
+                        <!--DE 6/1: Net Mass.
+                            Weight of the goods in kilograms without any packaging. -->
+                        <NetNetWeightMeasure>500</NetNetWeightMeasure>
+                    </GoodsMeasure>
+                </Commodity>
+                <!--DE 1/10: Procedure.
+                    Requested procedure code 10 to represent permanent export or dispatch.
+                    Previous procedure code 40 to represent goods were previously for free circulation and home use. -->
+                <GovernmentProcedure>
+                    <CurrentCode>10</CurrentCode>
+                    <PreviousCode>40</PreviousCode>
+                </GovernmentProcedure>
+                <!--DE 1/11: Additional Procedure Code.
+                000 to indicate no additional procedure. -->
+                <GovernmentProcedure>
+                    <CurrentCode>000</CurrentCode>
+                </GovernmentProcedure>
+                <Packaging>
+                    <SequenceNumeric>1</SequenceNumeric>
+                    <!--DE 6/11: Shipping Marks.
+                        In this case '2379261ETT'. -->
+                    <MarksNumbersID>2379261ETT</MarksNumbersID>
+                    <!--DE 6/10: Number of Packages.
+                        In this case 10. -->
+                    <QuantityQuantity>1000</QuantityQuantity>
+                    <!--DE 6/9: Type of Packages.
+                        JB indicates Bag, jumbo. -->
+                    <TypeCode>JB</TypeCode>
+                </Packaging>
+            </GovernmentAgencyGoodsItem>
+            <!--DE 2/1: Previous Documents.
+                ZDCR to show the DUCR assigned to the consignment.
+                This is a mandatory field. -->
+            <PreviousDocument>
+                <CategoryCode>Z</CategoryCode>
+                <ID>3XI427168118378-ILPIW8E5R</ID>
+                <TypeCode>DCR</TypeCode>
+            </PreviousDocument>
+        </GoodsShipment>
+    </Declaration>
+</md:MetaData>

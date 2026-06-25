@@ -1,0 +1,8 @@
+<ns2:inventoryLinkingControlResponse xmlns:ns2="http://gov.uk/customs/inventoryLinking/v1" xmlns="http://gov.uk/customs/inventoryLinking/gatewayHeader/v1">
+    <ns2:messageCode>CST</ns2:messageCode>
+    <ns2:actionCode>1</ns2:actionCode>
+    <ns2:ucr>
+        <ns2:ucr>GB/FCP1-CHIEF2001M30</ns2:ucr>
+        <ns2:ucrType>M</ns2:ucrType>
+    </ns2:ucr>
+</ns2:inventoryLinkingControlResponse>

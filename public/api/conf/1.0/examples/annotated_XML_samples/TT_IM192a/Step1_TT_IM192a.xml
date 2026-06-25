@@ -20,7 +20,7 @@
 			<Declaration xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
 				<!--
             SCENARIO:
-			A Trader submits a Type K pre-lodged GL C21iEIDR NOP declaration "Not At Risk" 
+			A Trader submits a Type K pre-lodged GL C21iEIDR NOP declaration "Not at Risk" 
 			for the simultaneous release for free circulation and home use for goods 
 			entering NI via direct transport from GB.  The trader also submits a GPN and has 
 			declared APC '1SG' in the declaration.
@@ -57,7 +57,7 @@
 					<ID>XI553202734852</ID>
 					<CategoryCode>EIR</CategoryCode>
 				</AuthorisationHolder>
-				<!--DE 3/39: Holder of the Authoriation Identification Number.
+				<!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of UKIM indicates that a good that otherwise would be considered "At Risk" of moving into the EU, 
 			must instead be considered "Not At Risk".
             The ID here is the EORI of the UKIM authorised party. -->

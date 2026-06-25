@@ -166,7 +166,7 @@
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references 
 					A document code of N018 indicates that an ATR Certificate Customs Document has been obtained for the movement of products entitled to preferential Customs Union duty rates, for import from Turkey. 
-					LPCOExemptionCode: AE indicates Document attached â€“ exhausted by (or only applies to) this entry (document returned to the trader).-->
+					LPCOExemptionCode: AE indicates Document attached exhausted by (or only applies to) this entry (document returned to the trader).-->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
 					<ID>N0180054037</ID>
@@ -209,7 +209,7 @@
 				</AdditionalDocument>
 				<!--DE 2/2: Additional Information. 
 					A document code of U099 indicates that there is an certificate EUR.1 bearing the endorsement "Derogation-Regulation (EU). 2017/882". Please enter the certificate reference number
-					LPCOExemptionCode: AE indicates Document attached â€“ exhausted by (or only applies to) this entry (document 
+					LPCOExemptionCode: AE indicates Document attached exhausted by (or only applies to) this entry (document 
 					returned to the trader).-->
 				<AdditionalDocument>
 					<CategoryCode>U</CategoryCode>
@@ -224,7 +224,7 @@
 				</AdditionalInformation>
 				<!--DE 2/2: Additional Information. 
 					This field is mandatory, this represents goods are imported from GB into Northern Ireland. 
-					Statment description of 300 is the identity between declarant and consignor.-->
+					Statment description of 400 is the identity between declarant and consignor.-->
 				<AdditionalInformation>
 					<StatementCode>EUPRF</StatementCode>
 					<StatementDescription>400</StatementDescription>
@@ -348,7 +348,7 @@
 				</PreviousDocument>
 				<!--DE 4/13: Valuation indicator.
 					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™: 
+					The code comprises four digits, each of which being either a 0 or a 1: 
 					- First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
 					- Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
 					- Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.

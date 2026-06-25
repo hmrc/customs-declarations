@@ -592,7 +592,7 @@
 					<AdditionCode>0000</AdditionCode>
 				</ValuationAdjustment>
 			</GovernmentAgencyGoodsItem>
-			<!--DE 3/16: Importer Identification Numnber.
+			<!--DE 3/16: Importer Identification Number.
 				EORI number of the Importer. -->
 			<Importer>
 				<ID>GB553202734852</ID>

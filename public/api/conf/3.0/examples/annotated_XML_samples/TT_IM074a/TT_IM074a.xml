@@ -14,7 +14,7 @@
             The Trader declares:
              - 'NIIMP' in D.E. 2/2 at Item level, as the goods are being imported from ROW to NI and are deemed to be 'At Risk'.
              - Procedure Code 40 00 entered in D.E. 1/10
-             - A Document Code of C400 in D.E. 2/3 to satify an Import Control CITES measure, as mandated by EU Tariff.
+             - A Document Code of C400 in D.E. 2/3 to satisfy an Import Control CITES measure, as mandated by EU Tariff.
              - Supplementary Units (p/st) entered in D.E. 6/2
              - A valid commodity code for importing Live Horses is entered within D.E. 6/14 and D.E. 6/15
             The declaration will be successfully accepted and cleared.
@@ -179,7 +179,7 @@
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     Document indicating that purebred breeding animals are to be entered in a breeding book maintained by a breed society or registered in a breeding register maintained by a breeding operation (Regulation (EU) 2016/1012, Article 37)
-                    Purebred animals imported for breeding prposes shall be accompanied by: the zootechnical certificate referred to in Article 30(5) or Article 32 of Regulation (EU) 2016/1012; a document indicating that they are to be entered in a breeding book maintained by a breed society or registered in a breeding register maintained by a breeding operation. -->
+                    Purebred animals imported for breeding purposes shall be accompanied by: the zootechnical certificate referred to in Article 30(5) or Article 32 of Regulation (EU) 2016/1012; a document indicating that they are to be entered in a breeding book maintained by a breed society or registered in a breeding register maintained by a breeding operation. -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
 					<ID>1234567801</ID>

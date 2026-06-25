@@ -125,7 +125,7 @@
 					<LPCOExemptionCode>AC</LPCOExemptionCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of Y922 - Import of fur other than cats and dogs fur. -->
+					A document code of Y922 - Import of fur other than cats and dog fur. -->
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>Cat/Dog Fur-96060</ID>

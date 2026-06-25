@@ -170,7 +170,7 @@
 					<!--DE 2/3: Documents produced, certificates and authorisations, additional references. This field is mandatory if the codes are required.
 								A document code of C644 indicates Certificate of inspection for organic products.
 								Name: A free text description of the Reason where required by the Document Status Code.
-								LPCOExemptionCode: GE indicates document with the goods Ã¢â‚¬â€œ exhausted by (or only applies to) this entry. -->
+								LPCOExemptionCode: GE indicates document with the goods - exhausted by (or only applies to) this entry. -->
 					<AdditionalDocument>
 						<CategoryCode>C</CategoryCode>
 						<ID>0054039</ID>

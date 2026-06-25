@@ -39,7 +39,7 @@
 		<!--DE 2/5: LRN.
 			Mandatory.
 			Declarants's own reference number - this must be unique to the transaction. -->
-		<FunctionalReferenceID>U.7847323CG5G5</FunctionalReferenceID>
+		<FunctionalReferenceID>U.786752326XR1</FunctionalReferenceID>
 		<!--DE 1/1: Declaration Type.
 			Mandatory.
 			IM to represent an import declaration. -->
@@ -206,13 +206,13 @@
 				<AdditionalDocument>
 					<CategoryCode>Y</CategoryCode>
 					<ID>Excluded from Reg 834/2007</ID>
-					<Name>Reason for Waiver</Name>
+					<Name>Excluded from Reg 834/2007</Name>
 					<TypeCode>929</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     Worksheet to support calculation of the customs value and/or revenue calculations (for example: C&E 1154 for Outward Processing Relief).
                     Manual calculations required if the goods have been invoiced in more than one currency or a fixed rate of exchange has been stipulated in the contract of sale.
-                    If a fixed rate of exchange has been used this is also to be declared on the attached document and rate declared inÂ DEÂ 4/15. -->
+                    If a fixed rate of exchange has been used this is also to be declared on the attached document and rate declared in DE 4/15. -->
 				<AdditionalDocument>
 					<CategoryCode>N</CategoryCode>
 					<ID>GBPHC012345</ID>
@@ -234,11 +234,6 @@
 					<Name>Form C and E955</Name>
 					<TypeCode>55D</TypeCode>
 					<LPCOExemptionCode>AE</LPCOExemptionCode>
-				</AdditionalDocument>
-				<AdditionalDocument>
-					<CategoryCode>Y</CategoryCode>
-					<ID>Phytosanitary Certificate Exempt</ID>
-					<TypeCode>252</TypeCode>
 				</AdditionalDocument>
 				<Commodity>
 					<!--DE 6/8: Description of Goods.
@@ -291,7 +286,7 @@
 							Weight of the goods in kilograms without any packaging. -->
 						<NetNetWeightMeasure>1500</NetNetWeightMeasure>
 					</GoodsMeasure>
-					<!--DE 4/14: Item Price/ Amount. 
+					<!--DE 4/14: Item Price/ Amount.
 						Mandatory.
 						The invoice was issued with a value of 1000 and the currency was in GBP. -->
 					<InvoiceLine>
@@ -303,7 +298,7 @@
 				<CustomsValuation>
 					<MethodCode>4</MethodCode>
 				</CustomsValuation>
-				<!--DE 1/10: Procedure. 
+				<!--DE 1/10: Procedure.
 					Mandatory.
 					Requested Procedure of 40 indicating entry for free circulation and home use of goods.
 					Previous Procedure of 00 indicating there is no previous procedure. -->
@@ -311,15 +306,15 @@
 					<CurrentCode>40</CurrentCode>
 					<PreviousCode>00</PreviousCode>
 				</GovernmentProcedure>
-				<!--DE 1/11: Additional Procedure. 
+				<!--DE 1/11: Additional Procedure.
 					Mandatory
-					1FV to indicate use of a provisional customs value pending sale of the goods, after import, or where no evidence is held to prove a declared value for equivalent good (â€œItem Priceâ€). -->
+					1FV to indicate use of a provisional customs value pending sale of the goods, after import, or where no evidence is held to prove a declared value for equivalent good (Item Price). -->
 				<GovernmentProcedure>
 					<CurrentCode>1FV</CurrentCode>
 				</GovernmentProcedure>
-				<!--DE 5/15: Country of Origin. 
+				<!--DE 5/15: Country of Origin.
 					Mandatory.
-					TypeCode of 1 to represent non-preferential origin. 
+					TypeCode of 1 to represent non-preferential origin.
 					Where preference in DE 4/17 begins with '1', this must be completed.
 					Origin country is the United States. -->
 				<Origin>
@@ -328,21 +323,21 @@
 				</Origin>
 				<Packaging>
 					<SequenceNumeric>1</SequenceNumeric>
-					<!--DE 6/11: Shipping Marks. 
+					<!--DE 6/11: Shipping Marks.
 						Mandatory.
 						Marks on the packages. -->
 					<MarksNumbersID>BX-1234228/34</MarksNumbersID>
-					<!--DE 6/10: Number of Packages. 
+					<!--DE 6/10: Number of Packages.
 						Mandatory.
 						There are 50 packages of the commodity for this goods item. -->
 					<QuantityQuantity>50</QuantityQuantity>
-					<!--DE 6/9: Type of Packages. 
+					<!--DE 6/9: Type of Packages.
 						Mandatory.
 						BX to represent Box. -->
 					<TypeCode>BX</TypeCode>
 				</Packaging>
 			</GovernmentAgencyGoodsItem>
-			<!--DE 3/16: Importer Identification Number. 
+			<!--DE 3/16: Importer Identification Number.
 				Mandatory only when a recognised ID no. is available
 				EORI number of the Importer. -->
 			<Importer>
@@ -350,29 +345,29 @@
 			</Importer>
 			<!--DE 2/1: Simplified Declarations/ Previous documents.
 				Previous document to show the DUCR assigned to the consignment.
-				Note: The DUCR is not mandatory for â€˜normalâ€™ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
+				Note: The DUCR is not mandatory for "normal" declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>2GB553202734852-12345</ID>
+				<ID>5GB553202734852-12345</ID>
 				<TypeCode>DCR</TypeCode>
 			</PreviousDocument>
 			<!--DE 2/1: Simplified Declarations/ Previous documents.
-				Previous document of Z355 to show the MRN for the entry summary declaration. 
+				Previous document of Z355 to show the MRN for the entry summary declaration.
 				Note: As this is for a single item declaration, this should all be declared at header level. -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
-				<ID>22GB34F7Y1O2CX8PT4</ID>
+				<ID>25GB34F7Y1O2CX8PT4</ID>
 				<TypeCode>355</TypeCode>
 				<LineNumeric>1</LineNumeric>
 			</PreviousDocument>
 		</GoodsShipment>
 		<ObligationGuarantee>
 			<!--DE 8/3: Guarantee Reference.
-				Mandatory for certain procedure codes/MOP. 
+				Mandatory for certain procedure codes/MOP.
 				Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code is declared in DE 3/39 (Holder of the Authorisation), then this data element is mandatory.
 				ID indicates that the guarantee is not required, as stated in DE 8/2. -->
 			<ID>Guaranteenotrequired</ID>
-			<!--DE 8/2: Guarantee Type and Cash Accounts. 
+			<!--DE 8/2: Guarantee Type and Cash Accounts.
 				Mandatory for certain procedure codes/MOP.
 				0 to represent that a customs comprehensive Guarantee is being waived for the deferment of customs duty.
 				Where document code C505 is declared in DE 2/3 (Document Codes) and authorisation type code CGU is declared in DE 3/39 (Holder of the Authorisation), then code '0' or '1' must be declared in this data element. -->

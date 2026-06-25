@@ -38,7 +38,7 @@
 			1 goods item on the declaration.  -->
 <GoodsItemQuantity>2</GoodsItemQuantity>
 <!-- DE 6/18: Total Packages. 
-			10 packages on teh declaration.  -->
+			10 packages on the declaration.  -->
 <TotalPackageQuantity>25</TotalPackageQuantity>
 <BorderTransportMeans>
 <!-- DE 7/14: Identity of active means of transport crossing the border.
@@ -148,7 +148,7 @@
 					Sequential number of the goods item.  -->
 <SequenceNumeric>1</SequenceNumeric>
 <!-- DE 8/6: Statistical Value.
-					Enter the statistical value for the goods item in GBP (Â£ sterling), irrespective of the currency used in invoice currency.  -->
+					Enter the statistical value for the goods item in GBP (£ sterling), irrespective of the currency used in invoice currency.  -->
 <StatisticalValueAmount currencyID="GBP">200</StatisticalValueAmount>
 <!-- DE 8/5 Nature of Transaction. 
 					Enter, a 2-digit code (second digit is optional).
@@ -170,7 +170,7 @@
 </AdditionalInformation>
 <Commodity>
 <!-- DE 6/8: Description of the Goods.  -->
-<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+<Description>Straw envelopes for bottles, made of certified straw in wraps of 1000</Description>
 <Classification>
 <!-- DE 6/14: Commodity Code - Combined Nomenclature Code.
 							46021910 to indicate Straw envelopes for bottles.  -->
@@ -231,7 +231,7 @@
 					Sequential number of the goods item.  -->
 <SequenceNumeric>2</SequenceNumeric>
 <!-- DE 8/6: Statistical Value.
-					Enter the statistical value for the goods item in GBP (Â£ sterling), irrespective of the currency used in invoice currency.  -->
+					Enter the statistical value for the goods item in GBP (£ sterling), irrespective of the currency used in invoice currency.  -->
 <StatisticalValueAmount currencyID="GBP">200</StatisticalValueAmount>
 <!-- DE 8/5 Nature of Transaction. 
 					Enter, a 2-digit code (second digit is optional).
@@ -242,7 +242,7 @@
 					- Second digit (1) represents 'Outright purchase/sale'.  -->
 <TransactionNatureCode>11</TransactionNatureCode>
 <!-- DE 2/2: Additional information. 
-					00400 Indicating self representation i.e. the declarant and tthe exporter are the same party.  -->
+					00400 Indicating self representation i.e. the declarant and the exporter are the same party.  -->
 <AdditionalInformation>
 <StatementCode>00400</StatementCode>
 <StatementDescription>EXPORTER</StatementDescription>
@@ -253,7 +253,7 @@
 </AdditionalInformation>
 <Commodity>
 <!-- DE 6/8: Description of the Goods.  -->
-<Description>Plastic Bottle made of certified staw in wraps of 1000</Description>
+<Description>Plastic Bottle made of certified straw in wraps of 1000</Description>
 <Classification>
 <!-- DE 6/14: Commodity Code - Combined Nomenclature Code.
 							46021910 to indicate Straw envelopes for bottles.  -->

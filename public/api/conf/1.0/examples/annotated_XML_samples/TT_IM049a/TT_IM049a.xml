@@ -235,7 +235,7 @@
 					<SequenceNumeric>1</SequenceNumeric>
 					<!--DE 6/11: Shipping marks on the packages.-->
 					<MarksNumbersID>BX-1234228/34</MarksNumbersID>
-					<!--DE 6/10: Number of packages, in this case 50.-->
+					<!--DE 6/10: Number of packages, in this case 80.-->
 					<QuantityQuantity>80</QuantityQuantity>
 					<!--DE 6/9: Type of packages - BX to represent Box.-->
 					<TypeCode>BX</TypeCode>

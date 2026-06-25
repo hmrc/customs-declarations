@@ -29,7 +29,7 @@
 		<TypeCode>IMA</TypeCode>
 		<!--DE 1/9: Total number of goods items on the declaration.-->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
-		<!--DE 6/18: Total packages - 50. Note that this matches DE 6/10 because this is a single item
+		<!--DE 6/18: Total packages - 100. Note that this matches DE 6/10 because this is a single item
 			declaration.-->
 		<TotalPackageQuantity>100</TotalPackageQuantity>
 		<!--DE 2/6: Deferred payment. This is mandatory when deferred payment is used.
@@ -183,7 +183,7 @@
 					<TypeCode>053</TypeCode>
 				</AdditionalDocument>
 				<!--DE 2/3: Documents produced, certificates and authorisations, additional references.
-					A document code of C057 indicates Copy of the declaration of conformity â€“ Option A, as referred in Article 1.2 and in the Annex of Regulation (EU) 2016/879.
+					A document code of C057 indicates Copy of the declaration of conformity Option A, as referred in Article 1.2 and in the Annex of Regulation (EU) 2016/879.
 					LPCOExemptionCode: AE indicates Document attached â€” exhausted by (or only applies to) this entry (document returned to the trader). -->
 				<AdditionalDocument>
 					<CategoryCode>C</CategoryCode>
@@ -315,7 +315,7 @@
 				</Packaging>
 				<!--DE 4/13: Valuation indicator.
 					Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-					The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™:
+					The code comprises four digits, each of which being either a 0 or a 1:
 					- First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
 					- Second digit: 0 = there are no restrictions as to the disposal
 					or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.

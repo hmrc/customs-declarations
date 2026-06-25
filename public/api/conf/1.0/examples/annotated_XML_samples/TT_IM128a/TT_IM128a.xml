@@ -25,14 +25,14 @@
 
         <!--Acceptance Date is present on all supplementary declarations. -->
         <AcceptanceDateTime>
-            <p1:DateTimeString formatCode="304">20241129171233+01</p1:DateTimeString>
+            <p1:DateTimeString formatCode="304">20260210145239+01</p1:DateTimeString>
         </AcceptanceDateTime>
         <!-- Function Code of 9 to represent an original declaration. -->
         <FunctionCode>9</FunctionCode>
         <!--DE 2/5: LRN.
             Mandatory field.
             Traders own reference number this must be unique to the transaction. -->
-        <FunctionalReferenceID>U.7867523ELLOB</FunctionalReferenceID>
+        <FunctionalReferenceID>U.7849454ZZSMB</FunctionalReferenceID>
         <!--DE 1/1: Declaration Type.
             Mandatory field.
             IM to represent an import declaration.-->
@@ -60,7 +60,7 @@
         </AdditionalDocument>
         <!--DE 3/39: Holder of the Authorisation Identification Number.
             Mandatory if authorisation is required to declare goods to procedure.
-            Type code of AEOC indicates this is the EORI number of the Authorised Economic Operator â€” Customs simplifications. -->
+            Type code of AEOC indicates this is the EORI number of the Authorised Economic Operator Customs simplifications. -->
         <AuthorisationHolder>
             <ID>XI553202734852</ID>
             <CategoryCode>AEOC</CategoryCode>
@@ -209,7 +209,7 @@
                     This field is mandatory if the codes are required.
                     A document code of C505 indicates CGU - Authorisation for the provision of a customs comprehensive guarantee, including possible reduction or waiver.
                     In this scenario, a waiver to the CCG authorisation is being used (indicated by the status code of CC), and therefore the ID also indicates that a waiver is being used.
-                    LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code â€“ CCG not required. -->
+                    LPCOExemptionCode: CC indicates Authorisation issued under the Community Customs Code CCG not required. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
                     <ID>GBCGUGuaranteenotrequired</ID>
@@ -223,7 +223,7 @@
                     LPCOExemptionCode: AC indicates Document attached for certification by customs. -->
                 <AdditionalDocument>
                     <CategoryCode>N</CategoryCode>
-                    <ID>12345/13.11.2024</ID>
+                    <ID>12345/19.02.2026</ID>
                     <TypeCode>935</TypeCode>
                     <LPCOExemptionCode>AC</LPCOExemptionCode>
                 </AdditionalDocument>
@@ -231,7 +231,7 @@
                     This field is mandatory if the codes are required.
                     A document code of C644 indicates Certificate of inspection for organic products.
                     Name: A free text description of the Reason where required by the Document Status Code.
-                    LPCOExemptionCode: GE indicates document with the goods â€“ exhausted by (or only applies to) this entry. -->
+                    LPCOExemptionCode: GE indicates document with the goods exhausted by (or only applies to) this entry. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
                     <ID>0054039</ID>
@@ -323,11 +323,6 @@
                     </DutyTaxFee>
                     <DutyTaxFee>
                         <!--DE 4/4: Tax Base.
-                                In this scenario, SPR indicating Small Producer Relief. -->
-                        <SpecificTaxBaseQuantity unitCode="SPR">7.77</SpecificTaxBaseQuantity>
-                    </DutyTaxFee>
-                    <DutyTaxFee>
-                        <!--DE 4/4: Tax Base.
                             In this scenario, LPA indicating LPA (Litre pure (100%) alcohol) Required for informational purposes not to be used in calculation -->
                         <SpecificTaxBaseQuantity unitCode="LPA">40</SpecificTaxBaseQuantity>
                     </DutyTaxFee>
@@ -400,13 +395,13 @@
                     YSDE to show the MRN for the previous simplified declaration. -->
                 <PreviousDocument>
                     <CategoryCode>Y</CategoryCode>
-                    <ID>24GBCDS123456789R1</ID>
+                    <ID>26GBCDS123456789R1</ID>
                     <TypeCode>SDE</TypeCode>
                     <LineNumeric>1</LineNumeric>
                 </PreviousDocument>
                 <!--DE 4/13: Valuation Indicator.
                     Mandatory if method 1 is being used. (See DE 4/16 where Method 1 has been entered.)
-                    The code comprises four digits, each of which being either a â€˜0â€™ or a â€˜1â€™
+                    The code comprises four digits, each of which being either a '˜0' or a '˜1' 
                      - First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
                      - Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
                      - Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
@@ -423,13 +418,13 @@
             </Importer>
             <!--DE 2/1: Simplified Declarations/Previous Documents.
                 This data element can be declared at a header or item level - as this is for a single item declaration, this should be declared at header level.
-                Category Code: Mandatory field. This identifies the class or kind of document being declared. The previous document, represented by â€˜Zâ€™.
+                Category Code: Mandatory field. This identifies the class or kind of document being declared. The previous document, represented by '˜Z'.
                 ID: Mandatory field. This represents the data needed to recognise and identify the document.
                 TypeCode: Mandatory field. This serves to identify the type of document: 355 indicates ENS - Entry Summary Declaration.
                 LineNumeric: Optional field. This is the goods item number. It is used to identify which item of the previous document is being referred to. Where the previous document referred to or contained only a single goods item, this component may be left blank. -->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>
-                <ID>24GB553202734852</ID>
+                <ID>26GB553202734852</ID>
                 <TypeCode>355</TypeCode>
                 <LineNumeric>1</LineNumeric>
             </PreviousDocument>
@@ -441,7 +436,7 @@
                 In CDS, the MUCR (MCR) is not required on a sup dec. -->
             <PreviousDocument>
                 <CategoryCode>Y</CategoryCode>
-                <ID>4GB553202734852-2611EC02</ID>
+                <ID>6GB553202734852-0902EC02</ID>
                 <TypeCode>DCR</TypeCode>
             </PreviousDocument>
             <!--DE 4/1: Delivery Terms.

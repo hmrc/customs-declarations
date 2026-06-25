@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><inv:InventoryLinkingImportsValidateMovementResponse xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
-<inv:entryNumber>24GBA512KES15RYA07</inv:entryNumber>
-<inv:entryVersionNumber>1</inv:entryVersionNumber>
-<inv:inventoryConsignmentReference>2GB427168118378-12345</inv:inventoryConsignmentReference>
-<inv:irc>000</inv:irc>
-</inv:InventoryLinkingImportsValidateMovementResponse>

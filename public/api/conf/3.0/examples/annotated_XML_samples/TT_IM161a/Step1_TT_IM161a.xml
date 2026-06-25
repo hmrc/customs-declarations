@@ -11,7 +11,7 @@
             SCENARIO RoW to NI
             ROW-NI Not At Risk + Valuation Method 4 + APC '1SV'.
 
-            An agent submits a Type A (H1) declaration importing goods from ROW to NI 'Not At Risk'
+            An agent submits a Type A (H1) declaration importing goods from ROW to NI 'Not at Risk'
 
             The agent enters the following information on the declaration:
             - Goods: Live horses, asses, mules and hinnies.
@@ -41,7 +41,7 @@
             IM to represent an import declaration. -->
         <!--DE 1/2: Additional Declaration Type.
             Mandatory field.
-            A to represent an Pre Lodged declaration. -->
+            A to represent a Pre Lodged declaration. -->
         <TypeCode>IMA</TypeCode>
         <!--DE 1/9: Total Number of Items.
             Mandatory field.

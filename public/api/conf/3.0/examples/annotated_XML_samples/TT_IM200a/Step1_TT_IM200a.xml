@@ -16,7 +16,7 @@
         - DE 1/1: IM
         - DE 1/2: A
         - DE 1/10: 40 00
-        - DE 3/16: GB Eori
+        - DE 3/16: GB EORI
         - DE 3/40: FR1 and VRN declared at header level
     -->
 		<!--Function Code of 9 to represent an original declaration. -->
@@ -296,7 +296,7 @@
 			</Importer>
 			<!--DE 2/1: Simplified Declarations/ Previous documents.
                 Previous document to show the DUCR assigned to the consignment.
-                Note: The DUCR is not mandatory for Ã¢â‚¬ËœnormalÃ¢â‚¬â„¢ declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
+                Note: The DUCR is not mandatory for normal declarations, only if CFSP or where the business process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
 			<PreviousDocument>
 				<CategoryCode>Z</CategoryCode>
 				<ID>5GB553202734852-12345</ID>

@@ -16,7 +16,7 @@
 			Goods: 5209310000 (White woven cotton fabric sheet material on 10 reels. Material consisting of 86% cotton, with weight of 200g/m2, STK12345). 
 			Supplementary declaration: H4 additional declaration type Z. 
 			Importer is not an AEO authorisation holder. 
-			Self representaion declaration. 
+			Self representation declaration. 
 			Goods presented at the port of Belfast. 
 			Expected Notifications: DMSTAX(1), DMSACC, DMSTAX(2), DMSCLE. 
          -->
@@ -183,7 +183,7 @@
 					ECO01 - Goods of any kind the processing of goods not listed in Annex 71-02 to Delegated Regulation (EU) 2015/2446.  -->
 <AdditionalInformation>
 <StatementCode>ECO01</StatementCode>
-<StatementDescription>Goods Of Any Kind</StatementDescription>
+<StatementDescription>Goods of Any Kind</StatementDescription>
 </AdditionalInformation>
 <!-- DE 2/2: Additional information. 
 					GEN45 statement - unique reference number, allocated to the consignment/work.  -->
@@ -268,7 +268,7 @@
 <!-- DE 5/15: Country of Origin. 
 					TypeCode of 1 to represent non-preferential origin. 
 					Where preference in DE 4/17 begins with '1', this must be completed.
-					CountryCode cotains the code for the country from which the goods originated, in this case GB.  -->
+					CountryCode contains the code for the country from which the goods originated, in this case GB.  -->
 <Origin>
 <CountryCode>GB</CountryCode>
 <TypeCode>1</TypeCode>
@@ -299,7 +299,7 @@
 <Importer>
 <ID>XI025115100010</ID>
 </Importer>
-<!-- DE 2/1: Simplified Declaration/Previous Doucments. 
+<!-- DE 2/1: Simplified Declaration/Previous Documents. 
 				YCLE to show the date of the EIDR record(Note that this is item 1 from the EIDR record entry).  -->
 <PreviousDocument>
 <CategoryCode>Y</CategoryCode>
@@ -307,7 +307,7 @@
 <TypeCode>CLE</TypeCode>
 <LineNumeric>1</LineNumeric>
 </PreviousDocument>
-<!-- DE 2/1: Simplified Declaration/Previous Doucments. 
+<!-- DE 2/1: Simplified Declaration/Previous Documents. 
 				Previous document to show the DUCR assigned to the consignment. 
 				This is a mandatory field.  -->
 <PreviousDocument>

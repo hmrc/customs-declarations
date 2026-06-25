@@ -7,10 +7,10 @@
     </md:AgencyAssignedCustomizationVersionCode>
     <Declaration xmlns:clm5ISO42173A="urn:un:unece:uncefact:codelist:standard:ISO:ISO3AlphaCurrencyCode:2012-08-31" xmlns:p1="urn:wco:datamodel:WCO:Declaration_DS:DMS:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:6" xsi:schemaLocation="urn:wco:datamodel:WCO:DEC-DMS:2 ../WCO_DEC_2_DMS.xsd ">
         <!--SCENARIO
-            CDSNIP-706 - Declaration and Validation of Goods At Risk Status Codes
+            
 
             RoW to NI - NIIMP [NIREM + NIHIS] (Apportionment - Goods Item Split Into 2)
-            A Trader submits a Type A (H1) declaration importing goods from RoW to NI. The Trader seeks to declare goods "Not At Risk" as a proportion
+            A Trader submits a Type A (H1) declaration importing goods from RoW to NI. The Trader seeks to declare goods "Not at Risk" as a proportion
             (80%) of the imported goods will remain in NI whilst the remaining proportion (20%) will NOT remain in NI. The goods item are therefore declared in 2 parts:
             Procedure code 40 00, with 000 (no additional procedure code)
             Standard declaration: H1 additional declaration type A – Release for Free Circulation.
@@ -56,7 +56,7 @@
             <ID>XI553202734852</ID>
             <CategoryCode>CGU</CategoryCode>
         </AuthorisationHolder>
-        <!--DE 3/39: Holder of the Authoriation Identification Number.
+        <!--DE 3/39: Holder of the Authorisation Identification Number.
             An authorisation type code of UKIM indicates that a good that otherwise would be considered “at risk” of moving into the EU, must instead be considered “not at risk”.
             The ID here is the EORI of the DPO authorised party. -->
         <AuthorisationHolder>

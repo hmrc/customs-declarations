@@ -90,7 +90,7 @@
 		<!--DE 8/5: Nature of transaction: 1 to indicate transactions involving actual or
                	  intended transfer of ownership from residents to non-residents against financial
                	  or other compensation.
-				  The scond digit 1: to indicate outright purchase/sale-->
+				  The second digit 1: to indicate outright purchase/sale-->
 			<TransactionNatureCode>11</TransactionNatureCode>
 			<Consignee>
 			<!--DE 3/9: Consignee Name and Address (Mandatory when DE 3/10 is not completed). 

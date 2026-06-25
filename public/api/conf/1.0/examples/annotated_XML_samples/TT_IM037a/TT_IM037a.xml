@@ -1,4 +1,4 @@
-﻿<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
+<md:MetaData xmlns="urn:wco:datamodel:WCO:DEC-DMS:2"
            	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            	xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D12B"
            	xmlns:ds="urn:wco:datamodel:WCO:MetaData_DS-DMS:2"
@@ -40,7 +40,7 @@
 		<!--DE 1/1: Declaration Type. 
 			IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type. 
-			A to represent a To represent an arrived frontier standard declaration. -->
+			A to represent an arrived frontier standard declaration. -->
 		<TypeCode>IMA</TypeCode>
 		<!--DE 1/9: Total Number of Items.
 			Single item declaration. -->
@@ -261,7 +261,7 @@
 					<!--DE 5/15: Country of Origin. 
 						TypeCode of 1 to represent non-preferential origin.
 						Where preference in DE 4/17 begins with '1', this must be completed.
-						CountryCode cotains the code for the country from which the goods originated, in this case Russia. -->
+						CountryCode contains the code for the country from which the goods originated, in this case Russia. -->
 					<CountryCode>RU</CountryCode>
 					<TypeCode>1</TypeCode>
 				</Origin>

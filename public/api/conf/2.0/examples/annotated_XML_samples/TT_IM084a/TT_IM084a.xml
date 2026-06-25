@@ -37,7 +37,7 @@
 			<ID>GB201909014000</ID>
 			<CategoryCode>FP</CategoryCode>
 		</AuthorisationHolder>
-		<!--DE 7/4: Mode of Transport at the border. This is a mandatory field. ModeCode of 1 to represent Maritime/Sea transport as the mode of transport at the border.-->
+		<!--DE 7/4: Mode of Transport at the border. This is a mandatory field. ModeCode of 4 to represent Maritime/Sea transport as the mode of transport at the border.-->
 		<BorderTransportMeans>
 			<ModeCode>4</ModeCode>
 		</BorderTransportMeans>
@@ -155,8 +155,8 @@
 					</GoodsMeasure>
 				</Commodity>
 				<!--DE 1/10: Procedure. This is a mandatory field.
-						Requested procedure of 71 indicating entry to a Customs Warehouse.
-						Previous Procedure of 22 indicating re-importation of goods after temporary export outside the EU for process, adaptation, re-working or making up.-->
+						Requested procedure of 78 indicating goods being removed from Customs Warehouse.
+						Previous Procedure of 00 indicating released from customs warehouse>
 				<GovernmentProcedure>
 					<CurrentCode>78</CurrentCode>
 					<PreviousCode>00</PreviousCode>

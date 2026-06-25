@@ -37,7 +37,7 @@
 			1 goods item on the declaration. -->
 		<GoodsItemQuantity>1</GoodsItemQuantity>
 		<!--DE 6/18: Total Packages.
-			10 packages on teh declaration. -->
+			10 packages on the declaration. -->
 		<TotalPackageQuantity>10</TotalPackageQuantity>
 		<!--DE 3/20: Representative Identification Number. -->
 		<Agent>
@@ -179,7 +179,7 @@
 				<TransactionNatureCode>11</TransactionNatureCode>
 				<Commodity>
 					<!--DE 6/8: Description of the Goods. -->
-					<Description>Straw envelopes for bottles, made of certified staw in wraps of 1000</Description>
+					<Description>Straw envelopes for bottles, made of certified straw in wraps of 1000</Description>
 					<Classification>
 						<!--DE 6/14: Commodity Code - Combined Nomenclature Code.
 							46021910 to indicate Straw envelopes for bottles. -->

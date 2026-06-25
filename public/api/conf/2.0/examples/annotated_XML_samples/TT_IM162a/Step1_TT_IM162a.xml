@@ -10,8 +10,8 @@
             Please note this sample now fails due to quota exhaustion. This is an expected failure for now.
             We expect to see this working again in January when quota values are updated.
             SCENARIO
-            CDSNIP-714 -Declaring and Claiming Quota under Windsor Framework
-            A Trader submits a Type A (H1) declaration importing goods from RoW to NI. Goods are deemed "Not At Risk". Trader wants to claim UK quota on these goods.
+            Declaring and Claiming Quota under Windsor Framework
+            A Trader submits a Type A (H1) declaration importing goods from RoW to NI. Goods are deemed "Not at Risk". Trader wants to claim UK quota on these goods.
             Goods imported and declared to free-circulation and home use of non-union goods, with no previous procedure.
             Procedure code 4000 Additional Procedure code 000.
             Additional Document codes! NIIMP and NIQUO are declared.
@@ -31,7 +31,7 @@
 		<!--DE 1/1: Declaration Type.
             IM to represent an import declaration. -->
 		<!--DE 1/2: Additional Declaration Type.
-            A to represent a To represent an arrived frontier standard declaration. -->
+            A to represent a an arrived frontier standard declaration. -->
 		<TypeCode>IMA</TypeCode>
 		<!--DE 1/9: Total Number of Items,
             Number of goods items on the declaration.
@@ -178,10 +178,10 @@
 				</AdditionalInformation>
 				<!--DE 2/2: Additional Information.
                     This field represents goods Code used when a trader wishes to claim UK Quota on RoW-NI movements
-                    that they have determined to be "Not At Risk"are de-risked from ROW into Northern Ireland. -->
+                    that they have determined to be "Not at Risk"are de-risked from ROW into Northern Ireland. -->
 				<AdditionalInformation>
 					<StatementCode>NIQUO</StatementCode>
-					<StatementDescription>Declared when trader claims UK Quota on RoW-NI movements deemed "Not At Risk"</StatementDescription>
+					<StatementDescription>Declared when trader claims UK Quota on RoW-NI movements deemed "Not at Risk"</StatementDescription>
 				</AdditionalInformation>
 				<Commodity>
 					<!--DE 6/8: Description of Goods.

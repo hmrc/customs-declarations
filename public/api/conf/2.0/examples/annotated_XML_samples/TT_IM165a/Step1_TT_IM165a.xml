@@ -182,9 +182,9 @@
                     Mandatory if codes required.
                     C506 indicates DPO - Authorisation for the deferment of payment.
                     Provide the authorisation decision number for the deferment of payment authorisation in format:
-                    Ã¢â‚¬Â¢ 2 digit code identifying the member state of authorisation, for example, GB
-                    Ã¢â‚¬Â¢ 3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
-                    Ã¢â‚¬Â¢ Followed by the authorisation reference number.
+                    2 digit code identifying the member state of authorisation, for example, GB
+                    3 digit code indicating that a deferment of payment authorisation is held, that is, DPO
+                    Followed by the authorisation reference number.
                     No document status code is required. -->
                 <AdditionalDocument>
                     <CategoryCode>C</CategoryCode>
@@ -193,7 +193,7 @@
                 </AdditionalDocument>
                 <!--DE 2/3: Documents produced, certificates and authorisations, additional references.
                     Mandatory if codes required.
-                    Document code Y900 to show the goods are not subject to CITES control Ã¢â‚¬â€œ complete statement/reason with: Ã¢â‚¬ËœCITES Permits not requiredÃ¢â‚¬â„¢. -->
+                    Document code Y900 to show the goods are not subject to CITES control Ã¢â‚¬â€œ complete statement/reason with: CITES Permits not required. -->
                 <AdditionalDocument>
                     <CategoryCode>Y</CategoryCode>
                     <Name>CITES Permits not required</Name>
@@ -259,7 +259,7 @@
                 </AdditionalDocument>
                 <!--DE 2/2 Additional Information.
                     00500 to indicate the identity between declarant and importer.
-                    In the description enter Ã¢â‚¬ËœImporterÃ¢â‚¬â„¢. -->
+                    In the description enter Importer. -->
                 <AdditionalInformation>
                     <StatementCode>00500</StatementCode>
                     <StatementDescription>importer</StatementDescription>
@@ -302,7 +302,7 @@
                         <IdentificationTypeCode>TRC</IdentificationTypeCode>
                     </Classification>
                     <Classification>
-                        <!--DE 6/17: Commodity Code Ã¢â‚¬â€œ National Additional Codes.
+                        <!--DE 6/17: Commodity Code National Additional Codes.
                            X345 to represent UK tax type 345, Spirits exceeding 22%. -->
                         <ID>X345</ID>
                         <IdentificationTypeCode>GN</IdentificationTypeCode>
@@ -448,11 +448,11 @@
                 </Packaging>
                 <!--DE 4/13: Valuation Indicator.
                     Mandatory in this scenario as a valuation method of 1 has been used in DE 4/16.
-                    The code comprises four digits, each of which being either a Ã¢â‚¬Ëœ0Ã¢â‚¬â„¢ or a Ã¢â‚¬Ëœ1Ã¢â‚¬â„¢:
-                    Ã¢â‚¬Â¢ First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
-                    Ã¢â‚¬Â¢ Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
-                    Ã¢â‚¬Â¢ Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
-                    Ã¢â‚¬Â¢ Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
+                    The code comprises four digits, :
+                    First digit: 0 = there is no price influence as a result of a Party Relationship between the buyer and seller.
+                    Second digit: 0 = there are no restrictions as to the disposal or use of the goods by the buyer in accordance with Article 70(3)(a) of the Code.
+                    Third digit: 0 = the sale or price is not subject to some condition or consideration in accordance with Article 70(3)(b) of the Code.
+                    Fourth digit: 0 = the sale is not subject to an arrangement under which part of the proceeds of any subsequent resale, disposal or use accrues directly or indirectly to the seller. -->
                 <ValuationAdjustment>
                     <AdditionCode>0000</AdditionCode>
                 </ValuationAdjustment>
@@ -465,7 +465,7 @@
             </Importer>
             <!--DE 2/1: Simplified Declarations/Previous documents.
                 ZDCR to show the DUCR assigned to the consignment.
-                Note: The DUCR is not mandatory for Ã¢â‚¬ËœnormalÃ¢â‚¬â„¢ declarations, only if CFSP or where the business
+                Note: The DUCR is not mandatory for normal declarations, only if CFSP or where the business
                 process mandates a DUCR for validation (such as for validating a PEACH record via ALVS etc). -->
             <PreviousDocument>
                 <CategoryCode>Z</CategoryCode>

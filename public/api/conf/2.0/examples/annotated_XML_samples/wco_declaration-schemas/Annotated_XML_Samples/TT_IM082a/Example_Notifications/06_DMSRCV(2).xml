@@ -1,0 +1,46 @@
+<MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>02</FunctionCode>
+        <FunctionalReferenceID>06f98dbcc7bc4122918e3aa0fca3f743</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20210709111933Z</DateTimeString>
+        </IssueDateTime>
+        <AdditionalInformation>
+            <StatementCode>smartErrorMsg</StatementCode>
+            <StatementDescription>Value per kilo appears too high for this commodity</StatementDescription>
+            <StatementTypeCode>1</StatementTypeCode>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>07B</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>53A</DocumentSectionCode>
+            </Pointer>
+        </AdditionalInformation>
+        <Error>
+            <ValidationCode>CDS13000</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+        </Error>
+        <Declaration>
+            <FunctionalReferenceID>TT_IM02c_v1.2_0907_01</FunctionalReferenceID>
+            <ID>21GB7IQC4FGWJZ5GR0</ID>
+            <VersionID>2</VersionID>
+        </Declaration>
+    </Response>
+</MetaData>

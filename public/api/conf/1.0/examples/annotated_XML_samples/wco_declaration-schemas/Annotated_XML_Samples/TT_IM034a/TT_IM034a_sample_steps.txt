@@ -1,0 +1,21 @@
+Sample steps
+************
+
+1.	Submit payload
+
+2.	Receive validate movement response from CSP, where 000 is a Match. 
+
+3. 	Trader Notifications:
+    02 DMSRCV
+    13 DMSTAX
+    50 DMSALV
+
+4.	Submit GAN
+
+5.	Receive validate movement response from CSP, where 000 is a Match.
+
+6.	Trader Notifications:
+    02 DMSRCV
+    01 DMSACC
+    13 DMSTAX
+    50 DMSALV

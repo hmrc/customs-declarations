@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<inv:inventoryLinkingImportsGoodsArrival xmlns:inv="http://gov.uk/customs/inventoryLinkingImport/v1">
-	<!--ID of the declaration assigned by Customs, being a specific customs ID or a Movement Reference Number (MRN)-->
-	<inv:entryNumber>19GB9QWJDL941FGVR9</inv:entryNumber>
-	<!-- Version number of the declaration before processing the amendment -->
-	<inv:entryVersionNumber>2</inv:entryVersionNumber>
-	<!-- Inventory Consignment Reference number which matches that within the declaration payload MUCR -->
-	<inv:inventoryConsignmentReference>GB/1234-:3333HB</inv:inventoryConsignmentReference>
-</inv:inventoryLinkingImportsGoodsArrival>

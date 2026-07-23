@@ -1,0 +1,56 @@
+<MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>03</FunctionCode>
+        <FunctionalReferenceID>00904c7bc8d74bf2b821e9d2ad49f93e</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20210712142145Z</DateTimeString>
+        </IssueDateTime>
+        <AdditionalInformation>
+            <StatementDescription>Relation Error: This preference code is not applicable, for this commodity code and country combination.</StatementDescription>
+            <StatementTypeCode>1</StatementTypeCode>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>07B</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>53A</DocumentSectionCode>
+            </Pointer>
+        </AdditionalInformation>
+        <Error>
+            <Description>Relation Error: This preference code is not applicable, for this commodity code and country combination.</Description>
+            <ValidationCode>CDS40013</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>23A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>50A</DocumentSectionCode>
+                <TagID>164</TagID>
+            </Pointer>
+        </Error>
+        <Declaration>
+            <FunctionalReferenceID>TT_IM29a_120721_01</FunctionalReferenceID>
+            <ID>21GB7N7BNUEAWKIKR5</ID>
+            <RejectionDateTime>
+                <DateTimeString formatCode="304">20210712142145Z</DateTimeString>
+            </RejectionDateTime>
+            <VersionID>1</VersionID>
+        </Declaration>
+    </Response>
+</MetaData>

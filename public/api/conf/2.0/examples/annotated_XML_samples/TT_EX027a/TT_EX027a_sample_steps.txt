@@ -1,5 +1,0 @@
-Steps to follow for TT_EX27a:
-
-Step 1 - Submit type A Declaration with 1xDUCR via CDS.
-Step 2 - Submit EAL with DUCR .
-Step 3 - Submit EDL with DUCR.

@@ -1,0 +1,6 @@
+Sample steps
+************
+
+Step 1 - Submit type F Declaration with DUCR via CDS.
+Step 2 - Submit EAL with DUCR.
+Step 3 - Submit EDL with DUCR.

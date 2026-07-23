@@ -1,0 +1,15 @@
+Sample Guidance
+***************
+A CSP submits an Imports Type A, UK Licence Quota Validation declaration importing goods from ROW to GB. The declaration payload for TT_IM44a is used in this sample. 
+
+The CSP then submits an API query to retrieve all declared declaration data using the following parameters:
+MRN (*M) - 'Declaration ID'
+Declaration Version Number (*O) - (if blank, most recent version must be returned)
+Declaration Submission Channel - Blank
+
+https://api.qa.tax.service.gov.uk/customs/declarations-information/mrn/{mrn}/full
+
+The list will return the matching version of the declaration that matches the input search parameter displaying all of the declared data elements.
+
+*M - Mandatory
+*O - Optional"

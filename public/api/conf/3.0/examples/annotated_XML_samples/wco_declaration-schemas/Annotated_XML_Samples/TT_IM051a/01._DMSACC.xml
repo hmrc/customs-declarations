@@ -1,0 +1,23 @@
+<MetaData>
+	<WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+	<WCOTypeName>RES</WCOTypeName>
+	<ResponsibleCountryCode/>
+	<ResponsibleAgencyName/>
+	<AgencyAssignedCustomizationCode/>
+	<AgencyAssignedCustomizationVersionCode/>
+	<Response>
+		<FunctionCode>01</FunctionCode>
+		<FunctionalReferenceID>09899bd5104f43258570c245a7f0028d</FunctionalReferenceID>
+		<IssueDateTime>
+			<DateTimeString formatCode="304">20250812102701Z</DateTimeString>
+		</IssueDateTime>
+		<Declaration>
+			<AcceptanceDateTime>
+				<DateTimeString formatCode="304">20250812102657Z</DateTimeString>
+			</AcceptanceDateTime>
+			<FunctionalReferenceID>U.7867523IVST2</FunctionalReferenceID>
+			<ID>25GB8V9LA8TL2F0AR9</ID>
+			<VersionID>1</VersionID>
+		</Declaration>
+	</Response>
+</MetaData>

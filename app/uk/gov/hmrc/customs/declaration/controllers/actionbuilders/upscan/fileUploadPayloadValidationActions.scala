@@ -25,9 +25,10 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders._
-import uk.gov.hmrc.customs.declaration.model.upscan.DocumentType
+import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, DocumentType}
 import uk.gov.hmrc.customs.declaration.services.{DeclarationsConfigService, FileUploadXmlValidationService}
 
+import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.Node
@@ -50,6 +51,7 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
   private val declarationIdLabel = "DeclarationID"
   private val documentTypeLabel = "DocumentType"
   private val fileGroupSizeLabel = "FileGroupSize"
+  private val batchIdLabel = "BatchID"
   private val fileSequenceNoLabel = "FileSequenceNo"
   private val filesLabel = "Files"
   private val fileLabel = "File"
@@ -83,6 +85,11 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
             val declarationId = DeclarationId((xml \ declarationIdLabel).text)
             val fileGroupSize = FileGroupSize((xml \ fileGroupSizeLabel).text.trim.toInt)
 
+            // if batch id is present it means request is coming from cds-file-upload-frontend
+            val maybeBatchId: Option[BatchId] =
+              (xml \ batchIdLabel).headOption
+                .map(node => BatchId(UUID.fromString(node.text.trim)))
+
             val files: Seq[FileUploadFile] = (xml \ filesLabel \ "_").collect {
               case file =>
                 val fileSequenceNumber = FileSequenceNo((file \ fileSequenceNoLabel).text.trim.toInt)
@@ -92,7 +99,11 @@ class FileUploadPayloadValidationComposedAction @Inject()(val fileUploadPayloadV
 
             }
 
-            val fileUpload = FileUploadRequest(declarationId, fileGroupSize, files.sortWith(_.fileSequenceNo.value < _.fileSequenceNo.value))
+            val fileUpload = FileUploadRequest(
+              declarationId,
+              fileGroupSize,
+              files.sortWith(_.fileSequenceNo.value < _.fileSequenceNo.value),
+              maybeBatchId)
 
             additionalValidation(fileUpload) match {
               case Right(_) =>

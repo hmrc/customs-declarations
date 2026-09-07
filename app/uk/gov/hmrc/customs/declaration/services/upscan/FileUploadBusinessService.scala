@@ -21,8 +21,8 @@ import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.connectors.upscan.UpscanInitiateConnector
 import uk.gov.hmrc.customs.declaration.controllers.ErrorResponse
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
-import uk.gov.hmrc.customs.declaration.model._
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
+import uk.gov.hmrc.customs.declaration.model.*
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.{FileUploadFile, ValidatedFileUploadPayloadRequest}
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchFile, BatchId, FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
@@ -34,7 +34,7 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
-import scala.xml._
+import scala.xml.*
 
 @Singleton
 class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiateConnector,
@@ -99,11 +99,33 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
         request.fileUploadRequest.files(index).fileSequenceNo, 1, request.fileUploadRequest.files(index).maybeDocumentType)
     }
 
-    val metadata = FileUploadMetadata(request.fileUploadRequest.declarationId, extractEori(request.authorisedAs).get, sfId,
-      BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, dateTimeService.nowUtc(), batchFiles)
-
-    fileUploadMetadataRepo.create(metadata)
+    request.fileUploadRequest.maybeBatchId match {
+      case None =>
+        // same as usual: path not deferred
+        fileUploadMetadataRepo.create(metadata(batchFiles, sfId, BatchId(uuidService.uuid()), deferred = false))
+      case Some(batchId) =>
+        // if it doesn't exist -> create else 
+        fileUploadMetadataRepo.fetchByBatchId(batchId, sfId).flatMap {
+          case None =>
+            fileUploadMetadataRepo.create(metadata(batchFiles, sfId, batchId, deferred = true))
+          //TODO verify if already completed?
+          case Some(md) =>
+            fileUploadMetadataRepo.addFiles(batchId, sfId, batchFiles).map(_.isDefined)
+        }
+    }
   }
+
+  private def metadata[A](batchFiles: Seq[BatchFile], sfId: SubscriptionFieldsId, batchId: BatchId, deferred: Boolean)
+                         (using request: ValidatedFileUploadPayloadRequest[A]): FileUploadMetadata =
+    FileUploadMetadata(
+      request.fileUploadRequest.declarationId,
+      extractEori(request.authorisedAs).get,
+      sfId,
+      batchId,
+      request.fileUploadRequest.fileGroupSize.value,
+      dateTimeService.nowUtc(),
+      batchFiles,
+      deferred = deferred)
 
   private def serialize(payloads: Seq[UpscanInitiateResponsePayload]): NodeSeq = {
 

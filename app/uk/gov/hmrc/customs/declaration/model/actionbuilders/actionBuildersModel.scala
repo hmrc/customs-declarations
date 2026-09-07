@@ -19,7 +19,7 @@ package uk.gov.hmrc.customs.declaration.model.actionbuilders
 import play.api.mvc.{Request, Result, WrappedRequest}
 import uk.gov.hmrc.customs.declaration.controllers.CustomHeaderNames.*
 import uk.gov.hmrc.customs.declaration.model.*
-import uk.gov.hmrc.customs.declaration.model.upscan.DocumentType
+import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, DocumentType}
 
 import java.time.ZonedDateTime
 import scala.annotation.unused
@@ -148,7 +148,8 @@ trait HasXmlBody {
   val xmlBody: NodeSeq
 }
 
-case class FileUploadRequest(declarationId: DeclarationId, fileGroupSize: FileGroupSize, files: Seq[FileUploadFile])
+// If maybeBatchId is present it means it's a cds-file-upload-frontend request -> build metadata with deferred = true
+case class FileUploadRequest(declarationId: DeclarationId, fileGroupSize: FileGroupSize, files: Seq[FileUploadFile], maybeBatchId: Option[BatchId] = None)
 
 case class FileUploadFile(fileSequenceNo: FileSequenceNo, maybeDocumentType: Option[DocumentType], successRedirect: Option[String], errorRedirect: Option[String]) {
 

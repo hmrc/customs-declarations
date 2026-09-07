@@ -38,6 +38,7 @@
         <xs:sequence>
             <xs:element type="DeclarationIDType" name="DeclarationID"/>
             <xs:element type="MinOneInt" name="FileGroupSize"/>
+            <xs:element type="xs:string" name="BatchID" minOccurs="0"/>
             <xs:element type="FilesType" name="Files" />
         </xs:sequence>
     </xs:complexType>

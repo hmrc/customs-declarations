@@ -34,20 +34,23 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMetadataRepo,
                                                             connector: FileTransmissionConnector,
-                                                            config: DeclarationsConfigService,
+                                                            config: DeclarationsConfigService, //TODO replace by FileTransmissionRequestBuilder
                                                             logger: DeclarationsLogger)
-                                                           (implicit ec: ExecutionContext) {
+                                                           (using ExecutionContext) {
 
-  def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(implicit r: HasConversationId, hc: HeaderCarrier): Future[Unit] = {
+  def persistAndCallFileTransmission(csId: SubscriptionFieldsId, ready: UploadedReadyCallbackBody)(using HasConversationId, HeaderCarrier): Future[Unit] = {
     repo.update(
       csId,
       ready.reference,
       CallbackFields(ready.uploadDetails.fileName, ready.uploadDetails.fileMimeType, ready.uploadDetails.checksum, ready.uploadDetails.uploadTimestamp, ready.downloadUrl)
-    ).flatMap{
+    ).flatMap {
       case None =>
         val errorMsg = s"database error - can't find record with file reference [${ready.reference}]"
         logger.error(errorMsg)
         Future.failed(new IllegalStateException(errorMsg))
+      case Some(metadata) if metadata.deferred =>
+        // no need to do anything here. We're just waiting for /file-upload/complete
+        Future.successful(())
       case Some(metadata) =>
         logger.debug(s"updated fileUploadMetadata: $metadata")
         maybeFileTransmission(ready, metadata) match {
@@ -60,7 +63,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
               logger.info(s"successfully called file transmission service with batchId [${fileTransmission.batch.id.toString}], callbackUrl [${fileTransmission.callbackUrl.toString}] and fileReference [${fileTransmission.file.reference.toString}]")
               ()
             }
-      }
+        }
     }
   }
 
@@ -73,7 +76,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
         ftf,
         FileTransmissionInterface("DEC64", "1.0.0"),
         extractFileProperties(ready, md, bf)
-    )
+      )
   }
 
   private def extractFileProperties(@unused ready: UploadedReadyCallbackBody, md: FileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {

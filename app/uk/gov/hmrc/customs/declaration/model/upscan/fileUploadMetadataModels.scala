@@ -42,43 +42,43 @@ case class BatchId(value: UUID) extends AnyVal{
   override def toString: String = value.toString
 }
 object BatchId {
-  implicit val writer: Writes[BatchId] = Writes[BatchId] { x => JsString(x.value.toString) }
-  implicit val reader: Reads[BatchId] = Reads.of[UUID].map(new BatchId(_))
+  given writer: Writes[BatchId] = Writes[BatchId] { x => JsString(x.value.toString) }
+  given reader: Reads[BatchId] = Reads.of[UUID].map(new BatchId(_))
 }
 
 case class DocumentType(value: String) extends AnyVal{
   override def toString: String = value.toString
 }
 object DocumentType {
-  implicit val writer: Writes[DocumentType] = Writes[DocumentType] { x => JsString(x.value) }
-  implicit val reader: Reads[DocumentType] = Reads.of[String].map(new DocumentType(_))
+  given writer: Writes[DocumentType] = Writes[DocumentType] { x => JsString(x.value) }
+  given reader: Reads[DocumentType] = Reads.of[String].map(new DocumentType(_))
 }
 
 case class FileReference(value: UUID) extends AnyVal{
   override def toString: String = value.toString
 }
 object FileReference {
-  implicit val writer: Writes[FileReference] = Writes[FileReference] { x => JsString(x.value.toString) }
-  implicit val reader: Reads[FileReference] = Reads.of[UUID].map(new FileReference(_))
+  given writer: Writes[FileReference] = Writes[FileReference] { x => JsString(x.value.toString) }
+  given reader: Reads[FileReference] = Reads.of[UUID].map(new FileReference(_))
 }
 
 case class CallbackFields(name: String, mimeType: String, checksum: String, uploadTimestamp: Instant, outboundLocation: URL)
 
 object CallbackFields {
-  implicit val dateWriter: Writes[Instant] = Writes[Instant] { x =>
+  given dateWriter: Writes[Instant] = Writes[Instant] { x =>
     JsString(x.toString)
   }
 
-  implicit val dateReader: Reads[Instant] = Reads[Instant] {
+  given dateReader: Reads[Instant] = Reads[Instant] {
     case JsString(value) =>
       Try(Instant.parse(value)).map(JsSuccess(_)).getOrElse(JsError("Invalid date format for Instant"))
     case _ =>
       JsError("Expected JsString for Instant")
   }
 
-  implicit val urlFormat: HttpUrlFormat.type = HttpUrlFormat
+  given urlFormat: HttpUrlFormat.type = HttpUrlFormat
 
-  implicit val format: OFormat[CallbackFields] = Json.format[CallbackFields]
+  given format: OFormat[CallbackFields] = Json.format[CallbackFields]
 }
 
 case class BatchFile(
@@ -91,8 +91,8 @@ case class BatchFile(
 )
 
 object BatchFile {
-  implicit val urlFormat: HttpUrlFormat.type = HttpUrlFormat
-  implicit val format: OFormat[BatchFile] = Json.format[BatchFile]
+  given urlFormat: HttpUrlFormat.type = HttpUrlFormat
+  given format: OFormat[BatchFile] = Json.format[BatchFile]
 }
 
 case class FileUploadMetadata(
@@ -102,10 +102,14 @@ case class FileUploadMetadata(
   batchId: BatchId,
   fileCount: Int,
   createdAt: Instant,
-  files: Seq[BatchFile]
+  files: Seq[BatchFile],
+  deferred: Boolean = false,
+  completedAt: Option[Instant] = None,
+  transmittedAt: Option[Instant] = None
 )
 
 object FileUploadMetadata {
-  implicit val dateTimeJF: Format[Instant] = MongoJavatimeFormats.instantFormat
-  implicit val format: OFormat[FileUploadMetadata] = Json.format[FileUploadMetadata]
+  given dateTimeJF: Format[Instant] = MongoJavatimeFormats.instantFormat
+  given format: OFormat[FileUploadMetadata] =
+    Json.using[Json.WithDefaultValues].format[FileUploadMetadata]
 }

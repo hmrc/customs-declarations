@@ -25,11 +25,13 @@ import org.mongodb.scala.model.{FindOneAndUpdateOptions, IndexModel, IndexOption
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.SubscriptionFieldsId
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
-import uk.gov.hmrc.customs.declaration.model.upscan.{CallbackFields, FileReference, FileUploadMetadata}
+import uk.gov.hmrc.customs.declaration.model.upscan.{BatchFile, BatchId, CallbackFields, FileReference, FileUploadMetadata}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.Codecs
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -46,6 +48,14 @@ trait FileUploadMetadataRepo {
 
   def update(csId: SubscriptionFieldsId, reference: FileReference, callbackFields: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]]
 
+  def addFiles(batchId: BatchId, csId: SubscriptionFieldsId, files: Seq[BatchFile])(using r: HasConversationId): Future[Option[FileUploadMetadata]]
+
+  def fetchByBatchId(batchId: BatchId, csId: SubscriptionFieldsId)(using r: HasConversationId): Future[Option[FileUploadMetadata]]
+
+  def claimForCompletion(batchId: BatchId, csId: SubscriptionFieldsId, at: Instant)(using r: HasConversationId): Future[Option[FileUploadMetadata]]
+
+  def markTransmitted(batchId: BatchId, csId: SubscriptionFieldsId, at: Instant)(using r: HasConversationId): Future[Option[FileUploadMetadata]]
+
   def deleteAll(): Future[Unit]
 }
 
@@ -59,8 +69,8 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     mongoComponent = mongoComponent,
     domainFormat = FileUploadMetadata.format,
     indexes = Seq(
-      IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index").expireAfter(configService.fileUploadConfig.ttlInSeconds.toLong,TimeUnit.SECONDS)),
-      IndexModel(ascending("batchId"), IndexOptions().unique(true).name("batch-id")),
+      IndexModel(descending("createdAt"), IndexOptions().unique(false).name("createdAt-Index").expireAfter(configService.fileUploadConfig.ttlInSeconds.toLong, TimeUnit.SECONDS)),
+      IndexModel(ascending("batchId", "csId"), IndexOptions().unique(true).name("batch-id-and-csid")),
       IndexModel(ascending("files.reference", "csId"), IndexOptions().unique(true).name("csId-and-file-reference"))
     )
   ) with FileUploadMetadataRepo {
@@ -112,8 +122,41 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
       set("files.$.maybeCallbackFields.outboundLocation", cf.outboundLocation.toString))
 
     collection.findOneAndUpdate(selector, update,
-      FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER))
+        FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER))
       .toFutureOption()
+  }
+
+  private def batchSelector(batchId: BatchId, csId: SubscriptionFieldsId) =
+    and(equal("batchId", batchId.toString), equal("csId", csId.toString))
+
+  override def addFiles(batchId: BatchId, csId: SubscriptionFieldsId, files: Seq[BatchFile])(using HasConversationId): Future[Option[FileUploadMetadata]] =
+    collection.findOneAndUpdate(
+      batchSelector(batchId, csId),
+      pushEach("files", files.map(Codecs.toBson(_)) *),
+      FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
+    ).toFutureOption()
+
+  override def fetchByBatchId(batchId: BatchId, csId: SubscriptionFieldsId)(using HasConversationId): Future[Option[FileUploadMetadata]] =
+    collection.find(batchSelector(batchId, csId)).toFuture().map(_.headOption)
+
+  override def claimForCompletion(batchId: BatchId, csId: SubscriptionFieldsId, at: Instant)(using HasConversationId): Future[Option[FileUploadMetadata]] = {
+    import FileUploadMetadata.dateTimeJF
+
+    collection.findOneAndUpdate(
+      and(batchSelector(batchId, csId), exists("completedAt", false)),
+      set("completedAt", Codecs.toBson(at)),
+      FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
+    ).toFutureOption()
+  }
+
+  override def markTransmitted(batchId: BatchId, csId: SubscriptionFieldsId, at: Instant)(using HasConversationId): Future[Option[FileUploadMetadata]] = {
+    import FileUploadMetadata.dateTimeJF
+
+    collection.findOneAndUpdate(
+      batchSelector(batchId, csId),
+      set("transmittedAt", Codecs.toBson(at)),
+      FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
+    ).toFutureOption()
   }
 
   override def deleteAll(): Future[Unit] = {

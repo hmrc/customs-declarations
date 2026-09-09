@@ -17,12 +17,13 @@
 package uk.gov.hmrc.customs.declaration.controllers.upscan
 
 import play.api.http.ContentTypes
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.customs.declaration.controllers.Common
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.upscan.FileUploadPayloadValidationComposedAction
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, ConversationIdAction}
-import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper._
+import uk.gov.hmrc.customs.declaration.model.actionbuilders.ActionBuilderModelHelper.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
+import uk.gov.hmrc.customs.declaration.model.upscan.BatchId
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadBusinessService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -62,6 +63,30 @@ class FileUploadController @Inject()(val common: Common,
       fileUploadBusinessService.send map {
         case Right(res) =>
             logger.info("Upload initiate request processed successfully")
+          Ok(res).withConversationId.as(ContentTypes.XML)
+        case Left(errorResult) =>
+          errorResult
+      }
+  }
+
+  def post(batchId: BatchId): Action[AnyContent] = (
+    Action andThen
+      conversationIdAction andThen
+      common.shutterCheckAction andThen
+      common.validateAndExtractHeadersAction andThen
+      fileUploadAuthAction andThen
+      fileUploadPayloadValidationComposedAction
+    ).async(bodyParser = xmlOrEmptyBody) {
+
+    //TODO maybe implement with batch id instead of adding it to the xml? (it feels simpler)
+    implicit validatedRequest: ValidatedFileUploadPayloadRequest[AnyContent] =>
+      val logger = common.logger
+
+      logger.debug(s"File upload initiate request received. Payload=${validatedRequest.xmlBody} headers=${validatedRequest.headers.headers}")
+
+      fileUploadBusinessService.send map {
+        case Right(res) =>
+          logger.info("Upload initiate request processed successfully")
           Ok(res).withConversationId.as(ContentTypes.XML)
         case Left(errorResult) =>
           errorResult

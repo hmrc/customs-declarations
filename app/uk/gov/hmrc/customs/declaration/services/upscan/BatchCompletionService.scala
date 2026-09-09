@@ -18,6 +18,7 @@ package uk.gov.hmrc.customs.declaration.services.upscan
 
 import cats.implicits.*
 import uk.gov.hmrc.customs.declaration.connectors.filetransmission.FileTransmissionConnector
+import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.upscan.*
@@ -32,6 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class BatchCompletionService @Inject()(repo: FileUploadMetadataRepo,
                                        connector: FileTransmissionConnector,
+                                       logger: DeclarationsLogger,
                                        builder: FileTransmissionRequestBuilder)(using ExecutionContext) {
 
   //TODO: consider different scenarios transmission in progress, pending, invalid, already completed, batch not found, etc
@@ -41,9 +43,18 @@ class BatchCompletionService @Inject()(repo: FileUploadMetadataRepo,
       case None =>
         ??? //TODO
       case Some(metadata) =>
-        val fileCount = metadata.files.size
+        //TODO consider order
+        // this is to exclude any removes (they will have a different reference)
+        val filesInMetadata = metadata.files.groupBy(_.reference).view.mapValues(_.head).toMap
 
-        val requests = metadata.files.zipWithIndex.map { case (bf, index) =>
+        logger.info(s"********* ${metadata.files}")
+
+        //TODO clean this up
+        val contactDetails = metadata.files.find(_.maybeCallbackFields.exists(_.name.startsWith("contact_details_")))
+        val files = (contactDetails :: references.map(filesInMetadata.get).toList).flatten
+        val fileCount = files.size
+
+        val requests = files.zipWithIndex.map { case (bf, index) =>
           builder.build(metadata, bf, bf.maybeCallbackFields.get, FileSequenceNo(index + 1), fileCount)
         }
 

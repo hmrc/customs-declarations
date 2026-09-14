@@ -30,7 +30,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
 
   Feature("Ensure definition file") {
 
-    Scenario("is correct when v1 and v2 are public and v3 is private") {
+    Scenario("is correct when v1 and v2 are public and v3 is internal") {
 
       Given("the API is available")
       val request = FakeRequest("GET", "/api/definition")
@@ -124,9 +124,7 @@ class DefinitionSpecWithAllVersionsEnabledByDefault extends ComponentTestSpec wi
           |        "version": "3.0",
           |        "status": "BETA",
           |        "endpointsEnabled": true,
-          |        "access": {
-          |          "type": "PRIVATE"
-          |        },
+          |        "access": "INTERNAL",
           |        "fieldDefinitions": [
           |          {
           |            "name": "callbackUrl",
@@ -266,9 +264,7 @@ class DefinitionSpecWithVersion2Disabled extends ComponentTestSpec with Matchers
           |        "version": "3.0",
           |        "status": "BETA",
           |        "endpointsEnabled": true,
-          |        "access": {
-          |          "type": "PRIVATE"
-          |        },
+          |        "access": "INTERNAL",
           |        "fieldDefinitions": [
           |          {
           |            "name": "callbackUrl",

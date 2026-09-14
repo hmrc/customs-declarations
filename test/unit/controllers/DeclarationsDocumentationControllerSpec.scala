@@ -126,9 +126,7 @@ class DeclarationsDocumentationControllerSpec extends PlaySpec with MockitoSugar
          |            "version":"3.0",
          |            "status":"BETA",
          |            "endpointsEnabled":true,
-         |            "access":{
-         |                "type":"PRIVATE"
-         |            },
+         |            "access":"INTERNAL",
          |            "fieldDefinitions":[
          |               {
          |                  "name":"callbackUrl",

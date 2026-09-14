@@ -82,9 +82,7 @@
         "version": "3.0",
         "status": "BETA",
         "endpointsEnabled": @v3Enabled,
-        "access": {
-            "type": "PRIVATE"
-        },
+        "access": "INTERNAL",
         "fieldDefinitions": [
           {
             "name": "callbackUrl",

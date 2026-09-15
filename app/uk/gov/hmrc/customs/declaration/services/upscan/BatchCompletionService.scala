@@ -38,33 +38,41 @@ class BatchCompletionService @Inject()(repo: FileUploadMetadataRepo,
 
   //TODO: consider different scenarios transmission in progress, pending, invalid, already completed, batch not found, etc
   def complete(batchId: BatchId, csId: SubscriptionFieldsId, eori: Option[Eori], references: Seq[FileReference])
-              (using HeaderCarrier, HasConversationId): Future[Unit] = {
-    repo.claimForCompletion(batchId, csId, Instant.now()).flatMap {
-      case None =>
-        ??? //TODO
-      case Some(metadata) =>
-        //TODO consider order
-        // this is to exclude any removes (they will have a different reference)
-        val filesInMetadata = metadata.files.groupBy(_.reference).view.mapValues(_.head).toMap
+              (using HeaderCarrier, HasConversationId): Future[CompletionResult] = {
 
-        logger.info(s"********* ${metadata.files}")
+    repo.fetchByBatchId(batchId, csId).flatMap {
+      case None => Future.successful(BatchNotFound)
+      case Some(md) if md.completedAt.isDefined =>
+        val status = md.transmittedAt.map(_ => AlreadyCompleted).getOrElse(CompletionInProgress)
+        Future.successful(status)
+      case Some(md) =>
+        repo.claimForCompletion(batchId, csId, Instant.now()).flatMap {
+          case None =>
+            ??? //TODO
+          case Some(metadata) =>
+            //TODO consider order
+            // this is to exclude any removes (they will have a different reference)
+            val filesInMetadata = metadata.files.groupBy(_.reference).view.mapValues(_.head).toMap
 
-        //TODO clean this up
-        val contactDetails = metadata.files.find(_.maybeCallbackFields.exists(_.name.startsWith("contact_details_")))
-        val files = (contactDetails :: references.map(filesInMetadata.get).toList).flatten
-        val fileCount = files.size
+            logger.info(s"********* ${metadata.files}")
 
-        val requests = files.zipWithIndex.map { case (bf, index) =>
-          builder.build(metadata, bf, bf.maybeCallbackFields.get, FileSequenceNo(index + 1), fileCount)
+            //TODO clean this up
+            val contactDetails = metadata.files.find(_.maybeCallbackFields.exists(_.name.startsWith("contact_details_")))
+            val files = (contactDetails :: references.map(filesInMetadata.get).toList).flatten
+            val fileCount = files.size
+
+            val requests = files.zipWithIndex.map { case (bf, index) =>
+              builder.build(metadata, bf, bf.maybeCallbackFields.get, FileSequenceNo(index + 1), fileCount)
+            }
+
+            //for each request send a message to file transmission
+            //this accomplishes same as previous cb FileUploadUpscanNotificationBusinessService.persistAndCallFileTransmission
+            //we do them all at once at the end whenever cds-file-upload-frontend sends a post to /file-upload/complete
+            for {
+              _ <- requests.traverse_(connector.send)
+              _ <- repo.markTransmitted(metadata.batchId, metadata.csId, Instant.now()) //TODO use DateTimeService
+            } yield Completed(fileCount)
         }
-
-        //for each request send a message to file transmission
-        //this accomplishes same as previous cb FileUploadUpscanNotificationBusinessService.persistAndCallFileTransmission
-        //we do them all at once at the end whenever cds-file-upload-frontend sends a post to /file-upload/complete
-        for {
-          _ <- requests.traverse_(connector.send)
-          _ <- repo.markTransmitted(metadata.batchId, metadata.csId, Instant.now()) //TODO use DateTimeService
-        } yield ()
     }
   }
 }

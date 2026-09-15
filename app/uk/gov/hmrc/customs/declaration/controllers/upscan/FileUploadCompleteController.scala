@@ -17,6 +17,7 @@
 package uk.gov.hmrc.customs.declaration.controllers.upscan
 
 import play.api.mvc.*
+import play.api.mvc.Results.logger.logger
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.controllers.Common
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, ConversationIdAction}
@@ -59,7 +60,13 @@ class FileUploadCompleteController @Inject()(val common: Common,
       .flatMap { response =>
         //TODO clean up mongo after completing
         batchCompletionService.complete(batchId, SubscriptionFieldsId(response.fieldsId), authorisedEori, references)
-          .map(_ => Ok("Completed"))
+          .map{
+            case BatchNotFound => NotFound
+            case AlreadyCompleted => NoContent
+            case Completed(count) => 
+              logger.info(s"Completed $count files")
+              NoContent
+          }
       }
   }
 

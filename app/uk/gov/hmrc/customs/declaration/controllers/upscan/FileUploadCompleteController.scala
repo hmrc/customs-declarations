@@ -17,7 +17,6 @@
 package uk.gov.hmrc.customs.declaration.controllers.upscan
 
 import play.api.mvc.*
-import play.api.mvc.Results.logger.logger
 import uk.gov.hmrc.customs.declaration.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.declaration.controllers.Common
 import uk.gov.hmrc.customs.declaration.controllers.actionbuilders.{AuthActionEoriHeader, ConversationIdAction}
@@ -54,6 +53,7 @@ class FileUploadCompleteController @Inject()(val common: Common,
     val batchId = BatchId(UUID.fromString((xml \ "BatchID").text.trim)) //TODO should batch id be in the path?
     val references = (xml \ "Files" \ "File" \ "Reference").map(node => FileReference(UUID.fromString(node.text.trim)))
     val authorisedEori = extractEori(request.authorisedAs)
+    val logger = common.logger
 
     apiSubFieldsConnector
       .getSubscriptionFields(ApiSubscriptionKey(request.clientId, apiContextEncoded, request.requestedApiVersion))

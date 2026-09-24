@@ -69,6 +69,7 @@ class FileUploadController @Inject()(val common: Common,
       }
   }
 
+  //TODO remove this and keep batchId in xml
   def post(batchId: BatchId): Action[AnyContent] = (
     Action andThen
       conversationIdAction andThen

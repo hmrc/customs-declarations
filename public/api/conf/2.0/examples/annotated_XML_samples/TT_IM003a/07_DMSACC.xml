@@ -1,0 +1,50 @@
+<MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>01</FunctionCode>
+        <FunctionalReferenceID>294d7309e338480c99d169a3773c55bf</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20220117160629Z</DateTimeString>
+        </IssueDateTime>
+        <AdditionalInformation>
+            <StatementCode>smartErrorMsg</StatementCode>
+            <StatementDescription>Value per kilo appears too high for this commodity</StatementDescription>
+            <StatementTypeCode>1</StatementTypeCode>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>07B</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>53A</DocumentSectionCode>
+            </Pointer>
+        </AdditionalInformation>
+        <Error>
+            <Description>Value per kilo appears too high for this commodity</Description>
+            <ValidationCode>CDS13000</ValidationCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+        </Error>
+        <Declaration>
+            <AcceptanceDateTime>
+                <DateTimeString formatCode="304">20220117160247Z</DateTimeString>
+            </AcceptanceDateTime>
+            <FunctionalReferenceID>TT_IM03a_v2.0_1701_01</FunctionalReferenceID>
+            <ID>22GB0NSSH4DLOO9AR7</ID>
+            <VersionID>3</VersionID>
+        </Declaration>
+    </Response>
+</MetaData>

@@ -1,0 +1,65 @@
+<MetaData>
+    <WCODataModelVersionCode>3.6</WCODataModelVersionCode>
+    <WCOTypeName>RES</WCOTypeName>
+    <ResponsibleCountryCode/>
+    <ResponsibleAgencyName/>
+    <AgencyAssignedCustomizationCode/>
+    <AgencyAssignedCustomizationVersionCode/>
+    <Response>
+        <FunctionCode>07</FunctionCode>
+        <FunctionalReferenceID>20519ad6071a4be293b0b34dceaf3cba</FunctionalReferenceID>
+        <IssueDateTime>
+            <DateTimeString formatCode="304">20220905123200Z</DateTimeString>
+        </IssueDateTime>
+        <AdditionalInformation>
+            <StatementDescription>TT_IM05 Amendment to Net Weight</StatementDescription>
+            <StatementTypeCode>AES</StatementTypeCode>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>07B</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>06A</DocumentSectionCode>
+            </Pointer>
+        </AdditionalInformation>
+        <Amendment>
+            <ChangeReasonCode>28</ChangeReasonCode>
+            <Pointer>
+                <DocumentSectionCode>42A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>67A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <SequenceNumeric>1</SequenceNumeric>
+                <DocumentSectionCode>68A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>23A</DocumentSectionCode>
+            </Pointer>
+            <Pointer>
+                <DocumentSectionCode>65A</DocumentSectionCode>
+                <TagID>128</TagID>
+            </Pointer>
+        </Amendment>
+        <Declaration>
+            <FunctionalReferenceID>TTIM05a_050922_001</FunctionalReferenceID>
+            <ID>22GB9TOG03BRZ1GA02</ID>
+            <VersionID>2</VersionID>
+        </Declaration>
+        <Declaration>
+            <FunctionCode>9</FunctionCode>
+            <GoodsShipment>
+                <GovernmentAgencyGoodsItem>
+                    <SequenceNumeric>1</SequenceNumeric>
+                    <Commodity>
+                        <GoodsMeasure>
+                            <NetNetWeightMeasure unitCode="KGM">89.000000</NetNetWeightMeasure>
+                        </GoodsMeasure>
+                    </Commodity>
+                </GovernmentAgencyGoodsItem>
+            </GoodsShipment>
+        </Declaration>
+    </Response>
+</MetaData>

@@ -108,7 +108,8 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
         fileUploadMetadataRepo.fetchByBatchId(batchId, sfId).flatMap {
           case None =>
             fileUploadMetadataRepo.create(metadata(batchFiles, sfId, batchId, deferred = true))
-          //TODO verify if already completed?
+          case Some(md) if md.transmittedAt.isDefined =>
+            throw new IllegalStateException(s"Already transmitted files exist for batchId $batchId")
           case Some(md) =>
             fileUploadMetadataRepo.addFiles(batchId, sfId, batchFiles).map(_.isDefined)
         }

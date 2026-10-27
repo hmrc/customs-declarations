@@ -68,29 +68,5 @@ class FileUploadController @Inject()(val common: Common,
           errorResult
       }
   }
-
-  //TODO remove this and keep batchId in xml
-  def post(batchId: BatchId): Action[AnyContent] = (
-    Action andThen
-      conversationIdAction andThen
-      common.shutterCheckAction andThen
-      common.validateAndExtractHeadersAction andThen
-      fileUploadAuthAction andThen
-      fileUploadPayloadValidationComposedAction
-    ).async(bodyParser = xmlOrEmptyBody) {
-
-    //TODO maybe implement with batch id instead of adding it to the xml? (it feels simpler)
-    implicit validatedRequest: ValidatedFileUploadPayloadRequest[AnyContent] =>
-      val logger = common.logger
-
-      logger.debug(s"File upload initiate request received. Payload=${validatedRequest.xmlBody} headers=${validatedRequest.headers.headers}")
-
-      fileUploadBusinessService.send map {
-        case Right(res) =>
-          logger.info("Upload initiate request processed successfully")
-          Ok(res).withConversationId.as(ContentTypes.XML)
-        case Left(errorResult) =>
-          errorResult
-      }
-  }
+  
 }

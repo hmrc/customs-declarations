@@ -25,6 +25,7 @@ import uk.gov.hmrc.customs.declaration.model.upscan.*
 import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.declaration.services.filetransmission.FileTransmissionRequestBuilder
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.customs.declaration.services.DateTimeService
 
 import java.time.Instant
 import javax.inject.{Inject, Singleton}
@@ -34,9 +35,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class BatchCompletionService @Inject()(repo: FileUploadMetadataRepo,
                                        connector: FileTransmissionConnector,
                                        logger: DeclarationsLogger,
-                                       builder: FileTransmissionRequestBuilder)(using ExecutionContext) {
+                                       builder: FileTransmissionRequestBuilder,
+                                       dateTimeService: DateTimeService)(using ExecutionContext) {
 
-  //TODO: consider different scenarios transmission in progress, pending, invalid, already completed, batch not found, etc
   def complete(batchId: BatchId, csId: SubscriptionFieldsId, eori: Option[Eori], references: Seq[FileReference])
               (using HeaderCarrier, HasConversationId): Future[CompletionResult] = {
 
@@ -48,29 +49,21 @@ class BatchCompletionService @Inject()(repo: FileUploadMetadataRepo,
       case Some(md) =>
         repo.claimForCompletion(batchId, csId, Instant.now()).flatMap {
           case None =>
-            ??? //TODO
+            Future.successful(BatchNotFound)
           case Some(metadata) =>
-            //TODO consider order
-            // this is to exclude any removes (they will have a different reference)
             val filesInMetadata = metadata.files.groupBy(_.reference).view.mapValues(_.head).toMap
-
-            logger.info(s"********* ${metadata.files}")
-
-            //TODO clean this up
             val contactDetails = metadata.files.find(_.maybeCallbackFields.exists(_.name.startsWith("contact_details_")))
-            val files = (contactDetails :: references.map(filesInMetadata.get).toList).flatten
-            val fileCount = files.size
-
-            val requests = files.zipWithIndex.map { case (bf, index) =>
+            val filesForCompletion = (contactDetails :: references.map(filesInMetadata.get).toList).flatten //excluding files that were removed by user
+            val fileCount = filesForCompletion.size
+            val requests = filesForCompletion.zipWithIndex.map { case (bf, index) =>
               builder.build(metadata, bf, bf.maybeCallbackFields.get, FileSequenceNo(index + 1), fileCount)
             }
-
             //for each request send a message to file transmission
             //this accomplishes same as previous cb FileUploadUpscanNotificationBusinessService.persistAndCallFileTransmission
             //we do them all at once at the end whenever cds-file-upload-frontend sends a post to /file-upload/complete
             for {
               _ <- requests.traverse_(connector.send)
-              _ <- repo.markTransmitted(metadata.batchId, metadata.csId, Instant.now()) //TODO use DateTimeService
+              _ <- repo.markTransmitted(metadata.batchId, metadata.csId, dateTimeService.nowUtc())
             } yield Completed(fileCount)
         }
     }

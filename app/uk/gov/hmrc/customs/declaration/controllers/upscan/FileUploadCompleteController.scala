@@ -62,7 +62,7 @@ class FileUploadCompleteController @Inject()(val common: Common,
         batchCompletionService.complete(batchId, SubscriptionFieldsId(response.fieldsId), authorisedEori, references)
           .map{
             case BatchNotFound => NotFound
-            case AlreadyCompleted => NoContent
+            case AlreadyCompleted | CompletionInProgress => NoContent
             case Completed(count) => 
               logger.info(s"Completed $count files")
               NoContent

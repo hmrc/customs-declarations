@@ -50,6 +50,8 @@ trait FileUploadMetadataRepo {
 
   def addFiles(batchId: BatchId, csId: SubscriptionFieldsId, files: Seq[BatchFile])(using r: HasConversationId): Future[Option[FileUploadMetadata]]
 
+  def updateFiles(batchId: BatchId, csId: SubscriptionFieldsId, files: Seq[BatchFile])(using r: HasConversationId): Future[Option[FileUploadMetadata]]
+
   def fetchByBatchId(batchId: BatchId, csId: SubscriptionFieldsId)(using r: HasConversationId): Future[Option[FileUploadMetadata]]
 
   def claimForCompletion(batchId: BatchId, csId: SubscriptionFieldsId, at: Instant)(using r: HasConversationId): Future[Option[FileUploadMetadata]]
@@ -133,6 +135,13 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
     collection.findOneAndUpdate(
       batchSelector(batchId, csId),
       pushEach("files", files.map(Codecs.toBson(_)) *),
+      FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
+    ).toFutureOption()
+
+  override def updateFiles(batchId: BatchId, csId: SubscriptionFieldsId, files: Seq[BatchFile])(using HasConversationId): Future[Option[FileUploadMetadata]] =
+    collection.findOneAndUpdate(
+      batchSelector(batchId, csId),
+      set("files", files),
       FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
     ).toFutureOption()
 

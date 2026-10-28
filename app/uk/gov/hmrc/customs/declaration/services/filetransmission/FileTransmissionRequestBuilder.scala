@@ -39,7 +39,7 @@ class FileTransmissionRequestBuilder @Inject()(config: DeclarationsConfigService
         cb.outboundLocation,
         sequenceNumber,
         uploadTimestamp = cb.uploadTimestamp),
-      FileTransmissionInterface("DEC64", "1.0.0"), //TODO should this come from config instead?
+      FileTransmissionInterface("DEC64", "1.0.0"),
       properties(md, bf))
 
   private def properties(md: FileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {

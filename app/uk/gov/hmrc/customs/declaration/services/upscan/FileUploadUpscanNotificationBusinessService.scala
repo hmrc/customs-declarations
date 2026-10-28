@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMetadataRepo,
                                                             connector: FileTransmissionConnector,
-                                                            config: DeclarationsConfigService, //TODO replace by FileTransmissionRequestBuilder
+                                                            config: DeclarationsConfigService,
                                                             logger: DeclarationsLogger)
                                                            (using ExecutionContext) {
 
@@ -63,7 +63,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
               logger.info(s"successfully called file transmission service with batchId [${fileTransmission.batch.id.toString}], callbackUrl [${fileTransmission.callbackUrl.toString}] and fileReference [${fileTransmission.file.reference.toString}]")
               ()
             }
-        }
+      }
     }
   }
 
@@ -76,7 +76,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
         ftf,
         FileTransmissionInterface("DEC64", "1.0.0"),
         extractFileProperties(ready, md, bf)
-      )
+    )
   }
 
   private def extractFileProperties(@unused ready: UploadedReadyCallbackBody, md: FileUploadMetadata, bf: BatchFile): Seq[FileTransmissionProperty] = {

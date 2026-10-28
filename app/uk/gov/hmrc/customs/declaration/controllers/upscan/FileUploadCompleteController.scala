@@ -50,7 +50,7 @@ class FileUploadCompleteController @Inject()(val common: Common,
     ).async(parse.xml) { implicit request =>
 
     val xml = request.body
-    val batchId = BatchId(UUID.fromString((xml \ "BatchID").text.trim)) //TODO should batch id be in the path?
+    val batchId = BatchId(UUID.fromString((xml \ "BatchID").text.trim))
     val references = (xml \ "Files" \ "File" \ "Reference").map(node => FileReference(UUID.fromString(node.text.trim)))
     val authorisedEori = extractEori(request.authorisedAs)
     val logger = common.logger
@@ -58,7 +58,6 @@ class FileUploadCompleteController @Inject()(val common: Common,
     apiSubFieldsConnector
       .getSubscriptionFields(ApiSubscriptionKey(request.clientId, apiContextEncoded, request.requestedApiVersion))
       .flatMap { response =>
-        //TODO clean up mongo after completing
         batchCompletionService.complete(batchId, SubscriptionFieldsId(response.fieldsId), authorisedEori, references)
           .map{
             case BatchNotFound => NotFound

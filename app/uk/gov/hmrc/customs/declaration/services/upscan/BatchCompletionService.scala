@@ -54,7 +54,6 @@ class BatchCompletionService @Inject()(fileUploadMetadataRepo: FileUploadMetadat
             val filesInMetadata = metadata.files.groupBy(_.reference).view.mapValues(_.head).toMap
             val contactDetailsFile = metadata.files.find(_.maybeCallbackFields.exists(_.name.startsWith("contact_details_")))
             val filesForCompletion = (contactDetailsFile :: references.map(filesInMetadata.get).toList).flatten //excluding files that were removed by user
-            fileUploadMetadataRepo.updateFiles(batchId, csId, filesForCompletion)
             val fileCount = filesForCompletion.size
             val fileTransmissionRequests = filesForCompletion.zipWithIndex.map { case (batchFile, index) =>
               fileTransmissionRequestBuilder.build(metadata, batchFile, batchFile.maybeCallbackFields.get, FileSequenceNo(index + 1), fileCount)
@@ -63,6 +62,7 @@ class BatchCompletionService @Inject()(fileUploadMetadataRepo: FileUploadMetadat
             //This accomplishes same as previous cb FileUploadUpscanNotificationBusinessService.persistAndCallFileTransmission
             //We do them all at once at the end, whenever cds-file-upload-frontend sends a POST to /file-upload/complete
             for {
+              _ <- fileUploadMetadataRepo.updateFiles(batchId, csId, filesForCompletion) //updating db with removed files
               _ <- fileTransmissionRequests.traverse_(fileTransmissionConnector.send)
               _ <- fileUploadMetadataRepo.markTransmitted(metadata.batchId, metadata.csId, dateTimeService.nowUtc())
             } yield Completed(fileCount)

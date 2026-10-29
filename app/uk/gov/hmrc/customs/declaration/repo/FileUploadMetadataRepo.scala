@@ -141,7 +141,7 @@ class FileUploadMetadataMongoRepo @Inject()(mongoComponent: MongoComponent,
   override def updateFiles(batchId: BatchId, csId: SubscriptionFieldsId, files: Seq[BatchFile])(using HasConversationId): Future[Option[FileUploadMetadata]] =
     collection.findOneAndUpdate(
       batchSelector(batchId, csId),
-      set("files", files),
+      set("files", Codecs.toBson(files)),
       FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
     ).toFutureOption()
 

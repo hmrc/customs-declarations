@@ -33,13 +33,4 @@ case class IntegrationTestModule(mockLogger: DeclarationsLogger) extends Abstrac
 }
 
 trait IntegrationTestSpec extends AnyWordSpecLike with UnitSpec
-  with BeforeAndAfterEach with BeforeAndAfterAll with Eventually {
-
-  /**
-   * On Jenkins the localhost string is different to when run locally.
-   * @return
-   */
-  def localhostString: String = {
-    if (System.getenv("HOME") == "/home/jenkins") "127.0.0.1" else "[0:0:0:0:0:0:0:1]"
-  }
-}
+  with BeforeAndAfterEach with BeforeAndAfterAll with Eventually

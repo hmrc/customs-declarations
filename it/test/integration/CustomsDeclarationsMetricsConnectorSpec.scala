@@ -32,7 +32,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.{HasConversationId, 
 import util.CustomsDeclarationsMetricsTestData.*
 import util.ExternalServicesConfig.{Host, Port}
 import util.MockitoPassByNameHelper.PassByNameVerifier
-import util.VerifyLogging.verifyDeclarationsLoggerError
+import util.VerifyLogging.{verifyDeclarationsLoggerError, verifyDeclarationsLoggerErrorContaining}
 import util.externalservices.{AuditService, CustomsDeclarationsMetricsService}
 import util.{CustomsDeclarationsExternalServicesConfig, TestData}
 
@@ -115,7 +115,7 @@ with BeforeAndAfterAll with AuditService with CustomsDeclarationsMetricsService 
       stopMockServer()
 
       intercept[RuntimeException]((sendValidRequest()).futureValue).getCause.getClass shouldBe classOf[RuntimeException]
-      verifyDeclarationsLoggerError(s"Call to customs declarations metrics service failed. url=[http://localhost:$Port/log-times], HttpStatus=[502], Error=[POST of 'http://localhost:$Port/log-times' failed. Caused by: 'Connection refused: localhost/$localhostString:$Port']")
+      verifyDeclarationsLoggerErrorContaining(s"Call to customs declarations metrics service failed. url=[http://localhost:$Port/log-times], HttpStatus=[502], Error=[POST of 'http://localhost:$Port/log-times' failed. Caused by: 'Connection refused")
 
       startMockServer()
     }

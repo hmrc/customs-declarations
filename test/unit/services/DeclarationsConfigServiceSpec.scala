@@ -98,6 +98,19 @@ class DeclarationsConfigServiceSpec extends AnyWordSpecLike with MockitoSugar wi
       configService.fileUploadConfig.upscanInitiateMaximumFileSize shouldBe 100
       configService.nrsConfig.nrsUrl shouldBe "http://nrs.url:11114/submission"
       configService.fileUploadConfig.ttlInSeconds shouldBe 600
+      configService.fileTransmissionEnabled shouldBe true
+    }
+
+    "return fileTransmissionEnabled as true when file-transmission-enabled is set to true" in {
+      val configService = customsConfigService(Configuration(ConfigFactory.parseString("file-transmission-enabled=true").withFallback(validAppConfig)))
+
+      configService.fileTransmissionEnabled shouldBe true
+    }
+
+    "return fileTransmissionEnabled as false when file-transmission-enabled is set to false" in {
+      val configService = customsConfigService(Configuration(ConfigFactory.parseString("file-transmission-enabled=false").withFallback(validAppConfig)))
+
+      configService.fileTransmissionEnabled shouldBe false
     }
 
     "throw an exception when configuration is invalid, that contains AGGREGATED error messages" in {

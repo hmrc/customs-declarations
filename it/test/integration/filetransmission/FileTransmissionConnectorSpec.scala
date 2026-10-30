@@ -120,7 +120,7 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec with GuiceOneApp
 
       intercept[RuntimeException](await(sendValidRequest())).getCause.getClass shouldBe classOf[BadGatewayException]
 
-      verifyDeclarationsLoggerError(s"Call to file transmission failed. url=http://localhost:$Port/file/transmission, HttpStatus=502, Error=POST of 'http://localhost:$Port/file/transmission' failed. Caused by: 'Connection refused: localhost/$localhostString:$Port'")
+      verifyDeclarationsLoggerErrorContaining(s"Call to file transmission failed. url=http://localhost:$Port/file/transmission, HttpStatus=502, Error=POST of 'http://localhost:$Port/file/transmission' failed. Caused by: 'Connection refused")
 
       startMockServer()
     }

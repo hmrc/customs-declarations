@@ -61,6 +61,8 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
   private val upscanInitiateMaximumFileSize = root.int("fileUpload.fileSize.maximum")
   private val ttlInSeconds = root.int("ttlInSeconds")
 
+  private val fileTransmissionEnabledNel = root.maybeBoolean("file-transmission-enabled").map(_.getOrElse(true))
+
   private val validatedDeclarationsConfig: CustomsValidatedNel[DeclarationsConfig] = (
     apiSubscriptionFieldsServiceUrlNel, customsNotificationsServiceUrlNel, customsDeclarationsMetricsServiceUrlNel, bearerTokenNel
     ) mapN DeclarationsConfig.apply
@@ -87,7 +89,8 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
       validatedDeclarationsShutterConfig,
       validatedDeclarationsCircuitBreakerConfig,
       validatedNrsConfig,
-      validatedFileUploadConfig
+      validatedFileUploadConfig,
+      fileTransmissionEnabledNel
       ) mapN CustomsConfigHolder.apply
 
   private val customsConfigHolderConf =
@@ -111,9 +114,12 @@ class DeclarationsConfigService @Inject()(configValidatedNel: ConfigValidatedNel
 
   val fileUploadConfig: FileUploadConfig = customsConfigHolderConf.validatedFileUploadConfig
 
+  val fileTransmissionEnabled: Boolean = customsConfigHolderConf.fileTransmissionEnabled
+
   private case class CustomsConfigHolder(declarationsConfig: DeclarationsConfig,
                                          declarationsShutterConfig: DeclarationsShutterConfig,
                                          declarationsCircuitBreakerConfig: DeclarationsCircuitBreakerConfig,
                                          validatedNrsConfig: NrsConfig,
-                                         validatedFileUploadConfig: FileUploadConfig)
+                                         validatedFileUploadConfig: FileUploadConfig,
+                                         fileTransmissionEnabled: Boolean)
 }

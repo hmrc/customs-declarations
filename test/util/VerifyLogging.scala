@@ -16,7 +16,7 @@
 
 package util
 
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{any, argThat}
 import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import util.MockitoPassByNameHelper.PassByNameVerifier
@@ -25,6 +25,13 @@ object VerifyLogging {
 
   def verifyDeclarationsLoggerError(message: String)(implicit logger: DeclarationsLogger): Unit = {
     verifyDeclarationsLogger("error", message)
+  }
+
+  def verifyDeclarationsLoggerErrorContaining(fragment: String)(implicit logger: DeclarationsLogger): Unit = {
+    PassByNameVerifier(logger, "error")
+      .withByNameParamMatcher(argThat[() => String](actual => actual().contains(fragment)))
+      .withParamMatcher(any[HasConversationId])
+      .verify()
   }
 
   def verifyDeclarationsLoggerWarn(message: String)(implicit logger: DeclarationsLogger): Unit = {

@@ -32,7 +32,7 @@ import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedPayloadRequ
 import uk.gov.hmrc.http.*
 import util.*
 import util.ExternalServicesConfig.{Host, Port}
-import util.VerifyLogging.verifyDeclarationsLoggerError
+import util.VerifyLogging.{verifyDeclarationsLoggerError, verifyDeclarationsLoggerErrorContaining}
 import util.externalservices.ApiSubscriptionFieldsService
 
 import scala.concurrent.Future
@@ -115,7 +115,7 @@ class ApiSubscriptionFieldsConnectorSpec extends IntegrationTestSpec with GuiceO
 
       intercept[RuntimeException](await(getApiSubscriptionFields)).getCause.getClass shouldBe classOf[BadGatewayException]
 
-      verifyDeclarationsLoggerError(s"Subscriptions fields lookup call failed. url=http://localhost:$Port/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=502 error=GET of 'http://localhost:$Port/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' failed. Caused by: 'Connection refused: localhost/$localhostString:$Port'")
+      verifyDeclarationsLoggerErrorContaining(s"Subscriptions fields lookup call failed. url=http://localhost:$Port/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0 HttpStatus=502 error=GET of 'http://localhost:$Port/api-subscription-fields/field/application/SOME_X_CLIENT_ID/context/some/api/context/version/1.0' failed. Caused by: 'Connection refused")
 
       startMockServer()
 

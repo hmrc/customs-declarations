@@ -86,7 +86,7 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
 def integrationComponentTestFilter(name: String): Boolean = (name startsWith "integration") || (name startsWith "component")
 def unitTestFilter(name: String): Boolean = name startsWith "unit"
 
-val compileDependencies = Seq(hmrcMongo, hmrcMongoWorkItemRepo, bootstrapBackendPlay30, cats)
+val compileDependencies = Seq(hmrcMongoWorkItemRepo, bootstrapBackendPlay30, cats)
 
 val testDependencies = Seq(scalamock, hmrcMongoTest, bootstrapBackendTestPlay30)
 

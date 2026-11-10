@@ -12,7 +12,7 @@ object AppDependencies {
 
   val bootstrapBackendPlay30        = "uk.gov.hmrc"        %% s"bootstrap-backend$playSuffix" % bootstrapVersion
   val cats                          = "org.typelevel"      %% "cats-core"                     % "2.13.0"
-  val hmrcMongo                     = "uk.gov.hmrc.mongo"  %% s"hmrc-mongo$playSuffix"        % hmrcMongoVersion
+  val hmrcMongoWorkItemRepo         = "uk.gov.hmrc.mongo"  %% s"hmrc-mongo-work-item-repo$playSuffix" % hmrcMongoVersion
 
   val bootstrapBackendTestPlay30    = "uk.gov.hmrc"        %% s"bootstrap-test$playSuffix"    % bootstrapVersion % testScope
   val hmrcMongoTest                 = "uk.gov.hmrc.mongo"  %% s"hmrc-mongo-test$playSuffix"   % hmrcMongoVersion % testScope

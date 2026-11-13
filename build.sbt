@@ -67,6 +67,10 @@ lazy val it = project.in(file("it"))
   .enablePlugins(play.sbt.PlayScala)
   .settings(scalaVersion := currentScalaVersion)
   .settings(majorVersion := 0)
+  .settings(
+    excludeDependencies += ExclusionRule("com.github.tomakehurst", "wiremock"),
+    libraryDependencies += "org.wiremock" % "wiremock-standalone" % "3.13.2" % Test
+  )
 
 lazy val commonSettings: Seq[Setting[_]] = gitStampSettings
 

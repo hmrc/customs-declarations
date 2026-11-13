@@ -19,17 +19,13 @@ package uk.gov.hmrc.customs.declaration.model.dec64
 import play.api.libs.json.*
 import uk.gov.hmrc.customs.declaration.model.upscan.{BatchId, FileReference}
 
-/** Final result of delivering one file to MDG; drives the SUCCESS / FAILURE trader notification. */
 sealed trait Dec64Outcome
 
 object Dec64Outcome {
-  /** MDG accepted the DEC64 request (2xx). */
-  case object Delivered extends Dec64Outcome
+  private case object Delivered extends Dec64Outcome
 
-  /** MDG rejected the request (4xx), or the delivery window ran out. `reason` is for logs only, never sent to the trader. */
   final case class Failed(reason: String) extends Dec64Outcome
 
-  // stored on the work-item so a failed notification can be retried without re-sending to MDG
   implicit val format: OFormat[Dec64Outcome] = OFormat[Dec64Outcome](
     (json: JsValue) => (json \ "status").validate[String].flatMap {
       case "DELIVERED" => JsSuccess(Delivered)

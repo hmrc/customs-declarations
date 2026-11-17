@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2017 rel. 3 sp1 (x64) (http://www.altova.com) by DST (H M Revenue & Customs) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:mdg="http://www.hmrc.gsi.gov.uk/mdg/batchFileInterfaceMetadataSchema" targetNamespace="http://www.hmrc.gsi.gov.uk/mdg/batchFileInterfaceMetadataSchema" elementFormDefault="qualified" attributeFormDefault="qualified" vc:minVersion="1.1">
+	<xs:element name="BatchFileInterfaceMetadata">
+		<xs:annotation>
+			<xs:documentation>The Metadata File contains information about the Batch Interface File that is used to control the transport and management of the file by the MDG File Transport Framework.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="sourceSystem" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The name of the Application or System that originally generated the Batch Interface Data File.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sourceSystemType" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The technology category on which the Source System was hosted when the Batch Interface Data File was generated</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sourceSystemOS" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The Operating system on which the Source System was hosted when the Batch Interface Data File was generated</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="interfaceName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The name of the interface for which the Data File was generated. N.B. The InterfaceName and InterfaceVersion must uniquely identify the data file contents structure and its eventual destination(s).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="interfaceVersion" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The version of the interface for which the Data File was generated. N.B. The InterfaceName and InterfaceVersion must uniquely identify the data file contents structure and its eventual destination(s).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="correlationID" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+The unique identifier for each Batch Interface File journey through the Integration Layer so that a request can be matched to a response.
+N.B. If the correlationID is not supplied by the application that generated the Batch Interface File, it will be generated at the first opportunity by the Integration Layer as a UUID.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="conversationID" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Used to logically group a number of related Batch Interface Files from the perspective of an overarching Business Transaction.  E.g. 1 (conversationID) : N (correlationID)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="transactionID" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Used to identify individual transactions that the Batch File Interface is involved  E.g. 1 (correlationID) : N (transactionID)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="messageID" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Used to uniquely identify the Batch Interface file sent by a provider.  E.g. Can be used when converting JMS message to/from files and retaining the JMSMessageID property</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sequenceNumber" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Used to identify the in-sequence order that this batch file was generated and should be applied
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="batchID" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Used to uniquely identify the batch that this file is a part of
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="batchSize" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The number of files that comprises the batch that this file is a part of
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="batchCount" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The sequence number that this file holds in the batch that it is a part of
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="extractStartDateTime" type="xs:dateTime" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The start date and time of the Batch Interface Data File extraction.
+The date is also exposed as part of the Batch File Name.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="extractEndDateTime" type="xs:dateTime" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The end date and time the Batch Interface Data File extraction</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="extractDatabaseDateTime" type="xs:dateTime" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The database start date and time of the Batch Interface Data File extraction.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="checksum" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The checksum generated against the Batch Interface File using the specified Checksum Algorithm</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="checksumAlgorithm" type="mdg:checksumAlgorithmType">
+					<xs:annotation>
+						<xs:documentation>The name of the Algorithm used to generate the checksum agains the batch interface data file</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="signature" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The encrypted checks value using the fileum originator's private key
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="fileSize" type="xs:long">
+					<xs:annotation>
+						<xs:documentation>The size of the batch file in bytes</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="compressed" type="xs:boolean" default="false">
+					<xs:annotation>
+						<xs:documentation>To specify whether the batch interface file has been compressed</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="compressionAlgorithm" type="mdg:compressionAlgorithmSimpleType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The Compression algorithm used on the Batch Interface file</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="compressedChecksum" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The checksum generated against the compressed Batch Interface File using the specified Compressed Checksum Algorithm</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="compressedChecksumAlgorithm" type="mdg:checksumAlgorithmType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The name of the Algorithm used to generate the checksum against the compressed Batch Interface data file</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="compressedSignature" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The encrypted compre
+ssedChecksum value
+using the file
+originator's private key</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="manifest" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Used to document the
+members of a zipped
+interface file</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="member" type="mdg:memberType" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>A manifest/member
+entry must exist for
+every file that
+comprises a zipped file</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="encrypted" type="xs:boolean" default="false" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>To specify whether the
+batch interface file has
+been encrypted</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="encryptedChecksum" type="mdg:checksumAlgorithmType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The checksum
+generated against the
+compressed Batch
+Interface File using the
+specified Compressed
+Checksum Algorithm</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="encryptedSignature" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The encrypted compressed Checksum value
+using the file
+originator's private key</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="properties" type="mdg:propertiesType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>File content or
+metadata exposed in
+the metadata file for
+routing, searching or
+processing purposes</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sourceLocation" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The llocation of the Content File in the Source System</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sourceFileName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The Batch Interface file name when it was originally generated</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sourceFileEncoding" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The Encoding for the Batch Interface Data File.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sourceFileMimeType" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The type of Batch
+Interface Data File. E.g
+PDF, GIF, DOC</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="virusScan" type="mdg:virusScanType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contains information of
+an virus checking that
+was performed on the
+batch interface file</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="destinations" type="mdg:destinationsType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="compressionAlgorithmSimpleType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GZIP"/>
+			<xs:enumeration value="ZIP"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="checksumAlgorithmType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CHIEF"/>
+			<xs:enumeration value="MD2"/>
+			<xs:enumeration value="MD5"/>
+			<xs:enumeration value="SHA-1"/>
+			<xs:enumeration value="SHA-256"/>
+			<xs:enumeration value="SHA-384"/>
+			<xs:enumeration value="SHA-512"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="destinationType">
+		<xs:sequence>
+			<xs:element name="destinationSystem" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The Final Destination for the transferred file.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="destinationLocation" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Used by the consuming DestinationSystem to specify the DestinationSystem operating system directory location where the Batch Interface File should be placed.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="destinationFileName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Used by the consuming DestinationSystem to specify a change of file name of the Batch Interface File within the DestinationLocation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="destinationFileEncoding" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Used by the consuming DestinationSystem top specify the Encoding that should be applied to the Batch Interface File.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="destinationFileMimeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="virusScanType">
+		<xs:sequence>
+			<xs:element name="execution" type="mdg:executionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="destinationsType">
+		<xs:sequence>
+			<xs:element name="destination" type="mdg:destinationType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="propertiesType">
+		<xs:sequence>
+			<xs:element name="property" type="mdg:propertyType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Property entry</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="propertyType">
+		<xs:annotation>
+			<xs:documentation>Property entry</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of the property</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="value" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Value of the property</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="memberType">
+		<xs:annotation>
+			<xs:documentation>A manifest/member
+entry must exist for
+every file that
+comprises a zipped file</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="fileName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The file name of the
+zipped up member</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="fileSize" type="xs:long" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The size of the zipped
+up member file in
+bytes</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="checksumAlgorithm" type="mdg:checksumAlgorithmType">
+				<xs:annotation>
+					<xs:documentation>The name of the
+Algorithm used to
+generate the
+checksum against the
+zipped up member file</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="checksum" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The checksum
+generated against the
+zipped up member file</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="executionType">
+		<xs:annotation>
+			<xs:documentation>Contains information of
+individual virus scans
+that were performed
+on the batch interface
+file</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="performed" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="result">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Passed"/>
+						<xs:enumeration value="Failed"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="tool" type="xs:string"/>
+			<xs:element name="report" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

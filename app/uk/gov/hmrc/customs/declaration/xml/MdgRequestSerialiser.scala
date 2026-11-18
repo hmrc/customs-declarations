@@ -16,30 +16,30 @@
 
 package uk.gov.hmrc.customs.declaration.xml
 
-import uk.gov.hmrc.customs.declaration.model.dec64.{MimeTypes, Dec64Submission}
+import uk.gov.hmrc.customs.declaration.model.transmission.MimeTypes.extensionFor
+import uk.gov.hmrc.customs.declaration.model.transmission.TransmissionRequest
 
-import java.net.URL
 import javax.inject.Singleton
 import scala.xml.NodeSeq
 
 @Singleton
-class MdgRequestSerializer {
+class MdgRequestSerialiser {
 
-  import MdgRequestSerializer.*
+  import MdgRequestSerialiser.*
 
-  def serialize(submission: Dec64Submission, sourceLocation: URL, fileSize: Long): String = {
+  def serialise(request: TransmissionRequest): String = {
 
-    val propertiesXml = for (property <- submission.properties)
+    val propertiesXml = for (property <- request.properties)
       yield <mdg:property>
         <mdg:name>{property.name}</mdg:name>
         <mdg:value>{property.value}</mdg:value>
       </mdg:property>
 
     val filename =
-      if (submission.fileName == FilenamePlaceholder)
-        FilenamePlaceholder + MimeTypes.extensionFor(submission.mimeType).getOrElse("")
+      if (request.file.name == FilenamePlaceholder)
+        FilenamePlaceholder + extensionFor(request.file.mimeType).getOrElse("")
       else
-        submission.fileName
+        request.file.name
 
     val xml =
       <mdg:BatchFileInterfaceMetadata
@@ -49,23 +49,23 @@ class MdgRequestSerializer {
       >
         <mdg:sourceSystem>MDTP</mdg:sourceSystem>
         <mdg:sourceSystemType>AWS</mdg:sourceSystemType>
-        <mdg:interfaceName>{InterfaceName}</mdg:interfaceName>
-        <mdg:interfaceVersion>{InterfaceVersion}</mdg:interfaceVersion>
-        <mdg:correlationID>{submission.fileReference.toString}</mdg:correlationID>
-        <mdg:sequenceNumber>{submission.sequenceNumber.value}</mdg:sequenceNumber>
-        <mdg:batchID>{submission.batchId.toString}</mdg:batchID>
-        <mdg:batchSize>{submission.fileCount}</mdg:batchSize>
-        <mdg:batchCount>{submission.sequenceNumber.value}</mdg:batchCount>
-        <mdg:extractEndDateTime>{submission.uploadTimestamp.toString}</mdg:extractEndDateTime>
-        <mdg:checksum>{submission.checksum}</mdg:checksum>
+        <mdg:interfaceName>{request.interface.name}</mdg:interfaceName>
+        <mdg:interfaceVersion>{request.interface.version}</mdg:interfaceVersion>
+        <mdg:correlationID>{request.file.reference}</mdg:correlationID>
+        <mdg:sequenceNumber>{request.file.sequenceNumber}</mdg:sequenceNumber>
+        <mdg:batchID>{request.batch.id}</mdg:batchID>
+        <mdg:batchSize>{request.batch.fileCount}</mdg:batchSize>
+        <mdg:batchCount>{request.file.sequenceNumber}</mdg:batchCount>
+        <mdg:extractEndDateTime>{request.file.uploadTimestamp}</mdg:extractEndDateTime>
+        <mdg:checksum>{request.file.checksum}</mdg:checksum>
         <mdg:checksumAlgorithm>SHA-256</mdg:checksumAlgorithm>
-        <mdg:fileSize>{fileSize}</mdg:fileSize>
+        <mdg:fileSize>{request.file.size}</mdg:fileSize>
         <mdg:compressed>false</mdg:compressed>
         <mdg:encrypted>false</mdg:encrypted>
         {if (propertiesXml.isEmpty) NodeSeq.Empty else <mdg:properties>{propertiesXml}</mdg:properties>}
-        <mdg:sourceLocation>{sourceLocation.toString}</mdg:sourceLocation>
+        <mdg:sourceLocation>{request.file.location.toString}</mdg:sourceLocation>
         <mdg:sourceFileName>{filename}</mdg:sourceFileName>
-        <mdg:sourceFileMimeType>{submission.mimeType}</mdg:sourceFileMimeType>
+        <mdg:sourceFileMimeType>{request.file.mimeType}</mdg:sourceFileMimeType>
         <mdg:destinations>
           <mdg:destination>
             <mdg:destinationSystem>{DestinationSystem}</mdg:destinationSystem>
@@ -77,9 +77,7 @@ class MdgRequestSerializer {
   }
 }
 
-object MdgRequestSerializer {
-  private val InterfaceName = "DEC64"
-  private val InterfaceVersion = "1.0.0"
+object MdgRequestSerialiser {
   private val DestinationSystem = "CDS"
   val FilenamePlaceholder: String = "$" + "{filename}"
 }

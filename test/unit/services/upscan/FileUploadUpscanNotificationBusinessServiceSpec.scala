@@ -29,8 +29,9 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model._
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.declaration.model.filetransmission._
+import uk.gov.hmrc.customs.declaration.model.transmission.{Batch, File, Interface, Property, TransmissionRequest, TransmissionRequestEnvelope}
 import uk.gov.hmrc.customs.declaration.model.upscan._
-import uk.gov.hmrc.customs.declaration.repo.FileUploadMetadataRepo
+import uk.gov.hmrc.customs.declaration.repo.{FileUploadMetadataRepo, TransmissionRequestRepo}
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
 import uk.gov.hmrc.customs.declaration.services.upscan.FileUploadUpscanNotificationBusinessService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -41,7 +42,7 @@ import java.net.URL
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
-class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers{
+class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike with MockitoSugar with Matchers {
 
   private val outboundUrl = new URL("http://remotehost/outbound-bucket/123")
   private val uploadDetails = UploadedDetails("test.pdf", "application/pdf", InitiateDate, "1a2b3c4d5e")
@@ -63,6 +64,24 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
     FileTransmissionProperty("DocumentType", mdFileOne.documentType.get.toString)
   )
   private val fileTransmissionRequest = FileTransmission(fileTransmissionBatchOne, new URL(s"$fileTransmissionCallbackUrl/file-transmission-notify/clientSubscriptionId/$clientSubscriptionIdString"), fileTransmissionFileOne, fileTransmissionInterfaceOne, fileTransmissionProperties)
+
+  private val transmissionRequestEnvelope = TransmissionRequestEnvelope(
+    request = TransmissionRequest(
+      batch = Batch(md.batchId.toString, md.fileCount),
+      interface = Interface("DEC64", "1.0.0"),
+      file = File(mdFileOne.reference.toString, mdFileOneCallback.outboundLocation, mdFileOneCallback.name, mdFileOneCallback.mimeType, mdFileOneCallback.checksum, mdFileOne.sequenceNumber.value, mdFileOne.size, mdFileOneCallback.uploadTimestamp),
+      properties = Seq(
+        Property("DeclarationId", md.declarationId.toString),
+        Property("Eori", md.eori.toString),
+        Property("DocumentType", mdFileOne.documentType.get.toString)
+      ),
+      callbackUrl = new URL(s"$fileTransmissionCallbackUrl/file-transmission-notify/clientSubscriptionId/$clientSubscriptionIdString"),
+      deliveryWindowDuration = None
+    ),
+    serviceName = "customs-declarations",
+    csId = subscriptionFieldsId
+  )
+
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private implicit val ec: ExecutionContext = Helpers.stubControllerComponents().executionContext
   private implicit val implicitHasConversationId: HasConversationId = new HasConversationId {
@@ -74,19 +93,22 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
   trait SetUp {
     val mockRepo: FileUploadMetadataRepo = mock[FileUploadMetadataRepo]
     val mockConnector: FileTransmissionConnector = mock[FileTransmissionConnector]
+    val mockTransmissionRequestRepo: TransmissionRequestRepo = mock[TransmissionRequestRepo]
     val mockConfig: DeclarationsConfigService = mock[DeclarationsConfigService]
     val mockLogger: DeclarationsLogger = mock[DeclarationsLogger]
-    val service = new FileUploadUpscanNotificationBusinessService(mockRepo, mockConnector, mockConfig, mockLogger)
+    val service = new FileUploadUpscanNotificationBusinessService(mockRepo, mockConnector, mockTransmissionRequestRepo, mockConfig, mockLogger)
 
     when(mockConfig.fileUploadConfig).thenReturn(fileUploadConfig)
+    when(mockConfig.fileTransmissionEnabled).thenReturn(true)
   }
 
-  "FileUploadUpscanNotificationBusinessService" should {
+  "FileUploadUpscanNotificationBusinessService when file-transmission-enabled is true" should {
+
     "update metadata and call file transmission service" in new SetUp {
       when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
       when(mockConnector.send(any[FileTransmission])(any[HasConversationId], any[HeaderCarrier])).thenReturn(Future.successful(()))
 
-      val actual: Unit = (service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)).futureValue
+      val actual: Unit = service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody).futureValue
 
       actual shouldBe (())
       verify(mockRepo).update(
@@ -95,20 +117,17 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
         ameq(callbackFields))(any[HasConversationId]
       )
       verify(mockConnector).send(ameq(fileTransmissionRequest))(any[HasConversationId], any[HeaderCarrier])
+      verifyNoInteractions(mockTransmissionRequestRepo)
     }
 
     "return failed future when no metadata record found for file reference" in new SetUp {
       when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(None))
 
-      val error: IllegalStateException = intercept[IllegalStateException] (await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
+      val error: IllegalStateException = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 
       error.getMessage shouldBe s"database error - can't find record with file reference [${FileReferenceOne.value.toString}]"
-      verify(mockRepo).update(
-        ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId],
-        ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
-        ameq(callbackFields))(any[HasConversationId]
-      )
       verifyNoMoreInteractions(mockConnector)
+      verifyNoInteractions(mockTransmissionRequestRepo)
     }
 
     "return failed future when file reference not found in returned metadata" in new SetUp {
@@ -117,12 +136,8 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
       val error: IllegalStateException = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 
       error.getMessage shouldBe s"database error - can't find file with file reference [${FileReferenceOne.value.toString}]"
-      verify(mockRepo).update(
-        ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId],
-        ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
-        ameq(callbackFields))(any[HasConversationId]
-      )
       verifyNoMoreInteractions(mockConnector)
+      verifyNoInteractions(mockTransmissionRequestRepo)
     }
 
     "propagate exception encountered in repo" in new SetUp {
@@ -131,12 +146,8 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
       val error: EmulatedServiceFailure = intercept[EmulatedServiceFailure](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 
       error shouldBe emulatedServiceFailure
-      verify(mockRepo).update(
-        ameq[UUID](subscriptionFieldsId.value).asInstanceOf[SubscriptionFieldsId],
-        ameq[UUID](FileReferenceOne.value).asInstanceOf[FileReference],
-        ameq(callbackFields))(any[HasConversationId]
-      )
       verifyNoMoreInteractions(mockConnector)
+      verifyNoInteractions(mockTransmissionRequestRepo)
     }
 
     "propagate exception encountered in connector" in new SetUp {
@@ -146,6 +157,56 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends AnyWordSpecLike wi
       val error: EmulatedServiceFailure = intercept[EmulatedServiceFailure](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
 
       error shouldBe emulatedServiceFailure
+      verifyNoInteractions(mockTransmissionRequestRepo)
+    }
+  }
+
+  "FileUploadUpscanNotificationBusinessService when file-transmission-enabled is false" should {
+
+    "update metadata and queue a TransmissionRequest item" in new SetUp {
+      when(mockConfig.fileTransmissionEnabled).thenReturn(false)
+      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
+      when(mockTransmissionRequestRepo.pushNewIfAbsent(any[TransmissionRequestEnvelope])).thenReturn(Future.successful(true))
+
+      val actual: Unit = service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody).futureValue
+
+      actual shouldBe (())
+      verify(mockTransmissionRequestRepo).pushNewIfAbsent(ameq(transmissionRequestEnvelope))
+      verifyNoInteractions(mockConnector)
+    }
+
+    "return 204 and not queue a second item on duplicate READY callback" in new SetUp {
+      when(mockConfig.fileTransmissionEnabled).thenReturn(false)
+      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFilesOneAndThree)))
+      when(mockTransmissionRequestRepo.pushNewIfAbsent(any[TransmissionRequestEnvelope])).thenReturn(Future.successful(false))
+
+      val actual: Unit = service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody).futureValue
+
+      actual shouldBe (())
+      verify(mockTransmissionRequestRepo).pushNewIfAbsent(ameq(transmissionRequestEnvelope))
+      verifyNoInteractions(mockConnector)
+    }
+
+    "return failed future when no metadata record found for file reference" in new SetUp {
+      when(mockConfig.fileTransmissionEnabled).thenReturn(false)
+      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(None))
+
+      val error: IllegalStateException = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
+
+      error.getMessage shouldBe s"database error - can't find record with file reference [${FileReferenceOne.value.toString}]"
+      verifyNoInteractions(mockConnector)
+      verifyNoInteractions(mockTransmissionRequestRepo)
+    }
+
+    "return failed future when file reference not found in returned metadata" in new SetUp {
+      when(mockConfig.fileTransmissionEnabled).thenReturn(false)
+      when(mockRepo.update(subscriptionFieldsId, FileReferenceOne, callbackFields)).thenReturn(Future.successful(Some(FileMetadataWithFileTwo)))
+
+      val error: IllegalStateException = intercept[IllegalStateException](await(service.persistAndCallFileTransmission(subscriptionFieldsId, readyCallbackBody)))
+
+      error.getMessage shouldBe s"database error - can't find file with file reference [${FileReferenceOne.value.toString}]"
+      verifyNoInteractions(mockConnector)
+      verifyNoInteractions(mockTransmissionRequestRepo)
     }
   }
 }

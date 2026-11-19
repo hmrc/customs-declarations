@@ -19,44 +19,45 @@ package unit.xml
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.xml.sax.SAXParseException
-import uk.gov.hmrc.customs.declaration.xml.MdgRequestSerializer
-import util.Dec64TestData.*
+import uk.gov.hmrc.customs.declaration.model.transmission.Interface
+import uk.gov.hmrc.customs.declaration.xml.MdgRequestSerialiser
+import util.TransmissionRequestTestData.*
 
 import scala.util.Try
 import scala.xml.factory.XMLLoader
 import scala.xml.parsing.FactoryAdapter
 import scala.xml.{Elem, SAXParser, Utility, XML}
 
-class MdgRequestSerializerSpec extends AnyWordSpec with Matchers {
+class MdgRequestSerialiserSpec extends AnyWordSpec with Matchers {
 
-  private val serializer = new MdgRequestSerializer()
-  private val placeholder = MdgRequestSerializer.FilenamePlaceholder
+  private val serialiser = new MdgRequestSerialiser()
+  private val placeholder = MdgRequestSerialiser.FilenamePlaceholder
 
-  "MdgRequestSerializer" should {
+  "MdgRequestSerialiser" should {
 
     "produce XML that is valid against the MDG BatchFileInterfaceMetadata-1.0.7 schema" in {
-      val result = validateSchema(serializer.serialize(Dec64SubmissionOne, PresignedUrl, FileSize))
+      val result = validateSchema(serialiser.serialise(TransmissionRequestOne))
       withClue(result) { result.isSuccess shouldBe true }
     }
 
     "leave out the properties element, and stay schema-valid, when there are no properties" in {
-      val actual = serializer.serialize(Dec64SubmissionOne.copy(properties = Nil), PresignedUrl, FileSize)
+      val actual = serialiser.serialise(TransmissionRequestOne.copy(properties = Nil))
       actual should not include "properties"
       val result = validateSchema(actual)
       withClue(result) { result.isSuccess shouldBe true }
     }
 
-    "populate the same values as file-transmission, with the presigned URL and real file size" in {
-      val s = Dec64SubmissionOne
+    "populate the same values as file-transmission" in {
+      val s = TransmissionRequestOne
       val expected =
         s"""<mdg:BatchFileInterfaceMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdg="http://www.hmrc.gsi.gov.uk/mdg/batchFileInterfaceMetadataSchema" xsi:schemaLocation="http://www.hmrc.gsi.gov.uk/mdg/batchFileInterfaceMetadataSchema BatchFileInterfaceMetadata-1.0.7.xsd">
            |    <mdg:sourceSystem>MDTP</mdg:sourceSystem>
            |    <mdg:sourceSystemType>AWS</mdg:sourceSystemType>
            |    <mdg:interfaceName>DEC64</mdg:interfaceName>
            |    <mdg:interfaceVersion>1.0.0</mdg:interfaceVersion>
-           |    <mdg:correlationID>${s.fileReference}</mdg:correlationID>
+           |    <mdg:correlationID>${s.file.reference}</mdg:correlationID>
            |    <mdg:sequenceNumber>1</mdg:sequenceNumber>
-           |    <mdg:batchID>${s.batchId}</mdg:batchID>
+           |    <mdg:batchID>${s.batch.id}</mdg:batchID>
            |    <mdg:batchSize>2</mdg:batchSize>
            |    <mdg:batchCount>1</mdg:batchCount>
            |    <mdg:extractEndDateTime>2018-04-24T09:30:00Z</mdg:extractEndDateTime>
@@ -80,19 +81,20 @@ class MdgRequestSerializerSpec extends AnyWordSpec with Matchers {
            |    </mdg:destinations>
            |</mdg:BatchFileInterfaceMetadata>""".stripMargin
 
-      val actual = serializer.serialize(s, PresignedUrl, FileSize)
+      val actual = serialiser.serialise(s)
 
       Utility.trim(XML.loadString(actual)) shouldBe Utility.trim(XML.loadString(expected))
     }
 
-    "use the fileSize argument, not the size stored on the submission" in {
-      val actual = serializer.serialize(Dec64SubmissionOne.copy(size = None), PresignedUrl, 99L)
-      (XML.loadString(actual) \ "fileSize").text shouldBe "99"
+    "take the interface name and version from the request" in {
+      val actual = XML.loadString(serialiser.serialise(TransmissionRequestOne.copy(interface = Interface("OTHER", "2.0"))))
+      (actual \ "interfaceName").text shouldBe "OTHER"
+      (actual \ "interfaceVersion").text shouldBe "2.0"
     }
 
     "escape XML special characters in the file name and presigned URL" in {
       val name = "a&b <c> \"d\".pdf"
-      val actual = serializer.serialize(Dec64SubmissionOne.copy(fileName = name), PresignedUrl, FileSize)
+      val actual = serialiser.serialise(withFile(_.copy(name = name)))
 
       actual should include("X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Expires=900")
       validateSchema(actual).isSuccess shouldBe true
@@ -103,17 +105,17 @@ class MdgRequestSerializerSpec extends AnyWordSpec with Matchers {
 
     "not add whitespace to long fields" in {
       val longFilename = "a" * 200 + ".pdf"
-      val actual = serializer.serialize(Dec64SubmissionOne.copy(fileName = longFilename), PresignedUrl, FileSize)
+      val actual = serialiser.serialise(withFile(_.copy(name = longFilename)))
       actual should include(s"<mdg:sourceFileName>$longFilename</mdg:sourceFileName>")
     }
 
     "add the file extension when the file name is the upscan placeholder" in {
-      val actual = serializer.serialize(Dec64SubmissionOne.copy(fileName = placeholder), PresignedUrl, FileSize)
+      val actual = serialiser.serialise(withFile(_.copy(name = placeholder)))
       actual should include(s"<mdg:sourceFileName>$placeholder.pdf</mdg:sourceFileName>")
     }
 
     "leave the placeholder unchanged when the mime type has no known extension" in {
-      val actual = serializer.serialize(Dec64SubmissionOne.copy(fileName = placeholder, mimeType = "application/zip"), PresignedUrl, FileSize)
+      val actual = serialiser.serialise(withFile(_.copy(name = placeholder, mimeType = "application/zip")))
       actual should include(s"<mdg:sourceFileName>$placeholder</mdg:sourceFileName>")
     }
   }

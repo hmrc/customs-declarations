@@ -22,5 +22,6 @@ class CustomsDeclarationsModule extends AbstractModule {
   override def configure(): Unit = {
     // asEagerSingleton forces evaluation at application startup time
     bind(classOf[DeclarationsConfigService]).asEagerSingleton()
+    bind(classOf[ServiceConfiguration]).to(classOf[PlayBasedServiceConfiguration])
   }
 }

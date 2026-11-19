@@ -29,6 +29,7 @@ object CustomsDeclarationsExternalServicesConfig {
   val UpscanInitiateContextV1 = "/upscan/initiate"
   val UpscanInitiateContextV2 = "/upscan/v2/initiate"
   val FileTransmissionContext = "/file/transmission"
+  val MdgDec64Context = "/mdg/dec64"
   val NrsServiceContext = "/submission"
   val CustomsNotificationContext = "/customs-notification/notify"
   val CustomsNotificationAuthHeaderValue = "some-basic-auth"

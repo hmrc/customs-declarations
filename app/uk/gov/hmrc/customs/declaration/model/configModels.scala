@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.customs.declaration.model
 
-import scala.concurrent.duration.Duration
-
 case class DeclarationsConfig(apiSubscriptionFieldsBaseUrl: String,
                               customsNotificationBaseBaseUrl: String,
                               customsDeclarationsMetricsBaseBaseUrl: String,
@@ -41,12 +39,3 @@ case class FileUploadConfig(upscanInitiateV1Url: String,
                             fileTransmissionCallbackUrl: String,
                             fileTransmissionBaseUrl: String,
                             ttlInSeconds: Int)
-
-
-case class Dec64Config(enabled: Boolean,
-                       mdgDec64Url: String,
-                       mdgDec64BearerToken: String,
-                       pollerInterval: Duration,
-                       initialBackoff: Duration,
-                       deliveryWindow: Duration,
-                       inProgressRetryAfter: Duration)

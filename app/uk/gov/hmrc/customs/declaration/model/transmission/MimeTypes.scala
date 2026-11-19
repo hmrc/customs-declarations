@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.customs.declaration.model.dec64
+package uk.gov.hmrc.customs.declaration.model.transmission
 
 object MimeTypes {
   private val mimeToExtension = Map(

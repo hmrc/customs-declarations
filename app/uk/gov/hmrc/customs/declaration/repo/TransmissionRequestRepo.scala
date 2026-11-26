@@ -20,7 +20,7 @@ import com.mongodb.ErrorCategory
 import org.bson.types.ObjectId
 import org.mongodb.scala._
 import org.mongodb.scala.model.Indexes.ascending
-import org.mongodb.scala.model.{Filters, IndexModel, IndexOptions, Updates}
+import org.mongodb.scala.model.{Filters, FindOneAndUpdateOptions, IndexModel, IndexOptions, ReturnDocument, Updates}
 import uk.gov.hmrc.customs.declaration.model.transmission.{FailedDeliveryAttempt, TransmissionOutcome, TransmissionRequestEnvelope}
 import uk.gov.hmrc.customs.declaration.services.{DateTimeService, DeclarationsConfigService}
 import uk.gov.hmrc.mongo.MongoComponent
@@ -73,6 +73,23 @@ class TransmissionRequestRepo @Inject()(mongoComponent: MongoComponent,
       filter = Filters.equal(workItemFields.id, id),
       update = Updates.set(s"${workItemFields.item}.outcome", Codecs.toBson(outcome))
     ).toFuture().map(_.getMatchedCount > 0)
+
+  def clearRequestQueue(): Future[Boolean] =
+    collection
+      .deleteMany(Filters.empty())
+      .toFuture()
+      .map(_.wasAcknowledged())
+      .recover { case _ => false }
+
+  def updateWorkItemBodyDeliveryAttempts(workItemId: ObjectId, body: TransmissionRequestEnvelope): Future[Boolean] =
+    collection
+      .findOneAndUpdate(
+        filter  = Filters.equal("_id", workItemId),
+        update  = Updates.set(s"${workItemFields.item}.deliveryAttempts", Codecs.toBson(body.deliveryAttempts)),
+        options = FindOneAndUpdateOptions().upsert(false).returnDocument(ReturnDocument.AFTER)
+      )
+      .toFutureOption()
+      .map(_.isDefined)
 }
 
 object TransmissionRequestRepo {

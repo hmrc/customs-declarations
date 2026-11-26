@@ -40,6 +40,7 @@ import uk.gov.hmrc.customs.declaration.logging.DeclarationsLogger
 import uk.gov.hmrc.customs.declaration.model.*
 import uk.gov.hmrc.customs.declaration.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.declaration.services.DeclarationsConfigService
+import uk.gov.hmrc.customs.declaration.services.queue.WorkItemProcessingScheduler
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.test.{HttpClientV2Support, WireMockSupport}
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
@@ -92,6 +93,7 @@ class UpscanInitiateConnectorSpec extends AnyWordSpecLike
       bind[HttpClientV2].toProvider[HttpClientV2Provider],
       bind[AuditConnector].toInstance(mockAuditConnector),
       bind[DeclarationsConfigService].toInstance(mockDeclarationsConfigService),
+      bind[WorkItemProcessingScheduler].toInstance(mock[WorkItemProcessingScheduler]),
       bind[DeclarationsLogger].toInstance(mockLogger)
     ).build()
 
